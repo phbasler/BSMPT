@@ -59,7 +59,7 @@ to:  philipp.basler@kit.edu
    'C_ModelTemplate' to the variable name with which the new model shall
    be selected by the program.
 
-2) Go to IncludeAllModels.cpp and add
+2) Go to IncludeAllModels.cpp and add the header for your model.  Also add
 
 ``` c++    
 	  else if(choice == C_ModelTemplate)
@@ -69,7 +69,7 @@ to:  philipp.basler@kit.edu
 ```
 
 
-   to the function Fchoose.
+   to the function Fchoose. 
 
 3) Adjust the functions in ClassTemplate.cpp as needed for the new model.
 
