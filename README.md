@@ -55,11 +55,11 @@ to:  philipp.basler@kit.edu
   
 ##How to add a new model (for further details, also see the manual):
 
-1) Go to the file ClassPotentialOrigin.h and rename the variable
+1) Go to the file IncludeAllModels.h and rename the variable
    'C_ModelTemplate' to the variable name with which the new model shall
    be selected by the program.
 
-2) Go to IncludeAllModels.h and add the header for your model. Also add
+2) Go to IncludeAllModels.cpp and add
 
 ``` c++    
 	  else if(choice == C_ModelTemplate)
