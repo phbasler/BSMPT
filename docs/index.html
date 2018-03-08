@@ -120,7 +120,7 @@ Installation</h1>
 <p>1) The program requires the GSL library [1] which is assumed to be installed in PATH.</p>
 <p>2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently 'chmod +x InstallLibraries.sh'.</p>
 <p>3) Then type <code>./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler</code> in order to install the eigen[2] and CMAES[3] libraries in the path 'PathToLib'. This might take a while.</p>
-<p>4) Afterwards type './autogen.sh PathToLib' in order to create a makefile in the main path, with the libraries installed in 'PathToLib'.</p>
+<p>4) Afterwards type <code>./autogen.sh --lib=PathToLib --CXX=YourC++Compiler</code> in order to create a makefile in the main path, with the libraries installed in 'PathToLib'.</p>
 <p>5) Finally go back to the main directory and type 'make'. </p><pre class="fragment">*  [1] http://www.gnu.org/software/gsl/
 
 * [2] http://eigen.tuxfamily.org

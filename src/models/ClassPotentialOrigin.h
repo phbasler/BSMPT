@@ -46,7 +46,7 @@
 *3) Then type `./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler` in order to install the
    eigen[2] and CMAES[3] libraries in the path 'PathToLib'. This might take a while.
 *
-*4) Afterwards type './autogen.sh PathToLib' in order to create a makefile in the
+*4) Afterwards type  `./autogen.sh --lib=PathToLib --CXX=YourC++Compiler`  in order to create a makefile in the
  *  main path, with the libraries installed in 'PathToLib'.
 *
 *5) Finally go back to the main directory and type 'make'. 
