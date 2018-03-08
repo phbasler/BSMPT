@@ -118,11 +118,11 @@ $(document).ready(function(){initNavTree('md_README.html','');});
 <p>Sample input and output files are provided in the directory 'example'.</p>
 <p>For additional information, comments, complaints or suggestions please e-mail to: <a href="#" onclick="location.href='mai'+'lto:'+'phi'+'li'+'pp.'+'ba'+'sle'+'r@'+'kit'+'.e'+'du'; return false;">phili<span style="display: none;">.nosp@m.</span>pp.b<span style="display: none;">.nosp@m.</span>asler<span style="display: none;">.nosp@m.</span>@kit<span style="display: none;">.nosp@m.</span>.edu</a> </p><hr/>
 <h2>Installation:</h2>
-<p>1) The program requires the GSL library. In case the library is not installed via the system packet manager, change the lines 108 to 114 in /src/models/ClassPotentialOrigin.h to include the GSL library according to the installation of GSL on the target system.</p>
+<p>1) The program requires the GSL library which the code assumes to be installed in PATH.</p>
 <p>2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently 'chmod +x InstallLibraries.sh'.</p>
 <p>3) Then type <code>./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler</code> in order to install the eigen and CMAES libraries in the path 'PathToLib'. This might take a while.</p>
 <p>4) Afterwards type <code>./autogen.sh --lib=PathToLib --CXX=YourC++Compiler</code> in order to create a makefile in the main path, with the libraries installed in 'PathToLib'.</p>
-<hr/>
+<p>5) Finally go back to the main directory and type 'make'. </p><hr/>
 <h2>How to add a new model (for further details, also see the manual):</h2>
 <p>1) Go to the file <a class="el" href="_class_potential_origin_8h_source.html">ClassPotentialOrigin.h</a> and rename the variable 'C_ModelTemplate' to the variable name with which the new model shall be selected by the program.</p>
 <p>2) Go to <a class="el" href="_include_all_models_8h_source.html">IncludeAllModels.h</a> and add the header for your model. Also add</p>

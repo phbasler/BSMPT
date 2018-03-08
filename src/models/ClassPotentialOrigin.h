@@ -12,11 +12,25 @@
  * \mainpage BSMPT - A tool for calculating the temperature dependent  effective potential in various extended Higgs models
  *
  * \section intro_sec Introduction
- * This program provides tools to calculate the temperature dependent effective potential in various models with
- *  extended Higgs sectors and the development of the Vacuum of the scalar sector. The programs are also accompanied
- *  by tools for calculating the counterterms, the trilinear Higgs couplings and the global minium at NLO at T=0
- *  described in arXiv:TODO . The code itself can be downloaded at https://github.com/phbasler/BSMPT.
- *
+*BSMPT - Beyond the Standard Model Phase Transitions:
+*The C++ program package BSMPT calculates for models with extended
+*Higgs sectors the loop-corrected effective potential at finite temperature
+*including the daisy resummation of the bosonic masses. The program
+*computes the vacuum expectation value (VEV) \f$ v \f$ of the potential
+*as a function of the temperature, and in particular the critical VEV
+*\f$v_c\f$ at the temperature \f$T_c\f$ where the phase transition takes
+*place. In addition, the loop-corrected trilinear Higgs self-couplings are
+*provided. We apply an 'on-shell' renormalization scheme in the sense
+*that the loop-corrected masses and mixing angles are required to be
+*equal to their tree-level input values. This allows for efficient
+*scans in the parameter space of the models. The models implemented so far
+*are the CP-conserving and the CP-violating 2-Higgs-Doublet Models (2HDM) and the
+*Next-to-Minimal 2HDM (N2HDM). The program structure is such that the
+*user can easily implement further models.
+
+*The program package can be downloaded at:
+*https://github.com/phbasler/BSMPT
+
  *  \section Citation
  *  If you use this program for your work please cite arXiv:TODO
  *
@@ -24,20 +38,18 @@
  *
  *
  *
- *  1) The program requires the GSL library [1]. In case the library
-  * is not installed via the system packet manager,
-  * change the lines 108 to 114 in /src/models/ClassPotentialOrigin.h
-  * to include the GSL library according to the installation of GSL on the
-  * target system.
+ *  1) The program requires the GSL library [1] which is assumed to be installed in PATH.
 	*
 *2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently
  *  'chmod +x InstallLibraries.sh'.
 *
-*3) Then type './InstallLibraries.sh PathToLib' in order to install the
- *  Eigen3 [2] and CMAES libraries [3] in the path 'PathToLib'. This might take a while.
+*3) Then type `./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler` in order to install the
+   eigen[2] and CMAES[3] libraries in the path 'PathToLib'. This might take a while.
 *
 *4) Afterwards type './autogen.sh PathToLib' in order to create a makefile in the
  *  main path, with the libraries installed in 'PathToLib'.
+*
+*5) Finally go back to the main directory and type 'make'. 
  *
  *   *  [1] http://www.gnu.org/software/gsl/
  *

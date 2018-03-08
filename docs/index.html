@@ -110,22 +110,23 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
 Introduction</h1>
-<p>This program provides tools to calculate the temperature dependent effective potential in various models with extended Higgs sectors and the development of the Vacuum of the scalar sector. The programs are also accompanied by tools for calculating the counterterms, the trilinear Higgs couplings and the global minium at NLO at T=0 described in arXiv:TODO . The code itself can be downloaded at <a href="https://github.com/phbasler/BSMPT">https://github.com/phbasler/BSMPT</a>.</p>
+<p>BSMPT - Beyond the Standard Model Phase Transitions: The C++ program package BSMPT calculates for models with extended Higgs sectors the loop-corrected effective potential at finite temperature including the daisy resummation of the bosonic masses. The program computes the vacuum expectation value (VEV) \( v \) of the potential as a function of the temperature, and in particular the critical VEV \(v_c\) at the temperature \(T_c\) where the phase transition takes place. In addition, the loop-corrected trilinear Higgs self-couplings are provided. We apply an 'on-shell' renormalization scheme in the sense that the loop-corrected masses and mixing angles are required to be equal to their tree-level input values. This allows for efficient scans in the parameter space of the models. The models implemented so far are the CP-conserving and the CP-violating 2-Higgs-Doublet Models (2HDM) and the Next-to-Minimal 2HDM (N2HDM). The program structure is such that the user can easily implement further models.</p>
+<p>The program package can be downloaded at: <a href="https://github.com/phbasler/BSMPT">https://github.com/phbasler/BSMPT</a></p>
 <h1><a class="anchor" id="Citation"></a>
 Citation</h1>
 <p>If you use this program for your work please cite arXiv:TODO</p>
 <h1><a class="anchor" id="install_sec"></a>
 Installation</h1>
-<p>1) The program requires the GSL library [1]. In case the library is not installed via the system packet manager, change the lines 108 to 114 in /src/models/ClassPotentialOrigin.h to include the GSL library according to the installation of GSL on the target system.</p>
+<p>1) The program requires the GSL library [1] which is assumed to be installed in PATH.</p>
 <p>2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently 'chmod +x InstallLibraries.sh'.</p>
-<p>3) Then type './InstallLibraries.sh PathToLib' in order to install the Eigen3 [2] and CMAES libraries [3] in the path 'PathToLib'. This might take a while.</p>
+<p>3) Then type <code>./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler</code> in order to install the eigen[2] and CMAES[3] libraries in the path 'PathToLib'. This might take a while.</p>
 <p>4) Afterwards type './autogen.sh PathToLib' in order to create a makefile in the main path, with the libraries installed in 'PathToLib'.</p>
-<ul>
-<li>[1] <a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a></li>
-<li>[2] <a href="http://eigen.tuxfamily.org">http://eigen.tuxfamily.org</a></li>
-<li>[3] <a href="https://github.com/beniz/libcmaes">https://github.com/beniz/libcmaes</a></li>
-</ul>
-<h1><a class="anchor" id="executables_sec"></a>
+<p>5) Finally go back to the main directory and type 'make'. </p><pre class="fragment">*  [1] http://www.gnu.org/software/gsl/
+
+* [2] http://eigen.tuxfamily.org
+
+* [3] https://github.com/beniz/libcmaes
+</pre><h1><a class="anchor" id="executables_sec"></a>
 Executables</h1>
 <p>This will give a brief overview over the given executables with an instruction on how to use the executables for an example point in the CP-violating 2HDM given in the file example/C2HDM_Input.dat. For an more detailed description go the chapter Executables in the manual.</p>
 <h2><a class="anchor" id="BSMPT"></a>

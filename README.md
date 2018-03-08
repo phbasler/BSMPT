@@ -38,11 +38,7 @@ to:  philipp.basler@kit.edu
 ##Installation:
 
 
-1) The program requires the GSL library. In case the library
-   is not installed via the system packet manager,
-   change the lines 108 to 114 in /src/models/ClassPotentialOrigin.h
-   to include the GSL library according to the installation of GSL on the
-   target system.
+1) The program requires the GSL library which the code assumes to be installed in PATH. 
 
 2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently
    'chmod +x InstallLibraries.sh'.
@@ -53,6 +49,7 @@ to:  philipp.basler@kit.edu
 4) Afterwards type `./autogen.sh --lib=PathToLib --CXX=YourC++Compiler` in order to create a makefile in the
    main path, with the libraries installed in 'PathToLib'.  
 
+5) Finally go back to the main directory and type 'make'. 
  
 ---
   
