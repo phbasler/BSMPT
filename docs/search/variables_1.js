@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['higgsrotationmatrix',['HiggsRotationMatrix',['../class_class___potential___origin.html#af12576dcf427308b1c204ea14394c2ed',1,'Class_Potential_Origin']]],
-  ['higgsvev',['HiggsVev',['../class_class___potential___origin.html#ae1202c89eebf4874447ba923bb46c371',1,'Class_Potential_Origin']]]
+  ['fsphere_5fgen_5fall',['fsphere_gen_all',['../_minfunc__gen_8cpp.html#a3552a41fccaa5e70ae659b9b1c3a9be6',1,'Minfunc_gen.cpp']]]
 ];

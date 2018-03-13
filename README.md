@@ -23,11 +23,13 @@ user can easily implement further models.
 The program package can be downloaded at:
 https://github.com/phbasler/BSMPT
 
-The documentation is given at: https://phbasler.github.io/BSMPT/
+A short documentation is given at: https://phbasler.github.io/BSMPT/
+
+Sample input and output files are provided in the directory 'example'.
 
 Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
-Sample input and output files are provided in the directory 'example'.
+
 
 For additional information, comments, complaints or suggestions please e-mail
 to:  philipp.basler@kit.edu

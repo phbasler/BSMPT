@@ -110,11 +110,10 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="intro_sec"></a>
 Introduction</h1>
-<p>BSMPT - Beyond the Standard Model Phase Transitions: The C++ program package BSMPT calculates for models with extended Higgs sectors the loop-corrected effective potential at finite temperature including the daisy resummation of the bosonic masses. The program computes the vacuum expectation value (VEV) \( v \) of the potential as a function of the temperature, and in particular the critical VEV \(v_c\) at the temperature \(T_c\) where the phase transition takes place. In addition, the loop-corrected trilinear Higgs self-couplings are provided. We apply an 'on-shell' renormalization scheme in the sense that the loop-corrected masses and mixing angles are required to be equal to their tree-level input values. This allows for efficient scans in the parameter space of the models. The models implemented so far are the CP-conserving and the CP-violating 2-Higgs-Doublet Models (2HDM) and the Next-to-Minimal 2HDM (N2HDM). The program structure is such that the user can easily implement further models.</p>
-<p>The program package can be downloaded at: <a href="https://github.com/phbasler/BSMPT">https://github.com/phbasler/BSMPT</a></p>
+<p>BSMPT - Beyond the Standard Model Phase Transitions: BSMPT is a C++ tool BSMPT for the calculation of the strength of the electroweak phase transition in extended Higgs sectors. For this the loop-corrected effective potential at finite temperature is calculated including the daisy resummation of the bosonic masses. The program calculates the vacuum expectation value (VEV) v of the potential as a function of the temperature, and in particular the critical VEV v_c at the temperature T_c where the phase transition takes place. Furthermore, the loop-corrected trilinear Higgs self-couplings are provided at T=0. The renormalization scheme is chosen such that the loop-corrected masses and mixing angles remain at their tree-level input values. For details, see: <a href="https://arxiv.org/abs/1803.02846">https://arxiv.org/abs/1803.02846</a>. The code itself can be downloaded at <a href="https://github.com/phbasler/BSMPT">https://github.com/phbasler/BSMPT</a>.</p>
 <h1><a class="anchor" id="Citation"></a>
 Citation</h1>
-<p>If you use this program for your work please cite arXiv:TODO</p>
+<p>If you use this program for your work please cite <a href="https://arxiv.org/abs/1803.02846">https://arxiv.org/abs/1803.02846</a></p>
 <h1><a class="anchor" id="install_sec"></a>
 Installation</h1>
 <p>1) The program requires the GSL library [1] which is assumed to be installed in PATH.</p>
@@ -128,42 +127,45 @@ Installation</h1>
 * [3] https://github.com/beniz/libcmaes
 </pre><h1><a class="anchor" id="executables_sec"></a>
 Executables</h1>
-<p>This will give a brief overview over the given executables with an instruction on how to use the executables for an example point in the CP-violating 2HDM given in the file example/C2HDM_Input.dat. For an more detailed description go the chapter Executables in the manual.</p>
+<p>We briefly give an overview of the available executables and their function. We illustrate the call of the executables for the CP-violationg 2HDM, with the input parameter values given in 'example/C2HDM_Input.dat.' For details, see also the section 'Executables' of the manual.</p>
 <h2><a class="anchor" id="BSMPT"></a>
 BSMPT</h2>
-<p>BSMPT will calculate the EWPT for every point in the Inputfile and will write only those into the Outputfile with \(v_c/T_c\) &gt; 1. To find those point it uses a bisection method with the Temperature starting between 0 and 300 GeV. It is called as</p>
+<p>BSMPT calculates the EWPT for every parameter point in the input file and gives out the results of those parameter points for which \(v_c/T_c\) &gt; 1. To find these points a bisection method is used with the temperature starting between 0 and 300 GeV. The executable is called through:</p>
 <p>./bin/BSMPT Model Inputfile Outputfile LineStart LineEnd</p>
-<p>This will call the model with the Identification Model and calculates every line between LineStart and LineEnd. For example</p>
+<p>This will call the specific model to be used, identified through 'Model', and calculate the EWPT for each parameter point (corresponding to one line) between 'LineStart' and 'LineEnd'.</p>
+<p>For our example the command</p>
 <p>./bin/BSMPT 0 example/C2HDM_Input.dat example/test_BSMPT.dat 2 2</p>
-<p>will calculate the one point in C2HDM_Input.dat. The output is given in example/C2HDM_Input.dat_BSMPT for comparission.</p>
+<p>will calculate for the C2HDM identified through (Model=) 0 the EWPT for one parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2 which can be compared with the already available file example/C2HDM_Input.dat_BSMPT.</p>
 <h2><a class="anchor" id="CalcCT"></a>
 CalcCT</h2>
-<p>This will calculate the counterterms and adds them to the end of the line. It is callable with</p>
+<p>This will calculate the counterterms. In the output file the information on the input parameter point is given and the counterterms are added at the end of the line.</p>
+<p>It is called through the command</p>
 <p>./bin/CalcCT Model Inputfile Outputfile LineStart LineEnd</p>
-<p>The example is then called with</p>
+<p>For the C2HDM example this reads</p>
 <p>./bin/CalcCT 0 example/C2HDM_Input.dat example/test_CalcCT.dat 2 2</p>
-<p>where the output can be compared with example/C2HDM_Input.dat_CalcCT.</p>
+<p>which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file example/C2HDM_Input.dat_CalcCT.</p>
 <h2><a class="anchor" id="NLOVEV"></a>
 NLOVEV</h2>
-<p>This calculates the vacuum at 1-loop at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called as</p>
+<p>This calculates the VEV at 1-loop order at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called through</p>
 <p>./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd</p>
-<p>and the example is given by</p>
+<p>and for the C2HDM example it is given by</p>
 <p>./bin/NLOVEV 0 example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2</p>
-<p>where the result is given in example/C2HDM_Input.dat_NLOVEV.</p>
+<p>where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.</p>
 <h2><a class="anchor" id="VEVEVO"></a>
 VEVEVO</h2>
-<p>This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called as</p>
+<p>This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through</p>
 <p>./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend</p>
-<p>where Model tells the code which model is used, Line is the number of the line in the Inputfile , Tempstart is the starting value of the temperature and it increases with Tempstep until Tempend.</p>
-<p>The example is given by</p>
+<p>where 'Tempstart' is the starting value of the temperature which increases with 'Tempstep' until 'Tempend'.</p>
+<p>For our C2HDM example this would be</p>
 <p>./bin/VEVEVO 0 example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150</p>
-<p>where the result is given in example/C2HDM_Input.dat_VEVevo for comparission.</p>
+<p>where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.</p>
 <h2><a class="anchor" id="TripleHiggsCouplingNLO"></a>
 TripleHiggsCouplingNLO</h2>
-<p>This program calculates the trilinear Higgs self-couplings at NLO for each line in the input file. It is called by ./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd</p>
-<p>An example is given by</p>
+<p>This program calculates the trilinear Higgs self-couplings at NLO at zero temperature. It is called through</p>
+<p>./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd</p>
+<p>The C2HDM example is called through</p>
 <p>./bin/TripleHiggsNLO 0 example/C2HDM_Input.dat example/test_TripleHiggsNLO.dat 2 2</p>
-<p>where the result is given in example/C2HDM_Input.dat_TripleHiggsNLO . </p>
+<p>with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsNLO . </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
