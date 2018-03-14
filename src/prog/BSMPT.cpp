@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) try{
 
 			sol.clear();
 			PTFinder_gen_all(Model,par,parCT,0,300,sol,3);
-			if(LineStart == LineEnd) {for(int i=0;i<6;i++) std::cout << sol.at(i) << "\t"; std::cout << "\n";}
+			if(LineStart == LineEnd) {for(int i=0;i<ndim+3 ;i++) std::cout << sol.at(i) << "\t"; std::cout << "\n";}
 			if(sol.at(2) == 1)
 			{
 				if(C_PT*sol.at(0) < sol.at(1))
