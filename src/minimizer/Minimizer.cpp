@@ -228,7 +228,10 @@ void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vect
 
     double vevsolTMp = 0;
     vevsolTMp = modelPointer->EWSBVEV(solTmpPot);
-    if(MinZero or vevsolTMp <= 0.5)
+    if(MinZero) {
+    	for(int k=0;k<dim;k++) sol.push_back(0);
+    }
+    else if(vevsolTMp <= 0.5)
     {
 	    for(int k=0;k<dim;k++) sol.push_back(modelPointer->ModifiedVEVVectorDim[k]);
     }

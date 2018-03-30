@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) try{
 	if(!(argc == 8))
 	{
 		std::cout << "./VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend \n";
-		std::cout << "\t0: C2HDM \n\t1: R2HDM\n\t2: RN2HDM \n\t3: DarkN2HDM \n";
+		std::cout << "\t0: C2HDM \n\t1: R2HDM\n\t2: RN2HDM \n";
 		return -1;
 	}
 	char* in_file; char* out_file;
@@ -210,6 +210,23 @@ int main(int argc, char *argv[]) try{
 
 
 
+	  //DEBUGGING
+		if(Debug){ std::cout << std::endl;
+		std::cout<<"Input Values"<<std::endl;
+		double VTree = modelPointer->VEff(modelPointer->vevTree,0,0);
+		double VTreeVevTree = modelPointer->VTree(modelPointer->vevTree,0);
+		double VCTVevTree = modelPointer->CounterTerm(modelPointer->vevTree,0);
+		double V1VevTree = modelPointer->V1Loop(modelPointer->vevTree,0,0);
+		std::cout << "V(v_T,T=0) = " << VTree << std::endl;
+		std::cout << "V_Tree(v_T,T=0) = " << VTreeVevTree << std::endl;
+		std::cout << "V_CT(v_T,T=0) = " << VCTVevTree << std::endl;
+		std::cout << "V_1(v_T,T=0) = " << V1VevTree << std::endl;
+
+		   double V_tree;
+		   V_tree = modelPointer->VTree(solPot,0);
+		   std::cout<<"V_tree at Minimum: "<<V_tree<<std::endl;
+
+		   std::cout<<"Minimizer-Input = "<<V_tree-VTree<<std::endl; }
 
 	   outfile << Temp << "\t";
 	   outfile << vev;
