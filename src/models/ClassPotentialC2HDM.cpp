@@ -1538,13 +1538,15 @@ Curvature_Higgs_L2[7][7] = u2;
     else if(Type == 4) vD = v1;
 
     YIJR2(0,9) = -std::conj(V11) * C_MassUp / v2;
-    YIJR2(0,10) = -std::conj(V21) * C_MassUp / v2;
-    YIJR2(0,11) = -std::conj(V31) * C_MassUp / v2;
-    YIJR2(1,9) = -std::conj(V12) * C_MassCharm / v2;
+    YIJR2(0,10) = -std::conj(V12) * C_MassUp / v2;
+    YIJR2(0,11) = -std::conj(V13) * C_MassUp / v2;
+
+    YIJR2(1,9) = -std::conj(V21) * C_MassCharm / v2;
     YIJR2(1,10) = -std::conj(V22) * C_MassCharm / v2;
-    YIJR2(1,11) = -std::conj(V32) * C_MassCharm / v2;
-    YIJR2(2,9) = -std::conj(V13) * C_MassTop / v2;
-    YIJR2(2,10) = -std::conj(V23) * C_MassTop / v2;
+    YIJR2(1,11) = -std::conj(V23) * C_MassCharm / v2;
+
+    YIJR2(2,9) = -std::conj(V31) * C_MassTop / v2;
+    YIJR2(2,10) = -std::conj(V32) * C_MassTop / v2;
     YIJR2(2,11) = -std::conj(V33) * C_MassTop / v2;
 
 
@@ -1601,12 +1603,14 @@ Curvature_Higgs_L2[7][7] = u2;
     }
 
 
-    YIJP2 = II*YIJS2;
-    YIJE2 = II*YIJR2;
-    YIJPD = std::complex<double>(-1,0)*II*YIJSD;
-    YIJED = std::complex<double>(-1,0)*II*YIJRD;
-    YIJPL = std::complex<double>(-1,0)*II*YIJSL;
-    YIJEL = std::complex<double>(-1,0)*II*YIJRL;
+    YIJP2 = std::complex<double>(-1,0)*II*YIJS2;
+    YIJE2 = std::complex<double>(-1,0)*II*YIJR2;
+
+    YIJPD = II*YIJSD;
+    YIJED = II*YIJRD;
+
+    YIJPL = II*YIJSL;
+    YIJEL = II*YIJRL;
 
     for(int i=0;i<NQuarks;i++)
     {

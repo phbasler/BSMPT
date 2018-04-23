@@ -2748,13 +2748,15 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     else if(Type == 4) vD = v1;
 
     YIJR2(0,9) = -std::conj(V11) * C_MassUp / v2;
-	YIJR2(0,10) = -std::conj(V21) * C_MassUp / v2;
-	YIJR2(0,11) = -std::conj(V31) * C_MassUp / v2;
-	YIJR2(1,9) = -std::conj(V12) * C_MassCharm / v2;
+	YIJR2(0,10) = -std::conj(V12) * C_MassUp / v2;
+	YIJR2(0,11) = -std::conj(V13) * C_MassUp / v2;
+
+	YIJR2(1,9) = -std::conj(V21) * C_MassCharm / v2;
 	YIJR2(1,10) = -std::conj(V22) * C_MassCharm / v2;
-	YIJR2(1,11) = -std::conj(V32) * C_MassCharm / v2;
-	YIJR2(2,9) = -std::conj(V13) * C_MassTop / v2;
-	YIJR2(2,10) = -std::conj(V23) * C_MassTop / v2;
+	YIJR2(1,11) = -std::conj(V23) * C_MassCharm / v2;
+
+	YIJR2(2,9) = -std::conj(V31) * C_MassTop / v2;
+	YIJR2(2,10) = -std::conj(V32) * C_MassTop / v2;
 	YIJR2(2,11) = -std::conj(V33) * C_MassTop / v2;
 
     YIJS2(0,6) = C_MassUp / v2;
@@ -2768,9 +2770,11 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     YIJRD(3,6) = V11 * C_MassDown / vD;
     YIJRD(3,7) = V21 * C_MassDown / vD;
     YIJRD(3,8) = V31 * C_MassDown / vD;
+
     YIJRD(4,6) = V12 * C_MassStrange / vD;
     YIJRD(4,7) = V22 * C_MassStrange / vD;
     YIJRD(4,8) = V32 * C_MassStrange / vD;
+
     YIJRD(5,6) = V13 * C_MassBottom / vD;
     YIJRD(5,7) = V23 * C_MassBottom / vD;
     YIJRD(5,8) = V33 * C_MassBottom / vD;
@@ -2809,12 +2813,14 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     }
 
 
-    YIJP2 = II*YIJS2;
-    YIJE2 = II*YIJR2;
-    YIJPD = std::complex<double>(-1,0)*II*YIJSD;
-    YIJED = std::complex<double>(-1,0)*II*YIJRD;
-    YIJPL = std::complex<double>(-1,0)*II*YIJSL;
-    YIJEL = std::complex<double>(-1,0)*II*YIJRL;
+    YIJP2 = std::complex<double>(-1,0)*II*YIJS2;
+    YIJE2 = std::complex<double>(-1,0)*II*YIJR2;
+
+    YIJPD = II*YIJSD;
+    YIJED = II*YIJRD;
+
+    YIJPL = II*YIJSL;
+    YIJEL = II*YIJRL;
 
     for(int i=0;i<NQuarks;i++)
     {
