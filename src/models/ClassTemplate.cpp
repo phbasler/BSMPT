@@ -126,6 +126,10 @@ void Class_Template::ReadAndSet(const std::string& linestr, std::vector<double>&
 	}
 	par[0] = lms;
 	par[1] = llambda;
+
+
+	set_gen(par); // This you have to call so that everything will be set
+	return ;
 }
 
 
