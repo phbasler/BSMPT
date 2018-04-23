@@ -30,8 +30,6 @@ int main(int argc, char *argv[]) try{
 		std::cout << "The chosen Method is ";
 		if(C_UseParwani) std::cout << "Parwani ";
 		else std::cout << "Arnold Espinosa\n";
-		std::cout << "\t0: C2HDM \n\t1: R2HDM\n\t2: RN2HDM \n\t3: DarkN2HDM \n";
-		std::cout << std::endl;
 		std::cout << "The implemented models are \n"
 				<< "0 : C2HDM\n"
 				<< "1 : R2HDM\n"
@@ -184,4 +182,3 @@ catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 }
-
