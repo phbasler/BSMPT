@@ -104,7 +104,7 @@ std::string Class_Template::addLegendVEV(){
 	std::string out;
 	//out = "Your VEV order";
 	out = "omega";
-  return "out";
+  return out;
 }
 
 /**
