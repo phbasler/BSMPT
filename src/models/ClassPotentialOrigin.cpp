@@ -1855,7 +1855,9 @@ void Class_Potential_Origin::HiggsMassesSquared(std::vector<double>& res, const 
         }
     }
 
-    if(diff == 0)
+//    std::cout << MassMatrix << std::endl;
+
+    if(diff == 0 and res.size() == 0)
     {
         SelfAdjointEigenSolver<MatrixXd> es(MassMatrix,EigenvaluesOnly);
         for(int i =0;i<NHiggs;i++)
@@ -1864,6 +1866,20 @@ void Class_Potential_Origin::HiggsMassesSquared(std::vector<double>& res, const 
             if(std::abs(tmp) < ZeroMass ) res.push_back(0);
             else res.push_back(tmp);
         }
+    }
+    else if(diff == 0 and res.size() == NHiggs){
+    	SelfAdjointEigenSolver<MatrixXd> es(MassMatrix,EigenvaluesOnly);
+		for(int i =0;i<NHiggs;i++)
+		{
+			double tmp = es.eigenvalues()[i];
+			if(std::abs(tmp) < ZeroMass ) tmp = 0;
+			res[i] = tmp;
+		}
+    }
+    else if(diff == 0 and res.size()!= 0 and res.size() != NHiggs){
+    	std::cout << "Something went wrong in " << __func__ << std::endl;
+    	std::cout << __func__ << "Is calculating the mass for " << NHiggs << "fields but the resolution vector has a size of "
+    			<< res.size() << ". This should be zero or " << NHiggs << std::endl;
     }
     else if(diff <= nVEV)
     {
@@ -2257,7 +2273,7 @@ void Class_Potential_Origin::CalculateDebye()
 	                for(int b=0;b<NQuarks;b++)
 	                {
 	                    double tmp = 0.5*(std::conj(Curvature_Quark_F2H1[a][b][j])*Curvature_Quark_F2H1[a][b][i] + std::conj(Curvature_Quark_F2H1[a][b][i])*Curvature_Quark_F2H1[a][b][j]).real();
-	                    DebyeHiggs[i][j] += 12/24.0*tmp;
+	                    DebyeHiggs[i][j] += 6.0/24.0*tmp;
 	                }
 	            }
 
@@ -2266,17 +2282,26 @@ void Class_Potential_Origin::CalculateDebye()
 	                for(int b=0;b<NLepton;b++)
 	                {
 	                    double tmp = 0.5*(std::conj(Curvature_Lepton_F2H1[a][b][j])*Curvature_Lepton_F2H1[a][b][i] + std::conj(Curvature_Lepton_F2H1[a][b][i])*Curvature_Lepton_F2H1[a][b][j]).real();
-	                    DebyeHiggs[i][j] += 4/24.0*tmp;
+	                    DebyeHiggs[i][j] += 2.0/24.0*tmp;
 	                }
 	            }
 
-	            if(i==j) DebyeHiggs[i][j] *= 0.5;
+//	            if(i==j) DebyeHiggs[i][j] *= 0.5;
 	        }
 	    }
 
+		for(int i=0;i<NHiggs;i++){
+			for(int j=i;j<NHiggs;j++) {
+				if(std::abs(DebyeHiggs[i][j])<=1e-5) DebyeHiggs[i][j] = 0;
+			}
+		}
+
+
 	    for(int i=0;i<NHiggs;i++)
 	    {
-	        for(int j=0;j<i;j++) DebyeHiggs[i][j] = DebyeHiggs[j][i];
+	        for(int j=0;j<i;j++) {
+	        	DebyeHiggs[i][j] = DebyeHiggs[j][i];
+	        }
 	    }
       }
 
@@ -2334,6 +2359,13 @@ void Class_Potential_Origin::CalculateDebyeGauge(){
     	if(Debug)std::cout << "gaugefac = " << GaugeFac << std::endl;
     	DebyeGauge[i][i] = 2.0/3.0*(nGaugeHiggs/8.0 + 5)*GaugeFac;
       }
+
+    for(int i=0;i<NGauge;i++){
+    	for(int j=0;j<NGauge;j++)
+    	{
+    		if(std::abs(DebyeGauge[i][j]) <=1e-5) DebyeGauge[i][j] = 0;
+    	}
+    }
 
     if(Debug)
       {
@@ -2554,3 +2586,6 @@ double Class_Potential_Origin::EWSBVEV(std::vector<double> v)
     }
   return res;
 }
+
+
+

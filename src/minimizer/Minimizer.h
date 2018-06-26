@@ -28,6 +28,10 @@ double GSL_VEFF_gen_all(const gsl_vector *v, void *p);
 int GSL_Minimize_From_S_gen_all(const std::vector<double>& p, std::vector<double>& sol,const std::vector<double>& start);
 bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT,
 		double Temp, std::vector<double>& solV, int seed);
+bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT,
+		double Temp, std::vector<double>& solV, int seed,int MaxSol);
+bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT,
+		double Temp, std::vector<double>& solV, int seed, std::vector<std::vector<double>>& saveAllMinima, int MaxSol);
 
 
 // Minfunc_gen.cpp
