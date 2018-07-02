@@ -60,7 +60,7 @@ std::string Class_Potential_RN2HDM::addLegendCT(){
  * complement the legend of the given inputfile
  */
 std::string Class_Potential_RN2HDM::addLegendTemp(){
-	std::string out = "omega_c\tT_c\tomega_{CB}(T_c)\tomega_{CP}(T_c)\tomega_1(T_c)\tomega_2(T_c)\tomega_s(T_c)\tomega_c/T_c";
+	std::string out = "T_c\tomega_c\tomega_{CB}(T_c)\tomega_{CP}(T_c)\tomega_1(T_c)\tomega_2(T_c)\tomega_s(T_c)\tomega_c/T_c";
   return out;
 }
 
