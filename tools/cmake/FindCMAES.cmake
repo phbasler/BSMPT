@@ -21,6 +21,8 @@ if(NOT CMAES_LIBRARY OR NOT CMAES_INCLUDE_DIR)
 			DOWNLOAD
 				https://github.com/beniz/libcmaes/archive/0.9.5.tar.gz
 				${CMAKE_BINARY_DIR}/libcmaes.tar.gz
+      EXPECTED_MD5
+        ab89fde799f1e938ffd74fa66ab77153
 		)
 		execute_process(
 			COMMAND
