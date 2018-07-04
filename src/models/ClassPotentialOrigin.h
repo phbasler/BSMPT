@@ -56,7 +56,7 @@
 *4) Afterwards type  `./autogen.sh --lib=PathToLib --CXX=YourC++Compiler`  in order to create a makefile in the
  *  main path, with the libraries installed in 'PathToLib'.
 *
-*5) Finally go back to the main directory and type 'make'. 
+*5) Finally go back to the main directory and type 'make'.
  *
  *   *  [1] http://www.gnu.org/software/gsl/
  *
@@ -157,16 +157,16 @@
  */
 
 
-#include <Eigen/Dense>
-#include <Eigen/Eigenvalues>
-#include <Eigen/IterativeLinearSolvers>
+#include "Eigen/Dense"
+#include "Eigen/Eigenvalues"
+#include "Eigen/IterativeLinearSolvers"
 
 #include <complex>
-#include<array>
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
-#include<sstream>
+#include <sstream>
 #include <limits>
 #include <algorithm>
 #include <cmath>
