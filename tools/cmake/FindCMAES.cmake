@@ -1,18 +1,22 @@
+if(DEFINED ENV{CMAES_ROOT})
+  set(CMAES_ROOT $ENV{CMAES_ROOT})
+endif(DEFINED ENV{CMAES_ROOT})
+
 find_library( CMAES_LIBRARY
   NAMES cmaes
-  HINTS ${TOOLSDIR}/lib ${TOOLSDIR}/lib64
+  HINTS ${CMAES_ROOT}/lib ${CMAES_ROOT}/lib64
   DOC "path to cmaes library"
 )
 
 find_path( CMAES_INCLUDE_DIR
   NAMES libcmaes/cmaes.h
-  HINTS ${TOOLSDIR}/include/
+  HINTS ${CMAES_ROOT}/include/
   DOC "cmaes include directory"
 )
 
 if(NOT CMAES_LIBRARY OR NOT CMAES_INCLUDE_DIR)
   MESSAGE(STATUS "libCMAES not found, downloading...")
-  file(MAKE_DIRECTORY ${TOOLSDIR})
+  file(MAKE_DIRECTORY ${CMAES_ROOT})
   file(
 			DOWNLOAD
 				https://github.com/beniz/libcmaes/archive/0.9.5.tar.gz
@@ -26,12 +30,13 @@ if(NOT CMAES_LIBRARY OR NOT CMAES_INCLUDE_DIR)
 			COMMAND ./autogen.sh
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/libcmaes-0.9.5
 		)
+    file(WRITE ${CMAKE_BINARY_DIR}/libcmaes-0.9.5/cmaes_export.h "#define CMAES_EXPORT")
     execute_process(
       COMMAND ./configure
         CC=${CMAKE_C_COMPILER}
         CXX=${CMAKE_CXX_COMPILER}
         --with-eigen3-include=${EIGEN3_INCLUDE_DIR}
-        --prefix=${TOOLSDIR}
+        --prefix=${CMAES_ROOT}
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/libcmaes-0.9.5
     )
     execute_process(
@@ -41,6 +46,17 @@ if(NOT CMAES_LIBRARY OR NOT CMAES_INCLUDE_DIR)
     execute_process(
       COMMAND make install
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/libcmaes-0.9.5
+    )
+    find_library( CMAES_LIBRARY
+      NAMES cmaes
+      HINTS ${CMAES_ROOT}/lib ${CMAES_ROOT}/lib64
+      DOC "path to cmaes library"
+    )
+
+    find_path( CMAES_INCLUDE_DIR
+      NAMES libcmaes/cmaes.h
+      HINTS ${CMAES_ROOT}/include/
+      DOC "cmaes include directory"
     )
 endif(NOT CMAES_LIBRARY OR NOT CMAES_INCLUDE_DIR)
 
