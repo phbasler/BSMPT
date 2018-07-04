@@ -5,3 +5,4 @@ add_library(Minimizer
 )
 target_include_directories( Minimizer PUBLIC ${EIGEN3_INCLUDE_DIR})
 target_link_libraries(Minimizer PRIVATE CMAES)
+target_compile_options(Minimizer PUBLIC ${OpenMP_CXX_FLAGS})

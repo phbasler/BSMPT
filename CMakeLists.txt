@@ -11,6 +11,6 @@ set(TOOLSDIR ${CMAKE_SOURCE_DIR}/tools)
 find_package(Eigen3 REQUIRED)
 find_package(CMAES REQUIRED)
 find_package(GSL REQUIRED)
-
+find_package(OpenMP)
 
 add_subdirectory(src)
