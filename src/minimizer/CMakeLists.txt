@@ -3,6 +3,5 @@ add_library(Minimizer
   MinimizeGSL.cpp
   Minimizer.cpp
 )
-target_include_directories( Minimizer PUBLIC ${EIGEN3_INCLUDE_DIR})
-target_link_libraries(Minimizer PRIVATE CMAES)
+target_link_libraries(Minimizer PUBLIC CMAES Eigen3::Eigen GSL::gsl)
 target_compile_options(Minimizer PUBLIC ${OpenMP_CXX_FLAGS})

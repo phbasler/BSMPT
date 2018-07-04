@@ -6,5 +6,4 @@ add_library(Models
   ClassTemplate.cpp
   IncludeAllModels.cpp
 )
-target_include_directories( Models PUBLIC ${EIGEN3_INCLUDE_DIR})
-target_link_libraries( Models PUBLIC CMAES GSL::gsl)
+target_link_libraries( Models PUBLIC CMAES GSL::gsl Eigen3::Eigen)
