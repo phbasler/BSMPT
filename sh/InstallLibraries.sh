@@ -10,7 +10,7 @@ while :; do
              showhelp    # Display a usage synopsis.
              exit
              ;;
-          --CXX) 
+          --CXX)
           	if [ "$2" ]; then
                    CXXInput=$2
                    shift
@@ -29,7 +29,7 @@ while :; do
            *)               # Default case: No more options, so break out of the loop.
                break
        esac
-   
+
        shift
    done
 
@@ -39,8 +39,7 @@ PathToLib=$PathToLib_Input
 mkdir -p $PathToLib
 echo "Install Libraries into $PathToLib"
 
-CMAESFILE=0.9.5.tar.gz
-GSL=http://bitbucket.org/eigen/eigen/get/3.3.3.tar.gz
+EIGEN=https://bitbucket.org/eigen/eigen/get/3.3.3.tar.gz
 CMAES=https://github.com/beniz/libcmaes/archive/0.9.5.tar.gz
 CXX=$CXXInput
 CC=$CCInput
@@ -49,14 +48,14 @@ CC=$CCInput
 
 cd $PathToLib
 
-wget -q -O - $GSL | tar xzf -
+echo "Downloading eigen3 ..."
+(wget -q -O - $EIGEN || curl -Ls $EIGEN ) | tar xzf -
 mv eigen-eigen-67e894c6cd8f eigen3
 
-wget -q $CMAES 
-tar -xzf $CMAESFILE
-rm $CMAESFILE
+echo "Downloading libCMAES ..."
+(wget -q -O - $CMAES || curl -Ls $CMAES ) | tar xzf -
 
-# tar -xzf libcmaes.tar.gz
+echo "Building libCMAES ..."
 cd libcmaes-0.9.5
 export CC=$CC
 export CXX=$CXX
