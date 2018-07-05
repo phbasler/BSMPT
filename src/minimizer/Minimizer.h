@@ -21,11 +21,11 @@
 #define MINIMIZER_H_
 
 #include "../models/IncludeAllModels.h"
-#include "cmaes.h"
-#include <cmaparameters.h>
-#include "esoptimizer.h"
-#include "cmastrategy.h"
-#include "llogging.h"
+#include "libcmaes/cmaes.h"
+#include "libcmaes/cmaparameters.h"
+#include "libcmaes/esoptimizer.h"
+#include "libcmaes/cmastrategy.h"
+#include "libcmaes/llogging.h"
 #include <random>
 #include <memory>
 
@@ -60,4 +60,3 @@ struct PointerContainer{
 };
 
 #endif /* MINIMIZER_H_ */
-
