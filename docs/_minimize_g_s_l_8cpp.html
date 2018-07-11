@@ -131,8 +131,14 @@ Functions</h2></td></tr>
 <tr class="separator:a21a2bf462530df73263d78dd1f24ecfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8e64d481739c404f5c48020893d0e8f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_minimize_g_s_l_8cpp.html#aa8e64d481739c404f5c48020893d0e8f">GSL_Minimize_From_S_gen_all</a> (void *p, std::vector&lt; double &gt; &amp;sol, std::vector&lt; double &gt; start)</td></tr>
 <tr class="separator:aa8e64d481739c404f5c48020893d0e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a488ed468dc1d74b624d2e2ea125f78c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_minimize_g_s_l_8cpp.html#a488ed468dc1d74b624d2e2ea125f78c3">GSL_Minimize_gen_all</a> (int Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, double Temp, std::vector&lt; double &gt; &amp;solV, int seed)</td></tr>
+<tr class="memitem:a6f495902eac49be9afc7104c9f123948"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_minimize_g_s_l_8cpp.html#a6f495902eac49be9afc7104c9f123948">GSL_Minimize_gen_all</a> (int Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, double Temp, std::vector&lt; double &gt; &amp;solV, int seed, int MaxSol)</td></tr>
+<tr class="separator:a6f495902eac49be9afc7104c9f123948"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a488ed468dc1d74b624d2e2ea125f78c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a488ed468dc1d74b624d2e2ea125f78c3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>GSL_Minimize_gen_all</b> (int Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, double Temp, std::vector&lt; double &gt; &amp;solV, int seed)</td></tr>
 <tr class="separator:a488ed468dc1d74b624d2e2ea125f78c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b9ceaad3b72733bb4c8a665c36ca0e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b9ceaad3b72733bb4c8a665c36ca0e9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>GSL_Minimize_gen_all</b> (int Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, double Temp, std::vector&lt; double &gt; &amp;solV, int seed, std::vector&lt; std::vector&lt; double &gt;&gt; &amp;saveAllMinima, int MaxSol)</td></tr>
+<tr class="separator:a3b9ceaad3b72733bb4c8a665c36ca0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -179,7 +185,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Minimize1D</b> = fals
 
 </div>
 </div>
-<a class="anchor" id="a488ed468dc1d74b624d2e2ea125f78c3"></a>
+<a class="anchor" id="a6f495902eac49be9afc7104c9f123948"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -217,7 +223,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>Minimize1D</b> = fals
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>seed</em>&#160;</td>
+          <td class="paramname"><em>seed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>MaxSol</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

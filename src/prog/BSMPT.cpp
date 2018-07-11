@@ -33,6 +33,9 @@ using namespace std;
 
 
 
+
+
+
 //#include "Minimizer.h"
 
 int main(int argc, char *argv[]) try{
@@ -125,10 +128,8 @@ int main(int argc, char *argv[]) try{
 
 	std::vector<double> Weinberg;
 
-	while(true)
+	while(getline(infile,linestr))
 	{
-
-		getline(infile,linestr);
 		if(linecounter > LineEnd) break;
 
 		if(linecounter == 1)
@@ -160,7 +161,36 @@ int main(int argc, char *argv[]) try{
 
 			sol.clear();
 			PTFinder_gen_all(Model,par,parCT,0,300,sol,3);
-			if(LineStart == LineEnd) {for(int i=0;i<ndim+3 ;i++) std::cout << sol.at(i) << "\t"; std::cout << "\n";}
+			if(LineStart == LineEnd) {
+				std::string labels=modelPointer->addLegendTemp();
+				std::string delimiter = "\t";
+				std::vector<std::string> dimensionnames;
+				size_t pos = 0;
+				while((pos = labels.find(delimiter)) != std::string::npos){
+					dimensionnames.push_back(labels.substr(0,pos));
+					labels.erase(0,pos+delimiter.length());
+				}
+				dimensionnames.push_back(labels);
+				if(dimensionnames.size() != ndim +3){
+					std::cout << "The number of names in the function addLegendTemp does not match the number of vevs, going to default naming."
+							<< "You should fix this as this will result in errors in your output file." << std::endl;
+					std::cout << "Succeded ? " << sol.at(2) << "\t (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+					std::cout << "omega_c = " << sol.at(1) << " GeV\n";
+					std::cout << "T_c = " << sol.at(0) << " GeV\n";
+					std::cout << "xi_c = omega_c/T_c =  " << sol.at(1)/sol.at(0) << std::endl;
+					for(int i=3;i<ndim+3 ;i++) {
+						std::cout << "omega_" << i-2 << " = " << sol.at(i) << " GeV\n";}
+				}
+				else{
+					std::cout << "Succeded ? " << sol.at(2) << "\t (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+					std::cout << dimensionnames.at(1) << " = " << sol.at(1) << " GeV\n";
+					std::cout << dimensionnames.at(0) << " = " << sol.at(0) << " GeV\n";
+					std::cout << "xi_c = " << dimensionnames.at(ndim+2)  << " = " << sol.at(1)/sol.at(0) << std::endl;
+					for(int i=3;i<ndim + 3; i++){
+						std::cout << dimensionnames.at(i-1) << " = " << sol.at(i) << " GeV\n";
+					}
+				}
+			}
 			if(sol.at(2) == 1)
 			{
 				if(C_PT*sol.at(0) < sol.at(1))

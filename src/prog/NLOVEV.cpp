@@ -1,7 +1,7 @@
 /*
  * CheckNLOVEV.cpp
  *
- * Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) try{
 		  }
 		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
 		{
-		        modelPointer->resetbools();
+			modelPointer->resetbools();
 			modelPointer->ReadAndSet(linestr,par);
 			modelPointer->calc_CT(parCT);
 			modelPointer->set_CT_Pot_Par(parCT);
@@ -133,12 +133,27 @@ int main(int argc, char *argv[]) try{
 			modelPointer->MinimizeOrderVEV(sol,solPot);
 			double vev = modelPointer->EWSBVEV(solPot);
 
-
+//			outfile << linecounter << "\t";
 			outfile << linestr;
 			for(int i=0;i<nParCT;i++) outfile << "\t" << parCT[i];
 			for(int i=0;i<ndim;i++) outfile << "\t" << sol.at(i);
 			outfile << "\t" << vev;
 			outfile << std::endl;
+
+			if(LineStart==LineEnd){
+				std::string labels=modelPointer->addLegendVEV();
+				std::string delimiter = "\t";
+				std::vector<std::string> dimensionnames;
+				size_t pos = 0;
+				while((pos = labels.find(delimiter)) != std::string::npos){
+					dimensionnames.push_back(labels.substr(0,pos));
+					labels.erase(0,pos+delimiter.length());
+				}
+				dimensionnames.push_back(labels);
+				for(int i=0;i<ndim;i++){
+					std::cout << dimensionnames.at(i) << " = " << sol.at(i) << " GeV" << std::endl;
+				}
+			}
 		}
 		linecounter++;
 		if(infile.eof()) break;

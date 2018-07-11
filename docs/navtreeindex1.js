@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"class_class___potential___r2_h_d_m.html#a5a39b3fc62450f660d9234c6b976536b":[3,0,2,14],
+"class_class___potential___r2_h_d_m.html#a60e5fdfb8bf2970d7d1125c36e4df43d":[3,0,2,4],
 "class_class___potential___r2_h_d_m.html#a655a38678c6313b9ee313df3b15f8567":[3,0,2,16],
 "class_class___potential___r2_h_d_m.html#a66163a5ac77457240d9a1ce3e4789447":[3,0,2,33],
 "class_class___potential___r2_h_d_m.html#a6a7172d8f9b1f2f2c6fd157c4332401a":[3,0,2,41],

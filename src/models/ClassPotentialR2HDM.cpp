@@ -200,6 +200,7 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double>& par) {
 			- C_vev0 * C_vev0 * C_CosBetaSquared* (L4 + RL5 + L3) / 0.2e1
 			- C_vev0 * C_vev0 * C_SinBetaSquared * L2 / 0.2e1;
 
+
 	double ML5 = 2*RealMMix/(C_vev0*C_vev0*C_SinBeta*C_CosBeta);
 	double TripleHiggs = -3.0/(C_vev0*std::sin(2*beta))*(Mh*Mh*(2*std::cos(alpha+beta)+std::sin(2*alpha)*std::sin(beta-alpha)) - std::cos(alpha+beta)*std::pow(std::cos(beta-alpha),2)*C_vev0*C_vev0*ML5 );
 
@@ -249,6 +250,7 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double>& par) {
 	    TripleHiggsCorrectionsCW.clear();
 	    nTripleCouplings = 0;
 	  }
+
 
 
 
@@ -472,7 +474,7 @@ void Class_Potential_R2HDM::write() {
 
 
     std::cout << "The parameters are : \n";
-    std::cout << "Model = " << Model << "\n";
+    std::cout << "Model = " << "R2HDM" << "\n";
     std::cout << "v1 = " << C_vev0*C_CosBeta << "\n";
     std::cout << "v2 = " << C_vev0*C_SinBeta << "\n";
     std::cout << "Type = " << Type << "\n";
@@ -507,6 +509,74 @@ void Class_Potential_R2HDM::write() {
     std::cout << "DT3:= " <<  DT3 << ";"<< std::endl;
 
 
+    MatrixXd HiggsRot(NHiggs,NHiggs);
+   	for(int i=0;i<NHiggs;i++)
+   	{
+   		for(int j=0;j<NHiggs;j++)
+   		{
+   			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
+   		}
+   	}
+
+   	int posMHCS1=0,posMHCS2=0;
+	int posN[2];
+	int countposN=0;
+	int posA=0;
+	int posG1=0,posG2=0,posG0=0;
+	double testsum = 0;
+	for(int i=0;i<3;i++)
+	{
+		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
+		if(testsum != 0) posG1 = i;
+		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+		if(testsum != 0) posG2 = i;
+		testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
+		if(testsum != 0) posG0 = i;
+	}
+	for(int i=3;i<NHiggs;i++)
+	{
+		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
+		if(testsum != 0) posMHCS1 = i;
+		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+		if(testsum != 0) posMHCS2 = i;
+		testsum = std::abs(HiggsRot(i,4))+std::abs(HiggsRot(i,6));
+		if(testsum != 0)
+		{
+			posN[countposN] = i;
+			countposN++;
+		}
+		testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
+		if(testsum != 0) posA = i;
+	}
+
+	std::vector<double> HiggsMasses;
+	HiggsMassesSquared(HiggsMasses,vevTree,0);
+
+	std::cout << "The mass spectrum is given by :\n";
+	std::cout << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n";
+	std::cout << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n";
+	std::cout << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
+			<< "m_h = " << std::sqrt(HiggsMasses[posN[0]]) << " GeV \n"
+			<< "m_H = " << std::sqrt(HiggsMasses[posN[1]])<< " GeV \n"
+			<< "m_A = " << std::sqrt(HiggsMasses[posA]) << " GeV \n";
+
+    std::cout << "The neutral mixing Matrix is given by :\n";
+    std::cout << "h = " << HiggsRot(posN[0],4) << " zeta_1 ";
+    bool IsNegative=HiggsRot(posN[0],6) < 0;
+    if(IsNegative) std::cout << "-";
+	else std::cout << "+";
+    std::cout << std::abs(HiggsRot(posN[0],6)) << " zeta_2\n"
+    		<< "H = " << HiggsRot(posN[1],4) << " zeta_1 ";
+	IsNegative=HiggsRot(posN[1],6) < 0;
+	if(IsNegative) std::cout << "-";
+	else std::cout << "+";
+	std::cout << std::abs(HiggsRot(posN[1],6)) << " zeta_2" << std::endl;
+
+
+//	std::cout << "The tree-level eigenvalues are given by \n";
+//	for(int i=0;i<NHiggs;i++) std::cout << HiggsMasses[i] << std::endl;
+//
+//
 
 
 
@@ -666,57 +736,91 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 	}
     }
 
-  MatrixXcd HiggsRotNeutral(4,4), HiggsRotCharged(4,4);
-  double CB=C_CosBeta;
-  double SB=C_SinBeta;
-  double CA=std::cos(alpha);
-  double SA=std::sin(alpha);
-  HiggsRotNeutral(0,0) = 0;
-  HiggsRotNeutral(0,1) = CB;
-  HiggsRotNeutral(0,2) = 0;
-  HiggsRotNeutral(0,3) = SB;
-  HiggsRotNeutral(1,0) = 0;
-  HiggsRotNeutral(1,1) = -SB;
-  HiggsRotNeutral(1,2) = 0;
-  HiggsRotNeutral(1,3) = CB;
-  HiggsRotNeutral(2,0) = -SA;
-  HiggsRotNeutral(2,1) = 0;
-  HiggsRotNeutral(2,2) = CA;
-  HiggsRotNeutral(2,3) = 0;
-  HiggsRotNeutral(3,0) = CA;
-  HiggsRotNeutral(3,1) = 0;
-  HiggsRotNeutral(3,2) = SA;
-  HiggsRotNeutral(3,3) = 0;
 
-  std::complex<double> II(0,1);
-  HiggsRotCharged(0,0) = CB;
-  HiggsRotCharged(0,1) = II*CB;
-  HiggsRotCharged(0,2) = SB;
-  HiggsRotCharged(0,3) = II*SB;
-  HiggsRotCharged(1,0) = CB;
-  HiggsRotCharged(1,1) = -II*CB;
-  HiggsRotCharged(1,2) = SB;
-  HiggsRotCharged(1,3) = -II*SB;
-  HiggsRotCharged(2,0) = -SB;
-  HiggsRotCharged(2,1) = -II*SB;
-  HiggsRotCharged(2,2) = CB;
-  HiggsRotCharged(2,3) = II*CB;
-  HiggsRotCharged(3,0) = -SB;
-  HiggsRotCharged(3,1) = II*SB;
-  HiggsRotCharged(3,2) = CB;
-  HiggsRotCharged(3,3) = -II*CB;
-
-  HiggsRotCharged *= 1.0/std::sqrt(2);
-
-  MatrixXcd HiggsRot(NHiggs,NHiggs);
-  HiggsRot = MatrixXcd::Zero(NHiggs,NHiggs);
-  for(int i=0;i<4;i++){
-      for(int j=0;j<4;j++)
+  MatrixXd HiggsRot(NHiggs,NHiggs);
+  for(int i=0;i<NHiggs;i++)
+  {
+	for(int j=0;j<NHiggs;j++)
 	{
-	  HiggsRot(i,j) = HiggsRotCharged(i,j);
-	  HiggsRot(i+4,j+4) = HiggsRotNeutral(i,j);
+		HiggsRot(i,j) = HiggsRotationMatrix[i][j];
 	}
   }
+
+  if(Debug){
+	  std::cout << "HiggsRot = \n\n" << HiggsRot << "\n\n";
+  }
+
+  MatrixXd HiggsRotSort(NHiggs,NHiggs);
+  int posMHCS1=0,posMHCS2=0;
+  int posN[2];
+  int countposN=0;
+  int posG1=0,posG2=0,posG0=0;
+  int posA=0, posh=0,posH=0;
+  double testsum = 0;
+  for(int i=0;i<3;i++)
+  {
+	testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
+	if(testsum != 0) posG1 = i;
+	testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+	if(testsum != 0) posG2 = i;
+	testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
+	if(testsum != 0) posG0 = i;
+  }
+  for(int i=3;i<NHiggs;i++)
+  {
+	testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
+	if(testsum != 0) posMHCS1 = i;
+	testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+	if(testsum != 0) posMHCS2 = i;
+	testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
+	if(testsum != 0) posA = i;
+	testsum = 0;
+	testsum = std::abs(HiggsRot(i,4)) + std::abs(HiggsRot(i,6));
+	if(testsum != 0)
+	{
+		posN[countposN] = i;
+		countposN++;
+	}
+  }
+
+
+
+
+  posh = posN[0];
+  posH = posN[1];
+
+
+
+
+
+
+
+
+  std::vector<double> HiggsOrder(NHiggs);
+  HiggsOrder[0] = posG1;
+  HiggsOrder[1] = posG2;
+  HiggsOrder[2] = posMHCS1;
+  HiggsOrder[3] = posMHCS2;
+  HiggsOrder[4] = posG0;
+  HiggsOrder[5] = posA;
+  HiggsOrder[6] = posh;
+  HiggsOrder[7] = posH;
+
+  for(int i=0;i<NHiggs;i++)
+{
+	HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
+}
+
+  if(Debug){
+	  std::cout << "HiggsRot sorted : \n\n"
+			  << HiggsRotSort << "\n\n";
+  }
+
+
+
+  int PosSM = 5;
+
+
 
 
 
@@ -724,42 +828,43 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   TripleHiggsCorrectionsTreePhysical.resize(NHiggs);
   TripleHiggsCorrectionsCTPhysical.resize(NHiggs);
   for(int i=0;i<NHiggs;i++) {
-      TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
-      TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
-      TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
-      for(int j=0;j<NHiggs;j++) {
+	  TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
+	  TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
+	  TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
+	  for(int j=0;j<NHiggs;j++) {
 	  TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
 	  TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
 	  TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
-      }
+	  }
   }
 
   for(int i=0;i<NHiggs;i++)
-    {
-      for(int j=0;j<NHiggs;j++)
 	{
-	  for(int k=0;k<NHiggs;k++)
-	    {
-	      TripleHiggsCorrectionsCWPhysical[i][j][k] = 0;
-	      TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
-	      TripleHiggsCorrectionsCTPhysical[i][j][k] = 0;
-	      for(int l=0;l<NHiggs;l++)
+	  for(int j=0;j<NHiggs;j++)
+	  {
+		for(int k=0;k<NHiggs;k++)
 		{
-		  for(int m=0;m<NHiggs;m++)
-		    {
-		      for(int n=0;n<NHiggs;n++)
-			{
-			  double RotFac = (HiggsRot(i,l)*HiggsRot(j,m)*HiggsRot(k,n)).real();
-			  TripleHiggsCorrectionsCWPhysical[i][j][k] += RotFac*GaugeBasis[l][m][n];
-			  TripleHiggsCorrectionsCTPhysical[i][j][k] += RotFac*LambdaHiggs_3_CT[l][m][n];
-			  TripleHiggsCorrectionsTreePhysical[i][j][k] += RotFac*LambdaHiggs_3[l][m][n];
+		  TripleHiggsCorrectionsCWPhysical[i][j][k] = 0;
+		  TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
+		  TripleHiggsCorrectionsCTPhysical[i][j][k] = 0;
+		  for(int l=0;l<NHiggs;l++)
+		  {
+			  for(int m=0;m<NHiggs;m++)
+			  {
+				  for(int n=0;n<NHiggs;n++)
+				  {
+	//  			  double RotFac = (HiggsRot(i,l)*HiggsRot(j,m)*HiggsRot(k,n)).real();
+				  double RotFac = HiggsRotSort(i,l)*HiggsRotSort(j,m)*HiggsRotSort(k,n);
+				  TripleHiggsCorrectionsCWPhysical[i][j][k] += RotFac*GaugeBasis[l][m][n];
+				  TripleHiggsCorrectionsTreePhysical[i][j][k] += RotFac*LambdaHiggs_3[l][m][n];
+				  TripleHiggsCorrectionsCTPhysical[i][j][k] += RotFac*LambdaHiggs_3_CT[l][m][n];
 
-			}
-		    }
+				  }
+			  }
+		  }
 		}
-	    }
+	  }
 	}
-    }
 
 
 

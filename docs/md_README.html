@@ -119,16 +119,25 @@ $(document).ready(function(){initNavTree('md_README.html','');});
 <p>For additional information, comments, complaints or suggestions please e-mail to: <a href="#" onclick="location.href='mai'+'lto:'+'phi'+'li'+'pp.'+'ba'+'sle'+'r@'+'kit'+'.e'+'du'; return false;">phili<span style="display: none;">.nosp@m.</span>pp.b<span style="display: none;">.nosp@m.</span>asler<span style="display: none;">.nosp@m.</span>@kit<span style="display: none;">.nosp@m.</span>.edu</a> </p><hr/>
 <h2>Installation:</h2>
 <p>1) The program requires the GSL library which the code assumes to be installed in PATH.</p>
-<p>2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently 'chmod +x InstallLibraries.sh'.</p>
-<p>3) Then type <code>./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler</code> in order to install the eigen and CMAES libraries in the path 'PathToLib'. This might take a while.</p>
-<p>4) Afterwards type <code>./autogen.sh --lib=PathToLib --CXX=YourC++Compiler</code> in order to create a makefile in the main path, with the libraries installed in 'PathToLib'.</p>
-<p>5) Finally go back to the main directory and type 'make'. </p><hr/>
+<p>2) To compile the program type <code>mkdir build &amp;&amp; cd build</code> and there <code>cmake ..</code> where this part can be modified with </p><pre class="fragment">CC=CCompiler
+
+CXX=C++Compiler
+
+EIGEN3_ROOT=/path/to/eigen3  
+    This is only necessary if eigen3 is not installed through your packet mananger. If it is not go to http://eigen.tuxfamily.org and download and unzip it to /path/to/eigen3.
+
+CMAES_ROOT=/path/to/libcmaes 
+    If you do not give this option the default path will be the 'tools' folder in your BSMPT directory. For downloading libcmaes you need either wget or curl installed on your system.
+</pre><p>For example a complete call would be <code>CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/eigen3 CMAES_ROOT=/path/to/libcmaes cmake ..</code> . After this execute <code>make</code> to compile the executables.</p>
+<p>3) At last you have to add the path to libcmaes to your LD_LIBRABRY_PATH which you can either do in every console session or you can edit your console setting by adding the line </p><pre class="fragment">export LD_LIBRABRY_PATH=$LD_LIBRABRY_PATH:/path/to/libcmaes/LIB
+</pre><p>where LIB is either lib64 or lib, depending on which folder exists in path/to/libcmaes. </p><hr/>
 <h2>How to add a new model (for further details, also see the manual):</h2>
 <p>1) Go to the file <a class="el" href="_include_all_models_8h_source.html">IncludeAllModels.h</a> and rename the variable 'C_ModelTemplate' to the variable name with which the new model shall be selected by the program.</p>
-<p>2) Go to IncludeAllModels.cpp and add the header for your model. Also add</p>
+<p>2) In the file <code>src/models/CMakeLists.txt</code> rename <code><a class="el" href="_class_template_8cpp.html">ClassTemplate.cpp</a></code> with the name of your new model file.</p>
+<p>3) Go to IncludeAllModels.cpp and add the header for your model. Also add</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; else if(choice == C_ModelTemplate)</div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;{</div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;  return std::unique_ptr&lt;Class_Potential_Origin&gt; { new Class_Template };</div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;}</div></div><!-- fragment --><p>to the function Fchoose.</p>
-<p>3) Adjust the functions in <a class="el" href="_class_template_8cpp.html">ClassTemplate.cpp</a> as needed for the new model.</p>
-<p>4) Have fun! </p>
+<p>4) Adjust the functions in <a class="el" href="_class_template_8cpp.html">ClassTemplate.cpp</a> as needed for the new model.</p>
+<p>5) Have fun! </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -657,6 +657,101 @@ void Class_Potential_C2HDM::write() {
     typedef std::numeric_limits< double > dbl;
     std::cout.precision(dbl::max_digits10);
 
+
+    MatrixXd HiggsRot(NHiggs,NHiggs);
+	for(int i=0;i<NHiggs;i++)
+	{
+		for(int j=0;j<NHiggs;j++)
+		{
+			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
+		}
+	}
+
+    int posMHCS1=0,posMHCS2=0;
+	int posN[3];
+	int countposN=0;
+	int posG1=0,posG2=0,posG0=0;
+	double testsum = 0;
+	for(int i=0;i<3;i++)
+	{
+		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
+		if(testsum != 0) posG1 = i;
+		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+		if(testsum != 0) posG2 = i;
+		testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
+		if(testsum != 0) posG0 = i;
+	}
+	for(int i=3;i<NHiggs;i++)
+	{
+		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
+		if(testsum != 0) posMHCS1 = i;
+		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+		if(testsum != 0) posMHCS2 = i;
+		testsum = 0;
+		for(int k=4;k<8;k++) testsum += std::abs(HiggsRot(i,k));
+		if(testsum != 0)
+		{
+			posN[countposN] = i;
+			countposN++;
+		}
+	}
+
+	std::vector<double> HiggsMasses;
+	HiggsMassesSquared(HiggsMasses,vevTree,0);
+
+	double NeutralHiggs[3];
+	for(int i=0;i<3;i++)
+	{
+		NeutralHiggs[i] = HiggsMasses[posN[i]];
+		//std::cout << NeutralHiggs[i] << "\t" << std::sqrt(NeutralHiggs[i]) << std::endl;
+	}
+	for(int i=0;i<3;i++)
+	{
+		if(std::sqrt(NeutralHiggs[i]) < 126 and std::sqrt(NeutralHiggs[i]) > 124 ) MSM = std::sqrt(NeutralHiggs[i]);
+	}
+	if(std::sqrt(NeutralHiggs[0]) == MSM)
+	{
+		MhUp = std::sqrt(NeutralHiggs[2]);
+		MhDown = std::sqrt(NeutralHiggs[1]);
+	}
+	else if(std::sqrt(NeutralHiggs[1]) == MSM)
+	{
+		MhUp = std::sqrt(NeutralHiggs[2]);
+		MhDown = std::sqrt(NeutralHiggs[0]);
+	}
+	else{
+		MhUp = std::sqrt(NeutralHiggs[1]);
+		MhDown = std::sqrt(NeutralHiggs[0]);
+	}
+
+	if(MSM > MhUp)
+	{
+		double tmp=posN[1];
+		posN[1] = posN[2];
+		posN[2] = tmp;
+	}
+	if(MSM > MhDown)
+	{
+		double tmp=posN[0];
+		posN[0] = posN[1];
+		posN[1] = tmp;
+	}
+
+
+	MatrixXd NeutralMatrix(4,4);
+	for(int j=0;j<4;j++) NeutralMatrix(0,j) = HiggsRot(posG0,j+4);
+	for(int i=1;i<4;i++){
+		for(int j=0;j<4;j++) NeutralMatrix(i,j) = HiggsRot(posN[i-1],j+4);
+	}
+
+	MatrixXd MassMixing(3,3);
+	for(int i=0;i<3;i++)
+	{
+		MassMixing(i,0) = NeutralMatrix(i+1,0);
+		MassMixing(i,1) = NeutralMatrix(i+1,2);
+		MassMixing(i,2) = -std::sin(beta) * NeutralMatrix(i+1,1) +std::cos(beta)*NeutralMatrix(i+1,3);
+	}
+
     std::cout << "scale = " << scale << "\n";
 
 
@@ -694,6 +789,17 @@ void Class_Potential_C2HDM::write() {
     std::cout << "DT1 := " << DT1 << ";\n";
     std::cout << "DT2 := " <<  DT2 << ";\n";
     std::cout << "DT3:= " <<  DT3 << ";\n";
+
+
+    std::cout << "The mass spectrum is given by :\n";
+    std::cout << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
+    		<< "m_{H_SM} = " << MSM << " GeV \n"
+			<< "m_{H_l} = " << MhDown << " GeV \n"
+			<< "m_{H_h} = " << MhUp << " GeV \n";
+    std::cout << "The neutral mixing Matrix is given by :\n"
+			<< "H_{SM} = " << MassMixing(0,0) << " zeta_1 + " << MassMixing(0,1) << " zeta_2 + " << MassMixing(0,2) << " zeta_3 \n"
+			<< "H_{l} = " << MassMixing(1,0) << " zeta_1 + " << MassMixing(1,1) << " zeta_2 + " << MassMixing(1,2) << " zeta_3 \n"
+			<< "H_{h} = " << MassMixing(2,0) << " zeta_1 + " << MassMixing(2,1) << " zeta_2 + " << MassMixing(2,2) << " zeta_3 \n";
 }
 
 
@@ -1735,6 +1841,7 @@ void Class_Potential_C2HDM::MinimizeOrderVEV(const std::vector<double>& vevMinim
 bool Class_Potential_C2HDM::CalculateDebyeSimplified()
 {
   bool Debug = false;
+//  return false;
   if(Debug) std::cout << "Debug turned on in Class_Potential_C2HDM :: " << __func__ << std::endl;
   double cb;
 
@@ -1768,6 +1875,7 @@ bool Class_Potential_C2HDM::CalculateDebyeSimplified()
     DebyeHiggs[5][5] = CTempC1;
     DebyeHiggs[6][6] = CTempC2;
     DebyeHiggs[7][7] = CTempC2;
+
   return true;
 }
 

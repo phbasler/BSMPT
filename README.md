@@ -42,16 +42,26 @@ to:  philipp.basler@kit.edu
 
 1) The program requires the GSL library which the code assumes to be installed in PATH. 
 
-2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently
-   'chmod +x InstallLibraries.sh'.
+2) To compile the program type `mkdir build && cd build` and there `cmake ..` where this part can be modified with
 
-3) Then type `./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler` in order to install the
-   eigen and CMAES libraries in the path 'PathToLib'. This might take a while.
+    CC=CCompiler
+    
+    CXX=C++Compiler
+    
+    EIGEN3_ROOT=/path/to/eigen3  
+        This is only necessary if eigen3 is not installed through your packet mananger. If it is not go to http://eigen.tuxfamily.org and download and unzip it to /path/to/eigen3.
+    
+    CMAES_ROOT=/path/to/libcmaes 
+        If you do not give this option the default path will be the 'tools' folder in your BSMPT directory. For downloading libcmaes you need either wget or curl installed on your system.
+    
+    
+For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/eigen3 CMAES_ROOT=/path/to/libcmaes cmake ..` . After this execute `make` to compile the executables.
 
-4) Afterwards type `./autogen.sh --lib=PathToLib --CXX=YourC++Compiler` in order to create a makefile in the
-   main path, with the libraries installed in 'PathToLib'.  
+3) At last you have to add the path to libcmaes to your LD_LIBRABRY_PATH which you can either do in every console session or you can edit your console setting by adding the line 
 
-5) Finally go back to the main directory and type 'make'. 
+    export LD_LIBRABRY_PATH=$LD_LIBRABRY_PATH:/path/to/libcmaes/LIB
+    
+where LIB is either lib64 or lib, depending on which folder exists in path/to/libcmaes.
  
 ---
   
@@ -61,7 +71,9 @@ to:  philipp.basler@kit.edu
    'C_ModelTemplate' to the variable name with which the new model shall
    be selected by the program.
 
-2) Go to IncludeAllModels.cpp and add the header for your model.  Also add
+2) In the file `src/models/CMakeLists.txt` rename `ClassTemplate.cpp` with the name of your new model file.
+
+3) Go to IncludeAllModels.cpp and add the header for your model.  Also add
 
 ``` c++    
 	  else if(choice == C_ModelTemplate)
@@ -73,8 +85,8 @@ to:  philipp.basler@kit.edu
 
    to the function Fchoose. 
 
-3) Adjust the functions in ClassTemplate.cpp as needed for the new model.
+4) Adjust the functions in ClassTemplate.cpp as needed for the new model.
 
-4) Have fun!
+5) Have fun!
 
 

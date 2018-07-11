@@ -487,16 +487,19 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA, double MassSquaredB
       {
 	C=2;
 	res = 1.0/mas*(std::log(mas) - 1);
+	res = 1.0/mas*(LogA-1);
       }
     else if(mas == 0 and mbs != 0 and mcs == 0)
       {
 	C=3;
 	res = 1.0/mbs*(std::log(mbs)-1);
+	res = (LogB-1)/mbs;
       }
     else if(mas == 0 and mbs == 0 and mcs != 0)
       {
 	C=4;
 	res = 1.0/mcs*(std::log(mcs)-1);
+	res = (LogC-1)/mcs;
       }
     else if(mas == mbs and mas != 0 and mas != mcs and mcs != 0)
       {

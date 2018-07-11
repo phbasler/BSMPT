@@ -45,24 +45,34 @@
  *
  *
  *
- *  1) The program requires the GSL library [1] which is assumed to be installed in PATH.
+ *1) The program requires the GSL library [1] which is assumed to be installed in PATH.
 	*
-*2) Go to the directory sh and type 'chmod +x autogen.sh' and subsequently
- *  'chmod +x InstallLibraries.sh'.
+*2) To compile the program type `mkdir build && cd build` and there `cmake ..` where this part can be modified with
+
+    	*CC=CCompiler
+
+    	*CXX=C++Compiler
+
+    	*EIGEN3_ROOT=/path/to/eigen3
+        	** This is only necessary if eigen3 is not installed through your packet mananger. If it is not go to [2] and download and unzip it to /path/to/eigen3.
+
+    	*CMAES_ROOT=/path/to/libcmaes
+        	**If you do not give this option the default path will be the 'tools' folder in your BSMPT directory. For downloading libcmaes [3] you need either wget or curl installed on your system.
+
+
+For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/eigen3 CMAES_ROOT=/path/to/libcmaes cmake ..` . After this execute `make` to compile the executables.
 *
-*3) Then type `./InstallLibraries.sh --lib=PathToLib --CXX=YourC++Compiler --CC=YourCCompiler` in order to install the
-   eigen[2] and CMAES[3] libraries in the path 'PathToLib'. This might take a while.
-*
-*4) Afterwards type  `./autogen.sh --lib=PathToLib --CXX=YourC++Compiler`  in order to create a makefile in the
- *  main path, with the libraries installed in 'PathToLib'.
-*
-*5) Finally go back to the main directory and type 'make'.
+*3) At last you have to add the path to libcmaes to your LD_LIBRABRY_PATH which you can either do in every console session or you can edit your console setting by adding the line
+
+    *export LD_LIBRABRY_PATH=$LD_LIBRABRY_PATH:/path/to/libcmaes/LIB
+
+where LIB is either lib64 or lib, depending on which folder exists in path/to/libcmaes.
  *
- *   *  [1] http://www.gnu.org/software/gsl/
+ *   [1] http://www.gnu.org/software/gsl/
  *
- *   * [2] http://eigen.tuxfamily.org
+ *   [2] http://eigen.tuxfamily.org
  *
- *   * [3] https://github.com/beniz/libcmaes
+ *   [3] https://github.com/beniz/libcmaes
 
 
    \section executables_sec Executables
@@ -77,7 +87,7 @@
  *  To find these points a bisection method is used with the temperature starting
  *  between 0 and 300 GeV. The executable is called through:
  *
- *  ./bin/BSMPT Model Inputfile Outputfile LineStart LineEnd
+ *  	./bin/BSMPT Model Inputfile Outputfile LineStart LineEnd
  *
  *  This will call the specific model to be used, identified through 'Model', and
  *  calculate the EWPT for each parameter point (corresponding to one line) between
@@ -85,7 +95,7 @@
  *
  *	For our example the command
  *
- *  ./bin/BSMPT 0 example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
+ *  	./bin/BSMPT 0 example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
  *
  *  will calculate for the C2HDM identified through (Model=) 0 the EWPT for one
  *  parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2
@@ -99,57 +109,57 @@
  *
  * It is called through the command
  *
- *  ./bin/CalcCT Model Inputfile Outputfile LineStart LineEnd
+ *  	./bin/CalcCT Model Inputfile Outputfile LineStart LineEnd
  *
  * For the C2HDM example this reads
  *
- * ./bin/CalcCT 0 example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
+ * 		./bin/CalcCT 0 example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
  *
  * which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file
  * example/C2HDM_Input.dat_CalcCT.
  *
  *  \subsection NLOVEV
  *
- *  This calculates the VEV at 1-loop order at vanishing temperature in the
- *  effective potential approach. This can be used to investigate the vacuum
- *  stability of the model. It is called through
+ * This calculates the VEV at 1-loop order at vanishing temperature in the
+ * effective potential approach. This can be used to investigate the vacuum
+ * stability of the model. It is called through
  *
- *  ./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
+ *  	./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
  *
  * and for the C2HDM example it is given by
  *
- *  ./bin/NLOVEV  0 example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
+ *  	./bin/NLOVEV  0 example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
  *
- *  where the result is written into the file example/test_NLOVEV.dat which
- *  can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.
+ * where the result is written into the file example/test_NLOVEV.dat which
+ * can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.
  *
  *  \subsection VEVEVO
- *  This program calculates the evolution of the vacuum expecation value of a given point with the temperature.
- *  It is called through
+ * This program calculates the evolution of the vacuum expecation value of a given point with the temperature.
+ * It is called through
  *
  *	  ./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend
  *
  * where 'Tempstart' is the starting value of the temperature which increases with 'Tempstep' until 'Tempend'.
  *
- *  For our C2HDM example this would be
+ * For our C2HDM example this would be
  *
- *  ./bin/VEVEVO 0 example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
+ *  	./bin/VEVEVO 0 example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
  *
- *  where the result for the NLO VEV is given in example/test_VEVEVO.dat as
- *  function of the temperature in the interval between 0 and 150 GeV in steps of
- *  5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.
+ * where the result for the NLO VEV is given in example/test_VEVEVO.dat as
+ * function of the temperature in the interval between 0 and 150 GeV in steps of
+ * 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.
  *
  *
  *  \subsection TripleHiggsCouplingNLO
  *
- *  This program calculates the trilinear Higgs self-couplings at NLO at zero
- *  temperature. It is called through
+ * This program calculates the trilinear Higgs self-couplings at NLO at zero
+ * temperature. It is called through
  *
- *  ./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
+ * 	 	./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
  *
- *  The C2HDM example is called through
+ * The C2HDM example is called through
  *
- *  ./bin/TripleHiggsNLO 0 example/C2HDM_Input.dat example/test_TripleHiggsNLO.dat 2 2
+ * 	 	./bin/TripleHiggsNLO 0 example/C2HDM_Input.dat example/test_TripleHiggsNLO.dat 2 2
  *
  * with the result given in example/test_TripleHiggsNLO.dat which
  * can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsNLO .
