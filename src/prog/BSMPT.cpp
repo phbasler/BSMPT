@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) try{
 				if(dimensionnames.size() != ndim +3){
 					std::cout << "The number of names in the function addLegendTemp does not match the number of vevs, going to default naming."
 							<< "You should fix this as this will result in errors in your output file." << std::endl;
-					std::cout << "Succeded ? " << sol.at(2) << "\t (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+					std::cout << "Success ? " << sol.at(2) << "\t (1 = Yes , -1 = No, v/T reached a value below " << C_PT << " during the calculation) \n";
 					std::cout << "omega_c = " << sol.at(1) << " GeV\n";
 					std::cout << "T_c = " << sol.at(0) << " GeV\n";
 					std::cout << "xi_c = omega_c/T_c =  " << sol.at(1)/sol.at(0) << std::endl;
@@ -182,7 +182,7 @@ int main(int argc, char *argv[]) try{
 						std::cout << "omega_" << i-2 << " = " << sol.at(i) << " GeV\n";}
 				}
 				else{
-					std::cout << "Succeded ? " << sol.at(2) << "\t (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+					std::cout << "Success ? " << sol.at(2) << "\t (1 = Yes , -1 = No, v/T reached a value below " << C_PT << " during the calculation) \n";
 					std::cout << dimensionnames.at(1) << " = " << sol.at(1) << " GeV\n";
 					std::cout << dimensionnames.at(0) << " = " << sol.at(0) << " GeV\n";
 					std::cout << "xi_c = " << dimensionnames.at(ndim+2)  << " = " << sol.at(1)/sol.at(0) << std::endl;
