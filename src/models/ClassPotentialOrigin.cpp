@@ -218,7 +218,7 @@ double Class_Potential_Origin::Vsf(double MassSquared, double Temp, int n, int d
  * @param Temp = Temperature at which the Debye masses and integrals should be calculated
  * @param cb = Parameter of the renormalisation-Scheme in the Coleman-Weinberg potential
  * @param diff: 0 returns the value of the integral and diff != 0 the derivative w.r.t. m^2
- * 
+ *
  * Not implemented yet:: Calculate the derivative for m^2 < 0
  *
  */
@@ -2594,13 +2594,10 @@ double Class_Potential_Origin::EWSBVEV(std::vector<double> v)
 			  ModifiedVEVVectorDim[i] = 0;
 		  }
 		  else{
-			  ModifiedVEVVectorDim[i] = v.at(i);
+			  ModifiedVEVVectorDim[i] = v.at(FieldNumber);
 		  }
       }
       res = 0;
     }
   return res;
 }
-
-
-
