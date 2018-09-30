@@ -123,7 +123,7 @@ void Class_Potential_R2HDM::ReadAndSet(const std::string& linestr, std::vector<d
 	double tmp;
 
 
-	for(int k=1;k<=15;k++)
+	for(int k=1;k<=8;k++)
 	{
 		ss>>tmp;
 		if(k==1) Type = tmp;
@@ -865,6 +865,8 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 		}
 	  }
 	}
+
+
 
 
 
