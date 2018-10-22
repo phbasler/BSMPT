@@ -4,13 +4,13 @@ endif(DEFINED ENV{CMAES_ROOT})
 
 find_library( CMAES_LIBRARY
   NAMES cmaes
-  HINTS ${CMAES_ROOT}/lib ${CMAES_ROOT}/lib64
+  HINTS ${CMAES_ROOT}/lib ${CMAES_ROOT}/lib64 ${CMAKE_SOURCE_DIR}/tools/lib ${CMAKE_SOURCE_DIR}/tools/lib64
   DOC "path to cmaes library"
 )
 
 find_path( CMAES_INCLUDE_DIR
   NAMES libcmaes/cmaes.h
-  HINTS ${CMAES_ROOT}/include/
+  HINTS ${CMAES_ROOT}/include/ ${CMAKE_SOURCE_DIR}/tools/include
   DOC "cmaes include directory"
 )
 
