@@ -67,11 +67,17 @@ if (EIGEN3_INCLUDE_DIR)
 
 else (EIGEN3_INCLUDE_DIR)
   
-  # search first if an Eigen3Config.cmake is available in the system,
+  # check if the submodule is present and use it
+  find_path(EIGEN3_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library
+    PATHS ${CMAKE_SOURCE_DIR}/tools/eigen-git-mirror
+  )
+
+  # search if an Eigen3Config.cmake is available in the system,
   # if successful this would set EIGEN3_INCLUDE_DIR and the rest of
   # the script will work as usual
   find_package(Eigen3 ${Eigen3_FIND_VERSION} NO_MODULE QUIET)
 
+  # finally check for a local version is specified by the environement variables
   if(NOT EIGEN3_INCLUDE_DIR)
     find_path(EIGEN3_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library
         HINTS
@@ -88,10 +94,17 @@ else (EIGEN3_INCLUDE_DIR)
     _eigen3_check_version()
   endif(EIGEN3_INCLUDE_DIR)
 
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(Eigen3 DEFAULT_MSG EIGEN3_INCLUDE_DIR EIGEN3_VERSION_OK)
-
-  mark_as_advanced(EIGEN3_INCLUDE_DIR)
-
 endif(EIGEN3_INCLUDE_DIR)
 
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Eigen3 
+  "Could not find the required Eigen3 library. You can use \n`git submodule update --init ${CMAKE_SOURCE_DIR}/tools/eigen-git-mirror`\n to download a local copy."
+   EIGEN3_INCLUDE_DIR EIGEN3_VERSION_OK)
+
+if(EIGEN3_FOUND AND NOT TARGET Eigen3::Eigen)
+  add_library(Eigen3::Eigen INTERFACE IMPORTED)
+  set_target_properties(Eigen3::Eigen PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${EIGEN3_INCLUDE_DIR}")
+endif()
+   
+mark_as_advanced(EIGEN3_INCLUDE_DIR)
