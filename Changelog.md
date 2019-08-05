@@ -1,3 +1,4 @@
+2019/08/05 : Fixed a small bug which occured if the Gauge fields were already given in a diagonal basis
 2018/11/06 : Updated the manual with the cmake installation and fixed some typos
 2018/09/25 : Fixed a small bug which set all singlet vevs to 0 for T > T_C. This did not effect BSMPT but only VEVEVO for plotting for T > T_C in the N2HDM.
 2018/07/11 : Fixed a bug in the calculation of the triple Higgs couplings. Furthermore the terminal output was changed into a more readable format. Thanks to Jonas Wittbrodt the installation is now done through a cmake file where the procedure is described in the README.

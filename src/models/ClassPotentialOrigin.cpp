@@ -1047,7 +1047,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
         {
             for(int b=0;b<NGauge;b++)
             {
-                for(int i=0;i<NGauge;i++)
+                for(int i=0;i<NHiggs;i++)
                 {
                     Couplings_Gauge_Higgs_21[a][b][i] = 0;
                     for(int is=0;is<NHiggs;is++)
