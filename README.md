@@ -1,4 +1,4 @@
-Program: BSMPT version 1.0
+Program: BSMPT version 1.1
 
 Released by: Philipp Basler and Margarete Mühlleitner
 
@@ -57,11 +57,6 @@ to:  philipp.basler@kit.edu
     
 For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/eigen3 CMAES_ROOT=/path/to/libcmaes cmake ..` . After this execute `make` to compile the executables.
 
-3) At last you have to add the path to libcmaes to your LD_LIBRABRY_PATH which you can either do in every console session or you can edit your console setting by adding the line 
-
-    export LD_LIBRABRY_PATH=$LD_LIBRABRY_PATH:/path/to/libcmaes/LIB
-    
-where LIB is either lib64 or lib, depending on which folder exists in path/to/libcmaes.
  
 ---
   

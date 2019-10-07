@@ -48,3 +48,61 @@ std::unique_ptr<Class_Potential_Origin> FChoose(int choice){
 	throw std::runtime_error("Invalid model");
 }
 
+
+/**
+ * Checks if a string is only made up of numbers or not.
+ */
+bool is_number(const std::string& s)
+{
+    return !s.empty() && std::find_if(s.begin(),
+        s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
+
+/**
+ * This function offers the possibility to call your model with a string. For that the the Model Input is converted to lower
+ * case and then compared with the Model Name, the value of Model is then set to the C_Model Parameter.
+ */
+int getModel(const std::string& s){
+	bool Debug=false;
+	if(Debug) std::cout << "Start Debugging in " << __func__ << std::endl;
+	int Model = -1;
+	if(Debug) std::cout << "s =  " << s << std::endl;
+	if(!is_number(s)){
+		std::string ModelInput=s;
+		if(Debug) std::cout << "ModelInput = " << ModelInput << std::endl;
+		std::transform(ModelInput.begin(),ModelInput.end(),ModelInput.begin(),::tolower);
+
+		if(ModelInput.compare("c2hdm")==0){
+			// std::cout << "Found C2HDM as an Input. Setting Model = " << C_ModelC2HDM << "." << std::endl;
+			Model=C_ModelC2HDM;
+		}
+		else if(ModelInput.compare("r2hdm")==0){
+//			std::cout << "Found R2HDM as an Input. Setting Model = " << C_ModelR2HDM <<  "." << std::endl;
+			Model=C_ModelR2HDM;
+		}
+		else if(ModelInput.compare("n2hdm")==0){
+//			std::cout << "Found N2HDM as an Input. Setting Model = " << C_ModelRN2HDM << "." << std::endl;
+			Model=C_ModelRN2HDM;
+		}
+	}
+	else{
+		Model = std::stoi(s);
+	}
+
+  if(Debug) std::cout << "Return " << Model << std::endl;
+	if(Debug) std::cout << "End Debugging in " << __func__ << std::endl;
+
+	return Model;
+}
+
+void ShowInputError(){
+	std::cerr << "The chosen Method for the thermal mass corrections is ";
+	if(C_UseParwani) std::cerr << "Parwani ";
+	else std::cerr << "Arnold Espinosa\n";
+	std::cerr << "The implemented models are \n"
+			<< C_ModelC2HDM <<" : C2HDM\n"
+			<< C_ModelR2HDM <<  " : R2HDM\n"
+			<< C_ModelRN2HDM << " : N2HDM\n"
+			<< std::endl;
+}
+

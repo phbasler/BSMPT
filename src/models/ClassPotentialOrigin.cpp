@@ -19,6 +19,7 @@
 
 #include "ClassPotentialOrigin.h"
 #include "IncludeAllModels.h"
+#include "../minimizer/Minimizer.h"
 using namespace Eigen;
 
 
@@ -2346,4 +2347,225 @@ double Class_Potential_Origin::EWSBVEV(std::vector<double> v)
       res = 0;
     }
   return res;
+}
+
+void Class_Potential_Origin::CheckImplementation(const std::vector<double>& par,
+		const std::vector<double>& parCT){
+	using std::pow;
+
+	double ZeroMass = std::pow(10,-5);
+
+
+	std::cout << std::endl
+			<< "This function calculates the masses of the gauge bosons, fermions and Higgs boson and compares them "
+			<< "with the parameters defined in SMparam.h."
+			<< std::endl;
+
+	std::vector<double> gaugeMassesInput, leptonMassesInput, quarkMassesInput;
+
+
+	gaugeMassesInput.push_back(0);
+	gaugeMassesInput.push_back(pow(C_MassW,2));
+	gaugeMassesInput.push_back(pow(C_MassW,2));
+	gaugeMassesInput.push_back(pow(C_MassZ,2));
+
+	leptonMassesInput.push_back(0);
+	leptonMassesInput.push_back(0);
+	leptonMassesInput.push_back(0);
+	leptonMassesInput.push_back(pow(C_MassElectron,2));
+	leptonMassesInput.push_back(pow(-C_MassElectron,2));
+	leptonMassesInput.push_back(pow(C_MassMu,2));
+	leptonMassesInput.push_back(pow(-C_MassMu,2));
+	leptonMassesInput.push_back(pow(C_MassTau,2));
+	leptonMassesInput.push_back(pow(-C_MassTau,2));
+
+	quarkMassesInput.push_back(pow(C_MassUp,2));
+	quarkMassesInput.push_back(pow(-C_MassUp,2));
+	quarkMassesInput.push_back(pow(C_MassCharm,2));
+	quarkMassesInput.push_back(pow(-C_MassCharm,2));
+	quarkMassesInput.push_back(pow(C_MassTop,2));
+	quarkMassesInput.push_back(pow(-C_MassTop,2));
+
+	quarkMassesInput.push_back(pow(C_MassDown,2));
+	quarkMassesInput.push_back(pow(-C_MassDown,2));
+	quarkMassesInput.push_back(pow(C_MassStrange,2));
+	quarkMassesInput.push_back(pow(-C_MassStrange,2));
+	quarkMassesInput.push_back(pow(C_MassBottom,2));
+	quarkMassesInput.push_back(pow(-C_MassBottom,2));
+
+	if(NLepton == 0){
+		for(int i=0;i<leptonMassesInput.size();i++) quarkMassesInput.push_back(leptonMassesInput.at(i));
+	}
+
+	std::sort(gaugeMassesInput.begin(),gaugeMassesInput.end());
+	std::sort(leptonMassesInput.begin(),leptonMassesInput.end());
+	std::sort(quarkMassesInput.begin(),quarkMassesInput.end());
+
+	std::vector<double> GaugeMassCalculated, leptonMassCalculated, quarkMassCalculated;
+
+	GaugeMassesSquared(GaugeMassCalculated,vevTree,0,0);
+	LeptonMassesSquared(leptonMassCalculated,vevTree,0);
+	QuarkMassesSquared(quarkMassCalculated,vevTree,0);
+
+	std::string printline1,printline2;
+
+	int maxlength, addline1, addline2;
+
+	printline1="The SM gauge boson masses squared are : ";
+	printline2="The calculated gauge boson masses squared are : ";
+	maxlength = std::max(printline1.size(),printline2.size());
+	addline1 = maxlength-printline1.size();
+	addline2 = maxlength-printline2.size();
+
+	std::cout << printline1 << std::setw(addline1) << " ";
+	for(auto x: gaugeMassesInput) std::cout << x << "\t";
+	std::cout << std::endl;
+	std::cout << printline2 << std::setw(addline2) ;
+	for(auto x: GaugeMassCalculated) std::cout << x << "\t";
+	std::cout << std::endl;
+
+	std::cout << std::endl;
+
+	if(NLepton != 0){
+		printline1="The SM lepton masses squared are : ";
+		printline2="The calculated lepton masses squared are : ";
+		maxlength = std::max(printline1.size(),printline2.size());
+		addline1 = maxlength-printline1.size();
+		addline2 = maxlength-printline2.size();
+
+		std::cout << printline1 << std::setw(addline1) << " ";
+		for(auto x: leptonMassesInput) std::cout << x << "\t";
+		std::cout << std::endl;
+		std::cout << printline2 << std::setw(addline2) ;
+		for(auto x: leptonMassCalculated) std::cout << x << "\t";
+		std::cout << std::endl;
+		std::cout << std::endl;
+	}
+
+	printline1="The SM quark masses squared are : ";
+	printline2="The calculated quark masses squared are : ";
+	maxlength = std::max(printline1.size(),printline2.size());
+	addline1 = maxlength-printline1.size();
+	addline2 = maxlength-printline2.size();
+
+	std::cout << printline1 << std::setw(addline1) << " ";
+	for(auto x: quarkMassesInput) std::cout << x << "\t";
+	std::cout << std::endl;
+	std::cout << printline2 << std::setw(addline2) ;
+	for(auto x: quarkMassCalculated) std::cout << x << "\t";
+	std::cout << std::endl << std::endl;
+
+	std::vector<double> CalculatedHiggsVEV, CheckVector, start;
+	for(auto x: vevTreeMin) start.push_back(0.5*x);
+
+	Minimize_gen_all(Model,par,parCT,0,CalculatedHiggsVEV,CheckVector,start);
+
+
+	printline1="The given VEV configuration at tree-level is : ";
+	printline2="The calculated VEV configuration at tree-level is : ";
+	maxlength = std::max(printline1.size(),printline2.size());
+	addline1 = maxlength-printline1.size();
+	addline2 = maxlength-printline2.size();
+
+	std::cout << printline1 << std::setw(addline1) << " ";
+	for(auto x: vevTreeMin) std::cout << x << "\t";
+	std::cout << std::endl;
+	std::cout << printline2 << std::setw(addline2) ;
+	for(auto x: CalculatedHiggsVEV) std::cout << x << "\t";
+	std::cout << std::endl << std::endl;
+
+	double err=0;
+	for(int i=0;i<std::min(gaugeMassesInput.size(),GaugeMassCalculated.size());i++){
+		err += std::abs(std::abs(GaugeMassCalculated.at(i))-std::abs(gaugeMassesInput.at(i)));
+	}
+
+	for(int i=0;i<std::min(leptonMassesInput.size(),leptonMassCalculated.size());i++){
+		err += std::abs(std::abs(leptonMassCalculated.at(i))-std::abs(leptonMassesInput.at(i)));
+	}
+
+	for(int i=0;i<std::min(quarkMassesInput.size(),quarkMassCalculated.size());i++){
+		err += std::abs(std::abs(quarkMassCalculated.at(i))-std::abs(quarkMassesInput.at(i)));
+	}
+
+	for(int i=0;i<std::min(vevTreeMin.size(),CalculatedHiggsVEV.size());i++){
+		err += std::abs(std::abs(CalculatedHiggsVEV.at(i))-std::abs(vevTreeMin.at(i)));
+	}
+
+
+
+	std::vector<double> WeinbergNabla,WeinbergHesse;
+	WeinbergFirstDerivative(WeinbergNabla);
+	WeinbergSecondDerivative(WeinbergHesse);
+
+	VectorXd NablaWeinberg(NHiggs),NablaVCT(NHiggs);
+	MatrixXd HesseWeinberg(NHiggs,NHiggs), HesseVCT(NHiggs,NHiggs);
+	for(int i=0;i<NHiggs;i++)
+	{
+		NablaWeinberg[i] = WeinbergNabla[i];
+		for(int j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
+	}
+
+	for(int i=0;i<NHiggs;i++){
+		NablaVCT(i) = Curvature_Higgs_CT_L1[i];
+		for(int j=0;j<NHiggs;j++){
+			NablaVCT(i) += Curvature_Higgs_CT_L2[i][j] * vevTree[j];
+			HesseVCT(i,j) = Curvature_Higgs_CT_L2[i][j];
+			for(int k=0;k<NHiggs;k++){
+				NablaVCT(i) += 0.5*Curvature_Higgs_CT_L3[i][j][k] * vevTree[j] *vevTree[k];
+				HesseVCT(i,j) += Curvature_Higgs_CT_L3[i][j][k] * vevTree[k];
+				for(int l=0;l<NHiggs;l++){
+					NablaVCT(i) += 1.0/6.0 * Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[j] * vevTree[k] * vevTree[l];
+					HesseVCT(i,j) += 0.5* Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[k] * vevTree[l];
+				}
+			}
+		}
+	}
+
+	MatrixXd MassMatrix(NHiggs,NHiggs);
+	for(int i=0;i<NHiggs;i++)
+	{
+		for(int j=0;j<NHiggs;j++)
+		{
+			MassMatrix(i,j) = Curvature_Higgs_L2[i][j];
+			for(int k=0;k<NHiggs;k++)
+			{
+				MassMatrix(i,j) += Curvature_Higgs_L3[i][j][k]*vevTree[k];
+				for(int l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * vevTree[k]*vevTree[l];
+			}
+		}
+	}
+
+	SelfAdjointEigenSolver<MatrixXd> esTree(MassMatrix,EigenvaluesOnly);
+	SelfAdjointEigenSolver<MatrixXd> esNLO(MassMatrix+HesseVCT+HesseWeinberg,EigenvaluesOnly);
+
+	std::vector<double> TreeMass,NLOMass;
+
+	for(int i =0;i<NHiggs;i++){
+		if(std::abs(esTree.eigenvalues()[i]) < ZeroMass) TreeMass.push_back(0);
+		else TreeMass.push_back(esTree.eigenvalues()[i]);
+		if(std::abs(esNLO.eigenvalues()[i]) < ZeroMass) NLOMass.push_back(0);
+		else NLOMass.push_back(esNLO.eigenvalues()[i]);
+	}
+
+	std::cout << "The higgs masses squared at LO | NLO are : " << std::endl;
+	for(int i=0;i<NHiggs;i++){
+		std::cout << "m_i^2 = " << TreeMass[i] << " | " << NLOMass[i] << std::endl;
+	}
+
+	for(int i=0;i<NHiggs;i++){
+		double z = std::abs(std::abs(NLOMass[i]) - TreeMass.at(i));
+		double n = std::max(std::abs(NLOMass[i]), std::abs(TreeMass[i]));
+		if(z!= 0) {
+			err += z/n;
+		}
+	}
+
+	if(std::abs(err) > 1){
+		std::cout << std::endl << "Warning: Your implementation has differences between the given and the calculated parameters."
+				<< " Please check the output above to see where the derivation occurs."
+				<< std::endl;
+	}
+
+
+
 }

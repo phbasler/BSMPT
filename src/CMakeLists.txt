@@ -15,3 +15,6 @@ target_link_libraries(CalcCT Models)
 
 add_executable(TripleHiggsCouplingsNLO prog/TripleHiggsNLO.cpp)
 target_link_libraries(TripleHiggsCouplingsNLO Models)
+
+add_executable(Test prog/Test.cpp)
+target_link_libraries(Test Minimizer Models)

@@ -6,4 +6,4 @@ add_library(Models
   ClassTemplate.cpp
   IncludeAllModels.cpp
 )
-target_link_libraries( Models PUBLIC CMAES GSL::gsl Eigen3::Eigen)
+target_link_libraries( Models PUBLIC CMAES GSL::gsl Eigen3::Eigen Minimizer)

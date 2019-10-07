@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) try{
 		return EXIT_FAILURE;
 	}
 
-	int Model;
+	int Model=-1;
 	double LineStart,LineEnd;
 	char* in_file;char* out_file;
 
@@ -47,7 +47,14 @@ int main(int argc, char *argv[]) try{
 
 
 
-	Model = atoi(argv[1]);
+	Model=getModel(argv[1]);
+	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
+	if(Model==-1) {
+		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+		ShowInputError();
+		return EXIT_FAILURE;
+	}
+
 	LineStart = atoi(argv[4]);
 	LineEnd = atoi(argv[5]);
 

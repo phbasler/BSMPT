@@ -40,5 +40,9 @@ const int C_ModelTemplate=5;
 
 std::unique_ptr<Class_Potential_Origin> FChoose(int choice);
 
+bool is_number(const std::string& s);
+int getModel(const std::string& s);
+void ShowInputError();
+
 
 //#endif /* INCLUDEALLMODELS_H_ */

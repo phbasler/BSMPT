@@ -13,6 +13,7 @@ var class_class___potential___origin =
     [ "CalculateDebyeGaugeSimplified", "class_class___potential___origin.html#a6108441041998222fc8ad4dc9a434750", null ],
     [ "CalculateDebyeSimplified", "class_class___potential___origin.html#a3ece4d1fce1f5a8a0f543c1b6a52ff8f", null ],
     [ "CalculatePhysicalCouplings", "class_class___potential___origin.html#aa94a3dfd447f6e26bcc3a30ef1f1a930", null ],
+    [ "CheckImplementation", "class_class___potential___origin.html#a9906f52a7bb9203d8077918f8d83b533", null ],
     [ "CheckNLOVEV", "class_class___potential___origin.html#ab4a181f91fde3bd3b77840334a27f87f", null ],
     [ "CounterTerm", "class_class___potential___origin.html#a73a4d71620c9f3e12508bfea4634563d", null ],
     [ "CWTerm", "class_class___potential___origin.html#a8e60b33223578c12730abe46a840a151", null ],

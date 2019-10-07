@@ -47,11 +47,17 @@ int main(int argc, char *argv[]) try{
 	out_file = argv[3];
 	double LineNumb,TempStartIn,TempStepIn,TempEndIn;
 	double TempStart,TempEnd,TempStep;
-	double Model;
+	int Model = -1;
 
 
+	Model=getModel(argv[1]);
+	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
+	if(Model==-1) {
+		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+		ShowInputError();
+		return EXIT_FAILURE;
+	}
 
-	Model = atoi(argv[1]);
 	LineNumb = atoi(argv[4]);
 	TempStart = atof(argv[5]);
 	TempStep = atof(argv[6]);
