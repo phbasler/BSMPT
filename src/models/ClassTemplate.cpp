@@ -127,6 +127,13 @@ void Class_Template::ReadAndSet(const std::string& linestr, std::vector<double>&
 	std::stringstream ss(linestr);
 	double tmp;
 
+	/**
+	 * Reads first number if the legend started with a tabulator. This assumes that the first column is then an index.
+	 */
+	if (UseIndexCol){
+		ss >> tmp;
+	}
+
 	double lms,llambda;
 
 

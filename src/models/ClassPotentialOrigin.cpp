@@ -350,12 +350,14 @@ double Class_Potential_Origin::fermion(double MassSquared, double Temp, int diff
  * @param MDiff : the element-wise first derivative of the matrix M with respect to the parameter you want to consider
  * @param res : writes the mass eigenvalues in the vector and then the derivatives in the same order
  */
-void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M, const Ref<MatrixXd> MDiff, std::vector<double> &res)
+void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXcd> M, const Ref<MatrixXcd> MDiff, std::vector<double> &res)
 {
+  bool Debug = false;
+  if(Debug) std::cout << "Start debugging in " << __func__ << std::endl;
 	const int nRows = M.rows();
 	const int nCols = M.cols();
 
-	const int EVThres = std::pow(10,-6);
+	const double EVThres = std::pow(10,-6);
 
 	if(nCols != nRows) {
 		std::cout << "ERROR ! M needs to be an quadratic Matrix for calculating the derivatives !\n";
@@ -364,16 +366,27 @@ void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M,
 
 	const int nSize = nRows;
 
-	SelfAdjointEigenSolver<MatrixXd> es;
+	SelfAdjointEigenSolver<MatrixXcd> es;
 	es.compute(M);
 
-	double Eigenvalues[nSize];
-	double Derivatives[nSize];
+
+  std::vector<std::complex<double>> Eigenvalues(nSize);
+  std::vector<std::complex<double>> Derivatives(nSize);
 	double AlreadyCalculated[nSize]; //Array to check which EVs already been calculated.
 	for(int i=0;i<nSize;i++) {
         Eigenvalues[i] = es.eigenvalues()[i];
-        if(std::abs(Eigenvalues[i]) < EVThres) Eigenvalues[i] = 0;
+        // std::cout << Eigenvalues[i] << "\t" << std::abs(Eigenvalues[i]) << std::endl;
+        if(std::abs(Eigenvalues[i]) < EVThres) {
+          // std::cout << "hallo" << std::endl;
+          Eigenvalues[i] = 0;
     }
+  }
+
+  if(Debug) {
+    std::cout << "The eigenvalues are given by ";
+    for(int i=0;i<Eigenvalues.size();i++) std::cout << "\t" << Eigenvalues.at(i);
+    std::cout << std::endl;
+  }
 
 	double Mapping[nSize][nSize];
 
@@ -396,8 +409,18 @@ void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M,
 		for(int j=0;j<i;j++) Mapping[i][j] = Mapping[j][i];
 	}
 
+  if(Debug) {
+    std::cout << "The mapping is given by \n";
+    for(int i=0;i<nSize;i++){
+      for(int j=0;j<nSize;j++) std::cout << Mapping[i][j] << "\t";
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
+
 	for(int p=0;p<nSize;p++)
 	{
+    if(Debug) std::cout << "p = " << p << std::endl;
 		if(AlreadyCalculated[p] == -1)
 		{
 			int NumOfReps = 0;
@@ -405,17 +428,19 @@ void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M,
 			{
 				NumOfReps += Mapping[p][i];
 			}
+      if(Debug) std::cout << "NumOfReps = " << NumOfReps << std::endl;
 			if(NumOfReps == 0)
 			{
-				VectorXd v(nSize);
+				VectorXcd v(nSize);
 				v = es.eigenvectors().col(p);
-				Derivatives[p] = (v.transpose()*MDiff*v).value();
+				// Derivatives[p] = (v.transpose()*MDiff*v).value();
+        Derivatives[p] = (v.adjoint()*MDiff*v).value();
 				AlreadyCalculated[p] = 1;
 			}
 			else{
-				MatrixXd Phi(nSize,NumOfReps+1);
+				MatrixXcd Phi(nSize,NumOfReps+1);
 				int helpCol = 0;
-				MatrixXd MXWork(NumOfReps+1,NumOfReps+1);
+				MatrixXcd MXWork(NumOfReps+1,NumOfReps+1);
 
 				for(int i=p;i<nSize;i++)
 				{
@@ -425,9 +450,16 @@ void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M,
 						helpCol++;
 					}
 				}
-				MXWork = Phi.transpose()*MDiff*Phi;
-				SelfAdjointEigenSolver<MatrixXd> esWork(MXWork,EigenvaluesOnly);
+        if(Debug) std::cout << "Phi = \n" << Phi << std::endl;
+        if(Debug) std::cout << "MDiff =\n" << MDiff << std::endl;
+				MXWork = Phi.adjoint()*MDiff*Phi;
+        if(Debug) std::cout << "MXWork = \n" << MXWork << std::endl;
+				SelfAdjointEigenSolver<MatrixXcd> esWork;
+        if(Debug) std::cout << "Set esWork" << std::endl;
+        esWork.compute(MXWork);
+        if(Debug) std::cout << "finished esWork calc" << std::endl;
 				helpCol = 0;
+        if(Debug) std::cout << "Start saving " << std::endl;
 				for(int i=p;i<nSize;i++)
 				{
 					if(Mapping[p][i] == 1)
@@ -437,6 +469,7 @@ void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M,
 						helpCol++;
 					}
 				}
+        if(Debug) std::cout << "finished with p = " << p << std::endl;
 
 			}
 		}
@@ -449,10 +482,11 @@ void Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXd> M,
 
 	for(int i=0;i<nSize;i++)
 	  {
-	    res.push_back(Eigenvalues[i]);
+	    res.push_back(Eigenvalues[i].real());
 	  }
-	  for(int i=0;i<nSize;i++) res.push_back(Derivatives[i]);
+	  for(int i=0;i<nSize;i++) res.push_back(Derivatives[i].real());
 
+    if(Debug) std::cout << "End debugging in " << __func__ << std::endl;
 
 
 
@@ -544,7 +578,16 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA, double MassSquaredB
     	res += mcs*LogC/((mcs-mas)*(mcs-mbs));
       }
 
-    if(std::isnan(res) or std::isinf(res))   std::cout << mas << "\t" << mbs << "\t" << mcs << "\t" << res << "\t" << C << std::endl;
+    if(std::isnan(res) or std::isinf(res)) {
+    	std::string throwstring = "Found nan at line = ";
+    	throwstring += std::to_string(InputLineNumber);
+    	throwstring += " in function ";
+    	throwstring+= __func__;
+    	throwstring+= "\n";
+    	std::cerr << "Found nan at line = " << InputLineNumber << " in function " << __func__ << std::endl;
+    	std::cerr << mas << "\t" << mbs << "\t" << mcs << "\t" << res << "\t" << C << std::endl;
+    	throw std::runtime_error(throwstring.c_str());
+    }
 
 
 
@@ -1326,6 +1369,18 @@ void Class_Potential_Origin::WeinbergSecondDerivative(std::vector<double>& res)
 
     MatrixXd Storage(NHiggs,NHiggs);
     Storage = HiggsPart+GaugePart+QuarkPart+LeptonPart;
+
+    if(Debug){
+      std::cout << "Higgspart = \n" << HiggsPart << "\nGaugePart = \n" << GaugePart << "\nQuarkPart = \n"
+                << QuarkPart
+                << "\nLeptonPart = \n" << LeptonPart << std::endl;
+    }
+    for(int i=0;i<NHiggs;i++){
+      for(int j=0;j<NHiggs;j++){
+        if(std::abs(Storage(i,j)) < NumZero) Storage(i,j) = 0;
+      }
+    }
+    if(Debug) std::cout << "Storage = \n" << Storage << std::endl;
     MatrixXd ResMatrix;
     MatrixXd HiggsRot(NHiggs,NHiggs);
     for(int i=0;i<NHiggs;i++)
@@ -1335,6 +1390,8 @@ void Class_Potential_Origin::WeinbergSecondDerivative(std::vector<double>& res)
             HiggsRot(i,j) = HiggsRotationMatrix[i][j];
         }
     }
+
+    if(Debug) std::cout << "Rotation = \n" << HiggsRot << std::endl;
 
     ResMatrix = 0.5*HiggsRot.transpose()*(Storage+Storage.transpose())*HiggsRot;
     double epsilon = 1.0/(16.0*M_PI*M_PI);
@@ -1355,6 +1412,10 @@ void Class_Potential_Origin::WeinbergSecondDerivative(std::vector<double>& res)
             res.push_back(ResMatrix(j,i));
         }
     }
+
+    if(Debug) std::cout << "Resulting Matrix = \n" << ResMatrix << std::endl;
+
+    if(Debug) std::cout << "End Debugging in " << __func__ << std::endl;
 
 
 
@@ -1596,6 +1657,21 @@ void Class_Potential_Origin::WeinbergThirdDerivative(std::vector<double>& res){
  */
 void Class_Potential_Origin::HiggsMassesSquared(std::vector<double>& res, const std::vector<double>& v, double Temp, int diff)
 {
+    if(v.size() != nVEV and v.size() != NHiggs){
+      std::string ErrorString = std::string("You have called ") + std::string(__func__)
+        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
+      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+      throw std::runtime_error(ErrorString);
+    }
+    if(v.size() == nVEV and nVEV != NHiggs){
+    	std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+    	    			<< nVEV << " while it should have " << NHiggs
+    					<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+      std::vector<double> Transformedv;
+      MinimizeOrderVEV(v,Transformedv);
+      HiggsMassesSquared(res,Transformedv,Temp,diff);
+      return ;
+    }
     if(!SetCurvatureDone) SetCurvatureArrays();
     MatrixXd MassMatrix(NHiggs,NHiggs);
     double ZeroMass = std::pow(10,-5);
@@ -1631,19 +1707,19 @@ void Class_Potential_Origin::HiggsMassesSquared(std::vector<double>& res, const 
     }
     else if(diff == 0 and res.size() == NHiggs){
     	SelfAdjointEigenSolver<MatrixXd> es(MassMatrix,EigenvaluesOnly);
-		for(int i =0;i<NHiggs;i++)
-		{
-			double tmp = es.eigenvalues()[i];
-			if(std::abs(tmp) < ZeroMass ) tmp = 0;
-			res[i] = tmp;
-		}
+  		for(int i =0;i<NHiggs;i++)
+  		{
+  			double tmp = es.eigenvalues()[i];
+  			if(std::abs(tmp) < ZeroMass ) tmp = 0;
+  			res[i] = tmp;
+  		}
     }
     else if(diff == 0 and res.size()!= 0 and res.size() != NHiggs){
     	std::cout << "Something went wrong in " << __func__ << std::endl;
     	std::cout << __func__ << "Is calculating the mass for " << NHiggs << "fields but the resolution vector has a size of "
     			<< res.size() << ". This should be zero or " << NHiggs << std::endl;
     }
-    else if(diff <= nVEV)
+    else if(diff <= NHiggs)
     {
         MatrixXd Diff(NHiggs,NHiggs);
         int x0 = diff -1;
@@ -1658,7 +1734,11 @@ void Class_Potential_Origin::HiggsMassesSquared(std::vector<double>& res, const 
                 }
             }
         }
-        FirstDerivativeOfEigenvalues(MassMatrix,Diff,res);
+        MatrixXcd MassCast(NHiggs,NHiggs);
+        MassCast = MassMatrix;
+        MatrixXcd DiffCast(NHiggs,NHiggs);
+        DiffCast = Diff;
+        FirstDerivativeOfEigenvalues(MassCast,DiffCast,res);
     }
 
 
@@ -1673,6 +1753,21 @@ void Class_Potential_Origin::HiggsMassesSquared(std::vector<double>& res, const 
  */
 void Class_Potential_Origin::GaugeMassesSquared(std::vector<double>& res,const std::vector<double>& v, double Temp,int diff)
 {
+    if(v.size() != nVEV and v.size() != NHiggs){
+      std::string ErrorString = std::string("You have called ") + std::string(__func__)
+        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
+      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+      throw std::runtime_error(ErrorString);
+    }
+    if(v.size() == nVEV and nVEV != NHiggs){
+    	std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+    			<< nVEV << " while it should have " << NHiggs
+				<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+      std::vector<double> Transformedv;
+      MinimizeOrderVEV(v,Transformedv);
+      GaugeMassesSquared(res,Transformedv,Temp,diff);
+      return ;
+    }
     if(!SetCurvatureDone) SetCurvatureArrays();
     MatrixXd MassMatrix(NGauge,NGauge);
     double ZeroMass = std::pow(10,-5);
@@ -1692,6 +1787,7 @@ void Class_Potential_Origin::GaugeMassesSquared(std::vector<double>& res,const s
         }
     }
 
+
     if(diff == 0)
     {
 
@@ -1703,8 +1799,7 @@ void Class_Potential_Origin::GaugeMassesSquared(std::vector<double>& res,const s
             else res.push_back(tmp);
         }
     }
-
-    else if(diff <= nVEV)
+    else if(diff <= NHiggs)
     {
         int i = diff -1;
         MatrixXd Diff(NGauge,NGauge);
@@ -1716,7 +1811,11 @@ void Class_Potential_Origin::GaugeMassesSquared(std::vector<double>& res,const s
                 for(int j=0;j<NHiggs;j++) Diff(a,b) += Curvature_Gauge_G2H2[a][b][i][j]*v[j];
             }
         }
-        FirstDerivativeOfEigenvalues(MassMatrix,Diff,res);
+        MatrixXcd MassCast(NHiggs,NHiggs);
+        MassCast = MassMatrix;
+        MatrixXcd DiffCast(NHiggs,NHiggs);
+        DiffCast = Diff;
+        FirstDerivativeOfEigenvalues(MassCast,DiffCast,res);
     }
 
 
@@ -1732,6 +1831,21 @@ void Class_Potential_Origin::GaugeMassesSquared(std::vector<double>& res,const s
  */
 void Class_Potential_Origin::QuarkMassesSquared(std::vector<double>& res, const std::vector<double>& v, int diff)
 {
+	if(v.size() != nVEV and v.size() != NHiggs){
+	  std::string ErrorString = std::string("You have called ") + std::string(__func__)
+		+ std::string(" with an invalid vev configuration. Your vev is of dimension ")
+	  + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+	  throw std::runtime_error(ErrorString);
+	}
+	if(v.size() == nVEV and nVEV != NHiggs){
+		std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+		    			<< nVEV << " while it should have " << NHiggs
+						<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+	  std::vector<double> Transformedv;
+	  MinimizeOrderVEV(v,Transformedv);
+	  QuarkMassesSquared(res,Transformedv,diff);
+	  return ;
+	}
     if(!SetCurvatureDone) {SetCurvatureArrays(); std::cout << "Reset of Set Curvature " << std::endl;};
     MatrixXcd MassMatrix(NQuarks,NQuarks),MIJ(NQuarks,NQuarks);
     MIJ = MatrixXcd::Zero(NQuarks,NQuarks);
@@ -1760,6 +1874,65 @@ void Class_Potential_Origin::QuarkMassesSquared(std::vector<double>& res, const 
             else res.push_back(tmp);
         }
     }
+    else if(diff <= NHiggs){
+      int m = diff-1;
+      MatrixXcd Diff(NQuarks,NQuarks);
+      Diff = MatrixXcd::Zero(NQuarks,NQuarks);
+      for(int a=0;a<NQuarks;a++){
+        for(int b=0;b<NQuarks;b++){
+          for(int i=0;i<NQuarks;i++){
+            for(int l=0;l<NHiggs;l++){
+              Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][m]) * Curvature_Quark_F2H1[i][b][l] * v[l];
+              Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][l]) * Curvature_Quark_F2H1[i][b][m] * v[l];
+            }
+          }
+        }
+      }
+
+      FirstDerivativeOfEigenvalues(MassMatrix,Diff,res);
+
+      for(int i=0;i<res.size();i++){
+    	  if(std::isnan(res.at(i))){
+    		  std::cout << "MassMatrix = \n" << MassMatrix << "\nDiff = \n" << Diff << std::endl;
+    		  std::cout << "Fermion Masses : " ;
+    		  for(int i=0;i<NQuarks;i++) std::cout << std::sqrt(std::abs(res.at(i))) << "\t";
+    		  std::cout << std::endl;
+    		  std::cout << "VEV fields : ";
+    		  for(int i=0;i<v.size();i++) std::cout << v.at(i) << "\t";
+    		  std::cout << std::endl;
+
+
+
+
+    		  for(int l=0;l<NHiggs;l++){
+
+				  std::cout << "Curvature_Quark * v an Higgs  =  :" << l << "\n";
+				  for(int a=0;a<NQuarks;a++){
+					  for(int i=0;i<NQuarks;i++){
+						  std::cout << Curvature_Quark_F2H1[a][i][l] * v[l] << "\t";
+					  }
+					  std::cout << std::endl;
+				  }
+				  std::cout << "conj Curvature_Quark an Higgs = :" << l << "\n";
+				  for(int a=0;a<NQuarks;a++){
+					  for(int i=0;i<NQuarks;i++){
+						  std::cout << std::conj(Curvature_Quark_F2H1[a][i][l]) *v[l] << "\t";
+					  }
+					  std::cout << std::endl;
+				  }
+    		  }
+
+    		  std::string retmessage = "Nan found in ";
+			  retmessage+= __func__;
+			  retmessage+= " at deriv number ";
+			  retmessage+= std::to_string(i);
+			  retmessage+= " and m = ";
+			  retmessage+= std::to_string(m);
+			  throw std::runtime_error(retmessage);
+    	  }
+      }
+
+    }
 
 
 
@@ -1775,6 +1948,21 @@ void Class_Potential_Origin::QuarkMassesSquared(std::vector<double>& res, const 
  */
 void Class_Potential_Origin::LeptonMassesSquared(std::vector<double>& res, const std::vector<double>& v, int diff)
 {
+	if(v.size() != nVEV and v.size() != NHiggs){
+	      std::string ErrorString = std::string("You have called ") + std::string(__func__)
+	        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
+	      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+	      throw std::runtime_error(ErrorString);
+	}
+	if(v.size() == nVEV and nVEV != NHiggs){
+		std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+		    			<< nVEV << " while it should have " << NHiggs
+						<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+	  std::vector<double> Transformedv;
+	  MinimizeOrderVEV(v,Transformedv);
+	  LeptonMassesSquared(res,Transformedv,diff);
+	  return ;
+	}
     if(!SetCurvatureDone) SetCurvatureArrays();
     MatrixXcd MassMatrix(NLepton,NLepton),MIJ(NLepton,NLepton);
     MIJ = MatrixXcd::Zero(NLepton,NLepton);
@@ -1926,14 +2114,36 @@ double Class_Potential_Origin::CounterTerm(const std::vector<double>& v, int dif
 
 /**
  * Calculates the effective potential and its derivatives.
+ * @param v vev configuration at which the potential should be evaluated
+ * @param Temp temperature at which the potential should be evaluated
+ * @param diff Switch for the derivative of the potential. Default is 0 for the value of the potential
+ * @param Order 0 returns the tree level potential and 1 the NLO potential. Default value is the NLO potential
  */
 double Class_Potential_Origin::VEff(const std::vector<double>& v,
-		double Temp=0, int diff=0) {
-		double resOut = 0;
-		resOut = VTree(v,diff);
+		double Temp, int diff, int Order) {
+    if(v.size() != nVEV and v.size() != NHiggs){
+      std::string ErrorString = std::string("You have called ") + std::string(__func__)
+        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
+      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+      throw std::runtime_error(ErrorString);
+    }
+    if(v.size() == nVEV and nVEV != NHiggs){
+    	std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+    	    			<< nVEV << " while it should have " << NHiggs
+    					<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+      std::vector<double> Transformedv;
+      MinimizeOrderVEV(v,Transformedv);
+      return VEff(Transformedv,Temp,diff);
+    }
+
+	double resOut = 0;
+	resOut = VTree(v,diff);
+	if(Order != 0 and not UseTreeLevel){
 		resOut+= CounterTerm(v,diff);
 		resOut+= V1Loop(v,Temp,diff);
-		return resOut;
+	}
+// for(int i=0;i<NHiggs;i++) resOut += DebyeHiggs[i][i]*0.5*std::pow(v.at(i),2)*std::pow(Temp,2);
+	return resOut;
 }
 
 
@@ -2148,7 +2358,7 @@ bool Debug = false;
 
 	VEVSymmetric.resize(NHiggs);
 
-    Curvature_Higgs_L1.resize(NHiggs);
+  Curvature_Higgs_L1.resize(NHiggs);
   Curvature_Higgs_L2.resize(NHiggs);
   Curvature_Higgs_L3.resize(NHiggs);
   Curvature_Higgs_L4.resize(NHiggs);
@@ -2182,7 +2392,7 @@ bool Debug = false;
       LambdaHiggs_3_CT[i].resize(NHiggs);
 
       for(int j=0;j<NHiggs;j++)
-	{
+      {
         DebyeHiggs[i][j] = 0;
 
         Curvature_Higgs_CT_L2[i][j] = 0;
@@ -2191,28 +2401,29 @@ bool Debug = false;
 
         Curvature_Higgs_L2[i][j] = 0;
         Curvature_Higgs_L3[i][j].resize(NHiggs);
-	Curvature_Higgs_L4[i][j].resize(NHiggs);
+      	Curvature_Higgs_L4[i][j].resize(NHiggs);
 
-	LambdaHiggs_3[i][j].resize(NHiggs);
-	LambdaHiggs_3_CT[i][j].resize(NHiggs);
+      	LambdaHiggs_3[i][j].resize(NHiggs);
+      	LambdaHiggs_3_CT[i][j].resize(NHiggs);
 
 
-	  for(int k=0;k<NHiggs;k++)
-	    {
-	      Curvature_Higgs_L3[i][j][k] = 0;
-	      Curvature_Higgs_L4[i][j][k].resize(NHiggs);
+	       for(int k=0;k<NHiggs;k++)
+         {
+  	      Curvature_Higgs_L3[i][j][k] = 0;
+  	      Curvature_Higgs_L4[i][j][k].resize(NHiggs);
 
-	      Curvature_Higgs_CT_L3[i][j][k] = 0;
-	      Curvature_Higgs_CT_L4[i][j][k].resize(NHiggs);
+  	      Curvature_Higgs_CT_L3[i][j][k] = 0;
+  	      Curvature_Higgs_CT_L4[i][j][k].resize(NHiggs);
 
-	      for(int l=0;l<NHiggs;l++) {
-		  Curvature_Higgs_L4[i][j][k][l] = 0;
-		  Curvature_Higgs_CT_L4[i][j][k][l] = 0;
+  	      for(int l=0;l<NHiggs;l++) {
+      		  Curvature_Higgs_L4[i][j][k][l] = 0;
+      		  Curvature_Higgs_CT_L4[i][j][k][l] = 0;
+  	      }
+
+	       }
 	      }
-
-	    }
-	}
     }
+
     Curvature_Gauge_G2H2.resize(NGauge);
     DebyeGauge.resize(NGauge);
     LambdaGauge_3.resize(NGauge);
@@ -2240,15 +2451,19 @@ bool Debug = false;
     {
         Curvature_Lepton_F2H1[i].resize(NLepton);
         LambdaLepton_3[i].resize(NLepton);
-	LambdaLepton_4[i].resize(NLepton);
+        LambdaLepton_4[i].resize(NLepton);
         for(int j=0;j<NLepton;j++)
         {
             Curvature_Lepton_F2H1[i][j].resize(NHiggs);
             LambdaLepton_3[i][j].resize(NHiggs);
-	    LambdaLepton_4[i][j].resize(NHiggs);
+            LambdaLepton_4[i][j].resize(NHiggs);
             for(int l=0;l<NHiggs;l++) {
-        	Curvature_Lepton_F2H1[i][j][l] = 0;
-        	LambdaLepton_4[i][j][l].resize(NHiggs);
+            	Curvature_Lepton_F2H1[i][j][l] = 0;
+            	LambdaLepton_4[i][j][l].resize(NHiggs);
+              LambdaLepton_3[i][j][l] = 0;
+              for(int m=0;m<NHiggs;m++){
+                LambdaLepton_4[i][j][l][m] = 0;
+              }
             }
         }
     }
@@ -2259,15 +2474,15 @@ bool Debug = false;
     {
         Curvature_Quark_F2H1[i].resize(NQuarks);
         LambdaQuark_3[i].resize(NQuarks);
-	LambdaQuark_4[i].resize(NQuarks);
+        LambdaQuark_4[i].resize(NQuarks);
 
         for(int j=0;j<NQuarks;j++) {
             Curvature_Quark_F2H1[i][j].resize(NHiggs);
             LambdaQuark_3[i][j].resize(NHiggs);
-	    LambdaQuark_4[i][j].resize(NHiggs);
+            LambdaQuark_4[i][j].resize(NHiggs);
             for(int l=0;l<NHiggs;l++) {
-        	Curvature_Quark_F2H1[i][j][l] = 0;
-        	LambdaQuark_4[i][j][l].resize(NHiggs);
+            	Curvature_Quark_F2H1[i][j][l] = 0;
+            	LambdaQuark_4[i][j][l].resize(NHiggs);
             }
         }
 
@@ -2347,6 +2562,11 @@ double Class_Potential_Origin::EWSBVEV(std::vector<double> v)
       res = 0;
     }
   return res;
+}
+
+
+void Class_Potential_Origin::setUseIndexCol(std::string legend){
+	UseIndexCol = legend.rfind("\t",0) == 0;
 }
 
 void Class_Potential_Origin::CheckImplementation(const std::vector<double>& par,
@@ -2458,7 +2678,8 @@ void Class_Potential_Origin::CheckImplementation(const std::vector<double>& par,
 	std::vector<double> CalculatedHiggsVEV, CheckVector, start;
 	for(auto x: vevTreeMin) start.push_back(0.5*x);
 
-	Minimize_gen_all(Model,par,parCT,0,CalculatedHiggsVEV,CheckVector,start);
+
+	Minimize_gen_all_tree_level(Model,par,parCT,CalculatedHiggsVEV,CheckVector,start);
 
 
 	printline1="The given VEV configuration at tree-level is : ";
@@ -2567,5 +2788,64 @@ void Class_Potential_Origin::CheckImplementation(const std::vector<double>& par,
 	}
 
 
+
+}
+
+
+void Class_Potential_Origin::FindSignSymmetries(){
+	bool Debug = false;
+	SignSymmetries.clear();
+	std::vector<double> testvev,testvevPotential;
+	for(int i=0;i<nVEV;i++) testvev.push_back(i+1);
+	MinimizeOrderVEV(testvev,testvevPotential);
+	double referenceValue = VEff(testvevPotential);
+
+	std::vector<double> vevdummy,vevdummyPotential;
+	double VEffDummy;
+
+	int permutation=0;
+	// Fill a dummy vector with a certain amout of -1 and look at all possible permutations of it
+	for(int countNegative=1;countNegative<=nVEV;countNegative++){
+		std::vector<double> tmpSymmetry;
+		for(int i=0;i<countNegative;i++) tmpSymmetry.push_back(-1);
+		for(int i=countNegative;i<nVEV;i++) tmpSymmetry.push_back(1);
+
+		do{
+			vevdummy.clear();
+			for(int i=0;i<nVEV;i++) vevdummy.push_back(tmpSymmetry.at(i)*testvev.at(i));
+			MinimizeOrderVEV(vevdummy,vevdummyPotential);
+			VEffDummy = VEff(vevdummyPotential);
+			if(std::abs(VEffDummy-referenceValue)<=1e-3*std::abs(referenceValue)) SignSymmetries.push_back(tmpSymmetry);
+
+			if(Debug) {
+				std::cout << ++permutation << ":\t";
+				for(auto x:tmpSymmetry) std::cout << x << "\t";
+				std::cout << VEffDummy-referenceValue;
+				std::cout << "\t" << (VEffDummy-referenceValue)/referenceValue;
+				std::cout << std::endl;
+			}
+		}while(std::next_permutation(tmpSymmetry.begin(),tmpSymmetry.end()));
+	}
+	if(Debug) std::cout << "Found " << SignSymmetries.size() << " symmetries " << std::endl;
+}
+
+void Class_Potential_Origin::SetUseTreeLevel(bool val){
+	UseTreeLevel=val;
+}
+
+std::pair<std::vector<double>, std::vector<double>> Class_Potential_Origin::initModel(std::string linestr){
+	std::vector<double> par(nPar), parCT(nParCT);
+	resetbools();
+	ReadAndSet(linestr,par);
+	calc_CT(parCT);
+	set_CT_Pot_Par(parCT);
+	CalculateDebye();
+	CalculateDebyeGauge();
+
+	std::pair<std::vector<double>, std::vector<double>> res;
+	res.first = par;
+	res.second = parCT;
+
+	return res;
 
 }

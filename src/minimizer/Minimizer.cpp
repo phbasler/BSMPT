@@ -55,7 +55,7 @@
 * The Minimization Debugging Options are written in the std::vector Check.
 * The std::vector Start gives the start value for the CMA-ES Minimization.
 */
-void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT, double Temp,
+void Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin>& modelPointer, double Temp,
 		std::vector<double>& sol, std::vector<double>& Check,const std::vector<double>& start, int WhichMinimizer)
 {
     bool Debug = !C_TurnOffDebug;
@@ -81,13 +81,7 @@ void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vect
     UseGSLLocal = (PGSL == 1);
 
 
-//    Class_Potential_Origin * modelPointer;
-//    Fchoose(modelPointer,Model);
-    std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
     int npar = modelPointer->nPar;
-//    double *p = (double *)par;
-//    double *pct = (double *)parCT;
-    modelPointer->set_All(par,parCT);
     int dim = modelPointer->nVEV;
     int NHiggs = modelPointer->NHiggs;
 
@@ -95,21 +89,26 @@ void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vect
 
     double timeStart=0,timeEnd=0;
 
-    if(dim <3)
+    if(dim <=2)
       {
-	UseCMAES = false;
-	UseGSLLocal = true;
+				UseCMAES = false;
+				UseGSLLocal = true;
       }
 
 
 
     if(Debug) std::cout << "\n\n\nBeginne Minimization at T = " << Temp << std::endl;
     std::vector<double> solGSLMin,solGSLMinPot;
+//    solGSLMin.resize(dim+2);
+
     bool gslMinSuc = false;
     if(UseGSLLocal) {
 		if(Debug) std::cout << "Start with GSL Minimization " << std::endl;
 		timeStart = time(NULL);
-		gslMinSuc = GSL_Minimize_gen_all(Model, par, parCT, Temp,solGSLMin, 5);
+
+		if(UseCMAES) gslMinSuc = GSL_Minimize_gen_all(modelPointer, Temp,solGSLMin, 5);
+		else gslMinSuc = GSL_Minimize_gen_all(modelPointer, Temp,solGSLMin, 5, 50);
+
 		timeEnd = time(NULL);
 		if(Debug) std::cout << "GSL Runtime = " << timeEnd-timeStart << "seconds" <<  std::endl;
 		modelPointer->MinimizeOrderVEV(solGSLMin,solGSLMinPot);
@@ -150,7 +149,7 @@ void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vect
     int errC = 0;
     if(UseCMAES) {
 		if(Debug) std::cout << "Start CMAES " << std::endl;
-		errC = min_cmaes_gen_all(Model,par,parCT,Temp,solCMAES,start);
+		errC = min_cmaes_gen_all(modelPointer,Temp,solCMAES,start);
 		if(Debug) std::cout << "Set Solution " << std::endl;
 		modelPointer->MinimizeOrderVEV(solCMAES,solCMAESPotIn);
 		if(Debug ) std::cout << "Done " << std::endl;
@@ -245,7 +244,9 @@ void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vect
     }
     else if(vevsolTMp <= 0.5)
     {
-	    for(int k=0;k<dim;k++) sol.push_back(modelPointer->ModifiedVEVVectorDim[k]);
+	    for(int k=0;k<dim;k++) {
+	    	sol.push_back(modelPointer->ModifiedVEVVectorDim[k]);
+	    }
     }
     else{
 	    for(int k=0;k<dim;k++) sol.push_back(solTmp.at(k));
@@ -280,20 +281,15 @@ void Minimize_gen_all(int Model, const std::vector<double>& par, const std::vect
 /**
 * Uses a bisection method between the Temperature TempStart and TempEnde to find the phase transition in the Model and writes the solution in the vector sol.
 */
-void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT, double TempStart, double TempEnde, std::vector<double>& sol, int WhichMinimizer)
+void PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin>& modelPointer, double TempStart,
+		double TempEnde, std::vector<double>& sol, int WhichMinimizer)
 {
 	bool Debug = !C_TurnOffDebug;
 
 
     if(Debug) std::cout << "Starte PTFinder from Temperature " << TempStart << " until " << TempEnde <<  "\n";
 
-//    Class_Potential_Origin * modelPointer;
-//    Fchoose(modelPointer,Model);
-    std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
     int npar = modelPointer->nPar;
-//    double *p = (double *)par;
-//    double *pct = (double *)parCT;
-    modelPointer->set_All(par,parCT);
     int dim = modelPointer->nVEV;
     int NHiggs = modelPointer->NHiggs;
 
@@ -317,7 +313,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
 
 
     for(int k=0;k<dim;k++) startEnde.push_back(modelPointer->vevTreeMin.at(k));
-    Minimize_gen_all(Model,par,parCT,TempEnde,solEnd,checkEnde,startEnde,WhichMinimizer);
+    Minimize_gen_all(modelPointer,TempEnde,solEnd,checkEnde,startEnde,WhichMinimizer);
     modelPointer->MinimizeOrderVEV(solEnd,solEndPot);
     vEnd = modelPointer->EWSBVEV(solEndPot);
 
@@ -340,7 +336,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
     }
 
     for(int k=0;k<dim;k++) startStart.push_back(modelPointer->vevTreeMin.at(k));
-    Minimize_gen_all(Model,par,parCT,TempStart,solStart,checkStart,startStart,WhichMinimizer);
+    Minimize_gen_all(modelPointer,TempStart,solStart,checkStart,startStart,WhichMinimizer);
     modelPointer->MinimizeOrderVEV(solStart,solStartPot);
     vStart = modelPointer->EWSBVEV(solStartPot);
 
@@ -349,7 +345,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
     if(Debug) std::cout << "v(T=0) = 0" << std::endl;
 	    sol.push_back(TempEnde);
 	    sol.push_back(0);
-	    sol.push_back(-1);
+	    sol.push_back(-2);
 	    for(int k=0;k<dim;k++) sol.push_back(0);
 //	    delete modelPointer;
 	    return ;
@@ -363,7 +359,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
 	    if(Debug) std::cout << "v_Tree is not the global Minimum at T=0 \n";
 	    sol.push_back(TempEnde);
 	    sol.push_back(0);
-	    sol.push_back(-1);
+	    sol.push_back(-2);
 	    for(int k=0;k<dim;k++) sol.push_back(0);
 //	    delete modelPointer;
 	    return ;
@@ -376,7 +372,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
 	    solMitte.clear();
 	    checkMitte.clear();
 	    solMittePot.clear();
-	    Minimize_gen_all(Model,par,parCT,TM,solMitte,checkMitte,startMitte,WhichMinimizer);
+	    Minimize_gen_all(modelPointer,TM,solMitte,checkMitte,startMitte,WhichMinimizer);
 	    modelPointer->MinimizeOrderVEV(solMitte,solMittePot);
 	    vMitte = modelPointer->EWSBVEV(solMittePot);
 
@@ -385,7 +381,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
 	    {
 	      sol.push_back(TM);
 	      sol.push_back(vMitte);
-	      sol.push_back(-1);
+	      sol.push_back(-3);
 	      for(int k=0;k<dim;k++) sol.push_back(solMitte.at(k));
 //	      delete modelPointer;
 	      return;
@@ -394,7 +390,7 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
 	    {
 		    sol.push_back(TM);
 		    sol.push_back(vMitte);
-		    sol.push_back(-1);
+		    sol.push_back(-4);
 		    for(int k=0;k<dim;k++) sol.push_back(solMitte.at(k));
 //		    delete modelPointer;
 		    return;
@@ -427,4 +423,10 @@ void PTFinder_gen_all(int Model, const std::vector<double>& par, const std::vect
 }
 
 
-
+void Minimize_gen_all_tree_level(int Model, const std::vector<double>& par, const std::vector<double>& parCT,
+		std::vector<double>& sol, std::vector<double>& Check,const std::vector<double>& start, int WhichMinimizer){
+	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+	modelPointer->set_All(par,parCT);
+	modelPointer->SetUseTreeLevel(true);
+	Minimize_gen_all(modelPointer,0,sol,Check,start,WhichMinimizer);
+}

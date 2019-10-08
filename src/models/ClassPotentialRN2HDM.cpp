@@ -122,6 +122,9 @@ void Class_Potential_RN2HDM::ReadAndSet(const std::string& linestr, std::vector<
 {
 	std::stringstream ss(linestr);
 	double tmp;
+	if (UseIndexCol){
+		ss >> tmp;
+	}
 	double lu1,lu2,lu3,ll1,ll2,ll3,ll4,ll5,ll6,ll7,ll8,lvs,lus,ltanbeta;
 	double ltype;
 

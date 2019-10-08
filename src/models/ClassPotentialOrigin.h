@@ -55,6 +55,7 @@
 
     	*EIGEN3_ROOT=/path/to/eigen3
         	** This is only necessary if eigen3 is not installed through your packet mananger. If it is not go to [2] and download and unzip it to /path/to/eigen3.
+        	** This code was developed and tested with eigen3.3.3.
 
     	*CMAES_ROOT=/path/to/libcmaes
         	**If you do not give this option the default path will be the 'tools' folder in your BSMPT directory. For downloading libcmaes [3] you need either wget or curl installed on your system.
@@ -90,9 +91,9 @@ For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/ei
  *
  *	For our example the command
  *
- *  	./bin/BSMPT ch2dm example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
+ *  	./bin/BSMPT 0 example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
  *
- *  will calculate for the C2HDM identified through Model= c2hdm the EWPT for one
+ *  will calculate for the C2HDM identified through (Model=) 0 the EWPT for one
  *  parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2
  *  which can be compared with the already available file example/C2HDM_Input.dat_BSMPT.
  *
@@ -108,7 +109,7 @@ For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/ei
  *
  * For the C2HDM example this reads
  *
- * 		./bin/CalcCT c2hdm example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
+ * 		./bin/CalcCT 0 example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
  *
  * which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file
  * example/C2HDM_Input.dat_CalcCT.
@@ -123,7 +124,7 @@ For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/ei
  *
  * and for the C2HDM example it is given by
  *
- *  	./bin/NLOVEV  c2hdm example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
+ *  	./bin/NLOVEV  0 example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
  *
  * where the result is written into the file example/test_NLOVEV.dat which
  * can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.
@@ -138,7 +139,7 @@ For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/ei
  *
  * For our C2HDM example this would be
  *
- *  	./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
+ *  	./bin/VEVEVO 0 example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
  *
  * where the result for the NLO VEV is given in example/test_VEVEVO.dat as
  * function of the temperature in the interval between 0 and 150 GeV in steps of
@@ -154,20 +155,18 @@ For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/ei
  *
  * The C2HDM example is called through
  *
- * 	 	./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat example/test_TripleHiggsNLO.dat 2 2
+ * 	 	./bin/TripleHiggsNLO 0 example/C2HDM_Input.dat example/test_TripleHiggsNLO.dat 2 2
  *
  * with the result given in example/test_TripleHiggsNLO.dat which
- * can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsNLO.
+ * can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsNLO .
  *
- *  \subsection Test
+ *  \subsection CalculateEWBG
+ *  This program calculates the difference between baryons and anti-baryons normalized to the photon density generated through the EWPT.
+ *  Please beware that this is only tested for the C2HDM so far and the general implementation is future work. It is called through
  *
- *  This program provides a short unit test to check your implementation of the model. For this the gauge boson, lepton
- *  and Higgs boson masses are calculated and compared with the input defined in SMparam.h. Additionally the VEV at tree-level
- *  is calculated numerically and compared with the given input.
- *  To check the implementation of the Counterterm potential the Higgs boson masses are calculated at NLO and compared to their LO values.
- *  The code can be called as (as an example for the C2HDM)
+ *  	./bin/CalculateEWBG 0 example/C2HDM_Input.dat example/test_EWBG.dat 2 2
  *
- *  	./bin/Test c2hdm example/C2HDM_Input.dat 2
+ *  with the result given in example/test_EWBG.dat which can be compared with the already available file example/C2HDM_Input.dat_EWBG.
  *
  */
 
@@ -204,7 +203,7 @@ For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/ei
 
 
 
-const bool C_UseParwani=false; // Temp Massen überall
+const bool C_UseParwani=false; // Use the Parwani Method instead of Arnold-Espinosa
 
 
 const double C_CWcbFermion = 1.5;
@@ -215,7 +214,7 @@ const double C_euler_gamma = 0.5772156649015328606065;
 
 
 
-const double C_PT = 1;
+const double C_PT = 0;
 
 
 const double C_threshold = 1e-3;
@@ -244,6 +243,8 @@ const bool C_TurnOffDebug = true;
 
 class Class_Potential_Origin
 {
+private:
+	bool UseTreeLevel=false;
 public:
   Class_Potential_Origin ();
   virtual   ~Class_Potential_Origin ();
@@ -341,6 +342,18 @@ public:
   bool CalcCouplingsdone = false;
   bool CalculatedTripleCopulings = false;
 
+  int InputLineNumber=-1;
+
+  /**
+   * Variable to check if the input file has an index column or not
+   */
+  bool UseIndexCol = false;
+
+  /**
+   * Checks if the string legend starts with a tabulator or not and sets the variable UseIndexCol accordingly
+   */
+  void setUseIndexCol(std::string legend);
+
 
   /**
    * Storage of the Tree-Level Higgs VEV
@@ -351,7 +364,7 @@ public:
    */
   std::vector<double> Curvature_Higgs_L1;
   /**
-     * L_{(S)}^{ij
+     * L_{(S)}^{ij}
      */
   std::vector< std::vector<double> > Curvature_Higgs_L2;
   /**
@@ -422,7 +435,7 @@ public:
 
   void initVectors();
 
-  double VEff(const std::vector<double>& v,double Temp, int diff);
+  double VEff(const std::vector<double>& v,double Temp=0, int diff=0, int Order = 1);
   double VTree(const std::vector<double>& v, int diff = 0);
   double CounterTerm(const std::vector<double>& v , int n);
   double V1Loop(const std::vector<double>& v, double Temp, int diff);
@@ -561,7 +574,7 @@ public:
         */
   virtual void MinimizeOrderVEV(const std::vector<double>& VEVminimizer, std::vector<double>& VEVFunction) = 0;
 
-  void FirstDerivativeOfEigenvalues(const Eigen::Ref<Eigen::MatrixXd> M,const Eigen::Ref<Eigen::MatrixXd> MDiff, std::vector<double> &res);
+  void FirstDerivativeOfEigenvalues(const Eigen::Ref<Eigen::MatrixXcd> M,const Eigen::Ref<Eigen::MatrixXcd> MDiff, std::vector<double> &res);
   void SecondDerivativeOfEigenvaluesNonRepeated(const Eigen::Ref<Eigen::MatrixXd> M,const Eigen::Ref<Eigen::MatrixXd> MDiffX,const Eigen::Ref<Eigen::MatrixXd> MDiffY,const Eigen::Ref<Eigen::MatrixXd> MDiffXY, std::vector<double> &res);
 
 
@@ -578,11 +591,29 @@ public:
    */
   virtual void Debugging(const std::vector<double>& input, std::vector<double>& output)=0;
 
+
   /**
- * Checks if the tensors are correctly implemented. For this the fermion, quark and gauge boson masses are calculated and
- * printed next to the values defined in SMparah.h
- */
+   * Checks if the tensors are correctly implemented. For this the fermion, quark and gauge boson masses are calculated and
+   * printed next to the values defined in SMparah.h
+   */
   void CheckImplementation(const std::vector<double>& par,const std::vector<double>& parCT);
+
+  /**
+   * Find all possible sign combinations of the vevs under which the potential is invariant
+   */
+  std::vector<std::vector<double>> SignSymmetries;
+  void FindSignSymmetries();
+
+  /**
+   * Set the parameter UseTreeLevel to the input
+   */
+  void SetUseTreeLevel(bool val);
+
+  /**
+   * Gets the parameter line as an Input and calls
+   * resetbools, ReadAndSet, calc_CT, set_CT_Pot_Par,CalculateDebye and CalculateDebyeGauge
+   */
+  std::pair<std::vector<double>, std::vector<double>> initModel(std::string linestr);
 
 
 };

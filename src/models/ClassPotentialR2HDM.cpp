@@ -121,6 +121,9 @@ void Class_Potential_R2HDM::ReadAndSet(const std::string& linestr, std::vector<d
 {
 	std::stringstream ss(linestr);
 	double tmp;
+	if (UseIndexCol){
+		ss >> tmp;
+	}
 
 
 	for(int k=1;k<=8;k++)

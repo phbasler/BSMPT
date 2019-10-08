@@ -39,22 +39,17 @@ using namespace std;
 //#include "Minimizer.h"
 
 int main(int argc, char *argv[]) try{
+	bool PrintErrorLines=true;
+	int Model=-1;
 
 	if(!( argc == 6 or argc == 7) )
 	{
-		std::cout << "./BSMPT Model Inputfile Outputfile  LineStart LineEnd \n";
-		std::cout << "The chosen Method is ";
-		if(C_UseParwani) std::cout << "Parwani ";
-		else std::cout << "Arnold Espinosa\n";
-		std::cout << "The implemented models are \n"
-				<< "0 : C2HDM\n"
-				<< "1 : R2HDM\n"
-				<< "2 : N2HDM"
-				<< std::endl;
+		std::cerr << "./BSMPT Model Inputfile Outputfile  LineStart LineEnd \n";
+		ShowInputError();
 		return EXIT_FAILURE;
 	}
 
-	int Model = -1;
+
 	Model=getModel(argv[1]);
 	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
 	if(Model==-1) {
@@ -109,7 +104,7 @@ int main(int argc, char *argv[]) try{
 //	Class_Potential_Origin * modelPointer;
 //	Fchoose(modelPointer,Model);
 
-	std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
 
 
 	int Type;
@@ -131,7 +126,6 @@ int main(int argc, char *argv[]) try{
 	std::vector<double> sol;
 
 
-	std::vector<double> Weinberg;
 
 	while(getline(infile,linestr))
 	{
@@ -142,6 +136,15 @@ int main(int argc, char *argv[]) try{
 		    outfile << linestr << "\t" << modelPointer->addLegendCT() << "\t";
 		    outfile << modelPointer->addLegendTemp();
 		    outfile << std::endl;
+
+		    modelPointer->setUseIndexCol(linestr);
+//		    if (modelPointer->UseIndexCol) {
+//		      std::cout << "linestr starts with tab" << std::endl;
+//		    }
+//		    else{
+//		    	std::cout << "No tab " << std::endl;
+//		    }
+
 		  }
 		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
 		{
@@ -149,14 +152,15 @@ int main(int argc, char *argv[]) try{
 			{
 				std::cout << "Currently at line " << linecounter << std::endl;
 			}
-			modelPointer->resetbools();
-			modelPointer->ReadAndSet(linestr,par);
+			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
+			par=parameters.first;
+			parCT = parameters.second;
 
-//
-			modelPointer->calc_CT(parCT);
-
-			modelPointer->set_CT_Pot_Par(parCT);
-			if(LineStart == LineEnd ) modelPointer->write();
+			if(LineStart == LineEnd ) {
+				modelPointer->write();
+				std::vector<double> dummy;
+				modelPointer->Debugging(dummy,dummy);
+			}
 
 			/*std::vector<double> res;
 			modelPointer->HiggsMassesSquared(res,modelPointer->vevTree,0,0);
@@ -165,7 +169,7 @@ int main(int argc, char *argv[]) try{
 
 
 			sol.clear();
-			PTFinder_gen_all(Model,par,parCT,0,300,sol,3);
+			PTFinder_gen_all(modelPointer,0,300,sol,3);
 			if(LineStart == LineEnd) {
 				std::string labels=modelPointer->addLegendTemp();
 				std::string delimiter = "\t";
@@ -188,20 +192,43 @@ int main(int argc, char *argv[]) try{
 				}
 				else{
 					std::cout << "Success ? " << sol.at(2) << "\t (1 = Yes , -1 = No, v/T reached a value below " << C_PT << " during the calculation) \n";
-					std::cout << dimensionnames.at(1) << " = " << sol.at(1) << " GeV\n";
-					std::cout << dimensionnames.at(0) << " = " << sol.at(0) << " GeV\n";
-					std::cout << "xi_c = " << dimensionnames.at(ndim+2)  << " = " << sol.at(1)/sol.at(0) << std::endl;
-					for(int i=3;i<ndim + 3; i++){
-						std::cout << dimensionnames.at(i-1) << " = " << sol.at(i) << " GeV\n";
+					if(sol.at(2) == 1){
+						std::cout << dimensionnames.at(1) << " = " << sol.at(1) << " GeV\n";
+						std::cout << dimensionnames.at(0) << " = " << sol.at(0) << " GeV\n";
+						std::cout << "xi_c = " << dimensionnames.at(ndim+2)  << " = " << sol.at(1)/sol.at(0) << std::endl;
+						for(int i=3;i<ndim + 3; i++){
+							std::cout << dimensionnames.at(i-1) << " = " << sol.at(i) << " GeV\n";
+						}
 					}
+				else if(sol.at(0) == 300){
+					std::cout << dimensionnames.at(1) << " != 0 GeV at T = 300 GeV." << std::endl;
+				}
+				else if(sol.at(0) == 0){
+					std::cout << "This point is not vacuum stable." << std::endl;
 				}
 			}
-			if(sol.at(2) == 1)
+			}
+			if(PrintErrorLines){
+				outfile << linestr;
+				for(int i=0;i<nParCT;i++) {
+					outfile << "\t" << parCT[i];
+					// std::cout << "parCT[" << i << "] = " << parCT[i] << std::endl;
+				}
+				outfile << "\t" << sol.at(0) << "\t" << sol.at(1);
+				for(int i=0;i<ndim;i++) outfile << "\t" << sol.at(i+3);
+				if(sol.at(1)>C_PT*sol.at(0) and sol.at(2)==1) outfile << "\t" << sol.at(1) / sol.at(0);
+				else outfile << "\t" <<sol.at(2);
+				outfile << std::endl;
+			}
+			else if(sol.at(2) == 1)
 			{
 				if(C_PT*sol.at(0) < sol.at(1))
 				{
 					outfile << linestr;
-					for(int i=0;i<nParCT;i++) outfile << "\t" << parCT[i];
+					for(int i=0;i<nParCT;i++) {
+						outfile << "\t" << parCT[i];
+						// std::cout << "parCT[" << i << "] = " << parCT[i] << std::endl;
+					}
 					outfile << "\t" << sol.at(0) << "\t" << sol.at(1);
 					for(int i=0;i<ndim;i++) outfile << "\t" << sol.at(i+3);
 					outfile << "\t" << sol.at(1) / sol.at(0);

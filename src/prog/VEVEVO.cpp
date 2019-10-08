@@ -38,25 +38,24 @@ int main(int argc, char *argv[]) try{
     bool Debug = false;
 	if(!(argc == 8))
 	{
-		std::cout << "./VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend \n";
-		std::cout << "\t0: C2HDM \n\t1: R2HDM\n\t2: RN2HDM \n";
-		return -1;
+		std::cerr << "./VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend \n";
+		ShowInputError();
+		return EXIT_FAILURE;
 	}
 	char* in_file; char* out_file;
 	in_file = argv[2];
 	out_file = argv[3];
 	double LineNumb,TempStartIn,TempStepIn,TempEndIn;
 	double TempStart,TempEnd,TempStep;
-	int Model = -1;
-
-
+	double Model=-1;
 	Model=getModel(argv[1]);
-	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
 	if(Model==-1) {
 		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
 		ShowInputError();
 		return EXIT_FAILURE;
 	}
+
+
 
 	LineNumb = atoi(argv[4]);
 	TempStart = atof(argv[5]);
@@ -65,7 +64,7 @@ int main(int argc, char *argv[]) try{
 
 	if(LineNumb < 1)
 	{
-		std::cout << "Start line counting with 1" << std::endl;
+		std::cerr << "Start line counting with 1" << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -92,7 +91,7 @@ int main(int argc, char *argv[]) try{
 	std::vector<double> Weinberg,parCTVec;
 
 
-	std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
 
 	if(Debug) std::cout << "Set model pointer " << std::endl;
 
@@ -131,10 +130,15 @@ int main(int argc, char *argv[]) try{
 	{
 	   if(infile.eof()) break;
 	   std::getline(infile,linestr);
-	   if(linecounter == LineNumb)
+	   if(linecounter == 1){
+		   modelPointer->setUseIndexCol(linestr);
+	   }
+	   else if(linecounter == LineNumb)
 	   {
-            modelPointer->ReadAndSet(linestr,par);
-            found=true;
+		   std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
+		   par=parameters.first;
+		   parCT = parameters.second;
+           found=true;
 	   }
 
 	   else if(linecounter > LineNumb) break;
@@ -146,15 +150,6 @@ int main(int argc, char *argv[]) try{
 
 	if(Debug) std::cout << "Read done " << std::endl;
 
-	if(Debug)std::cout<<"Calculating counterterms"<<std::endl;
-	modelPointer->calc_CT(parCT);
-
-
-
-
-
-	if(Debug)std::cout<<"set function call"<<std::endl;
-	modelPointer->set_All(par,parCT);
 
 	if(Debug) modelPointer->write();
 
@@ -219,7 +214,7 @@ int main(int argc, char *argv[]) try{
 	   Check.clear();
 	   solPot.clear();
 	   if(Debug)std::cout<<"Minimization start"<<std::endl;
-	   Minimize_gen_all(Model,par,parCT,Temp,sol,Check,start,3);
+	   Minimize_gen_all(modelPointer,Temp,sol,Check,start,3);
 	   if(Debug)std::cout<<"Minimization end"<<std::endl;
 	   if(Debug){
 		   for(int i=0;i<dim;i++) std::cout << sol[i] << std::endl;

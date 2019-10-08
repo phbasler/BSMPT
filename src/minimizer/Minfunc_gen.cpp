@@ -70,7 +70,7 @@ FitFunc fsphere_gen_all = [](const double *v, const int N)
  * and write the solution in sol. The initial guess is given in start.
  * @return the libcmaes run_status of the system
  */
-double min_cmaes_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT,
+double min_cmaes_gen_all(const std::shared_ptr<Class_Potential_Origin>& modelPointer,
 		double Temp, std::vector<double>& sol, const std::vector<double>& Start){
 
     bool Debug = !C_TurnOffDebug;
@@ -84,17 +84,10 @@ double min_cmaes_gen_all(int Model, const std::vector<double>& par, const std::v
 //    ModelCom = Model;
     Tempcom = Temp;
 
-//    Class_Potential_Origin * modelPointer;
-//    Fchoose(modelPointer,Model);
-
-    std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
 
     nPar = modelPointer->nPar;
     nParCT = modelPointer->nParCT;
 
-
-
-    modelPointer->set_All(par,parCT);
 
     PCon.modelPointer = modelPointer;
 

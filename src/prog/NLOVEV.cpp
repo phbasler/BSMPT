@@ -39,58 +39,56 @@ int main(int argc, char *argv[]) try{
 
 	if(!( argc == 6) )
 	{
-		std::cout << "./NLOVEV Model Inputfile Outputfile  LineStart LineEnd \n";
+		std::cerr << "./NLOVEV Model Inputfile Outputfile  LineStart LineEnd \n";
+		ShowInputError();
 		return EXIT_FAILURE;
 	}
 
 
 	int Model=-1;
-	double LineStart,LineEnd;
-	char* in_file;char* out_file;
-
-
-	in_file = argv[2];
-	out_file = argv[3];
-
-
 	Model=getModel(argv[1]);
-	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
 	if(Model==-1) {
 		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
 		ShowInputError();
 		return EXIT_FAILURE;
 	}
 
+	double LineStart,LineEnd;
+	char* in_file;char* out_file;
+
+
+	in_file = argv[2];
+	out_file = argv[3];
 	LineStart = atoi(argv[4]);
 	LineEnd = atoi(argv[5]);
 
 	if(LineStart < 1)
 	{
-		std::cout << "Start line counting with 1" << std::endl;
+		std::cerr << "Start line counting with 1" << std::endl;
 		return EXIT_FAILURE;
 	}
 	if(LineStart > LineEnd)
 	{
-		std::cout << "LineEnd is smaller then LineStart " << std::endl;
+		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	int linecounter = 1;
 	std::ifstream infile(in_file);
 	if(!infile.good()) {
-			std::cout << "Input file not found " << std::endl;
+			std::cerr << "Input file not found " << std::endl;
 			return EXIT_FAILURE;
 	}
 	std::ofstream outfile(out_file);
 	if(!outfile.good())
 	{
-		std::cout << "Can not create file " << out_file << std::endl;
+		std::cerr << "Can not create file " << out_file << std::endl;
 		return EXIT_FAILURE;
 	}
 	std::string linestr;
 
 
-	std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
 
 	int Type;
 	double tmp;
@@ -117,6 +115,7 @@ int main(int argc, char *argv[]) try{
 		if(linecounter > LineEnd) break;
 		if(linecounter == 1)
 		  {
+			modelPointer->setUseIndexCol(linestr);
 		    outfile << linestr << "\t" << modelPointer->addLegendCT() << "\t";
 		    outfile << modelPointer->addLegendVEV();
 		    outfile << "\t" << "v_NLO";
@@ -124,16 +123,16 @@ int main(int argc, char *argv[]) try{
 		  }
 		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
 		{
-			modelPointer->resetbools();
-			modelPointer->ReadAndSet(linestr,par);
-			modelPointer->calc_CT(parCT);
-			modelPointer->set_CT_Pot_Par(parCT);
+			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
+			par=parameters.first;
+			parCT = parameters.second;
+
 			if(LineStart == LineEnd ) modelPointer->write();
 			sol.clear();
 			Check.clear();
 			start.clear();
 			for(int i=0;i<ndim;i++) start.push_back(modelPointer->vevTreeMin.at(i));
-			Minimize_gen_all(Model,par,parCT,0,sol,Check,start);
+			Minimize_gen_all(modelPointer,0,sol,Check,start);
 
 
 			std::vector<double> solPot,solSym;

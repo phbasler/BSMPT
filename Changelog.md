@@ -1,3 +1,8 @@
+2019/10/08: Release of v1.1.1:
+v1.1 did not calculate the tree-level minimum for comparison with the input but the NLO minimum, this is now fixed.
+The code can now work with data samples where the first column is an index column without a label, assuming the columns are tab separated.
+Cleaned up the interface of the minimisation functions, this changed nothing at the results.
+Introduced the initModel function which will handle ReadAndSet from the line, setting the parameters, calculating the Counterterm parameters and setting them as well as preparing everything necessary in the background. This was cleanup of the interface and did not change the numerics. 
 2019/10/07: Release of v1.1. It is now possible to call the models with the names 'ch2dm', 'n2hdm', 'r2hdm' instead of the numbers. Additionally added the Test binary which provides a possibility to check the implemented models.
 2019/09/27: Fixed a bug introduced with the changes of 2019/08/15
 2019/08/05: Fixed a small bug which occurred if the Gauge fields were already given in a diagonal basis

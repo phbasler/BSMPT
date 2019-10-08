@@ -32,37 +32,34 @@ int main(int argc, char *argv[]) try{
 
 	if(!( argc == 6 or argc == 7) )
 	{
-		std::cout << "./TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd \n";
+		std::cerr << "./TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd \n";
+		ShowInputError();
 		return -1;
 	}
 	int Model=-1;
+	Model=getModel(argv[1]);
+	if(Model==-1) {
+		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+		ShowInputError();
+		return EXIT_FAILURE;
+	}
 	double LineStart,LineEnd;
 	char* in_file;char* out_file;
 
 
 	in_file = argv[2];
 	out_file = argv[3];
-
-
-	Model=getModel(argv[1]);
-	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
-	if(Model==-1) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-
 	LineStart = atoi(argv[4]);
 	LineEnd = atoi(argv[5]);
 
 	if(LineStart < 1)
 	{
-		std::cout << "Start line counting with 1" << std::endl;
+		std::cerr << "Start line counting with 1" << std::endl;
 		return EXIT_FAILURE;
 	}
 	if(LineStart > LineEnd)
 	{
-		std::cout << "LineEnd is smaller then LineStart " << std::endl;
+		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -114,6 +111,7 @@ int main(int argc, char *argv[]) try{
 		}
 		if(linecounter == 1)
 		  {
+			modelPointer->setUseIndexCol(linestr);
 		    outfile << linestr << "\t" << modelPointer->addLegendCT();
 		    outfile << "\t" << modelPointer->addLegendTripleCouplings();
 		    outfile << std::endl;
@@ -122,12 +120,14 @@ int main(int argc, char *argv[]) try{
 		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
 		{
 
-			modelPointer->resetbools();
-			modelPointer->ReadAndSet(linestr,par);
-			modelPointer->calc_CT(parCT);
-			modelPointer->set_CT_Pot_Par(parCT);
+			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
+			par=parameters.first;
+			parCT = parameters.second;
+
+			modelPointer->InputLineNumber = linecounter;
 			modelPointer->Prepare_Triple();
 			modelPointer->TripleHiggsCouplings();
+
 			if(LineStart == LineEnd and TerminalOutput) modelPointer->write();
 			outfile << linestr;
 			for(int i=0;i<nParCT;i++) outfile << "\t" << parCT[i];

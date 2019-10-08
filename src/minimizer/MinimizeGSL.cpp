@@ -26,7 +26,7 @@
 
 #include "Minimizer.h"
 
-const double GSL_Tolerance=std::pow(10,-4);
+const double GSL_Tolerance=std::pow(10,-6);
 
 bool Minimize1D = false;
 
@@ -85,14 +85,14 @@ double GSL_VEFF_gen_all(const gsl_vector *v, void *p)
  * Calculates the next local minimum in the model from the point start
  * @returns The final status of the gsl minimization process.
  */
-int GSL_Minimize_From_S_gen_all(void* p, std::vector<double>& sol,std::vector<double> start)
+int GSL_Minimize_From_S_gen_all(struct GSL_params& params, std::vector<double>& sol,const std::vector<double>& start)
 {
 
   bool Debug = false;
   if(Debug) std::cout << "Start Debuging " << __func__ << std::endl;
     gsl_set_error_handler_off();
 
-	struct GSL_params * params = (struct GSL_params *) p;
+//	struct GSL_params * params = (struct GSL_params *) p;
 	const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2;
 	gsl_multimin_fminimizer *s = NULL;
 	gsl_vector *ss, *x;
@@ -105,7 +105,7 @@ int GSL_Minimize_From_S_gen_all(void* p, std::vector<double>& sol,std::vector<do
 	int status;
 	double size;
 
-	int dim = params->nVEV;
+	int dim = params.nVEV;
 
 	/* Starting point */
 	x = gsl_vector_alloc (dim);
@@ -118,7 +118,7 @@ int GSL_Minimize_From_S_gen_all(void* p, std::vector<double>& sol,std::vector<do
 	/* Initialize method and iterate */
 	minex_func.n = dim;
 	minex_func.f = &GSL_VEFF_gen_all;
-	minex_func.params = params;
+	minex_func.params = &params;
 	s = gsl_multimin_fminimizer_alloc (T, dim);
   gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
 
@@ -167,43 +167,38 @@ int GSL_Minimize_From_S_gen_all(void* p, std::vector<double>& sol,std::vector<do
  * deepest potential value as the candidate for the global minimum
  * @return True if a candidate for the global minimum is found and false otherwise
  */
-bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT,
+bool GSL_Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin>& modelPointer,
 		double Temp, std::vector<double>& solV, int seed,int MaxSol){
 	std::vector<std::vector<double>> saveAllMinima;
-	bool result = GSL_Minimize_gen_all(Model,par, parCT,Temp,solV, seed ,saveAllMinima, MaxSol);
+	bool result = GSL_Minimize_gen_all(modelPointer,Temp,solV, seed ,saveAllMinima, MaxSol);
 
 //	std::cout << "rows = " << saveAllMinima.size() << std::endl;
 	return result;
 }
 
 
-bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT,
+bool GSL_Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin>& modelPointer,
 		double Temp, std::vector<double>& solV, int seed){
 	std::vector<std::vector<double>> saveAllMinima;
 	int MaxSol = 20;
-	bool result = GSL_Minimize_gen_all(Model,par, parCT,Temp,solV, seed ,saveAllMinima, MaxSol);
+	bool result = GSL_Minimize_gen_all(modelPointer,Temp,solV, seed ,saveAllMinima, MaxSol);
 
 //	std::cout << "rows = " << saveAllMinima.size() << std::endl;
 	return result;
 }
 
-bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::vector<double>&  parCT, double Temp,
+bool GSL_Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin>& modelPointer, double Temp,
 		std::vector<double>& solV, int seed , std::vector<std::vector<double>>& saveAllMinima, int MaxSol)
 {
 	bool Debug = false;
 	if(Debug) std::cout << "Start Debuging " << __func__ << std::endl;
 	if(Debug) std::cout << "Searching for " << MaxSol << " solutions " << std::endl;
-//	Class_Potential_Origin * modelPointer;
-//	Fchoose(modelPointer,Model);
-//	int nPar = modelPointer->nPar;
-	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+
 	int nParCT = modelPointer->nParCT;
-//	double *p = (double *)par;
-//	double *pCT = (double *)parCT;
+
 	struct GSL_params params;
 	params.Temp = Temp;
 	params.nVEV = modelPointer->nVEV;
-	modelPointer->set_All(par,parCT);
 	params.modelPointer = modelPointer;
 
 
@@ -234,7 +229,7 @@ bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::
 		for(int i=0;i<dim;i++) start[i] = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
 
 
-		GSL_Minimize_From_S_gen_all(&params,sol,start);
+		GSL_Minimize_From_S_gen_all(params,sol,start);
 
 		vPot.resize(modelPointer->NHiggs);
 		modelPointer->MinimizeOrderVEV(sol,vPot);
@@ -270,7 +265,7 @@ bool GSL_Minimize_gen_all(int Model, const std::vector<double>& par, const std::
 
 	if(numOfSol == 0)
 	{
-		std::cout << "No solutions found \n";
+		std::cerr << "No solutions found during the GSL minimization at T = " << Temp << " GeV " << "\n";
 //		delete modelPointer;
 		return false;
 	}
