@@ -32,7 +32,7 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 For additional information, comments, complaints or suggestions please e-mail
-to:  philipp.basler@kit.edu
+to:  bsmpt@lists.kit.edu
 
 ---
    
