@@ -257,6 +257,7 @@ double Class_Potential_Origin::boson(double MassSquared, double Temp, double cb,
 			}
 
 			PotVal = (fnext-fprev)/(xnext-xprev) * (x-xprev) + fprev;
+			PotVal += C_BosonShift;
 			PotVal *= std::pow(Temp,4)/(2*M_PI*M_PI);
 
         }

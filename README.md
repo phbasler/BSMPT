@@ -1,4 +1,4 @@
-Program: BSMPT version 1.1
+Program: BSMPT version 1.1.2
 
 Released by: Philipp Basler and Margarete Mühlleitner
 

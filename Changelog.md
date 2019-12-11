@@ -1,3 +1,4 @@
+2019/12/11: Release of v1.1.2: Many thanks for Andrew Fowlie, Csaba Balazs, Peter Athron and Yang Zhang for pointing out a small bug in the calculation of the bosonic thermal corrections. The finite shift delta_- introduced in Eq. (2.43) of the manual was not carried over in the case m^2 < 0, introducing a non-continuity in the function. This is now fixed.
 2019/10/08: Release of v1.1.1:
 v1.1 did not calculate the tree-level minimum for comparison with the input but the NLO minimum, this is now fixed.
 The code can now work with data samples where the first column is an index column without a label, assuming the columns are tab separated.
