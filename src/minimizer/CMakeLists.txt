@@ -1,6 +1,53 @@
-add_library(Minimizer
-  Minfunc_gen.cpp
-  MinimizeGSL.cpp
-  Minimizer.cpp
+set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/minimizer")
+set(header
+	${header_path}/Minimizer.h
+	${header_path}/MinimizePlane.h
+	${header_path}/MinimizeGSL.h
 )
-target_link_libraries(Minimizer PUBLIC CMAES Eigen3::Eigen GSL::gsl OpenMP::OpenMP_CXX)
+
+set(src
+	MinimizeGSL.cpp
+	Minimizer.cpp
+	MinimizePlane.cpp
+)
+
+
+if(CMAES_FOUND)
+	set(header
+		${header}
+		${header_path}/LibCMAES/MinimizeLibCMAES.h
+		)
+	set(src
+		${src}
+		LibCMAES/MinimizeLibCMAES.cpp
+		)
+endif()
+
+if(NLopt_FOUND)
+	set(header
+		${header}
+		${header_path}/LibNLOPT/MinimizeNLOPT.h
+		)
+	set(src
+		${src}
+		LibNLOPT/MinimizeNLOPT.cpp
+		)
+endif()
+
+
+
+add_library(Minimizer ${header} ${src})
+target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl)
+if(CMAES_FOUND)
+  target_link_libraries(Minimizer PUBLIC CMAES::cmaes OpenMP::OpenMP_CXX)
+endif()
+
+if(NLopt_FOUND)
+  target_link_libraries(Minimizer PUBLIC nlopt)
+endif()
+
+target_include_directories(Minimizer PUBLIC ${BSMPT_SOURCE_DIR}/include
+	                                         ${BSMPT_BINARY_DIR}/include)
+target_include_directories(Minimizer PUBLIC ${BSMPT_SOURCE_DIR}/include)
+target_compile_features(Minimizer PUBLIC cxx_std_14)
+

@@ -2,7 +2,7 @@
  * CalcCT.cpp
  *
  *
- *      Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -24,10 +24,19 @@
  * same as used in Potential::set_CT_Pot_Par
  */
 
-#include "../models/IncludeAllModels.h"
-
+#include <bits/exception.h>                     // for exception
+#include <stdlib.h>                             // for atoi, EXIT_FAILURE
+#include <memory>                               // for unique_ptr
+#include <string>                               // for operator<<, getline
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
+#include <fstream>
 #include <iostream>
 using namespace std;
+using namespace BSMPT;
 //#include "Minimizer.h"
 int main(int argc, char *argv[]) try{
 
@@ -38,16 +47,15 @@ int main(int argc, char *argv[]) try{
 		return EXIT_FAILURE;
 	}
 
-	int Model=-1;
 	double LineStart,LineEnd;
 	char* in_file;char* out_file;
 
-	Model=getModel(argv[1]);
-	if(Model==-1) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
+    auto Model=ModelID::getModel(argv[1]);
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return EXIT_FAILURE;
+    }
 
 
 	in_file = argv[2];
@@ -84,13 +92,11 @@ int main(int argc, char *argv[]) try{
 		return EXIT_FAILURE;
 	}
 	std::string linestr;
-	int Type;
-	double tmp;
 
-	std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
+    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
+    size_t nPar,nParCT;
+    nPar = modelPointer->get_nPar();
+    nParCT = modelPointer->get_nParCT();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 
@@ -105,7 +111,8 @@ int main(int argc, char *argv[]) try{
 		if(linecounter == 1)
 		  {
 			modelPointer->setUseIndexCol(linestr);
-		    outfile << linestr << "\t" << modelPointer->addLegendCT();
+            outfile << linestr;
+            for(auto x: modelPointer->addLegendCT()) outfile << sep << x;
 		    outfile << std::endl;
 		  }
 
@@ -115,9 +122,7 @@ int main(int argc, char *argv[]) try{
 			par=parameters.first;
 			parCT = parameters.second;
 
-			outfile << linestr;
-			for(int i=0;i<nParCT;i++) outfile << "\t" << parCT[i];
-			outfile << std::endl;
+            outfile << linestr << sep << parCT << std::endl;
         }
 		linecounter++;
 		if(infile.eof()) break;

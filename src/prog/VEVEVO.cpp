@@ -2,7 +2,7 @@
  * VEVEVO.cpp
  *
  *
- *      Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -27,15 +27,25 @@
  */
 
 
-#include "../models/IncludeAllModels.h"
-#include "../minimizer/Minimizer.h"
+#include <bits/exception.h>                     // for exception
+#include <math.h>                               // for sqrt, abs
+#include <stdlib.h>                             // for atof, EXIT_FAILURE, atoi
+#include <algorithm>                            // for copy, max
+#include <iomanip>                              // for operator<<, setprecision
+#include <memory>                               // for shared_ptr, __shared_...
+#include <string>                               // for getline, operator<<
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/minimizer/Minimizer.h>
+#include <BSMPT/utility.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
+using namespace BSMPT;
 
 int main(int argc, char *argv[]) try{
-
-
-    bool Debug = false;
 	if(!(argc == 8))
 	{
 		std::cerr << "./VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend \n";
@@ -45,11 +55,11 @@ int main(int argc, char *argv[]) try{
 	char* in_file; char* out_file;
 	in_file = argv[2];
 	out_file = argv[3];
-	double LineNumb,TempStartIn,TempStepIn,TempEndIn;
+	double LineNumb;
 	double TempStart,TempEnd,TempStep;
-	double Model=-1;
-	Model=getModel(argv[1]);
-	if(Model==-1) {
+
+    auto Model=ModelID::getModel(argv[1]);
+    if(Model==ModelID::ModelIDs::NotSet) {
 		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
 		ShowInputError();
 		return EXIT_FAILURE;
@@ -85,23 +95,24 @@ int main(int argc, char *argv[]) try{
 
 	}
 
+    if(TempStep == 0){
+        std::cout << "The given stepsize is zero. This will cause an infinite loop. Therefore the stepsize has been set to 1." << std::endl;
+        TempStep = 1;
+    }
+
 
 
 	std::vector<double> sol,start,solPot;
 	std::vector<double> Weinberg,parCTVec;
 
 
-	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
-
-	if(Debug) std::cout << "Set model pointer " << std::endl;
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
 	std::ifstream infile(in_file);
 	if(!infile.good()) {
 			std::cout << "Input file not found " << std::endl;
 			return EXIT_FAILURE;
 	}
-
-	if(Debug) std::cout << "found file " << std::endl;
 
 	std::ofstream outfile(out_file);
 	if(!outfile.good())
@@ -113,19 +124,15 @@ int main(int argc, char *argv[]) try{
 	std::string linestr;
 	int linecounter = 1;
 
-	double tmp;
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
+    size_t nPar,nParCT;
+    nPar = modelPointer->get_nPar();
+    nParCT = modelPointer->get_nParCT();
 
-	int dim = modelPointer->nVEV;
+    size_t dim = modelPointer->get_nVEV();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 
 	bool found=false;
-
-	if(Debug) std::cout << "Read start " << std::endl;
-
 	while(true)
 	{
 	   if(infile.eof()) break;
@@ -148,55 +155,28 @@ int main(int argc, char *argv[]) try{
 	infile.close();
 	if(!found) {std::cout << "Line not found !\n"; return -1;}
 
-	if(Debug) std::cout << "Read done " << std::endl;
-
-
-	if(Debug) modelPointer->write();
-
-
-
 	std::vector<double> vTree;
 
 
-	for(int k=0;k<dim;k++) vTree.push_back(modelPointer->vevTreeMin.at(k));
+    for(size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
 
-	if(Debug)
-	{
-		std::vector<double> TreeMasses;
-		modelPointer->HiggsMassesSquared(TreeMasses,modelPointer->vevTree,0,0);
-		for(int i=0;i<modelPointer->NHiggs;i++)
-		{
-			std::cout << TreeMasses[i] << "\t" << std::sqrt(std::abs(TreeMasses[i])) << std::endl;
-		}
-	}
-
-
-
-
-
-
-
-
-	std::vector<double> Check;
+    std::vector<double> Check;
 	double vev=0;
-	double v1T,v2T,v3T;
 	std::vector<double> NTempMass;
 
-	std::vector<double> zero;
-	for(int k=0;k<dim;k++) zero.push_back(0);
+    std::vector<double> zero(dim,0);
 
 	std::vector<double> sol1D;
 
 
-	double Temp = TempStart;
 	std::cout << std::scientific;
 	std::cout << std::setprecision(16);
 	outfile << std::setprecision(16);
 
 
-    outfile << "T" << "\t" << "v" << "\t";
-    outfile << modelPointer->addLegendVEV()
-    		<< "\t" << "Veff(v,T)"
+    outfile << "T" << sep << "v";
+    for(auto x: modelPointer->addLegendVEV()) outfile << sep << x;
+    outfile << sep << "Veff(v,T)"
     		<< std::endl;
 
    for(double Temp = TempStart; Temp<=TempEnd; Temp+=TempStep)
@@ -205,47 +185,22 @@ int main(int argc, char *argv[]) try{
 	   start.clear();
 	   if(Temp==TempStart)
 	   {
-		   for(int k=0;k<dim;k++) start.push_back(vTree.at(k));
+           for(size_t k=0;k<dim;k++) start.push_back(vTree.at(k));
 	   }
 	   else{
-		   for(int k=0;k<dim;k++) start.push_back(sol.at(k));
+           for(size_t k=0;k<dim;k++) start.push_back(sol.at(k));
 	   }
 	   sol.clear();
 	   Check.clear();
 	   solPot.clear();
-	   if(Debug)std::cout<<"Minimization start"<<std::endl;
-	   Minimize_gen_all(modelPointer,Temp,sol,Check,start,3);
-	   if(Debug)std::cout<<"Minimization end"<<std::endl;
-	   if(Debug){
-		   for(int i=0;i<dim;i++) std::cout << sol[i] << std::endl;
-	   }
-	   modelPointer->MinimizeOrderVEV(sol,solPot);
+       sol = Minimizer::Minimize_gen_all(modelPointer,Temp,Check,start);
+       solPot=modelPointer->MinimizeOrderVEV(sol);
 	   vev = modelPointer->EWSBVEV(solPot);
 
-
-
-	  //DEBUGGING
-		if(Debug){ std::cout << std::endl;
-		std::cout<<"Input Values"<<std::endl;
-		double VTree = modelPointer->VEff(modelPointer->vevTree,0,0);
-		double VTreeVevTree = modelPointer->VTree(modelPointer->vevTree,0);
-		double VCTVevTree = modelPointer->CounterTerm(modelPointer->vevTree,0);
-		double V1VevTree = modelPointer->V1Loop(modelPointer->vevTree,0,0);
-		std::cout << "V(v_T,T=0) = " << VTree << std::endl;
-		std::cout << "V_Tree(v_T,T=0) = " << VTreeVevTree << std::endl;
-		std::cout << "V_CT(v_T,T=0) = " << VCTVevTree << std::endl;
-		std::cout << "V_1(v_T,T=0) = " << V1VevTree << std::endl;
-
-		   double V_tree;
-		   V_tree = modelPointer->VTree(solPot,0);
-		   std::cout<<"V_tree at Minimum: "<<V_tree<<std::endl;
-
-		   std::cout<<"Minimizer-Input = "<<V_tree-VTree<<std::endl; }
-
-	   outfile << Temp << "\t";
+       outfile << Temp << sep;
 	   outfile << vev;
-	   for(int k=0;k<dim;k++) outfile << "\t" << sol.at(k);
-	   outfile << "\t" << modelPointer->VEff(solPot,Temp,0);
+       for(auto x: sol) outfile << sep << x;
+       outfile << sep << modelPointer->VEff(solPot,Temp,0);
 	   outfile << std::endl;
 
 

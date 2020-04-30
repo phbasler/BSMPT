@@ -2,7 +2,7 @@
  * BSMPT.cpp
  *
  *
- *      Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -26,21 +26,31 @@
  *
  */
 
-#include "../models/IncludeAllModels.h"
-#include "../minimizer/Minimizer.h"
+
+#include <bits/exception.h>                     // for exception
+#include <stdlib.h>                             // for atoi, EXIT_FAILURE
+#include <algorithm>                            // for copy, max
+#include <memory>                               // for shared_ptr, __shared_...
+#include <string>                               // for string, operator<<
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/minimizer/Minimizer.h>
+#include <BSMPT/utility.h>
 #include <iostream>
+#include <fstream>
+
 using namespace std;
+using namespace BSMPT;
 
-
-
-
-
-
-//#include "Minimizer.h"
 
 int main(int argc, char *argv[]) try{
+	/**
+	 * PrintErrorLines decides if parameter points with no valid EWPT (no NLO stability or T=300 vanishing VEV)
+	 * are printed in the output file
+	 */
 	bool PrintErrorLines=true;
-	int Model=-1;
 
 	if(!( argc == 6 or argc == 7) )
 	{
@@ -50,13 +60,13 @@ int main(int argc, char *argv[]) try{
 	}
 
 
-	Model=getModel(argv[1]);
-	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
-	if(Model==-1) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
+    auto Model=ModelID::getModel(argv[1]);
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return EXIT_FAILURE;
+    }
+
 	double LineStart,LineEnd;
 	char* in_file;char* out_file;
 
@@ -101,30 +111,18 @@ int main(int argc, char *argv[]) try{
 	}
 	std::string linestr;
 
-//	Class_Potential_Origin * modelPointer;
-//	Fchoose(modelPointer,Model);
-
-	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
 
-	int Type;
-	double tmp;
+    size_t nPar,nParCT;
+    nPar = modelPointer->get_nPar();
+    nParCT = modelPointer->get_nParCT();
 
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
+    size_t ndim = modelPointer->get_nVEV();
 
-	int ndim = modelPointer->nVEV;
-
-
+	
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
-
-
-
-
-	std::vector<double> sol;
-
 
 
 	while(getline(infile,linestr))
@@ -133,18 +131,10 @@ int main(int argc, char *argv[]) try{
 
 		if(linecounter == 1)
 		  {
-		    outfile << linestr << "\t" << modelPointer->addLegendCT() << "\t";
-		    outfile << modelPointer->addLegendTemp();
-		    outfile << std::endl;
+            outfile << linestr << sep << modelPointer->addLegendCT()
+                    << sep << modelPointer->addLegendTemp() << std::endl;
 
 		    modelPointer->setUseIndexCol(linestr);
-//		    if (modelPointer->UseIndexCol) {
-//		      std::cout << "linestr starts with tab" << std::endl;
-//		    }
-//		    else{
-//		    	std::cout << "No tab " << std::endl;
-//		    }
-
 		  }
 		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
 		{
@@ -155,83 +145,57 @@ int main(int argc, char *argv[]) try{
 			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
 			par=parameters.first;
 			parCT = parameters.second;
-
 			if(LineStart == LineEnd ) {
-				modelPointer->write();
-				std::vector<double> dummy;
-				modelPointer->Debugging(dummy,dummy);
+                 modelPointer->write();
 			}
 
-			/*std::vector<double> res;
-			modelPointer->HiggsMassesSquared(res,modelPointer->vevTree,0,0);
-			for(int i=0;i<modelPointer->NHiggs;i++) std::cout << std::sqrt(res.at(i)) << std::endl;
-            */
+            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,3/*Minimisation without NLOpt*/); //TODO: NLOpt does not work on the cluster?!
+            std::vector<double> vevsymmetricSolution,checksym, startpoint;
+            for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
+            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,3);
 
 
-			sol.clear();
-			PTFinder_gen_all(modelPointer,0,300,sol,3);
-			if(LineStart == LineEnd) {
-				std::string labels=modelPointer->addLegendTemp();
-				std::string delimiter = "\t";
-				std::vector<std::string> dimensionnames;
-				size_t pos = 0;
-				while((pos = labels.find(delimiter)) != std::string::npos){
-					dimensionnames.push_back(labels.substr(0,pos));
-					labels.erase(0,pos+delimiter.length());
-				}
-				dimensionnames.push_back(labels);
-				if(dimensionnames.size() != ndim +3){
-					std::cout << "The number of names in the function addLegendTemp does not match the number of vevs, going to default naming."
-							<< "You should fix this as this will result in errors in your output file." << std::endl;
-					std::cout << "Success ? " << sol.at(2) << "\t (1 = Yes , -1 = No, v/T reached a value below " << C_PT << " during the calculation) \n";
-					std::cout << "omega_c = " << sol.at(1) << " GeV\n";
-					std::cout << "T_c = " << sol.at(0) << " GeV\n";
-					std::cout << "xi_c = omega_c/T_c =  " << sol.at(1)/sol.at(0) << std::endl;
-					for(int i=3;i<ndim+3 ;i++) {
-						std::cout << "omega_" << i-2 << " = " << sol.at(i) << " GeV\n";}
-				}
-				else{
-					std::cout << "Success ? " << sol.at(2) << "\t (1 = Yes , -1 = No, v/T reached a value below " << C_PT << " during the calculation) \n";
-					if(sol.at(2) == 1){
-						std::cout << dimensionnames.at(1) << " = " << sol.at(1) << " GeV\n";
-						std::cout << dimensionnames.at(0) << " = " << sol.at(0) << " GeV\n";
-						std::cout << "xi_c = " << dimensionnames.at(ndim+2)  << " = " << sol.at(1)/sol.at(0) << std::endl;
-						for(int i=3;i<ndim + 3; i++){
-							std::cout << dimensionnames.at(i-1) << " = " << sol.at(i) << " GeV\n";
-						}
-					}
-				else if(sol.at(0) == 300){
-					std::cout << dimensionnames.at(1) << " != 0 GeV at T = 300 GeV." << std::endl;
-				}
-				else if(sol.at(0) == 0){
-					std::cout << "This point is not vacuum stable." << std::endl;
-				}
-			}
+            if(LineStart == LineEnd) {
+                auto dimensionnames = modelPointer->addLegendTemp();
+                std::cout << "Success ? " << EWPT.StatusFlag << sep << " (1 = Yes , -1 = No, v/T reached a value below " << C_PT << " during the calculation) \n";
+                if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS){
+                    std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
+                    std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
+                    std::cout << "xi_c = " << dimensionnames.at(2)  << " = " << EWPT.vc/EWPT.Tc << std::endl;
+                    for(size_t i=0;i<ndim; i++){
+                        std::cout << dimensionnames.at(i+3) << " = " << EWPT.EWMinimum.at(i) << " GeV\n";
+                    }
+                    std::cout<< "Symmetric VEV config"<<std::endl;
+                    for(size_t i=0;i<ndim; i++){
+                        std::cout << dimensionnames.at(i+3) << " = " << VEVsym.at(i) << " GeV\n";
+                    }
+
+
+                }
+                else if(EWPT.Tc == 300){
+                    std::cout << dimensionnames.at(1) << " != 0 GeV at T = 300 GeV." << std::endl;
+                }
+                else if(EWPT.Tc == 0){
+                    std::cout << "This point is not vacuum stable." << std::endl;
+                }
 			}
 			if(PrintErrorLines){
 				outfile << linestr;
-				for(int i=0;i<nParCT;i++) {
-					outfile << "\t" << parCT[i];
-					// std::cout << "parCT[" << i << "] = " << parCT[i] << std::endl;
-				}
-				outfile << "\t" << sol.at(0) << "\t" << sol.at(1);
-				for(int i=0;i<ndim;i++) outfile << "\t" << sol.at(i+3);
-				if(sol.at(1)>C_PT*sol.at(0) and sol.at(2)==1) outfile << "\t" << sol.at(1) / sol.at(0);
-				else outfile << "\t" <<sol.at(2);
+                for(auto x: parCT) outfile << sep << x;
+                outfile << sep << EWPT.Tc << sep << EWPT.vc;
+                if(EWPT.vc>C_PT*EWPT.Tc and EWPT.StatusFlag==Minimizer::MinimizerStatus::SUCCESS) outfile << sep << EWPT.vc/EWPT.Tc;
+                else outfile << sep << static_cast<int>(EWPT.StatusFlag);
+                for(auto x: EWPT.EWMinimum) outfile << sep << x;
 				outfile << std::endl;
 			}
-			else if(sol.at(2) == 1)
+            else if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS)
 			{
-				if(C_PT*sol.at(0) < sol.at(1))
+                if(C_PT* EWPT.Tc < EWPT.vc)
 				{
-					outfile << linestr;
-					for(int i=0;i<nParCT;i++) {
-						outfile << "\t" << parCT[i];
-						// std::cout << "parCT[" << i << "] = " << parCT[i] << std::endl;
-					}
-					outfile << "\t" << sol.at(0) << "\t" << sol.at(1);
-					for(int i=0;i<ndim;i++) outfile << "\t" << sol.at(i+3);
-					outfile << "\t" << sol.at(1) / sol.at(0);
+                    outfile << linestr << sep << parCT;
+                    outfile << sep << EWPT.Tc << sep << EWPT.vc;
+                    outfile << sep << EWPT.vc / EWPT.Tc;
+                    for(auto x: EWPT.EWMinimum) outfile << sep << x;
 					outfile << std::endl;
 				}
 			}

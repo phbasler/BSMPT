@@ -1,7 +1,7 @@
 /*
- * CheckNLOVEV.cpp
+ * NLOVEV.cpp
  *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *  Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -26,10 +26,21 @@
  *
  */
 
-#include "../models/IncludeAllModels.h"
-#include "../minimizer/Minimizer.h"
+#include <bits/exception.h>                     // for exception
+#include <stdlib.h>                             // for atoi, EXIT_FAILURE
+#include <algorithm>                            // for copy, max
+#include <memory>                               // for shared_ptr, __shared_...
+#include <string>                               // for string, operator<<
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/minimizer/Minimizer.h>
+#include <BSMPT/utility.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
+using namespace BSMPT;
 
 
 
@@ -45,9 +56,8 @@ int main(int argc, char *argv[]) try{
 	}
 
 
-	int Model=-1;
-	Model=getModel(argv[1]);
-	if(Model==-1) {
+    auto Model=ModelID::getModel(argv[1]);
+    if(Model==ModelID::ModelIDs::NotSet) {
 		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
 		ShowInputError();
 		return EXIT_FAILURE;
@@ -88,16 +98,14 @@ int main(int argc, char *argv[]) try{
 	std::string linestr;
 
 
-	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
-	int Type;
-	double tmp;
 
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
+    size_t nPar,nParCT;
+    nPar = modelPointer->get_nPar();
+    nParCT = modelPointer->get_nParCT();
 
-	int ndim = modelPointer->nVEV;
+    size_t ndim = modelPointer->get_nVEV();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 
@@ -116,9 +124,12 @@ int main(int argc, char *argv[]) try{
 		if(linecounter == 1)
 		  {
 			modelPointer->setUseIndexCol(linestr);
-		    outfile << linestr << "\t" << modelPointer->addLegendCT() << "\t";
-		    outfile << modelPointer->addLegendVEV();
-		    outfile << "\t" << "v_NLO";
+            outfile << linestr;
+            auto legendCT = modelPointer->addLegendCT();
+            for(auto x: legendCT) outfile << sep << x;
+            auto legendVEV = modelPointer->addLegendVEV();
+            for(auto x: legendVEV) outfile << sep << x;
+            outfile << sep << "v_NLO";
 		    outfile << std::endl;
 		  }
 		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
@@ -131,32 +142,23 @@ int main(int argc, char *argv[]) try{
 			sol.clear();
 			Check.clear();
 			start.clear();
-			for(int i=0;i<ndim;i++) start.push_back(modelPointer->vevTreeMin.at(i));
-			Minimize_gen_all(modelPointer,0,sol,Check,start);
+            for(size_t i=0;i<ndim;i++) start.push_back(modelPointer->get_vevTreeMin(i));
+            sol = Minimizer::Minimize_gen_all(modelPointer,0,Check,start);
 
 
 			std::vector<double> solPot,solSym;
-			modelPointer->MinimizeOrderVEV(sol,solPot);
+            solPot=modelPointer->MinimizeOrderVEV(sol);
 			double vev = modelPointer->EWSBVEV(solPot);
 
-//			outfile << linecounter << "\t";
 			outfile << linestr;
-			for(int i=0;i<nParCT;i++) outfile << "\t" << parCT[i];
-			for(int i=0;i<ndim;i++) outfile << "\t" << sol.at(i);
-			outfile << "\t" << vev;
+            for(size_t i=0;i<nParCT;i++) outfile << sep << parCT[i];
+            for(size_t i=0;i<ndim;i++) outfile << sep << sol.at(i);
+            outfile << sep << vev;
 			outfile << std::endl;
 
 			if(LineStart==LineEnd){
-				std::string labels=modelPointer->addLegendVEV();
-				std::string delimiter = "\t";
-				std::vector<std::string> dimensionnames;
-				size_t pos = 0;
-				while((pos = labels.find(delimiter)) != std::string::npos){
-					dimensionnames.push_back(labels.substr(0,pos));
-					labels.erase(0,pos+delimiter.length());
-				}
-				dimensionnames.push_back(labels);
-				for(int i=0;i<ndim;i++){
+                auto dimensionnames = modelPointer->addLegendVEV();
+                for(size_t i=0;i<ndim;i++){
 					std::cout << dimensionnames.at(i) << " = " << sol.at(i) << " GeV" << std::endl;
 				}
 			}

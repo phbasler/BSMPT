@@ -1,8 +1,8 @@
 /*
- * BSMPT.cpp
+ * Test.cpp
  *
  *
- *      Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -26,16 +26,23 @@
  *
  */
 
-#include "../models/IncludeAllModels.h"
-#include "../minimizer/Minimizer.h"
+#include <BSMPT/models/IncludeAllModels.h>
 #include <iostream>
+#include <bits/exception.h>                     // for exception
+#include <stdlib.h>                             // for EXIT_FAILURE, atoi
+#include <algorithm>                            // for copy
+#include <memory>                               // for unique_ptr
+#include <string>                               // for getline, string
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <fstream>
 using namespace std;
+using namespace BSMPT;
 
 
 
 int main(int argc, char *argv[]) try{
-	bool PrintErrorLines=true;
-	int Model=-1;
 
 	if(!( argc == 4) )
 	{
@@ -45,13 +52,13 @@ int main(int argc, char *argv[]) try{
 	}
 
 
-	Model=getModel(argv[1]);
-	// std::cout << "Model parameter in BSMPT = " << Model << std::endl;
-	if(Model==-1) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
+    auto Model=ModelID::getModel(argv[1]);
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return EXIT_FAILURE;
+    }
+
 	int  Line;
 	char* in_file;
 
@@ -81,17 +88,12 @@ int main(int argc, char *argv[]) try{
 //	Class_Potential_Origin * modelPointer;
 //	Fchoose(modelPointer,Model);
 
-	std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
+    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
 
-	int Type;
-	double tmp;
-
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
-
-	int ndim = modelPointer->nVEV;
+    size_t nPar,nParCT;
+    nPar = modelPointer->get_nPar();
+    nParCT = modelPointer->get_nParCT();
 
 
 	std::vector<double> par(nPar);

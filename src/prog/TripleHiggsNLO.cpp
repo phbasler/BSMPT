@@ -2,7 +2,7 @@
  * TripleHiggsNLO.cpp
  *
  *
- *      Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -23,10 +23,21 @@
  * Calculates the Triple Higgs couplings for mulitple points and adds them at the end of the line.
  */
 
-#include "../models/IncludeAllModels.h"
+#include <bits/exception.h>                     // for exception
+#include <ext/alloc_traits.h>                   // for __alloc_traits<>::val...
+#include <stdlib.h>                             // for atoi, EXIT_FAILURE
+#include <memory>                               // for unique_ptr
+#include <string>                               // for operator<<, string
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
+#include <fstream>
 
 #include <iostream>
 using namespace std;
+using namespace BSMPT;
 //#include "Minimizer.h"
 int main(int argc, char *argv[]) try{
 
@@ -36,13 +47,14 @@ int main(int argc, char *argv[]) try{
 		ShowInputError();
 		return -1;
 	}
-	int Model=-1;
-	Model=getModel(argv[1]);
-	if(Model==-1) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
+
+    auto Model=ModelID::getModel(argv[1]);
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return EXIT_FAILURE;
+    }
+
 	double LineStart,LineEnd;
 	char* in_file;char* out_file;
 
@@ -85,16 +97,14 @@ int main(int argc, char *argv[]) try{
 		return EXIT_FAILURE;
 	}
 	std::string linestr;
-	int Type;
-	double tmp;
 
-	std::unique_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
+    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
+    size_t nPar,nParCT;
+    nPar = modelPointer->get_nPar();
+    nParCT = modelPointer->get_nParCT();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
-	int NHiggs=modelPointer->NHiggs;
+    size_t NHiggs=modelPointer->get_NHiggs();
 
 
 
@@ -112,8 +122,9 @@ int main(int argc, char *argv[]) try{
 		if(linecounter == 1)
 		  {
 			modelPointer->setUseIndexCol(linestr);
-		    outfile << linestr << "\t" << modelPointer->addLegendCT();
-		    outfile << "\t" << modelPointer->addLegendTripleCouplings();
+            outfile << linestr;
+            for(auto x: modelPointer->addLegendCT()) outfile << sep << x;
+            for(auto x: modelPointer->addLegendTripleCouplings()) outfile << sep << x;
 		    outfile << std::endl;
 		  }
 
@@ -124,27 +135,25 @@ int main(int argc, char *argv[]) try{
 			par=parameters.first;
 			parCT = parameters.second;
 
-			modelPointer->InputLineNumber = linecounter;
+            modelPointer->set_InputLineNumber(linecounter);
 			modelPointer->Prepare_Triple();
 			modelPointer->TripleHiggsCouplings();
 
 			if(LineStart == LineEnd and TerminalOutput) modelPointer->write();
 			outfile << linestr;
-			for(int i=0;i<nParCT;i++) outfile << "\t" << parCT[i];
-			for(int i=0;i<NHiggs;i++)
-			  {
-			    for(int j=i;j<NHiggs;j++)
-			      {
-				for(int k=j;k<NHiggs;k++)
-				  {
-				    outfile << "\t" << -modelPointer->TripleHiggsCorrectionsTreePhysical[i][j][k];
-				    outfile << "\t" << -modelPointer->TripleHiggsCorrectionsCTPhysical[i][j][k];
-				    outfile << "\t" << -modelPointer->TripleHiggsCorrectionsCWPhysical[i][j][k];
-
-
-				  }
-			      }
-			  }
+            for(size_t i=0;i<nParCT;i++) outfile << sep << parCT[i];
+            for(size_t i=0;i<NHiggs;i++)
+            {
+                for(size_t j=i;j<NHiggs;j++)
+                {
+                    for(size_t k=j;k<NHiggs;k++)
+                    {
+                        outfile << sep << -modelPointer->get_TripleHiggsCorrectionsTreePhysical(i,j,k);
+                        outfile << sep << -modelPointer->get_TripleHiggsCorrectionsCTPhysical(i,j,k);
+                        outfile << sep << -modelPointer->get_TripleHiggsCorrectionsCWPhysical(i,j,k);
+                    }
+                }
+            }
 			outfile << std::endl;
 
 
