@@ -1162,33 +1162,6 @@ void Class_Potential_CN2HDM::set_CT_Pot_Par(const std::vector<double>& par){
     Curvature_Higgs_CT_L4[9][9][8][8] = dL6 / 0.4e1;
     Curvature_Higgs_CT_L4[9][9][9][9] = 0.3e1 / 0.4e1 * dL6;
 
-    //std::cout << "Curvature tensor 4 which should NOT be 0 = " << Curvature_Higgs_CT_L4[9][9][8][8] << "\n" << std::endl;
-    //std::cout << "Curvature tensor 4 which should be 0 = " << Curvature_Higgs_CT_L4[9][9][8][7] << "\n" << std::endl;
-
-    double CurvatureL1HiggsCT;
-    double CurvatureL2HiggsCT;
-    double CurvatureL4HiggsCT;
-    CurvatureL1HiggsCT = 0;
-    CurvatureL2HiggsCT = 0;
-    CurvatureL4HiggsCT = 0;
-
-    for(int i=0;i<10;i++){
-        CurvatureL1HiggsCT += Curvature_Higgs_CT_L1[i];
-        for(int j=0;j<10;j++){
-            CurvatureL2HiggsCT += Curvature_Higgs_CT_L2[i][j];
-            for(int k=0;k<10;k++){
-                for(int l=0;l<10;l++){
-                    CurvatureL4HiggsCT += Curvature_Higgs_CT_L4[i][j][k][l];
-                }
-            }
-        }
-    }
-
-    std::cout << "Curvature tensor Higgs L1 added " << CurvatureL1HiggsCT << "\n" << std::endl;
-    std::cout << "Curvature tensor Higgs L2 added " << CurvatureL2HiggsCT << "\n" << std::endl;
-    std::cout << "Curvature tensor Higgs L4 added " << CurvatureL4HiggsCT << "\n" << std::endl;
-
-
 
 }
 
@@ -1314,34 +1287,7 @@ std::vector<double> Class_Potential_CN2HDM::calc_CT() const{
 				<< HesseWeinberg << std::endl;
 	}
 
-    std::cout << "Printing NW and HW terms \n" << std::endl;
-    std::cout << "HesseWeinberg(0, 0) = " << HesseWeinberg(0, 0) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(3, 3) = P HesseWeinberg(6, 6) " << HesseWeinberg(3, 3) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(7, 7) = P HesseWeinberg(7, 7) " << HesseWeinberg(7, 7) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(2, 6) = P HesseWeinberg(4, 5) " << HesseWeinberg(2, 6) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(3, 7) = P HesseWeinberg(6, 7) " << HesseWeinberg(3, 7) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(6, 6) = P HesseWeinberg(5, 5) " << HesseWeinberg(6, 6) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(6, 8) = P HesseWeinberg(5, 8) " << HesseWeinberg(6, 8) << "\n" << std::endl;
 
-    std::cout << "S HesseWeinberg(1, 1) = P HesseWeinberg(2, 2) " << HesseWeinberg(1, 1) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(2, 2) = P HesseWeinberg(4, 4) " << HesseWeinberg(2, 2) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(3, 3) = P HesseWeinberg(6, 6) " << HesseWeinberg(3, 3) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(4, 4) = P HesseWeinberg(1, 1) " << HesseWeinberg(4, 4) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(5, 5) = P HesseWeinberg(3, 3) " << HesseWeinberg(5, 5) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(6, 6) = P HesseWeinberg(5, 5) " << HesseWeinberg(6, 6) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(8, 8) = P HesseWeinberg(8, 8) " << HesseWeinberg(8, 8) << "\n" << std::endl;
-    std::cout << "S HesseWeinberg(9, 9) = P HesseWeinberg(9, 9) " << HesseWeinberg(9, 9) << "\n" << std::endl;
-
-    std::cout << "S NablaWeinberg(0) = P NablaWeinberg(0) " << NablaWeinberg(0) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(1) = P NablaWeinberg(2) " << NablaWeinberg(1) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(2) = P NablaWeinberg(4) " << NablaWeinberg(2) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(3) = P NablaWeinberg(6) " << NablaWeinberg(3) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(4) = P NablaWeinberg(1) " << NablaWeinberg(4) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(5) = P NablaWeinberg(3) " << NablaWeinberg(5) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(6) = P NablaWeinberg(5) " << NablaWeinberg(6) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(7) = P NablaWeinberg(7) " << NablaWeinberg(7) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(8) = P NablaWeinberg(8) " << NablaWeinberg(8) << "\n" << std::endl;
-    std::cout << "S NablaWeinberg(9) = P NablaWeinberg(9) " << NablaWeinberg(9) << "\n" << std::endl;
 
 
 	// Here you have to use your formulas for the counterterm scheme
