@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name : installPackages
-      run : sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libboost1.67-all-dev
+      run : sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libboost-all-dev
     - name: cmake
       run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. 
     - name: make
