@@ -79,8 +79,8 @@ if(DOXYGEN_FOUND)
   set(DOXYGEN_USE_MATHJAX YES)
   set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
   set(DOXYGEN_EXCLUDE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid_old.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part1.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part2.cpp
     )
   set(DOXYGEN_PROJECT_BRIEF "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models")
   set(DOXYGEN_EXTRACT_PRIVATE YES)
