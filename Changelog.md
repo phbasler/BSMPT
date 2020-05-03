@@ -4,34 +4,34 @@
 
 ## New Physics
 
-With this version we provide the calculation for the electroweak baryogenesis in the C2HDM with multiple, different approaches.
-For this several smaller libraries have been implemented
+With this version, we provide the calculation for the electroweak baryogenesis in the C2HDM with multiple, different approaches.
+For this several smaller libraries have been implemented:
 ### Baryo
-TODO
+This library contains the numerical evaluation of the different methods to calculate the electroweak baryogenesis. The different approaches are described in the manual.
 ### WallThickness
 The thickness of the bubble wall is calculated as described in the manual.
 ### ThermalFunctions
-The theral integrals J_+ and J_- have been moved to their own library. The old implementations are still in the main code and can be accessed for legacy code if wished. 
+The thermal integrals J_+ and J_- have been moved to their own library. The old implementations are still in the main code and can be accessed for legacy code if wished. 
 ### Kfactors
-During the calculation of the transport equations the K-functions are needed. This library provides a numerical integration for those but also the bicubic spline interpolation which is used in the numerical evaluation of the transport equations. The data points for the interpolation are given in 'include/BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid.h' which has a size of 148mb.
+During the calculation of the transport equations, the K-functions are needed. This library provides a numerical integration for those but also the bicubic spline interpolation which is used in the numerical evaluation of the transport equations. The data points for the interpolation are given in 'include/BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid.h' which has a size of 148mb.
 ### Minimizer
 NLopt is now a possible option for the minimization. You can set the default settings in Minimizer.h 
 ## Models
 You CAN NOT call the models anymore by their number. You have to call them through the string set in IncludeAllModels.h
 	
 ## BSMPT as a package
-It is now possible to include BSMPT as a library into your programm through cmake. In your cmake file you can use find_package(BSMPT) after compiling BSMPT.
+It is now possible to include BSMPT as a library into your program through cmake. In your cmake file you can use find_package(BSMPT) after compiling BSMPT.
 
 ## Changes in Test
 * Extends the Test binary to check if the minimum conditions are fulfilled
 * If a simplified tree-level or counterterm potential is given it is compared at random points with the potential calculated through the tensor structures to check for possible errors in the simplified potential.
 
 ## Changes in the Installation Routine
-Due to changes in the cmake interfaces Eigen is now included through -DEigen3_DIR. The instructions in the Readme are updated.
+Due to changes in the cmake interfaces, Eigen is now included through -DEigen3_DIR. The instructions in the Readme are updated.
 
 
 ## Differences in how to include a new model
-Due to the restructoring of the Code the source file for your model has to be put in include/BSMPT/models/YourModel.h and the source file in src/models/YourModel.cpp. In src/models you have to put ${header_path}/YourModel.h in the set(header list and YourModel.cpp in the set(src list. 
+Due to the restructuring of the Code, the source file for your model has to be put in include/BSMPT/models/YourModel.h and the source file in src/models/YourModel.cpp. In src/models you have to put ${header_path}/YourModel.h in the set(header list and YourModel.cpp in the set(src list. 
 	
     
 # 2019/12/11: Release of v1.1.2
