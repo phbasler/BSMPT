@@ -45,7 +45,6 @@
 using namespace std;
 using namespace BSMPT;
 
-
 auto getCLIArguments(int argc, char *argv[])
 {
     struct ReturnType{
@@ -145,6 +144,7 @@ auto getCLIArguments(int argc, char *argv[])
 
 int main(int argc, char *argv[]) try{
 
+
 	/**
 	 * PrintErrorLines decides if parameter points with no valid EWPT (no NLO stability or T=300 vanishing VEV)
 	 * are printed in the output file
@@ -152,6 +152,7 @@ int main(int argc, char *argv[]) try{
 	bool PrintErrorLines=true;
 
     const auto args = getCLIArguments(argc,argv);
+
     if(args.Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
