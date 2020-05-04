@@ -8,10 +8,19 @@ endif(Boost_FOUND)
 add_subdirectory(ThermalFunctions)
 
 
+#==============================Utility==================================
+
+set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT")
+set(header ${CMAKE_SOURCE_DIR}/include/BSMPT/utility.h)
+set(src utility.cpp)
+add_library(Utility ${header} ${src})
+target_include_directories(Utility PUBLIC ${BSMPT_SOURCE_DIR}/include)
+
+
 #==============================EXE======================================
 
 add_executable(BSMPT prog/BSMPT.cpp)
-target_link_libraries(BSMPT Minimizer Models)
+target_link_libraries(BSMPT Minimizer Models Utility)
 target_compile_features(BSMPT PUBLIC cxx_std_14)
 
 add_executable(VEVEVO prog/VEVEVO.cpp)
