@@ -56,7 +56,6 @@ auto getCLIArguments(int argc, char *argv[])
 
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
-
     if(argc < 6 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
