@@ -44,8 +44,89 @@
 using namespace std;
 using namespace BSMPT;
 
+bool StringStartsWith(std::string str, std::string prefix)
+{
+    return str.size() >= prefix.size() and str.find(prefix) == 0;
+}
+
+auto getCLIArguments(int argc, char *argv[])
+{
+    struct ReturnType{
+        BSMPT::ModelID::ModelIDs Model{};
+        int FirstLine{}, LastLine{};
+        std::string InputFile, OutputFile;
+        bool TerminalOutput{false};
+    };
+
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 6)
+    {
+        ShowInputError();
+        throw std::runtime_error("Too few arguments.");
+    }
+
+    for(auto& el: args)
+    {
+     std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+    }
+
+
+    ReturnType res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& el: args)
+        {
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = el.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                res.OutputFile = el.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--firstline="))
+            {
+                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+            else if(StringStartsWith(el,"--lastline="))
+            {
+                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+            }
+        }
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.OutputFile = args.at(2);
+        res.FirstLine = std::stoi(args.at(3));
+        res.LastLine = std::stoi(args.at(4));
+    }
+
+
+    return res;
+}
 
 int main(int argc, char *argv[]) try{
+
+
+    auto args = getCLIArguments(argc,argv);
+    std::cout << "Model = " << args.Model << std::endl
+              << "InputFile = " << args.InputFile << std::endl
+              << "Output = " << args.OutputFile << std::endl
+              << "LineStart = " << args.FirstLine << std::endl
+              << "LineEnd = " << args.LastLine << std::endl
+              << "TerminalOutput = " << args.TerminalOutput << std::endl;
+    return EXIT_SUCCESS;
+
+
 	/**
 	 * PrintErrorLines decides if parameter points with no valid EWPT (no NLO stability or T=300 vanishing VEV)
 	 * are printed in the output file
@@ -58,6 +139,7 @@ int main(int argc, char *argv[]) try{
 		ShowInputError();
 		return EXIT_FAILURE;
 	}
+
 
 
     auto Model=ModelID::getModel(argv[1]);
@@ -221,3 +303,6 @@ catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 }
+
+
+
