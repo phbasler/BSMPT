@@ -56,6 +56,7 @@ auto getCLIArguments(int argc, char *argv[])
 
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
     if(argc < 6 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
@@ -142,6 +143,7 @@ auto getCLIArguments(int argc, char *argv[])
 }
 
 int main(int argc, char *argv[]) try{
+
 	/**
 	 * PrintErrorLines decides if parameter points with no valid EWPT (no NLO stability or T=300 vanishing VEV)
 	 * are printed in the output file
@@ -150,6 +152,7 @@ int main(int argc, char *argv[]) try{
 
     const auto args = getCLIArguments(argc,argv);
     if(args.Model==ModelID::ModelIDs::NotSet) {
+
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
         return EXIT_FAILURE;
