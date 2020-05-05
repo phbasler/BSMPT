@@ -151,9 +151,8 @@ int main(int argc, char *argv[]) try{
 	 */
 	bool PrintErrorLines=true;
 
-    auto args = getCLIArguments(argc,argv);
-    auto Model=args.Model;
-    if(Model==ModelID::ModelIDs::NotSet) {
+    const auto args = getCLIArguments(argc,argv);
+    if(args.Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
         return EXIT_FAILURE;
@@ -186,7 +185,7 @@ int main(int argc, char *argv[]) try{
 	}
 	std::string linestr;
 
-    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
 
     std::size_t nPar,nParCT;
