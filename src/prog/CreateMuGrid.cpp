@@ -39,35 +39,108 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <BSMPT/utility.h>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 using namespace std;
 using namespace BSMPT;
 
 
-int main(int argc, char *argv[]) try{
-	if(!(argc == 5))
-	{
-	std::cerr << "./CreateMuGrid Model Inputfile Outputfile Line \n";
-	ShowInputError();
-	return EXIT_FAILURE;
-	}
-	char* in_file; char* out_file;
-	in_file = argv[2];
-	out_file = argv[3];
-	double LineNumb;
+auto getCLIArguments(int argc, char *argv[])
+{
+    struct ReturnType{
+        BSMPT::ModelID::ModelIDs Model{};
+        int Line{};
+        std::string InputFile, OutputFile;
+        double vw{0.1};
+    };
 
-    auto Model=ModelID::getModel(argv[1]);
-    if(Model==ModelID::ModelIDs::NotSet) {
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 5 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "CreateMuGrid calculates the mu_{BL} potential in front of the bubble wall" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./CreateMuGrid model input output Line" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
+                  <<"The line in the input file to calculate the EWPT. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--vw="
+                  << "Wall velocity for the EWBG calculation. Default value of 0.1." << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 5)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    ReturnType res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                res.OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--firstline="))
+            {
+                res.Line = std::stoi(el.substr(std::string("--line=").size()));
+            }
+            else if(StringStartsWith(el,"--vw="))
+            {
+                res.vw = std::stod(el.substr(std::string("--vw=").size()));
+            }
+        }
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.OutputFile = args.at(2);
+        res.Line = std::stoi(args.at(3));
+    }
+
+
+    return res;
+}
+
+
+int main(int argc, char *argv[]) try{
+    const auto args = getCLIArguments(argc,argv);
+    if(args.Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
         return EXIT_FAILURE;
     }
 
-
-
-	LineNumb = atoi(argv[4]);
-
-	if(LineNumb < 1)
+    if(args.Line < 1)
 	{
 	std::cerr << "Start line counting with 1" << std::endl;
 	return EXIT_FAILURE;
@@ -81,30 +154,30 @@ int main(int argc, char *argv[]) try{
 	std::vector<double> Weinberg,parCTVec;
 
 
-    std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
+    std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
-	std::ifstream infile(in_file);
+    std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 		std::cout << "Input file not found " << std::endl;
 		return EXIT_FAILURE;
 	}
 
 
-	std::ofstream outfile(out_file);
+    std::ofstream outfile(args.OutputFile);
 	if(!outfile.good())
 	{
-	std::cout << "Can not create file " << out_file << std::endl;
+    std::cout << "Can not create file " << args.OutputFile << std::endl;
 	return EXIT_FAILURE;
 	}
 
 	std::string linestr;
 	int linecounter = 1;
 
-	int nPar,nParCT;
+    size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 
-    int dim = modelPointer->get_nVEV();
+    size_t dim = modelPointer->get_nVEV();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 
@@ -118,7 +191,7 @@ int main(int argc, char *argv[]) try{
 	 if(linecounter == 1){
 		 modelPointer->setUseIndexCol(linestr);
 	 }
-	 else if(linecounter == LineNumb)
+     else if(linecounter == args.Line)
 	 {
 		 std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
 		 par=parameters.first;
@@ -126,7 +199,7 @@ int main(int argc, char *argv[]) try{
 		 found=true;
 	 }
 
-	 else if(linecounter > LineNumb) break;
+     else if(linecounter > args.Line) break;
 	 linecounter++;
 	 if(infile.eof()) break;
 	}
@@ -139,32 +212,18 @@ int main(int argc, char *argv[]) try{
 	std::vector<double> vTree;
 
 
-    for(int k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
-
-
-	std::vector<double> vev_critical,vev_critical_vevbasis;
-	vev_critical_vevbasis.push_back(0);
-	vev_critical_vevbasis.push_back(50);
-	vev_critical_vevbasis.push_back(195);
-	vev_critical_vevbasis.push_back(-1.4);
-
-    vev_critical=modelPointer->MinimizeOrderVEV(vev_critical_vevbasis);
-
-
-
-
+    for(size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
 
 
 	std::vector<double> parStart,parEnd;
 	for(int i=0;i<8;i++) parStart.push_back(0);
-	double vw = 0.1;
-	double TC = 145;
-	double LW = 5.0/TC;
+    auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
+
 
 	// find the minimum in the symmetric phase. For this minimise at T = Tc + 1
     std::vector<double> vevsymmetricSolution,checksym, startpoint;
-    for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vev_critical.at(i));
-    vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint);
+    for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
+    vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint);
 
 
     double absvevsymmetricSolution = 0;
@@ -177,29 +236,24 @@ int main(int argc, char *argv[]) try{
 
 
     struct Baryo::GSL_integration_mubl p;
-    p.init(vw,vev_critical,vevsymmetricSolution,TC,modelPointer);
+    p.init(args.vw,EWPT.EWMinimum,vevsymmetricSolution,EWPT.Tc,modelPointer);
 
 
 
 
-	std::cout << "vw = " << vw << std::endl;
-	std::cout << "LW = " << LW*TC << "/TC" << std::endl;
-	std::cout << "T_C = " << TC << std::endl;
-    for(size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << vev_critical.at(i) << std::endl;
+    std::cout << "vw = " << args.vw << std::endl;
+    std::cout << "LW = " << p.getLW()*EWPT.Tc << "/TC" << std::endl;
+    std::cout << "T_C = " << EWPT.Tc << std::endl;
+    for(size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
 
 	// double res = K1_fermion_interp(2.5,3.7);
 	// std::cout << "res = " << res << std::endl;
 
 
 	int nstep = 1000;
-	double zmax = 3*LW;
 	double zmin = 0;
-	double stepsize = (zmax-zmin)/nstep;
+    double stepsize = (p.getZMAX()-zmin)/nstep;
 	outfile << "z\tmu_{B_L}" << std::endl;
-	// double z = 2.5*LW;
-	// z=8.63999969421609948e-02;
-	// z=0;
-    // outfile << z << sep << mubl_func(z,&p) << std::endl;
 	for(int i=0;i<=nstep;i++){
 		double z= zmin + stepsize*i;
         outfile << z << sep << Baryo::mubl_func(z,&p) << std::endl;
@@ -220,7 +274,10 @@ int main(int argc, char *argv[]) try{
 
 
 }
-
+catch(int)
+{
+    return EXIT_SUCCESS;
+}
 catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
