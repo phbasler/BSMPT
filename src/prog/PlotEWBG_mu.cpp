@@ -225,10 +225,7 @@ int main(int argc, char *argv[]) try{
             std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
             par=parameters.first;
             parCT = parameters.second;
-
             if(args.TerminalOutput) modelPointer->write();
-
-
             if(args.TerminalOutput)
             {
                 std::cout<<"Calculating EWPT in default settings with:\n mu = "<<modelPointer->get_scale()
@@ -238,7 +235,6 @@ int main(int argc, char *argv[]) try{
             for(int step=0;step<args.NumberOfSteps;step++){
                 double mu_factor = 1/2. + (step/static_cast<double>(args.NumberOfSteps));
                 if(args.TerminalOutput) std::cout<<"\r currently mu_factor = "<<mu_factor<<std::endl;
-
                 auto VEVnames = modelPointer->addLegendTemp();
                 auto CT_mu=modelPointer->resetScale(C_vev0*mu_factor);
                 auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300);

@@ -130,11 +130,9 @@ auto getCLIArguments(int argc, char *argv[])
             std::string s7 = argv[6];
             res.TerminalOutput = ("y" == s7);
         }
-
     }
     return res;
 }
-
 
 
 int main(int argc, char *argv[]) try{
