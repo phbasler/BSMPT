@@ -216,6 +216,7 @@ int main(int argc, char *argv[]) try{
     parStart = std::vector<double>(modelPointer->get_NHiggs(),0);
     auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
 
+
 	// find the minimum in the symmetric phase. For this minimise at T = Tc + 1
     std::vector<double> vevsymmetricSolution,checksym, startpoint;
     for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
@@ -251,7 +252,6 @@ int main(int argc, char *argv[]) try{
     for(size_t i=0;i<=nstep;i++){
 		double z= zmin + stepsize*i;
         outfile << z << sep << Baryo::mubl_func(z,&p) << std::endl;
-
 	}
 
 
