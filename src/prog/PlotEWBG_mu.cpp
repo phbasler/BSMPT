@@ -159,9 +159,6 @@ auto getCLIArguments(int argc, char *argv[])
     return res;
 }
 
-
-
-
 int main(int argc, char *argv[]) try{
 
     const auto args = getCLIArguments(argc,argv);

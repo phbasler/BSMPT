@@ -45,7 +45,6 @@ using namespace std;
 using namespace BSMPT;
 
 
-
 auto getCLIArguments(int argc, char *argv[])
 {
     struct ReturnType{
@@ -127,7 +126,6 @@ auto getCLIArguments(int argc, char *argv[])
         res.OutputFile = args.at(2);
         res.Line = std::stoi(args.at(3));
     }
-
 
     return res;
 }
@@ -217,10 +215,7 @@ int main(int argc, char *argv[]) try{
 
 	std::vector<double> parStart,parEnd;
     parStart = std::vector<double>(modelPointer->get_NHiggs(),0);
-
     auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
-
-    parStart = std::vector<double>(modelPointer->get_NHiggs(),0);
 
 	// find the minimum in the symmetric phase. For this minimise at T = Tc + 1
     std::vector<double> vevsymmetricSolution,checksym, startpoint;
