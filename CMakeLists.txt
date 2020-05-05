@@ -58,7 +58,7 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion)
 
 export(
-  TARGETS Models Minimizer ThermalFunctions
+  TARGETS Models Minimizer ThermalFunctions Utility
   NAMESPACE BSMPT::
   FILE BSMPTTargets.cmake
   )
