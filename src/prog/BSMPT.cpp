@@ -151,9 +151,8 @@ int main(int argc, char *argv[]) try{
 	 */
 	bool PrintErrorLines=true;
 
-    auto args = getCLIArguments(argc,argv);
-    auto Model=args.Model;
-    if(Model==ModelID::ModelIDs::NotSet) {
+    const auto args = getCLIArguments(argc,argv);
+    if(args.Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
         return EXIT_FAILURE;
@@ -186,7 +185,7 @@ int main(int argc, char *argv[]) try{
 	}
 	std::string linestr;
 
-    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
 
     size_t nPar,nParCT;
@@ -224,10 +223,10 @@ int main(int argc, char *argv[]) try{
                  modelPointer->write();
 			}
 
-            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,3/*Minimisation without NLOpt*/); //TODO: NLOpt does not work on the cluster?!
+            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
             for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
-            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,3);
+            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint);
 
 
             if(args.FirstLine == args.LastLine) {
