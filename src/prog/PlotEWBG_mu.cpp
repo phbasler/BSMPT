@@ -238,7 +238,6 @@ int main(int argc, char *argv[]) try{
             for(int step=0;step<args.NumberOfSteps;step++){
                 double mu_factor = 1/2. + (step/static_cast<double>(args.NumberOfSteps));
                 if(args.TerminalOutput) std::cout<<"\r currently mu_factor = "<<mu_factor<<std::endl;
-
                 auto VEVnames = modelPointer->addLegendTemp();
                 auto CT_mu=modelPointer->resetScale(C_vev0*mu_factor);
                 auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300);
