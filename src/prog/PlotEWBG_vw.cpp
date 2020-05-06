@@ -133,10 +133,7 @@ int main(int argc, char *argv[]) try{
     if(TerminalOutput) modelPointer->write();
 //CALL: BSMPT-->Phasetransition
     if(TerminalOutput) std::cout<<"PTFinder called..."<<std::endl;
-////////////////////////////////
-    int WhichMinimizer = 3;/////
-////////////////////////////////
-    auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,WhichMinimizer);//Change to NLOpt
+    auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
 //SFOEWPT FOUND 
     if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and C_PT*EWPT.Tc < EWPT.vc){
         if(TerminalOutput) std::cout<<"SFOEWPT found..."<<std::endl;
@@ -148,7 +145,7 @@ int main(int argc, char *argv[]) try{
 //Find the minimum in the symmetric phase. For this minimise at T = Tc + 1
 		std::vector<double> vevsymmetricSolution,checksym, startpoint;
         for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vcritical.at(i));
-        vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint,WhichMinimizer);//TODO: Change to NLopt
+        vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint);
 		double vw = 0;
         if(TerminalOutput) std::cout<<"Currently calculating vw:"<<std::endl;
 		for(vw=vwMin;vw<=vwMax;vw+=vwStepsize)
