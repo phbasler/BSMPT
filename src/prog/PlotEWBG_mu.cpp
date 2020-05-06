@@ -140,11 +140,13 @@ int main(int argc, char *argv[]) try{
             par=parameters.first;
             parCT = parameters.second;
             if(TerminalOutput) modelPointer->write();
-//!!!!!
-///////////////////////////////////////
-            int WhichMinimizer = 3;////
-///////////////////////////////////////
-            if(TerminalOutput)std::cout<<"Calculating EWPT in default settings with:\n mu = "<<modelPointer->get_scale()<<" and WhichMinimizer = "<<WhichMinimizer<<std::endl;
+
+
+            if(TerminalOutput)
+            {
+                std::cout<<"Calculating EWPT in default settings with:\n mu = "<<modelPointer->get_scale()
+                        <<std::endl;
+            }
             if(TerminalOutput)std::cout<<"Start of mu variation"<<std::endl;
             double nstep = NumberOfStep;
             for(int step=0;step<nstep;step++){
@@ -152,12 +154,12 @@ int main(int argc, char *argv[]) try{
                 if(TerminalOutput) std::cout<<"\r currently mu_factor = "<<mu_factor<<std::endl;
                 auto VEVnames = modelPointer->addLegendTemp();
                 auto CT_mu=modelPointer->resetScale(C_vev0*mu_factor);
-                auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300,WhichMinimizer);
+                auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300);
                 std::vector<double> startpoint;
                 for(auto x : EWPT_mu.EWMinimum) startpoint.push_back(x/2.);
                 if(EWPT_mu.StatusFlag==1){
                     std::vector<double>checkmu;
-                    auto VEV_mu_sym = Minimizer::Minimize_gen_all(modelPointer,EWPT_mu.Tc+1,checkmu,startpoint,WhichMinimizer);
+                    auto VEV_mu_sym = Minimizer::Minimize_gen_all(modelPointer,EWPT_mu.Tc+1,checkmu,startpoint);
                     auto VEV_mu_brk = EWPT_mu.EWMinimum;
                     auto eta_mu = EtaInterface.CalcEta(vw,EWPT_mu.EWMinimum,VEV_mu_sym,EWPT_mu.Tc,modelPointer);
 
