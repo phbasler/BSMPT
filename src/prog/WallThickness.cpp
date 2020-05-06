@@ -116,8 +116,6 @@ int main(int argc, char *argv[]) try{
 	}
 	std::string linestr;
 
-//	Class_Potential_Origin * modelPointer;
-//	Fchoose(modelPointer,Model);
 
     std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
