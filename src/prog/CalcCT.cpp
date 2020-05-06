@@ -37,7 +37,7 @@
 #include <iostream>
 using namespace std;
 using namespace BSMPT;
-//#include "Minimizer.h"
+
 int main(int argc, char *argv[]) try{
 
 	if(!( argc == 6) )
