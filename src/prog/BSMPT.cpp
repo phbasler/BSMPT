@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) try{
                  modelPointer->write();
 			}
 
-            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,3/*Minimisation without NLOpt*/); //TODO: NLOpt does not work on the cluster?!
+            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
             for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
             auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,3);
