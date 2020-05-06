@@ -119,25 +119,32 @@ int main(int argc, char *argv[]) try{
             par=parameters.first;
             parCT = parameters.second;
             if(TerminalOutput) modelPointer->write();
-//!!!!!
-            int WhichMinimizer = 3;
-            if(TerminalOutput)std::cout<<"Calculating EWPT in default settings with:\n mu = "<<modelPointer->get_scale()<<" and WhichMinimizer = "<<WhichMinimizer<<std::endl;
-            auto EWPTdefault = Minimizer::PTFinder_gen_all(modelPointer,0,300,WhichMinimizer);
+
+            if(TerminalOutput){
+                std::cout<<"Calculating EWPT in default settings with:\n mu = "
+                                      <<modelPointer->get_scale()<<std::endl;
+            }
+            auto EWPTdefault = Minimizer::PTFinder_gen_all(modelPointer,0,300);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
             for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPTdefault.EWMinimum.at(i));
-            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPTdefault.Tc+1,checksym,startpoint,WhichMinimizer);
+            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPTdefault.Tc+1,checksym,startpoint);
             if(TerminalOutput)std::cout<<"Start of mu variation"<<std::endl;
             double nstep = NumberOfStep;
             for(int step=0;step<nstep;step++){
                 double mu_factor = 1/2. + (step/nstep);
                 auto VEVnames = modelPointer->addLegendTemp();
                 auto CT_mu=modelPointer->resetScale(C_vev0*mu_factor);
-                auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300,WhichMinimizer);
+                auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300);
                 std::vector<double>checkmu;
-                auto VEV_NLO_mu = Minimizer::Minimize_gen_all(modelPointer,0,checkmu,startpoint,WhichMinimizer);
+                auto VEV_NLO_mu = Minimizer::Minimize_gen_all(modelPointer,0,checkmu,startpoint);
                 if(TerminalOutput){
                     std::cout<<"\tStatusFlag = "<<EWPT_mu.StatusFlag<<" @ mu = "<<modelPointer->get_scale()<<" = "<<mu_factor<<"*C_vev0"<<std::endl;
-                    for(size_t i=0;i<EWPT_mu.EWMinimum.size();i++) std::cout<<sep<<sep<< VEVnames.at(i+3)<<sep<<EWPT_mu.EWMinimum.at(i)<<" = " <<EWPT_mu.EWMinimum.at(i)/EWPTdefault.EWMinimum.at(i)<<"/"<<VEVnames.at(i+3)<<std::endl;
+                    for(size_t i=0;i<EWPT_mu.EWMinimum.size();i++)
+                    {
+                        std::cout<<sep<<sep<< VEVnames.at(i+3)<<sep<<EWPT_mu.EWMinimum.at(i)
+                                <<" = " <<EWPT_mu.EWMinimum.at(i)/EWPTdefault.EWMinimum.at(i)
+                               <<"/"<<VEVnames.at(i+3)<<std::endl;
+                    }
                 }
                 if(PrintErrorLines){
                     outfile << linestr;
