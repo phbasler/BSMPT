@@ -59,17 +59,6 @@ double JB(double msquared,double T){
 
 int main() try{
 
-//	std::ofstream outfile("TestJB.tsv");
-//	double Temp = 1e2;
-//	outfile << "x\tJB" << std::endl;
-//	double stepsize = 0.1;
-//	for(int i=-100;i<=100;i++){
-//		double x = i*stepsize;
-//		double res = JB(x*std::pow(Temp,2),Temp);
-//		outfile << x << sep << res << std::endl;
-//	}
-//	outfile.close();
-
     auto modelPointer = ModelID::FChoose(ModelID::ModelIDs::C2HDM);
 
 
