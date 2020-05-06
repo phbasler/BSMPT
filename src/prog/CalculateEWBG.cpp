@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) try{
             if(TerminalOutput) std::cout<<"Calling PTFinder"<<std::endl;
 
 //Call: BSMPT 
-            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,1); //WITHOUT NLOpt SO FAR! //TODO: CHANGE THAT
+            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
 //Define parameters for eta
 			std::vector<double> eta;
             if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and C_PT*EWPT.Tc < EWPT.vc){
@@ -165,7 +165,7 @@ int main(int argc, char *argv[]) try{
 			//Find the minimum in the symmetric phase. For this minimise at T = Tc + 1
 				std::vector<double> vevsymmetricSolution,checksym, startpoint;
                 for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vcritical.at(i));
-                vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint,1); //TODO: Change to NLOpt
+                vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint);
 //Call: Calculation of eta in the different implemented approaches 
                 if(TerminalOutput) std::cout<<"Calling CalcEta..."<<std::endl;
 				eta = EtaInterface.CalcEta(vw,vcritical,vevsymmetricSolution,TC,modelPointer);
