@@ -59,8 +59,34 @@ class Calc_Gam_M
          */
         double hf_prime(double w);
     public:
-        double m_full,beta,T,vw,GamT,YukCoupling;
-        double msqrt_thermal,dmsqrt_thermal;
+        /**
+         * @brief m_full One loop fermion mass withouth thermal contributions.
+         */
+        double m_full;
+        /**
+         * @brief beta Inverse temperature
+         */
+        double beta ;
+        /**
+         * @brief T Temperature
+         */
+        double T ;
+        /**
+         * @brief vw Bubble wall velocity
+         */
+        double vw;
+        /**
+         * @brief GamT Thermal width of the top quark
+         */
+        double GamT;
+        /**
+         * @brief msqrt_thermal Right-handed thermal mass of the fermion
+         */
+        double msqrt_thermal;
+        /**
+         * @brief dmsqrt_thermal Mass difference between the right- and left-handed fermion
+         */
+        double dmsqrt_thermal;
         /**
          * @brief set_class Defines all needed parameter for the evaluation of Gam_M
          * @param T Temperature
@@ -101,9 +127,36 @@ class Calc_Scp
          */
         double nf_prime(double w);
     public:
-        double m_full,T,vw,theta_prime;
-        double msqrt_thermal,dmsqrt_thermal;
+        /**
+         * @brief m_full One-loop mass of the fermion without the thermal contributions
+         */
+        double m_full;
+        /**
+         * @brief T Critical temperature
+         */
+        double T;
+        /**
+         * @brief vw Bubble wall velocity
+         */
+        double vw;
+        /**
+         * @brief theta_prime Derivative of the mass phase factor theta
+         */
+        double theta_prime;
+        /**
+         * @brief msqrt_thermal Right-handed thermal mass of the fermion
+         */
+        double msqrt_thermal;
+        /**
+         * @brief dmsqrt_thermal Difference of the right- and left-handed fermion thermal mass
+         */
+        double dmsqrt_thermal;
+        /**
+         * @brief YukType Yukawa type of the model
+         */
         int YukType;
+
+
         /**
          * @brief operator () Needed for the boost interface.
          * @param Scp Current state of Scp.
@@ -134,7 +187,14 @@ class Calc_kappa_t
 {
     private:
     public:
-        double mt,Temp;
+        /**
+         * @brief mt Fermion mass
+         */
+        double mt;
+        /**
+         * @brief Temp Temperature
+         */
+        double Temp;
         /**
          * @brief set_class Set up of the class parameters.
          * @param Temp_in Temperature
@@ -163,7 +223,14 @@ double NIntegrate_kappa(const Calc_kappa_t& C_kap);
 class Calc_eta
 {
     private:
-        double Temp,vw;
+        /**
+         * @brief Temp Temperature
+         */
+        double Temp;
+        /**
+         * @brief vw Bubble wall velocity
+         */
+        double vw;
         /**
          * @brief nL_cub Boost spline for the left-handed fermion density as function of the bubble wall distance z.
          */
