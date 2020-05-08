@@ -206,7 +206,6 @@ class gen_fluid
 {
     private:
     public: 
-        //TODO: Implement the full track for the flags
         int  bot_mass_flag;
         int  tau_mass_flag = 1 ;
         /**
@@ -381,7 +380,6 @@ class gen_fluid
          */
         std::pair<double,double> Calc_ThermalMass_l(double& YukCoupling_in , double& T_in);
 
-        //TODO: RETURN values for top_func and tau_func.
         /**
          * @brief top_func Calculation of the top and bot mass at a given distance of the bubble wall and temperature
          * @param z Wall distance.
