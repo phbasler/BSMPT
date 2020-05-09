@@ -152,7 +152,6 @@ int main(int argc, char *argv[]) try{
 
     const auto args = getCLIArguments(argc,argv);
     if(args.Model==ModelID::ModelIDs::NotSet) {
-
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
         return EXIT_FAILURE;

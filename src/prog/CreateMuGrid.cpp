@@ -126,7 +126,6 @@ auto getCLIArguments(int argc, char *argv[])
         res.OutputFile = args.at(2);
         res.Line = std::stoi(args.at(3));
     }
-
     return res;
 }
 
@@ -141,8 +140,8 @@ int main(int argc, char *argv[]) try{
 
     if(args.Line < 1)
 	{
-	std::cerr << "Start line counting with 1" << std::endl;
-	return EXIT_FAILURE;
+        std::cerr << "Start line counting with 1" << std::endl;
+        return EXIT_FAILURE;
 	}
 
 
@@ -176,7 +175,6 @@ int main(int argc, char *argv[]) try{
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 
-    size_t dim = modelPointer->get_nVEV();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 
@@ -208,10 +206,7 @@ int main(int argc, char *argv[]) try{
 
 
 
-	std::vector<double> vTree;
-
-
-    for(size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
+    std::vector<double> vTree = modelPointer->get_vevTreeMin();
 	std::vector<double> parStart,parEnd;
     parStart = std::vector<double>(modelPointer->get_NHiggs(),0);
     auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
@@ -239,10 +234,6 @@ int main(int argc, char *argv[]) try{
     std::cout << "LW = " << p.getLW()*EWPT.Tc << "/TC" << std::endl;
     std::cout << "T_C = " << EWPT.Tc << std::endl;
     for(size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
-
-	// double res = K1_fermion_interp(2.5,3.7);
-	// std::cout << "res = " << res << std::endl;
-
 
     size_t nstep = 1000;
 	double zmin = 0;
