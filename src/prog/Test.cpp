@@ -28,6 +28,7 @@
 
 #include <BSMPT/models/IncludeAllModels.h>
 #include <iostream>
+#include <iomanip>
 #include <bits/exception.h>                     // for exception
 #include <stdlib.h>                             // for EXIT_FAILURE, atoi
 #include <algorithm>                            // for copy
@@ -36,39 +37,98 @@
 #include <utility>                              // for pair
 #include <vector>                               // for vector
 #include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/utility.h>
 #include <fstream>
 using namespace std;
 using namespace BSMPT;
 
 
+auto getCLIArguments(int argc, char *argv[])
+{
+    struct ReturnType{
+        BSMPT::ModelID::ModelIDs Model{};
+        int Line{};
+        std::string InputFile;
+    };
+
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 4 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "Test performs a serious of tests on the given model. Intended for testing new models." << std::endl
+                  << "It is called either by " << std::endl
+                  << "./Test model input Line" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to test"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
+                  <<"The line in the input file with the parameter point used to check the model." << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 4)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    ReturnType res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--line="))
+            {
+                res.Line = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+        }
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.Line = std::stoi(args.at(2));
+    }
+
+
+    return res;
+}
+
+
 
 int main(int argc, char *argv[]) try{
 
-	if(!( argc == 4) )
-	{
-		std::cerr << "./Test Model Inputfile Line \n";
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
+    const auto args = getCLIArguments(argc,argv);
 
 
-    auto Model=ModelID::getModel(argv[1]);
-    if(Model==ModelID::ModelIDs::NotSet) {
+    if(args.Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();
         return EXIT_FAILURE;
     }
 
-	int  Line;
-	char* in_file;
-
-	in_file = argv[2];
-
-	Line = atoi(argv[3]);
-
-
-
-	if(Line < 1)
+    if(args.Line < 1)
 	{
 		std::cout << "Start line counting with 1" << std::endl;
 		return EXIT_FAILURE;
@@ -76,7 +136,7 @@ int main(int argc, char *argv[]) try{
 
 
 	int linecounter = 1;
-	std::ifstream infile(in_file);
+    std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 		std::cout << "Input file not found " << std::endl;
 		return EXIT_FAILURE;
@@ -84,31 +144,12 @@ int main(int argc, char *argv[]) try{
 
 
 	std::string linestr;
-
-//	Class_Potential_Origin * modelPointer;
-//	Fchoose(modelPointer,Model);
-
-    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
-
-
-    size_t nPar,nParCT;
-    nPar = modelPointer->get_nPar();
-    nParCT = modelPointer->get_nParCT();
-
-
-	std::vector<double> par(nPar);
-	std::vector<double> parCT(nParCT);
-
-
-
-
-	std::vector<double> sol;
-
+    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
 
 	while(getline(infile,linestr))
 	{
-		if(linecounter > Line) break;
+        if(linecounter > args.Line) break;
 
 		if(linecounter == 1)
 		  {
@@ -116,32 +157,19 @@ int main(int argc, char *argv[]) try{
 		    modelPointer->setUseIndexCol(linestr);
 
 		  }
-		if(linecounter == Line and linecounter != 1)
+        if(linecounter == args.Line and linecounter != 1)
 		{
 			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-			par=parameters.first;
-			parCT = parameters.second;
 
 			modelPointer->write();
 			std::vector<double> dummy;
 			modelPointer->Debugging(dummy,dummy);
-			modelPointer->CheckImplementation(par,parCT);
-
-
-
-
+            modelPointer->CheckImplementation(parameters.first,parameters.second);
 		}
 		linecounter++;
 		if(infile.eof()) break;
 	}
-
-//	delete modelPointer;
 	return EXIT_SUCCESS;
-
-
-
-
-
 }
 
 catch(exception& e){

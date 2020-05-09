@@ -40,7 +40,7 @@ target_link_libraries(TripleHiggsCouplingsNLO Models Utility)
 target_compile_features(TripleHiggsCouplingsNLO PUBLIC cxx_std_14)
 
 add_executable(Test prog/Test.cpp)
-target_link_libraries(Test Minimizer Models)
+target_link_libraries(Test Minimizer Models Utility)
 target_compile_features(Test PUBLIC cxx_std_14)
 
 if(Boost_FOUND)
