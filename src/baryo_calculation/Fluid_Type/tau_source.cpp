@@ -201,9 +201,6 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
        domega[15]   =   (vw*omega[15] - (Gam_Y_t*mu_Y_t - Gam_Y_b*mu_Y_b - Gam_Y_tau*mu_Y_tau)) / Dh;
        domega[16]   =   (vw*omega[16] - (Gam_Y_t*mu_Y_t - Gam_Y_b*mu_Y_b - Gam_Y_tau*mu_Y_tau)) / Dh;
        domega[17]   =   (vw*omega[17] - (Gam_SS*mu_SS))/Dq;
-
-        // if(debug) for(int i=0; i<12;i++) std::cout<<"\tdomega["<<i<<"] = "<<domega[i]<<std::endl;
-
 }
 
 double tau_source::Calc_nL(double z_start,double z_end) const {
@@ -232,14 +229,11 @@ double tau_source::Calc_nL(double z_start,double z_end) const {
         */
     state_type mu(18);
     mu = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    // if(debug) std::cout<<"Before ODE Calc:"<<std::endl;
-    // if(debug) for(size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
     const double C_AbsErr = 1e-9;
     const double C_RelErr = 1e-5;
     double stepsize_initial;
     if(z_start<z_end)  stepsize_initial= 1e-8;
     if(z_start>z_end)  stepsize_initial = -1e-8;
-    // if(stepsize_initial==0) stepsize_initial=1e-7;
     double abs_err = C_AbsErr;
     double rel_err =C_RelErr;
     integrate_adaptive(make_controlled( abs_err , rel_err , error_stepper_type() ) , *this , mu , z_start , z_end , stepsize_initial );

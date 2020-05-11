@@ -37,9 +37,8 @@ namespace Baryo{
 using namespace boost::numeric::odeint;
 typedef std::vector<double> state_type;
 /**
- * Fluid equations only with top induced source terms
- * - \f$m_b \approx 0\f$
- * - \f$\mu_b\approx \mu_u\f$
+ * @brief The top_source class Class instance for the transport equation system and numerical calculation of the left-handed fermion density in front of the bubble wall including the top quark.
+ * 
  */
 class top_source : public gen_fluid 
 {

@@ -38,7 +38,7 @@ using namespace boost::numeric::odeint;
 typedef std::vector<double> state_type;
 
 /**
- * @brief The tau_source class Class instance for the transport equation system and numerical calculation of the left-handed fermion density in front of the bubble wall.
+ * @brief The tau_source class Class instance for the transport equation system and numerical calculation of the left-handed fermion density in front of the bubble wall including the bot,top quark and the tau lepton.
  */
 class tau_source : public gen_fluid
 {

@@ -88,7 +88,6 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
 
 
     //Rescaled chemical potential like in 1811.11104
-
         double mu_M_t   =   omega[1]/kappa_tR - omega[0]/kappa_q;
         double mu_M_b   =   omega[2]/kappa_bR - omega[0]/kappa_q;
         double mu_Y_t   =   omega[1]/kappa_tR - omega[0]/kappa_q - omega[3]/kappa_H_0 - omega[4]/kappa_H_0;
@@ -119,19 +118,6 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
             std::cout<< "bot_mass_flag = "<< bot_mass_flag <<std::endl;
             throw std::runtime_error("No valid bot_mass_flag @ operator()");
         }
-        // switch(Yuk_Type)
-        // {
-        //     case 1: 
-        //             Calc_Scp_obj.set_class(Temp,vw,mb,theta_prime);
-        //             Scp_b   =   Nintegrate_Scp(Calc_Scp_obj);
-        //             break;
-        //     case 2:
-        //             Scp_b = 0;
-        //             break;
-        //     default:
-        //             throw std::runtime_error("No valid YukType in the CP-violating Source Term");
-        // }
-
         if(debug)
         {
             std::cout<<"z = "<<z<< "########################"<<std::endl;
@@ -174,8 +160,6 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
         domega[10]  = (vw*omega[10] - (Gam_Y_t*mu_Y_t - Gam_Y_b*mu_Y_b ))/Dh;
         domega[11]  = (vw*omega[11] - Gam_SS*mu_SS)/Dq;
 
-        if(debug) for(int i=0; i<12;i++) std::cout<<"\tdomega["<<i<<"] = "<<domega[i]<<std::endl;
-
 }
 
 double bot_source::Calc_nL(double z_start,double z_end) const
@@ -207,15 +191,12 @@ double bot_source::Calc_nL(double z_start,double z_end) const
     double stepsize_initial;
     if(z_start<z_end)  stepsize_initial= 1e-8;
     if(z_start>z_end)  stepsize_initial = -1e-8;
-    // if(stepsize_initial==0) stepsize_initial=1e-7;
     double abs_err = C_AbsErr;
     double rel_err =C_RelErr;
     integrate_adaptive(make_controlled( abs_err , rel_err , error_stepper_type() ) , *this , mu , z_start , z_end , stepsize_initial );
     if(debug) std::cout<<"After ODE Calc:"<<std::endl;
     if(debug) for(size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
-
-    //Additional left-handed up-type quarks;  q1 = -2 u
-    return mu[0] - 2*mu[5];
+    return mu[0] - 2*mu[5]; //Additional left-handed up-type quarks;  q1 = -2 u
 
 }
 

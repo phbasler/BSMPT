@@ -43,10 +43,9 @@ using namespace boost::numeric::odeint;
 typedef std::vector<double> state_type;
 
 /**
- * Fluid equations with the bottom quarks 
- * \f$m_b \neq 0 \f$
-*/
-
+ * @brief The bot_source class Class instance for the transport equation system and numerical calculation of the left-handed fermion density in front of the bubble wall including top and bottom quarks.
+ * 
+ */
 class bot_source : public gen_fluid 
 {
     private:

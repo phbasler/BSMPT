@@ -54,7 +54,6 @@ double top_source::Calc_nL(double z_start, double z_end) const {
     double stepsize_initial;
     if(z_start<z_end)  stepsize_initial= 1e-8;
     if(z_start>z_end)  stepsize_initial = -1e-8;
-    // if(stepsize_initial==0) stepsize_initial=1e-7;
     double abs_err = C_AbsErr;
     double rel_err =C_RelErr;
     integrate_adaptive(make_controlled( abs_err , rel_err , error_stepper_type() ) , *this , mu , z_start , z_end , stepsize_initial );
@@ -81,23 +80,11 @@ void top_source::operator()(const state_type &omega , state_type &domega , const
         double mt = quark_mass[0];
         double sym_phase = gen_fluid::symmetric_CP_violating_phase;
         double brk_phase = gen_fluid::broken_CP_violating_phase; 
-
-        // auto theta_vec  =   Calc_theta(z,vcritical,vsym);//OLD VERSION
         auto theta_vec =   Calc_theta(z , sym_phase , brk_phase);
 
         double theta    =   theta_vec[0];
         double theta_prime = theta_vec[1];
         //?????
-        //Consistent with hep-ph/9410281
-        // double Dq       =   6./Temp;
-        // double Dt       =   6./Temp;
-        // double Dh       =   100/Temp;
-        // double beta     =   std::atan(tanbeta);
-        // double sinbeta  =   std::sin(beta);
-        // //Taken from hep-ph/9410281
-        // double yuk_q    = std::sqrt(2)*mtop_0/(C_vev0*sinbeta);
-        // double Gam_SS   =   14* std::pow(alpha_S,4)*Temp;
-        // double Gam_Y    =   0.19*alphaS*yuk_q*yuk_q*Temp;
         //Calculation of kappa_t
         Calc_kappa_obj.set_class(Temp, mt);
         double num_int  =   NIntegrate_kappa(Calc_kappa_obj);
