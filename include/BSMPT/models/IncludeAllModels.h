@@ -44,7 +44,7 @@ namespace ModelID {
 /**
  * @brief The ModelIDs enum containing all IDs for identifying the Models
  */
-enum ModelIDs
+enum class ModelIDs
 {
     NotSet,
     C2HDM ,
@@ -64,11 +64,11 @@ enum ModelIDs
   * @brief Mapping between the model name which is given as the first argument to the binary and the ModelIDs element
   */
 const std::unordered_map<std::string,ModelIDs> ModelNames{
-    {"c2hdm",C2HDM},
-    {"r2hdm",R2HDM},
-    {"n2hdm",RN2HDM},
-    {"cxsm",CXSM},
-    {"template",TEMPLATE}
+    {"c2hdm",ModelIDs::C2HDM},
+    {"r2hdm",ModelIDs::R2HDM},
+    {"n2hdm",ModelIDs::RN2HDM},
+    {"cxsm",ModelIDs::CXSM},
+    {"template",ModelIDs::TEMPLATE}
 };
 
 

@@ -39,11 +39,11 @@ namespace ModelID {
 std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice){
     using namespace  Models;
     switch (choice) {
-    case R2HDM: return std::make_unique<Class_Potential_R2HDM>(); break;
-    case C2HDM: return std::make_unique<Class_Potential_C2HDM>(); break;
-    case RN2HDM: return  std::make_unique<Class_Potential_RN2HDM>(); break;
-    case CXSM: return std::make_unique<Class_CxSM>(); break;
-    case TEMPLATE: return std::unique_ptr<Class_Template>(); break;
+    case ModelIDs::R2HDM: return std::make_unique<Class_Potential_R2HDM>(); break;
+    case ModelIDs::C2HDM: return std::make_unique<Class_Potential_C2HDM>(); break;
+    case ModelIDs::RN2HDM: return  std::make_unique<Class_Potential_RN2HDM>(); break;
+    case ModelIDs::CXSM: return std::make_unique<Class_CxSM>(); break;
+    case ModelIDs::TEMPLATE: return std::unique_ptr<Class_Template>(); break;
     default: throw std::runtime_error("Invalid model");
     }
 }
@@ -53,11 +53,13 @@ ModelIDs getModel(const std::string& s){
     std::string ModelInput=s;
     std::transform(ModelInput.begin(),ModelInput.end(),ModelInput.begin(),::tolower);
     for(auto entry: ModelNames){
-        if(ModelInput.compare(entry.first)==0){
+        auto key = entry.first;
+        std::transform(key.begin(),key.end(),key.begin(),::tolower);
+        if(ModelInput.compare(key)==0){
             return entry.second;
         }
     }
-    return NotSet;
+    return ModelIDs::NotSet;
 }
 
 }
