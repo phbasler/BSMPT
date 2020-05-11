@@ -84,11 +84,6 @@ endif(Boost_FOUND)
 
 if(MakeAdditionalTesting)
 
-  add_executable(TestThermalFunctions prog/TestThermalFunctions.cpp)
-  target_link_libraries(TestThermalFunctions Models ThermalFunctions)
-  target_compile_features(TestThermalFunctions PUBLIC cxx_std_14)
-
-
   if(Boost_FOUND)
     add_executable(CreateMuGrid prog/CreateMuGrid.cpp)
     target_link_libraries(CreateMuGrid Minimizer Models Baryo)
