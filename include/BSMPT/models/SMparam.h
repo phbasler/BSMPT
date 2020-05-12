@@ -3,18 +3,18 @@
  *
  *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
 
-		This program is free software: you can redistribute it and/or modify
-		it under the terms of the GNU General Public License as published by
-		the Free Software Foundation, either version 3 of the License, or
-		(at your option) any later version.
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
 
-		This program is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-		GNU General Public License for more details.
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
 
-		You should have received a copy of the GNU General Public License
-		along with this program.  If not, see <http://www.gnu.org/licenses/>.
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -26,6 +26,8 @@
 
 #include <complex>
 #include <cmath>
+
+namespace BSMPT {
 
 /**
  * @brief imaginary number i
@@ -252,7 +254,7 @@ const double C_gs = 2*std::sqrt(std::pow(C_MassZ,2)-std::pow(C_MassW,2))/C_vev0;
  */
 const double C_SMTriHiggs = 3*C_MassSMHiggs*C_MassSMHiggs/(C_vev0);
 
-
+}
 
 
 
