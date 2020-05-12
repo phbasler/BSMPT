@@ -497,7 +497,7 @@ void Class_Potential_C2HDM::write() const {
 
 
     std::cout << "The parameters are :  \n";
-    std::cout << "Model = " << "C2HDM" << "\n";
+    std::cout << "Model = " << Model << "\n";
     std::cout << "v1 = " << C_vev0*C_CosBeta << "\n";
     std::cout << "v2 = " << C_vev0*C_SinBeta << "\n";
     std::cout << "Type = " << Type << "\n";

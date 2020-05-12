@@ -439,7 +439,7 @@ void Class_Potential_RN2HDM::write() const{
 
 
     std::cout << "The parameters are :   \n";
-    std::cout << "Model = " << "N2HDM" << "\n";
+    std::cout << "Model = " << Model << "\n";
     std::cout << "Renorm Scale = " << scale <<"\n";
     std::cout << "v1 = " << C_vev0*C_CosBeta << "\n";
     std::cout << "v2 = " << C_vev0*C_SinBeta << "\n";

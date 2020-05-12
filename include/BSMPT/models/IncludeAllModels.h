@@ -71,6 +71,12 @@ const std::unordered_map<std::string,ModelIDs> ModelNames{
     {"template",ModelIDs::TEMPLATE}
 };
 
+/**
+ * @brief InvertModelNames
+ * @return The switched map to ModelNames
+ */
+std::unordered_map<ModelIDs,std::string> InvertModelNames();
+
 
 /**
  * @param choice ModelIDs for the Model under investigation
@@ -93,6 +99,13 @@ ModelIDs getModel(const std::string& s);
  */
 void ShowInputError();
 
+/**
+ * @brief operator << overload for the model parameter
+ */
+std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model);
+
 }
+
+
 
 //#endif /* INCLUDEALLMODELS_H_ */

@@ -2305,6 +2305,9 @@ void Class_Potential_Origin::CheckImplementation(
     const std::string Pass = "Pass";
     const std::string Fail = "Fail";
 
+
+    std::cout << "The tested Model is the " << Model<< std::endl;
+
     std::vector<std::string> TestNames, TestResults;
 
     TestNames.push_back("CT number/label match");
