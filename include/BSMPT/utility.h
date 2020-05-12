@@ -33,6 +33,17 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec)
     }
     return os;
 }
+
+
+/**
+ * @brief operator << overload for the model parameter
+ */
+namespace ModelID {
+  enum class ModelIDs;
+}
+std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model);
+
+
 }
 
 #endif // UTILITY_H

@@ -19,6 +19,7 @@
 
 #include <BSMPT/models/ClassPotentialC2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
 using namespace Eigen;
 
 namespace BSMPT{

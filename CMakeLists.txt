@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(
   BSMPT
-  VERSION 1.9.92
+  VERSION 1.9.93
   LANGUAGES C CXX)
 
 # -------------------------------- setup cmake --------------------------------
@@ -58,7 +58,7 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion)
 
 export(
-  TARGETS Models Minimizer ThermalFunctions
+  TARGETS Models Minimizer ThermalFunctions Utility
   NAMESPACE BSMPT::
   FILE BSMPTTargets.cmake
   )

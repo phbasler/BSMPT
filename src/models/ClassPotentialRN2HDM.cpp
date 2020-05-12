@@ -23,6 +23,7 @@
 
 #include <BSMPT/models/ClassPotentialRN2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
 #include <iomanip>
 using namespace Eigen;
 

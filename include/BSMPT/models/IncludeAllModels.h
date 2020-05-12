@@ -99,10 +99,6 @@ ModelIDs getModel(const std::string& s);
  */
 void ShowInputError();
 
-/**
- * @brief operator << overload for the model parameter
- */
-std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model);
 
 }
 

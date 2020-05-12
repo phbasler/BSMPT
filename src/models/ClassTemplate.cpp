@@ -29,6 +29,7 @@
 
 #include <BSMPT/models/ClassTemplate.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
 using namespace Eigen;
 
 /**
@@ -214,6 +215,8 @@ void Class_Template::set_CT_Pot_Par(const std::vector<double>& par){
  * console output of all Parameters
  */
 void Class_Template::write() const {
+
+    std::cout << "Model = " << Model << std::endl;
 
 	std::cout << "The parameters are : " << std::endl;
 	std::cout << "lambda = " << lambda << std::endl

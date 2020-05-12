@@ -19,6 +19,7 @@
 
 #include <BSMPT/models/ClassPotentialR2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
 
 namespace BSMPT {
 namespace Models {
