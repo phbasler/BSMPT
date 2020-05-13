@@ -36,83 +36,22 @@
 
 namespace BSMPT {
 namespace Minimizer{
-PointerContainerMinPlane PCon_Plane;
 namespace LibCMAES {
 
-
-
-PointerContainer PCon;
 using namespace libcmaes;
-
-
-/**
- * @brief Interface for libcmaes to calculate the value of the effective Potential at vev = v and Temp = PCon_Planes.Temp
- */
-FitFunc CMAES_VEFF_Minimize_Plane = [](const double *v, const int N)
-{
-
-//    double *p = static_cast<double*>(v);//(double *)v;
-    (void) N;
-
-    size_t nVEVs = PCon_Plane.modelPointer->get_nVEV();
-
-    std::vector<double> vIn,vMinTilde;
-    vMinTilde.resize(nVEVs-1);
-    for(size_t i=0;i<nVEVs-1;i++) vMinTilde[i] = v[i];
-    auto vMin = TransformCoordinates(vMinTilde,PCon_Plane);
-    vIn=PCon_Plane.modelPointer->MinimizeOrderVEV(vMin);
-
-
-    double res = PCon_Plane.modelPointer->VEff(vIn,PCon_Plane.Temp,0);
-    return res;
-
-};
-
-
-/**
- *
- *
- * Interface for libcmaes to calculate the value of the effective Potential at vev = v and Temp = Tempcom
- */
-FitFunc fsphere_gen_all = [](const double *v, const int N)
-{
-    double *p = (double *)v;
-    (void) N;
-
-    int nVEVs = PCon.modelPointer->get_nVEV();
-
-    std::vector<double> vIn,vMin;
-    vMin.resize(nVEVs);
-    for(int i=0;i<nVEVs;i++) vMin[i] = p[i];
-    vIn=PCon.modelPointer->MinimizeOrderVEV(vMin);
-
-    double res = PCon.modelPointer->VEff(vIn,PCon.Temp,0);
-    return res;
-
-};
-
-
 
 LibCMAESReturn min_cmaes_gen_all(
         const std::shared_ptr<Class_Potential_Origin>& modelPointer,
         const double& Temp,
         const std::vector<double>& Start){
 
-    PCon.Temp = Temp;
+    auto dim = modelPointer->get_nVEV();
 
-
-
-    PCon.modelPointer = modelPointer;
-
-    int dim = modelPointer->get_nVEV();
-
-    std::vector<double> x0(dim);
+    std::vector<double> x0 = Start;
 
 
     double sigma;
     sigma = 5;
-
-    for(int i=0;i<dim;i++) x0[i]=Start.at(i);
 
 
     //sigma *= 0.5;//0.5;
@@ -130,8 +69,14 @@ LibCMAESReturn min_cmaes_gen_all(
     cmaparams.set_ftolerance(ftol);
 
 
-    //CMASolutions cmasols = cmaes<>(fsphere,cmaparams,CMAStrategy<CovarianceUpdate>::_defaultPFunc, grad_fsphere);
-    CMASolutions cmasols = cmaes<>(fsphere_gen_all,cmaparams);
+    FitFunc cmafunc = [=](const double*v, const int& N){
+        (void) N;
+        std::vector<double> vev;
+        for(size_t i{0};i<modelPointer->get_nVEV();++i) vev.push_back(v[i]);
+        return modelPointer->VEff(modelPointer->MinimizeOrderVEV(vev),Temp);
+    };
+
+    CMASolutions cmasols = cmaes<>(cmafunc,cmaparams);
 
     Candidate bcand = cmasols.best_candidate();
 
@@ -140,7 +85,7 @@ LibCMAESReturn min_cmaes_gen_all(
 
     std::vector<double> sol;
 
-    for(int i = 0;i<dim;i++)
+    for(size_t i = 0;i<dim;i++)
     {
         sol.push_back(xsol.at(i));
     }
@@ -160,20 +105,18 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
         const std::vector<double>& Start){
 
 
-    PCon_Plane = params;
-
     std::shared_ptr<Class_Potential_Origin> modelPointer;
 
     modelPointer=params.modelPointer;
 
-    int dim = params.nVEV - 1;
+    auto dim = params.nVEV - 1;
     std::vector<double> x0(dim);
 
 
     double sigma;
     sigma = 5;
 
-    for(int i=0;i<dim;i++) x0[i]=Start.at(i);
+    for(size_t i=0;i<dim;i++) x0[i]=Start.at(i);
 
     double ftol=1e-5;
 
@@ -182,6 +125,21 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
 
     cmaparams.set_algo(aCMAES);
     cmaparams.set_ftolerance(ftol);
+
+    FitFunc CMAES_VEFF_Minimize_Plane = [=](const double* v, const int& N)
+    {
+        (void) N;
+        size_t nVEVs = params.modelPointer->get_nVEV();
+
+        std::vector<double> vMinTilde;
+        vMinTilde.resize(nVEVs-1);
+        for(size_t i=0;i<nVEVs-1;i++) vMinTilde[i] = v[i];
+        auto vev = TransformCoordinates(vMinTilde,params);
+
+
+        double res = params.modelPointer->VEff(params.modelPointer->MinimizeOrderVEV(vev),params.Temp);
+        return res;
+    };
 
 
     CMASolutions cmasols = cmaes<>(CMAES_VEFF_Minimize_Plane,cmaparams);
@@ -192,7 +150,7 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
 
     std::vector<double> sol;
 
-    for(int i = 0;i<dim;i++)
+    for(size_t i = 0;i<dim;i++)
     {
         sol.push_back(xsol.at(i));
     }

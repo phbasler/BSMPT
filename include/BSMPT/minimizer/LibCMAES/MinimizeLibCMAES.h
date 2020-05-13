@@ -35,15 +35,6 @@ struct PointerContainerMinPlane;
 namespace LibCMAES {
 
 /**
- * @brief The PointerContainer struct used to pass information to the minimization routine
- */
-struct PointerContainer{
-  std::shared_ptr<Class_Potential_Origin> modelPointer;
-  double Temp;
-};
-
-
-/**
  * @brief The LibCMAESReturn struct which is returned by the routine
  */
 struct LibCMAESReturn{
