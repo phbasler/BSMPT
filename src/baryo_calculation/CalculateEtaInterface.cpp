@@ -40,6 +40,11 @@ std::pair<std::vector<bool>,int> CalculateEtaInterface::ReadConfigFile(const std
 	std::pair<std::vector<bool>,int> res;
 	std::string line;
 	std::ifstream configFile(file);
+    if(not configFile.good())
+    {
+        std::string errmsg("Can not open file: " + file + " in function " + __func__);
+        throw std::runtime_error(errmsg);
+    }
     std::vector<bool> method_transport_local;
     int bot_mass_flag_local=0;
 	while(std::getline(configFile,line)){
@@ -94,7 +99,9 @@ CalculateEtaInterface::CalculateEtaInterface(const std::pair<std::vector<bool>,i
     if(config.first.size() != 5){
         std::string errmsg = "Warning: ";
         errmsg += __func__;
-        errmsg += " expects a vector of length 5.";
+        errmsg += " expects a vector of length 5 but only received ";
+        errmsg += std::to_string(config.first.size());
+        errmsg+= ".";
         throw std::runtime_error(errmsg);
     }
 }

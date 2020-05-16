@@ -45,7 +45,7 @@ target_compile_features(Test PUBLIC cxx_std_14)
 
 if(Boost_FOUND)
 add_executable(WallThickness prog/WallThickness.cpp)
-target_link_libraries(WallThickness Minimizer Models lib_WallThickness Utility)
+target_link_libraries(WallThickness Minimizer Models LibWallThickness Utility)
 target_compile_features(WallThickness PUBLIC cxx_std_14)
 else(Boost_FOUND)
   message("WallThickness will not compile as Boost is missing")

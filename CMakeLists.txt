@@ -58,7 +58,7 @@ write_basic_package_version_file(
   COMPATIBILITY AnyNewerVersion)
 
 export(
-  TARGETS Models Minimizer ThermalFunctions Utility
+  TARGETS Models Minimizer ThermalFunctions Utility Baryo LibWallThickness Kfactors
   NAMESPACE BSMPT::
   FILE BSMPTTargets.cmake
   )

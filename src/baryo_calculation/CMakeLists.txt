@@ -20,7 +20,7 @@ set(src
 )
 
 add_library(Baryo ${header} ${src})
-target_link_libraries(Baryo PUBLIC Eigen3::Eigen GSL::gsl Minimizer Kfactors lib_WallThickness)
+target_link_libraries(Baryo PUBLIC Eigen3::Eigen GSL::gsl Minimizer Kfactors LibWallThickness)
 #target_compile_options(Baryo PUBLIC ${OpenMP_CXX_FLAGS})
 target_include_directories(Baryo PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Baryo PUBLIC cxx_std_14)

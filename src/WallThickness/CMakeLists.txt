@@ -6,8 +6,8 @@ set(src
 	WallThicknessLib.cpp
 )
 
-add_library(lib_WallThickness ${header} ${src})
-target_link_libraries(lib_WallThickness PUBLIC Eigen3::Eigen GSL::gsl Minimizer Boost::boost)
-target_include_directories(lib_WallThickness PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(lib_WallThickness PUBLIC cxx_std_14)
+add_library(LibWallThickness ${header} ${src})
+target_link_libraries(LibWallThickness PUBLIC Eigen3::Eigen GSL::gsl Minimizer Boost::boost)
+target_include_directories(LibWallThickness PUBLIC ${BSMPT_SOURCE_DIR}/include)
+target_compile_features(LibWallThickness PUBLIC cxx_std_14)
 
