@@ -57,18 +57,27 @@ write_basic_package_version_file(
   VERSION ${PACKAGE_VERSION}
   COMPATIBILITY AnyNewerVersion)
 
+set(ExportList
+  Models
+  Minimizer
+  ThermalFunctions
+  Utility
+  )
+
+if(Boost_FOUND)
+set(ExportList
+  ${ExportList}
+  Baryo
+  LibWallThickness
+  Kfactors
+  )
+endif(Boost_FOUND)
+
 export(
-  TARGETS Models Minimizer ThermalFunctions Utility
+  TARGETS ${ExportList}
   NAMESPACE BSMPT::
   FILE BSMPTTargets.cmake
   )
-if(Boost_FOUND)
-export(
-  TARGETS Models Minimizer ThermalFunctions Utility Baryo LibWallThickness Kfactors
-  NAMESPACE BSMPT::
-  FILE BSMPTTargets.cmake
-)
-endif(Boost_FOUND)
 
 configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
 
