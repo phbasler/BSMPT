@@ -497,7 +497,7 @@ protected:
     /**
      * @brief VevOrder Stores the matching order used in MinimizeOrderVEV, set in the constructor of the model
      */
-    std::vector<size_t> VevOrder;
+    std::vector<std::size_t> VevOrder;
 
 
 public:
@@ -588,7 +588,7 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsTreePhysical[i][j][k]
    */
-    double get_TripleHiggsCorrectionsTreePhysical(size_t i, std::size_t j, std::size_t k) const {
+    double get_TripleHiggsCorrectionsTreePhysical(std::size_t i, std::size_t j, std::size_t k) const {
         return TripleHiggsCorrectionsTreePhysical.at(i).at(j).at(k);
     }
     /**
@@ -598,7 +598,7 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsCTPhysical[i][j][k]
    */
-    double get_TripleHiggsCorrectionsCTPhysical(size_t i, std::size_t j, std::size_t k) const {
+    double get_TripleHiggsCorrectionsCTPhysical(std::size_t i, std::size_t j, std::size_t k) const {
         return TripleHiggsCorrectionsCTPhysical.at(i).at(j).at(k);
     }
     /**
@@ -608,7 +608,7 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsCWPhysical[i][j][k]
    */
-    double get_TripleHiggsCorrectionsCWPhysical(size_t i, std::size_t j, std::size_t k) const {
+    double get_TripleHiggsCorrectionsCWPhysical(std::size_t i, std::size_t j, std::size_t k) const {
         return  TripleHiggsCorrectionsCWPhysical.at(i).at(j).at(k);
     }
 

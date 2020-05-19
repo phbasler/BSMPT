@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) try{
 	int nPar,nParCT;
 	nPar = modelPointer->nPar;
 	nParCT = modelPointer->nParCT;
-	size_t ndim = modelPointer->nVEV;
+	std::size_t ndim = modelPointer->nVEV;
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 	//Declare the vector for the PTFinder algorithm
@@ -165,7 +165,7 @@ int main(int argc, char *argv[]) try{
 		{
 	//Calculation of LW 
 			std::vector<double> vcritical,vbarrier;
-			for(size_t i=3;i<ndim+3;i++) vcritical.push_back(sol.at(i));
+			for(std::size_t i=3;i<ndim+3;i++) vcritical.push_back(sol.at(i));
 			int CPoddIndex=3, CPevenIndex=2;
 			double brokenPhase = std::atan2(vcritical.at(CPoddIndex),vcritical.at(CPevenIndex));
 		//Sign Check for the broken phase
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) try{
 					double tmpphase=std::atan2(symmetry.at(CPoddIndex)*vcritical.at(CPoddIndex), symmetry.at(CPevenIndex)*vcritical.at(CPevenIndex) );
 					if(std::abs(tmpphase) <= 0.5*M_PI)
 					{
-						for(size_t i=0;i<vcritical.size();i++) vcritical.at(i) *= symmetry.at(i);
+						for(std::size_t i=0;i<vcritical.size();i++) vcritical.at(i) *= symmetry.at(i);
 						break;
 					}
 				}
@@ -184,13 +184,13 @@ int main(int argc, char *argv[]) try{
 			double TC = sol.at(0);
 		//Symmetric Phase (symmetric minimum)-->Calculated at TC+1 
 			std::vector<double> vevsymmetricSolutiontmp,checksym, startpoint;
-			for(size_t i=0;i<modelPointer->nVEV;i++) startpoint.push_back(0.5*vcritical.at(i));
+			for(std::size_t i=0;i<modelPointer->nVEV;i++) startpoint.push_back(0.5*vcritical.at(i));
 			Minimize_gen_all(modelPointer,TC+1,vevsymmetricSolutiontmp,checksym,startpoint);
 
 			if(debug)
 			{
 				std::cout << "Solution for the symmetric phase  : " << std::endl;
-				for(size_t i=0;i<vevsymmetricSolutiontmp.size();i++)
+				for(std::size_t i=0;i<vevsymmetricSolutiontmp.size();i++)
 				{
 					std::cout << "vevsymmetricSolution[" << i << "] = " << vevsymmetricSolutiontmp.at(i) << std::endl;
 				}

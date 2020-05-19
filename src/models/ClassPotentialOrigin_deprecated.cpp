@@ -201,7 +201,7 @@ double Class_Potential_Origin::boson_legacy(double MassSquared, double Temp, dou
                 fnext = NegLinearInt[C_NegLine-1][1];
             }
             else{
-                std::size_t pos = (size_t (-x));
+                std::size_t pos = (std::size_t (-x));
                 xprev = NegLinearInt[pos][0];
                 fprev = NegLinearInt[pos][1];
                 xnext = NegLinearInt[pos+1][0];

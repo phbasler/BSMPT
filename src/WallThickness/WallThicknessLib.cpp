@@ -45,7 +45,7 @@ struct GSL_params {
     /**
  * @brief nVEV number of VEVs
  */
-size_t nVEV;
+std::size_t nVEV;
 /**
  * @brief VevMinimum electroweak minimum in the broken phase
  */
@@ -79,7 +79,7 @@ double GSL_VEFF_gen_all_maximum_line(double t, void *p){
 	std::vector<double> vIn,vMin;
     std::size_t nVEVs = params->modelPointer->get_nVEV();
 
-	for(size_t i=0;i<nVEVs;i++)
+	for(std::size_t i=0;i<nVEVs;i++)
 	{
         vMin.push_back(t*params->VevMinimum.at(i) + (1-t) * params->VeVSymmetric.at(i));
 	}
@@ -111,7 +111,7 @@ double calculate_wall_thickness_plane(
 	for(int ncounter=0;ncounter<=maxstep;ncounter++){
 		double line_parameter = Stepsize*ncounter;
         std::vector<double> basepoint, row;
-		for(size_t i=0;i<vcritical.size();i++) {
+		for(std::size_t i=0;i<vcritical.size();i++) {
 			basepoint.push_back(vevsymmetric.at(i) *(1-line_parameter) + vcritical.at(i) * line_parameter );
 		}
         auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp);
@@ -195,7 +195,7 @@ bool GSL_Find_Maximum_line(
 
 	tmax = solutions.at(0).at(0);
 	double fmax = solutions.at(0).at(1);
-	for(size_t i=1;i<solutions.size();i++){
+	for(std::size_t i=1;i<solutions.size();i++){
 		if(solutions.at(i).at(1) > fmax){
 			fmax = solutions.at(i).at(1);
 			tmax = solutions.at(i).at(0);
@@ -206,13 +206,13 @@ bool GSL_Find_Maximum_line(
 		std::cerr << "The length of solV in " << __func__ << " does not match with vcritical and is not zero." << std::endl;
 	}
 	else if(solV.size()!= 0){
-		for(size_t i=0;i<solV.size();i++){
+		for(std::size_t i=0;i<solV.size();i++){
 			solV.at(i) = tmax* vcritical.at(i);
 		}
 	}
 	else if(solV.size() == 0)
 	{
-		for(size_t i=0;i<vcritical.size();i++)
+		for(std::size_t i=0;i<vcritical.size();i++)
 		{
 			solV.push_back(tmax*vcritical.at(i));
 		}
@@ -227,7 +227,7 @@ bool GSL_Find_Maximum_line(
 
     vIn=params.modelPointer->MinimizeOrderVEV(vcritical);
 	double MinValC = params.modelPointer->VEff(vIn,params.Temp,0);
-	for(size_t i=0;i<vIn.size();i++) vIn.at(i)=0;
+	for(std::size_t i=0;i<vIn.size();i++) vIn.at(i)=0;
 	double MinVal0 = params.modelPointer->VEff(vIn,params.Temp,0);
 
 	double MinVal = std::min(MinVal0,MinValC); // They can differ through the numerical error of the minimization
@@ -249,9 +249,9 @@ bool GSL_Maximize_From_S_gen_line(struct GSL_params& params, std::vector<std::ve
 	s = gsl_min_fminimizer_alloc(T);
 
 
-	size_t MaxIter = 600;
+	std::size_t MaxIter = 600;
 
-	size_t iter = 0;
+	std::size_t iter = 0;
 	int status;
 
 

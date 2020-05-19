@@ -162,32 +162,32 @@ void GSL_integration_mubl::init(const double& vw_input,
 
 
     double TestNorm=0;
-    for(size_t i =0 ;i<vev_critical.size();i++) TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - vev_critical.at(i),2);
+    for(std::size_t i =0 ;i<vev_critical.size();i++) TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - vev_critical.at(i),2);
     if(TestNorm > CompareNorm)
     {
         for(auto symmetry : modelPointer->SignSymmetries){
             TestNorm = 0;
-            for(size_t i =0 ;i<vev_critical.size();i++) {
+            for(std::size_t i =0 ;i<vev_critical.size();i++) {
                 TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - symmetry.at(i)*vev_critical.at(i),2);
             }
             if(TestNorm < CompareNorm){
-                for(size_t i=0;i<vev_critical.size();i++) vev_critical.at(i) *= symmetry.at(i);
+                for(std::size_t i=0;i<vev_critical.size();i++) vev_critical.at(i) *= symmetry.at(i);
                 break;
             }
         }
     }
 
     TestNorm=0;
-    for(size_t i =0 ;i<vev_symmetric.size();i++) TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - vev_symmetric.at(i),2);
+    for(std::size_t i =0 ;i<vev_symmetric.size();i++) TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - vev_symmetric.at(i),2);
     if(TestNorm > CompareNorm)
     {
         for(auto symmetry : modelPointer->SignSymmetries){
             TestNorm = 0;
-            for(size_t i =0 ;i<vev_symmetric.size();i++) {
+            for(std::size_t i =0 ;i<vev_symmetric.size();i++) {
                 TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - symmetry.at(i)*vev_symmetric.at(i),2);
             }
             if(TestNorm < CompareNorm){
-                for(size_t i=0;i<vev_symmetric.size();i++) vev_symmetric.at(i) *= symmetry.at(i);
+                for(std::size_t i=0;i<vev_symmetric.size();i++) vev_symmetric.at(i) *= symmetry.at(i);
                 break;
             }
         }
@@ -206,7 +206,7 @@ void GSL_integration_mubl::init(const double& vw_input,
 
     // Find minimum slightly before the symmetric phase to define the CP-violating phase in the symmetric minimum
     std::vector<double> basepoint;
-    for(size_t i=0;i<vev_critical.size();i++)
+    for(std::size_t i=0;i<vev_critical.size();i++)
     {
         basepoint.push_back(vev_symmetric.at(i) + 1e-2 * (vev_critical.at(i)-vev_symmetric.at(i)));
     }
@@ -217,16 +217,16 @@ void GSL_integration_mubl::init(const double& vw_input,
 
 
     TestNorm = 0;
-    for(size_t i =0 ;i<MinimumPlane.size();i++) TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - MinimumPlane.at(i),2);
+    for(std::size_t i =0 ;i<MinimumPlane.size();i++) TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - MinimumPlane.at(i),2);
     if(TestNorm > CompareNorm)
     {
         for(auto symmetry : modelPointer->SignSymmetries){
             TestNorm = 0;
-            for(size_t i =0 ;i<MinimumPlane.size();i++) {
+            for(std::size_t i =0 ;i<MinimumPlane.size();i++) {
                 TestNorm += std::pow(modelPointer->get_vevTreeMin(i) - symmetry.at(i)*MinimumPlane.at(i),2);
             }
             if(TestNorm < CompareNorm){
-                for(size_t i=0;i<MinimumPlane.size();i++) MinimumPlane.at(i) *= symmetry.at(i);
+                for(std::size_t i=0;i<MinimumPlane.size();i++) MinimumPlane.at(i) *= symmetry.at(i);
                 break;
             }
         }
@@ -310,10 +310,10 @@ double transport_equations::get_W_mass(const std::vector<double>& vev, const dou
     std::vector<double> res;
     res=modelPointer->GaugeMassesSquared(vev,T);
     std::vector<double> nrepeat(modelPointer->get_NGauge());
-    for(size_t i=0;i<modelPointer->get_NGauge();i++)
+    for(std::size_t i=0;i<modelPointer->get_NGauge();i++)
     {
         nrepeat[i]=0;
-        for(size_t j=0;j<modelPointer->get_NGauge();j++){
+        for(std::size_t j=0;j<modelPointer->get_NGauge();j++){
             if(std::abs(res.at(i)- res.at(j)) <= 1e-5) nrepeat[i]++;
         }
     }
@@ -341,7 +341,7 @@ std::vector<double> transport_equations::get_top_mass_and_derivative(const std::
     int posdifftop=2*modelPointer->get_NQuarks() -1;
     double topmasssquared=-1;
     std::vector<double> topderivatives;
-    for(size_t i=1;i<=modelPointer->get_NHiggs();i++)
+    for(std::size_t i=1;i<=modelPointer->get_NHiggs();i++)
     {
         restmp.clear();
         restmp=modelPointer->QuarkMassesSquared(vev,i);
@@ -350,20 +350,20 @@ std::vector<double> transport_equations::get_top_mass_and_derivative(const std::
     }
     res.push_back(topmasssquared);
     if(std::isnan(topmasssquared)){
-        for(size_t i=0;i<vev.size();i++) std::cout << vev.at(i) << sep;
+        for(std::size_t i=0;i<vev.size();i++) std::cout << vev.at(i) << sep;
         std::cout << std::endl;
         std::string retmessage = "Nan found in ";
         retmessage+= __func__;
         throw std::runtime_error(retmessage);
     }
-    for(size_t i=0;i<topderivatives.size();i++) {
+    for(std::size_t i=0;i<topderivatives.size();i++) {
         res.push_back(topderivatives.at(i));
         if(std::isnan(topderivatives.at(i))){
             std::string retmessage = "Nan found in ";
             retmessage+= __func__;
             retmessage+= " at deriv number ";
             retmessage+= std::to_string(i);
-            for(size_t j=0;j<vev.size();j++) std::cout << vev.at(j) << sep;
+            for(std::size_t j=0;j<vev.size();j++) std::cout << vev.at(j) << sep;
             throw std::runtime_error(retmessage);
         }
     }
@@ -379,7 +379,7 @@ std::vector<double> transport_equations::calculate_vev(const double &z) const
         retmessage+= __func__;
         throw std::runtime_error(retmessage);
     }
-    for(size_t i=0;i<modelPointer->get_NHiggs();i++){
+    for(std::size_t i=0;i<modelPointer->get_NHiggs();i++){
         vev.push_back(0.5*vev_critical.at(i) *(1-std::tanh(z/LW)));
     }
     return vev;
@@ -390,7 +390,7 @@ std::vector<double> transport_equations::calculate_vev_derivative(const double &
     std::vector<double> vev;
     double tanhv=std::tanh(z/LW);
     double diffval = -(1-tanhv*tanhv)/LW;
-    for(size_t i=0;i<modelPointer->get_NHiggs();i++){
+    for(std::size_t i=0;i<modelPointer->get_NHiggs();i++){
         vev.push_back(0.5*vev_critical.at(i) *diffval);
     }
     return vev;
@@ -446,7 +446,7 @@ transport_equations &transport_equations::operator()(const state_type &x , state
     double mtsquared = topres.at(0);
 
     double dmtsquared = 0;
-    for(size_t i=0;i<vevdiff.size();i++){
+    for(std::size_t i=0;i<vevdiff.size();i++){
         dmtsquared += vevdiff.at(i) * topres.at(i+1);
     }
 
@@ -573,7 +573,7 @@ std::vector<double> calculateTransportEquation(
     std::size_t dim = 8;
     // dim = 1;
     state_type x(dim);
-    for(size_t i=0;i<dim;i++) x[i] = parStart[i];
+    for(std::size_t i=0;i<dim;i++) x[i] = parStart[i];
 
     transport_equations transport(params);
     std::vector<state_type> x_vec;
@@ -595,8 +595,8 @@ std::vector<double> calculateTransportEquation(
                         x , zInitial , z , stepsize_initial,push_back_state_and_time( x_vec , times ) );
 
     std::vector<double> parEnd;
-    for(size_t i=0;i<dim;i++) parEnd.push_back(x[i]);
-    for(size_t i=0;i<dim;i++){
+    for(std::size_t i=0;i<dim;i++) parEnd.push_back(x[i]);
+    for(std::size_t i=0;i<dim;i++){
         if(std::abs(parEnd[i]) <= std::pow(10,-16)) parEnd[i] = 0;
     }
 
@@ -613,7 +613,7 @@ std::vector<double> calculateTransportEquation(
     if(std::isnan(parEnd.at(0))){
         std::cout << "Nan in " << __func__ << std::endl
                   << "parEnd.size() = " << parEnd.size() << "\nparEnd = ";
-        for(size_t i=0;i<parEnd.size();i++) std::cout << parEnd.at(i) << sep;
+        for(std::size_t i=0;i<parEnd.size();i++) std::cout << parEnd.at(i) << sep;
         std::cout << std::endl;
     }
     return parEnd;

@@ -467,10 +467,10 @@ void gen_fluid::top_func(double z , std::vector<double>& m_quark, std::vector<do
   phi.clear();
   gen_phi.clear();
   std::size_t gen_nvev = gen_fluid::gen_vcritical.size();
-  for(size_t i =0 ; i<gen_nvev;i++) gen_phi.push_back(gen_fluid::gen_vcritical.at(i)/2*(1-std::tanh(z/gen_fluid::LW)));
+  for(std::size_t i =0 ; i<gen_nvev;i++) gen_phi.push_back(gen_fluid::gen_vcritical.at(i)/2*(1-std::tanh(z/gen_fluid::LW)));
 
 
-  for(size_t i=1;i<=gen_nvev;i++)
+  for(std::size_t i=1;i<=gen_nvev;i++)
     {
 	  m_i.clear();
       m_i=gen_fluid::modelPointer->QuarkMassesSquared(gen_phi,i);
@@ -489,13 +489,13 @@ void gen_fluid::top_func(double z , std::vector<double>& m_quark, std::vector<do
     double res_b=0;
     std::vector<double> grad_omega = gen_fluid::omegaprime(z);
         if(debug) std::cout<<std::endl;
-        if(debug) for(size_t i=0;i<gen_nvev;i++) std::cout<<"gen_vev_"<<i<<" = "<<gen_phi.at(i)<<std::endl;
-        if(debug) for(size_t i=0;i<grad_omega.size();i++)std::cout<<"grad_omega_"<<i<<" = "<< grad_omega.at(i)<<"\n";
+        if(debug) for(std::size_t i=0;i<gen_nvev;i++) std::cout<<"gen_vev_"<<i<<" = "<<gen_phi.at(i)<<std::endl;
+        if(debug) for(std::size_t i=0;i<grad_omega.size();i++)std::cout<<"grad_omega_"<<i<<" = "<< grad_omega.at(i)<<"\n";
         if(debug) std::cout<<std::endl;
-        if(debug) for(size_t i=0;i<dif_mt.size();i++)std::cout<<"dif_mt_"<<i<<" ="<< dif_mt.at(i)<<"\n";
+        if(debug) for(std::size_t i=0;i<dif_mt.size();i++)std::cout<<"dif_mt_"<<i<<" ="<< dif_mt.at(i)<<"\n";
         if(debug) std::cout<<std::endl;
-    for(size_t i=0;i<dif_mt.size();i++) res_t+=dif_mt.at(i)*grad_omega.at(i);
-    for(size_t i=0;i<dif_mb.size();i++) res_b+=dif_mb.at(i)*grad_omega.at(i);
+    for(std::size_t i=0;i<dif_mt.size();i++) res_t+=dif_mt.at(i)*grad_omega.at(i);
+    for(std::size_t i=0;i<dif_mb.size();i++) res_b+=dif_mb.at(i)*grad_omega.at(i);
 
     if(debug) std::cout<<"msqrtprime = "<<res_t<<std::endl;
     if(std::isnan(res_t)) throw std::runtime_error("NAN @ msqrtprime");
@@ -513,7 +513,7 @@ std::vector<double> gen_fluid::omegaprime(double z)
 {
   std::vector<double> dummy;
   dummy.clear();
-  for(size_t i=0;i<gen_fluid::gen_vcritical.size();i++)
+  for(std::size_t i=0;i<gen_fluid::gen_vcritical.size();i++)
   {
 	dummy.push_back((-gen_fluid::gen_vcritical.at(i)/(2*gen_fluid::LW))*(1./(std::pow(std::cosh(z/gen_fluid::LW),2))));
   }
@@ -588,13 +588,13 @@ void gen_fluid::tau_func(double z, std::vector<double>& m_lep, std::vector<doubl
 //Configure z-dep VEV
     std::vector<double>gen_phi;
     std::size_t gen_nvev = gen_fluid::gen_vcritical.size();
-    for(size_t i =0;i<gen_nvev;i++) gen_phi.push_back(gen_fluid::gen_vcritical.at(i)/2*(1-std::tanh(z/gen_fluid::LW)));
+    for(std::size_t i =0;i<gen_nvev;i++) gen_phi.push_back(gen_fluid::gen_vcritical.at(i)/2*(1-std::tanh(z/gen_fluid::LW)));
 //Calculation of the mass mtau
     std::vector<double> mi;
     std::vector<double> grad_mtau;
     grad_mtau.clear();
 
-    for(size_t i=1;i<=gen_nvev;i++)
+    for(std::size_t i=1;i<=gen_nvev;i++)
     {
         mi.clear();
         mi=gen_fluid::modelPointer->LeptonMassesSquared(gen_phi , i);
@@ -608,7 +608,7 @@ void gen_fluid::tau_func(double z, std::vector<double>& m_lep, std::vector<doubl
     double mtau = std::sqrt(std::abs(mi.at(nlep-1)));
     double res =0;
     std::vector<double> grad_omega = gen_fluid::omegaprime(z);
-    for(size_t i=0;i<grad_mtau.size();i++) res += grad_mtau.at(i)*grad_omega.at(i);
+    for(std::size_t i=0;i<grad_mtau.size();i++) res += grad_mtau.at(i)*grad_omega.at(i);
     if(std::isnan(res)) throw std::runtime_error("NaN @ tau_func");
     m_lep.resize(1);
     m_lep_prime.resize(1);

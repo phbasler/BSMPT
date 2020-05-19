@@ -132,11 +132,11 @@ std::vector<std::string> Class_Potential_R2HDM::addLegendTripleCouplings() const
     particles.push_back("h");
     particles.push_back("H");
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=i;j<NHiggs;j++)
+        for(std::size_t j=i;j<NHiggs;j++)
         {
-            for(size_t k=j;k<NHiggs;k++)
+            for(std::size_t k=j;k<NHiggs;k++)
             {
                 labels.push_back("Tree_"+particles.at(i)+particles.at(j)+particles.at(k));
                 labels.push_back("CT_"+particles.at(i)+particles.at(j)+particles.at(k));
@@ -444,13 +444,13 @@ Curvature_Higgs_CT_L4[6][6][7][7] = DL2CT;
 Curvature_Higgs_CT_L4[7][7][7][7] = 3 * DL2CT;
 
 
-    for(size_t k1=0;k1<NHiggs;k1++)
+    for(std::size_t k1=0;k1<NHiggs;k1++)
     {
-        for(size_t k2=k1;k2<NHiggs;k2++)
+        for(std::size_t k2=k1;k2<NHiggs;k2++)
         {
-            for(size_t k3=k2;k3<NHiggs;k3++)
+            for(std::size_t k3=k2;k3<NHiggs;k3++)
             {
-                for(size_t k4=k3;k4<NHiggs;k4++)
+                for(std::size_t k4=k3;k4<NHiggs;k4++)
                 {
                     Curvature_Higgs_CT_L4[k2][k3][k4][k1] = Curvature_Higgs_CT_L4[k1][k2][k3][k4];
                     Curvature_Higgs_CT_L4[k3][k4][k1][k2] = Curvature_Higgs_CT_L4[k1][k2][k3][k4];
@@ -535,9 +535,9 @@ void Class_Potential_R2HDM::write() const{
 
 
     MatrixXd HiggsRot(NHiggs,NHiggs);
-   	for(size_t i=0;i<NHiggs;i++)
+   	for(std::size_t i=0;i<NHiggs;i++)
    	{
-   		for(size_t j=0;j<NHiggs;j++)
+   		for(std::size_t j=0;j<NHiggs;j++)
    		{
    			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
    		}
@@ -549,7 +549,7 @@ void Class_Potential_R2HDM::write() const{
 	int posA=0;
 	int posG1=0,posG0=0;
 	double testsum = 0;
-	for(size_t i=0;i<3;i++)
+	for(std::size_t i=0;i<3;i++)
 	{
 		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 		if(testsum != 0) posG1 = i;
@@ -558,7 +558,7 @@ void Class_Potential_R2HDM::write() const{
 		testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
 		if(testsum != 0) posG0 = i;
 	}
-	for(size_t i=3;i<NHiggs;i++)
+	for(std::size_t i=3;i<NHiggs;i++)
 	{
 		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 		if(testsum != 0) posMHCS1 = i;
@@ -599,7 +599,7 @@ void Class_Potential_R2HDM::write() const{
 
 
 //	std::cout << "The tree-level eigenvalues are given by \n";
-//	for(size_t i=0;i<NHiggs;i++) std::cout << HiggsMasses[i] << std::endl;
+//	for(std::size_t i=0;i<NHiggs;i++) std::cout << HiggsMasses[i] << std::endl;
 //
 //
 
@@ -643,10 +643,10 @@ std::vector<double> Class_Potential_R2HDM::calc_CT() const
 	VectorXd NablaWeinberg(8);
 	MatrixXd HesseWeinberg(8,8),HiggsRot(8,8);
 
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		NablaWeinberg(i) = WeinbergNabla[i];
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
 			HesseWeinberg(i,j) = WeinbergHesse.at((j)*NHiggs+i);
 			if(std::abs(HesseWeinberg(i,j)) <= 1e-3) HesseWeinberg(i,j)=0;
@@ -721,11 +721,11 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   TripleDeriv=WeinbergThirdDerivative();
   std::vector<std::vector<std::vector<double>>> GaugeBasis(NHiggs, std::vector<std::vector<double>>(NHiggs,
   			std::vector<double>(NHiggs)));
-  for(size_t i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
     {
-      for(size_t j=0;j<NHiggs;j++)
+      for(std::size_t j=0;j<NHiggs;j++)
       {
-    	  for(size_t k=0;k<NHiggs;k++)
+    	  for(std::size_t k=0;k<NHiggs;k++)
     	  {
     		  GaugeBasis[i][j][k] = TripleDeriv.at(i+j*NHiggs+k*NHiggs*NHiggs);
     	  }
@@ -734,9 +734,9 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 
 
   MatrixXd HiggsRot(NHiggs,NHiggs);
-  for(size_t i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
   {
-	for(size_t j=0;j<NHiggs;j++)
+	for(std::size_t j=0;j<NHiggs;j++)
 	{
 		HiggsRot(i,j) = HiggsRotationMatrix[i][j];
 	}
@@ -749,7 +749,7 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   int posG1=0,posG2=0,posG0=0;
   int posA=0, posh=0,posH=0;
   double testsum = 0;
-  for(size_t i=0;i<3;i++)
+  for(std::size_t i=0;i<3;i++)
   {
 	testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 	if(testsum != 0) posG1 = i;
@@ -758,7 +758,7 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 	testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
 	if(testsum != 0) posG0 = i;
   }
-  for(size_t i=3;i<NHiggs;i++)
+  for(std::size_t i=3;i<NHiggs;i++)
   {
 	testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 	if(testsum != 0) posMHCS1 = i;
@@ -798,7 +798,7 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   HiggsOrder[6] = posh;
   HiggsOrder[7] = posH;
 
-  for(size_t i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
   {
       HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
   }
@@ -806,31 +806,31 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   TripleHiggsCorrectionsCWPhysical.resize(NHiggs);
   TripleHiggsCorrectionsTreePhysical.resize(NHiggs);
   TripleHiggsCorrectionsCTPhysical.resize(NHiggs);
-  for(size_t i=0;i<NHiggs;i++) {
+  for(std::size_t i=0;i<NHiggs;i++) {
 	  TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
 	  TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
 	  TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
-	  for(size_t j=0;j<NHiggs;j++) {
+	  for(std::size_t j=0;j<NHiggs;j++) {
 		  TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
 		  TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
 		  TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
 	  }
   }
 
-  for(size_t i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
 	{
-	  for(size_t j=0;j<NHiggs;j++)
+	  for(std::size_t j=0;j<NHiggs;j++)
 	  {
-		for(size_t k=0;k<NHiggs;k++)
+		for(std::size_t k=0;k<NHiggs;k++)
 		{
 		  TripleHiggsCorrectionsCWPhysical[i][j][k] = 0;
 		  TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
 		  TripleHiggsCorrectionsCTPhysical[i][j][k] = 0;
-		  for(size_t l=0;l<NHiggs;l++)
+		  for(std::size_t l=0;l<NHiggs;l++)
 		  {
-			  for(size_t m=0;m<NHiggs;m++)
+			  for(std::size_t m=0;m<NHiggs;m++)
 			  {
-				  for(size_t n=0;n<NHiggs;n++)
+				  for(std::size_t n=0;n<NHiggs;n++)
 				  {
 	//  			  double RotFac = (HiggsRot(i,l)*HiggsRot(j,m)*HiggsRot(k,n)).real();
 				  double RotFac = HiggsRotSort(i,l)*HiggsRotSort(j,m)*HiggsRotSort(k,n);
@@ -855,12 +855,12 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 void Class_Potential_R2HDM::SetCurvatureArrays(){
   initVectors();
 
-  for(size_t i=0;i<NHiggs;i++) {
+  for(std::size_t i=0;i<NHiggs;i++) {
     Curvature_Higgs_L1[i] =0;
     HiggsVev[i] = 0;
-    for(size_t j=0;j<NHiggs;j++)
+    for(std::size_t j=0;j<NHiggs;j++)
     {
-        for(size_t k=0;k<NHiggs;k++) Curvature_Higgs_L3[i][j][k] = 0;
+        for(std::size_t k=0;k<NHiggs;k++) Curvature_Higgs_L3[i][j][k] = 0;
     }
   }
 
@@ -997,13 +997,13 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     Curvature_Higgs_L4[6][6][7][7] = L2;
     Curvature_Higgs_L4[7][7][7][7] = 3 * L2;
 
-    for(size_t k1=0;k1<NHiggs;k1++)
+    for(std::size_t k1=0;k1<NHiggs;k1++)
     {
-        for(size_t k2=k1;k2<NHiggs;k2++)
+        for(std::size_t k2=k1;k2<NHiggs;k2++)
         {
-            for(size_t k3=k2;k3<NHiggs;k3++)
+            for(std::size_t k3=k2;k3<NHiggs;k3++)
             {
-                for(size_t k4=k3;k4<NHiggs;k4++)
+                for(std::size_t k4=k3;k4<NHiggs;k4++)
                 {
                     Curvature_Higgs_L4[k2][k3][k4][k1] = Curvature_Higgs_L4[k1][k2][k3][k4];
                     Curvature_Higgs_L4[k3][k4][k1][k2] = Curvature_Higgs_L4[k1][k2][k3][k4];
@@ -1034,13 +1034,13 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
         }
     }
 
-    for(size_t a=0;a<NGauge;a++)
+    for(std::size_t a=0;a<NGauge;a++)
     {
-        for(size_t b=0;b<NGauge;b++)
+        for(std::size_t b=0;b<NGauge;b++)
         {
-            for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
             {
-                for(size_t j=0;j<NHiggs;j++) Curvature_Gauge_G2H2[a][b][i][j] = 0;
+                for(std::size_t j=0;j<NHiggs;j++) Curvature_Gauge_G2H2[a][b][i][j] = 0;
             }
         }
     }
@@ -1216,9 +1216,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
 
 
 
-    for(size_t i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(size_t j=0;j<i;j++)
+        for(std::size_t j=0;j<i;j++)
         {
             YIJR2(i,j) = YIJR2(j,i);
             YIJS2(i,j) = YIJS2(j,i);
@@ -1226,9 +1226,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
             YIJSD(i,j) = YIJSD(j,i);
         }
     }
-    for(size_t i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(size_t j=0;j<i;j++)
+        for(std::size_t j=0;j<i;j++)
         {
             YIJRL(i,j) = YIJRL(j,i);
             YIJSL(i,j) = YIJSL(j,i);
@@ -1245,9 +1245,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     YIJPL = II*YIJSL;
     YIJEL = II*YIJRL;
 
-    for(size_t i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(size_t j=0;j<NQuarks;j++)
+        for(std::size_t j=0;j<NQuarks;j++)
         {
             Curvature_Quark_F2H1[i][j][0] = 0;
             Curvature_Quark_F2H1[i][j][1] = 0;
@@ -1276,9 +1276,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
         }
     }
 
-    for(size_t i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(size_t j=0;j<NLepton;j++)
+        for(std::size_t j=0;j<NLepton;j++)
         {
             if(Type == 1 or Type == 4)
             {

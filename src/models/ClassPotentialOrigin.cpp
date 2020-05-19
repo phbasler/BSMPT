@@ -68,14 +68,14 @@ void Class_Potential_Origin::set_All(const std::vector<double>& par,const std::v
 
 void Class_Potential_Origin::Prepare_Triple()
 {
-	for(size_t a=0;a<NHiggs;a++)
+    for(std::size_t a=0;a<NHiggs;a++)
 	{
-		for(size_t b=0;b<NHiggs;b++)
+        for(std::size_t b=0;b<NHiggs;b++)
 		{
-			for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
 			{
 				LambdaHiggs_3_CT[a][b][i] = Curvature_Higgs_CT_L3[a][b][i];
-				for(size_t j=0;j<NHiggs;j++)
+                for(std::size_t j=0;j<NHiggs;j++)
 				{
 					LambdaHiggs_3_CT[a][b][i] += Curvature_Higgs_CT_L4[a][b][i][j]*HiggsVev[j];
 				}
@@ -182,7 +182,7 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
     std::vector<std::complex<double>> Eigenvalues(nSize);
     std::vector<std::complex<double>> Derivatives(nSize);
     std::vector<double> AlreadyCalculated(nSize);//Array to check which EVs already been calculated.
-    for(size_t i=0;i<nSize;i++) {
+    for(std::size_t i=0;i<nSize;i++) {
         Eigenvalues[i] = es.eigenvalues()[i];
         // std::cout << Eigenvalues[i] << sep << std::abs(Eigenvalues[i]) << std::endl;
         if(std::abs(Eigenvalues[i]) < EVThres) {
@@ -193,10 +193,10 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
 
     std::vector<std::vector<double>> Mapping(nSize,std::vector<double>(nSize));
 
-    for(size_t i=0;i<nSize;i++)
+    for(std::size_t i=0;i<nSize;i++)
     {
         AlreadyCalculated[i] = -1;
-        for(size_t j=i;j<nSize;j++)
+        for(std::size_t j=i;j<nSize;j++)
         {
             if(std::abs(Eigenvalues[i]-Eigenvalues[j]) > EVThres)
             {
@@ -207,17 +207,17 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
             }
         }
     }
-    for(size_t i=1;i<nSize;i++)
+    for(std::size_t i=1;i<nSize;i++)
     {
-        for(size_t j=0;j<i;j++) Mapping[i][j] = Mapping[j][i];
+        for(std::size_t j=0;j<i;j++) Mapping[i][j] = Mapping[j][i];
     }
 
-    for(size_t p=0;p<nSize;p++)
+    for(std::size_t p=0;p<nSize;p++)
     {
         if(AlreadyCalculated[p] == -1)
         {
             std::size_t NumOfReps = 0;
-            for(size_t i=p+1;i<nSize;i++)
+            for(std::size_t i=p+1;i<nSize;i++)
             {
                 NumOfReps += Mapping[p][i];
             }
@@ -234,7 +234,7 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
                 std::size_t helpCol = 0;
                 MatrixXcd MXWork(NumOfReps+1,NumOfReps+1);
 
-                for(size_t i=p;i<nSize;i++)
+                for(std::size_t i=p;i<nSize;i++)
                 {
                     if(Mapping[p][i] == 1)
                     {
@@ -246,7 +246,7 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
                 SelfAdjointEigenSolver<MatrixXcd> esWork;
                 esWork.compute(MXWork);
                 helpCol = 0;
-                for(size_t i=p;i<nSize;i++)
+                for(std::size_t i=p;i<nSize;i++)
                 {
                     if(Mapping[p][i] == 1)
                     {
@@ -260,16 +260,16 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
         }
 
     }
-    for(size_t i=0;i<nSize;i++)
+    for(std::size_t i=0;i<nSize;i++)
     {
         if(std::abs(Derivatives[i]) < EVThres) Derivatives[i] = 0;
     }
 
-    for(size_t i=0;i<nSize;i++)
+    for(std::size_t i=0;i<nSize;i++)
     {
         res.push_back(Eigenvalues[i].real());
     }
-    for(size_t i=0;i<nSize;i++) res.push_back(Derivatives[i].real());
+    for(std::size_t i=0;i<nSize;i++) res.push_back(Derivatives[i].real());
     return res;
 }
 
@@ -416,8 +416,8 @@ std::vector<double> Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepe
     es.compute(M);
 
     std::vector<double> Eigenvalues(nSize);
-    for(size_t i=0;i<nSize;i++) Eigenvalues[i] = es.eigenvalues()[i];
-    for(size_t i=0;i<nSize-1;i++)
+    for(std::size_t i=0;i<nSize;i++) Eigenvalues[i] = es.eigenvalues()[i];
+    for(std::size_t i=0;i<nSize-1;i++)
     {
         if(std::abs(Eigenvalues[i]-Eigenvalues[i+1]) < EVThres) {
             std::cerr << "ERROR ! repeated eigenvalues. \n";
@@ -430,7 +430,7 @@ std::vector<double> Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepe
     Identity = MatrixXd::Identity(nSize,nSize);
     VectorXd vDiffX(nSize),vDiffY(nSize);
 
-    for(size_t i=0;i<nSize;i++)
+    for(std::size_t i=0;i<nSize;i++)
     {
         Deriv[i][0] = Eigenvalues[i];
         v = es.eigenvectors().col(i);
@@ -453,9 +453,9 @@ std::vector<double> Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepe
 
     for(const auto& x : Eigenvalues) res.push_back(x);
 
-    for(size_t i=0;i<nSize;i++)
+    for(std::size_t i=0;i<nSize;i++)
     {
-        for(size_t j=0;j<4;j++) res.push_back(Deriv[i][j]);
+        for(std::size_t j=0;j<4;j++) res.push_back(Deriv[i][j]);
     }
     return res;
 }
@@ -477,29 +477,29 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
     MassSquaredQuark.resize(NQuarks);
     MassSquaredLepton.resize(NLepton);
     HiggsRotationMatrix.resize(NHiggs);
-    for(size_t i=0;i<NHiggs;i++) HiggsRotationMatrix[i].resize(NHiggs);
+    for(std::size_t i=0;i<NHiggs;i++) HiggsRotationMatrix[i].resize(NHiggs);
 
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             MassHiggs(i,j) += Curvature_Higgs_L2[i][j];
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 MassHiggs(i,j) += Curvature_Higgs_L3[i][j][k]*HiggsVev[k];
-                for(size_t l=0;l<NHiggs;l++) MassHiggs(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l]*HiggsVev[k]*HiggsVev[l];
+                for(std::size_t l=0;l<NHiggs;l++) MassHiggs(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l]*HiggsVev[k]*HiggsVev[l];
             }
         }
     }
 
-    for(size_t a=0;a<NGauge;a++)
+    for(std::size_t a=0;a<NGauge;a++)
     {
-        for(size_t b=0;b<NGauge;b++)
+        for(std::size_t b=0;b<NGauge;b++)
         {
-            for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
             {
-                for(size_t j=0;j<NHiggs;j++)
+                for(std::size_t j=0;j<NHiggs;j++)
                 {
                     MassGauge(a,b) += 0.5*Curvature_Gauge_G2H2[a][b][i][j]*HiggsVev[i]*HiggsVev[j];
                 }
@@ -509,12 +509,12 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     MatrixXcd MIJQuarks(NQuarks,NQuarks);
     MIJQuarks = MatrixXcd::Zero(NQuarks,NQuarks);
-    for(size_t a=0;a<NQuarks;a++)
+    for(std::size_t a=0;a<NQuarks;a++)
     {
-        for(size_t b=0;b<NQuarks;b++)
+        for(std::size_t b=0;b<NQuarks;b++)
         {
             // MIJQuarks(a,b) = 0;
-            for(size_t k=0;k<NHiggs;k++) MIJQuarks(a,b) += Curvature_Quark_F2H1[a][b][k]*HiggsVev[k];
+            for(std::size_t k=0;k<NHiggs;k++) MIJQuarks(a,b) += Curvature_Quark_F2H1[a][b][k]*HiggsVev[k];
         }
     }
 
@@ -522,12 +522,12 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     MatrixXcd MIJLeptons(NLepton,NLepton);
     MIJLeptons=MatrixXcd::Zero(NLepton,NLepton);
-    for(size_t a=0;a<NLepton;a++)
+    for(std::size_t a=0;a<NLepton;a++)
     {
-        for(size_t b=0;b<NLepton;b++)
+        for(std::size_t b=0;b<NLepton;b++)
         {
             // MIJLeptons(a,b) = 0;
-            for(size_t k=0;k<NHiggs;k++) MIJLeptons(a,b) += Curvature_Lepton_F2H1[a][b][k]*HiggsVev[k];
+            for(std::size_t k=0;k<NHiggs;k++) MIJLeptons(a,b) += Curvature_Lepton_F2H1[a][b][k]*HiggsVev[k];
         }
     }
 
@@ -543,15 +543,15 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
 	es.compute(MassHiggs);
 	HiggsRot = es.eigenvectors().transpose();
-	for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
 		{
 			if(std::abs(HiggsRot(i,j)) < std::pow(10,-10)) HiggsRot(i,j) = 0;
 		}
 	}
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
         MassSquaredHiggs[i] = es.eigenvalues()[i];
         if(std::abs(MassSquaredHiggs[i]) < ZeroMass) MassSquaredHiggs[i] = 0;
@@ -561,7 +561,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 	es.compute(MassGauge);
 	GaugeRot = es.eigenvectors().transpose();
 
-    for(size_t i=0;i<NGauge;i++)
+    for(std::size_t i=0;i<NGauge;i++)
     {
         MassSquaredGauge[i] = es.eigenvalues()[i];
         if(std::abs(MassSquaredGauge[i]) < ZeroMass) MassSquaredGauge[i] = 0;
@@ -570,32 +570,32 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
 	SelfAdjointEigenSolver<MatrixXcd> esQuark(MassQuark);
 	QuarkRot = esQuark.eigenvectors().transpose().real();
-	for(size_t i=0;i<NQuarks;i++) MassSquaredQuark[i] = esQuark.eigenvalues().real()[i];
+    for(std::size_t i=0;i<NQuarks;i++) MassSquaredQuark[i] = esQuark.eigenvalues().real()[i];
 
 	SelfAdjointEigenSolver<MatrixXcd> esLepton(MassLepton);
 	LepRot = esLepton.eigenvectors().transpose().real();
-	for(size_t i=0;i<NLepton;i++) MassSquaredLepton[i] = esLepton.eigenvalues().real()[i];
+    for(std::size_t i=0;i<NLepton;i++) MassSquaredLepton[i] = esLepton.eigenvalues().real()[i];
 
-    for(size_t a=0;a<NGauge;a++)
+    for(std::size_t a=0;a<NGauge;a++)
     {
-        for(size_t b=0;b<NGauge;b++)
+        for(std::size_t b=0;b<NGauge;b++)
         {
-            for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
             {
                 LambdaGauge_3[a][b][i] = 0;
-                for(size_t j=0;j<NHiggs;j++) LambdaGauge_3[a][b][i] += Curvature_Gauge_G2H2[a][b][i][j]*HiggsVev[j];
+                for(std::size_t j=0;j<NHiggs;j++) LambdaGauge_3[a][b][i] += Curvature_Gauge_G2H2[a][b][i][j]*HiggsVev[j];
             }
         }
     }
-    for(size_t a=0;a<NHiggs;a++)
+    for(std::size_t a=0;a<NHiggs;a++)
     {
-        for(size_t b=0;b<NHiggs;b++)
+        for(std::size_t b=0;b<NHiggs;b++)
         {
-            for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
             {
                 LambdaHiggs_3[a][b][i] = Curvature_Higgs_L3[a][b][i];
 
-                for(size_t j=0;j<NHiggs;j++) {
+                for(std::size_t j=0;j<NHiggs;j++) {
                 	LambdaHiggs_3[a][b][i] += Curvature_Higgs_L4[a][b][i][j]*HiggsVev[j];
 
                 }
@@ -603,21 +603,21 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
         }
     }
 
-    for(size_t i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(size_t j=0;j<NQuarks;j++)
+        for(std::size_t j=0;j<NQuarks;j++)
         {
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 LambdaQuark_3[i][j][k] = 0;
-                for(size_t l=0;l<NQuarks;l++){
+                for(std::size_t l=0;l<NQuarks;l++){
                     LambdaQuark_3[i][j][k] += conj(Curvature_Quark_F2H1[i][l][k])*MIJQuarks(l,j);
                     LambdaQuark_3[i][j][k] += conj(MIJQuarks(i,l)) * Curvature_Quark_F2H1[l][j][k];
                 }
-                for(size_t m=0;m<NHiggs;m++)
+                for(std::size_t m=0;m<NHiggs;m++)
                 {
                     LambdaQuark_4[i][j][k][m] = 0;
-                    for(size_t l=0;l<NQuarks;l++)
+                    for(std::size_t l=0;l<NQuarks;l++)
                     {
                         LambdaQuark_4[i][j][k][m] += conj(Curvature_Quark_F2H1[i][l][k])*Curvature_Quark_F2H1[l][j][m];
                         LambdaQuark_4[i][j][k][m] += conj(Curvature_Quark_F2H1[i][l][m])*Curvature_Quark_F2H1[l][j][k];
@@ -628,21 +628,21 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
     }
 
 
-    for(size_t i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(size_t j=0;j<NLepton;j++)
+        for(std::size_t j=0;j<NLepton;j++)
         {
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 LambdaLepton_3[i][j][k] = 0;
-                for(size_t l=0;l<NLepton;l++){
+                for(std::size_t l=0;l<NLepton;l++){
                     LambdaLepton_3[i][j][k] += conj(Curvature_Lepton_F2H1[i][l][k])*MIJLeptons(l,j);
                     LambdaLepton_3[i][j][k] += conj(MIJLeptons(i,l)) * Curvature_Lepton_F2H1[l][j][k];
                 }
-                for(size_t m=0;m<NHiggs;m++)
+                for(std::size_t m=0;m<NHiggs;m++)
                 {
                     LambdaLepton_4[i][j][k][m] = 0;
-                    for(size_t l=0;l<NLepton;l++)
+                    for(std::size_t l=0;l<NLepton;l++)
                     {
                         LambdaLepton_4[i][j][k][m] += conj(Curvature_Lepton_F2H1[i][l][k])*Curvature_Lepton_F2H1[l][j][m];
                         LambdaLepton_4[i][j][k][m] += conj(Curvature_Lepton_F2H1[i][l][m])*Curvature_Lepton_F2H1[l][j][k];
@@ -656,13 +656,13 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     Couplings_Higgs_Quartic.resize(NHiggs);
     Couplings_Higgs_Triple.resize(NHiggs);
-    for(size_t i=0;i<NHiggs;i++) {
+    for(std::size_t i=0;i<NHiggs;i++) {
         Couplings_Higgs_Quartic[i].resize(NHiggs);
         Couplings_Higgs_Triple[i].resize(NHiggs);
-        for(size_t j=0;j<NHiggs;j++){
+        for(std::size_t j=0;j<NHiggs;j++){
             Couplings_Higgs_Quartic[i][j].resize(NHiggs);
             Couplings_Higgs_Triple[i][j].resize(NHiggs);
-            for(size_t k=0;k<NHiggs;k++) Couplings_Higgs_Quartic[i][j][k].resize(NHiggs);
+            for(std::size_t k=0;k<NHiggs;k++) Couplings_Higgs_Quartic[i][j][k].resize(NHiggs);
         }
     }
 
@@ -670,15 +670,15 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     Couplings_Gauge_Higgs_22.resize(NGauge);
     Couplings_Gauge_Higgs_21.resize(NGauge);
-    for(size_t a=0;a<NGauge;a++)
+    for(std::size_t a=0;a<NGauge;a++)
     {
         Couplings_Gauge_Higgs_22[a].resize(NGauge);
         Couplings_Gauge_Higgs_21[a].resize(NGauge);
-        for(size_t b=0;b<NGauge;b++)
+        for(std::size_t b=0;b<NGauge;b++)
         {
             Couplings_Gauge_Higgs_22[a][b].resize(NHiggs);
             Couplings_Gauge_Higgs_21[a][b].resize(NHiggs);
-            for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
             {
                 Couplings_Gauge_Higgs_22[a][b][i].resize(NHiggs);
             }
@@ -689,14 +689,14 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     Couplings_Quark_Higgs_22.resize(NQuarks);
     Couplings_Quark_Higgs_21.resize(NQuarks);
-    for(size_t a=0;a<NQuarks;a++)
+    for(std::size_t a=0;a<NQuarks;a++)
     {
         Couplings_Quark_Higgs_22[a].resize(NQuarks);
         Couplings_Quark_Higgs_21[a].resize(NQuarks);
-        for(size_t b=0;b<NQuarks;b++) {
+        for(std::size_t b=0;b<NQuarks;b++) {
             Couplings_Quark_Higgs_22[a][b].resize(NHiggs);
             Couplings_Quark_Higgs_21[a][b].resize(NHiggs);
-            for(size_t i=0;i<NHiggs;i++) Couplings_Quark_Higgs_22[a][b][i].resize(NHiggs);
+            for(std::size_t i=0;i<NHiggs;i++) Couplings_Quark_Higgs_22[a][b][i].resize(NHiggs);
         }
     }
 
@@ -705,46 +705,46 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     Couplings_Lepton_Higgs_22.resize(NLepton);
     Couplings_Lepton_Higgs_21.resize(NLepton);
-    for(size_t a=0;a<NLepton;a++)
+    for(std::size_t a=0;a<NLepton;a++)
     {
         Couplings_Lepton_Higgs_22[a].resize(NLepton);
         Couplings_Lepton_Higgs_21[a].resize(NLepton);
-        for(size_t b=0;b<NLepton;b++)
+        for(std::size_t b=0;b<NLepton;b++)
         {
             Couplings_Lepton_Higgs_22[a][b].resize(NHiggs);
             Couplings_Lepton_Higgs_21[a][b].resize(NHiggs);
-            for(size_t i=0;i<NHiggs;i++) Couplings_Lepton_Higgs_22[a][b][i].resize(NHiggs);
+            for(std::size_t i=0;i<NHiggs;i++) Couplings_Lepton_Higgs_22[a][b][i].resize(NHiggs);
         }
     }
 
 
-  for(size_t i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
 		{
-			for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
 			{
 				Couplings_Higgs_Triple[i][j][k] = 0;
-				for(size_t is=0;is<NHiggs;is++)
+                for(std::size_t is=0;is<NHiggs;is++)
 				{
-					for(size_t js=0;js<NHiggs;js++)
+                    for(std::size_t js=0;js<NHiggs;js++)
 					{
-						for(size_t ks=0;ks<NHiggs;ks++)
+                        for(std::size_t ks=0;ks<NHiggs;ks++)
 						{
 							Couplings_Higgs_Triple[i][j][k] += HiggsRot(i,is)*HiggsRot(j,js)*HiggsRot(k,ks)*LambdaHiggs_3[is][js][ks];
 						}
 					}
 				}
-				for(size_t l=0;l<NHiggs;l++)
+                for(std::size_t l=0;l<NHiggs;l++)
 				{
 					Couplings_Higgs_Quartic[i][j][k][l] = 0;
-					for(size_t is=0;is<NHiggs;is++)
+                    for(std::size_t is=0;is<NHiggs;is++)
 					{
-						for(size_t js=0;js<NHiggs;js++)
+                        for(std::size_t js=0;js<NHiggs;js++)
 						{
-							for(size_t ks=0;ks<NHiggs;ks++)
+                            for(std::size_t ks=0;ks<NHiggs;ks++)
 							{
-								for(size_t ls=0;ls<NHiggs;ls++)
+                                for(std::size_t ls=0;ls<NHiggs;ls++)
 								{
 									Couplings_Higgs_Quartic[i][j][k][l] += HiggsRot(i,is)*HiggsRot(j,js)*HiggsRot(k,ks)*HiggsRot(l,ls)*Curvature_Higgs_L4[is][js][ks][ls];
 								}
@@ -760,31 +760,31 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
 
     // Gauge Rot
-	for(size_t a=0;a<NGauge;a++)
+    for(std::size_t a=0;a<NGauge;a++)
 	{
-		for(size_t b=0;b<NGauge;b++)
+        for(std::size_t b=0;b<NGauge;b++)
 		{
-			for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
 			{
 				Couplings_Gauge_Higgs_21[a][b][i] = 0;
-				for(size_t as=0;as<NGauge;as++)
+                for(std::size_t as=0;as<NGauge;as++)
 				{
-					for(size_t bs=0;bs<NGauge;bs++)
+                    for(std::size_t bs=0;bs<NGauge;bs++)
 					{
-						for(size_t is=0;is<NHiggs;is++)
+                        for(std::size_t is=0;is<NHiggs;is++)
 						Couplings_Gauge_Higgs_21[a][b][i] += GaugeRot(a,as)*GaugeRot(b,bs)*HiggsRot(i,is)*LambdaGauge_3[as][bs][is];
 					}
 				}
-				for(size_t j=0;j<NHiggs;j++)
+                for(std::size_t j=0;j<NHiggs;j++)
 				{
 					Couplings_Gauge_Higgs_22[a][b][i][j] = 0;
-					for(size_t as=0;as<NGauge;as++)
+                    for(std::size_t as=0;as<NGauge;as++)
 					{
-						for(size_t bs=0;bs<NGauge;bs++)
+                        for(std::size_t bs=0;bs<NGauge;bs++)
 						{
-							for(size_t is=0;is<NHiggs;is++)
+                            for(std::size_t is=0;is<NHiggs;is++)
 							{
-								for(size_t js=0;js<NHiggs;js++){
+                                for(std::size_t js=0;js<NHiggs;js++){
 									double RotFac = GaugeRot(a,as)*GaugeRot(b,bs)*HiggsRot(i,is)*HiggsRot(j,js);
 									Couplings_Gauge_Higgs_22[a][b][i][j] += RotFac*Curvature_Gauge_G2H2[as][bs][is][js];
 								}
@@ -800,34 +800,34 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 
     // Quark
 
-	for(size_t a=0;a<NQuarks;a++)
+    for(std::size_t a=0;a<NQuarks;a++)
 	{
-		for(size_t b=0;b<NQuarks;b++)
+        for(std::size_t b=0;b<NQuarks;b++)
 		{
-			for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
 			{
 				Couplings_Quark_Higgs_21[a][b][i] = 0;
-				for(size_t as = 0;as<NQuarks;as++)
+                for(std::size_t as = 0;as<NQuarks;as++)
 				{
-					for(size_t bs=0;bs<NQuarks;bs++)
+                    for(std::size_t bs=0;bs<NQuarks;bs++)
 					{
-						for(size_t is=0;is<NHiggs;is++)
+                        for(std::size_t is=0;is<NHiggs;is++)
 						{
 							double RotFac = QuarkRot(a,as)*QuarkRot(b,bs)*HiggsRot(i,is);
 							Couplings_Quark_Higgs_21[a][b][i] += RotFac*LambdaQuark_3[as][bs][is];
 						}
 					}
 				}
-				for(size_t j=0;j<NHiggs;j++)
+                for(std::size_t j=0;j<NHiggs;j++)
 				{
 					Couplings_Quark_Higgs_22[a][b][i][j] = 0;
-					for(size_t as=0;as<NQuarks;as++)
+                    for(std::size_t as=0;as<NQuarks;as++)
 					{
-						for(size_t bs=0;bs<NQuarks;bs++)
+                        for(std::size_t bs=0;bs<NQuarks;bs++)
 						{
-							for(size_t is=0;is<NHiggs;is++)
+                            for(std::size_t is=0;is<NHiggs;is++)
 							{
-								for(size_t js=0;js<NHiggs;js++)
+                                for(std::size_t js=0;js<NHiggs;js++)
 								{
 									double RotFac = QuarkRot(a,as)*QuarkRot(b,bs)*HiggsRot(i,is)*HiggsRot(j,js);
 									Couplings_Quark_Higgs_22[a][b][i][j] += RotFac*LambdaQuark_4[as][bs][is][js];
@@ -844,34 +844,34 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
     // Lepton
 
 
-	for(size_t a=0;a<NLepton;a++)
+    for(std::size_t a=0;a<NLepton;a++)
 	{
-		for(size_t b=0;b<NLepton;b++)
+        for(std::size_t b=0;b<NLepton;b++)
 		{
-			for(size_t i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
 			{
 				Couplings_Lepton_Higgs_21[a][b][i] = 0;
-				for(size_t as = 0;as<NLepton;as++)
+                for(std::size_t as = 0;as<NLepton;as++)
 				{
-					for(size_t bs=0;bs<NLepton;bs++)
+                    for(std::size_t bs=0;bs<NLepton;bs++)
 					{
-						for(size_t is=0;is<NHiggs;is++)
+                        for(std::size_t is=0;is<NHiggs;is++)
 						{
 							double RotFac = LepRot(a,as)*LepRot(b,bs)*HiggsRot(i,is);
 							Couplings_Lepton_Higgs_21[a][b][i] += RotFac*LambdaLepton_3[as][bs][is];
 						}
 					}
 				}
-				for(size_t j=0;j<NHiggs;j++)
+                for(std::size_t j=0;j<NHiggs;j++)
 				{
 					Couplings_Lepton_Higgs_22[a][b][i][j] = 0;
-					for(size_t as=0;as<NLepton;as++)
+                    for(std::size_t as=0;as<NLepton;as++)
 					{
-						for(size_t bs=0;bs<NLepton;bs++)
+                        for(std::size_t bs=0;bs<NLepton;bs++)
 						{
-							for(size_t is=0;is<NHiggs;is++)
+                            for(std::size_t is=0;is<NHiggs;is++)
 							{
-								for(size_t js=0;js<NHiggs;js++)
+                                for(std::size_t js=0;js<NHiggs;js++)
 								{
 									double RotFac = LepRot(a,as)*LepRot(b,bs)*HiggsRot(i,is)*HiggsRot(j,js);
 									Couplings_Lepton_Higgs_22[a][b][i][j] += RotFac*LambdaLepton_4[as][bs][is][js];
@@ -884,9 +884,9 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 		}
 	}
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             HiggsRotationMatrix[i][j] = HiggsRot(i,j);
         }
@@ -918,9 +918,9 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const{
     FirstDerivLepton = VectorXd::Zero(NHiggs);
     double epsilon = 1.0/(16*M_PI*M_PI);
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t a=0;a<NGauge;a++)
+        for(std::size_t a=0;a<NGauge;a++)
         {
             if(MassSquaredGauge[a] != 0)
             {
@@ -928,7 +928,7 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const{
             }
         }
 
-        for(size_t a = 0;a<NHiggs;a++)
+        for(std::size_t a = 0;a<NHiggs;a++)
         {
             if(MassSquaredHiggs[a] != 0)
             {
@@ -936,7 +936,7 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const{
                 FirstDerivHiggs[i] += MassSquaredHiggs[a]*Couplings_Higgs_Triple[a][a][i]*(std::log(MassSquaredHiggs[a]/std::pow(scale,2)) - C_CWcbHiggs + 0.5);
             }
         }
-        for(size_t a=0;a<NQuarks;a++)
+        for(std::size_t a=0;a<NQuarks;a++)
         {
             if(MassSquaredQuark[a] != 0)
             {
@@ -944,7 +944,7 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const{
                 FirstDerivQuark[i] += MassSquaredQuark[a]*Coup*(std::log(MassSquaredQuark[a]/std::pow(scale,2)) - C_CWcbFermion + 0.5);
             }
         }
-        for(size_t a=0;a<NLepton;a++)
+        for(std::size_t a=0;a<NLepton;a++)
         {
             if(MassSquaredLepton[a] != 0)
             {
@@ -959,20 +959,20 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const{
     FirstDerivLepton *= -1;
 
     MatrixXd HiggsRot(NHiggs,NHiggs);
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++) HiggsRot(i,j) = HiggsRotationMatrix[i][j];
+        for(std::size_t j=0;j<NHiggs;j++) HiggsRot(i,j) = HiggsRotationMatrix[i][j];
     }
 
     FirstDeriv = HiggsRot.transpose()*(FirstDerivGauge+FirstDerivHiggs+FirstDerivQuark+FirstDerivLepton);
     FirstDeriv *= epsilon;
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
         if(std::abs(FirstDeriv[i]) < NumZero) FirstDeriv[i] = 0;
     }
 
-    for(size_t i=0;i<NHiggs;i++)    res.push_back(FirstDeriv[i]);
+    for(std::size_t i=0;i<NHiggs;i++)    res.push_back(FirstDeriv[i]);
 
     return  res;
 }
@@ -994,13 +994,13 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
     QuarkPart = MatrixXd::Zero(NHiggs,NHiggs);
     LeptonPart = MatrixXd::Zero(NHiggs,NHiggs);
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
-            for(size_t a=0;a<NGauge;a++)
+            for(std::size_t a=0;a<NGauge;a++)
             {
-                for(size_t b=0;b<NGauge;b++)
+                for(std::size_t b=0;b<NGauge;b++)
                 {
                     double Coup1 = Couplings_Gauge_Higgs_21[a][b][i];
                     double Coup2 = Couplings_Gauge_Higgs_21[b][a][j];
@@ -1014,9 +1014,9 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
             }
 
 
-            for(size_t a=0;a<NHiggs;a++)
+            for(std::size_t a=0;a<NHiggs;a++)
             {
-                for(size_t b=0;b<NHiggs;b++)
+                for(std::size_t b=0;b<NHiggs;b++)
                 {
                     double Coup1 = Couplings_Higgs_Triple[a][b][i];
                     double Coup2 = Couplings_Higgs_Triple[b][a][j];
@@ -1029,9 +1029,9 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
                 }
             }
 
-            for(size_t a=0;a<NQuarks;a++)
+            for(std::size_t a=0;a<NQuarks;a++)
             {
-                for(size_t b=0;b<NQuarks;b++)
+                for(std::size_t b=0;b<NQuarks;b++)
                 {
                     double Coup = (Couplings_Quark_Higgs_21[a][b][i] * Couplings_Quark_Higgs_21[b][a][j]).real();
                     double Br = fbase(MassSquaredQuark[a],MassSquaredQuark[b]) - C_CWcbFermion + 0.5;
@@ -1045,9 +1045,9 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
                 }
             }
 
-            for(size_t a=0;a<NLepton;a++)
+            for(std::size_t a=0;a<NLepton;a++)
             {
-                for(size_t b=0;b<NLepton;b++)
+                for(std::size_t b=0;b<NLepton;b++)
                 {
                     double Coup = (Couplings_Lepton_Higgs_21[a][b][i]*Couplings_Lepton_Higgs_21[b][a][j]).real();
                     double Br = fbase(MassSquaredLepton[a],MassSquaredLepton[b]) - C_CWcbFermion + 0.5;
@@ -1070,16 +1070,16 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
     MatrixXd Storage(NHiggs,NHiggs);
     Storage = HiggsPart+GaugePart+QuarkPart+LeptonPart;
 
-    for(size_t i=0;i<NHiggs;i++){
-      for(size_t j=0;j<NHiggs;j++){
+    for(std::size_t i=0;i<NHiggs;i++){
+      for(std::size_t j=0;j<NHiggs;j++){
         if(std::abs(Storage(i,j)) < NumZero) Storage(i,j) = 0;
       }
     }
     MatrixXd ResMatrix;
     MatrixXd HiggsRot(NHiggs,NHiggs);
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             HiggsRot(i,j) = HiggsRotationMatrix[i][j];
         }
@@ -1089,17 +1089,17 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
     double epsilon = 1.0/(16.0*M_PI*M_PI);
     ResMatrix *= epsilon;
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             if(std::abs(ResMatrix(i,j)) < NumZero) ResMatrix(i,j) = 0;
         }
     }
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             res.push_back(ResMatrix(j,i));
         }
@@ -1131,14 +1131,14 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
     LeptonPart.resize(NHiggs);
     QuarkPartSym.resize(NHiggs);
     LeptonPartSym.resize(NHiggs);
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
         restmp[i].resize(NHiggs);
         QuarkPart[i].resize(NHiggs);
         LeptonPart[i].resize(NHiggs);
         QuarkPartSym[i].resize(NHiggs);
         LeptonPartSym[i].resize(NHiggs);
-        for(size_t j=0;j<NHiggs;j++) {
+        for(std::size_t j=0;j<NHiggs;j++) {
             restmp[i][j].resize(NHiggs);
             QuarkPart[i][j].resize(NHiggs );
             LeptonPart[i][j].resize(NHiggs);
@@ -1163,18 +1163,18 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
                                                                                                         std::vector<double>(NHiggs)));
 
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 Higgspart[i][j][k] = 0;
-                for(size_t a=0;a<NHiggs;a++)
+                for(std::size_t a=0;a<NHiggs;a++)
                 {
-                    for(size_t b=0;b<NHiggs;b++)
+                    for(std::size_t b=0;b<NHiggs;b++)
                     {
-                        for(size_t c=0;c<NHiggs;c++)
+                        for(std::size_t c=0;c<NHiggs;c++)
                         {
                             double f1 = fbaseTri(MassSquaredHiggs[a],MassSquaredHiggs[b],MassSquaredHiggs[c]);
                             double f2 = Couplings_Higgs_Triple[a][b][i];
@@ -1190,11 +1190,11 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
                 }
 
                 GaugePart[i][j][k] = 0;
-                for(size_t a=0;a<NGauge;a++)
+                for(std::size_t a=0;a<NGauge;a++)
                 {
-                    for(size_t b=0;b<NGauge;b++)
+                    for(std::size_t b=0;b<NGauge;b++)
                     {
-                        for(size_t c=0;c<NGauge;c++)
+                        for(std::size_t c=0;c<NGauge;c++)
                         {
                             double f1 = fbaseTri(MassSquaredGauge[a],MassSquaredGauge[b],MassSquaredGauge[c]);
                             double f2 = Couplings_Gauge_Higgs_21[a][b][i];
@@ -1210,11 +1210,11 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
                 }
 
                 QuarkPart[i][j][k] = 0;
-                for(size_t a=0;a<NQuarks;a++)
+                for(std::size_t a=0;a<NQuarks;a++)
                 {
-                    for(size_t b=0;b<NQuarks;b++)
+                    for(std::size_t b=0;b<NQuarks;b++)
                     {
-                        for(size_t c=0;c<NQuarks;c++)
+                        for(std::size_t c=0;c<NQuarks;c++)
                         {
                             std::complex<double> f1 = fbaseTri(MassSquaredQuark[a],MassSquaredQuark[b],MassSquaredQuark[c]);
                             std::complex<double> f2 = Couplings_Quark_Higgs_21[a][b][i];
@@ -1229,11 +1229,11 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
                     }
                 }
                 LeptonPart[i][j][k] = 0;
-                for(size_t a=0;a<NLepton;a++)
+                for(std::size_t a=0;a<NLepton;a++)
                 {
-                    for(size_t b=0;b<NLepton;b++)
+                    for(std::size_t b=0;b<NLepton;b++)
                     {
-                        for(size_t c=0;c<NLepton;c++)
+                        for(std::size_t c=0;c<NLepton;c++)
                         {
                             std::complex<double> f1 = fbaseTri(MassSquaredLepton[a],MassSquaredLepton[b],MassSquaredLepton[c]);
                             std::complex<double> f2 = Couplings_Lepton_Higgs_21[a][b][i];
@@ -1251,11 +1251,11 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
         }
     }
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 HiggspartSym[i][j][k] = Higgspart[i][j][k] + Higgspart[i][k][j];
                 HiggspartSym[i][j][k] += Higgspart[j][i][k] + Higgspart[j][k][i];
@@ -1280,11 +1280,11 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
         }
     }
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 restmp[i][j][k] = 0.5*HiggspartSym[i][j][k];
                 restmp[i][j][k] += 1.5*GaugePartSym[i][j][k];
@@ -1294,18 +1294,18 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
         }
     }
 
-    for(size_t l=0;l<NHiggs;l++)
+    for(std::size_t l=0;l<NHiggs;l++)
     {
-        for(size_t m=0;m<NHiggs;m++)
+        for(std::size_t m=0;m<NHiggs;m++)
         {
-            for(size_t n=0;n<NHiggs;n++)
+            for(std::size_t n=0;n<NHiggs;n++)
             {
                 resGaugeBase[l][m][n] = 0;
-                for(size_t i=0;i<NHiggs;i++)
+                for(std::size_t i=0;i<NHiggs;i++)
                 {
-                    for(size_t j=0;j<NHiggs;j++)
+                    for(std::size_t j=0;j<NHiggs;j++)
                     {
-                        for(size_t k=0;k<NHiggs;k++)
+                        for(std::size_t k=0;k<NHiggs;k++)
                         {
                             double RotFac = HiggsRotationMatrix[i][l]*HiggsRotationMatrix[j][m]*HiggsRotationMatrix[k][n];
                             resGaugeBase[l][m][n] += RotFac*restmp[i][j][k].real();
@@ -1318,11 +1318,11 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const{
         }
     }
 
-    for(size_t l=0;l<NHiggs;l++)
+    for(std::size_t l=0;l<NHiggs;l++)
     {
-        for(size_t m=0;m<NHiggs;m++)
+        for(std::size_t m=0;m<NHiggs;m++)
         {
-            for(size_t n=0;n<NHiggs;n++)
+            for(std::size_t n=0;n<NHiggs;n++)
             {
                 res.push_back(resGaugeBase[l][m][n]);
             }
@@ -1362,15 +1362,15 @@ std::vector<double> Class_Potential_Origin::HiggsMassesSquared(
     }
     MatrixXd MassMatrix(NHiggs,NHiggs);
     double ZeroMass = std::pow(10,-5);
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             MassMatrix(i,j) = Curvature_Higgs_L2[i][j];
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 MassMatrix(i,j) += Curvature_Higgs_L3[i][j][k]*v[k];
-                for(size_t l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * v[k]*v[l];
+                for(std::size_t l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * v[k]*v[l];
             }
 
             if(Temp != 0)
@@ -1383,7 +1383,7 @@ std::vector<double> Class_Potential_Origin::HiggsMassesSquared(
     if(diff == 0 and res.size() == 0)
     {
         SelfAdjointEigenSolver<MatrixXd> es(MassMatrix,EigenvaluesOnly);
-        for(size_t i =0;i<NHiggs;i++)
+        for(std::size_t i =0;i<NHiggs;i++)
         {
             double tmp = es.eigenvalues()[i];
             if(std::abs(tmp) < ZeroMass ) res.push_back(0);
@@ -1392,7 +1392,7 @@ std::vector<double> Class_Potential_Origin::HiggsMassesSquared(
     }
     else if(diff == 0 and res.size() == NHiggs){
     	SelfAdjointEigenSolver<MatrixXd> es(MassMatrix,EigenvaluesOnly);
-  		for(size_t i =0;i<NHiggs;i++)
+        for(std::size_t i =0;i<NHiggs;i++)
   		{
   			double tmp = es.eigenvalues()[i];
   			if(std::abs(tmp) < ZeroMass ) tmp = 0;
@@ -1408,12 +1408,12 @@ std::vector<double> Class_Potential_Origin::HiggsMassesSquared(
     {
         MatrixXd Diff(NHiggs,NHiggs);
         std::size_t x0 = diff -1;
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
-            for(size_t j=0;j<NHiggs;j++)
+            for(std::size_t j=0;j<NHiggs;j++)
             {
                 Diff(i,j) = Curvature_Higgs_L3[i][j][x0];
-                for(size_t k=0;k<NHiggs;k++)
+                for(std::size_t k=0;k<NHiggs;k++)
                 {
                     Diff(i,j) += Curvature_Higgs_L4[i][j][x0][k]*v[k];
                 }
@@ -1427,8 +1427,8 @@ std::vector<double> Class_Potential_Origin::HiggsMassesSquared(
     }
     else if(diff == -1){
     	MatrixXd Diff(NHiggs,NHiggs);
-    	for(size_t i=0;i<NHiggs;i++){
-    		for(size_t j=0;j<NHiggs;j++){
+        for(std::size_t i=0;i<NHiggs;i++){
+            for(std::size_t j=0;j<NHiggs;j++){
     			Diff(i,j) = 2* DebyeHiggs[i][j] * Temp;
     		}
     	}
@@ -1475,14 +1475,14 @@ std::vector<double> Class_Potential_Origin::GaugeMassesSquared(
     }
     MatrixXd MassMatrix(NGauge,NGauge);
     double ZeroMass = std::pow(10,-5);
-    for(size_t i=0;i<NGauge;i++)
+    for(std::size_t i=0;i<NGauge;i++)
     {
-        for(size_t j=0;j<NGauge;j++)
+        for(std::size_t j=0;j<NGauge;j++)
         {
             MassMatrix(i,j) = 0;
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
-                for(size_t l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Gauge_G2H2[i][j][k][l] * v[k]*v[l];
+                for(std::size_t l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Gauge_G2H2[i][j][k][l] * v[k]*v[l];
             }
             if(Temp != 0)
             {
@@ -1496,7 +1496,7 @@ std::vector<double> Class_Potential_Origin::GaugeMassesSquared(
     {
 
         SelfAdjointEigenSolver<MatrixXd> es(MassMatrix,EigenvaluesOnly);
-        for(size_t i =0;i<NGauge;i++)
+        for(std::size_t i =0;i<NGauge;i++)
         {
             double tmp = es.eigenvalues()[i];
             if(std::abs(tmp) < ZeroMass ) res.push_back(0);
@@ -1508,11 +1508,11 @@ std::vector<double> Class_Potential_Origin::GaugeMassesSquared(
         std::size_t i = diff -1;
         MatrixXd Diff(NGauge,NGauge);
         Diff = MatrixXd::Zero(NGauge,NGauge);
-        for(size_t a=0;a<NGauge;a++)
+        for(std::size_t a=0;a<NGauge;a++)
         {
-            for(size_t b=0;b<NGauge;b++)
+            for(std::size_t b=0;b<NGauge;b++)
             {
-                for(size_t j=0;j<NHiggs;j++) Diff(a,b) += Curvature_Gauge_G2H2[a][b][i][j]*v[j];
+                for(std::size_t j=0;j<NHiggs;j++) Diff(a,b) += Curvature_Gauge_G2H2[a][b][i][j]*v[j];
             }
         }
         MatrixXcd MassCast(NGauge,NGauge);
@@ -1523,8 +1523,8 @@ std::vector<double> Class_Potential_Origin::GaugeMassesSquared(
     }
     else if(diff == -1){
 		MatrixXd Diff(NGauge,NGauge);
-		for(size_t i=0;i<NGauge;i++){
-			for(size_t j=0;j<NGauge;j++){
+        for(std::size_t i=0;i<NGauge;i++){
+            for(std::size_t j=0;j<NGauge;j++){
 				Diff(i,j) = 2* DebyeGauge[i][j] * Temp;
 			}
 		}
@@ -1569,12 +1569,12 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
     MatrixXcd MassMatrix(NQuarks,NQuarks),MIJ(NQuarks,NQuarks);
     MIJ = MatrixXcd::Zero(NQuarks,NQuarks);
     double ZeroMass = std::pow(10,-10);
-    for(size_t i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(size_t j=0;j<NQuarks;j++)
+        for(std::size_t j=0;j<NQuarks;j++)
         {
 
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 MIJ(i,j) += Curvature_Quark_F2H1[i][j][k]*v[k];
             }
@@ -1586,7 +1586,7 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
     if(diff <= 0) // No temperature dependent part here
     {
         SelfAdjointEigenSolver<MatrixXcd> es(MassMatrix,EigenvaluesOnly);
-        for(size_t i =0;i<NQuarks;i++)
+        for(std::size_t i =0;i<NQuarks;i++)
         {
             double tmp = es.eigenvalues().real()[i];
             if(std::abs(tmp) < ZeroMass ) res.push_back(0);
@@ -1597,10 +1597,10 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
       std::size_t m = diff-1;
       MatrixXcd Diff(NQuarks,NQuarks);
       Diff = MatrixXcd::Zero(NQuarks,NQuarks);
-      for(size_t a=0;a<NQuarks;a++){
-        for(size_t b=0;b<NQuarks;b++){
-          for(size_t i=0;i<NQuarks;i++){
-            for(size_t l=0;l<NHiggs;l++){
+      for(std::size_t a=0;a<NQuarks;a++){
+        for(std::size_t b=0;b<NQuarks;b++){
+          for(std::size_t i=0;i<NQuarks;i++){
+            for(std::size_t l=0;l<NHiggs;l++){
               Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][m]) * Curvature_Quark_F2H1[i][b][l] * v[l];
               Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][l]) * Curvature_Quark_F2H1[i][b][m] * v[l];
             }
@@ -1610,31 +1610,31 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
 
       res=FirstDerivativeOfEigenvalues(MassMatrix,Diff);
 
-      for(size_t j=0;j<res.size();j++){
+      for(std::size_t j=0;j<res.size();j++){
     	  if(std::isnan(res.at(j))){
     		  std::cout << "MassMatrix = \n" << MassMatrix << "\nDiff = \n" << Diff << std::endl;
     		  std::cout << "Fermion Masses : " ;
-              for(size_t i=0;i<NQuarks;i++) std::cout << std::sqrt(std::abs(res.at(i))) << sep;
+              for(std::size_t i=0;i<NQuarks;i++) std::cout << std::sqrt(std::abs(res.at(i))) << sep;
     		  std::cout << std::endl;
     		  std::cout << "VEV fields : ";
-              for(size_t i=0;i<v.size();i++) std::cout << v.at(i) << sep;
+              for(std::size_t i=0;i<v.size();i++) std::cout << v.at(i) << sep;
     		  std::cout << std::endl;
 
 
 
 
-    		  for(size_t l=0;l<NHiggs;l++){
+              for(std::size_t l=0;l<NHiggs;l++){
 
 				  std::cout << "Curvature_Quark * v an Higgs  =  :" << l << "\n";
-				  for(size_t a=0;a<NQuarks;a++){
-					  for(size_t i=0;i<NQuarks;i++){
+                  for(std::size_t a=0;a<NQuarks;a++){
+                      for(std::size_t i=0;i<NQuarks;i++){
                           std::cout << Curvature_Quark_F2H1[a][i][l] * v[l] << sep;
 					  }
 					  std::cout << std::endl;
 				  }
 				  std::cout << "conj Curvature_Quark an Higgs = :" << l << "\n";
-				  for(size_t a=0;a<NQuarks;a++){
-					  for(size_t i=0;i<NQuarks;i++){
+                  for(std::size_t a=0;a<NQuarks;a++){
+                      for(std::size_t i=0;i<NQuarks;i++){
                           std::cout << std::conj(Curvature_Quark_F2H1[a][i][l]) *v[l] << sep;
 					  }
 					  std::cout << std::endl;
@@ -1684,12 +1684,12 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
     MatrixXcd MassMatrix(NLepton,NLepton),MIJ(NLepton,NLepton);
     MIJ = MatrixXcd::Zero(NLepton,NLepton);
     double ZeroMass = std::pow(10,-10);
-    for(size_t i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(size_t j=0;j<NLepton;j++)
+        for(std::size_t j=0;j<NLepton;j++)
         {
 
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 MIJ(i,j) += Curvature_Lepton_F2H1[i][j][k]*v[k];
             }
@@ -1701,7 +1701,7 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
     if(diff <= 0) // no temperature part here
 	{
 		SelfAdjointEigenSolver<MatrixXcd> es(MassMatrix,EigenvaluesOnly);
-		for(size_t i =0;i<NLepton;i++)
+        for(std::size_t i =0;i<NLepton;i++)
 		{
 			double tmp = es.eigenvalues().real()[i];
 			if(std::abs(tmp) < ZeroMass ) res.push_back(0);
@@ -1709,13 +1709,13 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
 		}
 	}
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs){
-	  std::size_t m = diff-1;
+      std::size_t m = diff-1;
 	  MatrixXcd Diff(NLepton,NLepton);
 	  Diff = MatrixXcd::Zero(NLepton,NLepton);
-	  for(size_t a=0;a<NLepton;a++){
-		for(size_t b=0;b<NLepton;b++){
-		  for(size_t i=0;i<NLepton;i++){
-			for(size_t l=0;l<NHiggs;l++){
+      for(std::size_t a=0;a<NLepton;a++){
+        for(std::size_t b=0;b<NLepton;b++){
+          for(std::size_t i=0;i<NLepton;i++){
+            for(std::size_t l=0;l<NHiggs;l++){
 			  Diff(a,b) += std::conj(Curvature_Lepton_F2H1[a][i][m]) * Curvature_Lepton_F2H1[i][b][l] * v[l];
 			  Diff(a,b) += std::conj(Curvature_Lepton_F2H1[a][i][l]) * Curvature_Lepton_F2H1[i][b][m] * v[l];
 			}
@@ -1725,31 +1725,31 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
 
       res=FirstDerivativeOfEigenvalues(MassMatrix,Diff);
 
-	  for(size_t j=0;j<res.size();j++){
+      for(std::size_t j=0;j<res.size();j++){
 		  if(std::isnan(res.at(j))){
 			  std::cout << "MassMatrix = \n" << MassMatrix << "\nDiff = \n" << Diff << std::endl;
 			  std::cout << "Fermion Masses : " ;
-              for(size_t i=0;i<NLepton;i++) std::cout << std::sqrt(std::abs(res.at(i))) << sep;
+              for(std::size_t i=0;i<NLepton;i++) std::cout << std::sqrt(std::abs(res.at(i))) << sep;
 			  std::cout << std::endl;
 			  std::cout << "VEV fields : ";
-              for(size_t i=0;i<v.size();i++) std::cout << v.at(i) << sep;
+              for(std::size_t i=0;i<v.size();i++) std::cout << v.at(i) << sep;
 			  std::cout << std::endl;
 
 
 
 
-			  for(size_t l=0;l<NHiggs;l++){
+              for(std::size_t l=0;l<NHiggs;l++){
 
 				  std::cout << "Curvature_Lepton * v an Higgs  =  :" << l << "\n";
-				  for(size_t a=0;a<NLepton;a++){
-					  for(size_t i=0;i<NLepton;i++){
+                  for(std::size_t a=0;a<NLepton;a++){
+                      for(std::size_t i=0;i<NLepton;i++){
                           std::cout << Curvature_Quark_F2H1[a][i][l] * v[l] << sep;
 					  }
 					  std::cout << std::endl;
 				  }
 				  std::cout << "conj Curvature_Lepton an Higgs = :" << l << "\n";
-				  for(size_t a=0;a<NLepton;a++){
-					  for(size_t i=0;i<NLepton;i++){
+                  for(std::size_t a=0;a<NLepton;a++){
+                      for(std::size_t i=0;i<NLepton;i++){
                           std::cout << std::conj(Curvature_Lepton_F2H1[a][i][l]) *v[l] << sep;
 					  }
 					  std::cout << std::endl;
@@ -1791,20 +1791,20 @@ double Class_Potential_Origin::VTree(const std::vector<double>& v, int diff, boo
 
     if(diff == 0)
     {
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
         	if(v[i] != 0)
         	{
 				res += Curvature_Higgs_L1[i]*v[i];
-				for(size_t j=0;j<NHiggs;j++)
+                for(std::size_t j=0;j<NHiggs;j++)
 				{
 					if(v[j] !=0)
 					{
 						res += 0.5*Curvature_Higgs_L2[i][j]*v[i]*v[j];
-						for(size_t k=0;k<NHiggs;k++)
+                        for(std::size_t k=0;k<NHiggs;k++)
 						{
 							res += 1.0/6.0 * Curvature_Higgs_L3[i][j][k]*v[i]*v[j]*v[k];
-							for(size_t l=0;l<NHiggs;l++)
+                            for(std::size_t l=0;l<NHiggs;l++)
 							{
 								res += 1.0/24.0*Curvature_Higgs_L4[i][j][k][l]*v[i]*v[j]*v[k]*v[l];
 							}
@@ -1818,13 +1818,13 @@ double Class_Potential_Origin::VTree(const std::vector<double>& v, int diff, boo
     {
         std::size_t i = diff -1;
         res = Curvature_Higgs_L1[i];
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             res += Curvature_Higgs_L2[i][j]*v[j];
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 res += 0.5*Curvature_Higgs_L3[i][j][k]*v[j]*v[k];
-                for(size_t l=0;l<NHiggs;l++)
+                for(std::size_t l=0;l<NHiggs;l++)
                 {
                     res += 1.0/6.0*Curvature_Higgs_L4[i][j][k][l]*v[j]*v[k]*v[l];
                 }
@@ -1852,16 +1852,16 @@ double Class_Potential_Origin::CounterTerm(const std::vector<double>& v, int dif
     res =0;
     if(diff == 0)
     {
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
             res += Curvature_Higgs_CT_L1[i]*v[i];
-            for(size_t j=0;j<NHiggs;j++)
+            for(std::size_t j=0;j<NHiggs;j++)
             {
                 res += 0.5*Curvature_Higgs_CT_L2[i][j]*v[i]*v[j];
-                for(size_t k=0;k<NHiggs;k++)
+                for(std::size_t k=0;k<NHiggs;k++)
                 {
                     res += 1.0/6.0 * Curvature_Higgs_CT_L3[i][j][k]*v[i]*v[j]*v[k];
-                    for(size_t l=0;l<NHiggs;l++)
+                    for(std::size_t l=0;l<NHiggs;l++)
                     {
                         res += 1.0/24.0*Curvature_Higgs_CT_L4[i][j][k][l]*v[i]*v[j]*v[k]*v[l];
                     }
@@ -1873,13 +1873,13 @@ double Class_Potential_Origin::CounterTerm(const std::vector<double>& v, int dif
     {
         std::size_t i = diff -1;
         res = Curvature_Higgs_CT_L1[i];
-        for(size_t j=0;j<NHiggs;j++)
+        for(std::size_t j=0;j<NHiggs;j++)
         {
             res += Curvature_Higgs_CT_L2[i][j]*v[j];
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 res += 0.5*Curvature_Higgs_CT_L3[i][j][k]*v[j]*v[k];
-                for(size_t l=0;l<NHiggs;l++)
+                for(std::size_t l=0;l<NHiggs;l++)
                 {
                     res += 1.0/6.0*Curvature_Higgs_CT_L4[i][j][k][l]*v[j]*v[k]*v[l];
                 }
@@ -1915,7 +1915,7 @@ double Class_Potential_Origin::VEff(const std::vector<double>& v,
 		resOut+= CounterTerm(v,diff);
 		resOut+= V1Loop(v,Temp,diff);
 	}
-// for(size_t i=0;i<NHiggs;i++) resOut += DebyeHiggs[i][i]*0.5*std::pow(v.at(i),2)*std::pow(Temp,2);
+// for(std::size_t i=0;i<NHiggs;i++) resOut += DebyeHiggs[i][i]*0.5*std::pow(v.at(i),2)*std::pow(Temp,2);
 	return resOut;
 }
 
@@ -1940,29 +1940,29 @@ double Class_Potential_Origin::V1Loop(const std::vector<double>& v, double Temp,
 	{
         if(C_UseParwani)
         {
-            for(size_t k=0;k<NHiggs;k++) res += boson(HiggsMassesVec[k],Temp,C_CWcbHiggs,0);
-            for(size_t k=0;k<NGauge;k++) res += boson(GaugeMassesVec[k],Temp,C_CWcbGB,0);
-            for(size_t k=0;k<NGauge;k++) res += 2*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,0);
-            for(size_t k=0;k<NQuarks;k++) res += -6*fermion(QuarkMassesVec[k],Temp,0);
-            for(size_t k=0;k<NLepton;k++) res += -2*fermion(LeptonMassesVec[k],Temp,0);
+            for(std::size_t k=0;k<NHiggs;k++) res += boson(HiggsMassesVec[k],Temp,C_CWcbHiggs,0);
+            for(std::size_t k=0;k<NGauge;k++) res += boson(GaugeMassesVec[k],Temp,C_CWcbGB,0);
+            for(std::size_t k=0;k<NGauge;k++) res += 2*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,0);
+            for(std::size_t k=0;k<NQuarks;k++) res += -6*fermion(QuarkMassesVec[k],Temp,0);
+            for(std::size_t k=0;k<NLepton;k++) res += -2*fermion(LeptonMassesVec[k],Temp,0);
         }
         else{
             HiggsMassesZeroTempVec=HiggsMassesSquared(v,0);
-            for(size_t k=0;k<NHiggs;k++) res += boson(HiggsMassesZeroTempVec[k],Temp,C_CWcbHiggs,0);
-            for(size_t k=0;k<NGauge;k++) res += 3*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,0);
+            for(std::size_t k=0;k<NHiggs;k++) res += boson(HiggsMassesZeroTempVec[k],Temp,C_CWcbHiggs,0);
+            for(std::size_t k=0;k<NGauge;k++) res += 3*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,0);
             double AddContQuark=0;
-            for(size_t k=0;k<NQuarks;k++) AddContQuark += -2*fermion(QuarkMassesVec[k],Temp,0);
-            for(size_t k=0;k<NColour;k++) res += AddContQuark;
-            for(size_t k=0;k<NLepton;k++) res += -2*fermion(LeptonMassesVec[k],Temp,0);
+            for(std::size_t k=0;k<NQuarks;k++) AddContQuark += -2*fermion(QuarkMassesVec[k],Temp,0);
+            for(std::size_t k=0;k<NColour;k++) res += AddContQuark;
+            for(std::size_t k=0;k<NLepton;k++) res += -2*fermion(LeptonMassesVec[k],Temp,0);
 
 
             double VDebay = 0;
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 if( HiggsMassesVec[k] > 0 ) VDebay += std::pow(HiggsMassesVec[k],1.5);
                 if( HiggsMassesZeroTempVec[k] > 0) VDebay += -std::pow(HiggsMassesZeroTempVec[k],1.5);
             }
-            for(size_t k=0;k<NGauge;k++)
+            for(std::size_t k=0;k<NGauge;k++)
             {
                 if(GaugeMassesVec[k] > 0 ) VDebay += std::pow(GaugeMassesVec[k],1.5);
                 if(GaugeMassesZeroTempVec[k] > 0 ) VDebay += -std::pow(GaugeMassesZeroTempVec[k],1.5);
@@ -1974,42 +1974,42 @@ double Class_Potential_Origin::V1Loop(const std::vector<double>& v, double Temp,
 	}
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs){
 		if(C_UseParwani){
-			for(size_t k=0;k<NHiggs;k++) {
+            for(std::size_t k=0;k<NHiggs;k++) {
 				res += HiggsMassesVec.at(k+NHiggs)*boson(HiggsMassesVec.at(k),Temp,C_CWcbHiggs,diff);
 			}
-			for(size_t k=0;k<NGauge;k++) {
+            for(std::size_t k=0;k<NGauge;k++) {
 				res += GaugeMassesVec.at(k+NGauge)*boson(GaugeMassesVec.at(k),Temp,C_CWcbHiggs,diff);
 			}
-			for(size_t k=0;k<NGauge;k++) {
+            for(std::size_t k=0;k<NGauge;k++) {
 				res += 2*GaugeMassesZeroTempVec.at(k+NGauge)*boson(GaugeMassesZeroTempVec.at(k),Temp,C_CWcbHiggs,diff);
 			}
-			for(size_t k=0;k<NQuarks;k++) {
+            for(std::size_t k=0;k<NQuarks;k++) {
 				res += -6*QuarkMassesVec.at(k+NQuarks)*fermion(QuarkMassesVec[k],Temp,diff);
 			}
-			for(size_t k=0;k<NLepton;k++) {
+            for(std::size_t k=0;k<NLepton;k++) {
 				res += -2*LeptonMassesVec.at(k+NLepton)*fermion(LeptonMassesVec[k],Temp,diff);
 			}
 		}
 		else{
             HiggsMassesZeroTempVec=HiggsMassesSquared(v,0,diff);
-			for(size_t k=0;k<NHiggs;k++) {
+            for(std::size_t k=0;k<NHiggs;k++) {
 				res += HiggsMassesZeroTempVec.at(k+NHiggs)*boson(HiggsMassesZeroTempVec[k],Temp,C_CWcbHiggs,diff);
 			}
-			for(size_t k=0;k<NGauge;k++) {
+            for(std::size_t k=0;k<NGauge;k++) {
 				res += 3*GaugeMassesZeroTempVec.at(k+NGauge)*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,diff);
 			}
 			double AddContQuark=0;
-			for(size_t k=0;k<NQuarks;k++) {
+            for(std::size_t k=0;k<NQuarks;k++) {
 				AddContQuark += -2*QuarkMassesVec.at(k+NQuarks)*fermion(QuarkMassesVec[k],Temp,diff);
 			}
-			for(size_t k=0;k<NColour;k++) res += AddContQuark;
-			for(size_t k=0;k<NLepton;k++) {
+            for(std::size_t k=0;k<NColour;k++) res += AddContQuark;
+            for(std::size_t k=0;k<NLepton;k++) {
 				res += -2*LeptonMassesVec.at(k+NLepton)*fermion(LeptonMassesVec[k],Temp,diff);
 			}
 
 
 			double VDebay = 0;
-			for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
 			{
 				if( HiggsMassesVec[k] > 0 ) {
 					VDebay += 1.5 * HiggsMassesVec.at(k+NHiggs) * std::pow(HiggsMassesVec.at(k),0.5);
@@ -2018,7 +2018,7 @@ double Class_Potential_Origin::V1Loop(const std::vector<double>& v, double Temp,
 					VDebay += -1.5 * HiggsMassesZeroTempVec.at(k+NHiggs)*std::pow(HiggsMassesZeroTempVec[k],0.5);
 				}
 			}
-			for(size_t k=0;k<NGauge;k++)
+            for(std::size_t k=0;k<NGauge;k++)
 			{
 				if(GaugeMassesVec[k] > 0 ) {
 					VDebay += 1.5*GaugeMassesVec.at(k+NGauge)*std::pow(GaugeMassesVec[k],0.5);
@@ -2034,45 +2034,45 @@ double Class_Potential_Origin::V1Loop(const std::vector<double>& v, double Temp,
 	}
 	else if(diff == -1){
 		if(C_UseParwani){
-			for(size_t k=0;k<NHiggs;k++) {
+            for(std::size_t k=0;k<NHiggs;k++) {
 				res += HiggsMassesVec.at(k+NHiggs)*boson(HiggsMassesVec[k],Temp,C_CWcbHiggs,0);
 				res += boson(HiggsMassesVec[k],Temp,C_CWcbHiggs,-1);
 			}
-			for(size_t k=0;k<NGauge;k++){
+            for(std::size_t k=0;k<NGauge;k++){
 				res += GaugeMassesVec.at(k+NGauge)*boson(GaugeMassesVec[k],Temp,C_CWcbGB,0);
 				res += boson(GaugeMassesVec.at(k),Temp,C_CWcbGB,-1);
 			}
-			for(size_t k=0;k<NGauge;k++){
+            for(std::size_t k=0;k<NGauge;k++){
 				res += 2*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,-1);
 			}
-			for(size_t k=0;k<NQuarks;k++) {
+            for(std::size_t k=0;k<NQuarks;k++) {
 				res += -6*fermion(QuarkMassesVec[k],Temp,-1);
 			}
-			for(size_t k=0;k<NLepton;k++){
+            for(std::size_t k=0;k<NLepton;k++){
 				res += -2*fermion(LeptonMassesVec[k],Temp,-1);
 			}
 		}
 		else{
             HiggsMassesZeroTempVec=HiggsMassesSquared(v,0,diff);
-			for(size_t k=0;k<NHiggs;k++) {
+            for(std::size_t k=0;k<NHiggs;k++) {
 				res += boson(HiggsMassesZeroTempVec[k],Temp,C_CWcbHiggs,-1);
 			}
-			for(size_t k=0;k<NGauge;k++) {
+            for(std::size_t k=0;k<NGauge;k++) {
 				res += 3*boson(GaugeMassesZeroTempVec[k],Temp,C_CWcbGB,-1);
 			}
 			double AddContQuark=0;
-			for(size_t k=0;k<NQuarks;k++) AddContQuark += -2*fermion(QuarkMassesVec[k],Temp,-1);
-			for(size_t k=0;k<NColour;k++) res += AddContQuark;
-			for(size_t k=0;k<NLepton;k++) res += -2*fermion(LeptonMassesVec[k],Temp,-1);
+            for(std::size_t k=0;k<NQuarks;k++) AddContQuark += -2*fermion(QuarkMassesVec[k],Temp,-1);
+            for(std::size_t k=0;k<NColour;k++) res += AddContQuark;
+            for(std::size_t k=0;k<NLepton;k++) res += -2*fermion(LeptonMassesVec[k],Temp,-1);
 
 
 			double VDebay = 0;
-			for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
 			{
 				if( HiggsMassesVec[k] > 0 ) VDebay += std::pow(HiggsMassesVec[k],1.5);
 				if( HiggsMassesZeroTempVec[k] > 0) VDebay += -std::pow(HiggsMassesZeroTempVec[k],1.5);
 			}
-			for(size_t k=0;k<NGauge;k++)
+            for(std::size_t k=0;k<NGauge;k++)
 			{
 				if(GaugeMassesVec[k] > 0 ) VDebay += std::pow(GaugeMassesVec[k],1.5);
 				if(GaugeMassesZeroTempVec[k] > 0 ) VDebay += -std::pow(GaugeMassesZeroTempVec[k],1.5);
@@ -2100,32 +2100,32 @@ void Class_Potential_Origin::CalculateDebye()
     bool Done = CalculateDebyeSimplified();
     if(!Done)
     {
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
-            for(size_t j=i;j<NHiggs;j++)
+            for(std::size_t j=i;j<NHiggs;j++)
             {
                 DebyeHiggs[i][j] = 0;
-                for(size_t k=0;k<NHiggs;k++)
+                for(std::size_t k=0;k<NHiggs;k++)
                 {
                     DebyeHiggs[i][j] += 0.5*Curvature_Higgs_L4[i][j][k][k]/12.0;
                 }
-                for(size_t k=0;k<NGauge;k++)
+                for(std::size_t k=0;k<NGauge;k++)
                 {
                     DebyeHiggs[i][j] += 3*0.5*Curvature_Gauge_G2H2[k][k][i][j]/12.0;
                 }
 
-                for(size_t a=0;a<NQuarks;a++)
+                for(std::size_t a=0;a<NQuarks;a++)
                 {
-                    for(size_t b=0;b<NQuarks;b++)
+                    for(std::size_t b=0;b<NQuarks;b++)
                     {
                         double tmp = 0.5*(std::conj(Curvature_Quark_F2H1[a][b][j])*Curvature_Quark_F2H1[a][b][i] + std::conj(Curvature_Quark_F2H1[a][b][i])*Curvature_Quark_F2H1[a][b][j]).real();
                         DebyeHiggs[i][j] += 6.0/24.0*tmp;
                     }
                 }
 
-                for(size_t a=0;a<NLepton;a++)
+                for(std::size_t a=0;a<NLepton;a++)
                 {
-                    for(size_t b=0;b<NLepton;b++)
+                    for(std::size_t b=0;b<NLepton;b++)
                     {
                         double tmp = 0.5*(std::conj(Curvature_Lepton_F2H1[a][b][j])*Curvature_Lepton_F2H1[a][b][i] + std::conj(Curvature_Lepton_F2H1[a][b][i])*Curvature_Lepton_F2H1[a][b][j]).real();
                         DebyeHiggs[i][j] += 2.0/24.0*tmp;
@@ -2136,16 +2136,16 @@ void Class_Potential_Origin::CalculateDebye()
             }
         }
 
-        for(size_t i=0;i<NHiggs;i++){
-            for(size_t j=i;j<NHiggs;j++) {
+        for(std::size_t i=0;i<NHiggs;i++){
+            for(std::size_t j=i;j<NHiggs;j++) {
                 if(std::abs(DebyeHiggs[i][j])<=1e-5) DebyeHiggs[i][j] = 0;
             }
         }
 
 
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
-            for(size_t j=0;j<i;j++) {
+            for(std::size_t j=0;j<i;j++) {
                 DebyeHiggs[i][j] = DebyeHiggs[j][i];
             }
         }
@@ -2153,7 +2153,7 @@ void Class_Potential_Origin::CalculateDebye()
 
 
     std::size_t nHiggsGauge = 0;
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
         if(Curvature_Gauge_G2H2[0][0][i][i] != 0) nHiggsGauge++;
     }
@@ -2164,8 +2164,8 @@ void Class_Potential_Origin::CalculateDebye()
 
 
 void Class_Potential_Origin::CalculateDebyeGauge(){
-    for(size_t i=0;i<NGauge;i++){
-        for(size_t j=0;j<NGauge;j++) DebyeGauge[i][j] = 0;
+    for(std::size_t i=0;i<NGauge;i++){
+        for(std::size_t j=0;j<NGauge;j++) DebyeGauge[i][j] = 0;
     }
 
     bool Done = CalculateDebyeGaugeSimplified();
@@ -2175,15 +2175,15 @@ void Class_Potential_Origin::CalculateDebyeGauge(){
 
 
 
-    for(size_t i=0;i<NHiggs;i++) {
+    for(std::size_t i=0;i<NHiggs;i++) {
 	if(Curvature_Gauge_G2H2[0][0][i][i] != 0){
 	    nGaugeHiggs++;
 	}
     }
-    for(size_t i=0;i<NGauge;i++)
+    for(std::size_t i=0;i<NGauge;i++)
       {
     	double GaugeFac = 0;
-    	for(size_t k=0;k<NHiggs;k++)
+        for(std::size_t k=0;k<NHiggs;k++)
     	{
     		GaugeFac += Curvature_Gauge_G2H2[i][i][k][k];
     	}
@@ -2191,8 +2191,8 @@ void Class_Potential_Origin::CalculateDebyeGauge(){
     	DebyeGauge[i][i] = 2.0/3.0*(nGaugeHiggs/8.0 + 5)*GaugeFac;
       }
 
-    for(size_t i=0;i<NGauge;i++){
-    	for(size_t j=0;j<NGauge;j++)
+    for(std::size_t i=0;i<NGauge;i++){
+        for(std::size_t j=0;j<NGauge;j++)
     	{
     		if(std::abs(DebyeGauge[i][j]) <=1e-5) DebyeGauge[i][j] = 0;
     	}
@@ -2260,7 +2260,7 @@ bool Class_Potential_Origin::CheckNLOVEV(const std::vector<double>& v) const
 	//std::vector<double> vPotential;
 	double MaxDiff = 0;
 	double AllowedDifference = 1;
-	for(size_t i=0;i<nVEV;i++)
+    for(std::size_t i=0;i<nVEV;i++)
 	{
 		double tmp=std::abs(std::abs(v[i])-std::abs(vevTreeMin[i]));
 		if(tmp > MaxDiff) MaxDiff = tmp;
@@ -2274,10 +2274,10 @@ bool Class_Potential_Origin::CheckNLOVEV(const std::vector<double>& v) const
 double Class_Potential_Origin::EWSBVEV(std::vector<double> v) const
 {
   double res=0;
-  for(size_t i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
   {
 	  double checkgauge=0;
-	  for(size_t j=0;j<NGauge;j++)
+      for(std::size_t j=0;j<NGauge;j++)
 	  {
 		  checkgauge += std::abs(Curvature_Gauge_G2H2[j][j][i][i]);
 	  }
@@ -2344,9 +2344,9 @@ void Class_Potential_Origin::CheckImplementation(
     TestResults.push_back(Pass);
     {
         std::size_t ExpectedTripleHiggs = 0;
-        for(size_t i=0;i<NHiggs;i++){
-            for(size_t j=i;j<NHiggs;j++){
-                for(size_t k=j;k<NHiggs;k++){
+        for(std::size_t i=0;i<NHiggs;i++){
+            for(std::size_t j=i;j<NHiggs;j++){
+                for(std::size_t k=j;k<NHiggs;k++){
                     ExpectedTripleHiggs++;
                 }
             }
@@ -2421,7 +2421,7 @@ void Class_Potential_Origin::CheckImplementation(
         std::cout << std::endl;
 
         double sum{0};
-        for(size_t i{0};i<NGauge;++i)
+        for(std::size_t i{0};i<NGauge;++i)
         {
             sum += std::abs(GaugeMassCalculated.at(i) - gaugeMassesInput.at(i));
         }
@@ -2465,7 +2465,7 @@ void Class_Potential_Origin::CheckImplementation(
         quarkMassesInput.push_back(pow(-C_MassBottom,2));
 
         if(NLepton == 0){
-            for(size_t i=0;i<leptonMassesInput.size();i++) quarkMassesInput.push_back(leptonMassesInput.at(i));
+            for(std::size_t i=0;i<leptonMassesInput.size();i++) quarkMassesInput.push_back(leptonMassesInput.at(i));
         }
 
 
@@ -2492,7 +2492,7 @@ void Class_Potential_Origin::CheckImplementation(
             std::cout << std::endl;
 
             double sum{0};
-            for(size_t i{0};i<NLepton;++i)
+            for(std::size_t i{0};i<NLepton;++i)
             {
                 sum += std::abs(leptonMassCalculated.at(i) - leptonMassesInput.at(i));
             }
@@ -2516,7 +2516,7 @@ void Class_Potential_Origin::CheckImplementation(
         std::cout << std::endl << std::endl;
 
         double sum{0};
-        for(size_t i{0};i<NQuarks;++i)
+        for(std::size_t i{0};i<NQuarks;++i)
         {
             sum += std::abs(quarkMassCalculated.at(i) - quarkMassesInput.at(i));
         }
@@ -2551,7 +2551,7 @@ void Class_Potential_Origin::CheckImplementation(
         std::cout << std::endl << std::endl;
 
         double sum{0};
-        for(size_t i{0};i<nVEV;++i)
+        for(std::size_t i{0};i<nVEV;++i)
         {
             sum += std::abs(std::abs(CalculatedHiggsVEV.at(i)) - std::abs(vevTreeMin.at(i)));
         }
@@ -2566,7 +2566,7 @@ void Class_Potential_Origin::CheckImplementation(
     TestResults.push_back(Pass);
     {
         double SurviveTadpole = 0;
-        for(size_t i=0;i<NHiggs;i++) SurviveTadpole += std::abs(VTree(vevTree,i+1));
+        for(std::size_t i=0;i<NHiggs;i++) SurviveTadpole += std::abs(VTree(vevTree,i+1));
 
         if(SurviveTadpole > 1e-5){
             std::cout << "The given input parameter does not fulfill the tadpole relations and is not a minimum of the potential."
@@ -2590,21 +2590,21 @@ void Class_Potential_Origin::CheckImplementation(
 
         VectorXd NablaWeinberg(NHiggs),NablaVCT(NHiggs);
         MatrixXd HesseWeinberg(NHiggs,NHiggs), HesseVCT(NHiggs,NHiggs);
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
             NablaWeinberg[i] = WeinbergNabla[i];
-            for(size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
+            for(std::size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
         }
 
-        for(size_t i=0;i<NHiggs;i++){
+        for(std::size_t i=0;i<NHiggs;i++){
             NablaVCT(i) = Curvature_Higgs_CT_L1[i];
-            for(size_t j=0;j<NHiggs;j++){
+            for(std::size_t j=0;j<NHiggs;j++){
                 NablaVCT(i) += Curvature_Higgs_CT_L2[i][j] * vevTree[j];
                 HesseVCT(i,j) = Curvature_Higgs_CT_L2[i][j];
-                for(size_t k=0;k<NHiggs;k++){
+                for(std::size_t k=0;k<NHiggs;k++){
                     NablaVCT(i) += 0.5*Curvature_Higgs_CT_L3[i][j][k] * vevTree[j] *vevTree[k];
                     HesseVCT(i,j) += Curvature_Higgs_CT_L3[i][j][k] * vevTree[k];
-                    for(size_t l=0;l<NHiggs;l++){
+                    for(std::size_t l=0;l<NHiggs;l++){
                         NablaVCT(i) += 1.0/6.0 * Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[j] * vevTree[k] * vevTree[l];
                         HesseVCT(i,j) += 0.5* Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[k] * vevTree[l];
                     }
@@ -2613,15 +2613,15 @@ void Class_Potential_Origin::CheckImplementation(
         }
 
         MatrixXd MassMatrix(NHiggs,NHiggs);
-        for(size_t i=0;i<NHiggs;i++)
+        for(std::size_t i=0;i<NHiggs;i++)
         {
-            for(size_t j=0;j<NHiggs;j++)
+            for(std::size_t j=0;j<NHiggs;j++)
             {
                 MassMatrix(i,j) = Curvature_Higgs_L2[i][j];
-                for(size_t k=0;k<NHiggs;k++)
+                for(std::size_t k=0;k<NHiggs;k++)
                 {
                     MassMatrix(i,j) += Curvature_Higgs_L3[i][j][k]*vevTree[k];
-                    for(size_t l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * vevTree[k]*vevTree[l];
+                    for(std::size_t l=0;l<NHiggs;l++) MassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * vevTree[k]*vevTree[l];
                 }
             }
         }
@@ -2631,7 +2631,7 @@ void Class_Potential_Origin::CheckImplementation(
 
         std::vector<double> TreeMass,NLOMass;
 
-        for(size_t i =0;i<NHiggs;i++){
+        for(std::size_t i =0;i<NHiggs;i++){
             if(std::abs(esTree.eigenvalues()[i]) < ZeroMass) TreeMass.push_back(0);
             else TreeMass.push_back(esTree.eigenvalues()[i]);
             if(std::abs(esNLO.eigenvalues()[i]) < ZeroMass) NLOMass.push_back(0);
@@ -2639,12 +2639,12 @@ void Class_Potential_Origin::CheckImplementation(
         }
 
         std::cout << "The higgs masses squared at LO | NLO are : " << std::endl;
-        for(size_t i=0;i<NHiggs;i++){
+        for(std::size_t i=0;i<NHiggs;i++){
             std::cout << "m_i^2 = " << TreeMass[i] << " | " << NLOMass[i] << std::endl;
         }
 
         double sum{0.0};
-        for(size_t i=0;i<NHiggs;i++){
+        for(std::size_t i=0;i<NHiggs;i++){
             double z = std::abs(std::abs(NLOMass[i]) - TreeMass.at(i));
             double n = std::max(std::abs(NLOMass[i]), std::abs(TreeMass[i]));
             if(n != 0) sum += z/n;
@@ -2663,7 +2663,7 @@ void Class_Potential_Origin::CheckImplementation(
         std::vector<double> VevDummyConfigForMinimiser(nVEV);
 		double RNDMax = 500;
 		for(int i=0;i<10;i++){
-			for(size_t j=0;j<nVEV;j++) VevDummyConfigForMinimiser.at(j) = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
+            for(std::size_t j=0;j<nVEV;j++) VevDummyConfigForMinimiser.at(j) = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
             auto VevDummyConfigForPotential=MinimizeOrderVEV(VevDummyConfigForMinimiser);
 			ValSimplified = VTree(VevDummyConfigForPotential);
 			ValTensor = VTree(VevDummyConfigForPotential,0,true /* = ForceExplicitCalculation */);
@@ -2687,7 +2687,7 @@ void Class_Potential_Origin::CheckImplementation(
         std::vector<double> VevDummyConfigForMinimiser(nVEV);
 		double RNDMax = 500;
 		for(int i=0;i<10;i++){
-			for(size_t j=0;j<nVEV;j++) VevDummyConfigForMinimiser.at(j) = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
+            for(std::size_t j=0;j<nVEV;j++) VevDummyConfigForMinimiser.at(j) = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
             auto VevDummyConfigForPotential=MinimizeOrderVEV(VevDummyConfigForMinimiser);
 			ValCTSimplified = CounterTerm(VevDummyConfigForPotential);
 			ValCTTensor = CounterTerm(VevDummyConfigForPotential,0,	true);
@@ -2728,7 +2728,7 @@ void Class_Potential_Origin::CheckImplementation(
         if(el.size() > maxsize) maxsize = el.size();
     }
     maxsize += 5;
-    for(size_t i{0};i<TestNames.size();++i)
+    for(std::size_t i{0};i<TestNames.size();++i)
     {
         std::cout << std::setw(maxsize) << std::left << TestNames.at(i)
                   << "| " << TestResults.at(i) << std::endl;
@@ -2756,7 +2756,7 @@ void Class_Potential_Origin::CheckImplementation(
 void Class_Potential_Origin::FindSignSymmetries(){
 	SignSymmetries.clear();
 	std::vector<double> testvev,testvevPotential;
-	for(size_t i=0;i<nVEV;i++) testvev.push_back(i+1);
+    for(std::size_t i=0;i<nVEV;i++) testvev.push_back(i+1);
     testvevPotential=MinimizeOrderVEV(testvev);
 	double referenceValue = VEff(testvevPotential);
 
@@ -2764,14 +2764,14 @@ void Class_Potential_Origin::FindSignSymmetries(){
 	double VEffDummy;
 
 	// Fill a dummy vector with a certain amout of -1 and look at all possible permutations of it
-	for(size_t countNegative=1;countNegative<=nVEV;countNegative++){
+    for(std::size_t countNegative=1;countNegative<=nVEV;countNegative++){
 		std::vector<double> tmpSymmetry;
-		for(size_t i=0;i<countNegative;i++) tmpSymmetry.push_back(-1);
-		for(size_t i=countNegative;i<nVEV;i++) tmpSymmetry.push_back(1);
+        for(std::size_t i=0;i<countNegative;i++) tmpSymmetry.push_back(-1);
+        for(std::size_t i=countNegative;i<nVEV;i++) tmpSymmetry.push_back(1);
 
 		do{
 			vevdummy.clear();
-			for(size_t i=0;i<nVEV;i++) vevdummy.push_back(tmpSymmetry.at(i)*testvev.at(i));
+            for(std::size_t i=0;i<nVEV;i++) vevdummy.push_back(tmpSymmetry.at(i)*testvev.at(i));
             vevdummyPotential=MinimizeOrderVEV(vevdummy);
 			VEffDummy = VEff(vevdummyPotential);
 			if(std::abs(VEffDummy-referenceValue)<=1e-3*std::abs(referenceValue)) SignSymmetries.push_back(tmpSymmetry);
@@ -2855,12 +2855,12 @@ std::vector<std::complex<double>> Class_Potential_Origin::QuarkMasses(const std:
     MatrixXcd MIJ(NQuarks,NQuarks);
     MIJ = MatrixXcd::Zero(NQuarks,NQuarks);
     double ZeroMass = std::pow(10,-10);
-    for(size_t i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(size_t j=0;j<NQuarks;j++)
+        for(std::size_t j=0;j<NQuarks;j++)
         {
 
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 MIJ(i,j) += Curvature_Quark_F2H1[i][j][k]*v[k];
             }
@@ -2870,7 +2870,7 @@ std::vector<std::complex<double>> Class_Potential_Origin::QuarkMasses(const std:
 
 	ComplexEigenSolver<MatrixXcd> es(MIJ,false);
 
-	for(size_t i =0;i<NQuarks;i++)
+    for(std::size_t i =0;i<NQuarks;i++)
 	{
 		auto tmp = es.eigenvalues()[i];
 		if(std::abs(tmp) < ZeroMass ) res.push_back(0);
@@ -2908,12 +2908,12 @@ std::vector<std::complex<double>> Class_Potential_Origin::LeptonMasses(const std
     MatrixXcd MIJ(NLepton,NLepton);
     MIJ = MatrixXcd::Zero(NLepton,NLepton);
     double ZeroMass = std::pow(10,-10);
-    for(size_t i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(size_t j=0;j<NLepton;j++)
+        for(std::size_t j=0;j<NLepton;j++)
         {
 
-            for(size_t k=0;k<NHiggs;k++)
+            for(std::size_t k=0;k<NHiggs;k++)
             {
                 MIJ(i,j) += Curvature_Lepton_F2H1[i][j][k]*v[k];
             }
@@ -2923,7 +2923,7 @@ std::vector<std::complex<double>> Class_Potential_Origin::LeptonMasses(const std
 
 	ComplexEigenSolver<MatrixXcd> es(MIJ,false);
 
-	for(size_t i =0;i<NLepton;i++)
+    for(std::size_t i =0;i<NLepton;i++)
 	{
 		auto tmp = es.eigenvalues()[i];
 		if(std::abs(tmp) < ZeroMass ) res.push_back(0);
@@ -2954,7 +2954,7 @@ std::vector<double> Class_Potential_Origin::MinimizeOrderVEV(const std::vector<d
 
 
      std::size_t count=0;
-     for(size_t i=0;i<NHiggs;++i)
+     for(std::size_t i=0;i<NHiggs;++i)
      {
          if(i==VevOrder[count]) {
              vevFunction.push_back(vevMinimizer.at(count));

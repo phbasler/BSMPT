@@ -54,7 +54,7 @@ double GSL_VEFF_gen_all(const gsl_vector *v, void *p)
     std::vector<double> vMin;
     auto nVEVs = params->modelPointer->get_nVEV();
 
-    for(size_t i=0;i<nVEVs;i++)
+    for(std::size_t i=0;i<nVEVs;i++)
     {
         vMin.push_back(gsl_vector_get(v,i));
     }
@@ -90,7 +90,7 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params& params, std::vector<double>& 
 
     /* Starting point */
     x = gsl_vector_alloc (dim);
-    for(size_t k=0;k<dim;k++) gsl_vector_set(x,k,start.at(k));
+    for(std::size_t k=0;k<dim;k++) gsl_vector_set(x,k,start.at(k));
     ss = gsl_vector_alloc (dim);
     gsl_vector_set_all (ss, 1.0);
 
@@ -118,10 +118,10 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params& params, std::vector<double>& 
 
     if(status == GSL_SUCCESS)
     {
-        for(size_t k=0;k<dim;k++) sol.push_back(gsl_vector_get(s->x,k));
+        for(std::size_t k=0;k<dim;k++) sol.push_back(gsl_vector_get(s->x,k));
     }
     else{
-        for(size_t k=0;k<dim;k++) sol.push_back(0);
+        for(std::size_t k=0;k<dim;k++) sol.push_back(0);
     }
 
     gsl_vector_free(x);
@@ -179,7 +179,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     std::vector<double> start,sol,vPot;
     do{
         start.resize(dim);
-        for(size_t i=0;i<dim;i++) start[i] = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
+        for(std::size_t i=0;i<dim;i++) start[i] = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
 
 
         auto status = GSL_Minimize_From_S_gen_all(params,sol,start);
@@ -188,7 +188,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
             vPot=modelPointer->MinimizeOrderVEV(sol);
 
             std::vector<double> row(nCol);
-            for(size_t i=0;i<dim;i++) row.at(i) = sol.at(i);
+            for(std::size_t i=0;i<dim;i++) row.at(i) = sol.at(i);
             row.at(dim) = modelPointer->EWSBVEV(vPot);
             row.at(dim+1) = modelPointer->VEff(vPot,Temp,0);
 
@@ -211,7 +211,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
 
     std::size_t minIndex = 0;
     double VMin = saveAllMinima[0][dim+1];
-    for(size_t k=1;k<numOfSol;k++)
+    for(std::size_t k=1;k<numOfSol;k++)
     {
         if(saveAllMinima[k][dim+1] <= VMin)
         {
@@ -221,7 +221,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     }
 
     std::vector<double> solV;
-    for(size_t k=0;k<dim;k++) solV.push_back(saveAllMinima[minIndex][k]);
+    for(std::size_t k=0;k<dim;k++) solV.push_back(saveAllMinima[minIndex][k]);
     return std::make_pair(solV,true);
 
 }

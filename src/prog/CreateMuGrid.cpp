@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) try{
 	std::vector<double> vTree;
 
 
-    for(size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
+    for(std::size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
 
 
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) try{
 
 	// find the minimum in the symmetric phase. For this minimise at T = Tc + 1
     std::vector<double> vevsymmetricSolution,checksym, startpoint;
-    for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
+    for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
     vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint);
 
 
@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) try{
 	std::cout << "vw = " << vw << std::endl;
     std::cout << "LW = " << p.getLW()*EWPT.Tc << "/TC" << std::endl;
     std::cout << "T_C = " << EWPT.Tc << std::endl;
-    for(size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
+    for(std::size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
 
 	// double res = K1_fermion_interp(2.5,3.7);
 	// std::cout << "res = " << res << std::endl;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) try{
 	double zmin = 0;
 	double stepsize = (zmax-zmin)/nstep;
 	outfile << "z\tmu_{B_L}" << std::endl;
-    for(size_t i=0;i<=nstep;i++){
+    for(std::size_t i=0;i<=nstep;i++){
 		double z= zmin + stepsize*i;
         outfile << z << sep << Baryo::mubl_func(z,&p) << std::endl;
 

@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) try{
             }
             auto EWPTdefault = Minimizer::PTFinder_gen_all(modelPointer,0,300);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
-            for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPTdefault.EWMinimum.at(i));
+            for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPTdefault.EWMinimum.at(i));
             auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPTdefault.Tc+1,checksym,startpoint);
             if(TerminalOutput)std::cout<<"Start of mu variation"<<std::endl;
             double nstep = NumberOfStep;
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) try{
                 auto VEV_NLO_mu = Minimizer::Minimize_gen_all(modelPointer,0,checkmu,startpoint);
                 if(TerminalOutput){
                     std::cout<<"\tStatusFlag = "<<EWPT_mu.StatusFlag<<" @ mu = "<<modelPointer->get_scale()<<" = "<<mu_factor<<"*C_vev0"<<std::endl;
-                    for(size_t i=0;i<EWPT_mu.EWMinimum.size();i++)
+                    for(std::size_t i=0;i<EWPT_mu.EWMinimum.size();i++)
                     {
                         std::cout<<sep<<sep<< VEVnames.at(i+3)<<sep<<EWPT_mu.EWMinimum.at(i)
                                 <<" = " <<EWPT_mu.EWMinimum.at(i)/EWPTdefault.EWMinimum.at(i)

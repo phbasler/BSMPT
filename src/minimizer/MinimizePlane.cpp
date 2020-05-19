@@ -64,16 +64,16 @@ std::vector<double> TransformCoordinates(
 
     std::size_t nVEVs = params.modelPointer->get_nVEV();
 	vMin.resize(nVEVs);
-    for(size_t i=0;i<params.Index;i++) {
+    for(std::size_t i=0;i<params.Index;i++) {
         vMin[i] = vMinTilde.at(i);
     }
     vMin[params.Index] = 0;
-    for(size_t i=1+params.Index;i<nVEVs;i++) {
+    for(std::size_t i=1+params.Index;i<nVEVs;i++) {
         vMin[i] = vMinTilde.at(i-1);
     }
 
 	double plane_const = 0, plane_coord=0;
-    for(size_t i=0;i<nVEVs;i++){
+    for(std::size_t i=0;i<nVEVs;i++){
 		plane_const += (params.normalvector.at(i))*(params.Point.at(i));
 		plane_coord += (params.normalvector.at(i))*(vMin.at(i));
 	}
@@ -108,7 +108,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
     std::vector<std::vector<double>> Minima;
 
 	std::vector<double> normalvector;
-	for(size_t i=0;i<VEVBroken.size();i++) normalvector.push_back(VEVBroken.at(i) - VEVSymmetric.at(i));
+	for(std::size_t i=0;i<VEVBroken.size();i++) normalvector.push_back(VEVBroken.at(i) - VEVSymmetric.at(i));
 
 	struct PointerContainerMinPlane params;
 	params.Temp = Temp;
@@ -120,7 +120,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 	params.VEVBroken = VEVBroken;
 
     int IndexNorm = -1;
-	for(size_t i=0;i<normalvector.size();i++){
+	for(std::size_t i=0;i<normalvector.size();i++){
 		if(std::abs(normalvector.at(i)) >= 1e-3) {
             IndexNorm = static_cast<int>(i);
 			break;
@@ -146,10 +146,10 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 
 #ifdef CMAES_FOUND
     std::vector<double> startCMAES(params.nVEV-1);
-    for(size_t i=0;i<params.Index;i++) {
+    for(std::size_t i=0;i<params.Index;i++) {
         startCMAES.at(i) = params.VEVBroken.at(i);
     }
-    for(size_t i=static_cast<size_t>(params.Index);i<params.nVEV-1;i++) {
+    for(std::size_t i=static_cast<size_t>(params.Index);i<params.nVEV-1;i++) {
         startCMAES.at(i) = params.VEVBroken.at(i+1);
     }
     auto LibCMAESResult=LibCMAES::CMAES_Minimize_Plane_gen_all(params,startCMAES);
@@ -162,7 +162,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 #endif
 
     std::size_t MinIndex=0;
-    for(size_t i=1;i<Minima.size();i++){
+    for(std::size_t i=1;i<Minima.size();i++){
         if(PotValues.at(i) < PotValues.at(MinIndex)){
             MinIndex = i;
         }
@@ -182,7 +182,7 @@ double GSL_VEFF_Minimize_Plane(const gsl_vector *v, void *p)
     struct PointerContainerMinPlane * params = static_cast<PointerContainerMinPlane*>(p);
     std::vector<double> vMinTilde;
     std::size_t nVEVs = params->nVEV;
-    for(size_t i=0;i<nVEVs-1;i++)
+    for(std::size_t i=0;i<nVEVs-1;i++)
     {
         vMinTilde.push_back(gsl_vector_get(v,i));
     }
@@ -204,9 +204,9 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& par
 	gsl_multimin_function minex_func;
 
     const double ftol = GSL_Tolerance;
-	size_t MinIter = 600;
+	std::size_t MinIter = 600;
 
-	size_t iter = 0;
+	std::size_t iter = 0;
 	int status;
 	double size;
 
@@ -214,7 +214,7 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& par
 
 	/* Starting point */
 	x = gsl_vector_alloc (dim);
-    for(size_t k=0;k<dim;k++) gsl_vector_set(x,k,start.at(k));
+    for(std::size_t k=0;k<dim;k++) gsl_vector_set(x,k,start.at(k));
 	ss = gsl_vector_alloc (dim);
 	gsl_vector_set_all (ss, 1.0);
 
@@ -241,10 +241,10 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& par
 
   if(status == GSL_SUCCESS)
   {
-      for(size_t k=0;k<dim;k++) sol.push_back(gsl_vector_get(s->x,k));
+      for(std::size_t k=0;k<dim;k++) sol.push_back(gsl_vector_get(s->x,k));
   }
   else{
-      for(size_t k=0;k<dim;k++) sol.push_back(0);
+      for(std::size_t k=0;k<dim;k++) sol.push_back(0);
   }
 
   gsl_vector_free(x);
@@ -293,7 +293,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane&
     std::vector<double> start,vPot,soltilde;
 	do{
 		start.resize(dim);
-        for(size_t i=0;i<dim;i++) start[i] = RNDMin*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
+        for(std::size_t i=0;i<dim;i++) start[i] = RNDMin*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
 
 
 		GSL_Minimize_Plane_From_S_gen_all(params,soltilde,start);
@@ -304,7 +304,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane&
 
 
 		std::vector<double> row(nCol);
-        for(size_t i=0;i<dim+1;i++) row.at(i) = sol.at(i);
+        for(std::size_t i=0;i<dim+1;i++) row.at(i) = sol.at(i);
 		row.at(dim+1) = modelPointer->EWSBVEV(vPot);
 		row.at(dim+2) = modelPointer->VEff(vPot,params.Temp,0);
 
@@ -329,7 +329,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane&
 
     std::size_t minIndex = 0;
 	double VMin = saveAllMinima[0][dim+2];
-    for(size_t k=1;k<numOfSol;k++)
+    for(std::size_t k=1;k<numOfSol;k++)
 	{
 		if(saveAllMinima[k][dim+2] <= VMin)
 		{
@@ -341,7 +341,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane&
     res.PotVal = saveAllMinima[minIndex][dim+2];
     res.vc = saveAllMinima[minIndex][dim+1];
     std::vector<double> Minimum;
-    for(size_t i=0;i<dim+1;i++) Minimum.push_back(saveAllMinima[minIndex][i]);
+    for(std::size_t i=0;i<dim+1;i++) Minimum.push_back(saveAllMinima[minIndex][i]);
     res.Minimum = Minimum;
     return  res;
 }

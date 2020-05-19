@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) try{
 
             auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
-            for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
+            for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
             auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,3);
 
 
@@ -162,11 +162,11 @@ int main(int argc, char *argv[]) try{
                     std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
                     std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
                     std::cout << "xi_c = " << dimensionnames.at(2)  << " = " << EWPT.vc/EWPT.Tc << std::endl;
-                    for(size_t i=0;i<ndim; i++){
+                    for(std::size_t i=0;i<ndim; i++){
                         std::cout << dimensionnames.at(i+3) << " = " << EWPT.EWMinimum.at(i) << " GeV\n";
                     }
                     std::cout<< "Symmetric VEV config"<<std::endl;
-                    for(size_t i=0;i<ndim; i++){
+                    for(std::size_t i=0;i<ndim; i++){
                         std::cout << dimensionnames.at(i+3) << " = " << VEVsym.at(i) << " GeV\n";
                     }
 

@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) try{
 
 
                     std::vector<double> basepoint;
-                    for(size_t i=0;i<modelPointer->get_nVEV();i++) basepoint.push_back(VEVSymmetric.at(i)
+                    for(std::size_t i=0;i<modelPointer->get_nVEV();i++) basepoint.push_back(VEVSymmetric.at(i)
 							+ 0.5*(vcritical.at(i) - VEVSymmetric.at(i)));
 
                     auto SolMinPlane = Minimizer::MinimizePlane(basepoint,VEVSymmetric,vcritical,Model,par,parCT,EWPT.Tc);
@@ -193,12 +193,12 @@ int main(int argc, char *argv[]) try{
 
 
 					outfile << linestr;
-                    for(size_t i=0;i<nParCT;i++) {
+                    for(std::size_t i=0;i<nParCT;i++) {
                         outfile << sep << parCT[i];
                     }
                     outfile << sep << EWPT.Tc << sep << EWPT.vc;
                     outfile << sep << EWPT.vc / EWPT.Tc;
-                    for(size_t i=0;i<ndim;i++) outfile << sep << EWPT.EWMinimum.at(i);
+                    for(std::size_t i=0;i<ndim;i++) outfile << sep << EWPT.EWMinimum.at(i);
                     outfile << sep << LW1D;
                     outfile << sep << LWplane;
 					outfile << std::endl;
@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) try{
                     std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
                     std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
                     std::cout << "xi_c = " << dimensionnames.at(2)  << " = " << EWPT.vc/EWPT.Tc << std::endl;
-                    for(size_t i=0;i<ndim; i++){
+                    for(std::size_t i=0;i<ndim; i++){
                         std::cout << dimensionnames.at(i+3) << " = " << EWPT.EWMinimum.at(i) << " GeV\n";
                     }
                     std::cout << "The potential barrier in the 1D approximation is given by Vb = " << Vb1D << " GeV^4" << std::endl;

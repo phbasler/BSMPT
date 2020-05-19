@@ -76,7 +76,7 @@ double K_integrand(const std::vector<double>& p, double masssquared, int switchv
 
 double K_integrand_gsl(double *x, std::size_t dim, void *p ){
   std::vector<double> momentum(dim);
-  for(size_t i=0;i<dim;i++) momentum[i] = x[i];
+  for(std::size_t i=0;i<dim;i++) momentum[i] = x[i];
   struct GSL_integration * params = static_cast<GSL_integration*>(p); //(struct GSL_integration *) p;
   double res = K_integrand(momentum, params->masssquared, params->switchval, params->s, params->Temp);
   return res;

@@ -46,7 +46,7 @@ std::pair<std::vector<double> , std::vector<double>> set_up_nL_grid(
             std::string errmsg = "boost::any_cast failed @ setting to top_source\n";
             throw std::runtime_error(errmsg);
         }
-        for(size_t i=0;i<=n_step;i++)
+        for(std::size_t i=0;i<=n_step;i++)
         {
             double zend     =   i*wall_factor/n_step;
             arr_z[i]        =   zend;
@@ -67,7 +67,7 @@ std::pair<std::vector<double> , std::vector<double>> set_up_nL_grid(
                 std::string errmsg = "boost::any_cast failed @ setting to bot_source\n";
                 throw std::runtime_error(errmsg);
             }
-        for(size_t i=0;i<=n_step;i++)
+        for(std::size_t i=0;i<=n_step;i++)
         {
             double zend     =   i*wall_factor/n_step;
             arr_z[i]        =   zend;
@@ -88,7 +88,7 @@ std::pair<std::vector<double> , std::vector<double>> set_up_nL_grid(
                 std::string errmsg = "boost::any_cast failed @ setting to tau_source\n";
                 throw std::runtime_error(errmsg);
             }
-        for(size_t i=0;i<=n_step;i++)
+        for(std::size_t i=0;i<=n_step;i++)
         {
             double zend     =   i*wall_factor/n_step;
             arr_z[i]        =   zend;

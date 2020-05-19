@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) try{
 			sol.clear();
 			Check.clear();
 			start.clear();
-            for(size_t i=0;i<ndim;i++) start.push_back(modelPointer->get_vevTreeMin(i));
+            for(std::size_t i=0;i<ndim;i++) start.push_back(modelPointer->get_vevTreeMin(i));
             sol = Minimizer::Minimize_gen_all(modelPointer,0,Check,start);
 
 
@@ -151,14 +151,14 @@ int main(int argc, char *argv[]) try{
 			double vev = modelPointer->EWSBVEV(solPot);
 
 			outfile << linestr;
-            for(size_t i=0;i<nParCT;i++) outfile << sep << parCT[i];
-            for(size_t i=0;i<ndim;i++) outfile << sep << sol.at(i);
+            for(std::size_t i=0;i<nParCT;i++) outfile << sep << parCT[i];
+            for(std::size_t i=0;i<ndim;i++) outfile << sep << sol.at(i);
             outfile << sep << vev;
 			outfile << std::endl;
 
 			if(LineStart==LineEnd){
                 auto dimensionnames = modelPointer->addLegendVEV();
-                for(size_t i=0;i<ndim;i++){
+                for(std::size_t i=0;i<ndim;i++){
 					std::cout << dimensionnames.at(i) << " = " << sol.at(i) << " GeV" << std::endl;
 				}
 			}

@@ -125,11 +125,11 @@ std::vector<std::string> Class_CxSM::addLegendTripleCouplings() const
 	particles[4]="H2";
 	particles[5]="H3";
 
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=i;j<NHiggs;j++)
+        for(std::size_t j=i;j<NHiggs;j++)
         {
-            for(size_t k=j;k<NHiggs;k++)
+            for(std::size_t k=j;k<NHiggs;k++)
             {
                 labels.push_back("Tree_"+particles.at(i)+particles.at(j)+particles.at(k));
                 labels.push_back("CT_"+particles.at(i)+particles.at(j)+particles.at(k));
@@ -429,9 +429,9 @@ void Class_CxSM::write() const
 	std::cout << "The scale is given by mu = " << scale << " GeV " << std::endl;
 
 	MatrixXd HiggsRot(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
 			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
 		}
@@ -564,16 +564,16 @@ std::vector<double> Class_CxSM::calc_CT() const
 
 	VectorXd NablaWeinberg(NHiggs);
 	MatrixXd HesseWeinberg(NHiggs,NHiggs),HiggsRot(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		NablaWeinberg[i] = WeinbergNabla[i];
-		for(size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
+		for(std::size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
 	}
 
 	double ZeroCut = 1e-5;
-	for(size_t i=0;i<NHiggs;i++){
+	for(std::size_t i=0;i<NHiggs;i++){
 		if(std::abs(NablaWeinberg[i]) <= ZeroCut) NablaWeinberg[i] = 0;
-		for(size_t j=0;j<NHiggs;j++) {
+		for(std::size_t j=0;j<NHiggs;j++) {
 			if(std::abs(HesseWeinberg(i,j)) <= ZeroCut) HesseWeinberg(i,j) = 0;
 		}
 	}
@@ -672,7 +672,7 @@ std::vector<double> Class_CxSM::calc_CT() const
         parCT[13] = 0;
         parCT[14] = 0;
     }
-  for(size_t i=0;i<nParCT;i++) {
+  for(std::size_t i=0;i<nParCT;i++) {
     if(std::abs(parCT[i]) <= ZeroCut) parCT[i] = 0;
   }
 
@@ -694,7 +694,7 @@ void Class_CxSM::TripleHiggsCouplings()
 	// particle to be the first particle in the vector (which has the index 5 because they are sorted by mass)
 
 	// example for keeping the mass order
-	for(size_t i=0;i<NHiggs;i++) {
+	for(std::size_t i=0;i<NHiggs;i++) {
 		HiggsOrder[i]=i;
 	}
 
@@ -702,11 +702,11 @@ void Class_CxSM::TripleHiggsCouplings()
     TripleDeriv=WeinbergThirdDerivative();
 	std::vector<std::vector<std::vector<double>>> GaugeBasis(NHiggs, std::vector<std::vector<double>>(NHiggs,
 				std::vector<double>(NHiggs)));
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	  {
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
-		  for(size_t k=0;k<NHiggs;k++)
+		  for(std::size_t k=0;k<NHiggs;k++)
 			{
 			  GaugeBasis[i][j][k] = TripleDeriv.at(i+j*NHiggs+k*NHiggs*NHiggs);
 			}
@@ -714,9 +714,9 @@ void Class_CxSM::TripleHiggsCouplings()
 	  }
 
 	MatrixXd HiggsRot(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
 			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
 		}
@@ -728,7 +728,7 @@ void Class_CxSM::TripleHiggsCouplings()
 
 
 
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
 	}
@@ -736,11 +736,11 @@ void Class_CxSM::TripleHiggsCouplings()
 	TripleHiggsCorrectionsCWPhysical.resize(NHiggs);
 	TripleHiggsCorrectionsTreePhysical.resize(NHiggs);
 	TripleHiggsCorrectionsCTPhysical.resize(NHiggs);
-	for(size_t i=0;i<NHiggs;i++) {
+	for(std::size_t i=0;i<NHiggs;i++) {
 		TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
 		TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
 		TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
-		for(size_t j=0;j<NHiggs;j++) {
+		for(std::size_t j=0;j<NHiggs;j++) {
 			TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
 			TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
 			TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
@@ -748,20 +748,20 @@ void Class_CxSM::TripleHiggsCouplings()
 	}
 
 
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	  {
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
-			for(size_t k=0;k<NHiggs;k++)
+			for(std::size_t k=0;k<NHiggs;k++)
 			{
 			  TripleHiggsCorrectionsCWPhysical[i][j][k] = 0;
 			  TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
 			  TripleHiggsCorrectionsCTPhysical[i][j][k] = 0;
-			  for(size_t l=0;l<NHiggs;l++)
+			  for(std::size_t l=0;l<NHiggs;l++)
 			  {
-				  for(size_t m=0;m<NHiggs;m++)
+				  for(std::size_t m=0;m<NHiggs;m++)
 				  {
-					  for(size_t n=0;n<NHiggs;n++)
+					  for(std::size_t n=0;n<NHiggs;n++)
 					  {
 						  double RotFac = HiggsRotSort(i,l)*HiggsRotSort(j,m)*HiggsRotSort(k,n);
 						  TripleHiggsCorrectionsCWPhysical[i][j][k] += RotFac*GaugeBasis[l][m][n];
@@ -791,7 +791,7 @@ void Class_CxSM::SetCurvatureArrays(){
 	initVectors();
 
 
-	for(size_t i=0;i<NHiggs;i++) HiggsVev[i] = vevTree[i];
+	for(std::size_t i=0;i<NHiggs;i++) HiggsVev[i] = vevTree[i];
 
 
 
@@ -1174,10 +1174,10 @@ void Class_CxSM::Debugging(const std::vector<double>& input, std::vector<double>
 
 	VectorXd NablaWeinberg(NHiggs);
 	MatrixXd HesseWeinberg(NHiggs,NHiggs),HiggsRot(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		NablaWeinberg[i] = WeinbergNabla[i];
-		for(size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
+		for(std::size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
 	}
 
 	std::cout << "Start " << std::endl;
@@ -1189,31 +1189,31 @@ void Class_CxSM::Debugging(const std::vector<double>& input, std::vector<double>
     LOMasses=HiggsMassesSquared(vevTree,0);
 
 	MatrixXd TreeMassMatrix(NHiggs,NHiggs), CTMassMatrix(NHiggs,NHiggs), CWMassMatrix(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++){
+		for(std::size_t j=0;j<NHiggs;j++){
 			TreeMassMatrix(i,j) = 0;
 			CTMassMatrix(i,j) = 0;
 			CWMassMatrix(i,j) = 0;
 		}
 	}
 
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
 			TreeMassMatrix(i,j) = Curvature_Higgs_L2[i][j];
-			for(size_t k=0;k<NHiggs;k++)
+			for(std::size_t k=0;k<NHiggs;k++)
 			{
 				TreeMassMatrix(i,j) += Curvature_Higgs_L3[i][j][k]*vevTree[k];
-				for(size_t l=0;l<NHiggs;l++) TreeMassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * vevTree[k]*vevTree[l];
+				for(std::size_t l=0;l<NHiggs;l++) TreeMassMatrix(i,j) += 0.5*Curvature_Higgs_L4[i][j][k][l] * vevTree[k]*vevTree[l];
 			}
 
 			CTMassMatrix(i,j) = Curvature_Higgs_CT_L2[i][j];
-			for(size_t k=0;k<NHiggs;k++)
+			for(std::size_t k=0;k<NHiggs;k++)
 			{
 				CTMassMatrix(i,j) += Curvature_Higgs_CT_L3[i][j][k]*vevTree[k];
-				for(size_t l=0;l<NHiggs;l++) CTMassMatrix(i,j) += 0.5*Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[k]*vevTree[l];
+				for(std::size_t l=0;l<NHiggs;l++) CTMassMatrix(i,j) += 0.5*Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[k]*vevTree[l];
 			}
 
 
@@ -1224,36 +1224,36 @@ void Class_CxSM::Debugging(const std::vector<double>& input, std::vector<double>
 
 	SelfAdjointEigenSolver<MatrixXd> es(TreeMassMatrix+CTMassMatrix+CWMassMatrix,EigenvaluesOnly);
 
-	for(size_t i=0;i<NHiggs;i++) {
+	for(std::size_t i=0;i<NHiggs;i++) {
 		NLOMasses[i] = es.eigenvalues()[i];
 	}
 
 
 	std::cout << "Print LO | NLO Mass^2 " << std::endl;
-	for(size_t i=0;i<NHiggs;i++){
+	for(std::size_t i=0;i<NHiggs;i++){
 		std::cout << LOMasses[i] << " | " << NLOMasses[i] << std::endl;
 	}
 
 	 MatrixXd HesseCT(NHiggs,NHiggs);
 	 VectorXd NablaCT(NHiggs);
 
-	 for(size_t i=0;i<NHiggs;i++)
+	 for(std::size_t i=0;i<NHiggs;i++)
 	     {
-	         for(size_t j=0;j<NHiggs;j++)
+	         for(std::size_t j=0;j<NHiggs;j++)
 	         {
 	        	 HesseCT(i,j) = Curvature_Higgs_CT_L2[i][j];
-	             for(size_t k=0;k<NHiggs;k++)
+	             for(std::size_t k=0;k<NHiggs;k++)
 	             {
 	            	 HesseCT(i,j) += Curvature_Higgs_CT_L3[i][j][k]*vevTree[k];
-	                 for(size_t l=0;l<NHiggs;l++) HesseCT(i,j) += 0.5*Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[k]*vevTree[l];
+	                 for(std::size_t l=0;l<NHiggs;l++) HesseCT(i,j) += 0.5*Curvature_Higgs_CT_L4[i][j][k][l] * vevTree[k]*vevTree[l];
 	             }
 	         }
 	     }
 
 	 MatrixXd Add(NHiggs,NHiggs);
 	 Add = HesseCT + HesseWeinberg;
-	 for(size_t i=0;i<NHiggs;i++)
-		 for(size_t j=0;j<NHiggs;j++)
+	 for(std::size_t i=0;i<NHiggs;i++)
+		 for(std::size_t j=0;j<NHiggs;j++)
 			 if(std::abs(Add(i,j)) <= 1e-5) Add(i,j) = 0;
 
 	 std::cout << "Hesse CT  = \n" << HesseCT << "\n\n\n CT + CW = " << Add << std::endl;
@@ -1261,16 +1261,16 @@ void Class_CxSM::Debugging(const std::vector<double>& input, std::vector<double>
 	 std::cout << "Hesse CW = \n" << HesseWeinberg << std::endl;
 
 
-	 for(size_t i=0;i<NHiggs;i++)
+	 for(std::size_t i=0;i<NHiggs;i++)
 	 {
 		 NablaCT[i] = Curvature_Higgs_CT_L1[i];
-		 for(size_t j=0;j<NHiggs;j++)
+		 for(std::size_t j=0;j<NHiggs;j++)
 		 {
 			 NablaCT[i] += Curvature_Higgs_CT_L2[i][j]*vevTree[j];
-			 for(size_t k=0;k<NHiggs;k++)
+			 for(std::size_t k=0;k<NHiggs;k++)
 			 {
 				 NablaCT[i] += 0.5* Curvature_Higgs_CT_L3[i][j][k] * vevTree[j] *vevTree[k];
-				 for(size_t l=0;l<NHiggs;l++)
+				 for(std::size_t l=0;l<NHiggs;l++)
 				 {
 					 NablaCT[i] += 1.0/6.0 * Curvature_Higgs_CT_L4[i][j][k][l]*vevTree[j]*vevTree[k]*vevTree[l];
 				 }
@@ -1280,7 +1280,7 @@ void Class_CxSM::Debugging(const std::vector<double>& input, std::vector<double>
 
 	 VectorXd AddNabla(NHiggs);
 	 AddNabla = NablaWeinberg + NablaCT;
-	 for(size_t i=0;i<NHiggs;i++) if(std::abs(AddNabla[i])<=1e-5) AddNabla[i] = 0;
+	 for(std::size_t i=0;i<NHiggs;i++) if(std::abs(AddNabla[i])<=1e-5) AddNabla[i] = 0;
 	 std::cout << "NablaCT  = " << NablaCT.transpose() << "\n"
 			 << "NablaCW = " << NablaWeinberg.transpose() << "\n"
 			 << "AddNabla = " << AddNabla.transpose() << "\n";

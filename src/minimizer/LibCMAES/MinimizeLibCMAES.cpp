@@ -72,7 +72,7 @@ LibCMAESReturn min_cmaes_gen_all(
     FitFunc cmafunc = [=](const double*v, const int& N){
         (void) N;
         std::vector<double> vev;
-        for(size_t i{0};i<modelPointer->get_nVEV();++i) vev.push_back(v[i]);
+        for(std::size_t i{0};i<modelPointer->get_nVEV();++i) vev.push_back(v[i]);
         return modelPointer->VEff(modelPointer->MinimizeOrderVEV(vev),Temp);
     };
 
@@ -85,7 +85,7 @@ LibCMAESReturn min_cmaes_gen_all(
 
     std::vector<double> sol;
 
-    for(size_t i = 0;i<dim;i++)
+    for(std::size_t i = 0;i<dim;i++)
     {
         sol.push_back(xsol.at(i));
     }
@@ -116,7 +116,7 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
     double sigma;
     sigma = 5;
 
-    for(size_t i=0;i<dim;i++) x0[i]=Start.at(i);
+    for(std::size_t i=0;i<dim;i++) x0[i]=Start.at(i);
 
     double ftol=1e-5;
 
@@ -133,7 +133,7 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
 
         std::vector<double> vMinTilde;
         vMinTilde.resize(nVEVs-1);
-        for(size_t i=0;i<nVEVs-1;i++) vMinTilde[i] = v[i];
+        for(std::size_t i=0;i<nVEVs-1;i++) vMinTilde[i] = v[i];
         auto vev = TransformCoordinates(vMinTilde,params);
 
 
@@ -150,7 +150,7 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
 
     std::vector<double> sol;
 
-    for(size_t i = 0;i<dim;i++)
+    for(std::size_t i = 0;i<dim;i++)
     {
         sol.push_back(xsol.at(i));
     }

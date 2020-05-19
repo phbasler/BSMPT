@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) try{
 				std::vector<double> MinimumPlane;
 			//Find the minimum in the symmetric phase. For this minimise at T = Tc + 1
 				std::vector<double> vevsymmetricSolution,checksym, startpoint;
-                for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vcritical.at(i));
+                for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vcritical.at(i));
                 vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint);
 //Call: Calculation of eta in the different implemented approaches 
                 if(TerminalOutput) std::cout<<"Calling CalcEta..."<<std::endl;
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) try{
                 outfile << sep << -50;//bot brk CP phase
                 outfile << sep << -50;//tau sym CP phase
                 outfile << sep << -50;//tau brk CP phase
-                for(size_t i=0;i<etaLegend.size();i++) outfile << sep << 0;
+                for(std::size_t i=0;i<etaLegend.size();i++) outfile << sep << 0;
 				outfile << std::endl;
 			}//END: No SFOEWPT
 
@@ -214,13 +214,13 @@ int main(int argc, char *argv[]) try{
                     std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
                     std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
                     std::cout << "xi_c = " << dimensionnames.at(2)  << " = " << EWPT.vc/EWPT.Tc << std::endl;
-                    for(size_t i=0;i<modelPointer->get_nVEV(); i++){
+                    for(std::size_t i=0;i<modelPointer->get_nVEV(); i++){
                         std::cout << dimensionnames.at(i+3) << " = " << EWPT.EWMinimum.at(i) << " GeV\n";
                     }
                     std::cout << "The Wall thickness is given by L_W  = " << EtaInterface.getLW()
                               << "GeV^-2\n"
                               << "L_W * T = " << EtaInterface.getLW() * EWPT.Tc << "\n";
-                    for(size_t i=0;i<etaLegend.size();i++) std::cout << etaLegend.at(i) << " = " << eta.at(i) << std::endl;
+                    for(std::size_t i=0;i<etaLegend.size();i++) std::cout << etaLegend.at(i) << " = " << eta.at(i) << std::endl;
                 }
 
 			}//END: LineStart == LineEnd

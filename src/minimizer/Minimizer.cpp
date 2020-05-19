@@ -167,7 +167,7 @@ std::vector<double> Minimize_gen_all(
 
 
     std::size_t minIndex=0;
-    for(size_t i=1;i<PotValues.size();i++){
+    for(std::size_t i=1;i<PotValues.size();i++){
         if(PotValues.at(i) < PotValues.at(minIndex)) minIndex = i;
     }
 
@@ -209,7 +209,7 @@ EWPTReturnType PTFinder_gen_all(
 
     std::vector<double> pSol(dim+1);
 
-    for(size_t k=0;k<dim;k++) startEnde.push_back(modelPointer->get_vevTreeMin(k));
+    for(std::size_t k=0;k<dim;k++) startEnde.push_back(modelPointer->get_vevTreeMin(k));
     solEnd = Minimize_gen_all(modelPointer,TempEnd,checkEnde,startEnde,WhichMinimizer);
     solEndPot=modelPointer->MinimizeOrderVEV(solEnd);
     vEnd = modelPointer->EWSBVEV(solEndPot);
@@ -225,7 +225,7 @@ EWPTReturnType PTFinder_gen_all(
         return result;
     }
 
-    for(size_t k=0;k<dim;k++) startStart.push_back(modelPointer->get_vevTreeMin(k));
+    for(std::size_t k=0;k<dim;k++) startStart.push_back(modelPointer->get_vevTreeMin(k));
     solStart=Minimize_gen_all(modelPointer,TempStart,checkStart,startStart,WhichMinimizer);
     solStartPot=modelPointer->MinimizeOrderVEV(solStart);
     vStart = modelPointer->EWSBVEV(solStartPot);
@@ -253,7 +253,7 @@ EWPTReturnType PTFinder_gen_all(
         return result;
     }
 
-    for(size_t k=0;k<dim;k++) startMitte.push_back(modelPointer->get_vevTreeMin(k));
+    for(std::size_t k=0;k<dim;k++) startMitte.push_back(modelPointer->get_vevTreeMin(k));
     do{
 	    TM = 0.5*(TA+TE);
 	    solMitte.clear();
@@ -285,9 +285,9 @@ EWPTReturnType PTFinder_gen_all(
 	    {
 		    TA = TM;
 		    startMitte.clear();
-            for(size_t k=0;k<dim;k++) pSol[k+1] = solMitte.at(k);
+            for(std::size_t k=0;k<dim;k++) pSol[k+1] = solMitte.at(k);
 		    pSol[0] = vMitte;
-            for(size_t k=0;k<dim;k++) startMitte.push_back(pSol[k+1]);
+            for(std::size_t k=0;k<dim;k++) startMitte.push_back(pSol[k+1]);
 		    vStart = vMitte;
 	    }
 	    else{
@@ -301,7 +301,7 @@ EWPTReturnType PTFinder_gen_all(
     result.StatusFlag = MinimizerStatus::SUCCESS;
     std::vector<double> SolMin;
     result.EWMinimum.clear();
-    for(size_t k=1;k<=dim;k++)  result.EWMinimum.push_back(pSol[k]);
+    for(std::size_t k=1;k<=dim;k++)  result.EWMinimum.push_back(pSol[k]);
     return result;
 }
 

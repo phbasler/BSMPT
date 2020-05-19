@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) try{
         std::vector<double> MinimumPlane;
 //Find the minimum in the symmetric phase. For this minimise at T = Tc + 1
         std::vector<double> vevsymmetricSolution,checksym, startpoint;
-        for(size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vcritical.at(i));
+        for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*vcritical.at(i));
         vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint);
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) try{
 ///////
 /// Outfile
 ///////
-        for(size_t i=0;i<nstep;i++){
+        for(std::size_t i=0;i<nstep;i++){
             outfile<<linestr<<sep;
             outfile<<TC<<sep<<EWPT.vc<<sep<<vwIn<<sep<<EtaInterface.getLW()<<sep;
             outfile<<tau_arr_nL.first.at(i)<<sep;

@@ -113,11 +113,11 @@ std::vector<std::string> Class_Template::addLegendTripleCouplings() const{
 	particles[0]="H";
 
     std::string out = "Tree_";
-    for(size_t i=0;i<NHiggs;i++)
+    for(std::size_t i=0;i<NHiggs;i++)
     {
-        for(size_t j=i;j<NHiggs;j++)
+        for(std::size_t j=i;j<NHiggs;j++)
         {
-            for(size_t k=j;k<NHiggs;k++)
+            for(std::size_t k=j;k<NHiggs;k++)
             {
                 labels.push_back("Tree_"+particles.at(i)+particles.at(j)+particles.at(k));
                 labels.push_back("CT_"+particles.at(i)+particles.at(j)+particles.at(k));
@@ -256,10 +256,10 @@ std::vector<double> Class_Template::calc_CT() const {
 
 	VectorXd NablaWeinberg(NHiggs);
 	MatrixXd HesseWeinberg(NHiggs,NHiggs),HiggsRot(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		NablaWeinberg[i] = WeinbergNabla[i];
-		for(size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
+		for(std::size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
 	}
 
 	// Here you have to use your formulas for the counterterm scheme
@@ -287,7 +287,7 @@ void Class_Template::TripleHiggsCouplings()
 	// particle to be the first particle in the vector (which has the index 5 because they are sorted by mass)
 
 	// example for keeping the mass order
-	for(size_t i=0;i<NHiggs;i++) {
+	for(std::size_t i=0;i<NHiggs;i++) {
 		HiggsOrder[i]=i;
 	}
 
@@ -295,11 +295,11 @@ void Class_Template::TripleHiggsCouplings()
     TripleDeriv=WeinbergThirdDerivative();
 	std::vector<std::vector<std::vector<double>>> GaugeBasis(NHiggs, std::vector<std::vector<double>>(NHiggs,
 				std::vector<double>(NHiggs)));
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	  {
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
-		  for(size_t k=0;k<NHiggs;k++)
+		  for(std::size_t k=0;k<NHiggs;k++)
 			{
 			  GaugeBasis[i][j][k] = TripleDeriv.at(i+j*NHiggs+k*NHiggs*NHiggs);
 			}
@@ -307,9 +307,9 @@ void Class_Template::TripleHiggsCouplings()
 	  }
 
 	MatrixXd HiggsRot(NHiggs,NHiggs);
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
 			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
 		}
@@ -321,7 +321,7 @@ void Class_Template::TripleHiggsCouplings()
 
 
 
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
 	}
@@ -329,11 +329,11 @@ void Class_Template::TripleHiggsCouplings()
 	TripleHiggsCorrectionsCWPhysical.resize(NHiggs);
 	TripleHiggsCorrectionsTreePhysical.resize(NHiggs);
 	TripleHiggsCorrectionsCTPhysical.resize(NHiggs);
-	for(size_t i=0;i<NHiggs;i++) {
+	for(std::size_t i=0;i<NHiggs;i++) {
 		TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
 		TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
 		TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
-		for(size_t j=0;j<NHiggs;j++) {
+		for(std::size_t j=0;j<NHiggs;j++) {
 			TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
 			TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
 			TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
@@ -341,20 +341,20 @@ void Class_Template::TripleHiggsCouplings()
 	}
 
 
-	for(size_t i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	  {
-		for(size_t j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
-			for(size_t k=0;k<NHiggs;k++)
+			for(std::size_t k=0;k<NHiggs;k++)
 			{
 			  TripleHiggsCorrectionsCWPhysical[i][j][k] = 0;
 			  TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
 			  TripleHiggsCorrectionsCTPhysical[i][j][k] = 0;
-			  for(size_t l=0;l<NHiggs;l++)
+			  for(std::size_t l=0;l<NHiggs;l++)
 			  {
-				  for(size_t m=0;m<NHiggs;m++)
+				  for(std::size_t m=0;m<NHiggs;m++)
 				  {
-					  for(size_t n=0;n<NHiggs;n++)
+					  for(std::size_t n=0;n<NHiggs;n++)
 					  {
 						  double RotFac = HiggsRotSort(i,l)*HiggsRotSort(j,m)*HiggsRotSort(k,n);
 						  TripleHiggsCorrectionsCWPhysical[i][j][k] += RotFac*GaugeBasis[l][m][n];
@@ -383,7 +383,7 @@ void Class_Template::SetCurvatureArrays(){
 
 	initVectors();
 	SetCurvatureDone=true;
-	for(size_t i=0;i<NHiggs;i++) HiggsVev[i] = vevTree[i];
+	for(std::size_t i=0;i<NHiggs;i++) HiggsVev[i] = vevTree[i];
 
 
 	Curvature_Higgs_L2[0][0] = ms;

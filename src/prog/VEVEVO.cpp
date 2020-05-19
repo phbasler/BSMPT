@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) try{
 	std::vector<double> vTree;
 
 
-    for(size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
+    for(std::size_t k=0;k<dim;k++) vTree.push_back(modelPointer->get_vevTreeMin(k));
 
     std::vector<double> Check;
 	double vev=0;
@@ -185,10 +185,10 @@ int main(int argc, char *argv[]) try{
 	   start.clear();
 	   if(Temp==TempStart)
 	   {
-           for(size_t k=0;k<dim;k++) start.push_back(vTree.at(k));
+           for(std::size_t k=0;k<dim;k++) start.push_back(vTree.at(k));
 	   }
 	   else{
-           for(size_t k=0;k<dim;k++) start.push_back(sol.at(k));
+           for(std::size_t k=0;k<dim;k++) start.push_back(sol.at(k));
 	   }
 	   sol.clear();
 	   Check.clear();

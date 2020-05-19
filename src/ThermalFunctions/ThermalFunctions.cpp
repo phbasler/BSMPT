@@ -268,7 +268,7 @@ double JbosonInterpolatedNegative(const double& x){
 		fnext = NegLinearInt[C_NegLine-1][1];
 	}
 	else{
-		size_t pos = (size_t (-x));
+		std::size_t pos = (std::size_t (-x));
 		xprev = NegLinearInt[pos][0];
 		fprev = NegLinearInt[pos][1];
 		xnext = NegLinearInt[pos+1][0];

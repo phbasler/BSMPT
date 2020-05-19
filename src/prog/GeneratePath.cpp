@@ -145,9 +145,9 @@ int main(int argc, char *argv[]) try{
             for(auto x: modelPointer->addLegendCT()) outfile << sep << x;
             for(auto x: modelPointer->addLegendTemp()) outfile << sep << x;
             outfile << sep << "line_parameter";
-            for(size_t i=3;i<dimensionnames.size();i++) outfile << sep << dimensionnames.at(i) << "_line";
+            for(std::size_t i=3;i<dimensionnames.size();i++) outfile << sep << dimensionnames.at(i) << "_line";
 		    outfile << "\tV_eff_line";
-            for(size_t i=3;i<dimensionnames.size();i++) outfile << sep << dimensionnames.at(i) << "_min";
+            for(std::size_t i=3;i<dimensionnames.size();i++) outfile << sep << dimensionnames.at(i) << "_min";
 		    outfile << "\tV_eff_min";
 		    outfile << "\tDistance_line_min";
 		    outfile << std::endl;
@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) try{
                     vcritical = EWPT.EWMinimum;
 
                     std::vector<double> VEVSymmetric(modelPointer->get_nVEV());
-					for(size_t i=0;i<VEVSymmetric.size();i++) VEVSymmetric.at(i) = 0;
+					for(std::size_t i=0;i<VEVSymmetric.size();i++) VEVSymmetric.at(i) = 0;
 
 
                     std::vector<double> basepoint,basepointPot;
@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) try{
 						basepoint.clear();
 						basepointPot.clear();
 						double lineparam = tcounter*DeltaT;
-                        for(size_t i=0;i<modelPointer->get_nVEV();i++) {
+                        for(std::size_t i=0;i<modelPointer->get_nVEV();i++) {
 							basepoint.push_back(VEVSymmetric.at(i)+ lineparam*(vcritical.at(i) - VEVSymmetric.at(i)));
 
 						}
@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) try{
                         basepointPot=modelPointer->MinimizeOrderVEV(basepoint);
 						double Vline = modelPointer->VEff(basepointPot,Temp);
 						double DistanceLineMinimum = 0;
-                        for(size_t i=0;i<modelPointer->get_nVEV();i++){
+                        for(std::size_t i=0;i<modelPointer->get_nVEV();i++){
 							DistanceLineMinimum += std::pow(basepoint.at(i)-MinimumPlane.at(i),2);
 						}
 						DistanceLineMinimum = std::sqrt(DistanceLineMinimum);
@@ -216,9 +216,9 @@ int main(int argc, char *argv[]) try{
                         outfile << sep << EWPT.vc / EWPT.Tc;
                         for(auto x: EWPT.EWMinimum) outfile << sep << x;
                         outfile << sep <<lineparam;
-                        for(size_t i=0;i<basepoint.size();i++) outfile << sep << basepoint.at(i);
+                        for(std::size_t i=0;i<basepoint.size();i++) outfile << sep << basepoint.at(i);
                         outfile << sep << Vline;
-                        for(size_t i=0;i<MinimumPlane.size();i++) outfile << sep << MinimumPlane.at(i);
+                        for(std::size_t i=0;i<MinimumPlane.size();i++) outfile << sep << MinimumPlane.at(i);
                         outfile << sep << Vmin;
                         outfile << sep << DistanceLineMinimum;
 						outfile << std::endl;
@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) try{
                     if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS){std::cout << "omega_c = " << EWPT.vc << " GeV\n";
                     std::cout << "T_c = " << EWPT.Tc << " GeV\n";
                     std::cout << "xi_c = omega_c/T_c =  " << EWPT.vc/EWPT.Tc << std::endl;
-                    for(size_t i=0;i<ndim ;i++) {
+                    for(std::size_t i=0;i<ndim ;i++) {
                         std::cout << "omega_" << i+1 << " = " << EWPT.EWMinimum.at(i) << " GeV\n";}
 					}
 				}
@@ -254,7 +254,7 @@ int main(int argc, char *argv[]) try{
                         std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
                         std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
                         std::cout << "xi_c = " << dimensionnames.at(2)  << " = " << EWPT.vc/EWPT.Tc << std::endl;
-                        for(size_t i=0;i<ndim; i++){
+                        for(std::size_t i=0;i<ndim; i++){
                             std::cout << dimensionnames.at(i+3) << " = " << EWPT.EWMinimum.at(i) << " GeV\n";
 						}
 
