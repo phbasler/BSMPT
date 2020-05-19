@@ -90,7 +90,7 @@ double JbosonNumericalIntegration(const double& x, int diff){
 	dummy.diff = diff;
 	dummy.x = x;
 	F.function = [](double k, void* p){
-		struct GSLTemp * params = (struct GSLTemp *) p;
+        struct GSLTemp * params = static_cast<GSLTemp*>(p);
 		return JbosonIntegrand(params->x,k,params->diff);
 	};
 	F.params = &dummy;
@@ -113,7 +113,7 @@ double JfermionNumericalIntegration(const double& x, int diff){
 	dummy.diff = diff;
 	dummy.x = x;
 	F.function = [](double k, void* p){
-		struct GSLTemp * params = (struct GSLTemp *) p;
+        struct GSLTemp * params = static_cast<GSLTemp*>(p);
 		return JfermionIntegrand(params->x,k,params->diff);
 	};
 	F.params = &dummy;
