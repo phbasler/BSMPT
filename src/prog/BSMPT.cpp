@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) try{
             auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
             for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
-            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,3);
+            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint);
 
 
             if(LineStart == LineEnd) {
