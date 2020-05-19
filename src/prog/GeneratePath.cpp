@@ -63,9 +63,9 @@ auto getCLIArguments(int argc, char *argv[])
     if(argc < 6 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "WallThickness calculates the strength of the Wall" << std::endl
+        std::cout << "Generate Path calculates the tunnel path from the broken to the symmetric minimum" << std::endl
                   << "It is called either by " << std::endl
-                  << "./WallThickness model input output FirstLine LastLine" << std::endl
+                  << "./GeneratePath model input output FirstLine LastLine" << std::endl
                   << "or with the following arguments" << std::endl
                   << std::setw(SizeOfFirstColumn) << std::left<< "--help"
                   << "Shows this menu" << std::endl
@@ -184,21 +184,10 @@ int main(int argc, char *argv[]) try{
 	}
 	std::string linestr;
 
-//	Class_Potential_Origin * modelPointer;
-//	Fchoose(modelPointer,Model);
 
     std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
-
-    std::size_t nPar,nParCT;
-    nPar = modelPointer->get_nPar();
-    nParCT = modelPointer->get_nParCT();
-
     std::size_t ndim = modelPointer->get_nVEV();
-
-
-	std::vector<double> par(nPar);
-	std::vector<double> parCT(nParCT);
 
 
 	std::vector<double> Weinberg;
@@ -228,9 +217,7 @@ int main(int argc, char *argv[]) try{
 			{
 				std::cout << "Currently at line " << linecounter << std::endl;
 			}
-			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-			par=parameters.first;
-			parCT = parameters.second;
+            auto parameters = modelPointer->initModel(linestr);
 
 
             if(args.FirstLine == args.LastLine ) modelPointer->write();
@@ -265,7 +252,7 @@ int main(int argc, char *argv[]) try{
 						}
 
                         double Temp = EWPT.Tc;
-                        auto MinPlaneResult = Minimizer::MinimizePlane(basepoint,VEVSymmetric,vcritical,args.Model,par,parCT,Temp);
+                        auto MinPlaneResult = Minimizer::MinimizePlane(basepoint,VEVSymmetric,vcritical,modelPointer,Temp);
                         double Vmin = MinPlaneResult.PotVal;
                         auto MinimumPlane = MinPlaneResult.Minimum;
                         basepointPot=modelPointer->MinimizeOrderVEV(basepoint);
@@ -281,7 +268,7 @@ int main(int argc, char *argv[]) try{
 
 
 						outfile <<  linestr;
-                        for(auto x: parCT) outfile << sep << x;
+                        for(auto x: parameters.second) outfile << sep << x;
                         outfile << sep << EWPT.Tc << sep << EWPT.vc;
                         outfile << sep << EWPT.vc / EWPT.Tc;
                         for(auto x: EWPT.EWMinimum) outfile << sep << x;

@@ -141,8 +141,8 @@ int main(int argc, char *argv[]) try{
 
     if(args.Line < 1)
 	{
-	std::cerr << "Start line counting with 1" << std::endl;
-	return EXIT_FAILURE;
+        std::cerr << "Start line counting with 1" << std::endl;
+        return EXIT_FAILURE;
 	}
 
 
