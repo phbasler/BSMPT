@@ -129,7 +129,7 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
     FitFunc CMAES_VEFF_Minimize_Plane = [=](const double* v, const int& N)
     {
         (void) N;
-        size_t nVEVs = params.modelPointer->get_nVEV();
+        std::size_t nVEVs = params.modelPointer->get_nVEV();
 
         std::vector<double> vMinTilde;
         vMinTilde.resize(nVEVs-1);

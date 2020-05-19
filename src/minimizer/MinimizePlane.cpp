@@ -28,7 +28,7 @@
 #include <gsl/gsl_multimin.h>                   // for gsl_multimin_fminimizer
 
 #include <stdio.h>                              // for printf
-#include <time.h>                               // for size_t, time, NULL
+#include <time.h>                               // for std::size_t, time, NULL
 #include <iomanip>                              // for setprecision
 #include <iostream>                             // for operator<<, endl, ost...
 #include <limits>                               // for numeric_limits, numer...
@@ -62,7 +62,7 @@ std::vector<double> TransformCoordinates(
 
     std::vector<double> vMin;
 
-    size_t nVEVs = params.modelPointer->get_nVEV();
+    std::size_t nVEVs = params.modelPointer->get_nVEV();
 	vMin.resize(nVEVs);
     for(size_t i=0;i<params.Index;i++) {
         vMin[i] = vMinTilde.at(i);
@@ -161,7 +161,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
     Minima.push_back(solCMAES);
 #endif
 
-    size_t MinIndex=0;
+    std::size_t MinIndex=0;
     for(size_t i=1;i<Minima.size();i++){
         if(PotValues.at(i) < PotValues.at(MinIndex)){
             MinIndex = i;
@@ -181,7 +181,7 @@ double GSL_VEFF_Minimize_Plane(const gsl_vector *v, void *p)
 {
     struct PointerContainerMinPlane * params = static_cast<PointerContainerMinPlane*>(p);
     std::vector<double> vMinTilde;
-    size_t nVEVs = params->nVEV;
+    std::size_t nVEVs = params->nVEV;
     for(size_t i=0;i<nVEVs-1;i++)
     {
         vMinTilde.push_back(gsl_vector_get(v,i));
@@ -210,7 +210,7 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& par
 	int status;
 	double size;
 
-    size_t dim = params.nVEV-1;
+    std::size_t dim = params.nVEV-1;
 
 	/* Starting point */
 	x = gsl_vector_alloc (dim);
@@ -257,39 +257,39 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& par
 
 
 GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params,
-                                          size_t seed,
-                                          size_t MinSol){
+                                          std::size_t seed,
+                                          std::size_t MinSol){
 	std::vector<std::vector<double>> saveAllMinima;
     auto result = GSL_Minimize_Plane_gen_all(params, seed ,saveAllMinima, MinSol);
 	return result;
 }
 
 
-GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params, size_t seed){
+GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params, std::size_t seed){
 	std::vector<std::vector<double>> saveAllMinima;
-    size_t MinSol = 20;
+    std::size_t MinSol = 20;
     auto result = GSL_Minimize_Plane_gen_all(params, seed ,saveAllMinima, MinSol);
 	return result;
 }
 
 GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params,
-                                size_t seed ,
+                                std::size_t seed ,
                                 std::vector<std::vector<double>>& saveAllMinima,
-                                size_t MinSol)
+                                std::size_t MinSol)
 {
     GSLPlaneReturn res;
 
 	std::shared_ptr<Class_Potential_Origin> modelPointer;
 	modelPointer=params.modelPointer;
 
-    size_t dim = modelPointer->get_nVEV() - 1;
+    std::size_t dim = modelPointer->get_nVEV() - 1;
 
 	std::default_random_engine randGen(seed);
 	double RNDMin= 500;
-    size_t MinTries = 600;
-    size_t tries = 0;
-    size_t numOfSol = 0;
-    size_t nCol = dim+2 +1 ;
+    std::size_t MinTries = 600;
+    std::size_t tries = 0;
+    std::size_t numOfSol = 0;
+    std::size_t nCol = dim+2 +1 ;
     std::vector<double> start,vPot,soltilde;
 	do{
 		start.resize(dim);
@@ -327,7 +327,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane&
         return res;
 	}
 
-    size_t minIndex = 0;
+    std::size_t minIndex = 0;
 	double VMin = saveAllMinima[0][dim+2];
     for(size_t k=1;k<numOfSol;k++)
 	{

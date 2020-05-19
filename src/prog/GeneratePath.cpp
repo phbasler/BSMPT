@@ -29,7 +29,7 @@
 #include <bits/exception.h>                     // for exception
 #include <ext/alloc_traits.h>                   // for __alloc_traits<>::val...
 #include <math.h>                               // for sqrt
-#include <stdlib.h>                             // for size_t, atoi, EXIT_FA...
+#include <stdlib.h>                             // for std::size_t, atoi, EXIT_FA...
 #include <algorithm>                            // for copy, max
 #include <memory>                               // for shared_ptr, __shared_...
 #include <string>                               // for string, operator<<
@@ -120,11 +120,11 @@ int main(int argc, char *argv[]) try{
     std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
 
-    size_t nPar,nParCT;
+    std::size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 
-    size_t ndim = modelPointer->get_nVEV();
+    std::size_t ndim = modelPointer->get_nVEV();
 
 
 	std::vector<double> par(nPar);

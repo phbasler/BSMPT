@@ -29,11 +29,11 @@ namespace Data{
 /**
  * @brief msg_size number of data points sampled in msg
  */
-const size_t msg_size = 12999;
+const std::size_t msg_size = 12999;
 /**
  * @brief Tg_size number of data points sampled in Tg
  */
-const size_t Tg_size = 121;
+const std::size_t Tg_size = 121;
 /**
  * @brief msg Data points used to sample in the m^2 direction of the Kfunctions
  * starting from 0 to 5 in steps of 10^-3 and then continuing to 200^2 in steps of 5

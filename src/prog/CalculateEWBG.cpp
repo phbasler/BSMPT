@@ -27,7 +27,7 @@
  */
 
 #include <bits/exception.h>                                 // for exception
-#include <stdlib.h>                                         // for atoi, size_t
+#include <stdlib.h>                                         // for atoi, std::size_t
 #include <algorithm>                                        // for max, copy
 #include <memory>                                           // for shared_ptr
 #include <string>                                           // for string

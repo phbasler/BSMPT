@@ -28,7 +28,7 @@
 
 #include <bits/exception.h>                 // for exception
 #include <ext/alloc_traits.h>               // for __alloc_traits<>::value_type
-#include <stdlib.h>                         // for size_t, atoi, EXIT_FAILURE
+#include <stdlib.h>                         // for std::size_t, atoi, EXIT_FAILURE
 #include <algorithm>                        // for max, copy
 #include <memory>                           // for allocator_traits<>::value...
 #include <string>                           // for string, operator==, opera...

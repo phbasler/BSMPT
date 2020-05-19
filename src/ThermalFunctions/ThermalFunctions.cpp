@@ -79,7 +79,7 @@ double JfermionIntegrand(const double& x, const double& k, int diff){
 
 
 double JbosonNumericalIntegration(const double& x, int diff){
-	const size_t workspaceSize = 1000;
+	const std::size_t workspaceSize = 1000;
 	gsl_integration_workspace * w = gsl_integration_workspace_alloc (workspaceSize);
 	gsl_function F;
 	struct GSLTemp{
@@ -102,7 +102,7 @@ double JbosonNumericalIntegration(const double& x, int diff){
 }
 
 double JfermionNumericalIntegration(const double& x, int diff){
-	const size_t workspaceSize = 1000;
+	const std::size_t workspaceSize = 1000;
 	gsl_integration_workspace * w = gsl_integration_workspace_alloc (workspaceSize);
 	gsl_function F;
 	struct GSLTemp{

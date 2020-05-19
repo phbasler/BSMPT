@@ -462,11 +462,11 @@ void gen_fluid::top_func(double z , std::vector<double>& m_quark, std::vector<do
   std::vector<double> dif_mb;
   dif_mt.clear();
   dif_mb.clear();
-  size_t nquark = gen_fluid::modelPointer->get_NQuarks();
+  std::size_t nquark = gen_fluid::modelPointer->get_NQuarks();
   std::vector<double> phi,gen_phi;
   phi.clear();
   gen_phi.clear();
-  size_t gen_nvev = gen_fluid::gen_vcritical.size();
+  std::size_t gen_nvev = gen_fluid::gen_vcritical.size();
   for(size_t i =0 ; i<gen_nvev;i++) gen_phi.push_back(gen_fluid::gen_vcritical.at(i)/2*(1-std::tanh(z/gen_fluid::LW)));
 
 
@@ -587,7 +587,7 @@ void gen_fluid::tau_func(double z, std::vector<double>& m_lep, std::vector<doubl
     int nlep = gen_fluid::modelPointer->get_NLepton();
 //Configure z-dep VEV
     std::vector<double>gen_phi;
-    size_t gen_nvev = gen_fluid::gen_vcritical.size();
+    std::size_t gen_nvev = gen_fluid::gen_vcritical.size();
     for(size_t i =0;i<gen_nvev;i++) gen_phi.push_back(gen_fluid::gen_vcritical.at(i)/2*(1-std::tanh(z/gen_fluid::LW)));
 //Calculation of the mass mtau
     std::vector<double> mi;

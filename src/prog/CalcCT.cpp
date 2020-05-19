@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) try{
 	std::string linestr;
 
     std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
-    size_t nPar,nParCT;
+    std::size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 	std::vector<double> par(nPar);

@@ -570,7 +570,7 @@ std::vector<double> calculateTransportEquation(
     const double C_AbsErr = 1e-10; //1.0e-10
     const double C_RelErr = 1e-3; // 1.0e-6
 
-    size_t dim = 8;
+    std::size_t dim = 8;
     // dim = 1;
     state_type x(dim);
     for(size_t i=0;i<dim;i++) x[i] = parStart[i];
@@ -656,7 +656,7 @@ double eta_integrand_func(double z,  void *p){
 
 
 double Integrate_mubl(const struct GSL_integration_mubl& pIn){
-    size_t workspace_size = 1000;
+    std::size_t workspace_size = 1000;
     gsl_integration_workspace *w = gsl_integration_workspace_alloc(workspace_size);
     double result, error;
     GSL_integration_mubl p = pIn;
@@ -715,7 +715,7 @@ double Integrate_mubl_interpolated(const struct GSL_integration_mubl& p){
     int nstep=100;
     auto spline = generate_mubl_spline(p, nstep);
 
-    size_t workspace_size = 1000;
+    std::size_t workspace_size = 1000;
     gsl_integration_workspace *w = gsl_integration_workspace_alloc(workspace_size);
     double result, error;
     gsl_function F;

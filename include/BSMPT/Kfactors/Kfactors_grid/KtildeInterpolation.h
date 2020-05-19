@@ -34,7 +34,7 @@ namespace Data{
 /**
  * @brief KtildeInterpolationSize number of Data points in the Interpolation of the tilde{K} normalisation
  */
-const size_t KtildeInterpolationSize = 401;
+const std::size_t KtildeInterpolationSize = 401;
 /**
  * @brief msquaredTsquared Data points for m^2/T^2 used to calculate the tilde{K} normalisations
  */

@@ -237,11 +237,11 @@ protected:
     /**
      * Number of Lagrange parameters in the Higgs Tree-Level potential
      */
-    size_t nPar = 0;
+    std::size_t nPar = 0;
     /**
        * Number of Lagrange parameters in the Higgs Counterterm potential
        */
-    size_t nParCT=0;
+    std::size_t nParCT=0;
 
     /**
    * Vector to store the parameter of the Potential
@@ -260,43 +260,43 @@ protected:
     /**
    * Number of neutral Higgs bosons
    */
-    size_t NNeutralHiggs = 0;
+    std::size_t NNeutralHiggs = 0;
     /**
    * Number of charged Higgs bosons
    */
-    size_t NChargedHiggs = 0;
+    std::size_t NChargedHiggs = 0;
     /**
    * Number of all Higgs particles. This will define the size of your Higgs mass matrix.
    */
-    size_t NHiggs = NNeutralHiggs+NChargedHiggs;
+    std::size_t NHiggs = NNeutralHiggs+NChargedHiggs;
     /**
    * Number of gauge bosons. Do not change this in the current version as we only investigate extended Higgs
    * sectors. If you want to extend the other sectors as well the Debye corrections have to be calculated by hand.
    */
-    size_t NGauge = 4;
+    std::size_t NGauge = 4;
     /**
      * Number of quarks. Do not change this in the current version as we only investigate extended Higgs
      * sectors. If you want to extend the other sectors as well the Debye corrections have to be calculated by hand.
      */
-    size_t NQuarks = 12;
+    std::size_t NQuarks = 12;
 
     /**
      * @brief NColour Number of colours of the quarks.
      * Do not change this in the current version as we only investigate extended Higgs
      * sectors. If you want to extend the other sectors as well the Debye corrections have to be calculated by hand.
      */
-    size_t NColour = 3;
+    std::size_t NColour = 3;
 
     /**
      * Number of leptons. Do not change this in the current version as we only investigate extended Higgs
      * sectors. If you want to extend the other sectors as well the Debye corrections have to be calculated by hand.
      */
-    size_t NLepton = 9;
+    std::size_t NLepton = 9;
 
     /**
    * Number of VEVs you want to minimize.
    */
-    size_t nVEV=0;
+    std::size_t nVEV=0;
 
     /**
      * Storage of the symmetric VEV in all Higgs fields
@@ -519,17 +519,17 @@ public:
    * @brief get_nPar
    * @return nPar
    */
-    size_t get_nPar() const { return nPar; }
+    std::size_t get_nPar() const { return nPar; }
     /**
    * @brief get_nParCT
    * @return nParCT
    */
-    size_t get_nParCT() const { return nParCT; }
+    std::size_t get_nParCT() const { return nParCT; }
     /**
    * @brief get_nVEV
    * @return nVEV
    */
-    size_t get_nVEV() const {return  nVEV;}
+    std::size_t get_nVEV() const {return  nVEV;}
     /**
    * @brief get_vevTreeMin
    * @return vevTreeMin
@@ -540,7 +540,7 @@ public:
    * @param k
    * @return vevTreeMin.at(k)
    */
-    double get_vevTreeMin(const size_t& k) const {return vevTreeMin.at(k);}
+    double get_vevTreeMin(const std::size_t& k) const {return vevTreeMin.at(k);}
     /**
    * @brief get_parStored
    * @return parStored
@@ -555,22 +555,22 @@ public:
    * @brief get_NGauge
    * @return NGauge
    */
-    size_t get_NGauge() const { return NGauge; }
+    std::size_t get_NGauge() const { return NGauge; }
     /**
    * @brief get_NQuarks
    * @return NQuarks
    */
-    size_t get_NQuarks() const { return NQuarks; }
+    std::size_t get_NQuarks() const { return NQuarks; }
     /**
    * @brief get_NHiggs
    * @return NHiggs
    */
-    size_t get_NHiggs() const { return  NHiggs; }
+    std::size_t get_NHiggs() const { return  NHiggs; }
     /**
    * @brief get_NLepton
    * @return NLepton
    */
-    size_t get_NLepton() const { return  NLepton; }
+    std::size_t get_NLepton() const { return  NLepton; }
     /**
    * @brief get_Model
    * @return ModelID of the Model
@@ -588,7 +588,7 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsTreePhysical[i][j][k]
    */
-    double get_TripleHiggsCorrectionsTreePhysical(size_t i, size_t j, size_t k) const {
+    double get_TripleHiggsCorrectionsTreePhysical(size_t i, std::size_t j, std::size_t k) const {
         return TripleHiggsCorrectionsTreePhysical.at(i).at(j).at(k);
     }
     /**
@@ -598,7 +598,7 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsCTPhysical[i][j][k]
    */
-    double get_TripleHiggsCorrectionsCTPhysical(size_t i, size_t j, size_t k) const {
+    double get_TripleHiggsCorrectionsCTPhysical(size_t i, std::size_t j, std::size_t k) const {
         return TripleHiggsCorrectionsCTPhysical.at(i).at(j).at(k);
     }
     /**
@@ -608,7 +608,7 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsCWPhysical[i][j][k]
    */
-    double get_TripleHiggsCorrectionsCWPhysical(size_t i, size_t j, size_t k) const {
+    double get_TripleHiggsCorrectionsCWPhysical(size_t i, std::size_t j, std::size_t k) const {
         return  TripleHiggsCorrectionsCWPhysical.at(i).at(j).at(k);
     }
 
@@ -860,12 +860,12 @@ public:
    */
     double FCW(double MassSquared) const;
     /**
-   * @brief Calculation of the bosonic size_tegral + Coleman-Weinberg potential __without__ taking d.o.f. size_to account
+   * @brief Calculation of the bosonic std::size_tegral + Coleman-Weinberg potential __without__ taking d.o.f. std::size_to account
    *
    * @param MassSquared = m^2 of the particle
-   * @param Temp = Temperature at which the Debye masses and size_tegrals should be calculated
+   * @param Temp = Temperature at which the Debye masses and std::size_tegrals should be calculated
    * @param cb = Parameter of the renormalisation-Scheme in the Coleman-Weinberg potential
-   * @param diff: 0 returns the value of the size_tegral and diff >0 the derivative w.r.t. m^2 and diff = -1 w.r.t. Temp
+   * @param diff: 0 returns the value of the std::size_tegral and diff >0 the derivative w.r.t. m^2 and diff = -1 w.r.t. Temp
    *
    *
    */
@@ -876,10 +876,10 @@ public:
     [[deprecated("Use this only if you want to calculate the effective potential with the exact same routine used in BSMPT v1.x. Use boson otherwise.")]]
     double boson_legacy(double MassSquared, double Temp, double cb, int diff=0) const;
     /**
-   * @brief Calculation of the fermionic size_tegral + Coleman-Weinberg potential __without__ taking d.o.f. size_to account
+   * @brief Calculation of the fermionic std::size_tegral + Coleman-Weinberg potential __without__ taking d.o.f. std::size_to account
    *
    * @param MassSquared = m^2 of the particle
-   * @param Temp = temperature at which the size_tegrals should be calculated
+   * @param Temp = temperature at which the std::size_tegrals should be calculated
    * @param diff :  0 = Value of the potential, diff > 0 returns the derivative w.r.t. m^2 and diff=-1 w.r.t Temp
    */
     double fermion(double MassSquared, double Temp, int diff=0) const;
@@ -889,13 +889,13 @@ public:
     [[deprecated("Use this only if you want to calculate the effective potential with the exact same routine used in BSMPT v1.x. Use fermion otherwise.")]]
     double fermion_legacy(double Mass, double Temp, int diff=0) const;
     /**
-   * Calculates the large m^2/T^2 approximation to order n for the temperature-dependent size_tegrals.
+   * Calculates the large m^2/T^2 approximation to order n for the temperature-dependent std::size_tegrals.
    */
     [[deprecated("Use this only if you want to calculate the effective potential with the exact same routine used in BSMPT v1.x. "
                  "Otherwise use ThermalFunctions::JInterpolatedHigh.")]]
     double Vl(double MassSquared, double Temp, int n, int diff =0 ) const;
     /**
-   * Calculates the small m^2/T^2 approximation of the fermionic temperature dependent size_tegral to the n-th order.
+   * Calculates the small m^2/T^2 approximation of the fermionic temperature dependent std::size_tegral to the n-th order.
    * @param MassSquared m^2
    * @param Temp temperature
    * @param n the order to which expand the expansion
@@ -906,7 +906,7 @@ public:
     double Vsf(double MassSquared, double Temp, int n, int diff = 0) const;
 
     /**
-   * Calculates the small m^2/T^2 approximation of the bosonic temperature dependent size_tegral to the n-th order.
+   * Calculates the small m^2/T^2 approximation of the bosonic temperature dependent std::size_tegral to the n-th order.
    */
     [[deprecated("Use this only if you want to calculate the effective potential with the exact same routine used in BSMPT v1.x. "
                  "Otherwise use ThermalFunctions::JbosonInterpolatedLow.")]]

@@ -74,7 +74,7 @@ double K_integrand(const std::vector<double>& p, double masssquared, int switchv
 }
 
 
-double K_integrand_gsl(double *x, size_t dim, void *p ){
+double K_integrand_gsl(double *x, std::size_t dim, void *p ){
   std::vector<double> momentum(dim);
   for(size_t i=0;i<dim;i++) momentum[i] = x[i];
   struct GSL_integration * params = static_cast<GSL_integration*>(p); //(struct GSL_integration *) p;
@@ -92,7 +92,7 @@ double K_integration(double masssquared,double Temp, int switchvalue, int s){
   p.masssquared = masssquared;
 
 
-  const size_t dim = 3;
+  const std::size_t dim = 3;
 
   double numint = 1e3;
 
@@ -105,8 +105,8 @@ double K_integration(double masssquared,double Temp, int switchvalue, int s){
   G.dim = dim;
   G.params = &p;
 
-  // size_t calls = 500000;
-  size_t calls = 5e5;
+  // std::size_t calls = 500000;
+  std::size_t calls = 5e5;
 
   gsl_rng_env_setup();
 
@@ -175,7 +175,7 @@ double Ktilde_normalization(double Temp, int s, double masssquared){
   p.masssquared = masssquared;
 
 
-  size_t workspace_size = 1000;
+  std::size_t workspace_size = 1000;
   gsl_integration_workspace *w = gsl_integration_workspace_alloc(workspace_size);
   double result, error;
   gsl_function F;

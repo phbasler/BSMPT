@@ -103,11 +103,11 @@ int main(int argc, char *argv[]) try{
 	std::string linestr;
 	int linecounter = 1;
 
-    size_t nPar,nParCT;
+    std::size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 
-    size_t dim = modelPointer->get_nVEV();
+    std::size_t dim = modelPointer->get_nVEV();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 
@@ -186,7 +186,7 @@ int main(int argc, char *argv[]) try{
 	// std::cout << "res = " << res << std::endl;
 
 
-    size_t nstep = 1000;
+    std::size_t nstep = 1000;
     double zmax = p.getZMAX();
 	double zmin = 0;
 	double stepsize = (zmax-zmin)/nstep;

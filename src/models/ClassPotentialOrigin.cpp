@@ -164,8 +164,8 @@ double Class_Potential_Origin::fermion(double MassSquared, double Temp, int diff
 std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const Ref<MatrixXcd> M, const Ref<MatrixXcd> MDiff) const
 {
     std::vector<double> res;
-    const size_t nRows = M.rows();
-    const size_t nCols = M.cols();
+    const std::size_t nRows = M.rows();
+    const std::size_t nCols = M.cols();
 
     const double EVThres = std::pow(10,-6);
 
@@ -173,7 +173,7 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
         throw std::runtime_error("ERROR ! M needs to be an quadratic Matrix for calculating the derivatives !\n");
     }
 
-    const size_t nSize = nRows;
+    const std::size_t nSize = nRows;
 
     SelfAdjointEigenSolver<MatrixXcd> es;
     es.compute(M);
@@ -216,7 +216,7 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
     {
         if(AlreadyCalculated[p] == -1)
         {
-            size_t NumOfReps = 0;
+            std::size_t NumOfReps = 0;
             for(size_t i=p+1;i<nSize;i++)
             {
                 NumOfReps += Mapping[p][i];
@@ -231,7 +231,7 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(const R
             }
             else{
                 MatrixXcd Phi(nSize,NumOfReps+1);
-                size_t helpCol = 0;
+                std::size_t helpCol = 0;
                 MatrixXcd MXWork(NumOfReps+1,NumOfReps+1);
 
                 for(size_t i=p;i<nSize;i++)
@@ -293,7 +293,7 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA, double MassSquaredB
     if(mbs != 0) LogB = std::log(mbs) - 2*std::log(scale);
     if(mcs != 0) LogC = std::log(mcs) - 2*std::log(scale);
 
-    size_t C = 1;
+    std::size_t C = 1;
     if(mas == 0 and mbs == 0 and mcs == 0) res = 0;
     else if(mas != 0 and mbs == 0 and mcs == 0)
       {
@@ -401,16 +401,16 @@ std::vector<double> Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepe
         const Eigen::Ref<Eigen::MatrixXd> MDiffXY) const
 {
     std::vector<double> res;
-    const size_t nRows = M.rows();
-    const size_t nCols = M.cols();
+    const std::size_t nRows = M.rows();
+    const std::size_t nCols = M.cols();
 
-    const size_t EVThres = std::pow(10,-6);
+    const std::size_t EVThres = std::pow(10,-6);
 
     if(nCols != nRows) {
         throw std::runtime_error("ERROR ! M needs to be an quadratic Matrix for calculating the derivatives !\n");
     }
 
-    const size_t nSize = nRows;
+    const std::size_t nSize = nRows;
 
     SelfAdjointEigenSolver<MatrixXd> es;
     es.compute(M);
@@ -652,7 +652,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
         }
     }
 
-    // Rotate and save size_to corresponding vectors
+    // Rotate and save std::size_to corresponding vectors
 
     Couplings_Higgs_Quartic.resize(NHiggs);
     Couplings_Higgs_Triple.resize(NHiggs);
@@ -1407,7 +1407,7 @@ std::vector<double> Class_Potential_Origin::HiggsMassesSquared(
     else if((size_t) diff <= NHiggs and diff >0)
     {
         MatrixXd Diff(NHiggs,NHiggs);
-        size_t x0 = diff -1;
+        std::size_t x0 = diff -1;
         for(size_t i=0;i<NHiggs;i++)
         {
             for(size_t j=0;j<NHiggs;j++)
@@ -1505,7 +1505,7 @@ std::vector<double> Class_Potential_Origin::GaugeMassesSquared(
     }
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs)
     {
-        size_t i = diff -1;
+        std::size_t i = diff -1;
         MatrixXd Diff(NGauge,NGauge);
         Diff = MatrixXd::Zero(NGauge,NGauge);
         for(size_t a=0;a<NGauge;a++)
@@ -1594,7 +1594,7 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
         }
     }
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs){
-      size_t m = diff-1;
+      std::size_t m = diff-1;
       MatrixXcd Diff(NQuarks,NQuarks);
       Diff = MatrixXcd::Zero(NQuarks,NQuarks);
       for(size_t a=0;a<NQuarks;a++){
@@ -1709,7 +1709,7 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
 		}
 	}
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs){
-	  size_t m = diff-1;
+	  std::size_t m = diff-1;
 	  MatrixXcd Diff(NLepton,NLepton);
 	  Diff = MatrixXcd::Zero(NLepton,NLepton);
 	  for(size_t a=0;a<NLepton;a++){
@@ -1816,7 +1816,7 @@ double Class_Potential_Origin::VTree(const std::vector<double>& v, int diff, boo
     }
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs)
     {
-        size_t i = diff -1;
+        std::size_t i = diff -1;
         res = Curvature_Higgs_L1[i];
         for(size_t j=0;j<NHiggs;j++)
         {
@@ -1871,7 +1871,7 @@ double Class_Potential_Origin::CounterTerm(const std::vector<double>& v, int dif
     }
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs)
     {
-        size_t i = diff -1;
+        std::size_t i = diff -1;
         res = Curvature_Higgs_CT_L1[i];
         for(size_t j=0;j<NHiggs;j++)
         {
@@ -2152,7 +2152,7 @@ void Class_Potential_Origin::CalculateDebye()
     }
 
 
-    size_t nHiggsGauge = 0;
+    std::size_t nHiggsGauge = 0;
     for(size_t i=0;i<NHiggs;i++)
     {
         if(Curvature_Gauge_G2H2[0][0][i][i] != 0) nHiggsGauge++;
@@ -2171,7 +2171,7 @@ void Class_Potential_Origin::CalculateDebyeGauge(){
     bool Done = CalculateDebyeGaugeSimplified();
     if(Done) return ;
 
-    size_t nGaugeHiggs = 0;
+    std::size_t nGaugeHiggs = 0;
 
 
 
@@ -2343,7 +2343,7 @@ void Class_Potential_Origin::CheckImplementation(
     TestNames.push_back("addLegendTripleCouplings number/label match");
     TestResults.push_back(Pass);
     {
-        size_t ExpectedTripleHiggs = 0;
+        std::size_t ExpectedTripleHiggs = 0;
         for(size_t i=0;i<NHiggs;i++){
             for(size_t j=i;j<NHiggs;j++){
                 for(size_t k=j;k<NHiggs;k++){
@@ -2715,7 +2715,7 @@ void Class_Potential_Origin::CheckImplementation(
         throw std::runtime_error(errmsg);
     }
 
-    size_t Passes{0};
+    std::size_t Passes{0};
     for(const auto& el: TestResults)
     {
         if(el == Pass) Passes++;
@@ -2953,7 +2953,7 @@ std::vector<double> Class_Potential_Origin::MinimizeOrderVEV(const std::vector<d
      std::vector<double> vevFunction;
 
 
-     size_t count=0;
+     std::size_t count=0;
      for(size_t i=0;i<NHiggs;++i)
      {
          if(i==VevOrder[count]) {

@@ -201,7 +201,7 @@ double Class_Potential_Origin::boson_legacy(double MassSquared, double Temp, dou
                 fnext = NegLinearInt[C_NegLine-1][1];
             }
             else{
-                size_t pos = (size_t (-x));
+                std::size_t pos = (size_t (-x));
                 xprev = NegLinearInt[pos][0];
                 fprev = NegLinearInt[pos][1];
                 xnext = NegLinearInt[pos+1][0];
@@ -245,7 +245,7 @@ double Class_Potential_Origin::boson_legacy(double MassSquared, double Temp, dou
             else{
             PotVal = 0;
             std::cerr << "This is not implemented yet! You called the derivative of the bosonic"
-                << " size_tegral for negative m^2" << std::endl;
+                << " std::size_tegral for negative m^2" << std::endl;
             }
         }
     }

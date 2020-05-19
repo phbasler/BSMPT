@@ -47,7 +47,7 @@ namespace Baryo{
  * @param classpointer Class reference to the transport equation class (top,bot,tau)
  * @return The pair with (z , nL(z) )
  */
-std::pair<std::vector<double> , std::vector<double> > set_up_nL_grid(size_t n_step,GSL_integration_mubl& container ,boost::any  const & classpointer);
+std::pair<std::vector<double> , std::vector<double> > set_up_nL_grid(std::size_t n_step,GSL_integration_mubl& container ,boost::any  const & classpointer);
 
 }
 }

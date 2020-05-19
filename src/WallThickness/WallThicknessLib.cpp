@@ -77,7 +77,7 @@ bool UseSpline=false;
 double GSL_VEFF_gen_all_maximum_line(double t, void *p){
     struct GSL_params * params = static_cast<GSL_params*>(p);
 	std::vector<double> vIn,vMin;
-    size_t nVEVs = params->modelPointer->get_nVEV();
+    std::size_t nVEVs = params->modelPointer->get_nVEV();
 
 	for(size_t i=0;i<nVEVs;i++)
 	{
@@ -183,7 +183,7 @@ bool GSL_Find_Maximum_line(
 
 
   std::vector<std::vector<double>> solutions ;
-  size_t nSolutions=20;
+  std::size_t nSolutions=20;
 	int ntry=0;
 	int seed=5;
 	std::default_random_engine randGen(seed);

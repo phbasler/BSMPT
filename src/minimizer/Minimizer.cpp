@@ -131,7 +131,7 @@ std::vector<double> Minimize_gen_all(
             std::tie(solGSLMin,gslMinSuc) = GSL_Minimize_gen_all(modelPointer, Temp, 5); // If additionally CMAES is minimising GSL does not need as much solutions
         }
         else {
-            size_t MaxSol = 50;
+            std::size_t MaxSol = 50;
             std::tie(solGSLMin,gslMinSuc) = GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
         }
 
@@ -166,7 +166,7 @@ std::vector<double> Minimize_gen_all(
 #endif
 
 
-    size_t minIndex=0;
+    std::size_t minIndex=0;
     for(size_t i=1;i<PotValues.size();i++){
         if(PotValues.at(i) < PotValues.at(minIndex)) minIndex = i;
     }
@@ -195,7 +195,7 @@ EWPTReturnType PTFinder_gen_all(
 
     EWPTReturnType result;
 
-    size_t dim = modelPointer->get_nVEV();
+    std::size_t dim = modelPointer->get_nVEV();
 
     double vStart,vEnd,vMitte;
     std::vector<double> solStart,solMitte,solEnd;

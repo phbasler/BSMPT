@@ -70,7 +70,7 @@ double K_integrand(const std::vector<double>& p, double masssquared, int switchv
 /**
  * Interface to communicate the value of K_integrand() to the GSL integration routine
  */
-double K_integrand_gsl(double *x, size_t dim, void *params );
+double K_integrand_gsl(double *x, std::size_t dim, void *params );
 
 /**
  * Calculates the values of the K functions given in Eq (23) in 0604159 without the normalization

@@ -31,7 +31,7 @@
 #include <gsl/gsl_multimin.h>                   // for gsl_multimin_fminimizer
 #include <gsl/gsl_vector_double.h>              // for gsl_vector_get, gsl_v...
 #include <stdio.h>                              // for printf
-#include <time.h>                               // for time, NULL, size_t
+#include <time.h>                               // for time, NULL, std::size_t
 #include <algorithm>                            // for copy, max
 #include <iostream>                             // for operator<<, endl, bas...
 #include <limits>                               // for numeric_limits, numer...
@@ -80,13 +80,13 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params& params, std::vector<double>& 
     gsl_multimin_function minex_func;
 
     double ftol = GSL_Tolerance;
-    size_t MaxIter = 600;
+    std::size_t MaxIter = 600;
 
-    size_t iter = 0;
+    std::size_t iter = 0;
     int status;
     double size;
 
-    size_t dim = params.nVEV;
+    std::size_t dim = params.nVEV;
 
     /* Starting point */
     x = gsl_vector_alloc (dim);
@@ -138,7 +138,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         const std::shared_ptr<Class_Potential_Origin>& modelPointer,
         const double& Temp,
         const int& seed,
-        const size_t& MaxSol){
+        const std::size_t& MaxSol){
     std::vector<std::vector<double>> saveAllMinima;
     auto result = GSL_Minimize_gen_all(modelPointer,Temp, seed ,saveAllMinima, MaxSol);
     return result;
@@ -150,7 +150,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         const double& Temp,
         const int& seed){
     std::vector<std::vector<double>> saveAllMinima;
-    size_t MaxSol = 20;
+    std::size_t MaxSol = 20;
     auto result = GSL_Minimize_gen_all(modelPointer,Temp, seed ,saveAllMinima, MaxSol);
     return result;
 }
@@ -160,22 +160,22 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         const double& Temp,
         const int& seed ,
         std::vector<std::vector<double>>& saveAllMinima,
-        const size_t& MaxSol)
+        const std::size_t& MaxSol)
 {
     struct GSL_params params;
     params.Temp = Temp;
     params.nVEV = modelPointer->get_nVEV();
     params.modelPointer = modelPointer;
 
-    size_t dim = modelPointer->get_nVEV();
+    std::size_t dim = modelPointer->get_nVEV();
 
     std::default_random_engine randGen(seed);
     double RNDMax= 500;
-    size_t MaxTries = 600;
-    size_t tries = 0;
-    size_t numOfSol = 0;
+    std::size_t MaxTries = 600;
+    std::size_t tries = 0;
+    std::size_t numOfSol = 0;
     //	int MaxSol = 20;
-    size_t nCol = dim+2;
+    std::size_t nCol = dim+2;
     std::vector<double> start,sol,vPot;
     do{
         start.resize(dim);
@@ -209,7 +209,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         return std::make_pair(std::vector<double>{}, false);
     }
 
-    size_t minIndex = 0;
+    std::size_t minIndex = 0;
     double VMin = saveAllMinima[0][dim+1];
     for(size_t k=1;k<numOfSol;k++)
     {

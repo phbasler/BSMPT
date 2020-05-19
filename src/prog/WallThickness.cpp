@@ -119,11 +119,11 @@ int main(int argc, char *argv[]) try{
 
     std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 
-    size_t nPar,nParCT;
+    std::size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 
-    size_t ndim = modelPointer->get_nVEV();
+    std::size_t ndim = modelPointer->get_nVEV();
 
 
 	std::vector<double> par(nPar);

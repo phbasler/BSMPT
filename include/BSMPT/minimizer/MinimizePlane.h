@@ -87,11 +87,11 @@ struct PointerContainerMinPlane{
 	 * Finds the first component of the connection vector ! = 0. In this component the value of the nVEV dimensional
 	 * vacuum configuration will be calculated from the condition (vev - point) * normalvector = 0
 	 */
-    size_t Index;
+    std::size_t Index;
 	/**
 	 * Number of vevs
 	 */
-    size_t nVEV;
+    std::size_t nVEV;
 
 };
 
@@ -174,8 +174,8 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& p, 
  */
 GSLPlaneReturn GSL_Minimize_Plane_gen_all(
         const struct PointerContainerMinPlane& params,
-        size_t seed, std::vector<std::vector<double>>& saveAllMinima,
-        size_t MinSol);
+        std::size_t seed, std::vector<std::vector<double>>& saveAllMinima,
+        std::size_t MinSol);
 
 
 /**
@@ -186,7 +186,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(
  * @param MinSol Number of local minima to look out for
  * @return A GSLPlaneReturn with a boolean being true if a candidate for the global minimum is found and false otherwise and a vector in which the candidate for the global minimum is stored
  */
-GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params, size_t seed,size_t MinSol);
+GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params, std::size_t seed,std::size_t MinSol);
 
 /**
  * Minimise the Potential from different random starting points and look for 20 local minima. Choose the local minimum with the
@@ -195,7 +195,7 @@ GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane&
  * @param seed Seed for generating the random starting points
  * @return A GSLPlaneReturn with a boolean being true if a candidate for the global minimum is found and false otherwise and a vector in which the candidate for the global minimum is stored
  */
-GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params, size_t seed);
+GSLPlaneReturn GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane& params, std::size_t seed);
 
 
 

@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) try{
         vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,TC+1,checksym,startpoint);
 
 /////////////////////////////////////////////////////////////////////////////////
-        size_t nstep = 100;
+        std::size_t nstep = 100;
 
         if(TerminalOutput) std::cout<<"Set up the numerics "<<std::endl;
         EtaInterface.setNumerics(vwIn , EWPT.EWMinimum , vevsymmetricSolution , TC , modelPointer);//Set up parameter container for Baryo Calculation-->Calls container.init

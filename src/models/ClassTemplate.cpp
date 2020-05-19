@@ -18,7 +18,7 @@
  */
 
 #include <ext/alloc_traits.h>               // for __alloc_traits<>::value_type
-#include <stddef.h>                         // for size_t
+#include <stddef.h>                         // for std::size_t
 #include <algorithm>                        // for max, copy
 #include <iostream>                         // for operator<<, endl, basic_o...
 #include <memory>                           // for allocator_traits<>::value...

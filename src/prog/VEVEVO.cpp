@@ -124,11 +124,11 @@ int main(int argc, char *argv[]) try{
 	std::string linestr;
 	int linecounter = 1;
 
-    size_t nPar,nParCT;
+    std::size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
 
-    size_t dim = modelPointer->get_nVEV();
+    std::size_t dim = modelPointer->get_nVEV();
 	std::vector<double> par(nPar);
 	std::vector<double> parCT(nParCT);
 

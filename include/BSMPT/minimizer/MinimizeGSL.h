@@ -45,7 +45,7 @@ const double GSL_Tolerance=std::pow(10,-6);
  */
 struct GSL_params {
     //int Model;
-    size_t nVEV;
+    std::size_t nVEV;
     //Class_Potential_Origin * modelPointer;
     std::shared_ptr<Class_Potential_Origin> modelPointer;
     double Temp;
@@ -88,7 +88,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         const std::shared_ptr<Class_Potential_Origin>& modelPointer,
         const double& Temp,
         const int& seed,
-        const size_t& MaxSol);
+        const std::size_t& MaxSol);
 
 /**
  * Minimize the Potential from different random starting points and choose the local minimum with the
@@ -105,7 +105,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         const double& Temp,
         const int& seed,
         std::vector<std::vector<double>>& saveAllMinima,
-        const size_t& MaxSol);
+        const std::size_t& MaxSol);
 
 
 
