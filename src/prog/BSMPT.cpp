@@ -52,6 +52,10 @@ auto getCLIArguments(int argc, char *argv[])
         int FirstLine{}, LastLine{};
         std::string InputFile, OutputFile;
         bool TerminalOutput{false};
+        bool UseGSL { Minimizer::UseGSLDefault};
+        bool UseCMAES {Minimizer::UseLibCMAESDefault};
+        bool UseNLopt{Minimizer::UseNLoptDefault};
+        int WhichMinimizer{Minimizer::WhichMinimizerDefault};
     };
 
     std::vector<std::string> args;
@@ -60,7 +64,8 @@ auto getCLIArguments(int argc, char *argv[])
     if(argc < 6 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "BSMPT calculates the strength of the electroweak phase transition" << std::endl
+        std::cout << std::boolalpha
+                  << "BSMPT calculates the strength of the electroweak phase transition" << std::endl
                   << "It is called either by " << std::endl
                   << "./BSMPT model input output FirstLine LastLine" << std::endl
                   << "or with the following arguments" << std::endl
@@ -75,8 +80,20 @@ auto getCLIArguments(int argc, char *argv[])
                   << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
                   <<"The first line in the input file to calculate the EWPT. Expects line 1 to be a legend." << std::endl
                   << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
-                  <<"The last line in the input file to calculate the EWPT." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
+                  <<"The last line in the input file to calculate the EWPT." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
+        std::cout<< std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
                   <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
         ShowInputError();
     }
@@ -124,7 +141,32 @@ auto getCLIArguments(int argc, char *argv[])
             {
                 res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
             }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                if(res.UseGSL and not Minimizer::UseGSLDefault)
+                {
+                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+                }
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
+                {
+                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+                }
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
+                {
+                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+                }
+            }
         }
+        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
     }
     else{
         res.Model = ModelID::getModel(args.at(0));
@@ -136,6 +178,11 @@ auto getCLIArguments(int argc, char *argv[])
             std::string s7 = argv[6];
             res.TerminalOutput = ("y" == s7);
         }
+    }
+
+    if(res.WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
 
 
@@ -224,10 +271,10 @@ int main(int argc, char *argv[]) try{
                  modelPointer->write();
 			}
 
-            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
+            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,args.WhichMinimizer);
             std::vector<double> vevsymmetricSolution,checksym, startpoint;
-            for(std::size_t i=0;i<modelPointer->get_nVEV();i++) startpoint.push_back(0.5*EWPT.EWMinimum.at(i));
-            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint);
+            for(const auto& el: EWPT.EWMinimum) startpoint.push_back(0.5*el);
+            auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,args.WhichMinimizer);
 
 
             if(args.FirstLine == args.LastLine) {
