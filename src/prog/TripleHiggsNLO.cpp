@@ -34,71 +34,50 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility.h>
 #include <fstream>
-
+#include <iomanip>
 #include <iostream>
 using namespace std;
 using namespace BSMPT;
 
+struct CLIoptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int FirstLine{}, LastLine{};
+    std::string InputFile, OutputFile;
+    bool TerminalOutput{false};
+};
+
+CLIoptions getCLIArguments(int argc, char *argv[]);
+
 int main(int argc, char *argv[]) try{
 
-	if(!( argc == 6 or argc == 7) )
-	{
-		std::cerr << "./TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd \n";
-		ShowInputError();
-		return -1;
-	}
+    const auto args = getCLIArguments(argc,argv);
 
-    auto Model=ModelID::getModel(argv[1]);
-    if(Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
-        return EXIT_FAILURE;
-    }
-
-	double LineStart,LineEnd;
-	char* in_file;char* out_file;
-
-
-	in_file = argv[2];
-	out_file = argv[3];
-	LineStart = atoi(argv[4]);
-	LineEnd = atoi(argv[5]);
-
-	if(LineStart < 1)
+    if(args.FirstLine < 1)
 	{
 		std::cerr << "Start line counting with 1" << std::endl;
 		return EXIT_FAILURE;
 	}
-	if(LineStart > LineEnd)
+    if(args.FirstLine > args.LastLine)
 	{
 		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	bool TerminalOutput = false;
-	if(argc == 7) {
-		std::string s7 = argv[6];
-		std::cout << s7 << std::endl;
-		TerminalOutput = ("y" == s7);
-
-	}
-
-
 	int linecounter = 1;
-	std::ifstream infile(in_file);
+    std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 			std::cout << "Input file not found " << std::endl;
 			return EXIT_FAILURE;
 		}
-	std::ofstream outfile(out_file);
+    std::ofstream outfile(args.OutputFile);
 	if(!outfile.good())
 	{
-		std::cout << "Can not create file " << out_file << std::endl;
+        std::cout << "Can not create file " << args.OutputFile << std::endl;
 		return EXIT_FAILURE;
 	}
 	std::string linestr;
 
-    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
+    std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
     std::size_t nPar,nParCT;
     nPar = modelPointer->get_nPar();
     nParCT = modelPointer->get_nParCT();
@@ -114,8 +93,8 @@ int main(int argc, char *argv[]) try{
 	{
 
 
-		if(linecounter > LineEnd) break;
-		if(TerminalOutput)
+        if(linecounter > args.LastLine) break;
+        if(args.TerminalOutput)
 		{
 			std::cout << "\rCurrently at line " << linecounter << std::flush;
 		}
@@ -128,7 +107,7 @@ int main(int argc, char *argv[]) try{
 		    outfile << std::endl;
 		  }
 
-		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
+        if(linecounter >= args.FirstLine and linecounter <= args.LastLine and linecounter != 1)
 		{
 
 			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
@@ -139,7 +118,7 @@ int main(int argc, char *argv[]) try{
 			modelPointer->Prepare_Triple();
 			modelPointer->TripleHiggsCouplings();
 
-			if(LineStart == LineEnd and TerminalOutput) modelPointer->write();
+            if(args.FirstLine == args.LastLine and args.TerminalOutput) modelPointer->write();
 			outfile << linestr;
             for(std::size_t i=0;i<nParCT;i++) outfile << sep << parCT[i];
             for(std::size_t i=0;i<NHiggs;i++)
@@ -161,13 +140,105 @@ int main(int argc, char *argv[]) try{
 		linecounter++;
 		if(infile.eof()) break;
 	}
-	if(TerminalOutput) std::cout << std::endl;
+    if(args.TerminalOutput) std::cout << std::endl;
 
 	outfile.close();
 
 	return EXIT_SUCCESS;
 }
+catch(int)
+{
+    return EXIT_SUCCESS;
+}
 catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
+}
+
+CLIoptions getCLIArguments(int argc, char *argv[])
+{
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 6 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "TripleHiggsNLO calculates the coupling between three Higgs bosons" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
+                  <<"The first line in the input file to calculate the EWPT. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
+                  <<"The last line in the input file to calculate the EWPT." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
+                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 6)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    CLIoptions res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                res.OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--firstline="))
+            {
+                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+            else if(StringStartsWith(el,"--lastline="))
+            {
+                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+            }
+            else if(StringStartsWith(el,"--terminaloutput="))
+            {
+                res.TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
+            }
+        }
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.OutputFile = args.at(2);
+        res.FirstLine = std::stoi(args.at(3));
+        res.LastLine = std::stoi(args.at(4));
+        if(argc == 7) {
+            std::string s7 = argv[6];
+            res.TerminalOutput = ("y" == s7);
+        }
+    }
+    return res;
 }

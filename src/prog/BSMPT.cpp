@@ -45,149 +45,19 @@
 using namespace std;
 using namespace BSMPT;
 
-auto getCLIArguments(int argc, char *argv[])
-{
-    struct ReturnType{
-        BSMPT::ModelID::ModelIDs Model{};
-        int FirstLine{}, LastLine{};
-        std::string InputFile, OutputFile;
-        bool TerminalOutput{false};
-        bool UseGSL { Minimizer::UseGSLDefault};
-        bool UseCMAES {Minimizer::UseLibCMAESDefault};
-        bool UseNLopt{Minimizer::UseNLoptDefault};
-        int WhichMinimizer{Minimizer::WhichMinimizerDefault};
-    };
+struct CLIoptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int FirstLine{}, LastLine{};
+    std::string InputFile, OutputFile;
+    bool TerminalOutput{false};
+    bool UseGSL { Minimizer::UseGSLDefault};
+    bool UseCMAES {Minimizer::UseLibCMAESDefault};
+    bool UseNLopt{Minimizer::UseNLoptDefault};
+    int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+};
 
-    std::vector<std::string> args;
-    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+CLIoptions getCLIArguments(int argc, char *argv[]);
 
-    if(argc < 6 or args.at(0) == "--help")
-    {
-        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << std::boolalpha
-                  << "BSMPT calculates the strength of the electroweak phase transition" << std::endl
-                  << "It is called either by " << std::endl
-                  << "./BSMPT model input output FirstLine LastLine" << std::endl
-                  << "or with the following arguments" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
-                  << "Shows this menu" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
-                  << "The model you want to investigate"<<std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
-                  << "The input file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
-                  << "The output file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
-                  <<"The first line in the input file to calculate the EWPT. Expects line 1 to be a legend." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
-                  <<"The last line in the input file to calculate the EWPT." << std::endl;
-        std::string GSLhelp{"--UseGSL="};
-        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
-        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
-                  << "Use the GSL library to minimize the effective potential" << std::endl;
-        std::string CMAEShelp{"--UseCMAES="};
-        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
-        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
-                  << "Use the CMAES library to minimize the effective potential" << std::endl;
-        std::string NLoptHelp{"--UseNLopt="};
-        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
-        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
-                  << "Use the NLopt library to minimize the effective potential" << std::endl;
-        std::cout<< std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
-                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
-        ShowInputError();
-    }
-
-    if(args.size() > 0 and args.at(0)=="--help")
-    {
-        throw int{0};
-    }
-    else if(argc < 6)
-    {
-        throw std::runtime_error("Too few arguments.");
-    }
-
-
-    ReturnType res;
-    std::string prefix{"--"};
-    bool UsePrefix = StringStartsWith(args.at(0),prefix);
-    if(UsePrefix)
-    {
-        for(const auto& arg: args)
-        {
-            auto el = arg;
-            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-            if(StringStartsWith(el,"--model="))
-            {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-            }
-            else if(StringStartsWith(el,"--input="))
-            {
-                res.InputFile = arg.substr(std::string("--input=").size());
-            }
-            else if(StringStartsWith(el,"--output="))
-            {
-                res.OutputFile = arg.substr(std::string("--output=").size());
-            }
-            else if(StringStartsWith(el,"--firstline="))
-            {
-                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
-            }
-            else if(StringStartsWith(el,"--lastline="))
-            {
-                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
-            }
-            else if(StringStartsWith(el,"--terminaloutput="))
-            {
-                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
-            }
-            else if(StringStartsWith(el,"--usegsl="))
-            {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
-                if(res.UseGSL and not Minimizer::UseGSLDefault)
-                {
-                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
-                }
-            }
-            else if(StringStartsWith(el,"--usecmaes="))
-            {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
-                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
-                {
-                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
-                }
-            }
-            else if(StringStartsWith(el,"--usenlopt="))
-            {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
-                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
-                {
-                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
-                }
-            }
-        }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
-    }
-    else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.FirstLine = std::stoi(args.at(3));
-        res.LastLine = std::stoi(args.at(4));
-        if(argc == 7) {
-            std::string s7 = argv[6];
-            res.TerminalOutput = ("y" == s7);
-        }
-    }
-
-    if(res.WhichMinimizer == 0)
-    {
-        throw std::runtime_error("You disabled all minimizers. You need at least one.");
-    }
-
-
-    return res;
-}
 
 int main(int argc, char *argv[]) try{
 
@@ -307,7 +177,7 @@ int main(int argc, char *argv[]) try{
                 outfile << sep << EWPT.Tc << sep << EWPT.vc;
                 if(EWPT.vc>C_PT*EWPT.Tc and EWPT.StatusFlag==Minimizer::MinimizerStatus::SUCCESS) outfile << sep << EWPT.vc/EWPT.Tc;
                 else outfile << sep << static_cast<int>(EWPT.StatusFlag);
-                for(auto x: EWPT.EWMinimum) outfile << sep << x;
+                outfile << sep << EWPT.EWMinimum;
 				outfile << std::endl;
 			}
             else if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS)
@@ -317,7 +187,7 @@ int main(int argc, char *argv[]) try{
                     outfile << linestr << sep << parCT;
                     outfile << sep << EWPT.Tc << sep << EWPT.vc;
                     outfile << sep << EWPT.vc / EWPT.Tc;
-                    for(auto x: EWPT.EWMinimum) outfile << sep << x;
+                    outfile << sep << EWPT.EWMinimum;
 					outfile << std::endl;
 				}
 			}
@@ -347,5 +217,139 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
+CLIoptions getCLIArguments(int argc, char *argv[])
+{
+
+
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 6 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << std::boolalpha
+                  << "BSMPT calculates the strength of the electroweak phase transition" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./BSMPT model input output FirstLine LastLine" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
+                  <<"The first line in the input file to calculate the EWPT. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
+                  <<"The last line in the input file to calculate the EWPT." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
+        std::cout<< std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
+                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 6)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    CLIoptions res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                res.OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--firstline="))
+            {
+                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+            else if(StringStartsWith(el,"--lastline="))
+            {
+                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+            }
+            else if(StringStartsWith(el,"--terminaloutput="))
+            {
+                res.TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
+            }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                if(res.UseGSL and not Minimizer::UseGSLDefault)
+                {
+                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+                }
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
+                {
+                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+                }
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
+                {
+                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+                }
+            }
+        }
+        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.OutputFile = args.at(2);
+        res.FirstLine = std::stoi(args.at(3));
+        res.LastLine = std::stoi(args.at(4));
+        if(argc == 7) {
+            std::string s7 = argv[6];
+            res.TerminalOutput = ("y" == s7);
+        }
+    }
+
+    if(res.WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
+    }
+
+
+    return res;
+}
 
 

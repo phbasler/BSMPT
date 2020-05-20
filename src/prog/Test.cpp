@@ -38,82 +38,18 @@
 #include <vector>                               // for vector
 #include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
 #include <BSMPT/utility.h>
+#include <BSMPT/minimizer/Minimizer.h>
 #include <fstream>
 using namespace std;
 using namespace BSMPT;
 
+struct CLIoptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int Line{};
+    std::string InputFile;
+};
 
-auto getCLIArguments(int argc, char *argv[])
-{
-    struct ReturnType{
-        BSMPT::ModelID::ModelIDs Model{};
-        int Line{};
-        std::string InputFile;
-    };
-
-    std::vector<std::string> args;
-    for(int i{1};i<argc;++i) args.push_back(argv[i]);
-
-    if(argc < 4 or args.at(0) == "--help")
-    {
-        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "Test performs a serious of tests on the given model. Intended for testing new models." << std::endl
-                  << "It is called either by " << std::endl
-                  << "./Test model input Line" << std::endl
-                  << "or with the following arguments" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
-                  << "Shows this menu" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
-                  << "The model you want to test"<<std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
-                  << "The input file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
-                  <<"The line in the input file with the parameter point used to check the model." << std::endl;
-        ShowInputError();
-    }
-
-    if(args.size() > 0 and args.at(0)=="--help")
-    {
-        throw int{0};
-    }
-    else if(argc < 4)
-    {
-        throw std::runtime_error("Too few arguments.");
-    }
-
-
-    ReturnType res;
-    std::string prefix{"--"};
-    bool UsePrefix = StringStartsWith(args.at(0),prefix);
-    if(UsePrefix)
-    {
-        for(const auto& arg: args)
-        {
-            auto el = arg;
-            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-            if(StringStartsWith(el,"--model="))
-            {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-            }
-            else if(StringStartsWith(el,"--input="))
-            {
-                res.InputFile = arg.substr(std::string("--input=").size());
-            }
-            else if(StringStartsWith(el,"--line="))
-            {
-                res.Line = std::stoi(el.substr(std::string("--firstline=").size()));
-            }
-        }
-    }
-    else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.Line = std::stoi(args.at(2));
-    }
-
-
-    return res;
-}
+CLIoptions getCLIArguments(int argc, char *argv[]);
 
 
 
@@ -171,8 +107,91 @@ int main(int argc, char *argv[]) try{
 	}
 	return EXIT_SUCCESS;
 }
-
+catch(int)
+{
+    return EXIT_SUCCESS;
+}
 catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
+}
+
+CLIoptions getCLIArguments(int argc, char *argv[])
+{
+
+
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 4 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "Test performs a serious of tests on the given model. Intended for testing new models." << std::endl
+                  << "It is called either by " << std::endl
+                  << "./Test model input Line" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to test"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
+                  <<"The line in the input file with the parameter point used to check the model." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 4)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    CLIoptions res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--line="))
+            {
+                res.Line = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+        }
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.Line = std::stoi(args.at(2));
+    }
+
+
+    return res;
 }
