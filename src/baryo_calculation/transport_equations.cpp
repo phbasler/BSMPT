@@ -118,10 +118,10 @@ void GSL_integration_mubl::setpar(std::vector<double> inp){
 std::vector<double> GSL_integration_mubl::getpar(){
     return par;
 }
-int GSL_integration_mubl::get_transport_method(){
+TransportMethod GSL_integration_mubl::get_transport_method(){
     return transport_method;
 }
-void GSL_integration_mubl::set_transport_method(int method){
+void GSL_integration_mubl::set_transport_method(TransportMethod method){
     transport_method = method;
 }
 void GSL_integration_mubl::setZMAX(double zin,bool MultiplesOfLW=false){

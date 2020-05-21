@@ -47,6 +47,12 @@ namespace BSMPT{
   typedef std::vector< double > state_type;
   typedef boost::numeric::odeint::runge_kutta_cash_karp54< state_type > error_stepper_type;
 
+  enum class TransportMethod{
+      top,
+      bottom,
+      tau
+  };
+
 
 
   /**
@@ -253,7 +259,7 @@ namespace BSMPT{
          * 2 --> bot
          * 3 --> tau
          */
-      int transport_method =  1 ;
+      TransportMethod transport_method {TransportMethod::top} ;
 
 
       /**
@@ -350,12 +356,12 @@ namespace BSMPT{
       /**
          * Set function to chose the method for the transport equations
         */
-      void set_transport_method(int method);
+      void set_transport_method(TransportMethod method);
       /**
        * @brief get_transport_method
        * @return transport_method
        */
-      int get_transport_method();
+      TransportMethod get_transport_method();
       /**
        * @brief setZMAX defines the value to treat mu(ZMAX) = 0
        * @param z_in new value to set zMAX to

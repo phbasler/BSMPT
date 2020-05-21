@@ -141,15 +141,16 @@ int main(int argc, char *argv[]) try{
         EtaInterface.setNumerics(args.vw , EWPT.EWMinimum , vevsymmetricSolution , TC , modelPointer,args.WhichMinimizer);//Set up parameter container for Baryo Calculation-->Calls container.init
         if(args.TerminalOutput) std::cout<<"Starting setting the class instances"<<std::endl;
         BSMPT::Baryo::tau_source C_tau;
-        EtaInterface.GSL_integration_mubl_container.set_transport_method(3);//setting to tau class
+        EtaInterface.set_transport_method(TransportMethod::tau);//setting to tau class
         bool botflag = true;
         auto class_GamM = EtaInterface.get_class_CalcGamM();
         auto class_ScP  = EtaInterface.get_class_Scp();
         auto class_kappa = EtaInterface.get_class_kappa();
-        C_tau.set_class(botflag,EtaInterface.GSL_integration_mubl_container,class_GamM,class_ScP,class_kappa);
+        auto Integration_mubl{EtaInterface.getGSL_integration_mubl_container()};
+        C_tau.set_class(botflag, Integration_mubl,class_GamM,class_ScP,class_kappa);
 
-        auto tau_arr_nL = set_up_nL_grid(nstep,EtaInterface.GSL_integration_mubl_container,C_tau);
-        auto FH_GSL = generate_mubl_spline(EtaInterface.GSL_integration_mubl_container , static_cast<int>(nstep));
+        auto tau_arr_nL = set_up_nL_grid(nstep,Integration_mubl,C_tau);
+        auto FH_GSL = generate_mubl_spline(Integration_mubl, static_cast<int>(nstep));
 
 ///////
 /// Outfile

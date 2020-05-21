@@ -148,12 +148,12 @@ int main(int argc, char *argv[]) try{
                     outfile << sep << static_cast<int>(EWPT_mu.StatusFlag);
                     outfile << sep << args.vw;
                     outfile << sep << EtaInterface.getLW();
-                    outfile << sep << EtaInterface.GSL_integration_mubl_container.getSymmetricCPViolatingPhase_top();
-                    outfile << sep << EtaInterface.GSL_integration_mubl_container.getBrokenCPViolatingPhase_top();
-                    outfile << sep << EtaInterface.GSL_integration_mubl_container.getSymmetricCPViolatingPhase_bot();
-                    outfile << sep << EtaInterface.GSL_integration_mubl_container.getBrokenCPViolatingPhase_bot();
-                    outfile << sep << EtaInterface.GSL_integration_mubl_container.getSymmetricCPViolatingPhase_tau();
-                    outfile << sep << EtaInterface.GSL_integration_mubl_container.getBrokenCPViolatingPhase_tau();
+                    outfile << sep << EtaInterface.getSymmetricCPViolatingPhase_top();
+                    outfile << sep << EtaInterface.getBrokenCPViolatingPhase_top();
+                    outfile << sep << EtaInterface.getSymmetricCPViolatingPhase_bot();
+                    outfile << sep << EtaInterface.getBrokenCPViolatingPhase_bot();
+                    outfile << sep << EtaInterface.getSymmetricCPViolatingPhase_tau();
+                    outfile << sep << EtaInterface.getBrokenCPViolatingPhase_tau();
                     outfile << sep << eta_mu;
 
                     outfile << std::endl;

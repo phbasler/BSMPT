@@ -168,7 +168,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
 {
 	std::vector<double> eta;
 	if(method_transport.at(0)){
-		GSL_integration_mubl_container.set_transport_method(1);
+        GSL_integration_mubl_container.set_transport_method(TransportMethod::top);
 		top_source C_top;
 		C_top.set_class(bot_mass_flag, GSL_integration_mubl_container,Calc_Gam_inp,Calc_Scp_inp,Calc_kappa_inp);
 		auto arr_nL = set_up_nL_grid(n_step , GSL_integration_mubl_container , C_top );
@@ -176,7 +176,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
 		eta.push_back(Nintegrate_eta(C_eta,0 , GSL_integration_mubl_container.getZMAX()));
 	}
 	if(method_transport.at(1)){
-		GSL_integration_mubl_container.set_transport_method(2);
+        GSL_integration_mubl_container.set_transport_method(TransportMethod::bottom);
 		bot_source C_bot;
 		C_bot.set_class(bot_mass_flag, GSL_integration_mubl_container,Calc_Gam_inp,Calc_Scp_inp,Calc_kappa_inp);
 		auto arr_nL = set_up_nL_grid(n_step , GSL_integration_mubl_container , C_bot );
@@ -184,7 +184,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
 		eta.push_back(Nintegrate_eta(C_eta,0 , GSL_integration_mubl_container.getZMAX()));
 	}
 	if(method_transport.at(2)){
-		GSL_integration_mubl_container.set_transport_method(3);
+        GSL_integration_mubl_container.set_transport_method(TransportMethod::tau);
 		tau_source C_tau;
 		C_tau.set_class(bot_mass_flag, GSL_integration_mubl_container,Calc_Gam_inp,Calc_Scp_inp,Calc_kappa_inp);
 		auto arr_nL = set_up_nL_grid(n_step , GSL_integration_mubl_container , C_tau);
