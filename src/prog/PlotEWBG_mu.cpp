@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) try{
                 auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300);
                 std::vector<double> startpoint;
                 for(auto x : EWPT_mu.EWMinimum) startpoint.push_back(x/2.);
-                if(EWPT_mu.StatusFlag==1){
+                if(EWPT_mu.StatusFlag== Minimizer::MinimizerStatus::SUCCESS ){
                     std::vector<double>checkmu;
                     auto VEV_mu_sym = Minimizer::Minimize_gen_all(modelPointer,EWPT_mu.Tc+1,checkmu,startpoint);
                     auto VEV_mu_brk = EWPT_mu.EWMinimum;
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) try{
                     outfile << linestr;
                     outfile << sep << mu_factor <<sep<< mu_factor*C_vev0;
                     outfile << sep << EWPT_mu.Tc<<sep<<EWPT_mu.vc<<sep<<EWPT_mu.vc/EWPT_mu.Tc<<sep<<EWPT_mu.EWMinimum;
-                    outfile << sep << EWPT_mu.StatusFlag;
+                    outfile << sep << static_cast<int>(EWPT_mu.StatusFlag);
                     outfile << sep << vw;
                     outfile << sep << EtaInterface.getLW();
                     outfile << sep << EtaInterface.GSL_integration_mubl_container.getSymmetricCPViolatingPhase_top();

@@ -238,7 +238,8 @@ int main(int argc, char *argv[]) try{
 				if(dimensionnames.size() != ndim +3){
 					std::cout << "The number of names in the function addLegendTemp does not match the number of vevs, going to default naming."
 							<< "You should fix this as this will result in errors in your output file." << std::endl;
-                    std::cout << "Succeded ? " << EWPT.StatusFlag << sep << " (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+                    std::cout << "Succeded ? " << static_cast<int>(EWPT.StatusFlag)
+                              << sep << " (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
                     if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS){std::cout << "omega_c = " << EWPT.vc << " GeV\n";
                     std::cout << "T_c = " << EWPT.Tc << " GeV\n";
                     std::cout << "xi_c = omega_c/T_c =  " << EWPT.vc/EWPT.Tc << std::endl;
@@ -247,7 +248,8 @@ int main(int argc, char *argv[]) try{
 					}
 				}
 				else{
-                    std::cout << "Succeded ? " << EWPT.StatusFlag << sep <<" (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+                    std::cout << "Succeded ? " << static_cast<int>(EWPT.StatusFlag)
+                              << sep <<" (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
                     if(EWPT.StatusFlag==Minimizer::MinimizerStatus::SUCCESS)
 					{
 						std::cout << std::scientific;
