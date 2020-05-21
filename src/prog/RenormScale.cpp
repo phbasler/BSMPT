@@ -138,7 +138,8 @@ int main(int argc, char *argv[]) try{
                 std::vector<double>checkmu;
                 auto VEV_NLO_mu = Minimizer::Minimize_gen_all(modelPointer,0,checkmu,startpoint);
                 if(TerminalOutput){
-                    std::cout<<"\tStatusFlag = "<<EWPT_mu.StatusFlag<<" @ mu = "<<modelPointer->get_scale()<<" = "<<mu_factor<<"*C_vev0"<<std::endl;
+                    std::cout<<"\tStatusFlag = "<<static_cast<int>(EWPT_mu.StatusFlag)
+                            <<" @ mu = "<<modelPointer->get_scale()<<" = "<<mu_factor<<"*C_vev0"<<std::endl;
                     for(std::size_t i=0;i<EWPT_mu.EWMinimum.size();i++)
                     {
                         std::cout<<sep<<sep<< VEVnames.at(i+3)<<sep<<EWPT_mu.EWMinimum.at(i)
@@ -152,7 +153,7 @@ int main(int argc, char *argv[]) try{
                     outfile << sep << EWPT_mu.Tc<<sep<<EWPT_mu.vc<<sep<<EWPT_mu.vc/EWPT_mu.Tc<<sep<<EWPT_mu.EWMinimum;
                     outfile << sep << VEV_NLO_mu;
                     outfile << sep << CT_mu;
-                    outfile << sep << EWPT_mu.StatusFlag;
+                    outfile << sep << static_cast<int>(EWPT_mu.StatusFlag);
                     outfile << std::endl;
                 }
                 else if(EWPTdefault.StatusFlag == Minimizer::MinimizerStatus::SUCCESS)
@@ -164,7 +165,7 @@ int main(int argc, char *argv[]) try{
                         outfile << sep << EWPT_mu.Tc<<sep<<EWPT_mu.vc<<sep<<EWPT_mu.vc/EWPT_mu.Tc<<sep<<EWPT_mu.EWMinimum;
                         outfile << sep << VEV_NLO_mu;
                         outfile << sep << CT_mu;
-                        outfile << sep << EWPT_mu.StatusFlag;
+                        outfile << sep << static_cast<int>(EWPT_mu.StatusFlag);
                         outfile << std::endl;
                     }
             }

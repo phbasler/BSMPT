@@ -94,7 +94,7 @@ std::vector<double> Minimize_gen_all(
 /**
  * @brief The MinimizerStatus enum for the Statusflags of the minimizer
  */
-enum MinimizerStatus{
+enum class MinimizerStatus{
     SUCCESS = 1,
     NOTVANISHINGATFINALTEMP=-1,
     NOTNLOSTABLE=-2,
