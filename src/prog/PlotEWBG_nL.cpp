@@ -195,7 +195,8 @@ CLIoptions getCLIArguments(int argc, char *argv[])
     if(argc < 7 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "PlotEWBG_nL calculates the ." << std::endl
+        std::cout << "Calculation of the left-handed chemical potentials or particle densities triggering the EW \
+                     sphaleron transitions as a function of the wall distance z ." << std::endl
                   << "It is called either by " << std::endl
                   << "./PlotEWBG_nL Model Inputfile Outputfile Line vw EWBGConfigFile TerminalOutput(y/n)" << std::endl
                   << "or with the following arguments" << std::endl
