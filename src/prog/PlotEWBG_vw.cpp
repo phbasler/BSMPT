@@ -220,7 +220,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
     {
         throw int{0};
     }
-    else if(argc < 7)
+    else if(argc < 9)
     {
         throw std::runtime_error("Too few arguments.");
     }
