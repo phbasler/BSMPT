@@ -45,7 +45,7 @@ using namespace std;
 using namespace BSMPT;
 
 struct CLIoptions{
-    BSMPT::ModelID::ModelIDs Model{};
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int FirstLine{}, LastLine{};
     std::string InputFile, OutputFile,ConfigFile;
     bool TerminalOutput{false};
@@ -233,7 +233,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
     if(argc < 7 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "CalculateEWBG calculates the strength of the electroweak phase transition" << std::endl
+        std::cout << "CalculateEWBG calculates the strength of the electroweak baryogenesis" << std::endl
                   << "It is called either by " << std::endl
                   << "./CalculateEWBG model input output FirstLine LastLine ConfigFile" << std::endl
                   << "or with the following arguments" << std::endl

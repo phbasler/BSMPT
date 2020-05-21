@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) try{
 						}
 
                         double Temp = EWPT.Tc;
-                        auto MinPlaneResult = Minimizer::MinimizePlane(basepoint,VEVSymmetric,vcritical,modelPointer,Temp);
+                        auto MinPlaneResult = Minimizer::MinimizePlane(basepoint,VEVSymmetric,vcritical,modelPointer,Temp,args.WhichMinimizer);
                         double Vmin = MinPlaneResult.PotVal;
                         auto MinimumPlane = MinPlaneResult.Minimum;
                         basepointPot=modelPointer->MinimizeOrderVEV(basepoint);
