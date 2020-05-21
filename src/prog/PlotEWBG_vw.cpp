@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) try{
         for(vw=args.vw_min;vw<=args.vw_max;vw+=args.vw_Stepsize)
 		{
             std::cout<<"\rvw = "<<vw<<"\n";
-			auto eta = EtaInterface.CalcEta(vw,vcritical,vevsymmetricSolution,TC,modelPointer);
+            auto eta = EtaInterface.CalcEta(vw,vcritical,vevsymmetricSolution,TC,modelPointer,args.WhichMinimizer);
             outfile<<linestr<<sep;
             outfile << TC << sep << vc << sep << vw << sep << EtaInterface.getLW();
             for(auto x:eta) outfile << sep << x;
