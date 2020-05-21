@@ -12,6 +12,7 @@
 namespace BSMPT {
 class Class_Potential_Origin;
 namespace Minimizer {
+struct PointerContainerMinPlane;
 namespace LibNLOPT {
 
 /**
@@ -52,6 +53,23 @@ double NLOPTVEff(
 NLOPTReturnType MinimizeUsingNLOPT(
         const std::shared_ptr<Class_Potential_Origin>& model,
         const double& Temp);
+
+/**
+ * @brief MinimizePlaneUsingNLOPT minimizes the effective potential in a given plane using the NLopt LN_COBYLA algorithm
+ * @param params The struct containing all necessary informations
+ * @return A ShareInformationNLOPT with the global minimum, the potential value and the nlopt::result of the minimization
+ */
+NLOPTReturnType MinimizePlaneUsingNLOPT(
+        const struct PointerContainerMinPlane& params);
+/**
+ * @brief NLOPTVEffPlane
+ * @param x VEV configuration to evaluate the effective potential
+ * @param grad NULL as a derivative free method is used
+ * @param data pointer to PointerContainerMinPlane struct
+ * @return
+ */
+double NLOPTVEffPlane(const std::vector<double>& x, std::vector<double>& grad, void* data);
+
 }
 }
 }

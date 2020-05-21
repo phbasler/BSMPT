@@ -28,7 +28,7 @@
 #include <vector>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/baryo_calculation/transport_equations.h>
-
+#include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_calc.h>
 
 
@@ -153,7 +153,8 @@ public:
 		std::vector<double>& vev_critical_input,
 		std::vector<double>& vev_symmetric_input,
 		const double& TC_input,
-		std::shared_ptr<Class_Potential_Origin>& modelPointer_input);
+        std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+        const int& WhichMinimizer = Minimizer::WhichMinimizerDefault );
 	/**
 	 * Calculates all EWBG methods turned on in CalculateEtaInterface::method_transport with the numerical values set in
 	 * CalculateEtaInterface::setNumerics()
@@ -174,7 +175,8 @@ public:
 			std::vector<double>& vev_critical_input,
 			std::vector<double>& vev_symmetric_input,
 			const double& TC_input,
-			std::shared_ptr<Class_Potential_Origin>& modelPointer_input);
+            std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+            const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
 	/**
 	 * Sets the wall velocity CalculateEtaInterface::vw
 	 * @param vw_in Input value for the wall velocity CalculateEtaInterface::vw

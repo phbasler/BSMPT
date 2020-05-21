@@ -26,6 +26,7 @@
 
 
  #include <BSMPT/models/IncludeAllModels.h>
+ #include <BSMPT/minimizer/Minimizer.h>
  #include <boost/numeric/odeint.hpp>
  #include <boost/numeric/odeint/iterator/const_step_time_iterator.hpp>
  #include <boost/math/interpolators/cubic_b_spline.hpp>
@@ -396,7 +397,8 @@ namespace BSMPT{
        */
       void init(const double& vw_input, std::vector<double>& vev_critical_input, std::vector<double>& vev_symmetric_input,
                 const double& TC_input,
-                std::shared_ptr<Class_Potential_Origin>& modelPointer_input);
+                std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+                const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
       /**
        * @brief getModelPointer

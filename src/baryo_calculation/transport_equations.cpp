@@ -141,7 +141,8 @@ void GSL_integration_mubl::init(const double& vw_input,
                                 std::vector<double>& vev_critical_input,
                                 std::vector<double>& vev_symmetric_input,
                                 const double& TC_input,
-                                std::shared_ptr<Class_Potential_Origin>& modelPointer_input){
+                                std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+                                const int& WhichMinimizer){
 
     vw = vw_input;
     TC = TC_input;
@@ -193,7 +194,7 @@ void GSL_integration_mubl::init(const double& vw_input,
         }
     }
 
-    LW = Wall::calculate_wall_thickness_plane(modelPointer,TC,vev_critical,vev_symmetric);
+    LW = Wall::calculate_wall_thickness_plane(modelPointer,TC,vev_critical,vev_symmetric,WhichMinimizer);
 
     if(false)
     {
@@ -210,7 +211,7 @@ void GSL_integration_mubl::init(const double& vw_input,
     {
         basepoint.push_back(vev_symmetric.at(i) + 1e-2 * (vev_critical.at(i)-vev_symmetric.at(i)));
     }
-    auto MinPlaneResult = Minimizer::MinimizePlane(basepoint,vev_symmetric,vev_critical,modelPointer,TC);
+    auto MinPlaneResult = Minimizer::MinimizePlane(basepoint,vev_symmetric,vev_critical,modelPointer,TC,WhichMinimizer);
     auto MinimumPlane = MinPlaneResult.Minimum;
 
 

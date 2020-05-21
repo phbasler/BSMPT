@@ -42,122 +42,18 @@
 using namespace std;
 using namespace BSMPT;
 
-
-auto getCLIArguments(int argc, char *argv[])
-{
-    struct ReturnType{
-        BSMPT::ModelID::ModelIDs Model{};
-        int Line{}, NumberOfSteps{};
-        std::string InputFile, OutputFile,ConfigFile;
-        bool TerminalOutput{false};
-        double vw{0.1};
-    };
-
-    std::vector<std::string> args;
-    for(int i{1};i<argc;++i) args.push_back(argv[i]);
-
-    if(argc < 7 or args.at(0) == "--help")
-    {
-        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "EWBGRenormScale calculates the strength of the EWBG while varying the MSBar renormalisation scale" << std::endl
-                  << "It is called either by " << std::endl
-                  << "./EWBGRenormScale Model Inputfile Outputfile  Line NumberOfSteps Configfile" << std::endl
-                  << "or with the following arguments" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
-                  << "Shows this menu" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
-                  << "The model you want to investigate"<<std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
-                  << "The input file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
-                  << "The output file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
-                  <<"The line in the input file with the parameter point. Expects line 1 to be a legend." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--config="
-                  << "The EWBG config file." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
-                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--vw="
-                  << "Wall velocity for the EWBG calculation. Default value of 0.1." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--NumberOfSteps="
-                  << "Number of Steps to vary the scale between 0.5 and 1.5 times the original scale." << std::endl;
-        ShowInputError();
-    }
-
-    if(args.size() > 0 and args.at(0)=="--help")
-    {
-        throw int{0};
-    }
-    else if(argc < 7)
-    {
-        throw std::runtime_error("Too few arguments.");
-    }
-
-
-    ReturnType res;
-    std::string prefix{"--"};
-    bool UsePrefix = StringStartsWith(args.at(0),prefix);
-    if(UsePrefix)
-    {
-        for(const auto& arg: args)
-        {
-            auto el = arg;
-            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-            if(StringStartsWith(el,"--model="))
-            {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-            }
-            else if(StringStartsWith(el,"--input="))
-            {
-                res.InputFile = arg.substr(std::string("--input=").size());
-            }
-            else if(StringStartsWith(el,"--output="))
-            {
-                res.OutputFile = arg.substr(std::string("--output=").size());
-            }
-            else if(StringStartsWith(el,"--line="))
-            {
-                res.Line = std::stoi(el.substr(std::string("--line=").size()));
-            }
-            else if(StringStartsWith(el,"--numberofsteps="))
-            {
-                res.NumberOfSteps = std::stoi(el.substr(std::string("--numberofsteps=").size()));
-            }
-            else if(StringStartsWith(el,"--terminaloutput="))
-            {
-                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
-            }
-            else if(StringStartsWith(el,"--vw="))
-            {
-                res.vw = std::stod(el.substr(std::string("--vw=").size()));
-            }
-            else if(StringStartsWith(el,"--config="))
-            {
-                res.ConfigFile = arg.substr(std::string("--config").size());
-            }
-        }
-    }
-    else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.Line = std::stoi(args.at(3));
-        res.NumberOfSteps = std::stoi(args.at(4));
-        res.ConfigFile = args.at(5);
-        if(argc == 8) {
-            std::string s7 = argv[6];
-            res.TerminalOutput = ("y" == s7);
-        }
-    }
-
-    if(res.NumberOfSteps == 0)
-    {
-        throw std::runtime_error("You have set the number of steps to zero.");
-    }
-
-
-    return res;
-}
+struct CLIoptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int Line{}, NumberOfSteps{};
+    std::string InputFile, OutputFile,ConfigFile;
+    bool TerminalOutput{false};
+    double vw{0.1};
+    bool UseGSL { Minimizer::UseGSLDefault};
+    bool UseCMAES {Minimizer::UseLibCMAESDefault};
+    bool UseNLopt{Minimizer::UseNLoptDefault};
+    int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+};
+CLIoptions getCLIArguments(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) try{
 
@@ -205,7 +101,7 @@ int main(int argc, char *argv[]) try{
           {
 
             outfile << linestr<<sep << "mu_factor"<<sep<<"mu";
-            for(auto x: modelPointer->addLegendTemp()) outfile << sep <<x+"_mu";
+            for(const auto& x: modelPointer->addLegendTemp()) outfile << sep <<x+"_mu";
             outfile << sep << "BSMPT_StatusFlag";
             outfile << sep << "vw";
             outfile << sep << "L_W";
@@ -215,7 +111,7 @@ int main(int argc, char *argv[]) try{
             outfile << sep << "bot_brk_phase";
             outfile << sep << "tau_sym_phase";
             outfile << sep << "tau_brk_phase";
-            for(auto x: etaLegend) outfile << sep << x+"_muvar";
+            for(const auto& x: etaLegend) outfile << sep << x+"_muvar";
             outfile << std::endl;
 
             modelPointer->setUseIndexCol(linestr);
@@ -237,14 +133,14 @@ int main(int argc, char *argv[]) try{
                 if(args.TerminalOutput) std::cout<<"\r currently mu_factor = "<<mu_factor<<std::endl;
                 auto VEVnames = modelPointer->addLegendTemp();
                 auto CT_mu=modelPointer->resetScale(C_vev0*mu_factor);
-                auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300);
+                auto EWPT_mu = Minimizer::PTFinder_gen_all(modelPointer,0,300,args.WhichMinimizer);
                 std::vector<double> startpoint;
                 for(const auto& x : EWPT_mu.EWMinimum) startpoint.push_back(x/2.);
                 if(EWPT_mu.StatusFlag== Minimizer::MinimizerStatus::SUCCESS ){
                     std::vector<double>checkmu;
-                    auto VEV_mu_sym = Minimizer::Minimize_gen_all(modelPointer,EWPT_mu.Tc+1,checkmu,startpoint);
+                    auto VEV_mu_sym = Minimizer::Minimize_gen_all(modelPointer,EWPT_mu.Tc+1,checkmu,startpoint,args.WhichMinimizer);
                     auto VEV_mu_brk = EWPT_mu.EWMinimum;
-                    auto eta_mu = EtaInterface.CalcEta(args.vw,EWPT_mu.EWMinimum,VEV_mu_sym,EWPT_mu.Tc,modelPointer);
+                    auto eta_mu = EtaInterface.CalcEta(args.vw,EWPT_mu.EWMinimum,VEV_mu_sym,EWPT_mu.Tc,modelPointer,args.WhichMinimizer);
 
                     outfile << linestr;
                     outfile << sep << mu_factor <<sep<< mu_factor*C_vev0;
@@ -287,3 +183,156 @@ catch(exception& e){
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
 }
+
+CLIoptions getCLIArguments(int argc, char *argv[])
+{
+
+
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 7 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "EWBGRenormScale calculates the strength of the EWBG while varying the MSBar renormalisation scale" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./EWBGRenormScale Model Inputfile Outputfile  Line NumberOfSteps Configfile" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
+                  <<"The line in the input file with the parameter point. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--config="
+                  << "The EWBG config file." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
+                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--vw="
+                  << "Wall velocity for the EWBG calculation. Default value of 0.1." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--NumberOfSteps="
+                  << "Number of Steps to vary the scale between 0.5 and 1.5 times the original scale." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 7)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    CLIoptions res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                res.OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--line="))
+            {
+                res.Line = std::stoi(el.substr(std::string("--line=").size()));
+            }
+            else if(StringStartsWith(el,"--numberofsteps="))
+            {
+                res.NumberOfSteps = std::stoi(el.substr(std::string("--numberofsteps=").size()));
+            }
+            else if(StringStartsWith(el,"--terminaloutput="))
+            {
+                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+            }
+            else if(StringStartsWith(el,"--vw="))
+            {
+                res.vw = std::stod(el.substr(std::string("--vw=").size()));
+            }
+            else if(StringStartsWith(el,"--config="))
+            {
+                res.ConfigFile = arg.substr(std::string("--config").size());
+            }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                if(res.UseGSL and not Minimizer::UseGSLDefault)
+                {
+                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+                }
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
+                {
+                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+                }
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
+                {
+                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+                }
+            }
+        }
+        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.OutputFile = args.at(2);
+        res.Line = std::stoi(args.at(3));
+        res.NumberOfSteps = std::stoi(args.at(4));
+        res.ConfigFile = args.at(5);
+        if(argc == 8) {
+            std::string s7 = argv[6];
+            res.TerminalOutput = ("y" == s7);
+        }
+    }
+
+    if(res.NumberOfSteps == 0)
+    {
+        throw std::runtime_error("You have set the number of steps to zero.");
+    }
+
+    if(res.WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
+    }
+
+
+    return res;
+}
+

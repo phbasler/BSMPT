@@ -46,105 +46,18 @@
 using namespace std;
 using namespace BSMPT;
 
+struct CLIoptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int FirstLine{}, LastLine{};
+    std::string InputFile, OutputFile;
+    bool TerminalOutput{false};
+    bool UseGSL { Minimizer::UseGSLDefault};
+    bool UseCMAES {Minimizer::UseLibCMAESDefault};
+    bool UseNLopt{Minimizer::UseNLoptDefault};
+    int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+};
 
-
-auto getCLIArguments(int argc, char *argv[])
-{
-    struct ReturnType{
-        BSMPT::ModelID::ModelIDs Model{};
-        int FirstLine{}, LastLine{};
-        std::string InputFile, OutputFile;
-        bool TerminalOutput{false};
-    };
-
-    std::vector<std::string> args;
-    for(int i{1};i<argc;++i) args.push_back(argv[i]);
-
-    if(argc < 6 or args.at(0) == "--help")
-    {
-        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "Generate Path calculates the tunnel path from the broken to the symmetric minimum" << std::endl
-                  << "It is called either by " << std::endl
-                  << "./GeneratePath model input output FirstLine LastLine" << std::endl
-                  << "or with the following arguments" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
-                  << "Shows this menu" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
-                  << "The model you want to investigate"<<std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
-                  << "The input file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
-                  << "The output file in tsv format" << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
-                  <<"The first line in the input file to calculate the Wallthickness. Expects line 1 to be a legend." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
-                  <<"The last line in the input file to calculate the Wallthickness." << std::endl
-                  << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
-                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
-        ShowInputError();
-    }
-
-    if(args.size() > 0 and args.at(0)=="--help")
-    {
-        throw int{0};
-    }
-    else if(argc < 6)
-    {
-        throw std::runtime_error("Too few arguments.");
-    }
-
-
-    ReturnType res;
-    std::string prefix{"--"};
-    bool UsePrefix = StringStartsWith(args.at(0),prefix);
-    if(UsePrefix)
-    {
-        for(const auto& arg: args)
-        {
-            auto el = arg;
-            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-            if(StringStartsWith(el,"--model="))
-            {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-            }
-            else if(StringStartsWith(el,"--input="))
-            {
-                res.InputFile = arg.substr(std::string("--input=").size());
-            }
-            else if(StringStartsWith(el,"--output="))
-            {
-                res.OutputFile = arg.substr(std::string("--output=").size());
-            }
-            else if(StringStartsWith(el,"--firstline="))
-            {
-                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
-            }
-            else if(StringStartsWith(el,"--lastline="))
-            {
-                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
-            }
-            else if(StringStartsWith(el,"--terminaloutput="))
-            {
-                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
-            }
-        }
-    }
-    else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.FirstLine = std::stoi(args.at(3));
-        res.LastLine = std::stoi(args.at(4));
-        if(argc == 7) {
-            std::string s7 = argv[6];
-            res.TerminalOutput = ("y" == s7);
-        }
-    }
-
-
-    return res;
-}
-
+CLIoptions getCLIArguments(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) try{
 
@@ -201,8 +114,8 @@ int main(int argc, char *argv[]) try{
 		if(linecounter == 1)
 		  {
 			modelPointer->setUseIndexCol(linestr);
-            for(auto x: modelPointer->addLegendCT()) outfile << sep << x;
-            for(auto x: modelPointer->addLegendTemp()) outfile << sep << x;
+            outfile << sep << modelPointer->addLegendCT();
+            outfile << sep << modelPointer->addLegendTemp();
             outfile << sep << "line_parameter";
             for(std::size_t i=3;i<dimensionnames.size();i++) outfile << sep << dimensionnames.at(i) << "_line";
 		    outfile << "\tV_eff_line";
@@ -222,9 +135,7 @@ int main(int argc, char *argv[]) try{
 
             if(args.FirstLine == args.LastLine ) modelPointer->write();
 
-            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300);
-
-
+            auto EWPT = Minimizer::PTFinder_gen_all(modelPointer,0,300,args.WhichMinimizer);
 
             if(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS)
 			{
@@ -268,25 +179,18 @@ int main(int argc, char *argv[]) try{
 
 
 						outfile <<  linestr;
-                        for(auto x: parameters.second) outfile << sep << x;
+                        outfile << sep << parameters.second;
                         outfile << sep << EWPT.Tc << sep << EWPT.vc;
                         outfile << sep << EWPT.vc / EWPT.Tc;
-                        for(auto x: EWPT.EWMinimum) outfile << sep << x;
+                        outfile << sep << EWPT.EWMinimum;
                         outfile << sep <<lineparam;
-                        for(std::size_t i=0;i<basepoint.size();i++) outfile << sep << basepoint.at(i);
+                        outfile << sep << basepoint;
                         outfile << sep << Vline;
-                        for(std::size_t i=0;i<MinimumPlane.size();i++) outfile << sep << MinimumPlane.at(i);
+                        outfile << sep << MinimumPlane;
                         outfile << sep << Vmin;
                         outfile << sep << DistanceLineMinimum;
 						outfile << std::endl;
 					}
-
-
-
-
-
-
-
 				}
 			}
 
@@ -347,3 +251,94 @@ catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 }
+
+CLIoptions getCLIArguments(int argc, char *argv[])
+{
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 6 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "Generate Path calculates the tunnel path from the broken to the symmetric minimum" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./GeneratePath model input output FirstLine LastLine" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
+                  <<"The first line in the input file to calculate the Wallthickness. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
+                  <<"The last line in the input file to calculate the Wallthickness." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
+                  <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 6)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+
+    CLIoptions res;
+    std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                res.InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                res.OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--firstline="))
+            {
+                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+            else if(StringStartsWith(el,"--lastline="))
+            {
+                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+            }
+            else if(StringStartsWith(el,"--terminaloutput="))
+            {
+                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+            }
+        }
+    }
+    else{
+        res.Model = ModelID::getModel(args.at(0));
+        res.InputFile = args.at(1);
+        res.OutputFile = args.at(2);
+        res.FirstLine = std::stoi(args.at(3));
+        res.LastLine = std::stoi(args.at(4));
+        if(argc == 7) {
+            std::string s7 = argv[6];
+            res.TerminalOutput = ("y" == s7);
+        }
+    }
+
+
+    return res;
+}
+

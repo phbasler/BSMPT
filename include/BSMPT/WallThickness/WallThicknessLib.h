@@ -27,6 +27,7 @@
 #include <vector>
 #include <memory>
 
+#include <BSMPT/minimizer/Minimizer.h>
 
 namespace BSMPT{
 class Class_Potential_Origin;
@@ -44,7 +45,8 @@ double calculate_wall_thickness_plane(
         const std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
         const double& Temp,
         const std::vector<double>& vcritical,
-        const std::vector<double>& vevsymmetric);
+        const std::vector<double>& vevsymmetric,
+        const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
 /**
  * @brief calculate_wall_thickness_1D calculates calculates the wall thickness across the straight line from the symmetrical minimum to the broken minimum

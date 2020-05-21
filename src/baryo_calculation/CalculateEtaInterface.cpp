@@ -136,7 +136,8 @@ void CalculateEtaInterface::setNumerics(const double& vw_input,
 		std::vector<double>& vev_critical_input,
 		std::vector<double>& vev_symmetric_input,
         const double& TC_input,
-		std::shared_ptr<Class_Potential_Origin>& modelPointer_input){
+        std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+        const int& WhichMinimizer){
 	vw=vw_input;
 	vev_critical=vev_critical_input;
 	vev_symmetric=vev_symmetric_input;
@@ -145,7 +146,7 @@ void CalculateEtaInterface::setNumerics(const double& vw_input,
     if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDM){
         throw std::runtime_error("Baryogenesis is only implemented for the C2HDM at the moment.");
     }
-    GSL_integration_mubl_container.init(vw,vev_critical,vev_symmetric,TC,modelPointer);
+    GSL_integration_mubl_container.init(vw,vev_critical,vev_symmetric,TC,modelPointer,WhichMinimizer);
 }
 
 void CalculateEtaInterface::setvw(double vw_in){
@@ -157,8 +158,9 @@ std::vector<double> CalculateEtaInterface::CalcEta(const double& vw_input,
 			std::vector<double>& vev_critical_input,
 			std::vector<double>& vev_symmetric_input,
 			const double& TC_input,
-			std::shared_ptr<Class_Potential_Origin>& modelPointer_input){
-    setNumerics(vw_input,vev_critical_input,vev_symmetric_input,TC_input,modelPointer_input);
+            std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+            const int& WhichMinimizer){
+    setNumerics(vw_input,vev_critical_input,vev_symmetric_input,TC_input,modelPointer_input,WhichMinimizer);
 	return CalcEta();
 }
 

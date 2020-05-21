@@ -156,7 +156,7 @@ LibCMAESReturn CMAES_Minimize_Plane_gen_all(
     }
 
     LibCMAESReturn res;
-    res.result = sol;
+    res.result = TransformCoordinates(sol,params);
     res.CMAESStatus = cmasols.run_status();
 
     return res;

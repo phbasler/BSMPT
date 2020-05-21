@@ -44,6 +44,11 @@
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
 #endif
 
+#ifdef NLopt_FOUND
+#include <BSMPT/minimizer/LibNLOPT/MinimizeNLOPT.h>
+#endif
+
+
 namespace BSMPT {
 namespace Minimizer{
 
@@ -92,17 +97,45 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
                                   const ModelID::ModelIDs& Model,
                                   const std::vector<double>& par,
                                   const std::vector<double>&  parCT,
-                                  const double& Temp){
+                                  const double& Temp,
+                                  const int& WhichMinimizer){
     std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
 	modelPointer->set_All(par,parCT);
-    return MinimizePlane(basepoint,VEVSymmetric,VEVBroken,modelPointer,Temp);
+    return MinimizePlane(basepoint,VEVSymmetric,VEVBroken,modelPointer,Temp,WhichMinimizer);
 }
 
 MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
                      const std::vector<double>& VEVSymmetric,
                      const std::vector<double>& VEVBroken,
                      const std::shared_ptr<Class_Potential_Origin>& modelPointer,
-                     const double& Temp){
+                     const double& Temp,
+                     const int& WhichMinimizer){
+
+
+    bool UseCMAES = false;
+    bool UseGSLLocal = false;
+    bool UseNLOPT = false;
+
+
+    int PGSL,PCMAES,PNLOPT;
+    int WMx = WhichMinimizer;
+    PCMAES = WMx%2;
+    WMx = WMx/2;
+    PGSL = WMx%2;
+    WMx = WMx/2;
+    PNLOPT = WMx%2;
+
+    UseNLOPT = (PNLOPT == 1);
+    UseCMAES = (PCMAES == 1);
+    UseGSLLocal = (PGSL == 1);
+
+#ifndef CMAES_FOUND
+    UseCMAES = false;
+#endif
+
+#ifndef NLopt_FOUND
+    UseNLOPT = false;
+#endif
 
     std::vector<double> PotValues;
     std::vector<std::vector<double>> Minima;
@@ -139,26 +172,37 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 
     auto dimensionnames = modelPointer->addLegendTemp();
 
-    // Find the minimum provided by GSL
-    auto GSLResult = GSL_Minimize_Plane_gen_all(params, 3,50);
-    PotValues.push_back(GSLResult.PotVal);
-    Minima.push_back(GSLResult.Minimum);
+    if(UseGSLLocal)
+    {
+        // Find the minimum provided by GSL
+        auto GSLResult = GSL_Minimize_Plane_gen_all(params, 3,50);
+        PotValues.push_back(GSLResult.PotVal);
+        Minima.push_back(GSLResult.Minimum);
+    }
 
 #ifdef CMAES_FOUND
-    std::vector<double> startCMAES(params.nVEV-1);
-    for(std::size_t i=0;i<params.Index;i++) {
-        startCMAES.at(i) = params.VEVBroken.at(i);
+    if(UseCMAES)
+    {
+        std::vector<double> startCMAES(params.nVEV-1);
+        for(std::size_t i=0;i<params.Index;i++) {
+            startCMAES.at(i) = params.VEVBroken.at(i);
+        }
+        for(std::size_t i=static_cast<size_t>(params.Index);i<params.nVEV-1;i++) {
+            startCMAES.at(i) = params.VEVBroken.at(i+1);
+        }
+        auto LibCMAESResult=LibCMAES::CMAES_Minimize_Plane_gen_all(params,startCMAES);
+        PotValues.push_back(modelPointer->VEff(modelPointer->MinimizeOrderVEV(LibCMAESResult.result),params.Temp));
+        Minima.push_back(LibCMAESResult.result);
     }
-    for(std::size_t i=static_cast<size_t>(params.Index);i<params.nVEV-1;i++) {
-        startCMAES.at(i) = params.VEVBroken.at(i+1);
-    }
-    auto LibCMAESResult=LibCMAES::CMAES_Minimize_Plane_gen_all(params,startCMAES);
-    auto solCMAESTilde = LibCMAESResult.result;
-    auto solCMAES = TransformCoordinates(solCMAESTilde,params);
-    auto solCMAESPot=modelPointer->MinimizeOrderVEV(solCMAES);
-    auto resCMAES = modelPointer->VEff(solCMAESPot,params.Temp);
-    PotValues.push_back(resCMAES);
-    Minima.push_back(solCMAES);
+#endif
+
+#ifdef NLopt_FOUND
+   if(UseNLOPT)
+   {
+       auto NLOPTResult = LibNLOPT::MinimizePlaneUsingNLOPT(params);
+       PotValues.push_back(NLOPTResult.PotVal);
+       Minima.push_back(NLOPTResult.Minimum);
+   }
 #endif
 
     std::size_t MinIndex=0;
@@ -199,7 +243,7 @@ int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane& par
     gsl_set_error_handler_off();
 
 	const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2;
-	gsl_multimin_fminimizer *s = NULL;
+    gsl_multimin_fminimizer *s = nullptr;
 	gsl_vector *ss, *x;
 	gsl_multimin_function minex_func;
 

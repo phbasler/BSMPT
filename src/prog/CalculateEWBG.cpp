@@ -146,10 +146,10 @@ int main(int argc, char *argv[]) try{
 			//Find the minimum in the symmetric phase. For this minimise at T = Tc + 1
 				std::vector<double> vevsymmetricSolution,checksym, startpoint;
                 for(const auto& el: EWPT.EWMinimum) startpoint.push_back(0.5*el);
-                vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint);
+                vevsymmetricSolution=Minimizer::Minimize_gen_all(modelPointer,EWPT.Tc+1,checksym,startpoint,args.WhichMinimizer);
 //Call: Calculation of eta in the different implemented approaches 
                 if(args.TerminalOutput) std::cout<<"Calling CalcEta..."<<std::endl;
-                eta = EtaInterface.CalcEta(args.vw,EWPT.EWMinimum,vevsymmetricSolution,EWPT.Tc,modelPointer);
+                eta = EtaInterface.CalcEta(args.vw,EWPT.EWMinimum,vevsymmetricSolution,EWPT.Tc,modelPointer,args.WhichMinimizer);
 //Outfile
 				outfile << linestr;
                 outfile << sep << parameters.second;
