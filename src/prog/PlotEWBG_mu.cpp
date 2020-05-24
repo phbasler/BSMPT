@@ -52,26 +52,21 @@ struct CLIoptions{
     bool UseCMAES {Minimizer::UseLibCMAESDefault};
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+
+    CLIoptions(int argc, char *argv[]);
+    bool good() const;
 };
-CLIoptions getCLIArguments(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) try{
 
-    const auto args = getCLIArguments(argc,argv);
-
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
+    const CLIoptions args(argc,argv);
+    if(not args.good())
+    {
         return EXIT_FAILURE;
     }
 
     //Init: Interface Class for the different transport methods
     Baryo::CalculateEtaInterface EtaInterface(argv[6] /* = Config file */);
-    if(args.Line < 1)
-    {
-        std::cout << "Start line counting with 1" << std::endl;
-        return EXIT_FAILURE;
-    }
     int linecounter = 1;
     std::ifstream infile(args.InputFile);
     if(!infile.good()) {
@@ -87,19 +82,12 @@ int main(int argc, char *argv[]) try{
     std::string linestr;
     std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
     std::vector<std::string> etaLegend = EtaInterface.legend();// Declare the vector for the PTFinder algorithm
-    std::size_t nPar,nParCT;
-    nPar = modelPointer->get_nPar();
-    nParCT = modelPointer->get_nParCT();
-    std::vector<double> par(nPar);
-    std::vector<double> parCT(nParCT);
-
     while(getline(infile,linestr))
     {
         if(linecounter > args.Line) break;
 
         if(linecounter == 1)
           {
-
             outfile << linestr<<sep << "mu_factor"<<sep<<"mu";
             for(const auto& x: modelPointer->addLegendTemp()) outfile << sep <<x+"_mu";
             outfile << sep << "BSMPT_StatusFlag";
@@ -119,8 +107,6 @@ int main(int argc, char *argv[]) try{
         if(args.Line==linecounter)
         {
             std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-            par=parameters.first;
-            parCT = parameters.second;
             if(args.TerminalOutput) modelPointer->write();
             if(args.TerminalOutput)
             {
@@ -184,7 +170,7 @@ catch(exception& e){
         return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIoptions::CLIoptions(int argc, char *argv[])
 {
 
 
@@ -240,9 +226,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -252,87 +236,99 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--line="))
             {
-                res.Line = std::stoi(el.substr(std::string("--line=").size()));
+                Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--numberofsteps="))
             {
-                res.NumberOfSteps = std::stoi(el.substr(std::string("--numberofsteps=").size()));
+                NumberOfSteps = std::stoi(el.substr(std::string("--numberofsteps=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
             }
             else if(StringStartsWith(el,"--vw="))
             {
-                res.vw = std::stod(el.substr(std::string("--vw=").size()));
+                vw = std::stod(el.substr(std::string("--vw=").size()));
             }
             else if(StringStartsWith(el,"--config="))
             {
-                res.ConfigFile = arg.substr(std::string("--config").size());
+                ConfigFile = arg.substr(std::string("--config").size());
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
-                if(res.UseGSL and not Minimizer::UseGSLDefault)
-                {
-                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
-                }
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
-                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
-                {
-                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
-                }
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
-                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
-                {
-                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
-                }
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.Line = std::stoi(args.at(3));
-        res.NumberOfSteps = std::stoi(args.at(4));
-        res.ConfigFile = args.at(5);
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        Line = std::stoi(args.at(3));
+        NumberOfSteps = std::stoi(args.at(4));
+        ConfigFile = args.at(5);
         if(argc == 8) {
-            std::string s7 = argv[6];
-            res.TerminalOutput = ("y" == s7);
+            TerminalOutput = ("y" == std::string(argv[6]));
         }
     }
+}
 
-    if(res.NumberOfSteps == 0)
+bool CLIoptions::good() const
+{
+    if(NumberOfSteps == 0)
     {
         throw std::runtime_error("You have set the number of steps to zero.");
     }
-
-    if(res.WhichMinimizer == 0)
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-
-
-    return res;
+    if(vw < 0 or vw > 1)
+    {
+        throw std::runtime_error("The wall velocity has to be between 0 and 1.");
+    }
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(Line < 1)
+    {
+        std::cerr << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    return true;
 }
-

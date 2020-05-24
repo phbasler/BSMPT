@@ -55,31 +55,19 @@ struct CLIoptions{
     bool UseCMAES {Minimizer::UseLibCMAESDefault};
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
-};
 
-CLIoptions getCLIArguments(int argc, char *argv[]);
+    CLIoptions(int argc, char *argv[]);
+    bool good() const;
+};
 
 int main(int argc, char *argv[]) try{
 
-    const auto args = getCLIArguments(argc,argv);
+    const CLIoptions args(argc,argv);
 
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
+    if(not args.good())
+    {
         return EXIT_FAILURE;
     }
-
-
-    if(args.FirstLine < 1)
-	{
-		std::cout << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-    if(args.FirstLine > args.LastLine)
-	{
-		std::cout << "LineEnd is smaller then LineStart " << std::endl;
-		return EXIT_FAILURE;
-	}
 
 
 	int linecounter = 1;
@@ -252,7 +240,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIoptions::CLIoptions(int argc, char *argv[])
 {
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
@@ -278,6 +266,18 @@ CLIoptions getCLIArguments(int argc, char *argv[])
                   <<"The last line in the input file to calculate the Wallthickness." << std::endl
                   << std::setw(SizeOfFirstColumn) << std::left<<"--TerminalOutput="
                   <<"y/n Turns on additional information in the terminal during the calculation." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
         ShowInputError();
     }
 
@@ -289,9 +289,6 @@ CLIoptions getCLIArguments(int argc, char *argv[])
     {
         throw std::runtime_error("Too few arguments.");
     }
-
-
-    CLIoptions res;
     std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
@@ -302,43 +299,88 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--firstline="))
             {
-                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+                FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
             }
             else if(StringStartsWith(el,"--lastline="))
             {
-                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+                LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                res.TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+            }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.FirstLine = std::stoi(args.at(3));
-        res.LastLine = std::stoi(args.at(4));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        FirstLine = std::stoi(args.at(3));
+        LastLine = std::stoi(args.at(4));
         if(argc == 7) {
             std::string s7 = argv[6];
-            res.TerminalOutput = ("y" == s7);
+            TerminalOutput = ("y" == s7);
         }
     }
+}
 
-
-    return res;
+bool CLIoptions::good() const
+{
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
+    }
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(FirstLine < 1)
+    {
+        std::cout << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    if(FirstLine > LastLine)
+    {
+        std::cout << "Firstline is smaller then LastLine " << std::endl;
+        return false;
+    }
+    return true;
 }
 

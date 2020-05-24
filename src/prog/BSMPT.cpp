@@ -55,11 +55,9 @@ struct CLIoptions{
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
 
+    CLIoptions(int argc, char *argv[]);
     bool good() const;
 };
-
-CLIoptions getCLIArguments(int argc, char *argv[]);
-
 
 int main(int argc, char *argv[]) try{
 
@@ -69,7 +67,7 @@ int main(int argc, char *argv[]) try{
 	 */
 	bool PrintErrorLines=true;
 
-    const auto args = getCLIArguments(argc,argv);
+    const CLIoptions args(argc,argv);
     if(not args.good())
     {
         return EXIT_FAILURE;
@@ -178,7 +176,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIoptions::CLIoptions(int argc, char *argv[])
 {
 
 
@@ -231,8 +229,6 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
     std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
@@ -243,54 +239,53 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--firstline="))
             {
-                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+                FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
             }
             else if(StringStartsWith(el,"--lastline="))
             {
-                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+                LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                res.TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.FirstLine = std::stoi(args.at(3));
-        res.LastLine = std::stoi(args.at(4));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        FirstLine = std::stoi(args.at(3));
+        LastLine = std::stoi(args.at(4));
         if(argc == 7) {
-            res.TerminalOutput = ("y" == std::string(argv[6]));
+            TerminalOutput = ("y" == std::string(argv[6]));
         }
     }
-    return res;
 }
 
 bool CLIoptions::good() const

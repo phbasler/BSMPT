@@ -53,56 +53,34 @@ struct CLIoptions{
     bool UseCMAES {Minimizer::UseLibCMAESDefault};
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
-};
-CLIoptions getCLIArguments(int argc, char *argv[]);
 
+    CLIoptions(int argc, char *argv[]);
+    bool good() const;
+};
 
 int main(int argc, char *argv[]) try{
-    const auto args = getCLIArguments(argc,argv);
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
+    const CLIoptions args(argc,argv);
+
+    if(not args.good())
+    {
         return EXIT_FAILURE;
     }
 
-    if(args.Line < 1)
-	{
-        std::cerr << "Start line counting with 1" << std::endl;
-        return EXIT_FAILURE;
-	}
-
-
-
-
-
-	std::vector<double> sol,start,solPot;
-	std::vector<double> Weinberg,parCTVec;
-
-
     std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
-
     std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 		std::cout << "Input file not found " << std::endl;
 		return EXIT_FAILURE;
 	}
-
-
     std::ofstream outfile(args.OutputFile);
 	if(!outfile.good())
 	{
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
-	return EXIT_FAILURE;
+        std::cout << "Can not create file " << args.OutputFile << std::endl;
+        return EXIT_FAILURE;
 	}
-
 	std::string linestr;
 	int linecounter = 1;
-
-    std::vector<double> par,parCT;
-
 	bool found=false;
-
-
 	while(true)
 	{
 	 if(infile.eof()) break;
@@ -121,9 +99,7 @@ int main(int argc, char *argv[]) try{
 	 if(infile.eof()) break;
 	}
 	infile.close();
-	if(!found) {std::cout << "Line not found !\n"; return -1;}
-
-
+    if(!found) {std::cout << "Line not found !\n"; return EXIT_FAILURE;}
 
 	std::vector<double> parStart,parEnd;
     parStart = std::vector<double>(modelPointer->get_NHiggs(),0);
@@ -153,10 +129,6 @@ int main(int argc, char *argv[]) try{
     std::cout << "T_C = " << EWPT.Tc << std::endl;
     for(std::size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
 
-	// double res = K1_fermion_interp(2.5,3.7);
-	// std::cout << "res = " << res << std::endl;
-
-
     std::size_t nstep = 1000;
     double zmin = 0;
     double stepsize = (p.getZMAX()-zmin)/nstep;
@@ -165,20 +137,8 @@ int main(int argc, char *argv[]) try{
 		double z= zmin + stepsize*i;
         outfile << z << sep << Baryo::mubl_func(z,&p) << std::endl;
 	}
-
-
-
-
 	outfile.close();
-
-
-
 	return EXIT_SUCCESS;
-
-
-
-
-
 }
 catch(int)
 {
@@ -189,10 +149,8 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIoptions::CLIoptions(int argc, char *argv[])
 {
-
-
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
 
@@ -239,9 +197,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -251,61 +207,77 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--firstline="))
             {
-                res.Line = std::stoi(el.substr(std::string("--line=").size()));
+                Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--vw="))
             {
-                res.vw = std::stod(el.substr(std::string("--vw=").size()));
+                vw = std::stod(el.substr(std::string("--vw=").size()));
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
-                if(res.UseGSL and not Minimizer::UseGSLDefault)
-                {
-                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
-                }
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
-                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
-                {
-                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
-                }
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
-                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
-                {
-                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
-                }
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.Line = std::stoi(args.at(3));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        Line = std::stoi(args.at(3));
     }
-    if(res.WhichMinimizer == 0)
+}
+
+
+bool CLIoptions::good() const
+{
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
 
-    return res;
+    if(Model==ModelID::ModelIDs::NotSet) {
+
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(Line < 1)
+    {
+        std::cerr << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    return true;
 }

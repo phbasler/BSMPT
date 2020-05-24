@@ -51,30 +51,18 @@ struct CLIOptions{
     bool UseCMAES {Minimizer::UseLibCMAESDefault};
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
-};
 
-CLIOptions getCLIArguments(int argc, char *argv[]);
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
+};
 
 int main(int argc, char *argv[]) try{
 
-    const auto args = getCLIArguments(argc,argv);
-
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-
-    if(args.FirstLine < 1)
-	{
-		std::cerr << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-    if(args.FirstLine > args.LastLine)
-	{
-		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
-		return EXIT_FAILURE;
-	}
+    const CLIOptions args(argc,argv);
+    if(not args.good())
+    {
+        return EXIT_FAILURE;
+    }
 
 	int linecounter = 1;
     std::ifstream infile(args.OutputFile);
@@ -92,23 +80,7 @@ int main(int argc, char *argv[]) try{
 
 
     std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
-
-
-    std::size_t nPar,nParCT;
-    nPar = modelPointer->get_nPar();
-    nParCT = modelPointer->get_nParCT();
-
-    std::size_t ndim = modelPointer->get_nVEV();
-	std::vector<double> par(nPar);
-	std::vector<double> parCT(nParCT);
-
-
-
-
-    std::vector<double> sol,Check;
-
-
-	std::vector<double> Weinberg;
+    std::vector<double> Check;
 	while(true)
 	{
 
@@ -128,13 +100,10 @@ int main(int argc, char *argv[]) try{
         if(linecounter >= args.FirstLine and linecounter <= args.LastLine and linecounter != 1)
 		{
 			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-			par=parameters.first;
-			parCT = parameters.second;
 
             if(args.FirstLine == args.LastLine ) modelPointer->write();
-			sol.clear();
 			Check.clear();
-            sol = Minimizer::Minimize_gen_all(modelPointer,0,Check,modelPointer->get_vevTreeMin(),args.WhichMinimizer);
+            auto sol = Minimizer::Minimize_gen_all(modelPointer,0,Check,modelPointer->get_vevTreeMin(),args.WhichMinimizer);
 
 
 			std::vector<double> solPot,solSym;
@@ -142,11 +111,11 @@ int main(int argc, char *argv[]) try{
 			double vev = modelPointer->EWSBVEV(solPot);
 
 			outfile << linestr;
-            outfile << sep << parCT << sep << sol << sep << vev << std::endl;
+            outfile << sep << parameters.second << sep << sol << sep << vev << std::endl;
 
             if(args.FirstLine==args.LastLine){
                 auto dimensionnames = modelPointer->addLegendVEV();
-                for(std::size_t i=0;i<ndim;i++){
+                for(std::size_t i=0;i<modelPointer->get_nVEV();i++){
 					std::cout << dimensionnames.at(i) << " = " << sol.at(i) << " GeV" << std::endl;
 				}
 			}
@@ -169,7 +138,7 @@ catch(exception& e){
 }
 
 
-CLIOptions getCLIArguments(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
@@ -217,9 +186,7 @@ CLIOptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIOptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -229,66 +196,80 @@ CLIOptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--firstline="))
             {
-                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+                FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
             }
             else if(StringStartsWith(el,"--lastline="))
             {
-                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+                LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
-                if(res.UseGSL and not Minimizer::UseGSLDefault)
-                {
-                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
-                }
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
-                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
-                {
-                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
-                }
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
-                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
-                {
-                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
-                }
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.FirstLine = std::stoi(args.at(3));
-        res.LastLine = std::stoi(args.at(4));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        FirstLine = std::stoi(args.at(3));
+        LastLine = std::stoi(args.at(4));
     }
+}
 
-    if(res.WhichMinimizer == 0)
+bool CLIOptions::good() const
+{
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-
-
-    return res;
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(FirstLine < 1)
+    {
+        std::cout << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    if(FirstLine > LastLine)
+    {
+        std::cout << "Firstline is smaller then LastLine " << std::endl;
+        return false;
+    }
+    return true;
 }
-
-
