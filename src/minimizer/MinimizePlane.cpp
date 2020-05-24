@@ -131,10 +131,12 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 
 #ifndef CMAES_FOUND
     UseCMAES = false;
+    (void) UseCMAES;
 #endif
 
 #ifndef NLopt_FOUND
     UseNLOPT = false;
+    (void) UseNLOPT;
 #endif
 
     std::vector<double> PotValues;

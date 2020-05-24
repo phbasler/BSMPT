@@ -44,6 +44,7 @@ struct CLIoptions{
     int FirstLine{}, LastLine{};
     std::string InputFile, OutputFile;
     bool TerminalOutput{false};
+    bool good() const;
 };
 
 CLIoptions getCLIArguments(int argc, char *argv[]);
@@ -53,23 +54,10 @@ int main(int argc, char *argv[]) try{
 
     const auto args = getCLIArguments(argc,argv);
 
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
+    if(not args.good())
+    {
         return EXIT_FAILURE;
     }
-
-    if(args.FirstLine < 1)
-	{
-		std::cerr << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-    if(args.FirstLine > args.LastLine)
-	{
-		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
-		return EXIT_FAILURE;
-	}
-
 
 	int linecounter = 1;
     std::ifstream infile(args.InputFile);
@@ -87,13 +75,8 @@ int main(int argc, char *argv[]) try{
 
     std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
-
-
-
 	while(getline(infile,linestr))
 	{
-
-
         if(linecounter > args.LastLine) break;
 		if(linecounter == 1)
 		  {
@@ -106,20 +89,12 @@ int main(int argc, char *argv[]) try{
         if(linecounter >= args.FirstLine and linecounter <= args.LastLine and linecounter != 1)
 		{
 			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-
             outfile << linestr << sep << parameters.second << std::endl;
         }
 		linecounter++;
 		if(infile.eof()) break;
 	}
-    if(args.FirstLine == args.LastLine) {
-		std::vector<double> DebugIn,DebugOut;
-		modelPointer->Debugging(DebugIn,DebugOut);
-	}
-
 	outfile.close();
-
-
 	return EXIT_SUCCESS;
 }
 catch(int)
@@ -219,3 +194,23 @@ CLIoptions getCLIArguments(int argc, char *argv[])
     return res;
 }
 
+bool CLIoptions::good() const
+{
+    if(Model==ModelID::ModelIDs::NotSet) {
+
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(FirstLine < 1)
+    {
+        std::cout << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    if(FirstLine > LastLine)
+    {
+        std::cout << "Firstline is smaller then LastLine " << std::endl;
+        return false;
+    }
+    return true;
+}

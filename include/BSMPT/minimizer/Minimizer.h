@@ -58,7 +58,7 @@ const bool UseLibCMAESDefault = false;
 #ifdef NLopt_FOUND
 const bool UseNLoptDefault = true;
 #else
-const bool UseNLoptDefault = true;
+const bool UseNLoptDefault = false;
 #endif
 
 /**
