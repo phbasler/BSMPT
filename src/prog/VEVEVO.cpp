@@ -45,7 +45,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIoptions{
+struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int Line{};
     std::string InputFile, OutputFile;
@@ -54,46 +54,33 @@ struct CLIoptions{
     bool UseCMAES {Minimizer::UseLibCMAESDefault};
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
 };
 
-
-CLIoptions getCLIArguments(int argc, char *argv[]);
-
-
 int main(int argc, char *argv[]) try{
-    const auto args = getCLIArguments(argc,argv);
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-
-
-    if(args.Line < 1)
-	{
-		std::cerr << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
+    const CLIOptions args(argc,argv);
+    if(not args.good())
+    {
+        return EXIT_FAILURE;
+    }
 
 	std::vector<double> sol,start,solPot;
-	std::vector<double> Weinberg,parCTVec;
 
 
     std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
-
     std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 			std::cout << "Input file not found " << std::endl;
 			return EXIT_FAILURE;
 	}
-
     std::ofstream outfile(args.OutputFile);
 	if(!outfile.good())
 	{
         std::cout << "Can not create file " << args.OutputFile << std::endl;
 		return EXIT_FAILURE;
 	}
-
 	std::string linestr;
 	int linecounter = 1;
 
@@ -132,7 +119,6 @@ int main(int argc, char *argv[]) try{
 
    for(double Temp = args.TemperatureStart; Temp<=args.TemperatureEnd; Temp+=args.TemperatureStep)
    {
-
 	   start.clear();
        if(Temp==args.TemperatureStart)
 	   {
@@ -167,7 +153,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
@@ -219,9 +205,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -231,96 +215,92 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--line="))
             {
-                res.Line = std::stoi(el.substr(std::string("--line=").size()));
+                Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--temperaturestart="))
             {
-                res.TemperatureStart = std::stod(el.substr(std::string("--temperaturestart=").size()));
+                TemperatureStart = std::stod(el.substr(std::string("--temperaturestart=").size()));
             }
             else if(StringStartsWith(el,"--temperaturestep="))
             {
-                res.TemperatureStep = std::stod(el.substr(std::string("--temperaturestep=").size()));
+                TemperatureStep = std::stod(el.substr(std::string("--temperaturestep=").size()));
             }
             else if(StringStartsWith(el,"--temperatureend="))
             {
-                res.TemperatureEnd = std::stod(el.substr(std::string("--temperatureend=").size()));
+                TemperatureEnd = std::stod(el.substr(std::string("--temperatureend=").size()));
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
-                if(res.UseGSL and not Minimizer::UseGSLDefault)
-                {
-                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
-                }
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
-                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
-                {
-                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
-                }
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
-                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
-                {
-                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
-                }
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.Line = std::stoi(args.at(3));
-        res.TemperatureStart = std::stod(args.at(4));
-        res.TemperatureStep = std::stod(args.at(5));
-        res.TemperatureEnd = std::stod(args.at(6));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        Line = std::stoi(args.at(3));
+        TemperatureStart = std::stod(args.at(4));
+        TemperatureStep = std::stod(args.at(5));
+        TemperatureEnd = std::stod(args.at(6));
     }
+}
 
-
-    if(res.TemperatureStart < 0)
+bool CLIOptions::good() const
+{
+    if(UseGSL and not Minimizer::UseGSLDefault)
     {
-        std::cout << "The starting value of your Temperature was negative. This was corrected to TemperatureStart = 0."
-                <<std::endl;
-        res.TemperatureStart = 0;
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
     }
-    if(res.TemperatureEnd < res.TemperatureStart)
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
     {
-        std::cout << "The value of Tempend was lower then the value of Tempstart. This was corrected by swapping them."
-                <<std::endl;
-        double tmp{res.TemperatureEnd};
-        res.TemperatureEnd = res.TemperatureStart;
-        res.TemperatureStart = tmp;
-
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
     }
-
-    if(res.TemperatureStep == 0){
-        std::cout << "The given stepsize is zero. This will cause an infinite loop. Therefore the stepsize has been set to 1." << std::endl;
-        res.TemperatureStep = 1;
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
     }
-
-    if(res.WhichMinimizer == 0)
+    if(WhichMinimizer == 0)
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
+    if(TemperatureStep == 0){
+        throw std::runtime_error("The stepsize has to be larger than 0.");
+    }
+    if(TemperatureStart < 0)
+    {
+        throw std::runtime_error("The starting value of the temperature can not be negative.");
+    }
+    if(TemperatureEnd < TemperatureStart)
+    {
+        throw std::runtime_error("The minimal value for the temperature is lower then the maximal value.");
+    }
+    if(Model==ModelID::ModelIDs::NotSet) {
 
-
-    return res;
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    return true;
 }

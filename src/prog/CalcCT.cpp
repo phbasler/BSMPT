@@ -39,19 +39,19 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIoptions{
+struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int FirstLine{}, LastLine{};
     std::string InputFile, OutputFile;
     bool TerminalOutput{false};
 
-    CLIoptions(int argc, char *argv[]);
+    CLIOptions(int argc, char *argv[]);
     bool good() const;
 };
 
 int main(int argc, char *argv[]) try{
 
-    const CLIoptions args(argc,argv);
+    const CLIOptions args(argc,argv);
 
     if(not args.good())
     {
@@ -105,7 +105,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions::CLIoptions(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
@@ -189,7 +189,7 @@ CLIoptions::CLIoptions(int argc, char *argv[])
     }
 }
 
-bool CLIoptions::good() const
+bool CLIOptions::good() const
 {
     if(Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;

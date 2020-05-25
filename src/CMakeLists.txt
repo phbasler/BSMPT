@@ -109,9 +109,5 @@ if(MakeAdditionalTesting)
     message("Kfactor_grid will not compile as Boost is missing")
   endif(Boost_FOUND)
 
-  add_executable(GeneratePath prog/GeneratePath.cpp)
-  target_link_libraries(GeneratePath Minimizer Models Utility)
-  target_compile_features(GeneratePath PUBLIC cxx_std_14)
-
 endif(MakeAdditionalTesting)
 

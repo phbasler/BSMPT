@@ -43,33 +43,21 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIoptions{
+struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int Line{};
     std::string InputFile;
+
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
 };
-
-CLIoptions getCLIArguments(int argc, char *argv[]);
-
-
-
 int main(int argc, char *argv[]) try{
 
-    const auto args = getCLIArguments(argc,argv);
-
-
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
+    const CLIOptions args(argc,argv);
+    if(not args.good())
+    {
         return EXIT_FAILURE;
     }
-
-    if(args.Line < 1)
-	{
-		std::cout << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-
 
 	int linecounter = 1;
     std::ifstream infile(args.InputFile);
@@ -116,7 +104,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
 
 
@@ -162,9 +150,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -174,24 +160,36 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--line="))
             {
-                res.Line = std::stoi(el.substr(std::string("--firstline=").size()));
+                Line = std::stoi(el.substr(std::string("--firstline=").size()));
             }
         }
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.Line = std::stoi(args.at(2));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        Line = std::stoi(args.at(2));
     }
+}
 
-
-    return res;
+bool CLIOptions::good() const
+{
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(Line < 1)
+    {
+        std::cerr << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    return true;
 }

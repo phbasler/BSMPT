@@ -44,7 +44,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIoptions{
+struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int FirstLine{}, LastLine{};
     std::string InputFile, OutputFile,ConfigFile;
@@ -55,13 +55,13 @@ struct CLIoptions{
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
 
-    CLIoptions(int argc, char *argv[]);
+    CLIOptions(int argc, char *argv[]);
     bool good() const;
 };
 
 int main(int argc, char *argv[]) try{
 
-    const CLIoptions args(argc,argv);
+    const CLIOptions args(argc,argv);
 
     if(not args.good())
     {
@@ -210,7 +210,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions::CLIoptions(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
 
 
@@ -335,7 +335,7 @@ CLIoptions::CLIoptions(int argc, char *argv[])
     }
 }
 
-bool CLIoptions::good() const
+bool CLIOptions::good() const
 {
     if(UseGSL and not Minimizer::UseGSLDefault)
     {

@@ -39,29 +39,23 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIoptions{
+struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int FirstLine{}, LastLine{};
     std::string InputFile, OutputFile;
     bool TerminalOutput{false};
-};
 
-CLIoptions getCLIArguments(int argc, char *argv[]);
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
+};
 
 int main(int argc, char *argv[]) try{
 
-    const auto args = getCLIArguments(argc,argv);
-
-    if(args.FirstLine < 1)
-	{
-		std::cerr << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-    if(args.FirstLine > args.LastLine)
-	{
-		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
-		return EXIT_FAILURE;
-	}
+    const CLIOptions args(argc,argv);
+    if(not args.good())
+    {
+        return EXIT_FAILURE;
+    }
 
 	int linecounter = 1;
     std::ifstream infile(args.InputFile);
@@ -155,7 +149,7 @@ catch(exception& e){
 		return EXIT_FAILURE;
 }
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
     std::vector<std::string> args;
     for(int i{1};i<argc;++i) args.push_back(argv[i]);
@@ -193,9 +187,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -205,40 +197,59 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--firstline="))
             {
-                res.FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+                FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
             }
             else if(StringStartsWith(el,"--lastline="))
             {
-                res.LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+                LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                res.TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
         }
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.FirstLine = std::stoi(args.at(3));
-        res.LastLine = std::stoi(args.at(4));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        FirstLine = std::stoi(args.at(3));
+        LastLine = std::stoi(args.at(4));
         if(argc == 7) {
-            std::string s7 = argv[6];
-            res.TerminalOutput = ("y" == s7);
+            TerminalOutput = ("y" == std::string(argv[6]));
         }
     }
-    return res;
+}
+
+bool CLIOptions::good() const
+{
+    if(Model==ModelID::ModelIDs::NotSet) {
+
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(FirstLine < 1)
+    {
+        std::cout << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    if(FirstLine > LastLine)
+    {
+        std::cout << "Firstline is smaller then LastLine " << std::endl;
+        return false;
+    }
+    return true;
 }

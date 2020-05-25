@@ -39,7 +39,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIoptions{
+struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int Line{};
     std::string InputFile, OutputFile;
@@ -49,8 +49,10 @@ struct CLIoptions{
     bool UseCMAES {Minimizer::UseLibCMAESDefault};
     bool UseNLopt{Minimizer::UseNLoptDefault};
     int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
 };
-CLIoptions getCLIArguments(int argc, char *argv[]);
 
 int main(int argc, char *argv[]) try{
     /**
@@ -59,17 +61,9 @@ int main(int argc, char *argv[]) try{
      */
     bool PrintErrorLines=true;
 
-    const auto args = getCLIArguments(argc,argv);
-
-    if(args.Model==ModelID::ModelIDs::NotSet) {
-        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-        ShowInputError();
-        return EXIT_FAILURE;
-    }
-
-    if(args.Line < 1)
+    const CLIOptions args(argc,argv);
+    if(not args.good())
     {
-        std::cout << "Start line counting with 1" << std::endl;
         return EXIT_FAILURE;
     }
     int linecounter = 1;
@@ -180,7 +174,7 @@ catch(exception& e){
 }
 
 
-CLIoptions getCLIArguments(int argc, char *argv[])
+CLIOptions::CLIOptions(int argc, char *argv[])
 {
 
 
@@ -233,9 +227,7 @@ CLIoptions getCLIArguments(int argc, char *argv[])
         throw std::runtime_error("Too few arguments.");
     }
 
-
-    CLIoptions res;
-    std::string prefix{"--"};
+    const std::string prefix{"--"};
     bool UsePrefix = StringStartsWith(args.at(0),prefix);
     if(UsePrefix)
     {
@@ -245,71 +237,86 @@ CLIoptions getCLIArguments(int argc, char *argv[])
             std::transform(el.begin(), el.end(), el.begin(), ::tolower);
             if(StringStartsWith(el,"--model="))
             {
-                res.Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
             }
             else if(StringStartsWith(el,"--input="))
             {
-                res.InputFile = arg.substr(std::string("--input=").size());
+                InputFile = arg.substr(std::string("--input=").size());
             }
             else if(StringStartsWith(el,"--output="))
             {
-                res.OutputFile = arg.substr(std::string("--output=").size());
+                OutputFile = arg.substr(std::string("--output=").size());
             }
             else if(StringStartsWith(el,"--line="))
             {
-                res.Line = std::stoi(el.substr(std::string("--line=").size()));
+                Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--numberofsteps="))
             {
-                res.NumberOfSteps = std::stoi(el.substr(std::string("--numberofsteps=").size()));
+                NumberOfSteps = std::stoi(el.substr(std::string("--numberofsteps=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                res.TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                res.UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
-                if(res.UseGSL and not Minimizer::UseGSLDefault)
-                {
-                    throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
-                }
+                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                res.UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
-                if(res.UseCMAES and not Minimizer::UseLibCMAESDefault)
-                {
-                    throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
-                }
+                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                res.UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
-                if(res.UseNLopt and not Minimizer::UseNLoptDefault)
-                {
-                    throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
-                }
+                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
-        res.WhichMinimizer = Minimizer::CalcWhichMinimizer(res.UseGSL,res.UseCMAES,res.UseNLopt);
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
-        res.Model = ModelID::getModel(args.at(0));
-        res.InputFile = args.at(1);
-        res.OutputFile = args.at(2);
-        res.Line = std::stoi(args.at(3));
-        res.NumberOfSteps = std::stoi(args.at(4));
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        Line = std::stoi(args.at(3));
+        NumberOfSteps = std::stoi(args.at(4));
         if(argc == 7) {
-            res.TerminalOutput = ("y" == std::string(argv[5]));
+            TerminalOutput = ("y" == std::string(argv[5]));
         }
     }
+}
 
-    if(res.WhichMinimizer == 0)
+bool CLIOptions::good() const
+{
+    if(NumberOfSteps == 0)
+    {
+        throw std::runtime_error("You have set the number of steps to zero.");
+    }
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-
-
-    return res;
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(Line < 1)
+    {
+        std::cerr << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    return true;
 }
