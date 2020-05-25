@@ -121,7 +121,10 @@ int main(int argc, char *argv[]) try{
 //Begin: Parameter Set Up for BSMPT
             auto parameters = modelPointer->initModel(linestr);
 			modelPointer->FindSignSymmetries();
-            if(args.FirstLine == args.LastLine ) modelPointer->write();
+            if(args.FirstLine == args.LastLine ) {
+                modelPointer->write();
+                std::cout << "vw = " << args.vw << std::endl;
+            }
             if(args.TerminalOutput) std::cout<<"Calling PTFinder"<<std::endl;
 
 //Call: BSMPT 
@@ -353,7 +356,7 @@ bool CLIOptions::good() const
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-    if(vw < 0 or vw > 1)
+    if(vw <= 0 or vw > 1)
     {
         throw std::runtime_error("The wall velocity has to be between 0 and 1.");
     }

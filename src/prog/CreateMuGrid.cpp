@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) try{
     std::cout << "vw = " << args.vw << std::endl;
     std::cout << "LW = " << p.getLW()*EWPT.Tc << "/TC" << std::endl;
     std::cout << "T_C = " << EWPT.Tc << std::endl;
-    for(std::size_t i=0;i<modelPointer->get_NHiggs();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
+    for(std::size_t i=0;i<modelPointer->get_nVEV();i++) std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
 
     std::size_t nstep = 1000;
     double zmin = 0;
@@ -217,7 +217,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             {
                 OutputFile = arg.substr(std::string("--output=").size());
             }
-            else if(StringStartsWith(el,"--firstline="))
+            else if(StringStartsWith(el,"--line="))
             {
                 Line = std::stoi(el.substr(std::string("--line=").size()));
             }
@@ -268,6 +268,10 @@ bool CLIOptions::good() const
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
 
+    if(vw <= 0 or vw > 1)
+    {
+        throw std::runtime_error("The wall velocity has to be between 0 and 1.");
+    }
     if(Model==ModelID::ModelIDs::NotSet) {
 
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;

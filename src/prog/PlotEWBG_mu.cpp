@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) try{
     }
 
     //Init: Interface Class for the different transport methods
-    Baryo::CalculateEtaInterface EtaInterface(argv[6] /* = Config file */);
+    Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile);
     int linecounter = 1;
     std::ifstream infile(args.InputFile);
     if(!infile.good()) {
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) try{
                         <<std::endl;
             }
             if(args.TerminalOutput)std::cout<<"Start of mu variation"<<std::endl;
-            for(int step=0;step<args.NumberOfSteps;step++){
+            for(int step=0;step<=args.NumberOfSteps;step++){
                 double mu_factor = 1/2. + (step/static_cast<double>(args.NumberOfSteps));
                 if(args.TerminalOutput) std::cout<<"\r currently mu_factor = "<<mu_factor<<std::endl;
                 auto VEVnames = modelPointer->addLegendTemp();
@@ -256,7 +256,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
             else if(StringStartsWith(el,"--vw="))
             {
@@ -264,7 +264,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--config="))
             {
-                ConfigFile = arg.substr(std::string("--config").size());
+                ConfigFile = arg.substr(std::string("--config=").size());
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
