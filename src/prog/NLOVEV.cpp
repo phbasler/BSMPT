@@ -39,88 +39,53 @@
 #include <BSMPT/utility.h>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 using namespace BSMPT;
 
+struct CLIOptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int FirstLine{}, LastLine{};
+    std::string InputFile, OutputFile;
+    bool UseGSL { Minimizer::UseGSLDefault};
+    bool UseCMAES {Minimizer::UseLibCMAESDefault};
+    bool UseNLopt{Minimizer::UseNLoptDefault};
+    int WhichMinimizer{Minimizer::WhichMinimizerDefault};
 
-
-//#include "Minimizer.h"
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
+};
 
 int main(int argc, char *argv[]) try{
 
-	if(!( argc == 6) )
-	{
-		std::cerr << "./NLOVEV Model Inputfile Outputfile  LineStart LineEnd \n";
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-
-
-    auto Model=ModelID::getModel(argv[1]);
-    if(Model==ModelID::ModelIDs::NotSet) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-
-	double LineStart,LineEnd;
-	char* in_file;char* out_file;
-
-
-	in_file = argv[2];
-	out_file = argv[3];
-	LineStart = atoi(argv[4]);
-	LineEnd = atoi(argv[5]);
-
-	if(LineStart < 1)
-	{
-		std::cerr << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-	if(LineStart > LineEnd)
-	{
-		std::cerr << "LineEnd is smaller then LineStart " << std::endl;
-		return EXIT_FAILURE;
-	}
+    const CLIOptions args(argc,argv);
+    if(not args.good())
+    {
+        return EXIT_FAILURE;
+    }
 
 	int linecounter = 1;
-	std::ifstream infile(in_file);
+    std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 			std::cerr << "Input file not found " << std::endl;
 			return EXIT_FAILURE;
 	}
-	std::ofstream outfile(out_file);
+    std::ofstream outfile(args.OutputFile);
 	if(!outfile.good())
 	{
-		std::cerr << "Can not create file " << out_file << std::endl;
+        std::cerr << "Can not create file " << args.OutputFile << std::endl;
 		return EXIT_FAILURE;
 	}
 	std::string linestr;
 
 
-    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
-
-
-    std::size_t nPar,nParCT;
-    nPar = modelPointer->get_nPar();
-    nParCT = modelPointer->get_nParCT();
-
-    std::size_t ndim = modelPointer->get_nVEV();
-	std::vector<double> par(nPar);
-	std::vector<double> parCT(nParCT);
-
-
-
-
-	std::vector<double> sol,Check,Start,start;
-
-
-	std::vector<double> Weinberg;
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
+    std::vector<double> Check;
 	while(true)
 	{
 
 		getline(infile,linestr);
-		if(linecounter > LineEnd) break;
+        if(linecounter > args.LastLine) break;
 		if(linecounter == 1)
 		  {
 			modelPointer->setUseIndexCol(linestr);
@@ -132,18 +97,13 @@ int main(int argc, char *argv[]) try{
             outfile << sep << "v_NLO";
 		    outfile << std::endl;
 		  }
-		if(linecounter >= LineStart and linecounter <= LineEnd and linecounter != 1)
+        if(linecounter >= args.FirstLine and linecounter <= args.LastLine and linecounter != 1)
 		{
 			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-			par=parameters.first;
-			parCT = parameters.second;
 
-			if(LineStart == LineEnd ) modelPointer->write();
-			sol.clear();
+            if(args.FirstLine == args.LastLine ) modelPointer->write();
 			Check.clear();
-			start.clear();
-            for(std::size_t i=0;i<ndim;i++) start.push_back(modelPointer->get_vevTreeMin(i));
-            sol = Minimizer::Minimize_gen_all(modelPointer,0,Check,start);
+            auto sol = Minimizer::Minimize_gen_all(modelPointer,0,Check,modelPointer->get_vevTreeMin(),args.WhichMinimizer);
 
 
 			std::vector<double> solPot,solSym;
@@ -151,14 +111,11 @@ int main(int argc, char *argv[]) try{
 			double vev = modelPointer->EWSBVEV(solPot);
 
 			outfile << linestr;
-            for(std::size_t i=0;i<nParCT;i++) outfile << sep << parCT[i];
-            for(std::size_t i=0;i<ndim;i++) outfile << sep << sol.at(i);
-            outfile << sep << vev;
-			outfile << std::endl;
+            outfile << sep << parameters.second << sep << sol << sep << vev << std::endl;
 
-			if(LineStart==LineEnd){
+            if(args.FirstLine==args.LastLine){
                 auto dimensionnames = modelPointer->addLegendVEV();
-                for(std::size_t i=0;i<ndim;i++){
+                for(std::size_t i=0;i<modelPointer->get_nVEV();i++){
 					std::cout << dimensionnames.at(i) << " = " << sol.at(i) << " GeV" << std::endl;
 				}
 			}
@@ -171,10 +128,148 @@ int main(int argc, char *argv[]) try{
 
 	return EXIT_SUCCESS;
 }
+catch(int)
+{
+    return EXIT_SUCCESS;
+}
 catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
 }
 
 
+CLIOptions::CLIOptions(int argc, char *argv[])
+{
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
 
+    if(argc < 6 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
+        std::cout << "NLOVEV calculates the EW VEV at NLO" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./NLOVEV model input output FirstLine LastLine" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--FirstLine="
+                  <<"The first line in the input file to calculate the NLO EW VEV. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--LastLine="
+                  <<"The last line in the input file to calculate the NLO EW VEV." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 6)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+    const std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--firstline="))
+            {
+                FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
+            }
+            else if(StringStartsWith(el,"--lastline="))
+            {
+                LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
+            }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
+            }
+        }
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
+    }
+    else{
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        FirstLine = std::stoi(args.at(3));
+        LastLine = std::stoi(args.at(4));
+    }
+}
+
+bool CLIOptions::good() const
+{
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
+    }
+    if(Model==ModelID::ModelIDs::NotSet) {
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    if(FirstLine < 1)
+    {
+        std::cout << "Start line counting with 1" << std::endl;
+        return false;
+    }
+    if(FirstLine > LastLine)
+    {
+        std::cout << "Firstline is smaller then LastLine " << std::endl;
+        return false;
+    }
+    return true;
+}

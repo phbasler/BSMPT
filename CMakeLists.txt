@@ -27,6 +27,7 @@ option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing" OFF)
 
+find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)

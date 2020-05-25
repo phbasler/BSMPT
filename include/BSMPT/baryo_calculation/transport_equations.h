@@ -26,6 +26,7 @@
 
 
  #include <BSMPT/models/IncludeAllModels.h>
+ #include <BSMPT/minimizer/Minimizer.h>
  #include <boost/numeric/odeint.hpp>
  #include <boost/numeric/odeint/iterator/const_step_time_iterator.hpp>
  #include <boost/math/interpolators/cubic_b_spline.hpp>
@@ -45,6 +46,12 @@ namespace BSMPT{
 
   typedef std::vector< double > state_type;
   typedef boost::numeric::odeint::runge_kutta_cash_karp54< state_type > error_stepper_type;
+
+  enum class TransportMethod{
+      top,
+      bottom,
+      tau
+  };
 
 
 
@@ -252,7 +259,7 @@ namespace BSMPT{
          * 2 --> bot
          * 3 --> tau
          */
-      int transport_method =  1 ;
+      TransportMethod transport_method {TransportMethod::top} ;
 
 
       /**
@@ -349,12 +356,12 @@ namespace BSMPT{
       /**
          * Set function to chose the method for the transport equations
         */
-      void set_transport_method(int method);
+      void set_transport_method(TransportMethod method);
       /**
        * @brief get_transport_method
        * @return transport_method
        */
-      int get_transport_method();
+      TransportMethod get_transport_method();
       /**
        * @brief setZMAX defines the value to treat mu(ZMAX) = 0
        * @param z_in new value to set zMAX to
@@ -396,7 +403,8 @@ namespace BSMPT{
        */
       void init(const double& vw_input, std::vector<double>& vev_critical_input, std::vector<double>& vev_symmetric_input,
                 const double& TC_input,
-                std::shared_ptr<Class_Potential_Origin>& modelPointer_input);
+                std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+                const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
       /**
        * @brief getModelPointer

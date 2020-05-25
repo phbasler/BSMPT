@@ -17,6 +17,7 @@
 #include <memory>                   // for shared_ptr
 #include <vector>                   // for vector
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/minimizer/Minimizer.h>
 
 namespace BSMPT {
 
@@ -115,7 +116,8 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
                      const ModelID::ModelIDs& Model,
                      const std::vector<double>& par,
                      const std::vector<double>&  parCT,
-                     const double& Temp);
+                     const double& Temp,
+                     const int& WhichMinimizer = WhichMinimizerDefault );
 /**
  * Calculates the minimum of a potential on a plane. For this the normal vector of the plane is
  * calculated as the connection vector between the symmetric and the broken phase. At a given point the plane normal
@@ -132,7 +134,8 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
                                   const std::vector<double>& VEVSymmetric,
                                   const std::vector<double>& VEVBroken,
                                   const std::shared_ptr<Class_Potential_Origin>& modelPointer,
-                                  const double& Temp);
+                                  const double& Temp,
+                                  const int& WhichMinimizer = WhichMinimizerDefault);
 
 /**
  * Transform from nVEV -1 coordinates used in the plane minimisation to the nVEV coordinates used to evaluate the potential.

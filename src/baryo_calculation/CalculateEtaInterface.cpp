@@ -136,7 +136,8 @@ void CalculateEtaInterface::setNumerics(const double& vw_input,
 		std::vector<double>& vev_critical_input,
 		std::vector<double>& vev_symmetric_input,
         const double& TC_input,
-		std::shared_ptr<Class_Potential_Origin>& modelPointer_input){
+        std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+        const int& WhichMinimizer){
 	vw=vw_input;
 	vev_critical=vev_critical_input;
 	vev_symmetric=vev_symmetric_input;
@@ -145,7 +146,7 @@ void CalculateEtaInterface::setNumerics(const double& vw_input,
     if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDM){
         throw std::runtime_error("Baryogenesis is only implemented for the C2HDM at the moment.");
     }
-    GSL_integration_mubl_container.init(vw,vev_critical,vev_symmetric,TC,modelPointer);
+    GSL_integration_mubl_container.init(vw,vev_critical,vev_symmetric,TC,modelPointer,WhichMinimizer);
 }
 
 void CalculateEtaInterface::setvw(double vw_in){
@@ -157,8 +158,9 @@ std::vector<double> CalculateEtaInterface::CalcEta(const double& vw_input,
 			std::vector<double>& vev_critical_input,
 			std::vector<double>& vev_symmetric_input,
 			const double& TC_input,
-			std::shared_ptr<Class_Potential_Origin>& modelPointer_input){
-    setNumerics(vw_input,vev_critical_input,vev_symmetric_input,TC_input,modelPointer_input);
+            std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+            const int& WhichMinimizer){
+    setNumerics(vw_input,vev_critical_input,vev_symmetric_input,TC_input,modelPointer_input,WhichMinimizer);
 	return CalcEta();
 }
 
@@ -166,7 +168,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
 {
 	std::vector<double> eta;
 	if(method_transport.at(0)){
-		GSL_integration_mubl_container.set_transport_method(1);
+        GSL_integration_mubl_container.set_transport_method(TransportMethod::top);
 		top_source C_top;
 		C_top.set_class(bot_mass_flag, GSL_integration_mubl_container,Calc_Gam_inp,Calc_Scp_inp,Calc_kappa_inp);
 		auto arr_nL = set_up_nL_grid(n_step , GSL_integration_mubl_container , C_top );
@@ -174,7 +176,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
 		eta.push_back(Nintegrate_eta(C_eta,0 , GSL_integration_mubl_container.getZMAX()));
 	}
 	if(method_transport.at(1)){
-		GSL_integration_mubl_container.set_transport_method(2);
+        GSL_integration_mubl_container.set_transport_method(TransportMethod::bottom);
 		bot_source C_bot;
 		C_bot.set_class(bot_mass_flag, GSL_integration_mubl_container,Calc_Gam_inp,Calc_Scp_inp,Calc_kappa_inp);
 		auto arr_nL = set_up_nL_grid(n_step , GSL_integration_mubl_container , C_bot );
@@ -182,7 +184,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
 		eta.push_back(Nintegrate_eta(C_eta,0 , GSL_integration_mubl_container.getZMAX()));
 	}
 	if(method_transport.at(2)){
-		GSL_integration_mubl_container.set_transport_method(3);
+        GSL_integration_mubl_container.set_transport_method(TransportMethod::tau);
 		tau_source C_tau;
 		C_tau.set_class(bot_mass_flag, GSL_integration_mubl_container,Calc_Gam_inp,Calc_Scp_inp,Calc_kappa_inp);
 		auto arr_nL = set_up_nL_grid(n_step , GSL_integration_mubl_container , C_tau);

@@ -185,6 +185,7 @@ Note to Mac Users: You have to use the g++ compiler as clang does not support Op
 #include "Eigen/Eigenvalues"
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/minimizer/Minimizer.h>
 
 
 namespace BSMPT{
@@ -967,7 +968,7 @@ public:
    * Checks if the tensors are correctly implemented. For this the fermion, quark and gauge boson masses are calculated and
    * printed next to the values defined in SMparah.h
    */
-    void CheckImplementation(const std::vector<double>& par,const std::vector<double>& parCT) const;
+    void CheckImplementation(const int& WhichMinimizer = Minimizer::WhichMinimizerDefault) const;
 
     /**
    * Find all possible sign combinations of the vevs under which the potential is invariant

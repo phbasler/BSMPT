@@ -38,7 +38,7 @@ std::pair<std::vector<double> , std::vector<double>> set_up_nL_grid(
     arr_nL.resize(n_step);
     double wall_factor = container.getZMAX();
     double zstart   =   container.getZMAX();
-    if(container.get_transport_method()==1)
+    if(container.get_transport_method()== TransportMethod::top)
     {
         auto C_class = boost::any_cast<top_source>(&classpointer);
         if(not C_class) 
@@ -59,7 +59,7 @@ std::pair<std::vector<double> , std::vector<double>> set_up_nL_grid(
             }
         }
     }    
-    if(container.get_transport_method()==2)
+    if(container.get_transport_method()== TransportMethod::bottom)
     {
         auto C_class = boost::any_cast<bot_source>(&classpointer);
         if(not C_class) 
@@ -80,7 +80,7 @@ std::pair<std::vector<double> , std::vector<double>> set_up_nL_grid(
             }
         }
     }
-    if(container.get_transport_method()==3)
+    if(container.get_transport_method()== TransportMethod::tau)
     {
         auto C_class = boost::any_cast<tau_source>(&classpointer);
         if(not C_class) 

@@ -58,18 +58,29 @@ const bool UseLibCMAESDefault = false;
 #ifdef NLopt_FOUND
 const bool UseNLoptDefault = true;
 #else
-const bool UseNLoptDefault = true;
+const bool UseNLoptDefault = false;
 #endif
+
+/**
+ * @brief CalcWhichMinimizer Calculates the WhichMinimizer value with the given Minimizer options
+ * @param UseGSL Should GSL be used?
+ * @param UseCMAES Should CMAES be used?
+ * @param UseNLopt Should NLopt be used?
+ * @return
+ */
+constexpr int CalcWhichMinimizer(bool UseGSL = UseGSLDefault,
+                                 bool UseCMAES =UseLibCMAESDefault,
+                                 bool UseNLopt = UseNLoptDefault)
+{
+    return  static_cast<int>(UseCMAES)
+            +2*static_cast<int>(UseGSL)
+            + 4*static_cast<int>(UseNLopt);
+}
 
 /**
  * @brief WhichMinimizerDefault default value for the Minimizers to use
  */
-constexpr int WhichMinimizerDefault{ static_cast<int>(UseLibCMAESDefault)
-            +2*static_cast<int>(UseGSLDefault)
-            + 4*static_cast<int>(UseNLoptDefault)
-};
-
-
+constexpr int WhichMinimizerDefault = CalcWhichMinimizer();
 
 // Minimizer.cpp
 std::vector<double> Minimize_gen_all(

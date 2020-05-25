@@ -30,5 +30,9 @@ std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model)
     os << IMN.at(Model);
     return os;
 }
+bool StringStartsWith(const std::string& str, const std::string& prefix)
+{
+    return str.size() >= prefix.size() and str.find(prefix) == 0;
+}
 
 }

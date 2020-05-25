@@ -97,7 +97,8 @@ double calculate_wall_thickness_plane(
         const std::shared_ptr<Class_Potential_Origin>& modelPointer,
         const double &Temp,
         const std::vector<double>& vcritical,
-        const std::vector<double>& vevsymmetric){
+        const std::vector<double>& vevsymmetric,
+        const int& WhichMinimizer){
 
 	if(vcritical.size() != vevsymmetric.size()){
 		throw std::runtime_error("vcritical and vevsymmetric in calculate_wall_thickness_plane do not have the same size ");
@@ -114,7 +115,7 @@ double calculate_wall_thickness_plane(
 		for(std::size_t i=0;i<vcritical.size();i++) {
 			basepoint.push_back(vevsymmetric.at(i) *(1-line_parameter) + vcritical.at(i) * line_parameter );
 		}
-        auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp);
+        auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp,WhichMinimizer);
         double Vmin = MinimumPlaneResult.PotVal;
         auto MinimumPlane = MinimumPlaneResult.Minimum;
 		row.push_back(line_parameter);

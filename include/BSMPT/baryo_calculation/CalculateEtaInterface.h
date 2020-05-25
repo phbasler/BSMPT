@@ -28,7 +28,7 @@
 #include <vector>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/baryo_calculation/transport_equations.h>
-
+#include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_calc.h>
 
 
@@ -92,7 +92,7 @@ protected:
 	/**
 	 * The step size used in the fluid methods
 	 */
-	const int n_step=50;
+    const std::size_t n_step=50;
 	/**
 	 * The member instance of the Calc_eta class to calculate the fluid Ansatz
 	 */
@@ -101,12 +101,11 @@ protected:
 	 * Set if the bot is treated as massive (1) or not (2)
 	 */
 	int bot_mass_flag;
+    /**
+     * struct to pass all necessary informations for the transport methods to the respective classes. Also calculates the wall thickness LW
+     */
+    GSL_integration_mubl GSL_integration_mubl_container;
 public:
-	/**
-	 * struct to pass all necessary informations for the transport methods to the respective classes. Also calculates the wall thickness LW
-	 */
-	GSL_integration_mubl GSL_integration_mubl_container;
-	
     /**
      * @brief CalculateEtaInterface Initialises the class with a config pair
      * @param config config.first sets the CalculateEtaInterface::method_transport and second CalculateEtaInterface::bot_mass_flag
@@ -153,7 +152,8 @@ public:
 		std::vector<double>& vev_critical_input,
 		std::vector<double>& vev_symmetric_input,
 		const double& TC_input,
-		std::shared_ptr<Class_Potential_Origin>& modelPointer_input);
+        std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+        const int& WhichMinimizer = Minimizer::WhichMinimizerDefault );
 	/**
 	 * Calculates all EWBG methods turned on in CalculateEtaInterface::method_transport with the numerical values set in
 	 * CalculateEtaInterface::setNumerics()
@@ -174,7 +174,8 @@ public:
 			std::vector<double>& vev_critical_input,
 			std::vector<double>& vev_symmetric_input,
 			const double& TC_input,
-			std::shared_ptr<Class_Potential_Origin>& modelPointer_input);
+            std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+            const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
 	/**
 	 * Sets the wall velocity CalculateEtaInterface::vw
 	 * @param vw_in Input value for the wall velocity CalculateEtaInterface::vw
@@ -201,6 +202,67 @@ public:
      * @return Calc_kappa_inp
      */
     Calc_kappa_t get_class_kappa() const;
+
+
+    /**
+     * @brief getSymmetricCPViolatingPhase_top
+     */
+    auto getSymmetricCPViolatingPhase_top() const{
+        return GSL_integration_mubl_container.getSymmetricCPViolatingPhase_top();
+    }
+
+    /**
+     * @brief getBrokenCPViolatingPhase_top
+     */
+    auto getBrokenCPViolatingPhase_top() const{
+        return GSL_integration_mubl_container.getBrokenCPViolatingPhase_top();
+    }
+
+    /**
+     * @brief getSymmetricCPViolatingPhase_bot
+     */
+    auto getSymmetricCPViolatingPhase_bot() const
+    {
+        return GSL_integration_mubl_container.getSymmetricCPViolatingPhase_bot();
+    }
+
+    /**
+     * @brief getBrokenCPViolatingPhase_bot
+     */
+    auto getBrokenCPViolatingPhase_bot() const{
+        return GSL_integration_mubl_container.getBrokenCPViolatingPhase_bot();
+    }
+
+    /**
+     * @brief getSymmetricCPViolatingPhase_tau
+     */
+    auto getSymmetricCPViolatingPhase_tau() const{
+        return GSL_integration_mubl_container.getSymmetricCPViolatingPhase_tau();
+    }
+
+    /**
+     * @brief getBrokenCPViolatingPhase_tau
+     */
+    auto getBrokenCPViolatingPhase_tau() const{
+        return GSL_integration_mubl_container.getBrokenCPViolatingPhase_tau();
+    }
+
+    /**
+     * @brief set_transport_method calls the set_transport_method of the underlying GSL_integration_mubl
+     * @param method
+     */
+    void set_transport_method(TransportMethod method)
+    {
+        GSL_integration_mubl_container.set_transport_method(method);
+    }
+
+
+    /**
+     * @brief getGSL_integration_mubl_container
+     */
+    auto getGSL_integration_mubl_container() const{
+        return GSL_integration_mubl_container ;
+    }
 
 
 };
