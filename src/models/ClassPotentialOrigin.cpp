@@ -2298,8 +2298,7 @@ void Class_Potential_Origin::setUseIndexCol(std::string legend){
 }
 
 void Class_Potential_Origin::CheckImplementation(
-        const std::vector<double>& par,
-        const std::vector<double>& parCT) const{
+        const int& WhichMinimizer ) const{
 	using std::pow;
 
     const std::string Pass = "Pass";
@@ -2532,9 +2531,9 @@ void Class_Potential_Origin::CheckImplementation(
     TestResults.push_back(Pass);
     {
         std::vector<double> CalculatedHiggsVEV, CheckVector, start;
-        for(auto x: vevTreeMin) start.push_back(0.5*x);
+        for(const auto& x: vevTreeMin) start.push_back(0.5*x);
 
-        CalculatedHiggsVEV = Minimizer::Minimize_gen_all_tree_level(Model,par,parCT,CheckVector,start);
+        CalculatedHiggsVEV = Minimizer::Minimize_gen_all_tree_level(Model,parStored,parCTStored,CheckVector,start,WhichMinimizer);
 
 
         std::string prsize_tline1="The given VEV configuration at tree-level is : ";

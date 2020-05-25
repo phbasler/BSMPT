@@ -47,6 +47,10 @@ struct CLIOptions{
     BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
     int Line{};
     std::string InputFile;
+    bool UseGSL { Minimizer::UseGSLDefault};
+    bool UseCMAES {Minimizer::UseLibCMAESDefault};
+    bool UseNLopt{Minimizer::UseNLoptDefault};
+    int WhichMinimizer{Minimizer::WhichMinimizerDefault};
 
     CLIOptions(int argc, char *argv[]);
     bool good() const;
@@ -83,12 +87,11 @@ int main(int argc, char *argv[]) try{
 		  }
         if(linecounter == args.Line and linecounter != 1)
 		{
-			std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-
+            modelPointer->initModel(linestr);
 			modelPointer->write();
 			std::vector<double> dummy;
 			modelPointer->Debugging(dummy,dummy);
-            modelPointer->CheckImplementation(parameters.first,parameters.second);
+            modelPointer->CheckImplementation(args.WhichMinimizer);
 		}
 		linecounter++;
 		if(infile.eof()) break;
@@ -170,7 +173,20 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             {
                 Line = std::stoi(el.substr(std::string("--firstline=").size()));
             }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
+            }
         }
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
     }
     else{
         Model = ModelID::getModel(args.at(0));
@@ -181,6 +197,22 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
 bool CLIOptions::good() const
 {
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
+    }
     if(Model==ModelID::ModelIDs::NotSet) {
         std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
         ShowInputError();

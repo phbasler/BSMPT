@@ -190,8 +190,8 @@ CLIOptions::CLIOptions(int argc, char *argv[])
     if(argc < 7 or args.at(0) == "--help")
     {
         int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-        std::cout << "Calculation of the left-handed chemical potentials or particle densities triggering the EW \
-                     sphaleron transitions as a function of the wall distance z ." << std::endl
+        std::cout << "Calculation of the left-handed chemical potentials or particle densities triggering the EW"
+                  << " sphaleron transitions as a function of the wall distance z ." << std::endl
                   << "It is called either by " << std::endl
                   << "./PlotEWBG_nL Model Inputfile Outputfile Line vw EWBGConfigFile TerminalOutput(y/n)" << std::endl
                   << "or with the following arguments" << std::endl
@@ -255,13 +255,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             {
                 OutputFile = arg.substr(std::string("--output=").size());
             }
-            else if(StringStartsWith(el,"--firstline="))
+            else if(StringStartsWith(el,"--line="))
             {
                 Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
             else if(StringStartsWith(el,"--vw="))
             {
@@ -269,19 +269,19 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--config="))
             {
-                ConfigFile = arg.substr(std::string("--config").size());
+                ConfigFile = arg.substr(std::string("--config=").size());
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
         WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
@@ -317,7 +317,7 @@ bool CLIOptions::good() const
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-    if(vw < 0 or vw > 1)
+    if(vw <= 0 or vw > 1)
     {
         throw std::runtime_error("The wall velocity has to be between 0 and 1.");
     }

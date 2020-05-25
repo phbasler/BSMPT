@@ -242,15 +242,15 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             {
                 OutputFile = arg.substr(std::string("--output=").size());
             }
-            else if(StringStartsWith(el,"--firstline="))
+            else if(StringStartsWith(el,"--line="))
             {
                 Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
-            else if(StringStartsWith(el,"--vw_max="))
+            else if(StringStartsWith(el,"--vw_min="))
             {
                 vw_min = std::stod(el.substr(std::string("--vw_min=").size()));
             }
@@ -264,19 +264,19 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--config="))
             {
-                ConfigFile = arg.substr(std::string("--config").size());
+                ConfigFile = arg.substr(std::string("--config=").size());
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
         WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
@@ -313,7 +313,7 @@ bool CLIOptions::good() const{
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-    if(vw_min < 0 or vw_min > 1 or vw_max < 0 or vw_max > 1)
+    if(vw_min <= 0 or vw_min > 1 or vw_max <= 0 or vw_max > 1)
     {
         throw std::runtime_error("The wall velocity has to be between 0 and 1.");
     }

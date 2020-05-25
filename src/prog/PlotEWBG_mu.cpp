@@ -268,15 +268,15 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
         WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);

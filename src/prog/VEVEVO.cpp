@@ -243,15 +243,15 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
-                UseGSL = arg.substr(std::string("--usegsl=").size()) == "true";
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usecmaes="))
             {
-                UseCMAES = arg.substr(std::string("--usecmaes=").size()) == "true";
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
             }
             else if(StringStartsWith(el,"--usenlopt="))
             {
-                UseNLopt = arg.substr(std::string("--usenlopt=").size()) == "true";
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
             }
         }
         WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
@@ -285,7 +285,7 @@ bool CLIOptions::good() const
     {
         throw std::runtime_error("You disabled all minimizers. You need at least one.");
     }
-    if(TemperatureStep == 0){
+    if(TemperatureStep <= 0){
         throw std::runtime_error("The stepsize has to be larger than 0.");
     }
     if(TemperatureStart < 0)
