@@ -159,7 +159,8 @@ int main(int argc, char *argv[]) try{
 
             if(args.FirstLine == args.LastLine) {
                 auto dimensionnames = modelPointer->addLegendTemp();
-                std::cout << "Succeded ? " << static_cast<int>(EWPT.StatusFlag) << sep <<" (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
+                std::cout << "Succeded ? " << static_cast<int>(EWPT.StatusFlag)
+                          << sep <<" (1 = Success , -1 = v/T reached a value below " << C_PT << " during the calculation) \n";
                 if(EWPT.StatusFlag==Minimizer::MinimizerStatus::SUCCESS)
                 {
                     std::cout << std::scientific;
