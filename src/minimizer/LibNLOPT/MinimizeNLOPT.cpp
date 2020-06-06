@@ -29,7 +29,7 @@ NLOPTReturnType MinimizeUsingNLOPT(
     settings.model = model;
     std::vector<double> VEV(model->get_nVEV());
 
-    nlopt::opt opt(nlopt::LN_COBYLA,static_cast<uint>(model->get_nVEV()));
+    nlopt::opt opt(nlopt::LN_COBYLA,static_cast<unsigned int>(model->get_nVEV()));
 
     opt.set_min_objective(NLOPTVEff,&settings);
     opt.set_xtol_rel(1e-4);
@@ -54,7 +54,7 @@ double NLOPTVEffPlane(const std::vector<double>& x, std::vector<double>& grad, v
 NLOPTReturnType MinimizePlaneUsingNLOPT(
         const struct PointerContainerMinPlane& params)
 {
-    nlopt::opt opt(nlopt::LN_COBYLA,static_cast<uint>(params.modelPointer->get_nVEV()-1));
+    nlopt::opt opt(nlopt::LN_COBYLA,static_cast<unsigned int>(params.modelPointer->get_nVEV()-1));
     std::vector<double> VEV(params.modelPointer->get_nVEV()-1);
     auto copy = params;
     opt.set_min_objective(NLOPTVEffPlane,&copy);
