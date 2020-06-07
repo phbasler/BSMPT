@@ -108,6 +108,7 @@ std::vector<double> Minimize_gen_all(
 
 #ifndef NLopt_FOUND
     UseNLOPT = false;
+    (void) UseNLOPT;
 #endif
 
 

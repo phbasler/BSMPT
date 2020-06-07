@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) try{
 
 
 
-                    LWplane = Wall::calculate_wall_thickness_plane(modelPointer,EWPT.Tc,vcritical,VEVSymmetric);
+                    LWplane = Wall::calculate_wall_thickness_plane(modelPointer,EWPT.Tc,vcritical,VEVSymmetric,args.WhichMinimizer);
 
 
 

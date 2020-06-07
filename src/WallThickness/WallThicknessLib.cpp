@@ -106,24 +106,16 @@ double calculate_wall_thickness_plane(
 	double LW = 0;
 	int maxstep = 10;
 	double Stepsize = 1.0/(maxstep);
-    std::vector<std::vector<double>> Data;
 	std::vector<double> Data_min_negative;
 
 	for(int ncounter=0;ncounter<=maxstep;ncounter++){
 		double line_parameter = Stepsize*ncounter;
-        std::vector<double> basepoint, row;
+        std::vector<double> basepoint;
 		for(std::size_t i=0;i<vcritical.size();i++) {
 			basepoint.push_back(vevsymmetric.at(i) *(1-line_parameter) + vcritical.at(i) * line_parameter );
 		}
         auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp,WhichMinimizer);
-        double Vmin = MinimumPlaneResult.PotVal;
-        auto MinimumPlane = MinimumPlaneResult.Minimum;
-		row.push_back(line_parameter);
-		row.push_back(Vmin);
-		Data.push_back(row);
-		Data_min_negative.push_back(-Vmin);
-		for(auto x: MinimumPlane) row.push_back(x);
-		for(auto x: basepoint) row.push_back(x);
+        Data_min_negative.push_back(-MinimumPlaneResult.PotVal);
 	}
 
 	struct GSL_params spline;
