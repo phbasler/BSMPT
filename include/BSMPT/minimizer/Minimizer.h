@@ -157,6 +157,19 @@ std::vector<double> Minimize_gen_all_tree_level(
         int WhichMinimizer=WhichMinimizerDefault);
 
 
+/**
+ * @brief FindNextLocalMinima finds the local minima from the given starting point at the given temperature
+ * @param model Parameter point to minimize
+ * @param StartingPoint Starting point from where to look for the next local minima
+ * @param temperature Temperature at which to minimize the potential
+ * @param WhichMinimizer Which Minimizer should be used? CMAES is not used here as it is only a global minimizer
+ * @return A vector containing the local minima. In case different Minima find different minima all solutions are given.
+ */
+std::vector<std::vector<double>> FindNextLocalMinima(
+        const std::shared_ptr<Class_Potential_Origin>& model,
+        const std::vector<double>& StartingPoint,
+        const double& temperature,
+        int WhichMinimizer = WhichMinimizerDefault);
 
 
 }
