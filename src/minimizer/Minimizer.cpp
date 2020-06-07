@@ -322,5 +322,50 @@ std::vector<double> Minimize_gen_all_tree_level(
     return sol;
 }
 
+
+std::vector<std::vector<double>> FindNextLocalMinima(
+        const std::shared_ptr<Class_Potential_Origin>& model,
+        const std::vector<double>& StartingPoint,
+        const double& temperature,
+        int WhichMinimizer)
+{
+    WhichMinimizer /= 2;
+    bool UseGSL = (WhichMinimizer%2 == 1);
+    WhichMinimizer /= 2;
+    bool UseNLOPT = (WhichMinimizer%2 == 1);
+
+    std::vector<std::vector<double>> Minima;
+
+    if(UseGSL)
+    {
+        std::vector<double> GSLSolution;
+        std::size_t tries{0}, MaxTries{600};
+        int status;
+        GSL_params params(model,temperature);
+        do{
+            GSLSolution.clear();
+            status = GSL_Minimize_From_S_gen_all(params,GSLSolution,StartingPoint);
+            tries++;
+        }while(status != GSL_SUCCESS and tries < MaxTries);
+        if(status == GSL_SUCCESS)
+        {
+            Minima.push_back(GSLSolution);
+        }
+    }
+
+#ifdef NLopt_FOUND
+
+    if(UseNLOPT)
+    {
+
+    }
+#else
+    UseNLOPT = false;
+    (void) UseNLOPT;
+#endif
+
+    return Minima;
+}
+
 }
 }
