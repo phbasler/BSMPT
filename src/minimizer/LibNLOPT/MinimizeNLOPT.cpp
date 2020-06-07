@@ -69,7 +69,7 @@ NLOPTReturnType MinimizePlaneUsingNLOPT(
         const struct PointerContainerMinPlane& params)
 {
     auto dim = params.modelPointer->get_nVEV()-1;
-    nlopt::opt opt(nlopt::GN_ORIG_DIRECT_L,static_cast<unsigned int>(dim));
+    nlopt::opt opt(nlopt::GN_DIRECT_L,static_cast<unsigned int>(dim));
     std::vector<double> LowerBound(dim,-300), UpperBound(dim,300);
     for(std::size_t i{0};i<params.modelPointer->get_nVEV();++i)
     {
