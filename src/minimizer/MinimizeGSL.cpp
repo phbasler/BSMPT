@@ -86,7 +86,7 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params& params, std::vector<double>& 
     int status;
     double size;
 
-    std::size_t dim = params.nVEV;
+    std::size_t dim = params.modelPointer->get_nVEV();
 
     /* Starting point */
     x = gsl_vector_alloc (dim);
@@ -162,10 +162,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         std::vector<std::vector<double>>& saveAllMinima,
         const std::size_t& MaxSol)
 {
-    struct GSL_params params;
-    params.Temp = Temp;
-    params.nVEV = modelPointer->get_nVEV();
-    params.modelPointer = modelPointer;
+    struct GSL_params params(modelPointer,Temp);
 
     std::size_t dim = modelPointer->get_nVEV();
 

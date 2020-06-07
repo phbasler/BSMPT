@@ -44,11 +44,10 @@ const double GSL_Tolerance=std::pow(10,-6);
  * struct containing the required Parameters of the model for the gsl interface
  */
 struct GSL_params {
-    //int Model;
-    std::size_t nVEV;
-    //Class_Potential_Origin * modelPointer;
     std::shared_ptr<Class_Potential_Origin> modelPointer;
     double Temp;
+    GSL_params(const std::shared_ptr<Class_Potential_Origin>& model, const double& temperature):
+        modelPointer{model}, Temp{temperature} {};
 };
 
 /**
