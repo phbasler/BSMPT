@@ -21,6 +21,8 @@ namespace LibNLOPT {
 struct ShareInformationNLOPT{
     std::shared_ptr<Class_Potential_Origin> model;
     double Temp;
+    ShareInformationNLOPT(const std::shared_ptr<Class_Potential_Origin>& modelIn, const double& TempIn):
+        model{modelIn},Temp{TempIn}{};
 };
 
 /**
@@ -29,7 +31,9 @@ struct ShareInformationNLOPT{
 struct NLOPTReturnType{
     std::vector<double> Minimum;
     double PotVal;
-    nlopt::result NLOPResult;
+    nlopt::result NLOPTResult;
+    NLOPTReturnType(const std::vector<double>& MinimumIn, const double& PotValIn, const nlopt::result& NLOPTResultIn):
+        Minimum{MinimumIn}, PotVal{PotValIn}, NLOPTResult{NLOPTResultIn}{};
 };
 
 /**
@@ -69,6 +73,17 @@ NLOPTReturnType MinimizePlaneUsingNLOPT(
  * @return
  */
 double NLOPTVEffPlane(const std::vector<double>& x, std::vector<double>& grad, void* data);
+
+/**
+ * @brief FindLocalMinimum finds the local minimum near the starting point
+ * @param model parameter point to use
+ * @param Start Starting point for the minimization
+ * @param Temp temperature for the minimization
+ * @return the local minimum
+ */
+NLOPTReturnType FindLocalMinimum(const std::shared_ptr<Class_Potential_Origin>& model,
+                                     const std::vector<double>& Start,
+                                     const double& Temp);
 
 }
 }

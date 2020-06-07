@@ -24,9 +24,7 @@ NLOPTReturnType MinimizeUsingNLOPT(
         const std::shared_ptr<Class_Potential_Origin>& model,
         const double& Temp)
 {
-    ShareInformationNLOPT settings;
-    settings.Temp = Temp;
-    settings.model = model;
+    ShareInformationNLOPT settings(model,Temp);
     std::vector<double> VEV(model->get_nVEV());
 
     nlopt::opt opt(nlopt::GN_ORIG_DIRECT_L,static_cast<unsigned int>(model->get_nVEV()));
@@ -49,10 +47,7 @@ NLOPTReturnType MinimizeUsingNLOPT(
     opt.set_xtol_rel(1e-4);
     double minf;
     auto result = opt.optimize(VEV,minf);
-    NLOPTReturnType res;
-    res.PotVal = minf;
-    res.Minimum = VEV;
-    res.NLOPResult = result;
+    NLOPTReturnType res(VEV,minf,result);
     return  res;
 }
 
@@ -105,11 +100,45 @@ NLOPTReturnType MinimizePlaneUsingNLOPT(
     opt.set_xtol_rel(1e-4);
     double minf;
     auto result = opt.optimize(VEV,minf);
-    NLOPTReturnType res;
-    res.PotVal = minf;
-    res.Minimum = TransformCoordinates(VEV,params);
-    res.NLOPResult = result;
+    auto minimum = TransformCoordinates(VEV,params);
+    NLOPTReturnType res(minimum,minf,result);
     return  res;
+}
+
+NLOPTReturnType FindLocalMinimum(const std::shared_ptr<Class_Potential_Origin>& model, const std::vector<double>& Start,
+                                     const double& Temp)
+{
+    nlopt::opt opt(nlopt::LN_COBYLA,static_cast<unsigned int>(model->get_nVEV()));
+    ShareInformationNLOPT settings(model,Temp);
+    std::vector<double> VEV(model->get_nVEV());
+    opt.set_min_objective(NLOPTVEff,&settings);
+    opt.set_xtol_rel(1e-4);
+
+    std::vector<double> LowerBound, UpperBound;
+    for(const auto& el: Start)
+    {
+        if(el > 0)
+        {
+            LowerBound.push_back(0.5*el);
+            UpperBound.push_back(1.5*el);
+        }
+        else if(el < 0)
+        {
+            LowerBound.push_back(1.5*el);
+            UpperBound.push_back(0.5*el);
+        }
+        else{
+            LowerBound.push_back(-10);
+            UpperBound.push_back(10);
+        }
+    }
+
+
+    double minf;
+    auto result = opt.optimize(VEV,minf);
+    NLOPTReturnType res(VEV,minf,result);
+    return  res;
+
 }
 
 }

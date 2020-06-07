@@ -160,8 +160,11 @@ std::vector<double> Minimize_gen_all(
     {
 //        std::cout<<"NLO opt called"<<std::endl;
         auto NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer,Temp);
-        PotValues.push_back(NLOPTResult.PotVal);
-        Minima.push_back(NLOPTResult.Minimum);
+        if(NLOPTResult.NLOPTResult == nlopt::SUCCESS)
+        {
+            PotValues.push_back(NLOPTResult.PotVal);
+            Minima.push_back(NLOPTResult.Minimum);
+        }
     }
 #endif
 
@@ -357,7 +360,11 @@ std::vector<std::vector<double>> FindNextLocalMinima(
 
     if(UseNLOPT)
     {
-
+        auto NLOPTres = LibNLOPT::FindLocalMinimum(model,StartingPoint,temperature);
+        if(NLOPTres.NLOPTResult == nlopt::SUCCESS)
+        {
+            Minima.push_back(NLOPTres.Minimum);
+        }
     }
 #else
     UseNLOPT = false;
