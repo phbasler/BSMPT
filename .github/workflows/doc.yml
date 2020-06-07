@@ -8,13 +8,13 @@ on:
     
 jobs:
   Deploy:
-     runs-on: ubuntu-latest
+     runs-on: ubuntu-20.04
      steps:
      - uses: actions/checkout@v2
        with:
           persist-credentials: false
      - name: installPackages
-       run: sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libboost-all-dev doxygen
+       run: sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-cxx-dev libboost-all-dev doxygen
      - name: cmake
        run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. && make doc
      - name: Deploy
