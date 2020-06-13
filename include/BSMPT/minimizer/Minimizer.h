@@ -172,6 +172,20 @@ std::vector<std::vector<double>> FindNextLocalMinima(
         int WhichMinimizer = WhichMinimizerDefault);
 
 
+
+std::vector<std::vector<std::pair<double,std::vector<double>>>>
+MinimaDevelopmentWithTemperature(
+const std::shared_ptr<Class_Potential_Origin>& model,
+const double& StartingTemperature,
+const double& FinalTemperature,
+const double& StepsizeTemperature,
+const std::vector<std::pair<double,double>>& RNGRanges,
+const std::size_t& seed,
+const std::size_t& NumberOfStartingPoints,
+const int& WhichMinimizer
+        );
+
+
 }
 }
 

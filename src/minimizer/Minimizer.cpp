@@ -28,6 +28,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>      // for FChoose
 #include <BSMPT/minimizer/Minimizer.h>
+#include <random>
 
 #include <BSMPT/config.h>
 
@@ -373,6 +374,76 @@ std::vector<std::vector<double>> FindNextLocalMinima(
 #endif
 
     return Minima;
+}
+
+
+std::vector<std::vector<std::pair<double,std::vector<double>>>>
+MinimaDevelopmentWithTemperature(
+const std::shared_ptr<Class_Potential_Origin>& model,
+const double& StartingTemperature,
+const double& FinalTemperature,
+const double& StepsizeTemperature,
+const std::vector<std::pair<double,double>>& RNGRanges,
+const std::size_t& seed,
+const std::size_t& NumberOfStartingPoints,
+const int& WhichMinimizer
+        )
+{
+    using MinimaDevelopmentType = std::vector<std::pair<double,std::vector<double>>>;
+    std::vector<MinimaDevelopmentType> res;
+    std::default_random_engine randGen(seed);
+
+
+    std::vector<std::vector<double>> StartingPoints;
+    for(std::size_t i{0}; i < NumberOfStartingPoints; ++i)
+    {
+        std::vector<double> Point;
+        for(const auto& el: RNGRanges)
+        {
+            Point.push_back(el.first
+                            + (el.second - el.first) * std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen) );
+        }
+        StartingPoints.push_back(Point);
+    }
+
+    for(const auto& StartingPoint: StartingPoints)
+    {
+        auto LocalMinima = FindNextLocalMinima(model,StartingPoint,StartingTemperature,WhichMinimizer);
+        for(const auto& el: LocalMinima)
+        {
+            auto Min = std::make_pair(StartingTemperature,el);
+            res.push_back(MinimaDevelopmentType{Min});
+        }
+    }
+
+    auto StoppingCriteria = [&](const double& Temp){
+        if(StartingTemperature < FinalTemperature)
+        {
+            return Temp < FinalTemperature;
+        }
+        else{
+            return  Temp > FinalTemperature;
+        }
+    };
+
+    for(double Temp = StartingTemperature + StepsizeTemperature; StoppingCriteria(Temp); Temp+=StepsizeTemperature )
+    {
+        auto resOld = std::move(res);
+        res.clear();
+        for(const auto& Point: resOld)
+        {
+            auto LatestMinima = Point.at(Point.size()-1);
+            auto NextMinima = FindNextLocalMinima(model,LatestMinima.second,Temp,WhichMinimizer);
+            for(const auto& NM : NextMinima)
+            {
+                auto base{Point};
+                base.push_back(std::make_pair(Temp,NM));
+                res.push_back(base);
+            }
+        }
+    }
+
+    return res;
 }
 
 }
