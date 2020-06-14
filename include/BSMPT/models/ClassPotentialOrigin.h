@@ -657,7 +657,7 @@ public:
     /**
    * This function calculates the EW breaking VEV from all contributing field configurations.
    */
-    double EWSBVEV(std::vector<double> v) const;
+    double EWSBVEV(const std::vector<double>& v) const;
 
 
     /**

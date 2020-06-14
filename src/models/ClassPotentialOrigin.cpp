@@ -2271,7 +2271,7 @@ bool Class_Potential_Origin::CheckNLOVEV(const std::vector<double>& v) const
 
 
 
-double Class_Potential_Origin::EWSBVEV(std::vector<double> v) const
+double Class_Potential_Origin::EWSBVEV(const std::vector<double>& v) const
 {
   double res=0;
   for(std::size_t i=0;i<NHiggs;i++)
