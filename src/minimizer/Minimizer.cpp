@@ -162,7 +162,7 @@ std::vector<double> Minimize_gen_all(
     {
 //        std::cout<<"NLO opt called"<<std::endl;
         auto NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer,Temp);
-        if(NLOPTResult.NLOPTResult == nlopt::SUCCESS)
+        if(NLOPTResult.Success)
         {
             PotValues.push_back(NLOPTResult.PotVal);
             Minima.push_back(NLOPTResult.Minimum);
@@ -363,7 +363,7 @@ std::vector<std::vector<double>> FindNextLocalMinima(
     if(UseNLOPT)
     {
         auto NLOPTres = LibNLOPT::FindLocalMinimum(model,StartingPoint,temperature);
-        if(NLOPTres.NLOPTResult == nlopt::SUCCESS)
+        if(NLOPTres.Success)
         {
             Minima.push_back(NLOPTres.Minimum);
         }
@@ -417,12 +417,13 @@ const int& WhichMinimizer
     }
 
     auto StoppingCriteria = [&](const double& Temp){
+        double epsilon = std::abs((FinalTemperature-StartingTemperature)/StepsizeTemperature)*1e-2; // because 1+1 = 2.0000000000000001
         if(StartingTemperature < FinalTemperature)
         {
-            return Temp < FinalTemperature;
+            return Temp < FinalTemperature + epsilon;
         }
         else{
-            return  Temp > FinalTemperature;
+            return  Temp > FinalTemperature - epsilon;
         }
     };
 

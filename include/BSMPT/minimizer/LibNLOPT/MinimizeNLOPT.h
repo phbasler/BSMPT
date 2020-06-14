@@ -22,7 +22,7 @@ struct ShareInformationNLOPT{
     std::shared_ptr<Class_Potential_Origin> model;
     double Temp;
     ShareInformationNLOPT(const std::shared_ptr<Class_Potential_Origin>& modelIn, const double& TempIn):
-        model{modelIn},Temp{TempIn}{};
+        model{modelIn},Temp{TempIn}{}
 };
 
 /**
@@ -32,8 +32,12 @@ struct NLOPTReturnType{
     std::vector<double> Minimum;
     double PotVal;
     nlopt::result NLOPTResult;
-    NLOPTReturnType(const std::vector<double>& MinimumIn, const double& PotValIn, const nlopt::result& NLOPTResultIn):
-        Minimum{MinimumIn}, PotVal{PotValIn}, NLOPTResult{NLOPTResultIn}{};
+    bool Success;
+    NLOPTReturnType(const std::vector<double>& MinimumIn,
+                    const double& PotValIn,
+                    const nlopt::result& NLOPTResultIn,
+                    bool SuccessIn):
+        Minimum{MinimumIn}, PotVal{PotValIn}, NLOPTResult{NLOPTResultIn},Success{SuccessIn}{}
 };
 
 /**

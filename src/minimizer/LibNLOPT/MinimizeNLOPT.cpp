@@ -2,6 +2,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
+#include <BSMPT/utility.h>
 
 /**
  *@file
@@ -47,7 +48,8 @@ NLOPTReturnType MinimizeUsingNLOPT(
     opt.set_xtol_rel(1e-4);
     double minf;
     auto result = opt.optimize(VEV,minf);
-    NLOPTReturnType res(VEV,minf,result);
+    bool Success = (result == nlopt::SUCCESS) or (result == nlopt::FTOL_REACHED) or (result == nlopt::XTOL_REACHED);
+    NLOPTReturnType res(VEV,minf,result,Success);
     return  res;
 }
 
@@ -101,7 +103,8 @@ NLOPTReturnType MinimizePlaneUsingNLOPT(
     double minf;
     auto result = opt.optimize(VEV,minf);
     auto minimum = TransformCoordinates(VEV,params);
-    NLOPTReturnType res(minimum,minf,result);
+    bool Success = (result == nlopt::SUCCESS) or (result == nlopt::FTOL_REACHED) or (result == nlopt::XTOL_REACHED);
+    NLOPTReturnType res(minimum,minf,result,Success);
     return  res;
 }
 
@@ -110,33 +113,16 @@ NLOPTReturnType FindLocalMinimum(const std::shared_ptr<Class_Potential_Origin>& 
 {
     nlopt::opt opt(nlopt::LN_COBYLA,static_cast<unsigned int>(model->get_nVEV()));
     ShareInformationNLOPT settings(model,Temp);
-    std::vector<double> VEV(model->get_nVEV());
+    auto VEV = Start;
     opt.set_min_objective(NLOPTVEff,&settings);
     opt.set_xtol_rel(1e-4);
-
-    std::vector<double> LowerBound, UpperBound;
-    for(const auto& el: Start)
-    {
-        if(el > 0)
-        {
-            LowerBound.push_back(0.5*el);
-            UpperBound.push_back(1.5*el);
-        }
-        else if(el < 0)
-        {
-            LowerBound.push_back(1.5*el);
-            UpperBound.push_back(0.5*el);
-        }
-        else{
-            LowerBound.push_back(-10);
-            UpperBound.push_back(10);
-        }
-    }
 
 
     double minf;
     auto result = opt.optimize(VEV,minf);
-    NLOPTReturnType res(VEV,minf,result);
+    bool Success = (result == nlopt::SUCCESS) or (result == nlopt::FTOL_REACHED) or (result == nlopt::XTOL_REACHED);
+    NLOPTReturnType res(VEV,minf,result,Success);
+
     return  res;
 
 }
