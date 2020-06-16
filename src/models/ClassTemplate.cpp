@@ -174,23 +174,15 @@ void Class_Template::ReadAndSet(const std::string& linestr, std::vector<double>&
  * Set Class Object as well as the VEV configuration
  */
 void Class_Template::set_gen(const std::vector<double>& par) {
-
-
-	ms = par[0];
-	lambda = par[1];
-
-	g=C_g;
-
-	yt = std::sqrt(2)/C_vev0 * C_MassTop;
-
-	scale = C_vev0;
-
+    ms = par[0]; // Class member are set accordingly to the input parameters
+    lambda = par[1]; // Class member are set accordingly to the input parameters
+    g=C_g; // SM SU (2) gauge coupling --> SMparam .h
+    yt = std::sqrt(2)/C_vev0 * C_MassTop; // Top Yukawa coupling --> SMparam .h
+    scale = C_vev0; // Renormalisation scale is set to the SM VEV
 	vevTreeMin.resize(nVEV);
 	vevTree.resize(NHiggs);
-
 	// Here you have to set the vector vevTreeMin. The vector vevTree will then be set by the function MinimizeOrderVEV
 	vevTreeMin[0] = C_vev0;
-
     vevTree=MinimizeOrderVEV(vevTreeMin);
 	if(!SetCurvatureDone) SetCurvatureArrays();
 }
@@ -220,7 +212,7 @@ void Class_Template::write() const {
 
 	std::cout << "The parameters are : " << std::endl;
 	std::cout << "lambda = " << lambda << std::endl
-			<< "\tm^2 = " << ms << std::endl;
+            << "m^2 = " << ms << std::endl;
 
 	std::cout << "The counterterm parameters are : " << std::endl;
 	std::cout << "dT = "<< dT << std::endl
@@ -262,7 +254,7 @@ std::vector<double> Class_Template::calc_CT() const {
 		for(std::size_t j=0;j<NHiggs;j++) HesseWeinberg(i,j) = WeinbergHesse.at(j*NHiggs+i);
 	}
 
-	// Here you have to use your formulas for the counterterm scheme
+    // Here you have to use your formulae for the counterterm scheme
 	double t = 0;
     parCT.push_back(t); // dT
     parCT.push_back(3.0*t/std::pow(C_vev0,3) + 3.0/std::pow(C_vev0,3) * NablaWeinberg(0) -3.0/std::pow(C_vev0,2) *HesseWeinberg(0,0)); // dlambda
