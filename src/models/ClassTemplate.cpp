@@ -174,8 +174,8 @@ void Class_Template::ReadAndSet(const std::string& linestr, std::vector<double>&
  * Set Class Object as well as the VEV configuration
  */
 void Class_Template::set_gen(const std::vector<double>& par) {
-    ms = par[0]; // Class member are set accordingly to the input parameters
-    lambda = par[1]; // Class member are set accordingly to the input parameters
+    ms = par[0]; // Class member is set accordingly to the input parameters
+    lambda = par[1]; // Class member is set accordingly to the input parameters
     g=C_g; // SM SU (2) gauge coupling --> SMparam .h
     yt = std::sqrt(2)/C_vev0 * C_MassTop; // Top Yukawa coupling --> SMparam .h
     scale = C_vev0; // Renormalisation scale is set to the SM VEV
