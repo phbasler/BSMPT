@@ -111,33 +111,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
                      const double& Temp,
                      const int& WhichMinimizer){
 
-
-    bool UseCMAES = false;
-    bool UseGSLLocal = false;
-    bool UseNLOPT = false;
-
-
-    int PGSL,PCMAES,PNLOPT;
-    int WMx = WhichMinimizer;
-    PCMAES = WMx%2;
-    WMx = WMx/2;
-    PGSL = WMx%2;
-    WMx = WMx/2;
-    PNLOPT = WMx%2;
-
-    UseNLOPT = (PNLOPT == 1);
-    UseCMAES = (PCMAES == 1);
-    UseGSLLocal = (PGSL == 1);
-
-#ifndef CMAES_FOUND
-    UseCMAES = false;
-    (void) UseCMAES;
-#endif
-
-#ifndef NLopt_FOUND
-    UseNLOPT = false;
-    (void) UseNLOPT;
-#endif
+    const auto UseMinimizer = GetMinimizers(WhichMinimizer);
 
     std::vector<double> PotValues;
     std::vector<std::vector<double>> Minima;
@@ -174,7 +148,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 
     auto dimensionnames = modelPointer->addLegendTemp();
 
-    if(UseGSLLocal)
+    if(UseMinimizer.UseGSL)
     {
         // Find the minimum provided by GSL
         auto GSLResult = GSL_Minimize_Plane_gen_all(params, 3,50);
@@ -183,7 +157,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
     }
 
 #ifdef CMAES_FOUND
-    if(UseCMAES)
+    if(UseMinimizer.UseCMAES and modelPointer->get_nVEV() >= 3)
     {
         std::vector<double> startCMAES(params.nVEV-1);
         for(std::size_t i=0;i<params.Index;i++) {
@@ -199,7 +173,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
 #endif
 
 #ifdef NLopt_FOUND
-   if(UseNLOPT)
+   if(UseMinimizer.UseNLopt)
    {
        auto NLOPTResult = LibNLOPT::MinimizePlaneUsingNLOPT(params);
        PotValues.push_back(NLOPTResult.PotVal);

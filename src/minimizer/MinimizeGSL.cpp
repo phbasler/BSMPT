@@ -75,7 +75,7 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params& params, std::vector<double>& 
 
     //	struct GSL_params * params = (struct GSL_params *) p;
     const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2;
-    gsl_multimin_fminimizer *s = NULL;
+    gsl_multimin_fminimizer *s = nullptr;
     gsl_vector *ss, *x;
     gsl_multimin_function minex_func;
 

@@ -69,6 +69,25 @@
 namespace BSMPT {
 namespace Minimizer {
 
+MinimizersToUse GetMinimizers(int WhichMinimizer)
+{
+    bool UseCMAES = (WhichMinimizer % 2 == 1);
+    WhichMinimizer/= 2;
+    bool UseGSL = (WhichMinimizer %2 == 1);
+    WhichMinimizer/= 2;
+    bool UseNLopt = (WhichMinimizer%2 == 1);
+
+#ifndef CMAES_FOUND
+    UseCMAES = false;
+#endif
+
+#ifndef NLopt_FOUND
+    UseNLopt = flase;
+#endif
+
+    return MinimizersToUse(UseCMAES,UseGSL,UseNLopt);
+}
+
 /**
  * @brief Minimization of the Model
 * Minimizes the given Potential with parameters par and CT-parameters parCT at a given Temperature Temp and writes the solution in the std::vector sol.
@@ -85,33 +104,7 @@ std::vector<double> Minimize_gen_all(
     std::vector<double> PotValues;
     std::vector<std::vector<double>> Minima;
 
-    bool UseCMAES = false;
-    bool UseGSLLocal = false;
-    bool UseNLOPT = false;
-
-
-    int PGSL,PCMAES,PNLOPT;
-    int WMx = WhichMinimizer;
-    PCMAES = WMx%2;
-    WMx = WMx/2;
-    PGSL = WMx%2;
-    WMx = WMx/2;
-    PNLOPT = WMx%2;
-
-    UseNLOPT = (PNLOPT == 1);
-    UseCMAES = (PCMAES == 1);
-    UseGSLLocal = (PGSL == 1);
-
-#ifndef CMAES_FOUND
-    UseCMAES = false;
-    (void) start;
-#endif
-
-#ifndef NLopt_FOUND
-    UseNLOPT = false;
-    (void) UseNLOPT;
-#endif
-
+    auto UseMinimizer = GetMinimizers(WhichMinimizer);
 
     bool CheckZero = true; // Check if zero is the global minimum explicitly
     if(CheckZero){
@@ -121,15 +114,15 @@ std::vector<double> Minimize_gen_all(
 
     if(modelPointer->get_nVEV() <=2)
       {
-				UseCMAES = false;
-				UseGSLLocal = true;
+                UseMinimizer.UseCMAES = false;
+                UseMinimizer.UseGSL = true;
       }
 
     std::vector<double> solGSLMin,solGSLMinPot;
 
     bool gslMinSuc = false;
-    if(UseGSLLocal) {
-        if(UseCMAES or UseNLOPT) {
+    if(UseMinimizer.UseGSL) {
+        if(UseMinimizer.UseCMAES or UseMinimizer.UseNLopt) {
             std::tie(solGSLMin,gslMinSuc) = GSL_Minimize_gen_all(modelPointer, Temp, 5); // If additionally CMAES is minimising GSL does not need as much solutions
         }
         else {
@@ -146,7 +139,7 @@ std::vector<double> Minimize_gen_all(
 
     }
 #ifdef CMAES_FOUND
-    if(UseCMAES) {
+    if(UseMinimizer.UseCMAES) {
         auto LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer,Temp,start);
         auto errC = LibCMAES.CMAESStatus;
         auto solCMAES = LibCMAES.result;
@@ -158,7 +151,7 @@ std::vector<double> Minimize_gen_all(
 #endif
 
 #ifdef NLopt_FOUND
-    if(UseNLOPT)
+    if(UseMinimizer.UseNLopt)
     {
 //        std::cout<<"NLO opt called"<<std::endl;
         auto NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer,Temp);
@@ -181,7 +174,7 @@ std::vector<double> Minimize_gen_all(
     if(EWVEV <= 0.5) sol = std::vector<double>(modelPointer->get_nVEV(),0);
 
     solGSLMin.clear();
-    if(UseGSLLocal and  gslMinSuc) Check.push_back(1);
+    if(UseMinimizer.UseGSL and  gslMinSuc) Check.push_back(1);
     else Check.push_back(-1);
 
     return sol;
@@ -334,14 +327,11 @@ std::vector<std::vector<double>> FindNextLocalMinima(
         const double& temperature,
         int WhichMinimizer)
 {
-    WhichMinimizer /= 2;
-    bool UseGSL = (WhichMinimizer%2 == 1);
-    WhichMinimizer /= 2;
-    bool UseNLOPT = (WhichMinimizer%2 == 1);
+    const auto UseMinimizer = GetMinimizers(WhichMinimizer);
 
     std::vector<std::vector<double>> Minima;
 
-    if(UseGSL)
+    if(UseMinimizer.UseGSL)
     {
         std::vector<double> GSLSolution;
         std::size_t tries{0}, MaxTries{600};
@@ -360,7 +350,7 @@ std::vector<std::vector<double>> FindNextLocalMinima(
 
 #ifdef NLopt_FOUND
 
-    if(UseNLOPT)
+    if(UseMinimizer.UseNLopt)
     {
         auto NLOPTres = LibNLOPT::FindLocalMinimum(model,StartingPoint,temperature);
         if(NLOPTres.Success)
@@ -368,9 +358,6 @@ std::vector<std::vector<double>> FindNextLocalMinima(
             Minima.push_back(NLOPTres.Minimum);
         }
     }
-#else
-    UseNLOPT = false;
-    (void) UseNLOPT;
 #endif
 
     return Minima;

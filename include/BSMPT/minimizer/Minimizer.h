@@ -78,6 +78,23 @@ constexpr int CalcWhichMinimizer(bool UseGSL = UseGSLDefault,
 }
 
 /**
+ * @brief The MinimizersToUse struct used as a return of GetMinimizers
+ */
+struct MinimizersToUse{
+    bool UseCMAES{UseLibCMAESDefault};
+    bool UseGSL{UseGSLDefault};
+    bool UseNLopt{UseNLoptDefault};
+    MinimizersToUse(bool useCMAES, bool useGSL, bool useNLopt): UseCMAES{useCMAES}, UseGSL{useGSL}, UseNLopt{useNLopt}{}
+};
+
+/**
+ * @brief GetMinimizers returns a struct containing the bools deciding which minimizers should be used or not
+ * @param WhichMinimizer
+ * @return
+ */
+MinimizersToUse GetMinimizers(int WhichMinimizer);
+
+/**
  * @brief WhichMinimizerDefault default value for the Minimizers to use
  */
 constexpr int WhichMinimizerDefault = CalcWhichMinimizer();
