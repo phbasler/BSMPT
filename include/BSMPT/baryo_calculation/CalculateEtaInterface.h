@@ -36,6 +36,12 @@
 namespace BSMPT{
 namespace Baryo{
 
+struct AdditionalBaryoArgs{
+    const bool Used{true};
+
+    AdditionalBaryoArgs(bool SetUsed = true): Used{SetUsed} {}
+};
+
 /**
  * This is an interface class to call the different EWBG methods
  */
@@ -146,6 +152,7 @@ public:
 	 * @param vev_symmetric_input Sets the vev in the symmetric phase CalculateEtaInterface::vev_symmetric
 	 * @param TC_input Sets the critical temperature CalculateEtaInterface::TC
      * @param modelPointer_input Sets the used parameter point CalculateEtaInterface::modlePointer
+     * * @param WhichMinimizer defines which minimizers should be used
 	 * @return The labels of the different EWBG methods
 	 */
 	void setNumerics(const double& vw_input,
@@ -153,6 +160,24 @@ public:
 		std::vector<double>& vev_symmetric_input,
 		const double& TC_input,
         std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+        const int& WhichMinimizer = Minimizer::WhichMinimizerDefault );
+    /**
+     * Sets the numerical values needed for the calculation
+     * @param vw_input Sets the wall velocity CalculateEtaInterface::vw
+     * @param vev_critical_input Sets the vev in the broken phase CalculateEtaInterface::vev_critical
+     * @param vev_symmetric_input Sets the vev in the symmetric phase CalculateEtaInterface::vev_symmetric
+     * @param TC_input Sets the critical temperature CalculateEtaInterface::TC
+     * @param modelPointer_input Sets the used parameter point CalculateEtaInterface::modlePointer
+     * @param AddBaryoArgs Instance of AdditionalBaryoArgs used for optional parameters in the different methods
+     * @param WhichMinimizer defines which minimizers should be used
+     * @return The labels of the different EWBG methods
+     */
+    void setNumerics(const double& vw_input,
+        std::vector<double>& vev_critical_input,
+        std::vector<double>& vev_symmetric_input,
+        const double& TC_input,
+        std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+        const AdditionalBaryoArgs& AddBaryoArgs,
         const int& WhichMinimizer = Minimizer::WhichMinimizerDefault );
 	/**
 	 * Calculates all EWBG methods turned on in CalculateEtaInterface::method_transport with the numerical values set in
@@ -168,6 +193,7 @@ public:
 	 * @param vev_symmetric_input Sets the vev in the symmetric phase CalculateEtaInterface::vev_symmetric
 	 * @param TC_input Sets the critical temperature CalculateEtaInterface::TC
      * @param modelPointer_input Sets the used parameter point CalculateEtaInterface::modlePointer
+     * @param WhichMinimizer defines which minimizers should be used
 	 * @return The results of the different EWBG methods
 	 */
 	std::vector<double> CalcEta(const double& vw_input,
@@ -176,6 +202,27 @@ public:
 			const double& TC_input,
             std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
             const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
+
+    /**
+     * Calls the CalculateEtaInterface::setNumerics() function and then calculates the EWBG methods stored in
+     * CalculateEtaInterface::method_transport
+     * @param vw_input Sets the wall velocity CalculateEtaInterface::vw
+     * @param vev_critical_input Sets the vev in the broken phase CalculateEtaInterface::vev_critical
+     * @param vev_symmetric_input Sets the vev in the symmetric phase CalculateEtaInterface::vev_symmetric
+     * @param TC_input Sets the critical temperature CalculateEtaInterface::TC
+     * @param modelPointer_input Sets the used parameter point CalculateEtaInterface::modlePointer
+     * @param AddBaryoArgs Instance of AdditionalBaryoArgs used for optional parameters in the different methods
+     * @param WhichMinimizer defines which minimizers should be used
+     * @return The results of the different EWBG methods
+     */
+    std::vector<double> CalcEta(const double& vw_input,
+            std::vector<double>& vev_critical_input,
+            std::vector<double>& vev_symmetric_input,
+            const double& TC_input,
+            std::shared_ptr<Class_Potential_Origin>& modelPointer_input,
+            const AdditionalBaryoArgs& AddBaryoArgs,
+            const int& WhichMinimizer = Minimizer::WhichMinimizerDefault);
+
 	/**
 	 * Sets the wall velocity CalculateEtaInterface::vw
 	 * @param vw_in Input value for the wall velocity CalculateEtaInterface::vw
