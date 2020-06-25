@@ -52,8 +52,8 @@ protected:
 	 * method_transport(0) --> top only included in transport equations \n
 	 * method_transport(1) --> top+bot included in transport equations \n
 	 * method_transport(2) --> top+bot+tau included in transport equations \n
-	 * method_transport(3) --> Huber Ansatz with plasma velocities \n
-	 * method_transport(4) --> Huber Ansatz with plasma velocities replaced by the second derivatives
+     * method_transport(3) --> FH Ansatz with plasma velocities \n
+     * method_transport(4) --> FH Ansatz with plasma velocities replaced by the second derivatives
 	 */
     std::vector<bool> method_transport;
 
