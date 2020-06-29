@@ -60,8 +60,7 @@ double top_source::Calc_nL(double z_start, double z_end) const {
     if(debug) std::cout<<"After ODE Calc:"<<std::endl;
     if(debug) for(std::size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
 
-    return mu[0];
-
+    return 3*mu[0]+2*mu[1];//as defined in 1811.11104; used q1=-2b and b = -(q+t)
 }
 
 

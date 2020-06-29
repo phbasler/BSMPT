@@ -103,8 +103,8 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
     //TAU statistical factor
         Calc_kappa_obj.set_class(Temp,mtau);
         num_int             =   NIntegrate_kappa(Calc_kappa_obj);
-        double kappa_tauL   =   kappa_QL_0*num_int;
-        double kappa_tauR   =   kappa_QR_0*num_int;
+        double kappa_tauL   =   kappa_LL_0*num_int;
+        double kappa_tauR   =   kappa_RL_0*num_int;
     //Effective statistical factor
         double kappa_q  = kappa_tL*kappa_bL/(kappa_tL+kappa_bL);
 
@@ -244,7 +244,7 @@ double tau_source::Calc_nL(double z_start,double z_end) const {
         We have to take the sum of all left-handed quarks and leptons 
             --> q && q1 = - 2 u &&  l 
     */
-    return mu[0] - 2*mu[8] + mu[3];
+    return mu[0] - 2*mu[8] + mu[3];//as defined in 1811.11104
 
 }
 

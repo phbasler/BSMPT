@@ -1,10 +1,10 @@
 ### config file for the EWBG calculation (yes/no)
 
 Fluid Ansatz only including the top quark in the transport equations
-Include:    no
+Include:    yes
 
 Fluid Ansatz including the top and bottom quark in the transport equations
-Include:    no
+Include:    yes
 
 Fluid Ansatz including the top and bottom quark and the tau lepton in the transport equations
 Include:    yes
