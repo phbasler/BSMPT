@@ -31,10 +31,6 @@ typedef controlled_runge_kutta< error_stepper_type > controlled_stepper_type;
 
 
 double top_source::Calc_nL(double z_start, double z_end) const {
-    bool debug = false;
-    if(debug) std::cout<<"start of debug in "<<__func__<<std::endl;
-    if(debug) std::cout<<"top class called"<<std::endl;
-
         /*
         omega[0] -> q 
         omega[1] -> t
@@ -47,8 +43,6 @@ double top_source::Calc_nL(double z_start, double z_end) const {
         */
     state_type mu(8);
     mu = {0,0,0,0,0,0,0,0};
-    if(debug) std::cout<<"Before ODE Calc:"<<std::endl;
-    if(debug) for(std::size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
     const double C_AbsErr = 1e-9;
     const double C_RelErr = 1e-5;
     double stepsize_initial;
@@ -57,8 +51,6 @@ double top_source::Calc_nL(double z_start, double z_end) const {
     double abs_err = C_AbsErr;
     double rel_err =C_RelErr;
     integrate_adaptive(make_controlled( abs_err , rel_err , error_stepper_type() ) , *this , mu , z_start , z_end , stepsize_initial );
-    if(debug) std::cout<<"After ODE Calc:"<<std::endl;
-    if(debug) for(std::size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
 
     return 3*mu[0]+2*mu[1];//as defined in 1811.11104; used q1=-2b and b = -(q+t)
 }
@@ -67,32 +59,27 @@ double top_source::Calc_nL(double z_start, double z_end) const {
 
 void top_source::operator()(const state_type &omega , state_type &domega , const double z)
 {
-    bool debug=false;
-    if(debug)std::cout<<"Begin of debug in "<<__func__<<std::endl;
-
     /*
         Definition of all transport coefficients
     */
         std::vector<double> quark_mass;
         std::vector<double> quark_mass_prime;
         top_func(z , quark_mass, quark_mass_prime);
-        double mt = quark_mass[0];
+        double mt = quark_mass[0];//top quark mass
         double sym_phase = gen_fluid::symmetric_CP_violating_phase;
         double brk_phase = gen_fluid::broken_CP_violating_phase; 
         auto theta_vec =   Calc_theta(z , sym_phase , brk_phase);
-
-        double theta    =   theta_vec[0];
-        double theta_prime = theta_vec[1];
-        //?????
+        // double theta    =   theta_vec[0];//phase factor of the top quark
+        double theta_prime = theta_vec[1];//derivative of the phase factor of the top quark
         //Calculation of kappa_t
         Calc_kappa_obj.set_class(Temp, mt);
         double num_int  =   NIntegrate_kappa(Calc_kappa_obj);
-        double kappa_q  =   kappa_QL_0*num_int;
-        double kappa_tR =   kappa_QR_0*num_int;
+        double kappa_q  =   kappa_QL_0*num_int;//left-handed kappa
+        double kappa_tR =   kappa_QR_0*num_int;//right-handed kappa
 
         //Rescaled chemical potential like in 1811.11104
         double mu_M     =   (omega[1]/kappa_tR - omega[0]/kappa_q);
-        double bR       =   -(omega[1]+omega[0]);
+        double bR       =   -(omega[1]+omega[0]);//local baryon conservation used to expresse the right-handed b density
         double mu_SS    =   2*omega[0]/kappa_q - omega[1]/kappa_tR - bR/kappa_QR_0;
         double mu_Y     =   omega[1]/kappa_tR - omega[0]/kappa_q - omega[2]/kappa_H_0-omega[3]/kappa_H_0;
 
@@ -100,17 +87,7 @@ void top_source::operator()(const state_type &omega , state_type &domega , const
         double Gam_M    =   Nintegrate_GamM(Calc_Gam_obj);
         Calc_Scp_obj.set_class(Temp,vw,mt,theta_prime,msqrt_thermal_top,dmsqrt_thermal_top);
         double Scp      =   Nintegrate_Scp(Calc_Scp_obj);
-        if(debug)
-        {
-            std::cout<<"\tyuk_q = "<<yuk_q<<std::endl;
-            std::cout<<"\tTemp = " <<Temp<<std::endl;
-            std::cout<<"\tGam_Y = "<<Gam_Y<<std::endl;
-            std::cout<<"\tGam_SS = "<<Gam_SS<<std::endl;
-            std::cout<<"\tGam_M = "<<Gam_M<<std::endl;
-            std::cout<<"\tScp = " <<Scp<<std::endl;
-            std::cout<<"\ttheta = " << theta<<std::endl;
-            std::cout<<"\ttheta_prime = " << theta_prime<<std::endl;
-        }
+
     /*
         omega[0] -> q 
         omega[1] -> t

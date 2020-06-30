@@ -33,8 +33,6 @@ typedef controlled_runge_kutta< error_stepper_type > controlled_stepper_type;
 
 void bot_source::operator()(const state_type &omega , state_type &domega , const double z)
 {   
-    bool debug=false;
-    if(debug)std::cout<<"Begin of debug in "<<__func__<<std::endl;
         /*
             omega[0] -> q 
             omega[1] -> t
@@ -67,11 +65,11 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
     //Phase Calculation
         //top
         auto theta_vec_top      =   Calc_theta(z , gen_fluid::TOP_symmetric_CP_violating_phase , gen_fluid::TOP_broken_CP_violating_phase);
-        double theta_top        =   theta_vec_top[0];
+        // double theta_top        =   theta_vec_top[0];
         double theta_prime_top  =   theta_vec_top[1];
         //bot
         auto theta_vec_bot      =   Calc_theta(z , gen_fluid::BOT_symmetric_CP_violating_phase , BOT_broken_CP_violating_phase);
-        double theta_bot        =   theta_vec_bot[0];
+        // double theta_bot        =   theta_vec_bot[0];
         double theta_prime_bot  =   theta_vec_bot[1];
     //TOP statistical factor
         Calc_kappa_obj.set_class(Temp, mt);
@@ -103,7 +101,6 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
 
         Calc_Scp_obj.set_class(Temp,vw,mt,theta_prime_top,msqrt_thermal_top,dmsqrt_thermal_top);
         double Scp_t   =   Nintegrate_Scp(Calc_Scp_obj);
-        //TODO: CHECK?!
         double Scp_b = 0 ; 
         if(bot_mass_flag==1)
         {
@@ -117,28 +114,6 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
         if((bot_mass_flag!=1) and (bot_mass_flag!=2)){
             std::cout<< "bot_mass_flag = "<< bot_mass_flag <<std::endl;
             throw std::runtime_error("No valid bot_mass_flag @ operator()");
-        }
-        if(debug)
-        {
-            std::cout<<"z = "<<z<< "########################"<<std::endl;
-            std::cout<<"Angles:" <<std::endl;
-            std::cout<<"Top-Quark:"<<std::endl;
-            std::cout<<"\ttheta = "<<theta_top<<std::endl;
-            std::cout<<"\ttheta_prime = "<<theta_prime_top<<std::endl;
-            std::cout<<"\tGam_Y = "<<Gam_Y_t<<std::endl;
-            std::cout<<"\tGam_SS = "<<Gam_SS<<std::endl;
-            std::cout<<"\tGam_M = "<<Gam_M_t<<std::endl;
-            std::cout<<"\tScp = " <<Scp_t<<std::endl;
-
-            std::cout<<"Bot-Quark:"<<std::endl;
-            std::cout<<"\ttheta = "<<theta_bot<<std::endl;
-            std::cout<<"\ttheta_prime = "<<theta_prime_bot<<std::endl;
-            std::cout<<"\tGam_Y = "<<Gam_Y_b<<std::endl;
-            std::cout<<"\tGam_SS = "<<Gam_SS<<std::endl;
-            std::cout<<"\tGam_M = "<<Gam_M_b<<std::endl;
-            std::cout<<"\tScp = " <<Scp_b<<std::endl;
-            std::cout<<"#################################################"<<std::endl;
-
         }
 
         domega[0] = omega[6];
@@ -164,10 +139,6 @@ void bot_source::operator()(const state_type &omega , state_type &domega , const
 
 double bot_source::Calc_nL(double z_start,double z_end) const
 {
-    bool debug = false;
-    if(debug) std::cout<<"start of debug in "<<__func__<<std::endl;
-    if(debug) std::cout<<"bot class called"<<std::endl;
-
         /*
             omega[0] -> q 
             omega[1] -> t
@@ -184,8 +155,6 @@ double bot_source::Calc_nL(double z_start,double z_end) const
         */
     state_type mu(12);
     mu = {0,0,0,0,0,0,0,0,0,0,0,0};
-    if(debug) std::cout<<"Before ODE Calc:"<<std::endl;
-    if(debug) for(std::size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
     const double C_AbsErr = 1e-9;
     const double C_RelErr = 1e-5;
     double stepsize_initial;
@@ -194,8 +163,7 @@ double bot_source::Calc_nL(double z_start,double z_end) const
     double abs_err = C_AbsErr;
     double rel_err =C_RelErr;
     integrate_adaptive(make_controlled( abs_err , rel_err , error_stepper_type() ) , *this , mu , z_start , z_end , stepsize_initial );
-    if(debug) std::cout<<"After ODE Calc:"<<std::endl;
-    if(debug) for(std::size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
+
     return mu[0] - 2*mu[5]; //Additional left-handed up-type quarks;  q1 = -2 u
 
 }

@@ -32,8 +32,6 @@ typedef controlled_runge_kutta< error_stepper_type > controlled_stepper_type;
 
 void tau_source::operator()(const state_type &omega , state_type &domega , const double z)
 {   
-    bool debug = false;
-    if(debug)std::cout<<"Begin of debug in "<<__func__<<std::endl;
         /*
             omega[0] -> q 
             omega[1] -> t
@@ -79,15 +77,15 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
     //Phase Calculation
         //top
         auto theta_vec_top      =   Calc_theta(z , gen_fluid::TOP_symmetric_CP_violating_phase , gen_fluid::TOP_broken_CP_violating_phase);
-        double theta_top        =   theta_vec_top[0];
+        // double theta_top        =   theta_vec_top[0];
         double theta_prime_top  =   theta_vec_top[1];
         //bot
         auto theta_vec_bot      =   Calc_theta(z , gen_fluid::BOT_symmetric_CP_violating_phase , gen_fluid::BOT_broken_CP_violating_phase);
-        double theta_bot        =   theta_vec_bot[0];
+        // double theta_bot        =   theta_vec_bot[0];
         double theta_prime_bot  =   theta_vec_bot[1];
         //tau
         auto theta_vec_tau      =   Calc_theta(z , gen_fluid::TAU_symmetric_CP_violating_phase , gen_fluid::TAU_broken_CP_violating_phase);
-        double theta_tau        =   theta_vec_tau[0];
+        // double theta_tau        =   theta_vec_tau[0];
         double theta_prime_tau  =   theta_vec_tau[1];
 
     //TOP statistical factor
@@ -120,7 +118,6 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
     //Strong sphaleron rate
         double mu_SS    =   -4*omega[8] *(2/kappa_QL_0 + 1/kappa_QR_0) + 2*omega[0]/kappa_q - omega[1]/kappa_tR - omega[2]/kappa_bR;
     //Numerical Integration Set up for the relaxation rates
-
         Calc_Gam_obj.set_class(Temp,vw,mt,msqrt_thermal_top,dmsqrt_thermal_top);
         double Gam_M_t      =   Nintegrate_GamM(Calc_Gam_obj);
         Calc_Gam_obj.set_class(Temp,vw,mb,msqrt_thermal_bot,dmsqrt_thermal_bot);
@@ -140,44 +137,6 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
             Calc_Scp_obj.set_class(Temp,vw,mtau,theta_prime_tau,msqrt_thermal_tau,dmsqrt_thermal_tau);
             Scp_tau = Nintegrate_Scp(Calc_Scp_obj);
         }
-
-        if(debug)
-        {
-            std::cout<<"z/LW = "<<z/LW<<std::endl;
-            std::cout<<"z = "<<z<<std::endl;
-
-            std::cout<<sep<<sep<<"TOP"<<sep<<sep<<"BOT"<<sep<<sep<<"TAU"<<std::endl;
-            std::cout<<sep<<"CPv_broken_phase "<<sep<<"= {"<<TOP_broken_CP_violating_phase<<sep<<sep<<BOT_broken_CP_violating_phase<<sep<<sep<<TAU_broken_CP_violating_phase<<"}"<<std::endl;
-            std::cout<<sep<<"CPv_sym_phase "<<sep<<"= {"<<TOP_symmetric_CP_violating_phase<<sep<<sep<<BOT_symmetric_CP_violating_phase<<sep<<sep<<TAU_symmetric_CP_violating_phase<<"}"<<std::endl;
-            std::cout<<sep<<"theta "<<sep<<"= {"<<theta_top<<sep<<sep<<theta_bot<<sep<<sep<<theta_tau<<"}"<<std::endl;
-            std::cout<<sep<<"theta_prime "<<sep<<"= {"<<theta_prime_top<<sep<<sep<<theta_prime_bot<<sep<<sep<<theta_prime_tau<<"}"<<std::endl;
-            std::cout<<sep<<"m_i "<<sep<<"= {"<<mt<<sep<<sep<<mb<<sep<<sep<<mtau<<"}"<<std::endl;
-            std::cout<<sep<<"Gam_Y "<<sep<<"= {"<<Gam_Y_t<<sep<<sep<<Gam_Y_b<<sep<<sep<<Gam_Y_tau<<"}"<<std::endl;
-            std::cout<<sep<<"Gam_M "<<sep<<"= {"<<Gam_M_t<<sep<<sep<<Gam_M_b<<sep<<sep<<Gam_M_tau<<"}"<<std::endl;
-            std::cout<<sep<<"Scp "<<sep<<"= {"<<Scp_t<<sep<<sep<<Scp_b<<sep<<sep<<Scp_tau<<"}"<<std::endl;
-        }
-
-
-        /*
-            omega[0]    -> q 
-            omega[1]    -> t
-            omega[2]    -> b
-            omega[3]    -> l
-            omega[4]    -> nu
-            omega[5]    -> tau 
-            omega[6]    -> h1 
-            omega[7]    -> h2
-            omega[8]    -> u 
-            omega[9]    -> q_prime
-            omega[10]   -> t_prime
-            omega[11]   -> b_prime
-            omega[12]   -> l_prime
-            omega[13]   -> nu_prime
-            omega[14]   -> tau_prime
-            omega[15]   -> h1_prime
-            omega[16]   -> h2_prime
-            omega[17]   -> u_prime
-        */
 
        domega[0]    =   omega[9];
        domega[1]    =   omega[10];
@@ -204,9 +163,6 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
 }
 
 double tau_source::Calc_nL(double z_start,double z_end) const {
-    bool debug = false;
-    if(debug) std::cout<<"start of debug in "<<__func__<<std::endl;
-    if(debug) std::cout<<"tau class called"<<std::endl;
         /*
             omega[0]    -> q 
             omega[1]    -> t
@@ -237,9 +193,6 @@ double tau_source::Calc_nL(double z_start,double z_end) const {
     double abs_err = C_AbsErr;
     double rel_err =C_RelErr;
     integrate_adaptive(make_controlled( abs_err , rel_err , error_stepper_type() ) , *this , mu , z_start , z_end , stepsize_initial );
-    if(debug) std::cout<<"After ODE Calc:"<<std::endl;
-    if(debug) for(std::size_t i=0;i<mu.size();i++) std::cout<<"\tmu["<<i<<"] = "<<mu[i]<<std::endl;
-
    /*
         We have to take the sum of all left-handed quarks and leptons 
             --> q && q1 = - 2 u &&  l 

@@ -82,7 +82,7 @@ MinimizersToUse GetMinimizers(int WhichMinimizer)
 #endif
 
 #ifndef NLopt_FOUND
-    UseNLopt = flase;
+    UseNLopt = false;
 #endif
 
     return MinimizersToUse(UseCMAES,UseGSL,UseNLopt);
