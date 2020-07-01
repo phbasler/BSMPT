@@ -33,10 +33,12 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 For additional information, comments, complaints or suggestions please e-mail
-to:  bsmpt@lists.kit.edu
+to:  bsmpt@lists.kit.edu or create a corresponding Issue.
 
 ---
 
+### Citation:
+If you use this program for your work, please cite [1803.02846](https://arxiv.org/abs/1803.02846) and []()
 
 ##Installation:
 
