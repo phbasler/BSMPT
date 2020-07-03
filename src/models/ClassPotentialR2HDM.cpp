@@ -17,13 +17,18 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ClassPotentialR2HDM.h"
-#include "IncludeAllModels.h"
+#include <BSMPT/models/ClassPotentialR2HDM.h>
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility.h>
+
+namespace BSMPT {
+namespace Models {
+
 
 Class_Potential_R2HDM::Class_Potential_R2HDM ()
 {
   // TODO Auto-generated constructor stub
-  Model = C_ModelR2HDM;
+  Model = ModelID::ModelIDs::R2HDM;
   NNeutralHiggs = 4;
   NChargedHiggs=4;
 
@@ -37,6 +42,18 @@ Class_Potential_R2HDM::Class_Potential_R2HDM ()
 
   nVEV=4;
 
+  VevOrder.resize(nVEV);
+  VevOrder[0] = 2;
+  VevOrder[1] = 4;
+  VevOrder[2] = 6;
+  VevOrder[3] = 7;
+
+  // Set UseVTreeSimplified to use the tree-level potential defined in VTreeSimplified
+  UseVTreeSimplified = false;
+
+  // Set UseVCounterSimplified to use the counterterm potential defined in VCounterSimplified
+  UseVCounterSimplified = false;
+
 }
 
 Class_Potential_R2HDM::~Class_Potential_R2HDM ()
@@ -49,9 +66,20 @@ Class_Potential_R2HDM::~Class_Potential_R2HDM ()
  * returns a string which tells the user the chronological order of the counterterms. Use this to
  * complement the legend of the given inputfile
  */
-std::string Class_Potential_R2HDM::addLegendCT(){
-  std::string out = "Dm11sq\tDm22sq\tDm12sq\tDL1\tDL2\tDL3\tDL4\tDL5\tDT1\tDT2\tDT3";
-  return out;
+std::vector<std::string> Class_Potential_R2HDM::addLegendCT() const{
+    std::vector<std::string> labels;
+    labels.push_back("Dm11sq");
+    labels.push_back("Dm22sq");
+    labels.push_back("Dm12sq");
+    labels.push_back("DL1");
+    labels.push_back("DL2");
+    labels.push_back("DL3");
+    labels.push_back("DL4");
+    labels.push_back("DL5");
+    labels.push_back("DT1");
+    labels.push_back("DT2");
+    labels.push_back("DT3");
+    return labels;
 
 }
 
@@ -59,17 +87,30 @@ std::string Class_Potential_R2HDM::addLegendCT(){
  * returns a string which tells the user the chronological order of the VEVs and the critical temperature. Use this to
  * complement the legend of the given inputfile
  */
-std::string Class_Potential_R2HDM::addLegendTemp(){
-  std::string out = "T_c\tomega_c\tomega_CB(T_c)\tomega_1(T_c)\tomega_2(T_c)\tomega_CP(T_c)\tomega_c/T_c";
-  return out;
+std::vector<std::string> Class_Potential_R2HDM::addLegendTemp() const{
+    std::vector<std::string> labels;
+    labels.push_back("T_c");
+    labels.push_back("omega_c");
+    labels.push_back("omega_c/T_c");
+
+    labels.push_back("omega_CB(T_c)");
+    labels.push_back("omega_1(T_c)");
+    labels.push_back("omega_2(T_c)");
+    labels.push_back("omega_CP(T_c)");
+    return labels;
 }
 
 /**
  * returns a string which tells the user the chronological order of the VEVs. Use this to
  * complement the legend of the given inputfile
  */
-std::string Class_Potential_R2HDM::addLegendVEV(){
-  return "omega_CB\tomega_1\tomega_2\tomega_CP";
+std::vector<std::string> Class_Potential_R2HDM::addLegendVEV() const{
+    std::vector<std::string> labels;
+    labels.push_back("omega_CB");
+    labels.push_back("omega_1");
+    labels.push_back("omega_2");
+    labels.push_back("omega_CP");
+    return labels;
 }
 
 
@@ -78,8 +119,9 @@ std::string Class_Potential_R2HDM::addLegendVEV(){
  * complement the legend of the given inputfile
  *
  */
-std::string Class_Potential_R2HDM::addLegendTripleCouplings(){
-  std::vector<std::string> particles;
+std::vector<std::string> Class_Potential_R2HDM::addLegendTripleCouplings() const{
+    std::vector<std::string> labels;
+    std::vector<std::string> particles;
 
     particles.push_back("G^+");
     particles.push_back("G^-");
@@ -89,29 +131,21 @@ std::string Class_Potential_R2HDM::addLegendTripleCouplings(){
     particles.push_back("A");
     particles.push_back("h");
     particles.push_back("H");
-    std::string out = "Tree_";
-    for(int i=0;i<NHiggs;i++)
-      {
-	for(int j=i;j<NHiggs;j++)
-	  {
-	    for(int k=j;k<NHiggs;k++)
-	      {
-		if(!(i==0 and j==0 and k==0)) out += "\tTree_";
-		out+=particles.at(i);
-		out+=particles.at(j);
-		out+=particles.at(k);
-		out+="\tCT_";
-		out+=particles.at(i);
-		out+=particles.at(j);
-		out+=particles.at(k);
-		out+="\tCW_";
-		out+=particles.at(i);
-		out+=particles.at(j);
-		out+=particles.at(k);
-	      }
-	  }
-      }
-    return out;
+
+    for(std::size_t i=0;i<NHiggs;i++)
+    {
+        for(std::size_t j=i;j<NHiggs;j++)
+        {
+            for(std::size_t k=j;k<NHiggs;k++)
+            {
+                labels.push_back("Tree_"+particles.at(i)+particles.at(j)+particles.at(k));
+                labels.push_back("CT_"+particles.at(i)+particles.at(j)+particles.at(k));
+                labels.push_back("CW_"+particles.at(i)+particles.at(j)+particles.at(k));
+            }
+        }
+    }
+
+    return labels;
 }
 
 
@@ -121,9 +155,10 @@ void Class_Potential_R2HDM::ReadAndSet(const std::string& linestr, std::vector<d
 {
 	std::stringstream ss(linestr);
 	double tmp;
+
 	if (UseIndexCol){
-		ss >> tmp;
-	}
+			ss >> tmp;
+		}
 
 
 	for(int k=1;k<=8;k++)
@@ -185,7 +220,7 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double>& par) {
 	RealMMix = par[5];
 	TanBeta = par[6];
 	beta = std::atan(TanBeta);
-	Type = par[7];
+    Type = static_cast<int>(par[7]);
 	C_CosBetaSquared = 1.0/(1+TanBeta*TanBeta);
 	C_CosBeta = sqrt(C_CosBetaSquared);
 	C_SinBetaSquared = TanBeta*TanBeta*C_CosBetaSquared;
@@ -204,12 +239,12 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double>& par) {
 			- C_vev0 * C_vev0 * C_SinBetaSquared * L2 / 0.2e1;
 
 
-	double ML5 = 2*RealMMix/(C_vev0*C_vev0*C_SinBeta*C_CosBeta);
-	double TripleHiggs = -3.0/(C_vev0*std::sin(2*beta))*(Mh*Mh*(2*std::cos(alpha+beta)+std::sin(2*alpha)*std::sin(beta-alpha)) - std::cos(alpha+beta)*std::pow(std::cos(beta-alpha),2)*C_vev0*C_vev0*ML5 );
+//	double ML5 = 2*RealMMix/(C_vev0*C_vev0*C_SinBeta*C_CosBeta);
+//	double TripleHiggs = -3.0/(C_vev0*std::sin(2*beta))*(Mh*Mh*(2*std::cos(alpha+beta)+std::sin(2*alpha)*std::sin(beta-alpha)) - std::cos(alpha+beta)*std::pow(std::cos(beta-alpha),2)*C_vev0*C_vev0*ML5 );
 
 
 
-	double cb;
+	double cb = 0;
 
 
 	if (Type == 1 or Type == 3) // Type I 2HDM oder Lepton Specific
@@ -243,20 +278,7 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double>& par) {
 	vevTreeMin[2] = C_vev0*C_SinBeta;
 	vevTreeMin[3] = 0;
 	vevTree.resize(NHiggs);
-	MinimizeOrderVEV(vevTreeMin,vevTree);
-
-
-	if(nTripleCouplings != 0)
-	  {
-
-	    TripleHiggsCorrectionsCWPhysical.clear();
-	    TripleHiggsCorrectionsCW.clear();
-	    nTripleCouplings = 0;
-	  }
-
-
-
-
+    vevTree=MinimizeOrderVEV(vevTreeMin);
 }
 
 
@@ -422,13 +444,13 @@ Curvature_Higgs_CT_L4[6][6][7][7] = DL2CT;
 Curvature_Higgs_CT_L4[7][7][7][7] = 3 * DL2CT;
 
 
-    for(int k1=0;k1<NHiggs;k1++)
+    for(std::size_t k1=0;k1<NHiggs;k1++)
     {
-        for(int k2=k1;k2<NHiggs;k2++)
+        for(std::size_t k2=k1;k2<NHiggs;k2++)
         {
-            for(int k3=k2;k3<NHiggs;k3++)
+            for(std::size_t k3=k2;k3<NHiggs;k3++)
             {
-                for(int k4=k3;k4<NHiggs;k4++)
+                for(std::size_t k4=k3;k4<NHiggs;k4++)
                 {
                     Curvature_Higgs_CT_L4[k2][k3][k4][k1] = Curvature_Higgs_CT_L4[k1][k2][k3][k4];
                     Curvature_Higgs_CT_L4[k3][k4][k1][k2] = Curvature_Higgs_CT_L4[k1][k2][k3][k4];
@@ -469,7 +491,7 @@ Curvature_Higgs_CT_L4[7][7][7][7] = 3 * DL2CT;
 /**
  * Console-Output of all Parameters
  */
-void Class_Potential_R2HDM::write() {
+void Class_Potential_R2HDM::write() const{
     typedef std::numeric_limits< double > dbl;
     std::cout.precision(dbl::max_digits10);
 
@@ -477,7 +499,7 @@ void Class_Potential_R2HDM::write() {
 
 
     std::cout << "The parameters are : \n";
-    std::cout << "Model = " << "R2HDM" << "\n";
+    std::cout << "Model = " << Model << "\n";
     std::cout << "v1 = " << C_vev0*C_CosBeta << "\n";
     std::cout << "v2 = " << C_vev0*C_SinBeta << "\n";
     std::cout << "Type = " << Type << "\n";
@@ -513,35 +535,35 @@ void Class_Potential_R2HDM::write() {
 
 
     MatrixXd HiggsRot(NHiggs,NHiggs);
-   	for(int i=0;i<NHiggs;i++)
+   	for(std::size_t i=0;i<NHiggs;i++)
    	{
-   		for(int j=0;j<NHiggs;j++)
+   		for(std::size_t j=0;j<NHiggs;j++)
    		{
    			HiggsRot(i,j) = HiggsRotationMatrix[i][j];
    		}
    	}
 
-   	int posMHCS1=0,posMHCS2=0;
+   	int posMHCS1=0;
 	int posN[2];
 	int countposN=0;
 	int posA=0;
-	int posG1=0,posG2=0,posG0=0;
+	int posG1=0,posG0=0;
 	double testsum = 0;
-	for(int i=0;i<3;i++)
+	for(std::size_t i=0;i<3;i++)
 	{
 		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 		if(testsum != 0) posG1 = i;
-		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
-		if(testsum != 0) posG2 = i;
+//		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+//		if(testsum != 0) posG2 = i;
 		testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
 		if(testsum != 0) posG0 = i;
 	}
-	for(int i=3;i<NHiggs;i++)
+	for(std::size_t i=3;i<NHiggs;i++)
 	{
 		testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 		if(testsum != 0) posMHCS1 = i;
-		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
-		if(testsum != 0) posMHCS2 = i;
+//		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
+//		if(testsum != 0) posMHCS2 = i;
 		testsum = std::abs(HiggsRot(i,4))+std::abs(HiggsRot(i,6));
 		if(testsum != 0)
 		{
@@ -553,7 +575,7 @@ void Class_Potential_R2HDM::write() {
 	}
 
 	std::vector<double> HiggsMasses;
-	HiggsMassesSquared(HiggsMasses,vevTree,0);
+    HiggsMasses=HiggsMassesSquared(vevTree,0);
 
 	std::cout << "The mass spectrum is given by :\n";
 	std::cout << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n";
@@ -577,7 +599,7 @@ void Class_Potential_R2HDM::write() {
 
 
 //	std::cout << "The tree-level eigenvalues are given by \n";
-//	for(int i=0;i<NHiggs;i++) std::cout << HiggsMasses[i] << std::endl;
+//	for(std::size_t i=0;i<NHiggs;i++) std::cout << HiggsMasses[i] << std::endl;
 //
 //
 
@@ -595,25 +617,24 @@ void Class_Potential_R2HDM::write() {
 /**
  * Calculates the counterterms in the 2HDM
  */
-void Class_Potential_R2HDM::calc_CT(std::vector<double>& par)
+std::vector<double> Class_Potential_R2HDM::calc_CT() const
 {
-	bool Debug=false;
-	if(Debug) std::cout << "Debug turned on in " << __func__ << std::endl;
+    std::vector<double> parCT;
 
-	if(!SetCurvatureDone)SetCurvatureArrays();
-    if(!CalcCouplingsdone)CalculatePhysicalCouplings();
-    if(Debug) {
-    std::cout << "Couplings done " << std::endl;
+    if(!SetCurvatureDone){
+        std::string retmes = __func__;
+        retmes += " was called before SetCurvatureArrays()!\n";
+        throw std::runtime_error(retmes);
     }
+    if(!CalcCouplingsdone){
+        std::string retmes = __func__;
+        retmes += " was called before CalculatePhysicalCouplings()!\n";
+        throw std::runtime_error(retmes);
+    }
+
     std::vector<double> WeinbergNabla,WeinbergHesse;
-    WeinbergFirstDerivative(WeinbergNabla);
-    WeinbergSecondDerivative(WeinbergHesse);
-
-    if(Debug) std::cout << "Finished Derivatives " << std::endl;
-
-
-	double v1Tree = C_vev0*C_CosBeta;
-	double v2Tree = C_vev0*C_SinBeta;
+    WeinbergNabla=WeinbergFirstDerivative();
+    WeinbergHesse=WeinbergSecondDerivative();
 
 	double v1 = C_vev0*C_CosBeta;
 	double v2 = C_vev0*C_SinBeta;
@@ -622,10 +643,10 @@ void Class_Potential_R2HDM::calc_CT(std::vector<double>& par)
 	VectorXd NablaWeinberg(8);
 	MatrixXd HesseWeinberg(8,8),HiggsRot(8,8);
 
-	for(int i=0;i<NHiggs;i++)
+	for(std::size_t i=0;i<NHiggs;i++)
 	{
 		NablaWeinberg(i) = WeinbergNabla[i];
-		for(int j=0;j<NHiggs;j++)
+		for(std::size_t j=0;j<NHiggs;j++)
 		{
 			HesseWeinberg(i,j) = WeinbergHesse.at((j)*NHiggs+i);
 			if(std::abs(HesseWeinberg(i,j)) <= 1e-3) HesseWeinberg(i,j)=0;
@@ -635,76 +656,51 @@ void Class_Potential_R2HDM::calc_CT(std::vector<double>& par)
 
 	double freepar = 0; // Value of DL4CT
 
-	Du1CT = -(double) ((-2 * freepar * v1 * v2 * v2 + 5 * HesseWeinberg(0, 0) * v1 + HesseWeinberg(1, 3) * v2 - HesseWeinberg(4, 6) * v2 - HesseWeinberg(4, 4) * v1 - 2 * HesseWeinberg(5, 5) * v1) / v1) / 0.2e1;
-	Du2CT = (double) ((2 * freepar * v1 * v1 * v2 * v2 + HesseWeinberg(6, 6) * v2 * v2 - 2 * HesseWeinberg(0, 0) * v1 * v1 - HesseWeinberg(1, 3) * v1 * v2 - 3 * HesseWeinberg(3, 3) * v2 * v2 + HesseWeinberg(4, 6) * v1 * v2 + 2 * v1 * v1 * HesseWeinberg(5, 5)) * (double) pow((double) v2, (double) (-2))) / 0.2e1;
-	DRu3CT = -(-freepar * v1 * v2 * v2 + HesseWeinberg(0, 0) * v1 - HesseWeinberg(1, 3) * v2 - HesseWeinberg(5, 5) * v1) / v2;
-	DL1CT = (double) (-freepar * v2 * v2 + 2 * HesseWeinberg(0, 0) - HesseWeinberg(4, 4) - HesseWeinberg(5, 5)) * pow(v1, -0.2e1);
-	DL2CT = -(freepar * v1 * v1 * v2 * v2 + HesseWeinberg(6, 6) * v2 * v2 - HesseWeinberg(0, 0) * v1 * v1 - HesseWeinberg(3, 3) * v2 * v2 + v1 * v1 * HesseWeinberg(5, 5)) * pow(v2, -0.4e1);
-	DL3CT = (-freepar * v1 * v2 * v2 + HesseWeinberg(0, 0) * v1 + HesseWeinberg(1, 3) * v2 - HesseWeinberg(4, 6) * v2 - HesseWeinberg(5, 5) * v1) / v1 * pow(v2, -0.2e1);
-	DL4CT = freepar;
-	DRL5CT = -(-freepar * v2 * v2 + 2 * HesseWeinberg(0, 0) - 2 * HesseWeinberg(5, 5)) * (double) pow((double) v2, (double) (-2));
+    //Du1CT
+    parCT.push_back(-(double) ((-2 * freepar * v1 * v2 * v2 + 5 * HesseWeinberg(0, 0) * v1 + HesseWeinberg(1, 3) * v2
+                                - HesseWeinberg(4, 6) * v2 - HesseWeinberg(4, 4) * v1 - 2 * HesseWeinberg(5, 5) * v1) / v1) / 0.2e1);
+    //Du2CT
+    parCT.push_back((double) ((2 * freepar * v1 * v1 * v2 * v2 + HesseWeinberg(6, 6) * v2 * v2 - 2 * HesseWeinberg(0, 0) * v1 * v1 -
+                               HesseWeinberg(1, 3) * v1 * v2 - 3 * HesseWeinberg(3, 3) * v2 * v2 + HesseWeinberg(4, 6) * v1 * v2
+                               + 2 * v1 * v1 * HesseWeinberg(5, 5)) * (double) pow((double) v2, (double) (-2))) / 0.2e1);
+    //DRu3CT
+    parCT.push_back(-(-freepar * v1 * v2 * v2 + HesseWeinberg(0, 0) * v1 - HesseWeinberg(1, 3) * v2 - HesseWeinberg(5, 5) * v1) / v2);
+    //DL1CT
+    parCT.push_back((double) (-freepar * v2 * v2 + 2 * HesseWeinberg(0, 0) - HesseWeinberg(4, 4) - HesseWeinberg(5, 5)) * pow(v1, -0.2e1));
+    //DL2CT
+    parCT.push_back(-(freepar * v1 * v1 * v2 * v2 + HesseWeinberg(6, 6) * v2 * v2 - HesseWeinberg(0, 0) * v1 * v1 - HesseWeinberg(3, 3) * v2 * v2
+                      + v1 * v1 * HesseWeinberg(5, 5)) * pow(v2, -0.4e1));
+    //DL3CT
+    parCT.push_back((-freepar * v1 * v2 * v2 + HesseWeinberg(0, 0) * v1 + HesseWeinberg(1, 3) * v2 - HesseWeinberg(4, 6) * v2
+                    - HesseWeinberg(5, 5) * v1) / v1 * pow(v2, -0.2e1));
+    //DL4CT
+    parCT.push_back(freepar);
+    //DRL5CT
+    parCT.push_back(-(-freepar * v2 * v2 + 2 * HesseWeinberg(0, 0) - 2 * HesseWeinberg(5, 5)) * (double) pow((double) v2, (double) (-2)));
 
 
 
 
 
-	DT1 = HesseWeinberg(1, 3) * v2 + HesseWeinberg(0, 0) * v1 - NablaWeinberg(4);
-	DT2 = HesseWeinberg(1, 3) * v1 + HesseWeinberg(3, 3) * v2 - NablaWeinberg(6);
-	DT3 = -(-v1 * v1 * HesseWeinberg(4, 5) - HesseWeinberg(4, 7) * v1 * v2 + NablaWeinberg(7) * v2) / v2;
+    //DT1
+    parCT.push_back(HesseWeinberg(1, 3) * v2 + HesseWeinberg(0, 0) * v1 - NablaWeinberg(4));
+    //DT2
+    parCT.push_back(HesseWeinberg(1, 3) * v1 + HesseWeinberg(3, 3) * v2 - NablaWeinberg(6));
+    //DT3
+    parCT.push_back(-(-v1 * v1 * HesseWeinberg(4, 5) - HesseWeinberg(4, 7) * v1 * v2 + NablaWeinberg(7) * v2) / v2);
 
 
 
+//	double Identities[5];
+//	Identities[0] = HesseWeinberg(0, 0) - HesseWeinberg(1, 1);
+//	Identities[1] = -HesseWeinberg(3, 3) + HesseWeinberg(2, 2);
+//	Identities[2] = (HesseWeinberg(1, 1) * v1 - HesseWeinberg(5, 5) * v1 + HesseWeinberg(1, 3) * v2 - HesseWeinberg(5, 7) * v2) / v2;
+//	Identities[3] = -HesseWeinberg(0, 2) + HesseWeinberg(1, 3);
+//	Identities[4] = -1 / v2 * (HesseWeinberg(5, 7) * v1 + HesseWeinberg(7, 7) * v2 - HesseWeinberg(1, 3) * v1 - HesseWeinberg(3, 3) * v2);
 
 
 
-
-	par[0] = Du1CT;
-	par[1] = Du2CT;
-	par[2] = DRu3CT;
-	par[3] = DL1CT;
-	par[4] = DL2CT;
-	par[5] = DL3CT;
-	par[6] = DL4CT;
-	par[7] = DRL5CT;
-	par[8] = DT1;
-	par[9] = DT2;
-	par[10] = DT3;
-
-
-	double Identities[5];
-	Identities[0] = HesseWeinberg(0, 0) - HesseWeinberg(1, 1);
-	Identities[1] = -HesseWeinberg(3, 3) + HesseWeinberg(2, 2);
-	Identities[2] = (HesseWeinberg(1, 1) * v1 - HesseWeinberg(5, 5) * v1 + HesseWeinberg(1, 3) * v2 - HesseWeinberg(5, 7) * v2) / v2;
-	Identities[3] = -HesseWeinberg(0, 2) + HesseWeinberg(1, 3);
-	Identities[4] = -1 / v2 * (HesseWeinberg(5, 7) * v1 + HesseWeinberg(7, 7) * v2 - HesseWeinberg(1, 3) * v1 - HesseWeinberg(3, 3) * v2);
-
-	if(Debug)
-	  {
-	    std::cout << Du1CT << std::endl;
-	    std::cout << Du2CT << std::endl;
-	    std::cout << DRu3CT << std::endl;
-	    std::cout << DL1CT << std::endl;
-	    std::cout << DL2CT << std::endl;
-	    std::cout << DL3CT << std::endl;
-	    std::cout << DL4CT << std::endl;
-	    std::cout << DRL5CT << std::endl;
-	    std::cout << DT1 << std::endl;
-	    std::cout << DT2 << std::endl;
-	    std::cout << DT3 << std::endl;
-
-	    std::cout << "Identities : \n";
-	    for(int i=0;i<5;i++) std::cout << Identities[i] << "\n";
-	    std::cout << std::endl;
-
-
-
-
-
-	  }
-
-
-
-	return;
+    return parCT;
 
 }
 
@@ -718,49 +714,42 @@ void Class_Potential_R2HDM::calc_CT(std::vector<double>& par)
  */
 void Class_Potential_R2HDM::TripleHiggsCouplings()
 {
-
-  bool Debug=false;
-  if(Debug) std::cout << "Debug turned on in " << __func__ << std::endl;
-
   if(!SetCurvatureDone)SetCurvatureArrays();
   if(!CalcCouplingsdone)CalculatePhysicalCouplings();
 
   std::vector<double> TripleDeriv;
-  WeinbergThirdDerivative(TripleDeriv);
-  double GaugeBasis[NHiggs][NHiggs][NHiggs];
-  for(int i=0;i<NHiggs;i++)
+  TripleDeriv=WeinbergThirdDerivative();
+  std::vector<std::vector<std::vector<double>>> GaugeBasis(NHiggs, std::vector<std::vector<double>>(NHiggs,
+  			std::vector<double>(NHiggs)));
+  for(std::size_t i=0;i<NHiggs;i++)
     {
-      for(int j=0;j<NHiggs;j++)
-	{
-	  for(int k=0;k<NHiggs;k++)
-	    {
-	      GaugeBasis[i][j][k] = TripleDeriv.at(i+j*NHiggs+k*NHiggs*NHiggs);
-	    }
-	}
+      for(std::size_t j=0;j<NHiggs;j++)
+      {
+    	  for(std::size_t k=0;k<NHiggs;k++)
+    	  {
+    		  GaugeBasis[i][j][k] = TripleDeriv.at(i+j*NHiggs+k*NHiggs*NHiggs);
+    	  }
+      }
     }
 
 
   MatrixXd HiggsRot(NHiggs,NHiggs);
-  for(int i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
   {
-	for(int j=0;j<NHiggs;j++)
+	for(std::size_t j=0;j<NHiggs;j++)
 	{
 		HiggsRot(i,j) = HiggsRotationMatrix[i][j];
 	}
   }
 
-  if(Debug){
-	  std::cout << "HiggsRot = \n\n" << HiggsRot << "\n\n";
-  }
-
   MatrixXd HiggsRotSort(NHiggs,NHiggs);
   int posMHCS1=0,posMHCS2=0;
-  int posN[2];
+  int posN[2] = {-1,-1};
   int countposN=0;
   int posG1=0,posG2=0,posG0=0;
   int posA=0, posh=0,posH=0;
   double testsum = 0;
-  for(int i=0;i<3;i++)
+  for(std::size_t i=0;i<3;i++)
   {
 	testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 	if(testsum != 0) posG1 = i;
@@ -769,7 +758,7 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 	testsum = std::abs(HiggsRot(i,5)) + std::abs(HiggsRot(i,7));
 	if(testsum != 0) posG0 = i;
   }
-  for(int i=3;i<NHiggs;i++)
+  for(std::size_t i=3;i<NHiggs;i++)
   {
 	testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
 	if(testsum != 0) posMHCS1 = i;
@@ -809,52 +798,39 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   HiggsOrder[6] = posh;
   HiggsOrder[7] = posH;
 
-  for(int i=0;i<NHiggs;i++)
-{
-	HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
-}
-
-  if(Debug){
-	  std::cout << "HiggsRot sorted : \n\n"
-			  << HiggsRotSort << "\n\n";
+  for(std::size_t i=0;i<NHiggs;i++)
+  {
+      HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
   }
-
-
-
-  int PosSM = 5;
-
-
-
-
 
   TripleHiggsCorrectionsCWPhysical.resize(NHiggs);
   TripleHiggsCorrectionsTreePhysical.resize(NHiggs);
   TripleHiggsCorrectionsCTPhysical.resize(NHiggs);
-  for(int i=0;i<NHiggs;i++) {
+  for(std::size_t i=0;i<NHiggs;i++) {
 	  TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
 	  TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
 	  TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
-	  for(int j=0;j<NHiggs;j++) {
-	  TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
-	  TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
-	  TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
+	  for(std::size_t j=0;j<NHiggs;j++) {
+		  TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
+		  TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
+		  TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
 	  }
   }
 
-  for(int i=0;i<NHiggs;i++)
+  for(std::size_t i=0;i<NHiggs;i++)
 	{
-	  for(int j=0;j<NHiggs;j++)
+	  for(std::size_t j=0;j<NHiggs;j++)
 	  {
-		for(int k=0;k<NHiggs;k++)
+		for(std::size_t k=0;k<NHiggs;k++)
 		{
 		  TripleHiggsCorrectionsCWPhysical[i][j][k] = 0;
 		  TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
 		  TripleHiggsCorrectionsCTPhysical[i][j][k] = 0;
-		  for(int l=0;l<NHiggs;l++)
+		  for(std::size_t l=0;l<NHiggs;l++)
 		  {
-			  for(int m=0;m<NHiggs;m++)
+			  for(std::size_t m=0;m<NHiggs;m++)
 			  {
-				  for(int n=0;n<NHiggs;n++)
+				  for(std::size_t n=0;n<NHiggs;n++)
 				  {
 	//  			  double RotFac = (HiggsRot(i,l)*HiggsRot(j,m)*HiggsRot(k,n)).real();
 				  double RotFac = HiggsRotSort(i,l)*HiggsRotSort(j,m)*HiggsRotSort(k,n);
@@ -877,16 +853,14 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 }
 
 void Class_Potential_R2HDM::SetCurvatureArrays(){
-    bool Debug = false;
-    if(Debug) std::cout << "Debug turned on in SetCurvatureArrays " << std::endl;
   initVectors();
 
-  for(int i=0;i<NHiggs;i++) {
+  for(std::size_t i=0;i<NHiggs;i++) {
     Curvature_Higgs_L1[i] =0;
     HiggsVev[i] = 0;
-    for(int j=0;j<NHiggs;j++)
+    for(std::size_t j=0;j<NHiggs;j++)
     {
-        for(int k=0;k<NHiggs;k++) Curvature_Higgs_L3[i][j][k] = 0;
+        for(std::size_t k=0;k<NHiggs;k++) Curvature_Higgs_L3[i][j][k] = 0;
     }
   }
 
@@ -1023,13 +997,13 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     Curvature_Higgs_L4[6][6][7][7] = L2;
     Curvature_Higgs_L4[7][7][7][7] = 3 * L2;
 
-    for(int k1=0;k1<NHiggs;k1++)
+    for(std::size_t k1=0;k1<NHiggs;k1++)
     {
-        for(int k2=k1;k2<NHiggs;k2++)
+        for(std::size_t k2=k1;k2<NHiggs;k2++)
         {
-            for(int k3=k2;k3<NHiggs;k3++)
+            for(std::size_t k3=k2;k3<NHiggs;k3++)
             {
-                for(int k4=k3;k4<NHiggs;k4++)
+                for(std::size_t k4=k3;k4<NHiggs;k4++)
                 {
                     Curvature_Higgs_L4[k2][k3][k4][k1] = Curvature_Higgs_L4[k1][k2][k3][k4];
                     Curvature_Higgs_L4[k3][k4][k1][k2] = Curvature_Higgs_L4[k1][k2][k3][k4];
@@ -1060,16 +1034,13 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
         }
     }
 
-
-    if(Debug) std::cout << "L4 done" << std::endl;
-
-    for(int a=0;a<NGauge;a++)
+    for(std::size_t a=0;a<NGauge;a++)
     {
-        for(int b=0;b<NGauge;b++)
+        for(std::size_t b=0;b<NGauge;b++)
         {
-            for(int i=0;i<NHiggs;i++)
+            for(std::size_t i=0;i<NHiggs;i++)
             {
-                for(int j=0;j<NHiggs;j++) Curvature_Gauge_G2H2[a][b][i][j] = 0;
+                for(std::size_t j=0;j<NHiggs;j++) Curvature_Gauge_G2H2[a][b][i][j] = 0;
             }
         }
     }
@@ -1245,9 +1216,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
 
 
 
-    for(int i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(int j=0;j<i;j++)
+        for(std::size_t j=0;j<i;j++)
         {
             YIJR2(i,j) = YIJR2(j,i);
             YIJS2(i,j) = YIJS2(j,i);
@@ -1255,9 +1226,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
             YIJSD(i,j) = YIJSD(j,i);
         }
     }
-    for(int i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(int j=0;j<i;j++)
+        for(std::size_t j=0;j<i;j++)
         {
             YIJRL(i,j) = YIJRL(j,i);
             YIJSL(i,j) = YIJSL(j,i);
@@ -1274,9 +1245,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
     YIJPL = II*YIJSL;
     YIJEL = II*YIJRL;
 
-    for(int i=0;i<NQuarks;i++)
+    for(std::size_t i=0;i<NQuarks;i++)
     {
-        for(int j=0;j<NQuarks;j++)
+        for(std::size_t j=0;j<NQuarks;j++)
         {
             Curvature_Quark_F2H1[i][j][0] = 0;
             Curvature_Quark_F2H1[i][j][1] = 0;
@@ -1305,9 +1276,9 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
         }
     }
 
-    for(int i=0;i<NLepton;i++)
+    for(std::size_t i=0;i<NLepton;i++)
     {
-        for(int j=0;j<NLepton;j++)
+        for(std::size_t j=0;j<NLepton;j++)
         {
             if(Type == 1 or Type == 4)
             {
@@ -1342,54 +1313,19 @@ Curvature_Higgs_L4[0][0][0][0] = 3 * L1;
 
 }
 
-void Class_Potential_R2HDM::MinimizeOrderVEV(const std::vector<double>& vevminimizer, std::vector<double>& vevFunction){
-    VevOrder.resize(nVEV);
-    VevOrder[0] = 2;
-    VevOrder[1] = 4;
-    VevOrder[2] = 6;
-    VevOrder[3] = 7;
-    int count=0;
-    if(vevFunction.size() != 0)
-      {
-	for(int i=0;i<NHiggs;i++)
-	    {
-	        if(i==VevOrder[count]) {
-	            vevFunction[i] =  vevminimizer.at(count);
-	            count++;
-	        }
-	        else vevFunction[i] = 0;
-
-	    }
-      }
-    else{
-	for(int i=0;i<NHiggs;i++)
-	    {
-	        if(i==VevOrder[count]) {
-	            vevFunction.push_back(vevminimizer.at(count));
-	            count++;
-	        }
-	        else vevFunction.push_back(0);
-
-	    }
-    }
-
-}
-
 bool Class_Potential_R2HDM::CalculateDebyeSimplified()
 {
-  bool Debug = false;
-  if(Debug) std::cout << "Debug turned on in Class_Potential_R2HDM :: " << __func__ << std::endl;
-  double cb;
+  double cb=0;
 
 
   if (Type == 1 or Type == 3) // Type I 2HDM oder Lepton Specific
-				  {
-			  cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_SinBeta);
-		  }
-		  if (Type == 2 or Type == 4) //Type II 2HDM oder Flipped
-				  {
-			  cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_CosBeta);
-		  }
+  {
+      cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_SinBeta);
+  }
+  if (Type == 2 or Type == 4) //Type II 2HDM oder Flipped
+  {
+      cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_CosBeta);
+  }
   CTempC1 = 1.0/48*(12*L1+8*L3+4*L4+3*(3*C_g*C_g+C_gs*C_gs));
   double ct = std::sqrt(2) * C_MassTop / (C_vev0 * C_SinBeta);
   CTempC2 = 1.0/48*(12*L2+8*L3+4*L4+3*(3*C_g*C_g+C_gs*C_gs)+12*ct*ct);
@@ -1419,10 +1355,6 @@ bool Class_Potential_R2HDM::CalculateDebyeSimplified()
 
 bool Class_Potential_R2HDM::CalculateDebyeGaugeSimplified()
 {
-	bool Debug = false;
-  if(Debug) std::cout << "Debug turned on in Class_Potential_R2HDM :: " << __func__ << std::endl;
-
-
   DebyeGauge[0][0] = 2*C_g*C_g;
   DebyeGauge[1][1] = 2*C_g*C_g;
   DebyeGauge[2][2] = 2*C_g*C_g;
@@ -1431,21 +1363,28 @@ bool Class_Potential_R2HDM::CalculateDebyeGaugeSimplified()
   return true;
 }
 
-double Class_Potential_R2HDM::VTreeSimplified(const std::vector<double>& v){
-	UseVTreeSimplified = false;
+double Class_Potential_R2HDM::VTreeSimplified(const std::vector<double>& v) const
+{
+	(void) v;
 	double res = 0;
 
 	return res;
 }
 
-double Class_Potential_R2HDM::VCounterSimplified(const std::vector<double>& v)
+double Class_Potential_R2HDM::VCounterSimplified(const std::vector<double>& v) const
 {
-	UseVCounterSimplified = false;
+	(void) v;
 	if(not UseVCounterSimplified) return 0;
 	double res = 0;
 	return res;
 }
 
-void Class_Potential_R2HDM::Debugging(const std::vector<double>& input, std::vector<double>& output){
+void Class_Potential_R2HDM::Debugging(const std::vector<double>& input, std::vector<double>& output) const
+{
+	(void) input;
+	(void) output;
 
+}
+
+}
 }

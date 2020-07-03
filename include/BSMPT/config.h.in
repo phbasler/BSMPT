@@ -1,0 +1,2 @@
+#cmakedefine CMAES_FOUND
+#cmakedefine NLopt_FOUND

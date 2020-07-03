@@ -1,0 +1,9 @@
+build
+
+.vscode
+.atom
+
+*.aux
+*.log
+*.out
+*.synctex.gz

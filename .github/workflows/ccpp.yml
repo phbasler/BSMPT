@@ -1,0 +1,26 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-cxx-dev libboost-all-dev
+    - name: cmake
+      run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. 
+    - name: make
+      run: cd build && make
+
+
+

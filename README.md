@@ -1,8 +1,9 @@
-Program: BSMPT version 1.1.2
 
-Released by: Philipp Basler and Margarete Mühlleitner
+Program: BSMPT version 2.0
 
-Manual: version 1.0 
+Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
+
+Manual: version 2.0
 
 BSMPT - Beyond the Standard Model Phase Transitions:
 The C++ program package BSMPT calculates for models with extended
@@ -32,56 +33,69 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 For additional information, comments, complaints or suggestions please e-mail
-to:  bsmpt@lists.kit.edu
+to:  bsmpt@lists.kit.edu or create a corresponding Issue.
 
 ---
-   
+
+### Citation:
+If you use this program for your work, please cite [1803.02846](https://arxiv.org/abs/1803.02846) and []()
 
 ##Installation:
 
-
-1) The program requires the GSL library which the code assumes to be installed in PATH. 
-
-2) To compile the program type `mkdir build && cd build` and there `cmake ..` where this part can be modified with
-
-    CC=CCompiler
-    
-    CXX=C++Compiler
-    
-    EIGEN3_ROOT=/path/to/eigen3  
-        This is only necessary if eigen3 is not installed through your packet mananger. If it is not go to http://eigen.tuxfamily.org and download and unzip it to /path/to/eigen3.
-    
-    CMAES_ROOT=/path/to/libcmaes 
-        If you do not give this option the default path will be the 'tools' folder in your BSMPT directory. For downloading libcmaes you need either wget or curl installed on your system.
-    
-    
-For example a complete call would be `CC=gcc-7 CXX=g++-7 EIGEN3_ROOT=/path/to/eigen3 CMAES_ROOT=/path/to/libcmaes cmake ..` . After this execute `make` to compile the executables.
-
- 
----
+### Dependencies
+1. GSL library: The code assume GSL is installed in PATH
+2. Eigen3: If eigen3 is not found automatically, you need to give the path to your eigen3 installation.  To install eigen3 you go to your downloaded eigen3 folder and install it through   
   
+        mkdir build && cd build  
+        cmake -DCMAKE_INSTALL_PREFIX=/path/to/installedEigen  ..  
+        make install  
+After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake` to link Eigen3
+  
+3. libcmaes: Additionally to GSL you should either use libcmaes or NLopt. For libcmaes you have to set 
+
+    `-DCMAES_ROOT=/path/to/cmaes`  
+    
+    If cmaes is not in this path, then it will be installed there. If you have troubles with the installation, please have a look at [libcmaes](https://github.com/beniz/libcmaes/wiki) for the dependencies. If you don't want to install or use it, you can set `-DUseLibCMAES=OFF` 
+    
+4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If NLopt is installed through your packet manager cmake will find it automatically. Otherwise, with `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you can tell where NLopt is installed. If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
+5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
+
+### build
+With the dependencies and options you can build the programm with
+  
+        mkdir build && cd build  
+        cmake (OPTIONS from Dependencies) ..  
+        make  
+        make doc
+    
+
+The make doc will use doxygen to create the online help in build/html which can be opened locally.
+
+
+Note to Mac Users: You have to use the g++ compiler as clang does not support OpenMP. If you get the error "missing libcmaes_config.h" during the compilation, please check if the file is in build/libcmaes-0.9.5. If so, copy it to /path/to/libcmaes/include/libcmaes
+
+---
+
 ##How to add a new model (for further details, also see the manual):
 
-1) Go to the file IncludeAllModels.h and rename the variable
-   'C_ModelTemplate' to the variable name with which the new model shall
-   be selected by the program.
+To add a new model you have to modify/create five files  
 
-2) In the file `src/models/CMakeLists.txt` rename `ClassTemplate.cpp` with the name of your new model file.
+1. Go to include/BSMPT/models and copy ClassTemplate.h to YourModel.h. Adjust the Class_Template name to your new model. For step 5 I will assume that your class is named Class_YourModel. 
 
-3) Go to IncludeAllModels.cpp and add the header for your model.  Also add
+2. Go to src/models and copy ClassTemplate.cpp to YourModel.cpp, and change the Class_Template class name in the file to your model name. Also follow the instructions in here and in the manual to set up your new model. 
 
-``` c++    
-	  else if(choice == C_ModelTemplate)
-     {
-       return std::unique_ptr<Class_Potential_Origin> { new Class_Template };
-     }
-```
+3. For your model to compile you have to open src/models/CMakeLists.txt and add ${header_path}/YourModel.h in the set(header enviroment as well as YourModel.cpp in the set(src enviroment)
+
+4. In include/BSMPT/models/IncludeAllModels.h you need to add a new entry in the ModelIDs enum above the `stop` entry which is different from the ones already in the enum, e.g. YourModel. Additionally, you have to create a new entry in the `const std::unordered_map<std::string,ModelIDs> ModelNames` map in the same file and add a new line with {"YourModelName",ModelIDs::YourModel} , the matching will be done automatically.
+Then you can call your model with `./binary YourModelName ...` .
+
+5. In src/models/IncludeAllModels.cpp you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also to actually call your model you have to extend the FChoose function. For this you add a new case to the switch statement, which reads
+
+        case ModelIDs::YourModel: return std::make_unique<Class_YourModel>(); break;
 
 
-   to the function Fchoose. 
 
-4) Adjust the functions in ClassTemplate.cpp as needed for the new model.
+You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at bsmpt@lists.kit.edu
 
-5) Have fun!
-
+Also contact us if you have a custom model for BSMPT v1.x and you have trouble converting it to the new notation.
 

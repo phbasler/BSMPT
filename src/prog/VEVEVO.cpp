@@ -2,7 +2,7 @@
  * VEVEVO.cpp
  *
  *
- *      Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+ *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -27,105 +27,64 @@
  */
 
 
-#include "../models/IncludeAllModels.h"
-#include "../minimizer/Minimizer.h"
+#include <bits/exception.h>                     // for exception
+#include <math.h>                               // for sqrt, abs
+#include <stdlib.h>                             // for atof, EXIT_FAILURE, atoi
+#include <algorithm>                            // for copy, max
+#include <iomanip>                              // for operator<<, setprecision
+#include <memory>                               // for shared_ptr, __shared_...
+#include <string>                               // for getline, operator<<
+#include <utility>                              // for pair
+#include <vector>                               // for vector
+#include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/minimizer/Minimizer.h>
+#include <BSMPT/utility.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
+using namespace BSMPT;
+
+struct CLIOptions{
+    BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
+    int Line{};
+    std::string InputFile, OutputFile;
+    double TemperatureStart{}, TemperatureStep{}, TemperatureEnd{};
+    bool UseGSL { Minimizer::UseGSLDefault};
+    bool UseCMAES {Minimizer::UseLibCMAESDefault};
+    bool UseNLopt{Minimizer::UseNLoptDefault};
+    int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+
+    CLIOptions(int argc, char *argv[]);
+    bool good() const;
+};
 
 int main(int argc, char *argv[]) try{
-
-
-    bool Debug = false;
-	if(!(argc == 8))
-	{
-		std::cerr << "./VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend \n";
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-	char* in_file; char* out_file;
-	in_file = argv[2];
-	out_file = argv[3];
-	double LineNumb,TempStartIn,TempStepIn,TempEndIn;
-	double TempStart,TempEnd,TempStep;
-	double Model=-1;
-	Model=getModel(argv[1]);
-	if(Model==-1) {
-		std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
-		ShowInputError();
-		return EXIT_FAILURE;
-	}
-
-
-
-	LineNumb = atoi(argv[4]);
-	TempStart = atof(argv[5]);
-	TempStep = atof(argv[6]);
-	TempEnd = atof(argv[7]);
-
-	if(LineNumb < 1)
-	{
-		std::cerr << "Start line counting with 1" << std::endl;
-		return EXIT_FAILURE;
-	}
-
-
-	if(TempStart < 0)
-	{
-		std::cout << "The starting value of your Temperature was negative. This was corrected to TempStart = 0"
-				<<std::endl;
-		TempStart = 0;
-	}
-	if(TempEnd < TempStart)
-	{
-		std::cout << "The value of Tempend was lower then the value of Tempstart. This was corrected by swapping them"
-				<<std::endl;
-		double tmp=TempStart;
-		TempStart = TempEnd;
-		TempEnd=tmp;
-
-	}
-
-
+    const CLIOptions args(argc,argv);
+    if(not args.good())
+    {
+        return EXIT_FAILURE;
+    }
 
 	std::vector<double> sol,start,solPot;
-	std::vector<double> Weinberg,parCTVec;
 
 
-	std::shared_ptr<Class_Potential_Origin> modelPointer = FChoose(Model);
-
-	if(Debug) std::cout << "Set model pointer " << std::endl;
-
-	std::ifstream infile(in_file);
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
+    std::ifstream infile(args.InputFile);
 	if(!infile.good()) {
 			std::cout << "Input file not found " << std::endl;
 			return EXIT_FAILURE;
 	}
-
-	if(Debug) std::cout << "found file " << std::endl;
-
-	std::ofstream outfile(out_file);
+    std::ofstream outfile(args.OutputFile);
 	if(!outfile.good())
 	{
-		std::cout << "Can not create file " << out_file << std::endl;
+        std::cout << "Can not create file " << args.OutputFile << std::endl;
 		return EXIT_FAILURE;
 	}
-
 	std::string linestr;
 	int linecounter = 1;
 
-	double tmp;
-	int nPar,nParCT;
-	nPar = modelPointer->nPar;
-	nParCT = modelPointer->nParCT;
-
-	int dim = modelPointer->nVEV;
-	std::vector<double> par(nPar);
-	std::vector<double> parCT(nParCT);
-
 	bool found=false;
-
-	if(Debug) std::cout << "Read start " << std::endl;
-
 	while(true)
 	{
 	   if(infile.eof()) break;
@@ -133,128 +92,215 @@ int main(int argc, char *argv[]) try{
 	   if(linecounter == 1){
 		   modelPointer->setUseIndexCol(linestr);
 	   }
-	   else if(linecounter == LineNumb)
+       else if(linecounter == args.Line)
 	   {
 		   std::pair<std::vector<double>,std::vector<double>> parameters = modelPointer->initModel(linestr);
-		   par=parameters.first;
-		   parCT = parameters.second;
            found=true;
 	   }
-
-	   else if(linecounter > LineNumb) break;
+       else if(linecounter > args.Line) break;
 	   linecounter++;
 	   if(infile.eof()) break;
 	}
 	infile.close();
 	if(!found) {std::cout << "Line not found !\n"; return -1;}
 
-	if(Debug) std::cout << "Read done " << std::endl;
+    std::vector<double> Check;
+    double vev{0.0};
 
-
-	if(Debug) modelPointer->write();
-
-
-
-	std::vector<double> vTree;
-
-
-	for(int k=0;k<dim;k++) vTree.push_back(modelPointer->vevTreeMin.at(k));
-
-	if(Debug)
-	{
-		std::vector<double> TreeMasses;
-		modelPointer->HiggsMassesSquared(TreeMasses,modelPointer->vevTree,0,0);
-		for(int i=0;i<modelPointer->NHiggs;i++)
-		{
-			std::cout << TreeMasses[i] << "\t" << std::sqrt(std::abs(TreeMasses[i])) << std::endl;
-		}
-	}
-
-
-
-
-
-
-
-
-	std::vector<double> Check;
-	double vev=0;
-	double v1T,v2T,v3T;
-	std::vector<double> NTempMass;
-
-	std::vector<double> zero;
-	for(int k=0;k<dim;k++) zero.push_back(0);
-
-	std::vector<double> sol1D;
-
-
-	double Temp = TempStart;
 	std::cout << std::scientific;
 	std::cout << std::setprecision(16);
 	outfile << std::setprecision(16);
 
 
-    outfile << "T" << "\t" << "v" << "\t";
-    outfile << modelPointer->addLegendVEV()
-    		<< "\t" << "Veff(v,T)"
+    outfile << "T" << sep << "v";
+    for(auto x: modelPointer->addLegendVEV()) outfile << sep << x;
+    outfile << sep << "Veff(v,T)"
     		<< std::endl;
 
-   for(double Temp = TempStart; Temp<=TempEnd; Temp+=TempStep)
+   for(double Temp = args.TemperatureStart; Temp<=args.TemperatureEnd; Temp+=args.TemperatureStep)
    {
-
 	   start.clear();
-	   if(Temp==TempStart)
+       if(Temp==args.TemperatureStart)
 	   {
-		   for(int k=0;k<dim;k++) start.push_back(vTree.at(k));
+           start = modelPointer->get_vevTreeMin();
 	   }
 	   else{
-		   for(int k=0;k<dim;k++) start.push_back(sol.at(k));
+           start = sol;
 	   }
 	   sol.clear();
 	   Check.clear();
 	   solPot.clear();
-	   if(Debug)std::cout<<"Minimization start"<<std::endl;
-	   Minimize_gen_all(modelPointer,Temp,sol,Check,start,3);
-	   if(Debug)std::cout<<"Minimization end"<<std::endl;
-	   if(Debug){
-		   for(int i=0;i<dim;i++) std::cout << sol[i] << std::endl;
-	   }
-	   modelPointer->MinimizeOrderVEV(sol,solPot);
+       sol = Minimizer::Minimize_gen_all(modelPointer,Temp,Check,start,args.WhichMinimizer);
+       solPot=modelPointer->MinimizeOrderVEV(sol);
 	   vev = modelPointer->EWSBVEV(solPot);
 
-
-
-	  //DEBUGGING
-		if(Debug){ std::cout << std::endl;
-		std::cout<<"Input Values"<<std::endl;
-		double VTree = modelPointer->VEff(modelPointer->vevTree,0,0);
-		double VTreeVevTree = modelPointer->VTree(modelPointer->vevTree,0);
-		double VCTVevTree = modelPointer->CounterTerm(modelPointer->vevTree,0);
-		double V1VevTree = modelPointer->V1Loop(modelPointer->vevTree,0,0);
-		std::cout << "V(v_T,T=0) = " << VTree << std::endl;
-		std::cout << "V_Tree(v_T,T=0) = " << VTreeVevTree << std::endl;
-		std::cout << "V_CT(v_T,T=0) = " << VCTVevTree << std::endl;
-		std::cout << "V_1(v_T,T=0) = " << V1VevTree << std::endl;
-
-		   double V_tree;
-		   V_tree = modelPointer->VTree(solPot,0);
-		   std::cout<<"V_tree at Minimum: "<<V_tree<<std::endl;
-
-		   std::cout<<"Minimizer-Input = "<<V_tree-VTree<<std::endl; }
-
-	   outfile << Temp << "\t";
-	   outfile << vev;
-	   for(int k=0;k<dim;k++) outfile << "\t" << sol.at(k);
-	   outfile << "\t" << modelPointer->VEff(solPot,Temp,0);
+       outfile << Temp << sep;
+       outfile << vev << sep;
+       outfile << sol;
+       outfile << sep << modelPointer->VEff(solPot,Temp,0);
 	   outfile << std::endl;
-
-
    }
    outfile.close();
 
 	return EXIT_SUCCESS;
 }
+catch(int)
+{
+    return EXIT_SUCCESS;
+}
 catch(exception& e){
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
+}
+
+CLIOptions::CLIOptions(int argc, char *argv[])
+{
+    std::vector<std::string> args;
+    for(int i{1};i<argc;++i) args.push_back(argv[i]);
+
+    if(argc < 8 or args.at(0) == "--help")
+    {
+        int SizeOfFirstColumn = std::string("--TemperatureStart=           ").size();
+        std::cout << "VEVEVO calculates the evolution of the global minimum with rising temperature for a given parameter point" << std::endl
+                  << "It is called either by " << std::endl
+                  << "./VEVEVO Model Inputfile Outputfile Line TemperatureStart TemperatureStep TemperatureEnd" << std::endl
+                  << "or with the following arguments" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<< "--help"
+                  << "Shows this menu" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left << "--model="
+                  << "The model you want to investigate"<<std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--input="
+                  << "The input file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--output="
+                  << "The output file in tsv format" << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--Line="
+                  <<"The line in the input file with the given parameter point. Expects line 1 to be a legend." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--TemperatureStart="
+                  <<"The starting temperature to calculate the global minimum." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--TemperatureStep="
+                  <<"The stepsize for the temperature." << std::endl
+                  << std::setw(SizeOfFirstColumn) << std::left<<"--TemperatureEnd="
+                  <<"The last temperature to calculate the global minimum." << std::endl;
+        std::string GSLhelp{"--UseGSL="};
+        GSLhelp += Minimizer::UseGSLDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<GSLhelp
+                  << "Use the GSL library to minimize the effective potential" << std::endl;
+        std::string CMAEShelp{"--UseCMAES="};
+        CMAEShelp += Minimizer::UseLibCMAESDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<CMAEShelp
+                  << "Use the CMAES library to minimize the effective potential" << std::endl;
+        std::string NLoptHelp{"--UseNLopt="};
+        NLoptHelp += Minimizer::UseNLoptDefault?"true":"false";
+        std::cout << std::setw(SizeOfFirstColumn) << std::left <<NLoptHelp
+                  << "Use the NLopt library to minimize the effective potential" << std::endl;
+        ShowInputError();
+    }
+
+    if(args.size() > 0 and args.at(0)=="--help")
+    {
+        throw int{0};
+    }
+    else if(argc < 8)
+    {
+        throw std::runtime_error("Too few arguments.");
+    }
+
+    const std::string prefix{"--"};
+    bool UsePrefix = StringStartsWith(args.at(0),prefix);
+    if(UsePrefix)
+    {
+        for(const auto& arg: args)
+        {
+            auto el = arg;
+            std::transform(el.begin(), el.end(), el.begin(), ::tolower);
+            if(StringStartsWith(el,"--model="))
+            {
+                Model = BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
+            }
+            else if(StringStartsWith(el,"--input="))
+            {
+                InputFile = arg.substr(std::string("--input=").size());
+            }
+            else if(StringStartsWith(el,"--output="))
+            {
+                OutputFile = arg.substr(std::string("--output=").size());
+            }
+            else if(StringStartsWith(el,"--line="))
+            {
+                Line = std::stoi(el.substr(std::string("--line=").size()));
+            }
+            else if(StringStartsWith(el,"--temperaturestart="))
+            {
+                TemperatureStart = std::stod(el.substr(std::string("--temperaturestart=").size()));
+            }
+            else if(StringStartsWith(el,"--temperaturestep="))
+            {
+                TemperatureStep = std::stod(el.substr(std::string("--temperaturestep=").size()));
+            }
+            else if(StringStartsWith(el,"--temperatureend="))
+            {
+                TemperatureEnd = std::stod(el.substr(std::string("--temperatureend=").size()));
+            }
+            else if(StringStartsWith(el,"--usegsl="))
+            {
+                UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usecmaes="))
+            {
+                UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
+            }
+            else if(StringStartsWith(el,"--usenlopt="))
+            {
+                UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
+            }
+        }
+        WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL,UseCMAES,UseNLopt);
+    }
+    else{
+        Model = ModelID::getModel(args.at(0));
+        InputFile = args.at(1);
+        OutputFile = args.at(2);
+        Line = std::stoi(args.at(3));
+        TemperatureStart = std::stod(args.at(4));
+        TemperatureStep = std::stod(args.at(5));
+        TemperatureEnd = std::stod(args.at(6));
+    }
+}
+
+bool CLIOptions::good() const
+{
+    if(UseGSL and not Minimizer::UseGSLDefault)
+    {
+        throw std::runtime_error("You set --UseGSL=true but GSL was not found during compilation.");
+    }
+    if(UseCMAES and not Minimizer::UseLibCMAESDefault)
+    {
+        throw std::runtime_error("You set --UseCMAES=true but CMAES was not found during compilation.");
+    }
+    if(UseNLopt and not Minimizer::UseNLoptDefault)
+    {
+        throw std::runtime_error("You set --UseNLopt=true but NLopt was not found during compilation.");
+    }
+    if(WhichMinimizer == 0)
+    {
+        throw std::runtime_error("You disabled all minimizers. You need at least one.");
+    }
+    if(TemperatureStep <= 0){
+        throw std::runtime_error("The stepsize has to be larger than 0.");
+    }
+    if(TemperatureStart < 0)
+    {
+        throw std::runtime_error("The starting value of the temperature can not be negative.");
+    }
+    if(TemperatureEnd < TemperatureStart)
+    {
+        throw std::runtime_error("The minimal value for the temperature is lower then the maximal value.");
+    }
+    if(Model==ModelID::ModelIDs::NotSet) {
+
+        std::cerr << "Your Model parameter does not match with the implemented Models." << std::endl;
+        ShowInputError();
+        return false;
+    }
+    return true;
 }
