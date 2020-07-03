@@ -148,7 +148,7 @@ std::vector<double> Minimize_gen_all(
         Minima.push_back(solCMAES);
         Check.push_back(errC);
     }
-#elif
+#else
     (void) start;
 #endif
 
