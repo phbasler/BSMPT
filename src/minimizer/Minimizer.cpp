@@ -148,12 +148,13 @@ std::vector<double> Minimize_gen_all(
         Minima.push_back(solCMAES);
         Check.push_back(errC);
     }
+#elif
+    (void) start;
 #endif
 
 #ifdef NLopt_FOUND
     if(UseMinimizer.UseNLopt)
     {
-//        std::cout<<"NLO opt called"<<std::endl;
         auto NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer,Temp);
         if(NLOPTResult.Success)
         {
