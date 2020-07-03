@@ -1,6 +1,6 @@
 # Changelog
 
-# 2020/XX/YY: Release of v2.0
+# 2020/07/06: Release of v2.0
 
 ## New Physics
 
