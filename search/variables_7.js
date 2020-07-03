@@ -1,16 +1,11 @@
 var searchData=
 [
-  ['k1m',['K1m',['../Kfunctions__grid_8h.html#a9a2f1c64c1db606d5ed9a752570ead29',1,'BSMPT::Kfactors::Data']]],
-  ['k1p',['K1p',['../Kfunctions__grid_8h.html#a908a3b8bbbd166f0225c5ba18a7a0b68',1,'BSMPT::Kfactors::Data']]],
-  ['k2p',['K2p',['../Kfunctions__grid_8h.html#af40c8438fe16fdd808aca132d9a8477c',1,'BSMPT::Kfactors::Data']]],
-  ['k4m',['K4m',['../Kfunctions__grid_8h.html#a22f0758a5d09135c08ee5176fe1ffab7',1,'BSMPT::Kfactors::Data']]],
-  ['k4p',['K4p',['../Kfunctions__grid_8h.html#ae09f1e10f07f3d6fc410c416cdd6ba03',1,'BSMPT::Kfactors::Data']]],
-  ['k5m',['K5m',['../Kfunctions__grid_8h.html#aa0890afc7b8825cf897db9fe492ec3c3',1,'BSMPT::Kfactors::Data']]],
-  ['k5p',['K5p',['../Kfunctions__grid_8h.html#ade8e5aa1d629495d2117cdb89ba2a992',1,'BSMPT::Kfactors::Data']]],
-  ['k6p',['K6p',['../Kfunctions__grid_8h.html#a6924a2651de9ac929599571017e3d919',1,'BSMPT::Kfactors::Data']]],
-  ['k8p',['K8p',['../Kfunctions__grid_8h.html#a2deb361d5455e80b7971f043b6f0921a',1,'BSMPT::Kfactors::Data']]],
-  ['k9p',['K9p',['../Kfunctions__grid_8h.html#a8829bd373798708ba8d70f2e6a05deab',1,'BSMPT::Kfactors::Data']]],
-  ['ktildeinterpolationsize',['KtildeInterpolationSize',['../KtildeInterpolation_8h.html#a3e112534c72973adefb97326ea56abda',1,'BSMPT::Kfactors::Data']]],
-  ['ktildenormboson_5fgrid',['KtildeNormBoson_grid',['../KtildeInterpolation_8h.html#a1964924c15e2313da5fa275acd8c0153',1,'BSMPT::Kfactors::Data']]],
-  ['ktildenormfermion_5fgrid',['KtildeNormFermion_grid',['../KtildeInterpolation_8h.html#abc33dcbf5a3c9f89eb8f699227d5e679',1,'BSMPT::Kfactors::Data']]]
+  ['lambdagauge_5f3_965',['LambdaGauge_3',['../classBSMPT_1_1Class__Potential__Origin.html#a80646e254c05778dd66325353c08a978',1,'BSMPT::Class_Potential_Origin']]],
+  ['lambdahiggs_5f3_966',['LambdaHiggs_3',['../classBSMPT_1_1Class__Potential__Origin.html#abd0de1495ab5ecb6e1ca4f1a25d52464',1,'BSMPT::Class_Potential_Origin']]],
+  ['lambdahiggs_5f3_5fct_967',['LambdaHiggs_3_CT',['../classBSMPT_1_1Class__Potential__Origin.html#a5399875e0854949304e07f60b2c70fc5',1,'BSMPT::Class_Potential_Origin']]],
+  ['lambdalepton_5f3_968',['LambdaLepton_3',['../classBSMPT_1_1Class__Potential__Origin.html#a02ccb61c71a713352b20318c23cb5dcc',1,'BSMPT::Class_Potential_Origin']]],
+  ['lambdalepton_5f4_969',['LambdaLepton_4',['../classBSMPT_1_1Class__Potential__Origin.html#a68aae7f245b0f7b6c7351db121fd71f8',1,'BSMPT::Class_Potential_Origin']]],
+  ['lambdaquark_5f3_970',['LambdaQuark_3',['../classBSMPT_1_1Class__Potential__Origin.html#ac589ac650796eee4c6315adbbf81896c',1,'BSMPT::Class_Potential_Origin']]],
+  ['lambdaquark_5f4_971',['LambdaQuark_4',['../classBSMPT_1_1Class__Potential__Origin.html#af3e767a0f98aae18127dca0eab3f9a6d',1,'BSMPT::Class_Potential_Origin']]],
+  ['lw_972',['LW',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a74dad50f3e9c6567c27d5c10b2b72ace',1,'BSMPT::Baryo::gen_fluid::LW()'],['../classBSMPT_1_1Baryo_1_1transport__equations.html#a84666beee06cb7b4a606578814765da1',1,'BSMPT::Baryo::transport_equations::LW()'],['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ab2c9249268b754d440dab412cbc75721',1,'BSMPT::Baryo::GSL_integration_mubl::LW()']]]
 ];

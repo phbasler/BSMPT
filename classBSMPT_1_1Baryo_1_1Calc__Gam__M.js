@@ -10,6 +10,5 @@ var classBSMPT_1_1Baryo_1_1Calc__Gam__M =
     [ "m_full", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#a94a4ad05774cee9bb30b972f6fed7572", null ],
     [ "msqrt_thermal", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#a037ae8a44f9ae8d486d61160cf9f2999", null ],
     [ "T", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#afa6cfc5ce50b26fb28cdda78c260b200", null ],
-    [ "vw", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#a4ed8cc8990807c26738ff943e17a3ef6", null ],
-    [ "YukCoupling", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#adf9533049b4a4b1b5b9c17ff88021c4b", null ]
+    [ "vw", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#a4ed8cc8990807c26738ff943e17a3ef6", null ]
 ];

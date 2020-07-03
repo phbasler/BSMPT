@@ -1,14 +1,19 @@
 var Minimizer_8h =
 [
+    [ "MinimizersToUse", "structBSMPT_1_1Minimizer_1_1MinimizersToUse.html", "structBSMPT_1_1Minimizer_1_1MinimizersToUse" ],
     [ "EWPTReturnType", "structBSMPT_1_1Minimizer_1_1EWPTReturnType.html", "structBSMPT_1_1Minimizer_1_1EWPTReturnType" ],
     [ "MinimizerStatus", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9", [
-      [ "SUCCESS", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9a0fdb2125fca002943b02f27ae53d1665", null ],
-      [ "NOTVANISHINGATFINALTEMP", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9a0ec661d426d03c91eae24bacd929b467", null ],
-      [ "NOTNLOSTABLE", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9aff84e59eb066200a3afe5860a604c09e", null ],
-      [ "NUMERICALLYUNSTABLE", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9ae1fb027e41a726a4b7a0aeea457e316c", null ],
-      [ "BELOWTHRESHOLD", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9af0ed174496495787f1f7e15d1f9755c0", null ],
-      [ "NLOVEVZEROORINF", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9a23eb2d869944abec4ca0076e876a6b65", null ]
+      [ "SUCCESS", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9ad0749aaba8b833466dfcbb0428e4f89c", null ],
+      [ "NOTVANISHINGATFINALTEMP", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9acd11060fe30864c7a45997ae8bc4888c", null ],
+      [ "NOTNLOSTABLE", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9ade50b656b4576690a5aead36d9aaf5c9", null ],
+      [ "NUMERICALLYUNSTABLE", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9a4dba472e9d47efc54ad2968cecc1b950", null ],
+      [ "BELOWTHRESHOLD", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9a886a6119dc611268fb76975a484004e6", null ],
+      [ "NLOVEVZEROORINF", "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9a30aad5e6b485618a8eced9fcf326d174", null ]
     ] ],
+    [ "CalcWhichMinimizer", "Minimizer_8h.html#aa0c9d80c331aebfa6c08b1f7d8a9c588", null ],
+    [ "FindNextLocalMinima", "Minimizer_8h.html#a21ca763ce1943f7345b2869ed58bb4ef", null ],
+    [ "GetMinimizers", "Minimizer_8h.html#a3ac152f5d63263e90befeadbea1c14d0", null ],
+    [ "MinimaDevelopmentWithTemperature", "Minimizer_8h.html#a050cc791e09c5756a2a6a8328bc69c77", null ],
     [ "Minimize_gen_all", "Minimizer_8h.html#a88c7250e51b094e110ea67fd48438afd", null ],
     [ "Minimize_gen_all_tree_level", "Minimizer_8h.html#a4f9686f97a8aeb1b96db142a690c42f4", null ],
     [ "PTFinder_gen_all", "Minimizer_8h.html#a391651025dceacd12f4b85a7c191b06f", null ],

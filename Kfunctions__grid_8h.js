@@ -11,7 +11,7 @@ var Kfunctions__grid_8h =
     [ "K8p", "Kfunctions__grid_8h.html#a2deb361d5455e80b7971f043b6f0921a", null ],
     [ "K9p", "Kfunctions__grid_8h.html#a8829bd373798708ba8d70f2e6a05deab", null ],
     [ "msg", "Kfunctions__grid_8h.html#abfc8a61056c3cffe2dc5ecbf8f6aaebc", null ],
-    [ "msg_size", "Kfunctions__grid_8h.html#aed72a9db7a9d00634cb19726c64f7bb2", null ],
+    [ "msg_size", "Kfunctions__grid_8h.html#a9e91550679894f0b70b228a7a0f25417", null ],
     [ "Tg", "Kfunctions__grid_8h.html#ab8c88f0f1dcc3281ca36508efaef5373", null ],
-    [ "Tg_size", "Kfunctions__grid_8h.html#a037b676b762d6cec7f110529677a01f5", null ]
+    [ "Tg_size", "Kfunctions__grid_8h.html#a963c08f2201bef6597347a8fca502c65", null ]
 ];

@@ -1,6 +1,6 @@
 var structBSMPT_1_1Baryo_1_1GSL__integration__mubl =
 [
-    [ "get_transport_method", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#afebcf1fcfb9afc814e70ea360451f748", null ],
+    [ "get_transport_method", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ac71ce9b154b0e53f1041b515484652bf", null ],
     [ "get_vev_sym_theta", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a99cab19b7cf635583b52aeb525256527", null ],
     [ "getBrokenCPViolatingPhase", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a1536219fc377453cbdf8bcc2f54b0f75", null ],
     [ "getBrokenCPViolatingPhase_bot", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ae16e6bf719fe94ebcf2fc684f97bf4ca", null ],
@@ -19,8 +19,8 @@ var structBSMPT_1_1Baryo_1_1GSL__integration__mubl =
     [ "getVEVsym", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#afe3d98c7481a5858f526cc6c143bd901", null ],
     [ "getvw", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a14d0ae51feac7dd0606b01dec7c583d2", null ],
     [ "getZMAX", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a5341b54ccae60a12eb5207b2adb43af1", null ],
-    [ "init", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#aaf0f6f18b6650ceef5c5cec5a1e3a5ff", null ],
-    [ "set_transport_method", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ad135a8b92f266f9bb570c15d715d209c", null ],
+    [ "init", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#aefb21909b1cda96a8d87a63b56ae6ffd", null ],
+    [ "set_transport_method", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a1a8d7603294d3a4308046605d65a719c", null ],
     [ "set_vev_sym_theta", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a803e729acaf15cbeacf2731b0343d179", null ],
     [ "setpar", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ac2623731712362ec29fef3f94c7c235d", null ],
     [ "setSymmetricCPViolatingPhase", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a785c621e54bcca731c75c1610899f0b4", null ],
@@ -40,7 +40,7 @@ var structBSMPT_1_1Baryo_1_1GSL__integration__mubl =
     [ "TC", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ab24896b084987a44c720e262a4fe3603", null ],
     [ "TOP_broken_CP_violating_phase", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#aafe9403fcdfed8ba8ec6d0619aae70f8", null ],
     [ "TOP_symmetric_CP_violating_phase", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a8675a23c7dc182581477733762dd0f93", null ],
-    [ "transport_method", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a55326d5c5d21da49410f38d7fe57b8da", null ],
+    [ "transport_method", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a647918bae3c5013fd9b5fddbf0deba40", null ],
     [ "UseVelocityTransportEquations", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a046c2d9c0e8d98e7c9c25ec7a3c5ab02", null ],
     [ "vc", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a74ca3d82e662d96cc44f301dc347c02b", null ],
     [ "vev_critical", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a23a4aab31b79c79b48b822c419896677", null ],

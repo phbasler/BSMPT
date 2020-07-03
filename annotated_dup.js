@@ -2,6 +2,7 @@ var annotated_dup =
 [
     [ "BSMPT", null, [
       [ "Baryo", null, [
+        [ "AdditionalBaryoArgs", "structBSMPT_1_1Baryo_1_1AdditionalBaryoArgs.html", "structBSMPT_1_1Baryo_1_1AdditionalBaryoArgs" ],
         [ "bot_source", "classBSMPT_1_1Baryo_1_1bot__source.html", "classBSMPT_1_1Baryo_1_1bot__source" ],
         [ "Calc_eta", "classBSMPT_1_1Baryo_1_1Calc__eta.html", "classBSMPT_1_1Baryo_1_1Calc__eta" ],
         [ "Calc_Gam_M", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html", "classBSMPT_1_1Baryo_1_1Calc__Gam__M" ],
@@ -21,8 +22,7 @@ var annotated_dup =
       ] ],
       [ "Minimizer", null, [
         [ "LibCMAES", null, [
-          [ "LibCMAESReturn", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn" ],
-          [ "PointerContainer", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1PointerContainer.html", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1PointerContainer" ]
+          [ "LibCMAESReturn", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn" ]
         ] ],
         [ "LibNLOPT", null, [
           [ "NLOPTReturnType", "structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html", "structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType" ],
@@ -32,6 +32,7 @@ var annotated_dup =
         [ "GSL_params", "structBSMPT_1_1Minimizer_1_1GSL__params.html", "structBSMPT_1_1Minimizer_1_1GSL__params" ],
         [ "GSLPlaneReturn", "structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html", "structBSMPT_1_1Minimizer_1_1GSLPlaneReturn" ],
         [ "MinimizePlaneReturn", "structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn.html", "structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn" ],
+        [ "MinimizersToUse", "structBSMPT_1_1Minimizer_1_1MinimizersToUse.html", "structBSMPT_1_1Minimizer_1_1MinimizersToUse" ],
         [ "PointerContainerMinPlane", "structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html", "structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane" ]
       ] ],
       [ "Models", null, [
@@ -45,5 +46,6 @@ var annotated_dup =
         [ "GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", "structBSMPT_1_1Wall_1_1GSL__params" ]
       ] ],
       [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html", "classBSMPT_1_1Class__Potential__Origin" ]
-    ] ]
+    ] ],
+    [ "CLIOptions", "structCLIOptions.html", "structCLIOptions" ]
 ];
