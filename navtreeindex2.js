@@ -1,7 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"classBSMPT_1_1Baryo_1_1transport__equations.html#a4dc6e0e949e4e455773469dde46b2d6b":[4,0,0,0,13,1],
-"classBSMPT_1_1Baryo_1_1transport__equations.html#a818afde935064a9d81597286c1c930a4":[4,0,0,0,13,2],
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a84666beee06cb7b4a606578814765da1":[4,0,0,0,13,9],
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a8908dbaaacc64c535cea7ffc4b51f868":[4,0,0,0,13,14],
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a9d25d938e2db6b25c5fc66c2fe7cf656":[4,0,0,0,13,10],
@@ -249,5 +247,7 @@ var NAVTREEINDEX2 =
 "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a93159171e38188acbee95c7a3fc475c6":[4,0,0,3,1,54],
 "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a9a0a4d01163385d23ef28594f338dfdc":[4,0,0,3,1,21],
 "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a9a84ed1b5d1d9279b29d360b2bb2b521":[4,0,0,3,1,65],
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a9b6c06eccf0c6f89bc2f9970964c5cea":[4,0,0,3,1,22]
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a9b6c06eccf0c6f89bc2f9970964c5cea":[4,0,0,3,1,22],
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#aa429c0be37ca1dc81e557730f09b4994":[4,0,0,3,1,47],
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ab021ab4b1b559c85633111c5a793f3c5":[4,0,0,3,1,70]
 };

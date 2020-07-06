@@ -20,9 +20,7 @@ var NAVTREEINDEX1 =
 "PlotEWBG__nL_8cpp.html#a6625fbc04a05cec6f89f19dacc18a6dc":[5,0,1,4,8,1],
 "PlotEWBG__nL_8cpp.html#ac56efa361ea6b42cbf55b1c4222f2d90":[5,0,1,4,8,3],
 "PlotEWBG__vw_8cpp.html":[5,0,1,4,9],
-"PlotEWBG__vw_8cpp.html#a56f4e57c8030257ac60b134ca66f11c3":[5,0,1,4,9,2],
-"PlotEWBG__vw_8cpp.html#a6625fbc04a05cec6f89f19dacc18a6dc":[5,0,1,4,9,1],
-"PlotEWBG__vw_8cpp.html#ac56efa361ea6b42cbf55b1c4222f2d90":[5,0,1,4,9,3],
+"PlotEWBG__vw_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97":[5,0,1,4,9,1],
 "RenormScale_8cpp.html":[5,0,1,4,10],
 "RenormScale_8cpp.html#a56f4e57c8030257ac60b134ca66f11c3":[5,0,1,4,10,2],
 "RenormScale_8cpp.html#a6625fbc04a05cec6f89f19dacc18a6dc":[5,0,1,4,10,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX1 =
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a11ad410671650023005fa6b17c7e9da8":[4,0,0,0,13,6],
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a32af98f9968dd5c3c2c0dcead5ede1bf":[4,0,0,0,13,7],
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a41e44a49c9496545b60479c65c179caf":[4,0,0,0,13,13],
-"classBSMPT_1_1Baryo_1_1transport__equations.html#a488c6c4b4339ff3685b601ec22e42256":[4,0,0,0,13,3]
+"classBSMPT_1_1Baryo_1_1transport__equations.html#a488c6c4b4339ff3685b601ec22e42256":[4,0,0,0,13,3],
+"classBSMPT_1_1Baryo_1_1transport__equations.html#a4dc6e0e949e4e455773469dde46b2d6b":[4,0,0,0,13,1],
+"classBSMPT_1_1Baryo_1_1transport__equations.html#a818afde935064a9d81597286c1c930a4":[4,0,0,0,13,2]
 };
