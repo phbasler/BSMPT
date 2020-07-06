@@ -38,7 +38,7 @@ to:  bsmpt@lists.kit.edu or create a corresponding Issue.
 ---
 
 ### Citation:
-If you use this program for your work, please cite [1803.02846](https://arxiv.org/abs/1803.02846) and []()
+If you use this program for your work, please cite [1803.02846](https://arxiv.org/abs/1803.02846) and [2007.01725](https://arxiv.org/abs/2007.01725)
 
 ##Installation:
 
