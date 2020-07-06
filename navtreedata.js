@@ -36,7 +36,11 @@ var NAVTREE =
         [ "NLOVEV", "index.html#NLOVEV", null ],
         [ "VEVEVO", "index.html#VEVEVO", null ],
         [ "TripleHiggsCouplingNLO", "index.html#TripleHiggsCouplingNLO", null ],
-        [ "CalculateEWBG", "index.html#CalculateEWBG", null ]
+        [ "CalculateEWBG", "index.html#CalculateEWBG", null ],
+        [ "RenormScale", "index.html#RenormScale", null ],
+        [ "PlotEWBG_vw", "index.html#PlotEWBG_vw", null ],
+        [ "PlotEWBG_nL", "index.html#PlotEWBG_nL", null ],
+        [ "EWBGRenormScale", "index.html#EWBGRenormScale", null ]
       ] ]
     ] ],
     [ "README", "md_README.html", null ],
