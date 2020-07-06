@@ -281,7 +281,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         Line = std::stoi(args.at(3));
         NumberOfSteps = std::stoi(args.at(4));
         if(argc == 7) {
-            TerminalOutput = ("y" == std::string(argv[5]));
+            TerminalOutput = ("y" == std::string(args[5]));
         }
     }
 }

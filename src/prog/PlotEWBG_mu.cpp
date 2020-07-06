@@ -289,7 +289,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         NumberOfSteps = std::stoi(args.at(4));
         ConfigFile = args.at(5);
         if(argc == 8) {
-            TerminalOutput = ("y" == std::string(argv[6]));
+            TerminalOutput = ("y" == std::string(args.at(6)));
         }
     }
 }

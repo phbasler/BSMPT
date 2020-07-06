@@ -333,7 +333,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         ConfigFile = args.at(5);
         if(argc == 8) {
             std::string s7 = argv[6];
-            TerminalOutput = ("y" == std::string(argv[6]));
+            TerminalOutput = ("y" == std::string(args.at(6)));
         }
     }
 }

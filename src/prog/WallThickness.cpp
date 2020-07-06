@@ -304,7 +304,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         FirstLine = std::stoi(args.at(3));
         LastLine = std::stoi(args.at(4));
         if(argc == 7) {
-            TerminalOutput = ("y" == std::string(argv[5]));
+            TerminalOutput = ("y" == std::string(args.at(5)));
         }
     }
 }
