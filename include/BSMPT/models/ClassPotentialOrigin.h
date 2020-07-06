@@ -37,7 +37,7 @@
 *   The code itself can be downloaded at https://github.com/phbasler/BSMPT.
 
  *  \section Citation
- *  If you use this program for your work please cite https://arxiv.org/abs/1803.02846
+ *  If you use this program for your work please cite https://arxiv.org/abs/1803.02846 and https://arxiv.org/abs/2007.01725
  *
  *  \section install_sec Installation
  *
@@ -56,7 +56,7 @@ After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake`
 
     `-DCMAES_ROOT=/path/to/cmaes`
 
-    If cmaes is not in this path, then it will be installed there. If you have troubles with the installation, please have a look at [libcmaes](https://github.com/beniz/libcmaes/wiki) for the dependencies. If you don't want to install or use it, you can set `-DUseLibCMAES=OFF`
+    If cmaes is not in this path, then it will be installed in the build directory. If you have troubles with the installation, please have a look at [libcmaes](https://github.com/beniz/libcmaes/wiki) for the dependencies. If you don't want to install or use it, you can set `-DUseLibCMAES=OFF`
 
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): With `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you need to tell where NLopt is installed. If you do not then NLopt will not be used.
 5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
@@ -76,7 +76,8 @@ Note to Mac Users: You have to use the g++ compiler as clang does not support Op
  *  We briefly give an overview of the available executables and their function.
 *We illustrate the call of the executables for the CP-violationg 2HDM, with the
 *input parameter values given in 'example/C2HDM_Input.dat.' For details, see
-*also the section 'Executables' of the manual.
+*also the section 'Executables' of the manual. Each executable can be called with
+* the option '--help' to get information on possible input parameters.
  *
  *  \subsection BSMPT
  *  BSMPT calculates the EWPT for every parameter point in the input file and
@@ -172,6 +173,23 @@ Note to Mac Users: You have to use the g++ compiler as clang does not support Op
  *      ./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat 2 2 example/EWBG_config.txt
  *
  *  with the result given in example/test_EWBG.dat which can be compared with the already available file example/C2HDM_Input.dat_EWBG.
+ *
+ * \subsection RenormScale
+ * This executable varies the MSbar renormalisation scale of a given parameter point between a factor of 0.5 and 1.5 of its original
+ * value and calculates the EWPT and the CT parameters at each scale. As no RGE running is included yet, this has to be taken with
+ * caution.
+ *
+ * \subsection PlotEWBG_vw
+ * This executable varies the wall velocity of a given parameter point and calculates the EWBG for each velocity.
+ *
+ * \subsection PlotEWBG_nL
+ * This executable calculates the left-handed fermion density in front of the wall as a function of the distance to the bubble wall.
+ *
+ * \subsection EWBGRenormScale
+ * This executable varies the MSbar renormalisation scale of a given parameter point between a factor of 0.5 and 1.5 of its original
+ * value and calculates the EWBG and the CT parameters at each scale. As no RGE running is included yet, this has to be taken with
+ * caution.
+ *
  *
  */
 
