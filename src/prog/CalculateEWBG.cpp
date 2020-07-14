@@ -299,7 +299,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--terminaloutput="))
             {
-                TerminalOutput = el.substr(std::string("--lastline=").size()) == "y";
+                TerminalOutput = el.substr(std::string("--terminaloutput=").size()) == "y";
             }
             else if(StringStartsWith(el,"--vw="))
             {
