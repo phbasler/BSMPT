@@ -70,14 +70,18 @@ namespace BSMPT
                 dGam[0] = 0;
         }
 
-        void Calc_Gam_M::set_class(double T_in, double vw_in, double m_in, double msqrt_thermal_in, double dmsqrt_thermal_in,bool use_lep_in)
+        void Calc_Gam_M::set_class(double T_in, double vw_in, double m_in, double msqrt_thermal_in, double dmsqrt_thermal_in, bool use_lep_in)
         {
             Calc_Gam_M::T = T_in;
             Calc_Gam_M::vw = vw_in;
             Calc_Gam_M::m_full = m_in;
             Calc_Gam_M::beta = 1 / T;
-            if(use_lep_in) Calc_Gam_M::GamT = 0.002 * T;
-            else Calc_Gam_M::GamT = 0.16 * T;
+            if (use_lep_in)
+            {
+                Calc_Gam_M::GamT = 0.002 * T;
+            }
+            else
+                Calc_Gam_M::GamT = 0.16 * T;
             Calc_Gam_M::msqrt_thermal = msqrt_thermal_in;
             Calc_Gam_M::dmsqrt_thermal = dmsqrt_thermal_in;
         }
@@ -196,8 +200,10 @@ namespace BSMPT
             Calc_Scp::T = T_in;
             Calc_Scp::msqrt_thermal = msqrt_thermal_in;
             Calc_Scp::dmsqrt_thermal = dmsqrt_thermal_in;
-            if(use_lep) Calc_Scp::GamT = 0.002*T;
-            else Calc_Scp::GamT=0.16 * T;
+            if (use_lep)
+                Calc_Scp::GamT = 0.002 * T;
+            else
+                Calc_Scp::GamT = 0.16 * T;
         }
 
         double Nintegrate_Scp(Calc_Scp &C_Scp)
@@ -409,7 +415,6 @@ namespace BSMPT
                 return std::atan2(-Im, -Re);
         }
 
-
         std::vector<double> gen_fluid::Calc_theta(double z, double CP_sym, double CP_brk)
         {
             std::vector<double> res;
@@ -569,7 +574,6 @@ namespace BSMPT
             gen_fluid::Gam_Y_b = 0.19 * alphaS * yuk_b * yuk_b * Temp;
             gen_fluid::Gam_Y_tau = 0.28 * alphaW * yuk_tau * yuk_tau * Temp;
             // gen_fluid::Gam_Y_u  = 0.19*alphaS*yuk_u*yuk_u*Temp;
-
         }
 
         std::pair<double, double> gen_fluid::Calc_ThermalMass_q(double &YukCoupling, double &T_in)
