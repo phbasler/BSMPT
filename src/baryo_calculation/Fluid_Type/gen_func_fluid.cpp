@@ -70,13 +70,14 @@ namespace BSMPT
                 dGam[0] = 0;
         }
 
-        void Calc_Gam_M::set_class(double T_in, double vw_in, double m_in, double msqrt_thermal_in, double dmsqrt_thermal_in)
+        void Calc_Gam_M::set_class(double T_in, double vw_in, double m_in, double msqrt_thermal_in, double dmsqrt_thermal_in,bool use_lep_in)
         {
             Calc_Gam_M::T = T_in;
             Calc_Gam_M::vw = vw_in;
             Calc_Gam_M::m_full = m_in;
             Calc_Gam_M::beta = 1 / T;
-            Calc_Gam_M::GamT = 0.16 * T;
+            if(use_lep_in) Calc_Gam_M::GamT = 0.002 * T;
+            else Calc_Gam_M::GamT = 0.16 * T;
             Calc_Gam_M::msqrt_thermal = msqrt_thermal_in;
             Calc_Gam_M::dmsqrt_thermal = dmsqrt_thermal_in;
         }
@@ -135,7 +136,6 @@ namespace BSMPT
             double NC = 3;
             double w = std::sqrt(std::pow(k, 2) + msqrt_thermal);
             double delta_w = dmsqrt_thermal / (2 * std::sqrt(k * k + msqrt_thermal));
-            double GamT = 0.16 * T;
             double Imff = 2 * Calc_Scp::m_full * Calc_Scp::m_full * theta_prime;
 
             double integrand = 0;
@@ -188,7 +188,7 @@ namespace BSMPT
                 res = 0;
             return res;
         }
-        void Calc_Scp::set_class(double T_in, double vw_in, double mt_in, double theta_prime_in, double msqrt_thermal_in, double dmsqrt_thermal_in)
+        void Calc_Scp::set_class(double T_in, double vw_in, double mt_in, double theta_prime_in, double msqrt_thermal_in, double dmsqrt_thermal_in, bool use_lep)
         {
             Calc_Scp::m_full = mt_in;
             Calc_Scp::vw = vw_in;
@@ -196,6 +196,8 @@ namespace BSMPT
             Calc_Scp::T = T_in;
             Calc_Scp::msqrt_thermal = msqrt_thermal_in;
             Calc_Scp::dmsqrt_thermal = dmsqrt_thermal_in;
+            if(use_lep) Calc_Scp::GamT = 0.002*T;
+            else Calc_Scp::GamT=0.16 * T;
         }
 
         double Nintegrate_Scp(Calc_Scp &C_Scp)

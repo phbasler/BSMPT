@@ -95,7 +95,7 @@ namespace BSMPT
          * @param vw Wall velocity
          * @param mt Quark mass
          */
-            void set_class(double T, double vw, double mt, double m_thermal, double dm_thermal);
+            void set_class(double T, double vw, double mt, double m_thermal, double dm_thermal,bool use_lep=false);
             /**
          * @brief operator () Needed for the boost interface.
          * @param Gam Current state of Gam_M.
@@ -130,6 +130,7 @@ namespace BSMPT
             double nf_prime(double w);
 
         public:
+            double GamT;
             /**
          * @brief m_full One-loop mass of the fermion without the thermal contributions
          */
@@ -173,7 +174,7 @@ namespace BSMPT
          * @param mt Quark mass
          * @param theta_prime Derivative of the quark phase in respect of the wall distance z
          */
-            void set_class(double T, double vw, double mt, double theta_prime, double msqrt_thermal_in, double dmsqrt_thermal_in);
+            void set_class(double T, double vw, double mt, double theta_prime, double msqrt_thermal_in, double dmsqrt_thermal_in , bool use_lep=false);
         };
         /**
  * @brief Nintegrate_Scp Numerical evaluation of the CP-violating source terms at given temperature and quark mass.
