@@ -122,7 +122,7 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
         double Gam_M_t      =   Nintegrate_GamM(Calc_Gam_obj);
         Calc_Gam_obj.set_class(Temp,vw,mb,msqrt_thermal_bot,dmsqrt_thermal_bot);
         double Gam_M_b      =   Nintegrate_GamM(Calc_Gam_obj);    
-        Calc_Gam_obj.set_class(Temp,vw,mtau,msqrt_thermal_tau,dmsqrt_thermal_tau);
+        Calc_Gam_obj.set_class(Temp,vw,mtau,msqrt_thermal_tau,dmsqrt_thermal_tau,true);//true--> Use lepton thermal width
         double Gam_M_tau    =   Nintegrate_GamM(Calc_Gam_obj);
     //Gam_Y_b has to be zero if the bottom mass vanishes
         if(bot_mass_flag == 2) Gam_Y_b =0;
@@ -134,7 +134,7 @@ void tau_source::operator()(const state_type &omega , state_type &domega , const
         if((bot_mass_flag==1) and (tau_mass_flag==1)){
             Calc_Scp_obj.set_class(Temp,vw,mb,theta_prime_bot,msqrt_thermal_bot,dmsqrt_thermal_bot);
             Scp_b = Nintegrate_Scp(Calc_Scp_obj);
-            Calc_Scp_obj.set_class(Temp,vw,mtau,theta_prime_tau,msqrt_thermal_tau,dmsqrt_thermal_tau);
+            Calc_Scp_obj.set_class(Temp,vw,mtau,theta_prime_tau,msqrt_thermal_tau,dmsqrt_thermal_tau,true);//true--> Use lepton thermal width
             Scp_tau = Nintegrate_Scp(Calc_Scp_obj);
         }
 
