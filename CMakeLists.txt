@@ -34,6 +34,9 @@ find_package(GSL 2.1 REQUIRED)
 if(UseLibCMAES AND NOT WIN32)
   find_package(OpenMP REQUIRED)
   find_package(libcmaes 0.9.6.1 REQUIRED)
+  if(NOT TARGET libcmaes::cmaes AND libcmaes_FOUND)
+    message("libcmaes found but no target")
+    endif()
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
@@ -49,6 +52,7 @@ configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
 
 add_subdirectory(src)
 
+message(STATUS ${libcmaes_INCLUDE_DIRS})
 
 
 # -------------------------- export as cmake package --------------------------
