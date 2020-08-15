@@ -189,7 +189,18 @@ std::vector<std::vector<double>> FindNextLocalMinima(
         int WhichMinimizer = WhichMinimizerDefault);
 
 
-
+/**
+ * @brief MinimaDevelopmentWithTemperature calculates the temperature development of several local minima
+ * @param model The used model and parameter point
+ * @param StartingTemperature The first temperature at which to calculate the local minima from the random points
+ * @param FinalTemperature The final temperature for the temperature development
+ * @param StepsizeTemperature The stepsize for the temperature development
+ * @param RNGRanges The ranges for the RNG generated starting point at StartingTemperature
+ * @param seed The seed used for the RNG
+ * @param NumberOfStartingPoints How many RNG points should be generated
+ * @param WhichMinimizer Which minimizers should be used?
+ * @return List of Minima development, each member being a list for one point with the entries <Temperature, Minimum>
+ */
 std::vector<std::vector<std::pair<double,std::vector<double>>>>
 MinimaDevelopmentWithTemperature(
 const std::shared_ptr<Class_Potential_Origin>& model,
