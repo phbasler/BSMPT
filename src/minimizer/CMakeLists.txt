@@ -12,7 +12,7 @@ set(src
 )
 
 
-if(CMAES_FOUND)
+if(libcmaes_FOUND)
 	set(header
 		${header}
 		${header_path}/LibCMAES/MinimizeLibCMAES.h
@@ -38,8 +38,8 @@ endif()
 
 add_library(Minimizer ${header} ${src})
 target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl)
-if(CMAES_FOUND)
-  target_link_libraries(Minimizer PUBLIC CMAES::cmaes OpenMP::OpenMP_CXX)
+if(libcmaes_FOUND)
+  target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
 endif()
 
 if(NLopt_FOUND)

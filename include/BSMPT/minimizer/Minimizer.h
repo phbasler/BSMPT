@@ -46,7 +46,7 @@ const bool UseGSLDefault = true;
 /**
  * @brief UseLibCMAESDefault Use the Libcmaes minimizer in the default settings
  */
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
 const bool UseLibCMAESDefault = true;
 #else
 const bool UseLibCMAESDefault = false;

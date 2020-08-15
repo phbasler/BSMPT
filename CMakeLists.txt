@@ -33,7 +33,7 @@ find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
 if(UseLibCMAES AND NOT WIN32)
   find_package(OpenMP REQUIRED)
-  include(GetCMAES)
+  find_package(libcmaes 0.9.6.1 REQUIRED)
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
