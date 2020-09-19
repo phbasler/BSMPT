@@ -419,9 +419,17 @@ protected:
    */
     std::vector< std::vector< std::vector< std::complex<double>> > > Curvature_Quark_F2H1;
     /**
+     * Y^{IJ} for Quarks
+     */
+    std::vector<std::vector<std::complex<double>>> Curvature_Quark_F2;
+    /**
    * Y^{IJk} for Leptons
    */
     std::vector< std::vector< std::vector< std::complex<double>> > > Curvature_Lepton_F2H1;
+    /**
+     * Y^{IJ} for Leptons
+     */
+    std::vector<std::vector<std::complex<double>>> Curvature_Lepton_F2;
     /**
      * @brief MassSquaredHiggs Stores the masses of the Higgs Bosons calculated in CalculatePhysicalCouplings
      */
@@ -831,6 +839,8 @@ public:
    */
     std::vector<double> LeptonMassesSquared(const std::vector<double>& v, const int& diff = 0) const;
 
+
+
     /**
    * Calculates the quark mass matrix and saves all eigenvalues, this assumes the same masses
    *  for different colours.
@@ -839,12 +849,24 @@ public:
    */
     std::vector<std::complex<double>> QuarkMasses(const std::vector<double>& v) const;
     /**
+     * @brief QuarkMassMatrix calculates the Mass Matrix for the Quarks of the form $ M^{IJ} = Y^{IJ} + Y^{IJk} v_k $
+     * @param v the configuration of all VEVs at which the matrix should be calculated
+     * @return the Mass Matrix for the Quarks of the form $ M^{IJ} = Y^{IJ} + Y^{IJk} v_k $
+     */
+    Eigen::MatrixXcd QuarkMassMatrix(const std::vector<double>& v) const;
+    /**
    * Calculates the quark mass matrix and saves all eigenvalues, this assumes the same masses
    *  for different colours.
    * @param v the configuration of all VEVs at which the eigenvalues should be evaluated
    * @return Vector in which the complex eigenvalues m of the mass matrix will be stored
    */
     std::vector<std::complex<double>> LeptonMasses(const std::vector<double>& v) const;
+    /**
+     * @brief LeptonMassMatrix calculates the Mass Matrix for the Leptons of the form $ M^{IJ} = Y^{IJ} + Y^{IJk} v_k $
+     * @param v the configuration of all VEVs at which the matrix should be calculated
+     * @return the Mass Matrix for the Leptons of the form $ M^{IJ} = Y^{IJ} + Y^{IJk} v_k $
+     */
+    Eigen::MatrixXcd LeptonMassMatrix(const std::vector<double>& v) const;
 
     /**
    * Calculates the triple Higgs couplings at NLO in the mass basis.
