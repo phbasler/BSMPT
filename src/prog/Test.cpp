@@ -171,7 +171,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             }
             else if(StringStartsWith(el,"--line="))
             {
-                Line = std::stoi(el.substr(std::string("--firstline=").size()));
+                Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--usegsl="))
             {
