@@ -31,9 +31,29 @@ find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
+
+set(EXPORT_CMAES FALSE)
+include(FetchContent)
 if(UseLibCMAES AND NOT WIN32)
   find_package(OpenMP REQUIRED)
-  find_package(libcmaes)
+  find_package(libcmaes QUIET)
+    if(NOT libcmaes_FOUND)
+      set(EXPORT_CMAES TRUE)
+      FetchContent_Declare(
+        libcmaes
+        GIT_REPOSITORY https://github.com/beniz/libcmaes.git
+        GIT_TAG master)
+      FetchContent_GetProperties(libcmaes)
+      if(NOT libcmaes_POPULATED)
+        option(LIBCMAES_BUILD_TESTS OFF)
+        option(LIBCMAES_BUILD_PYTHON OFF)
+        option(LIBCMAES_BUILD_EXAMPLES OFF)
+        FetchContent_Populate(libcmaes)
+        add_subdirectory(${libcmaes_SOURCE_DIR} ${libcmaes_BINARY_DIR})
+        message(STATUS ${libcmaes_SOURCE_DIR})
+      endif()
+      set(libcmaes_FOUND TRUE)
+    endif()
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
@@ -65,6 +85,13 @@ set(ExportList
   ThermalFunctions
   Utility
   )
+
+if(EXPORT_CMAES)
+  set(ExportList
+    ${ExportList}
+    cmaes
+    )
+endif(EXPORT_CMAES)
 
 if(Boost_FOUND)
 set(ExportList
