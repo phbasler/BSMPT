@@ -37,7 +37,7 @@ if(UseLibCMAES AND NOT WIN32)
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
-  find_package(NLopt QUIET)
+  find_package(NLopt REQUIRED)
 endif(UseNLopt)
 
 if(NOT CMAES_FOUND AND NOT NLopt_FOUND)

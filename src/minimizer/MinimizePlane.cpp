@@ -23,7 +23,6 @@
  */
 
 #include <BSMPT/minimizer/MinimizePlane.h>
-#include <ext/alloc_traits.h>                   // for __alloc_traits<>::val...
 #include <gsl/gsl_errno.h>                      // for gsl_set_error_handler...
 #include <gsl/gsl_multimin.h>                   // for gsl_multimin_fminimizer
 
