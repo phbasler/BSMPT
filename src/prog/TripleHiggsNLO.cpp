@@ -23,8 +23,6 @@
  * Calculates the Triple Higgs couplings for mulitple points and adds them at the end of the line.
  */
 
-#include <bits/exception.h>                     // for exception
-#include <ext/alloc_traits.h>                   // for __alloc_traits<>::val...
 #include <stdlib.h>                             // for atoi, EXIT_FAILURE
 #include <memory>                               // for unique_ptr
 #include <string>                               // for operator<<, string
