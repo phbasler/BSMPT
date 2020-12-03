@@ -29,7 +29,6 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <iostream>
 #include <iomanip>
-#include <bits/exception.h>                     // for exception
 #include <stdlib.h>                             // for EXIT_FAILURE, atoi
 #include <algorithm>                            // for copy
 #include <memory>                               // for unique_ptr
@@ -70,10 +69,12 @@ int main(int argc, char *argv[]) try{
 		return EXIT_FAILURE;
 	}
 
+    std::cout << "Found file" << std::endl;
 
 	std::string linestr;
     std::unique_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(args.Model);
 
+    std::cout << "Created modelpointer " << std::endl;
 
 	while(getline(infile,linestr))
 	{
@@ -87,6 +88,7 @@ int main(int argc, char *argv[]) try{
 		  }
         if(linecounter == args.Line and linecounter != 1)
 		{
+            std::cout << "Found line" << std::endl;
             modelPointer->initModel(linestr);
 			modelPointer->write();
 			std::vector<double> dummy;
@@ -168,10 +170,11 @@ CLIOptions::CLIOptions(int argc, char *argv[])
             else if(StringStartsWith(el,"--input="))
             {
                 InputFile = arg.substr(std::string("--input=").size());
+                std::cout << "Inputfile = " << InputFile << std::endl;
             }
             else if(StringStartsWith(el,"--line="))
             {
-                Line = std::stoi(el.substr(std::string("--firstline=").size()));
+                Line = std::stoi(el.substr(std::string("--line=").size()));
             }
             else if(StringStartsWith(el,"--usegsl="))
             {

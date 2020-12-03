@@ -22,7 +22,6 @@
  * Calculates eta as a function of the renormalised scale mu. The renormalisation scale mu is varied from 1/2 to 1.5 C_vev0 in NumberOfStep steps.
  */
 
-#include <bits/exception.h>                     // for exception
 #include <stdlib.h>                             // for atoi, EXIT_FAILURE
 #include <algorithm>                            // for copy, max
 #include <memory>                               // for shared_ptr, __shared_...

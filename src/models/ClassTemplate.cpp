@@ -17,7 +17,6 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ext/alloc_traits.h>               // for __alloc_traits<>::value_type
 #include <stddef.h>                         // for std::size_t
 #include <algorithm>                        // for max, copy
 #include <iostream>                         // for operator<<, endl, basic_o...

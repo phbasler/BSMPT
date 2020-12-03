@@ -24,7 +24,6 @@
  * same as used in Potential::set_CT_Pot_Par
  */
 
-#include <bits/exception.h>                     // for exception
 #include <stdlib.h>                             // for atoi, EXIT_FAILURE
 #include <memory>                               // for unique_ptr
 #include <string>                               // for operator<<, getline
