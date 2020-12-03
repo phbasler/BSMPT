@@ -113,8 +113,8 @@ var NAVTREEINDEX =
 ".html",
 "Minimizer_8h_source.html",
 "classBSMPT_1_1Baryo_1_1transport__equations.html#a84666beee06cb7b4a606578814765da1",
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ab1dacede2de6911bd5dee623ea947d8c",
-"gen__func__fluid_8cpp.html",
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#aa429c0be37ca1dc81e557730f09b4994",
+"gen__calc_8h.html#a12fbd54c0296e21cc380dd2817155f40",
 "structCLIOptions.html#a8918c9804ce48b0957ff1b277889dbf3"
 ];
 

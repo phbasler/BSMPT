@@ -45,6 +45,8 @@ var classBSMPT_1_1Models_1_1Class__Potential__C2HDM =
     [ "DTCharged", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a0628175a3e1821d7778032c57a84ce03", null ],
     [ "Du1CT", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a2709689e6dc5f2e058c09c9cf0b3dc0f", null ],
     [ "Du2CT", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ad90df66778a2f4fafff4f40dff3dd90e", null ],
+    [ "g1uu", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a8a54fe2c9e90c784ff81eb65666d6505", null ],
+    [ "g2uu", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a4637cefa62d37431511d76ddad6cbc4b", null ],
     [ "IL5", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae538c844f00d7b72a7c1f7561496b526", null ],
     [ "IncludeChargeBreakingVEV", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a3237b6c0aa12a48b61431ac0ff95a707", null ],
     [ "Iu3", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#aa429c0be37ca1dc81e557730f09b4994", null ],
