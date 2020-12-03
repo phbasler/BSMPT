@@ -29,7 +29,6 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <iostream>
 #include <iomanip>
-#include <bits/exception.h>                     // for exception
 #include <stdlib.h>                             // for EXIT_FAILURE, atoi
 #include <algorithm>                            // for copy
 #include <memory>                               // for unique_ptr

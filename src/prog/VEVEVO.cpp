@@ -27,7 +27,6 @@
  */
 
 
-#include <bits/exception.h>                     // for exception
 #include <math.h>                               // for sqrt, abs
 #include <stdlib.h>                             // for atof, EXIT_FAILURE, atoi
 #include <algorithm>                            // for copy, max

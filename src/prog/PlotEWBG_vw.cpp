@@ -23,7 +23,6 @@
  * This program calculates the EWBG eta as a function of vw and varies vw over a given array.
  */
 
-#include <bits/exception.h>                    // for exception
 #include <stdlib.h>                            // for atof, EXI...
 #include <algorithm>                           // for copy, max
 #include <memory>                              // for shared_ptr
