@@ -34,7 +34,7 @@
 
 #include <BSMPT/minimizer/MinimizeGSL.h>
 
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
 #endif
 
@@ -77,7 +77,7 @@ MinimizersToUse GetMinimizers(int WhichMinimizer)
     WhichMinimizer/= 2;
     bool UseNLopt = (WhichMinimizer%2 == 1);
 
-#ifndef CMAES_FOUND
+#ifndef libcmaes_FOUND
     UseCMAES = false;
 #endif
 
@@ -138,7 +138,7 @@ std::vector<double> Minimize_gen_all(
 
 
     }
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
     if(UseMinimizer.UseCMAES) {
         auto LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer,Temp,start);
         auto errC = LibCMAES.CMAESStatus;
