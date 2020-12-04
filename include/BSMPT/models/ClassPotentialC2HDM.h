@@ -29,7 +29,7 @@ namespace BSMPT{
 namespace Models{
 
 /**
- * @brief The Class_Potential_JonasSUSY class
+ * @brief The Class_Potential_C2HDM class
  * Implementation of the CP-violating 2HDM as given in the manual
  *
  *
