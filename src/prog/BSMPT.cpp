@@ -27,7 +27,6 @@
  */
 
 
-#include <bits/exception.h>                     // for exception
 #include <stdlib.h>                             // for atoi, EXIT_FAILURE
 #include <algorithm>                            // for copy, max
 #include <memory>                               // for shared_ptr, __shared_...

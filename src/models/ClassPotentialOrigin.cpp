@@ -2369,6 +2369,13 @@ void Class_Potential_Origin::CheckImplementation(
         leptonMassesInput.push_back(pow(C_MassTau,2));
         leptonMassesInput.push_back(pow(-C_MassTau,2));
 
+        leptonMassesInput.push_back(0);
+        leptonMassesInput.push_back(0);
+        leptonMassesInput.push_back(0);
+        leptonMassesInput.push_back(0);
+        leptonMassesInput.push_back(0);
+        leptonMassesInput.push_back(0);
+
         quarkMassesInput.push_back(pow(C_MassUp,2));
         quarkMassesInput.push_back(pow(-C_MassUp,2));
         quarkMassesInput.push_back(pow(C_MassCharm,2));
@@ -2411,9 +2418,23 @@ void Class_Potential_Origin::CheckImplementation(
             std::cout << std::endl;
 
             double sum{0};
-            for(std::size_t i{0};i<NLepton;++i)
+            for(std::size_t i{0};i<std::min(leptonMassCalculated.size(),leptonMassesInput.size());++i)
             {
                 sum += std::abs(leptonMassCalculated.at(i) - leptonMassesInput.at(i));
+            }
+            if(leptonMassCalculated.size() > leptonMassesInput.size())
+            {
+                for(std::size_t i{leptonMassesInput.size()}; i<leptonMassCalculated.size();++i )
+                {
+                    sum += std::abs(leptonMassCalculated.at(i));
+                }
+            }
+            else if(leptonMassesInput.size() > leptonMassCalculated.size())
+            {
+                for(std::size_t i{leptonMassCalculated.size()}; i<leptonMassesInput.size();++i)
+                {
+                    sum += std::abs(leptonMassesInput.at(i));
+                }
             }
             if(sum > ZeroMass)
             {

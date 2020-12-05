@@ -68,7 +68,7 @@ const std::unordered_map<std::string,ModelIDs> ModelNames{
     {"r2hdm",ModelIDs::R2HDM},
     {"n2hdm",ModelIDs::RN2HDM},
     {"cxsm",ModelIDs::CXSM},
-    {"template",ModelIDs::TEMPLATE}
+    {"template",ModelIDs::TEMPLATE},
 };
 
 /**

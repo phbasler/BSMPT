@@ -15,6 +15,7 @@ set(header ${CMAKE_SOURCE_DIR}/include/BSMPT/utility.h)
 set(src utility.cpp)
 add_library(Utility ${header} ${src})
 target_include_directories(Utility PUBLIC ${BSMPT_SOURCE_DIR}/include)
+target_compile_features(Utility PUBLIC cxx_std_14)
 
 
 #==============================EXE======================================
