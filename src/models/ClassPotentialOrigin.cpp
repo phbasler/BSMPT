@@ -2449,12 +2449,6 @@ void Class_Potential_Origin::CheckImplementation(
         leptonMassesInput.push_back(pow(C_MassTau,2));
         leptonMassesInput.push_back(pow(-C_MassTau,2));
 
-        leptonMassesInput.push_back(0);
-        leptonMassesInput.push_back(0);
-        leptonMassesInput.push_back(0);
-        leptonMassesInput.push_back(0);
-        leptonMassesInput.push_back(0);
-        leptonMassesInput.push_back(0);
 
         quarkMassesInput.push_back(pow(C_MassUp,2));
         quarkMassesInput.push_back(pow(-C_MassUp,2));
