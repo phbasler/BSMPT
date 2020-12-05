@@ -34,6 +34,8 @@
 #include <random>
 #include <boost/math/tools/minima.hpp>
 
+#include <thread>
+
 namespace BSMPT{
 namespace Wall{
 const double GSL_Tolerance=std::pow(10,-4);
@@ -106,7 +108,8 @@ double calculate_wall_thickness_plane(
 	double LW = 0;
 	int maxstep = 10;
 	double Stepsize = 1.0/(maxstep);
-	std::vector<double> Data_min_negative;
+    std::vector<double> Data_min_negative(maxstep+1);
+    std::vector<std::thread> Data_min_threads(maxstep+1);
 
 	for(int ncounter=0;ncounter<=maxstep;ncounter++){
 		double line_parameter = Stepsize*ncounter;
@@ -114,9 +117,20 @@ double calculate_wall_thickness_plane(
 		for(std::size_t i=0;i<vcritical.size();i++) {
 			basepoint.push_back(vevsymmetric.at(i) *(1-line_parameter) + vcritical.at(i) * line_parameter );
 		}
-        auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp,WhichMinimizer);
-        Data_min_negative.push_back(-MinimumPlaneResult.PotVal);
+        Data_min_threads.at(ncounter) =
+                std::thread([ncounter, basepoint, &vevsymmetric, &vcritical, modelPointer, Temp, WhichMinimizer, &Data_min_negative](){
+            auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp,WhichMinimizer);
+            Data_min_negative.at(ncounter) = -MinimumPlaneResult.PotVal;
+        });
 	}
+
+    for(auto& thr : Data_min_threads)
+    {
+        if(thr.joinable())
+        {
+            thr.join();
+        }
+    }
 
 	struct GSL_params spline;
 	boost::math::cubic_b_spline<double> splinef(Data_min_negative.data(),Data_min_negative.size(),0,Stepsize);
