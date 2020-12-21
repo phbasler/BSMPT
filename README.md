@@ -51,11 +51,10 @@ If you use this program for your work, please cite [1803.02846](https://arxiv.or
         make install  
 After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake` to link Eigen3
   
-3. libcmaes: Additionally to GSL you should either use libcmaes or NLopt. For libcmaes you have to set 
-
-    `-DCMAES_ROOT=/path/to/cmaes`  
+3. libcmaes: Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically, otherwise you can point it to the install direction with
+    `-Dlibcmaes_ROOT=/path/to/cmaes`  
     
-    If cmaes is not in this path, then it will be installed there. If you have troubles with the installation, please have a look at [libcmaes](https://github.com/beniz/libcmaes/wiki) for the dependencies. If you don't want to install or use it, you can set `-DUseLibCMAES=OFF` 
+    If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `-DUseLibCMAES=OFF` 
     
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If NLopt is installed through your packet manager cmake will find it automatically. Otherwise, with `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you can tell where NLopt is installed. If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
 5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
