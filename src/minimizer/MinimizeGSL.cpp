@@ -40,6 +40,13 @@
 #include <BSMPT/models/ClassPotentialOrigin.h>  // for Class_Potential_Origin
 #include <BSMPT/minimizer/Minimizer.h>
 
+
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <queue>
+
+
 namespace BSMPT {
 namespace Minimizer{
 
@@ -168,46 +175,91 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     std::default_random_engine randGen(seed);
     double RNDMax= 500;
     std::size_t MaxTries = 600;
-    std::size_t tries = 0;
-    std::size_t numOfSol = 0;
-    //	int MaxSol = 20;
+    std::atomic<std::size_t> tries {0};
     std::size_t nCol = dim+2;
-    std::vector<double> start,sol,vPot;
-    do{
-        start.resize(dim);
-        for(std::size_t i=0;i<dim;i++) start[i] = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
 
+    struct MinimizeParams{
+        std::vector<double> start;
+        std::vector<double> sol;
+        int GSL_status;
+    };
 
-        auto status = GSL_Minimize_From_S_gen_all(params,sol,start);
+    std::atomic<std::size_t> FoundSolutions{0};
+    std::vector<std::thread> MinThreads;
+    std::mutex WriteResultLock;
+    std::queue<std::vector<double>> Results;
 
-        if(status == GSL_SUCCESS){
-            vPot=modelPointer->MinimizeOrderVEV(sol);
+    auto thread_Job = [](
+            std::atomic<std::size_t>& mFoundSolutions,
+            std::size_t mMaxSol,
+            std::atomic<std::size_t>& mtries,
+            std::size_t mMaxTries,
+            std::size_t mdim,
+            double mRNDMax,
+            std::default_random_engine& mrandGen,
+            GSL_params& mparams,
+            std::mutex& mWriteResultLock,
+            std::queue<std::vector<double>>& mResults){
+        while(mFoundSolutions < mMaxSol and mtries <= mMaxTries)
+        {
 
-            std::vector<double> row(nCol);
-            for(std::size_t i=0;i<dim;i++) row.at(i) = sol.at(i);
-            row.at(dim) = modelPointer->EWSBVEV(vPot);
-            row.at(dim+1) = modelPointer->VEff(vPot,Temp,0);
-
-            saveAllMinima.push_back(row);
-            numOfSol ++;
-            if(numOfSol == MaxSol) break;
+            std::vector<double> start(mdim);
+            std::vector<double> sol;
+            for(std::size_t j=0;j<mdim;++j)
+            {
+                start.at(j) = mRNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(mrandGen));
+            }
+            auto status = GSL_Minimize_From_S_gen_all(mparams, sol, start);
+            if(status == GSL_SUCCESS)
+            {
+                std::unique_lock<std::mutex> lock(mWriteResultLock);
+                ++mFoundSolutions;
+                mResults.push(sol);
+            }
         }
+    };
 
-
-        start.clear();
-        sol.clear();
-        tries++;
-    }while(tries <= MaxTries);
-
-    if(numOfSol == 0)
+    for(std::size_t i=0;i<Num_threads;++i)
     {
-//        std::cerr << "No solutions found during the GSL minimization at T = " << Temp << " GeV " << "\n";
+        MinThreads.push_back(
+                    std::thread([&](){
+            thread_Job(FoundSolutions, MaxSol, tries, MaxTries, dim, RNDMax, randGen, params, WriteResultLock, Results);
+        })
+        );
+    }
+
+    for(auto& thr: MinThreads)
+    {
+        if(thr.joinable()) thr.join();
+    }
+
+    while(not Results.empty())
+    {
+        auto res = Results.front();
+        Results.pop();
+        auto vpot = modelPointer->MinimizeOrderVEV(res);
+        std::vector<double> row(nCol);
+        for(std::size_t i=0;i<dim;++i) row.at(i) = res.at(i);
+        row.at(dim) = modelPointer->EWSBVEV(vpot);
+        row.at(dim+1) = modelPointer->VEff(vpot,Temp,0);
+        saveAllMinima.push_back(row);
+    }
+
+
+    if(saveAllMinima.size() == 0)
+    {
+        std::cerr << "No solutions found during the GSL minimization at T = " << Temp << " GeV " << "\n";
         return std::make_pair(std::vector<double>{}, false);
+    }
+
+    if(saveAllMinima.size() < MaxSol)
+    {
+        std::cerr << "Found " << saveAllMinima.size() << " of  " << MaxSol << " solutions at T = " << Temp << std::endl;
     }
 
     std::size_t minIndex = 0;
     double VMin = saveAllMinima[0][dim+1];
-    for(std::size_t k=1;k<numOfSol;k++)
+    for(std::size_t k=1;k<saveAllMinima.size();k++)
     {
         if(saveAllMinima[k][dim+1] <= VMin)
         {

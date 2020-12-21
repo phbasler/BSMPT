@@ -507,29 +507,11 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
         }
     }
 
-    MatrixXcd MIJQuarks(NQuarks,NQuarks);
-    MIJQuarks = MatrixXcd::Zero(NQuarks,NQuarks);
-    for(std::size_t a=0;a<NQuarks;a++)
-    {
-        for(std::size_t b=0;b<NQuarks;b++)
-        {
-            // MIJQuarks(a,b) = 0;
-            for(std::size_t k=0;k<NHiggs;k++) MIJQuarks(a,b) += Curvature_Quark_F2H1[a][b][k]*HiggsVev[k];
-        }
-    }
+    MatrixXcd MIJQuarks = QuarkMassMatrix(HiggsVev);
 
     MassQuark = MIJQuarks.conjugate()*MIJQuarks;
 
-    MatrixXcd MIJLeptons(NLepton,NLepton);
-    MIJLeptons=MatrixXcd::Zero(NLepton,NLepton);
-    for(std::size_t a=0;a<NLepton;a++)
-    {
-        for(std::size_t b=0;b<NLepton;b++)
-        {
-            // MIJLeptons(a,b) = 0;
-            for(std::size_t k=0;k<NHiggs;k++) MIJLeptons(a,b) += Curvature_Lepton_F2H1[a][b][k]*HiggsVev[k];
-        }
-    }
+    MatrixXcd MIJLeptons = LeptonMassMatrix(HiggsVev);
 
     MassLepton = MIJLeptons.conjugate()*MIJLeptons;
 
@@ -1545,41 +1527,9 @@ std::vector<double> Class_Potential_Origin::GaugeMassesSquared(
 std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector<double>& v, const int& diff) const
 {
     std::vector<double> res;
-	if(v.size() != nVEV and v.size() != NHiggs){
-	  std::string ErrorString = std::string("You have called ") + std::string(__func__)
-		+ std::string(" with an invalid vev configuration. Your vev is of dimension ")
-	  + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
-	  throw std::runtime_error(ErrorString);
-	}
-	if(v.size() == nVEV and nVEV != NHiggs){
-		std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
-		    			<< nVEV << " while it should have " << NHiggs
-						<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
-	  std::vector<double> Transformedv;
-      Transformedv=MinimizeOrderVEV(v);
-      res = QuarkMassesSquared(Transformedv,diff);
-      return res;
-	}
-    if(!SetCurvatureDone) {
-//        SetCurvatureArrays(); std::cout << "Reset of Set Curvature " << std::endl;
-        std::string retmes = __func__;
-        retmes += "was called while the model was not initialised correctly.\n";
-        throw std::runtime_error(retmes);
-    };
     MatrixXcd MassMatrix(NQuarks,NQuarks),MIJ(NQuarks,NQuarks);
-    MIJ = MatrixXcd::Zero(NQuarks,NQuarks);
+    MIJ = QuarkMassMatrix(v);
     double ZeroMass = std::pow(10,-10);
-    for(std::size_t i=0;i<NQuarks;i++)
-    {
-        for(std::size_t j=0;j<NQuarks;j++)
-        {
-
-            for(std::size_t k=0;k<NHiggs;k++)
-            {
-                MIJ(i,j) += Curvature_Quark_F2H1[i][j][k]*v[k];
-            }
-        }
-    }
 
     MassMatrix = MIJ.conjugate()*MIJ;
 
@@ -1600,10 +1550,8 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
       for(std::size_t a=0;a<NQuarks;a++){
         for(std::size_t b=0;b<NQuarks;b++){
           for(std::size_t i=0;i<NQuarks;i++){
-            for(std::size_t l=0;l<NHiggs;l++){
-              Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][m]) * Curvature_Quark_F2H1[i][b][l] * v[l];
-              Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][l]) * Curvature_Quark_F2H1[i][b][m] * v[l];
-            }
+              Diff(a,b) += std::conj(Curvature_Quark_F2H1[a][i][m]) * MIJ(i,b);
+              Diff(a,b) += std::conj(MIJ(a,i)) * Curvature_Quark_F2H1[i][b][m];
           }
         }
       }
@@ -1660,41 +1608,10 @@ std::vector<double> Class_Potential_Origin::QuarkMassesSquared(const std::vector
 std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vector<double>& v, const int& diff) const
 {
     std::vector<double> res;
-	if(v.size() != nVEV and v.size() != NHiggs){
-	      std::string ErrorString = std::string("You have called ") + std::string(__func__)
-	        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
-	      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
-	      throw std::runtime_error(ErrorString);
-	}
-	if(v.size() == nVEV and nVEV != NHiggs){
-		std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
-		    			<< nVEV << " while it should have " << NHiggs
-						<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
-	  std::vector<double> Transformedv;
-      Transformedv=MinimizeOrderVEV(v);
-      res = LeptonMassesSquared(Transformedv,diff);
-      return res;
-	}
-    if(!SetCurvatureDone) {
-//        SetCurvatureArrays();
-        std::string retmes = __func__;
-        retmes += "was called while the model was not initialised correctly.\n";
-        throw std::runtime_error(retmes);
-    }
     MatrixXcd MassMatrix(NLepton,NLepton),MIJ(NLepton,NLepton);
-    MIJ = MatrixXcd::Zero(NLepton,NLepton);
     double ZeroMass = std::pow(10,-10);
-    for(std::size_t i=0;i<NLepton;i++)
-    {
-        for(std::size_t j=0;j<NLepton;j++)
-        {
+    MIJ = LeptonMassMatrix(v);
 
-            for(std::size_t k=0;k<NHiggs;k++)
-            {
-                MIJ(i,j) += Curvature_Lepton_F2H1[i][j][k]*v[k];
-            }
-        }
-    }
 
     MassMatrix = MIJ.conjugate()*MIJ;
 
@@ -1709,23 +1626,24 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
 		}
 	}
     else if(diff > 0 and static_cast<size_t>(diff) <= NHiggs){
-      std::size_t m = diff-1;
-	  MatrixXcd Diff(NLepton,NLepton);
-	  Diff = MatrixXcd::Zero(NLepton,NLepton);
-      for(std::size_t a=0;a<NLepton;a++){
-        for(std::size_t b=0;b<NLepton;b++){
-          for(std::size_t i=0;i<NLepton;i++){
-            for(std::size_t l=0;l<NHiggs;l++){
-			  Diff(a,b) += std::conj(Curvature_Lepton_F2H1[a][i][m]) * Curvature_Lepton_F2H1[i][b][l] * v[l];
-			  Diff(a,b) += std::conj(Curvature_Lepton_F2H1[a][i][l]) * Curvature_Lepton_F2H1[i][b][m] * v[l];
-			}
-		  }
-		}
-	  }
 
-      res=FirstDerivativeOfEigenvalues(MassMatrix,Diff);
+        auto k = diff-1;
+        MatrixXcd Diff = MatrixXcd::Zero(NLepton,NLepton);
+        for(std::size_t I{0};I<NLepton;++I)
+        {
+            for(std::size_t J{0};J<NLepton;++J)
+            {
+                for(std::size_t L{0};L<NLepton;++L)
+                {
+                    Diff(I,J) += std::conj(Curvature_Lepton_F2H1[I][L][k]) * MIJ(L,J);
+                    Diff(I,J) += std::conj(MIJ(I,L)) * Curvature_Lepton_F2H1[L][J][k];
+                }
+            }
+        }
 
-      for(std::size_t j=0;j<res.size();j++){
+        res=FirstDerivativeOfEigenvalues(MassMatrix,Diff);
+
+        for(std::size_t j=0;j<res.size();j++){
 		  if(std::isnan(res.at(j))){
 			  std::cout << "MassMatrix = \n" << MassMatrix << "\nDiff = \n" << Diff << std::endl;
 			  std::cout << "Fermion Masses : " ;
@@ -1743,7 +1661,7 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
 				  std::cout << "Curvature_Lepton * v an Higgs  =  :" << l << "\n";
                   for(std::size_t a=0;a<NLepton;a++){
                       for(std::size_t i=0;i<NLepton;i++){
-                          std::cout << Curvature_Quark_F2H1[a][i][l] * v[l] << sep;
+                          std::cout << Curvature_Lepton_F2H1[a][i][l] * v[l] << sep;
 					  }
 					  std::cout << std::endl;
 				  }
@@ -1761,7 +1679,7 @@ std::vector<double> Class_Potential_Origin::LeptonMassesSquared(const std::vecto
 			  retmessage+= " at deriv number ";
 			  retmessage+= std::to_string(j);
 			  retmessage+= " and m = ";
-			  retmessage+= std::to_string(m);
+              retmessage+= std::to_string(diff-1);
 			  throw std::runtime_error(retmessage);
 		  }
 	  }
@@ -2231,10 +2149,12 @@ void Class_Potential_Origin::initVectors(){
     DebyeGauge = vec2{NGauge,std::vector<double>(NGauge,0)};
     LambdaGauge_3 = vec3{NGauge,vec2{NGauge,std::vector<double>(NHiggs,0)}};
 
+    Curvature_Lepton_F2 = vec2Complex{NLepton,vec1Complex(NLepton,0)};
     Curvature_Lepton_F2H1 = vec3Complex{NLepton,vec2Complex{NLepton,vec1Complex(NHiggs,0)}};
     LambdaLepton_3 = vec3Complex{NLepton,vec2Complex{NLepton,vec1Complex(NHiggs,0)}};
     LambdaLepton_4 = vec4Complex{NLepton,vec3Complex{NLepton,vec2Complex{NHiggs,vec1Complex(NHiggs,0)}}};
 
+    Curvature_Quark_F2 = vec2Complex{NQuarks,vec1Complex(NQuarks,0)};
     Curvature_Quark_F2H1 = vec3Complex{NQuarks,vec2Complex{NQuarks,vec1Complex(NHiggs,0)}};
     LambdaQuark_3 = vec3Complex{NQuarks,vec2Complex{NQuarks,vec1Complex(NHiggs,0)}};
     LambdaQuark_4 = vec4Complex{NQuarks,vec3Complex{NQuarks,vec2Complex{NHiggs,vec1Complex(NHiggs,0)}}};
@@ -2842,38 +2762,38 @@ std::vector<double> Class_Potential_Origin::resetScale(const double& newScale)
 }
 
 
-std::vector<std::complex<double>> Class_Potential_Origin::QuarkMasses(const std::vector<double>& v) const
+Eigen::MatrixXcd Class_Potential_Origin::QuarkMassMatrix(const std::vector<double>& v) const
 {
-    std::vector<std::complex<double>> res;
-	if(v.size() != nVEV and v.size() != NHiggs){
-	  std::string ErrorString = std::string("You have called ") + std::string(__func__)
-		+ std::string(" with an invalid vev configuration. Your vev is of dimension ")
-	  + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
-	  throw std::runtime_error(ErrorString);
-	}
-	if(v.size() == nVEV and nVEV != NHiggs){
-		std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
-		    			<< nVEV << " while it should have " << NHiggs
-						<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
-	  std::vector<double> Transformedv;
+    MatrixXcd MIJ(NQuarks,NQuarks);
+    if(v.size() != nVEV and v.size() != NHiggs){
+      std::string ErrorString = std::string("You have called ") + std::string(__func__)
+        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
+      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+      throw std::runtime_error(ErrorString);
+    }
+    if(v.size() == nVEV and nVEV != NHiggs){
+        std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+                        << nVEV << " while it should have " << NHiggs
+                        << ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+      std::vector<double> Transformedv;
       Transformedv=MinimizeOrderVEV(v);
-      res = QuarkMasses(Transformedv);
-      return res ;
-	}
+      MIJ = QuarkMassMatrix(Transformedv);
+      return MIJ ;
+    }
     if(!SetCurvatureDone) {
 //        SetCurvatureArrays(); std::cout << "Reset of Set Curvature " << std::endl;
         std::string retmes = __func__;
         retmes += " is called before SetCurvatureArrays() is called. \n";
         throw std::runtime_error(retmes);
     }
-    MatrixXcd MIJ(NQuarks,NQuarks);
+
     MIJ = MatrixXcd::Zero(NQuarks,NQuarks);
-    double ZeroMass = std::pow(10,-10);
+
     for(std::size_t i=0;i<NQuarks;i++)
     {
         for(std::size_t j=0;j<NQuarks;j++)
         {
-
+            MIJ(i,j) = Curvature_Quark_F2[i][j];
             for(std::size_t k=0;k<NHiggs;k++)
             {
                 MIJ(i,j) += Curvature_Quark_F2H1[i][j][k]*v[k];
@@ -2881,6 +2801,15 @@ std::vector<std::complex<double>> Class_Potential_Origin::QuarkMasses(const std:
         }
     }
 
+    return  MIJ;
+}
+
+std::vector<std::complex<double>> Class_Potential_Origin::QuarkMasses(const std::vector<double>& v) const
+{
+    std::vector<std::complex<double>> res;
+    double ZeroMass = std::pow(10,-10);
+
+    auto MIJ = QuarkMassMatrix(v);
 
 	ComplexEigenSolver<MatrixXcd> es(MIJ,false);
 
@@ -2894,49 +2823,55 @@ std::vector<std::complex<double>> Class_Potential_Origin::QuarkMasses(const std:
     return res;
 }
 
-
-std::vector<std::complex<double>> Class_Potential_Origin::LeptonMasses(const std::vector<double>& v) const
+MatrixXcd Class_Potential_Origin::LeptonMassMatrix(const std::vector<double>& v) const
 {
-    std::vector<std::complex<double>> res;
-	if(v.size() != nVEV and v.size() != NHiggs){
-	  std::string ErrorString = std::string("You have called ") + std::string(__func__)
-		+ std::string(" with an invalid vev configuration. Your vev is of dimension ")
-	  + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
-	  throw std::runtime_error(ErrorString);
-	}
-	if(v.size() == nVEV and nVEV != NHiggs){
-		std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
-		    			<< nVEV << " while it should have " << NHiggs
-						<< ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
-	  std::vector<double> Transformedv;
+    MatrixXcd res = MatrixXcd::Zero(NLepton,NLepton);
+    if(v.size() != nVEV and v.size() != NHiggs){
+      std::string ErrorString = std::string("You have called ") + std::string(__func__)
+        + std::string(" with an invalid vev configuration. Your vev is of dimension ")
+      + std::to_string(v.size()) + std::string(" and it should be ") + std::to_string(NHiggs) + std::string(".");
+      throw std::runtime_error(ErrorString);
+    }
+    if(v.size() == nVEV and nVEV != NHiggs){
+        std::cerr << __func__ << " is being called with a wrong sized vev configuration. It has the dimension of "
+                        << nVEV << " while it should have " << NHiggs
+                        << ". For now this is transformed but please fix this to reduce the runtime." << std::endl;
+      std::vector<double> Transformedv;
       Transformedv=MinimizeOrderVEV(v);
-      res = LeptonMasses(Transformedv);
+      res = LeptonMassMatrix(Transformedv);
       return res ;
-	}
+    }
     if(!SetCurvatureDone) {
 //        SetCurvatureArrays(); std::cout << "Reset of Set Curvature " << std::endl;
         std::string retmes = __func__;
         retmes += " is called before SetCurvatureArrays();\n";
         throw std::runtime_error(retmes);
-    };
-    MatrixXcd MIJ(NLepton,NLepton);
-    MIJ = MatrixXcd::Zero(NLepton,NLepton);
-    double ZeroMass = std::pow(10,-10);
+    }
+
     for(std::size_t i=0;i<NLepton;i++)
     {
         for(std::size_t j=0;j<NLepton;j++)
         {
-
+            res(i,j) = Curvature_Lepton_F2[i][j];
             for(std::size_t k=0;k<NHiggs;k++)
             {
-                MIJ(i,j) += Curvature_Lepton_F2H1[i][j][k]*v[k];
+                res(i,j) += Curvature_Lepton_F2H1[i][j][k]*v[k];
             }
         }
     }
 
+    return  res;
+}
+
+std::vector<std::complex<double>> Class_Potential_Origin::LeptonMasses(const std::vector<double>& v) const
+{
+    std::vector<std::complex<double>> res;
+
+    MatrixXcd MIJ = LeptonMassMatrix(v);
+
 
 	ComplexEigenSolver<MatrixXcd> es(MIJ,false);
-
+    double ZeroMass = 1e-10;
     for(std::size_t i =0;i<NLepton;i++)
 	{
 		auto tmp = es.eigenvalues()[i];

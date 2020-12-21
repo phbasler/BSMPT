@@ -26,6 +26,7 @@
 
 #include <vector>                   // for vector
 #include <memory>
+#include <thread>
 #include <BSMPT/config.h>
 #include <BSMPT/models/IncludeAllModels.h>
 
@@ -46,7 +47,7 @@ const bool UseGSLDefault = true;
 /**
  * @brief UseLibCMAESDefault Use the Libcmaes minimizer in the default settings
  */
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
 const bool UseLibCMAESDefault = true;
 #else
 const bool UseLibCMAESDefault = false;
@@ -60,6 +61,8 @@ const bool UseNLoptDefault = true;
 #else
 const bool UseNLoptDefault = false;
 #endif
+
+const std::size_t Num_threads = std::thread::hardware_concurrency();
 
 /**
  * @brief CalcWhichMinimizer Calculates the WhichMinimizer value with the given Minimizer options
@@ -189,7 +192,18 @@ std::vector<std::vector<double>> FindNextLocalMinima(
         int WhichMinimizer = WhichMinimizerDefault);
 
 
-
+/**
+ * @brief MinimaDevelopmentWithTemperature calculates the temperature development of several local minima
+ * @param model The used model and parameter point
+ * @param StartingTemperature The first temperature at which to calculate the local minima from the random points
+ * @param FinalTemperature The final temperature for the temperature development
+ * @param StepsizeTemperature The stepsize for the temperature development
+ * @param RNGRanges The ranges for the RNG generated starting point at StartingTemperature
+ * @param seed The seed used for the RNG
+ * @param NumberOfStartingPoints How many RNG points should be generated
+ * @param WhichMinimizer Which minimizers should be used?
+ * @return List of Minima development, each member being a list for one point with the entries <Temperature, Minimum>
+ */
 std::vector<std::vector<std::pair<double,std::vector<double>>>>
 MinimaDevelopmentWithTemperature(
 const std::shared_ptr<Class_Potential_Origin>& model,

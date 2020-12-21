@@ -39,7 +39,7 @@
 
 #include <BSMPT/config.h>
 
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
 #endif
 
@@ -155,7 +155,7 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double>& basepoint,
         Minima.push_back(GSLResult.Minimum);
     }
 
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
     if(UseMinimizer.UseCMAES and modelPointer->get_nVEV() >= 3)
     {
         std::vector<double> startCMAES(params.nVEV-1);

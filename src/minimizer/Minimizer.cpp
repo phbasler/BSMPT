@@ -29,12 +29,13 @@
 #include <BSMPT/models/IncludeAllModels.h>      // for FChoose
 #include <BSMPT/minimizer/Minimizer.h>
 #include <random>
+#include <thread>
 
 #include <BSMPT/config.h>
 
 #include <BSMPT/minimizer/MinimizeGSL.h>
 
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
 #endif
 
@@ -77,7 +78,7 @@ MinimizersToUse GetMinimizers(int WhichMinimizer)
     WhichMinimizer/= 2;
     bool UseNLopt = (WhichMinimizer%2 == 1);
 
-#ifndef CMAES_FOUND
+#ifndef libcmaes_FOUND
     UseCMAES = false;
 #endif
 
@@ -121,49 +122,87 @@ std::vector<double> Minimize_gen_all(
     std::vector<double> solGSLMin,solGSLMinPot;
 
     bool gslMinSuc = false;
+    std::thread thread_GSL;
     if(UseMinimizer.UseGSL) {
+
         if(UseMinimizer.UseCMAES or UseMinimizer.UseNLopt) {
+            thread_GSL = std::thread([&solGSLMin, &gslMinSuc,&modelPointer,&Temp](){
             std::tie(solGSLMin,gslMinSuc) = GSL_Minimize_gen_all(modelPointer, Temp, 5); // If additionally CMAES is minimising GSL does not need as much solutions
+                                     });
         }
         else {
             std::size_t MaxSol = 50;
+            thread_GSL = std::thread([&solGSLMin,&gslMinSuc,&modelPointer,&Temp,&MaxSol](){
             std::tie(solGSLMin,gslMinSuc) = GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
+            });
         }
 
-        if(gslMinSuc){
-            solGSLMinPot=modelPointer->MinimizeOrderVEV(solGSLMin);
-            PotValues.push_back(modelPointer->VEff(solGSLMinPot,Temp));
-            Minima.push_back(solGSLMin);
-        }
+
 
 
     }
-#ifdef CMAES_FOUND
+#ifdef libcmaes_FOUND
+    std::thread thread_CMAES;
+    LibCMAES::LibCMAESReturn LibCMAES;
     if(UseMinimizer.UseCMAES) {
-        auto LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer,Temp,start);
-        auto errC = LibCMAES.CMAESStatus;
-        auto solCMAES = LibCMAES.result;
-        auto solCMAESPotIn=modelPointer->MinimizeOrderVEV(solCMAES);
-        PotValues.push_back(modelPointer->VEff(solCMAESPotIn,Temp));
-        Minima.push_back(solCMAES);
-        Check.push_back(errC);
+        thread_CMAES = std::thread([&modelPointer,&Temp,&start,&LibCMAES](){
+            LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer,Temp,start);
+        });
     }
 #else
     (void) start;
 #endif
 
 #ifdef NLopt_FOUND
+    LibNLOPT::NLOPTReturnType NLOPTResult;
+    std::thread thread_NLopt;
     if(UseMinimizer.UseNLopt)
     {
-        auto NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer,Temp);
-        if(NLOPTResult.Success)
-        {
-            PotValues.push_back(NLOPTResult.PotVal);
-            Minima.push_back(NLOPTResult.Minimum);
-        }
+        thread_NLopt = std::thread( [&NLOPTResult, &modelPointer, &Temp](){
+            NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer,Temp);
+        } );
+
     }
 #endif
 
+
+#ifdef NLopt_FOUND
+    if(thread_NLopt.joinable())
+    {
+        thread_NLopt.join();
+    }
+
+    if(NLOPTResult.Success)
+    {
+        PotValues.push_back(NLOPTResult.PotVal);
+        Minima.push_back(NLOPTResult.Minimum);
+    }
+#endif
+
+
+#ifdef libcmaes_FOUND
+   if(thread_CMAES.joinable())
+   {
+       thread_CMAES.join();
+       auto errC = LibCMAES.CMAESStatus;
+       auto solCMAES = LibCMAES.result;
+       auto solCMAESPotIn=modelPointer->MinimizeOrderVEV(solCMAES);
+       PotValues.push_back(modelPointer->VEff(solCMAESPotIn,Temp));
+       Minima.push_back(solCMAES);
+       Check.push_back(errC);
+   }
+#endif
+
+    if(thread_GSL.joinable())
+    {
+        thread_GSL.join();
+    }
+
+    if(gslMinSuc){
+        solGSLMinPot=modelPointer->MinimizeOrderVEV(solGSLMin);
+        PotValues.push_back(modelPointer->VEff(solGSLMinPot,Temp));
+        Minima.push_back(solGSLMin);
+    }
 
     std::size_t minIndex=0;
     for(std::size_t i=1;i<PotValues.size();i++){
