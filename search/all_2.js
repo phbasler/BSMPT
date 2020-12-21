@@ -112,8 +112,10 @@ var searchData=
   ['curvature_5fhiggs_5fl2_127',['Curvature_Higgs_L2',['../classBSMPT_1_1Class__Potential__Origin.html#a07de02202560b4a2288773773d48ea98',1,'BSMPT::Class_Potential_Origin']]],
   ['curvature_5fhiggs_5fl3_128',['Curvature_Higgs_L3',['../classBSMPT_1_1Class__Potential__Origin.html#a827fd0406e3213ee588aa66bf0027ba5',1,'BSMPT::Class_Potential_Origin']]],
   ['curvature_5fhiggs_5fl4_129',['Curvature_Higgs_L4',['../classBSMPT_1_1Class__Potential__Origin.html#ad5504787e192aa3cabd6d835551e7b35',1,'BSMPT::Class_Potential_Origin']]],
-  ['curvature_5flepton_5ff2h1_130',['Curvature_Lepton_F2H1',['../classBSMPT_1_1Class__Potential__Origin.html#a5989560c075d5105dd006b99b9dbde3f',1,'BSMPT::Class_Potential_Origin']]],
-  ['curvature_5fquark_5ff2h1_131',['Curvature_Quark_F2H1',['../classBSMPT_1_1Class__Potential__Origin.html#a590c7237d24ee0260654234d83ce61af',1,'BSMPT::Class_Potential_Origin']]],
-  ['cwterm_132',['CWTerm',['../classBSMPT_1_1Class__Potential__Origin.html#a234541b83ffa51dae80a6690e8a1b562',1,'BSMPT::Class_Potential_Origin']]],
-  ['changelog_133',['Changelog',['../md_Changelog.html',1,'']]]
+  ['curvature_5flepton_5ff2_130',['Curvature_Lepton_F2',['../classBSMPT_1_1Class__Potential__Origin.html#a7b03121d9722dd99858faad630a4ae1b',1,'BSMPT::Class_Potential_Origin']]],
+  ['curvature_5flepton_5ff2h1_131',['Curvature_Lepton_F2H1',['../classBSMPT_1_1Class__Potential__Origin.html#a5989560c075d5105dd006b99b9dbde3f',1,'BSMPT::Class_Potential_Origin']]],
+  ['curvature_5fquark_5ff2_132',['Curvature_Quark_F2',['../classBSMPT_1_1Class__Potential__Origin.html#af0976cab0360a8e344bbb897016c5552',1,'BSMPT::Class_Potential_Origin']]],
+  ['curvature_5fquark_5ff2h1_133',['Curvature_Quark_F2H1',['../classBSMPT_1_1Class__Potential__Origin.html#a590c7237d24ee0260654234d83ce61af',1,'BSMPT::Class_Potential_Origin']]],
+  ['cwterm_134',['CWTerm',['../classBSMPT_1_1Class__Potential__Origin.html#a234541b83ffa51dae80a6690e8a1b562',1,'BSMPT::Class_Potential_Origin']]],
+  ['changelog_135',['Changelog',['../md_Changelog.html',1,'']]]
 ];

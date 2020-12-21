@@ -17,6 +17,7 @@ var Minimizer_8h =
     [ "Minimize_gen_all", "Minimizer_8h.html#a88c7250e51b094e110ea67fd48438afd", null ],
     [ "Minimize_gen_all_tree_level", "Minimizer_8h.html#a4f9686f97a8aeb1b96db142a690c42f4", null ],
     [ "PTFinder_gen_all", "Minimizer_8h.html#a391651025dceacd12f4b85a7c191b06f", null ],
+    [ "Num_threads", "Minimizer_8h.html#a5577cfcbd4168906c1208442e7eb389f", null ],
     [ "UseGSLDefault", "Minimizer_8h.html#ac0a05e648102baab29671f0f578756bc", null ],
     [ "UseLibCMAESDefault", "Minimizer_8h.html#ab6f8272942b46cd033293ccb411b6d40", null ],
     [ "UseNLoptDefault", "Minimizer_8h.html#a68ef9a7c5689ba6320a375a5a3180ca6", null ],

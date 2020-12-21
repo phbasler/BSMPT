@@ -118,10 +118,9 @@ Dependencies</h3>
  cmake -DCMAKE_INSTALL_PREFIX=/path/to/installedEigen  ..  
  make install  
 </pre> After that you can use <code>-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake</code> to link Eigen3</li>
-<li><p class="startli">libcmaes: Additionally to GSL you should either use libcmaes or NLopt. For libcmaes you have to set</p>
-<p class="startli"><code>-DCMAES_ROOT=/path/to/cmaes</code> <br  />
+<li><p class="startli">libcmaes: Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically, otherwise you can point it to the install direction with <code>-Dlibcmaes_ROOT=/path/to/cmaes</code> <br  />
 </p>
-<p class="startli">If cmaes is not in this path, then it will be installed there. If you have troubles with the installation, please have a look at <a href="https://github.com/beniz/libcmaes/wiki">libcmaes</a> for the dependencies. If you don't want to install or use it, you can set <code>-DUseLibCMAES=OFF</code></p>
+<p class="startli">If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their <a href="https://github.com/CMA-ES/libcmaes/wiki">wiki</a>. If you don't want to install or use it, you can set <code>-DUseLibCMAES=OFF</code></p>
 </li>
 <li><a href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>: If NLopt is installed through your packet manager cmake will find it automatically. Otherwise, with <code>-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt</code> you can tell where NLopt is installed. If you do not want to use NLopt, you can set <code>-DUseNLopt=OFF</code></li>
 <li><a href="https://www.boost.org/">Boost</a> : It should be found automatically, if not you can use <code>-DBOOST_ROOT=/path/to/boost</code></li>
