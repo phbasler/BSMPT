@@ -26,6 +26,7 @@
 
 #include <vector>                   // for vector
 #include <memory>
+#include <thread>
 #include <BSMPT/config.h>
 #include <BSMPT/models/IncludeAllModels.h>
 
@@ -60,6 +61,8 @@ const bool UseNLoptDefault = true;
 #else
 const bool UseNLoptDefault = false;
 #endif
+
+const std::size_t Num_threads = std::thread::hardware_concurrency();
 
 /**
  * @brief CalcWhichMinimizer Calculates the WhichMinimizer value with the given Minimizer options

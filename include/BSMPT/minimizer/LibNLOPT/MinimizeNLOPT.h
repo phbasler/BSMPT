@@ -33,6 +33,8 @@ struct NLOPTReturnType{
     double PotVal;
     nlopt::result NLOPTResult;
     bool Success;
+    NLOPTReturnType()
+        : NLOPTReturnType(std::vector<double>(),0,nlopt::result(), false) {}
     NLOPTReturnType(const std::vector<double>& MinimumIn,
                     const double& PotValIn,
                     const nlopt::result& NLOPTResultIn,

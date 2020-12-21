@@ -34,9 +34,15 @@
 #include <random>
 #include <boost/math/tools/minima.hpp>
 
+#include <queue>
+#include <thread>
+#include <atomic>
+#include <mutex>
+
 namespace BSMPT{
 namespace Wall{
 const double GSL_Tolerance=std::pow(10,-4);
+const std::size_t Num_threads = std::thread::hardware_concurrency();
 
 /**
  * struct containing the required Parameters of the model for the gsl interface
@@ -106,17 +112,68 @@ double calculate_wall_thickness_plane(
 	double LW = 0;
 	int maxstep = 10;
 	double Stepsize = 1.0/(maxstep);
-	std::vector<double> Data_min_negative;
+    std::vector<double> Data_min_negative(maxstep+1);
+    std::vector<std::thread> Data_min_threads(Num_threads);
 
-	for(int ncounter=0;ncounter<=maxstep;ncounter++){
-		double line_parameter = Stepsize*ncounter;
+    std::atomic<std::size_t> DataIndex{0};
+    std::mutex WriteLock;
+
+    std::vector<std::pair<int,std::vector<double>>> BasePoints;
+    for(int ncounter=0;ncounter<=maxstep;++ncounter)
+    {
+        double line_parameter=Stepsize*ncounter;
         std::vector<double> basepoint;
-		for(std::size_t i=0;i<vcritical.size();i++) {
-			basepoint.push_back(vevsymmetric.at(i) *(1-line_parameter) + vcritical.at(i) * line_parameter );
-		}
-        auto MinimumPlaneResult = Minimizer::MinimizePlane(basepoint,vevsymmetric,vcritical,modelPointer,Temp,WhichMinimizer);
-        Data_min_negative.push_back(-MinimumPlaneResult.PotVal);
-	}
+        for(std::size_t i=0;i<vcritical.size();i++) {
+            basepoint.push_back(vevsymmetric.at(i) *(1-line_parameter) + vcritical.at(i) * line_parameter );
+        }
+        BasePoints.push_back(std::make_pair(ncounter,basepoint));
+    }
+
+    auto thread_Job = [](
+            std::atomic<std::size_t>& mDataIndex,
+            std::vector<std::pair<int,std::vector<double>>>& a_BasePoints,
+            std::vector<double>& Data_min,
+            std::mutex& mWriteResultLock,
+            const std::vector<double>& a_vevsymmetric,
+            const std::vector<double>& a_vcritical,
+            std::shared_ptr<Class_Potential_Origin> a_modelPointer,
+            const double& a_Temp,
+            const int& a_WhichMinimizer
+            )
+    {
+        while (mDataIndex < a_BasePoints.size() ) {
+            const auto data = a_BasePoints.at(mDataIndex++);
+            auto MinimumPlaneResult = Minimizer::MinimizePlane(
+                        data.second,
+                        a_vevsymmetric,
+                        a_vcritical,
+                        a_modelPointer,
+                        a_Temp,
+                        a_WhichMinimizer);
+            {
+                std::unique_lock<std::mutex> lock(mWriteResultLock);
+                Data_min.at(data.first) = -MinimumPlaneResult.PotVal;
+            }
+
+        }
+    };
+
+
+
+    for(auto& thr: Data_min_threads)
+    {
+        thr = std::thread([&](){
+            thread_Job(DataIndex, BasePoints, Data_min_negative, WriteLock, vevsymmetric,vcritical, modelPointer, Temp, WhichMinimizer);
+        });
+    }
+
+    for(auto& thr : Data_min_threads)
+    {
+        if(thr.joinable())
+        {
+            thr.join();
+        }
+    }
 
 	struct GSL_params spline;
 	boost::math::cubic_b_spline<double> splinef(Data_min_negative.data(),Data_min_negative.size(),0,Stepsize);
