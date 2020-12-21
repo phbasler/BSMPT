@@ -61,6 +61,12 @@ endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
   find_package(NLopt REQUIRED)
+  message(STATUS "NLOPT Dir")
+  message(STATUS ${NLopt_SOURCE_DIR})
+  message(STATUS ${NLopt_INCLUDE_DIRS})
+  message(STATUS ${NLOPT_SOURCE_DIR})
+  message(STATUS ${NLOPT_INCLUDE_DIRS})
+  message(STATUS "End")
 endif(UseNLopt)
 
 if(NOT CMAES_FOUND AND NOT NLopt_FOUND)
