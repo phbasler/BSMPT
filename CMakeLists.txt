@@ -42,7 +42,7 @@ if(UseLibCMAES AND NOT WIN32)
       set(EXPORT_CMAES TRUE)
       FetchContent_Declare(
         libcmaes
-        GIT_REPOSITORY https://github.com/beniz/libcmaes.git
+        GIT_REPOSITORY https://github.com/CMA-ES/libcmaes.git
         GIT_TAG master)
       FetchContent_GetProperties(libcmaes)
       if(NOT libcmaes_POPULATED)
