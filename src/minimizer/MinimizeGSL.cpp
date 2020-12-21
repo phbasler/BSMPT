@@ -176,8 +176,6 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     double RNDMax= 500;
     std::size_t MaxTries = 600;
     std::atomic<std::size_t> tries {0};
-    std::size_t numOfSol = 0;
-    //	int MaxSol = 20;
     std::size_t nCol = dim+2;
 
     struct MinimizeParams{
@@ -187,7 +185,6 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     };
 
     std::atomic<std::size_t> FoundSolutions{0};
-    auto Num_threads = std::thread::hardware_concurrency();
     std::vector<std::thread> MinThreads;
     std::mutex WriteResultLock;
     std::queue<std::vector<double>> Results;
@@ -195,13 +192,15 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     auto thread_Job = [](
             std::atomic<std::size_t>& mFoundSolutions,
             std::size_t mMaxSol,
+            std::atomic<std::size_t>& mtries,
+            std::size_t mMaxTries,
             std::size_t mdim,
             double mRNDMax,
             std::default_random_engine& mrandGen,
             GSL_params& mparams,
             std::mutex& mWriteResultLock,
             std::queue<std::vector<double>>& mResults){
-        while(mFoundSolutions < mMaxSol)
+        while(mFoundSolutions < mMaxSol and mtries <= mMaxTries)
         {
 
             std::vector<double> start(mdim);
@@ -223,7 +222,9 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     for(std::size_t i=0;i<Num_threads;++i)
     {
         MinThreads.push_back(
-                    std::thread([&](){thread_Job(FoundSolutions, MaxSol, dim, RNDMax, randGen, params, WriteResultLock, Results);})
+                    std::thread([&](){
+            thread_Job(FoundSolutions, MaxSol, tries, MaxTries, dim, RNDMax, randGen, params, WriteResultLock, Results);
+        })
         );
     }
 
@@ -245,47 +246,20 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
     }
 
 
-//    std::vector<double> start,sol,vPot;
-//    do{
-//        start.resize(dim);
-//        for(std::size_t i=0;i<dim;i++) start[i] = RNDMax*(-1+2*std::generate_canonical<double,std::numeric_limits<double>::digits>(randGen));
-
-
-//        auto status = GSL_Minimize_From_S_gen_all(params,sol,start);
-
-//        if(status == GSL_SUCCESS){
-//            vPot=modelPointer->MinimizeOrderVEV(sol);
-
-//            std::vector<double> row(nCol);
-//            for(std::size_t i=0;i<dim;i++) row.at(i) = sol.at(i);
-//            row.at(dim) = modelPointer->EWSBVEV(vPot);
-//            row.at(dim+1) = modelPointer->VEff(vPot,Temp,0);
-
-//            saveAllMinima.push_back(row);
-//            numOfSol ++;
-//            if(numOfSol == MaxSol) break;
-//        }
-
-
-//        start.clear();
-//        sol.clear();
-//        tries++;
-//    }while(tries <= MaxTries);
-
-    if(numOfSol == 0)
+    if(saveAllMinima.size() == 0)
     {
         std::cerr << "No solutions found during the GSL minimization at T = " << Temp << " GeV " << "\n";
         return std::make_pair(std::vector<double>{}, false);
     }
 
-    if(numOfSol <= MaxSol)
+    if(saveAllMinima.size() <= MaxSol)
     {
-        std::cerr << "Found " << numOfSol << " of  " << MaxSol << " solutions at T = " << Temp << std::endl;
+        std::cerr << "Found " << saveAllMinima.size() << " of  " << MaxSol << " solutions at T = " << Temp << std::endl;
     }
 
     std::size_t minIndex = 0;
     double VMin = saveAllMinima[0][dim+1];
-    for(std::size_t k=1;k<numOfSol;k++)
+    for(std::size_t k=1;k<saveAllMinima.size();k++)
     {
         if(saveAllMinima[k][dim+1] <= VMin)
         {
