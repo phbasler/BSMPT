@@ -43,7 +43,11 @@ if(libcmaes_FOUND)
 endif()
 
 if(NLopt_FOUND)
-  target_link_libraries(Minimizer PUBLIC NLopt::nlopt)
+  if(TARGET NLopt::nlopt)
+    target_link_libraries(Minimizer PUBLIC NLopt::nlopt)
+  else()
+    target_link_libraries(Minimizer PUBLIC NLopt::nlopt_cxx)
+  endif()
 endif()
 
 target_include_directories(Minimizer PUBLIC ${BSMPT_SOURCE_DIR}/include

@@ -252,7 +252,7 @@ std::pair<std::vector<double>,bool> GSL_Minimize_gen_all(
         return std::make_pair(std::vector<double>{}, false);
     }
 
-    if(saveAllMinima.size() <= MaxSol)
+    if(saveAllMinima.size() < MaxSol)
     {
         std::cerr << "Found " << saveAllMinima.size() << " of  " << MaxSol << " solutions at T = " << Temp << std::endl;
     }
