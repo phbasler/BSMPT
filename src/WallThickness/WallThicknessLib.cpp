@@ -24,7 +24,6 @@
 
 #include <BSMPT/WallThickness/WallThicknessLib.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
-#include <boost/math/interpolators/cubic_b_spline.hpp>
 #include <BSMPT/models/ClassPotentialOrigin.h>
 
 #include <gsl/gsl_min.h>
@@ -33,6 +32,13 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <random>
 #include <boost/math/tools/minima.hpp>
+
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 107200
+#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
+#else
+#include <boost/math/interpolators/cubic_b_spline.hpp>
+#endif
 
 #include <queue>
 #include <thread>
@@ -43,6 +49,15 @@ namespace BSMPT{
 namespace Wall{
 const double GSL_Tolerance=std::pow(10,-4);
 const std::size_t Num_threads = std::thread::hardware_concurrency();
+
+#if BOOST_VERSION >= 107200
+template<typename T>
+using boost_cubic_b_spline = boost::math::cardinal_cubic_b_spline<T>;
+#else
+template<typename T>
+using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
+#endif
+
 
 /**
  * struct containing the required Parameters of the model for the gsl interface
@@ -71,7 +86,7 @@ double Temp;
 /**
  * @brief spline cubic spline used to find the potential barrier
  */
-boost::math::cubic_b_spline<double> spline;
+boost_cubic_b_spline<double> spline;
 /**
  * @brief UseSpline Decides if the spline is to be used or not
  */
@@ -176,7 +191,7 @@ double calculate_wall_thickness_plane(
     }
 
 	struct GSL_params spline;
-	boost::math::cubic_b_spline<double> splinef(Data_min_negative.data(),Data_min_negative.size(),0,Stepsize);
+    boost_cubic_b_spline<double> splinef(Data_min_negative.data(),Data_min_negative.size(),0,Stepsize);
 	spline.spline = splinef;
 	spline.UseSpline=true;
 

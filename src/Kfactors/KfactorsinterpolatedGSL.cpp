@@ -29,8 +29,26 @@
 
 #include <iostream>
 
+
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 107200
+#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
+#else
+#include <boost/math/interpolators/cubic_b_spline.hpp>
+#endif
+
+
+
 namespace BSMPT {
 namespace Kfactors{
+
+#if BOOST_VERSION >= 107200
+template<typename T>
+using boost_cubic_b_spline = boost::math::cardinal_cubic_b_spline<T>;
+#else
+template<typename T>
+using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
+#endif
 
 /**
  * @brief GSLAcclType Type used by the interpolations of the Kfunctions
@@ -47,11 +65,11 @@ double CalculateNorm2(const double& msquared, const double& T, const int& s)
 //    static const double startingValue = 0;
 //    static const double StepSize = 1;
 
-    static const boost::math::cubic_b_spline<double> KtildeNormalisationFermionSpline(Data::KtildeNormFermion_grid.data(),
+    static const boost_cubic_b_spline<double> KtildeNormalisationFermionSpline(Data::KtildeNormFermion_grid.data(),
                                                            Data::KtildeNormFermion_grid.size()
                                                            ,0,1);
 
-    static const boost::math::cubic_b_spline<double> KtildeNormalisationBosonSpline(Data::KtildeNormBoson_grid.data(),
+    static const boost_cubic_b_spline<double> KtildeNormalisationBosonSpline(Data::KtildeNormBoson_grid.data(),
                                                                                     Data::KtildeNormBoson_grid.size()
                                                                                     ,0,1);
 

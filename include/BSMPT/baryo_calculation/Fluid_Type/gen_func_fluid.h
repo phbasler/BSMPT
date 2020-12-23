@@ -26,8 +26,14 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <boost/numeric/odeint.hpp>
-#include <boost/math/interpolators/cubic_b_spline.hpp>
 #include <BSMPT/models/SMparam.h>
+
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 107200
+#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
+#else
+#include <boost/math/interpolators/cubic_b_spline.hpp>
+#endif
 
 namespace BSMPT
 {
@@ -35,6 +41,14 @@ namespace BSMPT
     {
         using namespace boost::numeric::odeint;
         typedef std::vector<double> state_type;
+
+#if BOOST_VERSION >= 107200
+template<typename T>
+using boost_cubic_b_spline = boost::math::cardinal_cubic_b_spline<T>;
+#else
+template<typename T>
+using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
+#endif
 
         /**
  * @brief C_smallcut For numerical stability
@@ -237,7 +251,7 @@ namespace BSMPT
             /**
          * @brief nL_cub Boost spline for the left-handed fermion density as function of the bubble wall distance z.
          */
-            boost::math::cubic_b_spline<double> nL_cub;
+            boost_cubic_b_spline<double> nL_cub;
             double exponent_prefactor;
             std::vector<double> array_z, array_nL;
 

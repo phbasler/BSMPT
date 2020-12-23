@@ -24,7 +24,7 @@
 #include <gsl/gsl_interp2d.h>
 #include <gsl/gsl_spline2d.h>
 #include <cmath>
-#include <boost/math/interpolators/cubic_b_spline.hpp>
+#include <memory>
 
 /**
  * @file

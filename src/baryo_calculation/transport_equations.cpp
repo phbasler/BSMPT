@@ -691,7 +691,7 @@ GSL_mubl_interpolation generate_mubl_spline(const struct GSL_integration_mubl& p
 
     }
 
-    boost::math::cubic_b_spline<double> splinef(ydata.data(),ydata.size(),0,stepsize);
+    GSL_integration_mubl::boost_cubic_b_spline<double> splinef(ydata.data(),ydata.size(),0,stepsize);
     GSL_mubl_interpolation spline;
     spline.spline = splinef;
     spline.vw = p.getvw();
