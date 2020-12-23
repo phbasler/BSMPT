@@ -30,12 +30,7 @@
  #include <boost/numeric/odeint.hpp>
  #include <boost/numeric/odeint/iterator/const_step_time_iterator.hpp>
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 107200
-#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
-#else
-#include <boost/math/interpolators/cubic_b_spline.hpp>
-#endif
+ #include <BSMPT/baryo_calculation/boost_cubic_b_spline/boost_cubic_b_spline.h>
 
 
 
@@ -175,13 +170,7 @@ namespace BSMPT{
  */
   struct GSL_integration_mubl{
   public:
-#if BOOST_VERSION >= 107200
-template<typename T>
-using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
-#else
-template<typename T>
-using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
-#endif
+
   private:
       /**
           * If true the transport equations with the plasma velocitys are used, otherwise the second order transport equations
@@ -430,13 +419,6 @@ using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
   * struct for the integration of the 1D interpolation of mu_BL
   */
   struct GSL_mubl_interpolation{
-#if BOOST_VERSION >= 107200
-template<typename T>
-using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
-#else
-template<typename T>
-using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
-#endif
       /**
       * Boost interpolation of mu_BL, calculated through generate_mubl_spline
       */

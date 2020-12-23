@@ -27,13 +27,7 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <boost/numeric/odeint.hpp>
 #include <BSMPT/models/SMparam.h>
-
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 107200
-#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
-#else
-#include <boost/math/interpolators/cubic_b_spline.hpp>
-#endif
+#include <BSMPT/baryo_calculation/boost_cubic_b_spline/boost_cubic_b_spline.h>
 
 namespace BSMPT
 {
@@ -41,14 +35,6 @@ namespace BSMPT
     {
         using namespace boost::numeric::odeint;
         typedef std::vector<double> state_type;
-
-#if BOOST_VERSION >= 107200
-template<typename T>
-using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
-#else
-template<typename T>
-using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
-#endif
 
         /**
  * @brief C_smallcut For numerical stability

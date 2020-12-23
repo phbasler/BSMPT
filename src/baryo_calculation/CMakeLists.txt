@@ -7,6 +7,7 @@ set(header
 	${header_path}/Fluid_Type/bot_source.h
 	${header_path}/Fluid_Type/tau_source.h
 	${header_path}/CalculateEtaInterface.h
+	${header_path}/boost_cubic_b_spline/boost_cubic_b_spline.h
 )
 
 set(src
