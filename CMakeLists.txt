@@ -29,7 +29,7 @@ option(MakeAdditionalTesting "Build the executables used for further testing" OF
 
 find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
-find_package(Boost 1.71 REQUIRED)
+find_package(Boost 1.66 REQUIRED)
 find_package(GSL 2.1 REQUIRED)
 find_package(Threads REQUIRED)
 
