@@ -60,10 +60,10 @@ if(UseLibCMAES AND NOT WIN32)
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
-  find_package(NLopt)
+  find_package(NLopt QUIET)
 endif(UseNLopt)
 
-if(NOT CMAES_FOUND AND NOT NLopt_FOUND)
+if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message( FATAL_ERROR "You need at least libcmaes or NLopt." )
 endif()
 
