@@ -63,7 +63,7 @@ if(UseNLopt)
   find_package(NLopt)
 endif(UseNLopt)
 
-if(NOT CMAES_FOUND AND NOT NLopt_FOUND)
+if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message( FATAL_ERROR "You need at least libcmaes or NLopt." )
 endif()
 

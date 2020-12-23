@@ -52,7 +52,7 @@ const std::size_t Num_threads = std::thread::hardware_concurrency();
 
 #if BOOST_VERSION >= 107200
 template<typename T>
-using boost_cubic_b_spline = boost::math::cardinal_cubic_b_spline<T>;
+using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
 #else
 template<typename T>
 using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
