@@ -54,9 +54,9 @@ After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake`
 
 3. [libcmaes](https://github.com/beniz/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. For libcmaes you have to set
 
-    `-DCMAES_ROOT=/path/to/cmaes`
+    `-Dlibcmaes_ROOT=/path/to/cmaes`
 
-    If cmaes is not in this path, then it will be installed in the build directory. If you have troubles with the installation, please have a look at [libcmaes](https://github.com/beniz/libcmaes/wiki) for the dependencies. If you don't want to install or use it, you can set `-DUseLibCMAES=OFF`
+    If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `-DUseLibCMAES=OFF`
 
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): With `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you need to tell where NLopt is installed. If you do not then NLopt will not be used.
 5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
