@@ -7,7 +7,6 @@ set(header
 	${header_path}/Fluid_Type/bot_source.h
 	${header_path}/Fluid_Type/tau_source.h
 	${header_path}/CalculateEtaInterface.h
-	${header_path}/boost_cubic_b_spline/boost_cubic_b_spline.h
 )
 
 set(src
@@ -21,7 +20,7 @@ set(src
 )
 
 add_library(Baryo ${header} ${src})
-target_link_libraries(Baryo PUBLIC Eigen3::Eigen GSL::gsl Minimizer Kfactors LibWallThickness)
+target_link_libraries(Baryo PUBLIC Eigen3::Eigen GSL::gsl Minimizer Kfactors LibWallThickness Utility Boost::boost)
 #target_compile_options(Baryo PUBLIC ${OpenMP_CXX_FLAGS})
 target_include_directories(Baryo PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Baryo PUBLIC cxx_std_14)

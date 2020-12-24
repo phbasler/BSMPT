@@ -27,7 +27,8 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <boost/numeric/odeint.hpp>
 #include <BSMPT/models/SMparam.h>
-#include <BSMPT/baryo_calculation/boost_cubic_b_spline/boost_cubic_b_spline.h>
+#include <BSMPT/utility.h>
+
 
 namespace BSMPT
 {

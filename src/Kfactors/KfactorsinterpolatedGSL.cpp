@@ -26,29 +26,17 @@
 #include <BSMPT/Kfactors/Kfactors.h>
 #include <BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid.h>
 #include <BSMPT/Kfactors/Kfactors_grid/KtildeInterpolation.h>
+#include <BSMPT/utility.h>
 
 #include <iostream>
 
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 107200
-#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
-#else
-#include <boost/math/interpolators/cubic_b_spline.hpp>
-#endif
+
 
 
 
 namespace BSMPT {
 namespace Kfactors{
-
-#if BOOST_VERSION >= 107200
-template<typename T>
-using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
-#else
-template<typename T>
-using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
-#endif
 
 /**
  * @brief GSLAcclType Type used by the interpolations of the Kfunctions

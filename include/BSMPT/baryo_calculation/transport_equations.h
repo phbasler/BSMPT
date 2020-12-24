@@ -30,7 +30,7 @@
  #include <boost/numeric/odeint.hpp>
  #include <boost/numeric/odeint/iterator/const_step_time_iterator.hpp>
 
- #include <BSMPT/baryo_calculation/boost_cubic_b_spline/boost_cubic_b_spline.h>
+ #include <BSMPT/utility.h>
 
 
 

@@ -25,6 +25,7 @@
 #include <BSMPT/WallThickness/WallThicknessLib.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
+#include <BSMPT/utility.h>
 
 #include <gsl/gsl_min.h>
 
@@ -32,13 +33,6 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <random>
 #include <boost/math/tools/minima.hpp>
-
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 107200
-#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
-#else
-#include <boost/math/interpolators/cubic_b_spline.hpp>
-#endif
 
 #include <queue>
 #include <thread>
@@ -50,13 +44,6 @@ namespace Wall{
 const double GSL_Tolerance=std::pow(10,-4);
 const std::size_t Num_threads = std::thread::hardware_concurrency();
 
-#if BOOST_VERSION >= 107200
-template<typename T>
-using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
-#else
-template<typename T>
-using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
-#endif
 
 
 /**

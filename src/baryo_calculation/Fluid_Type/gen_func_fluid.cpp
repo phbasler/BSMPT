@@ -19,7 +19,7 @@
 
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_func_fluid.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
-#include <BSMPT/utility.h>
+
 
 /**
  * @file
