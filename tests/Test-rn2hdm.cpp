@@ -58,7 +58,7 @@ TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
         std::cout << "res = " << res << "\t exp = " << expected << std::endl;
         if(expected != 0)
         {
-            REQUIRE(std::abs(res-expected)/expected <= 5e-3);
+            REQUIRE(std::abs(res-expected)/expected <= 1e-2);
         }
         else {
             REQUIRE(res <= 1e-4);
