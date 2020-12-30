@@ -20,7 +20,7 @@ jobs:
     - name: cmake
       run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. 
     - name: make
-      run: cd build && make
+      run: cd build && cmake --build . -j
     - name: Test
       run: cd build && ctest 
 
