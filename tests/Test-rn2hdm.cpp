@@ -50,7 +50,7 @@ TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
 
     REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
     REQUIRE(std::abs(omega_c_expected - EWPT.vc)/omega_c_expected <= 1e-2);
-    REQUIRE(std::abs(Tc_expected-EWPT.Tc)/Tc_expected <= 1e-4);
+    REQUIRE(std::abs(Tc_expected-EWPT.Tc)/Tc_expected <= 5e-3);
     for(std::size_t i{0};i<EWPT.EWMinimum.size();++i)
     {
         auto res = std::abs(EWPT.EWMinimum.at(i));
@@ -58,7 +58,7 @@ TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
         std::cout << "res = " << res << "\t exp = " << expected << std::endl;
         if(expected != 0)
         {
-            REQUIRE(std::abs(res-expected)/expected <= 1e-4);
+            REQUIRE(std::abs(res-expected)/expected <= 5e-3);
         }
         else {
             REQUIRE(res <= 1e-4);
