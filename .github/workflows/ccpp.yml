@@ -2,7 +2,7 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ UnitTests ]
   pull_request:
     branches: [ master ]
 
@@ -21,6 +21,8 @@ jobs:
       run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. 
     - name: make
       run: cd build && make
+    - name: Test
+      run: cd build && ctest 
 
 
 
