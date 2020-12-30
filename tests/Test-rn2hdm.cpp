@@ -47,6 +47,14 @@ TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
     const double Tc_expected = 120.7305908203125;
     const std::vector<double> min_expected{0, 0, -32.70827526931041, -177.6050195289305, -297.0418903961274};
     std::cout << "EWPT: " << static_cast<int>(EWPT.StatusFlag) << "\t" << EWPT.vc << "\t" << EWPT.Tc << std::endl;
+
+    REQUIRE(EWPT.vc == omega_c_expected);
+    REQUIRE(EWPT.Tc == Tc_expected);
+    for(std::size_t i{0}; i<EWPT.EWMinimum.size();++i)
+    {
+        REQUIRE(EWPT.EWMinimum.at(i) == min_expected.at(i));
+    }
+
     REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
     REQUIRE(std::abs(omega_c_expected - EWPT.vc)/omega_c_expected <= 1e-4);
     REQUIRE(std::abs(Tc_expected-EWPT.Tc)/Tc_expected <= 1e-4);
