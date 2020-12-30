@@ -22,7 +22,7 @@ jobs:
     - name: make
       run: cd build && cmake --build . -j
     - name: Test
-      run: cd build && ctest 
+      run: cd build && ./bin/GenericTests
 
 
 
