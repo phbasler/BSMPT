@@ -18,6 +18,10 @@
  */
 
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_calc.h>
+#include <BSMPT/baryo_calculation/Fluid_Type/gen_func_fluid.h>
+#include <BSMPT/baryo_calculation/Fluid_Type/top_source.h>
+#include <BSMPT/baryo_calculation/Fluid_Type/bot_source.h>
+#include <BSMPT/baryo_calculation/Fluid_Type/tau_source.h>
 
 /**
  * @file

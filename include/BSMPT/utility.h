@@ -17,13 +17,22 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef UTILITY_H
-#define UTILITY_H
+#pragma once
 
 #include <string>
 #include <iostream>
 #include <vector>
 #include <random>
+#include <BSMPT/config.h>
+
+#ifdef Boost_FOUND
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 107200
+#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
+#else
+#include <boost/math/interpolators/cubic_b_spline.hpp>
+#endif
+#endif
 
 /**
  * @file
@@ -70,6 +79,13 @@ namespace ModelID {
 std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model);
 
 
+#if BOOST_VERSION >= 107200
+template<typename T>
+using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
+#else
+template<typename T>
+using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
+#endif
+
 }
 
-#endif // UTILITY_H

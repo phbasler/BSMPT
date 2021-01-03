@@ -42,6 +42,7 @@ if(libcmaes_FOUND)
   target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
 endif()
 
+
 if(NLopt_FOUND)
   if(TARGET NLopt::nlopt)
     target_link_libraries(Minimizer PUBLIC NLopt::nlopt)

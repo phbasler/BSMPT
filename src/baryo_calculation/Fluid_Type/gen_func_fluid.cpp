@@ -19,7 +19,7 @@
 
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_func_fluid.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
-#include <BSMPT/utility.h>
+
 
 /**
  * @file
@@ -294,7 +294,7 @@ namespace BSMPT
                 t0 = array_z.at(array_z.size() - 1);
                 h = array_z.at(0) - array_z.at(1);
             }
-            boost::math::cubic_b_spline<double> spline(array_nL.begin(), array_nL.end(), t0, h);
+            boost_cubic_b_spline<double> spline(array_nL.begin(), array_nL.end(), t0, h);
             Calc_eta::nL_cub = spline;
         }
         void Calc_eta::set_class(std::pair<std::vector<double>, std::vector<double>> arr_in, double Temp_in, double vw_in)
@@ -333,7 +333,7 @@ namespace BSMPT
                 t0 = array_z.at(array_z.size() - 1);
                 h = array_z.at(0) - array_z.at(1);
             }
-            boost::math::cubic_b_spline<double> spline(array_nL.begin(), array_nL.end(), t0, h);
+            boost_cubic_b_spline<double> spline(array_nL.begin(), array_nL.end(), t0, h);
             Calc_eta::nL_cub = spline;
         }
         double Nintegrate_eta(const Calc_eta &C_eta, const double &z_start, const double &z_end)

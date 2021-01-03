@@ -27,7 +27,6 @@
 #include<iostream>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <boost/numeric/odeint.hpp>
-#include <boost/math/interpolators/cubic_b_spline.hpp>
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_func_fluid.h>
 
 

@@ -29,8 +29,8 @@
  #include <BSMPT/minimizer/Minimizer.h>
  #include <boost/numeric/odeint.hpp>
  #include <boost/numeric/odeint/iterator/const_step_time_iterator.hpp>
- #include <boost/math/interpolators/cubic_b_spline.hpp>
 
+ #include <BSMPT/utility.h>
 
 
 
@@ -169,6 +169,8 @@ namespace BSMPT{
  * Struct for the GSL integration over mu_BL
  */
   struct GSL_integration_mubl{
+  public:
+
   private:
       /**
           * If true the transport equations with the plasma velocitys are used, otherwise the second order transport equations
@@ -420,7 +422,7 @@ namespace BSMPT{
       /**
       * Boost interpolation of mu_BL, calculated through generate_mubl_spline
       */
-      boost::math::cubic_b_spline<double> spline;
+      boost_cubic_b_spline<double> spline;
       /**
       * wall velocity
       */

@@ -30,7 +30,7 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_calc.h>
-
+#include <BSMPT/baryo_calculation/Fluid_Type/gen_func_fluid.h>
 
 
 namespace BSMPT{
@@ -41,6 +41,7 @@ struct AdditionalBaryoArgs{
 
     AdditionalBaryoArgs(bool SetUsed = true): Used{SetUsed} {}
 };
+
 
 /**
  * This is an interface class to call the different EWBG methods

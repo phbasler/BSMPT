@@ -26,8 +26,14 @@
 #include <BSMPT/Kfactors/Kfactors.h>
 #include <BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid.h>
 #include <BSMPT/Kfactors/Kfactors_grid/KtildeInterpolation.h>
+#include <BSMPT/utility.h>
 
 #include <iostream>
+
+
+
+
+
 
 namespace BSMPT {
 namespace Kfactors{
@@ -47,11 +53,11 @@ double CalculateNorm2(const double& msquared, const double& T, const int& s)
 //    static const double startingValue = 0;
 //    static const double StepSize = 1;
 
-    static const boost::math::cubic_b_spline<double> KtildeNormalisationFermionSpline(Data::KtildeNormFermion_grid.data(),
+    static const boost_cubic_b_spline<double> KtildeNormalisationFermionSpline(Data::KtildeNormFermion_grid.data(),
                                                            Data::KtildeNormFermion_grid.size()
                                                            ,0,1);
 
-    static const boost::math::cubic_b_spline<double> KtildeNormalisationBosonSpline(Data::KtildeNormBoson_grid.data(),
+    static const boost_cubic_b_spline<double> KtildeNormalisationBosonSpline(Data::KtildeNormBoson_grid.data(),
                                                                                     Data::KtildeNormBoson_grid.size()
                                                                                     ,0,1);
 

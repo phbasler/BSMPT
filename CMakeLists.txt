@@ -29,7 +29,7 @@ option(MakeAdditionalTesting "Build the executables used for further testing" OF
 
 find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
-find_package(Boost 1.66)
+find_package(Boost 1.66 REQUIRED)
 find_package(GSL 2.1 REQUIRED)
 find_package(Threads REQUIRED)
 
@@ -63,7 +63,7 @@ if(UseNLopt)
   find_package(NLopt)
 endif(UseNLopt)
 
-if(NOT CMAES_FOUND AND NOT NLopt_FOUND)
+if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message( FATAL_ERROR "You need at least libcmaes or NLopt." )
 endif()
 
@@ -144,3 +144,13 @@ if(DOXYGEN_FOUND)
 else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation")
 endif(DOXYGEN_FOUND)
+
+
+# -------------------- Testing ---------------------------------------------------
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif()
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

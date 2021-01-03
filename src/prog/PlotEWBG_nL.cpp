@@ -35,6 +35,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/baryo_calculation/CalculateEtaInterface.h>
 #include <BSMPT/utility.h>
+#include <BSMPT/baryo_calculation/Fluid_Type/tau_source.h>
 #include <iostream>
 #include <fstream>
 using namespace std;
