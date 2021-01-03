@@ -1,21 +1,21 @@
 ### config file for the EWBG calculation (yes/no)
 ### VIA = VEV Insertion Approximation
 
-VIA Ansatz only including the top quark in the transport equations
+VIA ansatz only including the top quark in the transport equations
 Include:    yes
 
-VIA Ansatz including the top and bottom quark in the transport equations
+VIA ansatz including the top and bottom quark in the transport equations
 Include:    yes
 
-VIA Ansatz including the top and bottom quark and the tau lepton in the transport equations
+VIA ansatz including the top and bottom quark and the tau lepton in the transport equations
 Include:    yes
 
-FH Ansatz with the plasma velocities
+FH ansatz with the plasma velocities
 Include:    yes
 
-FH Ansatz with the plasma velocities replaced through the second derivatives
+FH ansatz with the plasma velocities replaced through the second derivatives
 Include:    yes
 
-Treat the bottom quark massive in the VIA Ansätze
+Treat the bottom quark massive in the VIA ansatze
 Massive:    yes
 
