@@ -64,7 +64,7 @@ With the dependencies and options you can build the programm with
   
         mkdir build && cd build  
         cmake (OPTIONS from Dependencies) ..  
-        make  
+        make -j  
         make doc
     
 
@@ -72,6 +72,10 @@ The make doc will use doxygen to create the online help in build/html which can 
 
 
 Note to Mac Users: You have to use the g++ compiler as clang does not support OpenMP. If you get the error "missing libcmaes_config.h" during the compilation, please check if the file is in build/libcmaes-0.9.5. If so, copy it to /path/to/libcmaes/include/libcmaes
+
+
+### Unit tests
+After calling `make` in the build directory you can call `ctest`or `./bin/GenericTests` to run some checks. Here the NLO VeV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
 
 ---
 
