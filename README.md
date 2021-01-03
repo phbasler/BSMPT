@@ -75,7 +75,7 @@ Note to Mac Users: You have to use the g++ compiler as clang does not support Op
 
 
 ### Unit tests
-After calling `make` in the build directory you can call `ctest`or `./bin/GenericTests` to run some checks. Here the NLO VeV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
+After calling `make` in the build directory you can call `ctest`or `./bin/GenericTests` to run some checks. Here the NLO VEV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
 
 ---
 
