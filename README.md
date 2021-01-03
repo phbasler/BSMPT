@@ -1,5 +1,5 @@
 
-Program: BSMPT version 2.0
+Program: BSMPT version 2.1
 
 Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 
