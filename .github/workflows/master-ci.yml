@@ -1,8 +1,8 @@
-name: C/C++ CI
+name: master CI
 
 on:
   push:
-    branches: [ UnitTests ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
