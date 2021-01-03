@@ -13,7 +13,7 @@ var searchData=
   ['nintegrate_5fgamm_385',['Nintegrate_GamM',['../gen__func__fluid_8h.html#ac66de1dc47e89bcf3001efae44ee4d03',1,'BSMPT::Baryo']]],
   ['nintegrate_5fkappa_386',['NIntegrate_kappa',['../gen__func__fluid_8h.html#a1401b48e79bd17ae8d99c5d1ff3132c7',1,'BSMPT::Baryo']]],
   ['nintegrate_5fscp_387',['Nintegrate_Scp',['../gen__func__fluid_8h.html#a762fa7df4493970be1610c7ecfa60281',1,'BSMPT::Baryo']]],
-  ['nl_5fcub_388',['nL_cub',['../classBSMPT_1_1Baryo_1_1Calc__eta.html#a4fe16b344b6f8a818c481ec714c56fc2',1,'BSMPT::Baryo::Calc_eta']]],
+  ['nl_5fcub_388',['nL_cub',['../classBSMPT_1_1Baryo_1_1Calc__eta.html#ad99d40efa424a08587531e5b532fe184',1,'BSMPT::Baryo::Calc_eta']]],
   ['nlepton_389',['NLepton',['../classBSMPT_1_1Class__Potential__Origin.html#ac1bd7cf45185943f2d40f371448796d8',1,'BSMPT::Class_Potential_Origin']]],
   ['nloptreturntype_390',['NLOPTReturnType',['../structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html',1,'BSMPT::Minimizer::LibNLOPT']]],
   ['nloptveff_391',['NLOPTVEff',['../MinimizeNLOPT_8h.html#a01152bea3731d373bb7f7fb36cbdf43e',1,'BSMPT::Minimizer::LibNLOPT']]],
