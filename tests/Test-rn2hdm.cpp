@@ -37,7 +37,7 @@ TEST_CASE("Checking NLOVEV for N2HDM", "[n2hdm]") {
 }
 
 
-TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
+TEST_CASE("Checking EWPT for N2HDM", "[n2hdm]") {
     using namespace BSMPT;
     std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer = ModelID::FChoose(Model);
     modelPointer->initModel(example_point_RN2HDM);
@@ -46,7 +46,6 @@ TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
     const double omega_c_expected = 180.5917335676395;
     const double Tc_expected = 120.7305908203125;
     const std::vector<double> min_expected{0, 0, -32.70827526931041, -177.6050195289305, -297.0418903961274};
-    std::cout << "EWPT: " << static_cast<int>(EWPT.StatusFlag) << "\t" << EWPT.vc << "\t" << EWPT.Tc << std::endl;
 
     REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
     REQUIRE(std::abs(omega_c_expected - EWPT.vc)/omega_c_expected <= 1e-2);
@@ -55,7 +54,6 @@ TEST_CASE("Checking EWPT for N2HDM", "[N2hdm]") {
     {
         auto res = std::abs(EWPT.EWMinimum.at(i));
         auto expected = std::abs(min_expected.at(i));
-        std::cout << "res = " << res << "\t exp = " << expected << std::endl;
         if(expected != 0)
         {
             REQUIRE(std::abs(res-expected)/expected <= 1e-2);
