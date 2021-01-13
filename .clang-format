@@ -1,0 +1,23 @@
+﻿---
+BasedOnStyle: LLVM
+AlignConsecutiveAssignments: 'true'
+AlignEscapedNewlines: Right
+AlignTrailingComments: 'true'
+AllowAllConstructorInitializersOnNextLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'true'
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLoopsOnASingleLine: 'false'
+AlwaysBreakAfterReturnType: All
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakBeforeBraces: Allman
+BreakConstructorInitializers: BeforeComma
+CompactNamespaces: 'false'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+IndentWidth: '2'
+Language: Cpp
+TabWidth: '2'
+
+...
