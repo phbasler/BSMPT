@@ -44,8 +44,7 @@ namespace Kfactors
  * Calculates the norm for < > Integrals
  * @param T temperature at which the normalisation should be evaluated
  */
-double
-CalculateNorm1(const double &T);
+double CalculateNorm1(const double &T);
 
 /**
  * Calculates the norm for [] Integrals
@@ -53,8 +52,7 @@ CalculateNorm1(const double &T);
  * @param T temperature at which the normalisation should be evaluated
  * @param s switch for bosons (s=-1) and fermions (s=1)
  */
-double
-CalculateNorm2(const double &msquared, const double &T, const int &s);
+double CalculateNorm2(const double &msquared, const double &T, const int &s);
 
 /**
  * @brief initializeK1fermionGrid
@@ -121,144 +119,124 @@ initializeK9fermionGrid();
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K1fermion(double msquared, double T);
+double K1fermion(double msquared, double T);
 
 /**
  * Calculates the non normalised function K1 for bosons
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K1boson(double msquared, double T);
+double K1boson(double msquared, double T);
 
 /**
  * Calculates the non normalised function K2 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K2fermion(double msquared, double T);
+double K2fermion(double msquared, double T);
 /**
  * Calculates the non normalised function K4 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K4fermion(double msquared, double T);
+double K4fermion(double msquared, double T);
 /**
  * Calculates the non normalised function K4 for bosons
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K4boson(double msquared, double T);
+double K4boson(double msquared, double T);
 /**
  * Calculates the non normalised function K5 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K5fermion(double msquared, double T);
+double K5fermion(double msquared, double T);
 /**
  * Calculates the non normalised function K5 for bosons
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K5boson(double msquared, double T);
+double K5boson(double msquared, double T);
 /**
  * Calculates the non normalised function K6 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K6fermion(double msquared, double T);
+double K6fermion(double msquared, double T);
 /**
  * Calculates the non normalised function K8 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K8fermion(double msquared, double T);
+double K8fermion(double msquared, double T);
 /**
  * Calculates the non normalised function K9 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K9fermion(double msquared, double T);
+double K9fermion(double msquared, double T);
 
 /**
  * Calculates the normalised function K1 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K1fermion_normalized(double msquared, double T);
+double K1fermion_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K1 for bosons
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K1boson_normalized(double msquared, double T);
+double K1boson_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K2 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K2fermion_normalized(double msquared, double T);
+double K2fermion_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K4 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K4fermion_normalized(double msquared, double T);
+double K4fermion_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K4 for bosons
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K4boson_normalized(double msquared, double T);
+double K4boson_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K5 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K5fermion_normalized(double msquared, double T);
+double K5fermion_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K5 for bosons
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K5boson_normalized(double msquared, double T);
+double K5boson_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K6 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K6fermion_normalized(double msquared, double T);
+double K6fermion_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K8 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K8fermion_normalized(double msquared, double T);
+double K8fermion_normalized(double msquared, double T);
 /**
  * Calculates the normalised function K9 for fermions
  * @param msquared m^2 [GeV^2]
  * @param T temperature [GeV]
  */
-double
-K9fermion_normalized(double msquared, double T);
+double K9fermion_normalized(double msquared, double T);
 
 } // namespace Kfactors
 } // namespace BSMPT

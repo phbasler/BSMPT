@@ -112,16 +112,12 @@ public:
          R_Hsm_1 = 0, R_Hsm_2 = 0, R_Hsm_3 = 0;
   double g1uu = 0, g2uu = 0;
 
-  void
-  ReadAndSet(const std::string &linestr, std::vector<double> &par) override;
-  std::vector<std::string>
-  addLegendCT() const override;
-  std::vector<std::string>
-  addLegendTemp() const override;
-  std::vector<std::string>
-  addLegendTripleCouplings() const override;
-  std::vector<std::string>
-  addLegendVEV() const override;
+  void ReadAndSet(const std::string &linestr,
+                  std::vector<double> &par) override;
+  std::vector<std::string> addLegendCT() const override;
+  std::vector<std::string> addLegendTemp() const override;
+  std::vector<std::string> addLegendTripleCouplings() const override;
+  std::vector<std::string> addLegendVEV() const override;
 
   /**
    * Set the numerical values for the Lagrange parameters
@@ -135,31 +131,20 @@ public:
    * @param par[7] = tan(beta)
    * @param par[8] = Yukawa Type
    */
-  void
-  set_gen(const std::vector<double> &par) override;
-  void
-  set_CT_Pot_Par(const std::vector<double> &par) override;
-  void
-  write() const override;
+  void set_gen(const std::vector<double> &par) override;
+  void set_CT_Pot_Par(const std::vector<double> &par) override;
+  void write() const override;
 
-  void
-  TripleHiggsCouplings() override;
-  std::vector<double>
-  calc_CT() const override;
+  void TripleHiggsCouplings() override;
+  std::vector<double> calc_CT() const override;
 
-  void
-  SetCurvatureArrays() override;
-  bool
-  CalculateDebyeSimplified() override;
-  bool
-  CalculateDebyeGaugeSimplified() override;
-  double
-  VTreeSimplified(const std::vector<double> &v) const override;
-  double
-  VCounterSimplified(const std::vector<double> &v) const override;
-  void
-  Debugging(const std::vector<double> &input,
-            std::vector<double> &output) const override;
+  void SetCurvatureArrays() override;
+  bool CalculateDebyeSimplified() override;
+  bool CalculateDebyeGaugeSimplified() override;
+  double VTreeSimplified(const std::vector<double> &v) const override;
+  double VCounterSimplified(const std::vector<double> &v) const override;
+  void Debugging(const std::vector<double> &input,
+                 std::vector<double> &output) const override;
 
   bool IncludeChargeBreakingVEV = true;
   bool CTAlternative            = false;

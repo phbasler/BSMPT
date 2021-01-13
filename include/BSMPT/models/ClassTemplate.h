@@ -50,42 +50,27 @@ public:
 
   double dms, dlambda, dT, yt, g;
 
-  void
-  ReadAndSet(const std::string &linestr, std::vector<double> &par) override;
-  std::vector<std::string>
-  addLegendCT() const override;
-  std::vector<std::string>
-  addLegendTemp() const override;
-  std::vector<std::string>
-  addLegendTripleCouplings() const override;
-  std::vector<std::string>
-  addLegendVEV() const override;
+  void ReadAndSet(const std::string &linestr,
+                  std::vector<double> &par) override;
+  std::vector<std::string> addLegendCT() const override;
+  std::vector<std::string> addLegendTemp() const override;
+  std::vector<std::string> addLegendTripleCouplings() const override;
+  std::vector<std::string> addLegendVEV() const override;
 
-  void
-  set_gen(const std::vector<double> &par) override;
-  void
-  set_CT_Pot_Par(const std::vector<double> &par) override;
-  void
-  write() const override;
+  void set_gen(const std::vector<double> &par) override;
+  void set_CT_Pot_Par(const std::vector<double> &par) override;
+  void write() const override;
 
-  void
-  TripleHiggsCouplings() override;
-  std::vector<double>
-  calc_CT() const override;
+  void TripleHiggsCouplings() override;
+  std::vector<double> calc_CT() const override;
 
-  void
-  SetCurvatureArrays() override;
-  bool
-  CalculateDebyeSimplified() override;
-  bool
-  CalculateDebyeGaugeSimplified() override;
-  double
-  VTreeSimplified(const std::vector<double> &v) const override;
-  double
-  VCounterSimplified(const std::vector<double> &v) const override;
-  void
-  Debugging(const std::vector<double> &input,
-            std::vector<double> &output) const override;
+  void SetCurvatureArrays() override;
+  bool CalculateDebyeSimplified() override;
+  bool CalculateDebyeGaugeSimplified() override;
+  double VTreeSimplified(const std::vector<double> &v) const override;
+  double VCounterSimplified(const std::vector<double> &v) const override;
+  void Debugging(const std::vector<double> &input,
+                 std::vector<double> &output) const override;
 };
 
 } // namespace Models

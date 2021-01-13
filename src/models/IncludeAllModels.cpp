@@ -35,8 +35,7 @@ namespace BSMPT
 namespace ModelID
 {
 
-std::unique_ptr<Class_Potential_Origin>
-FChoose(ModelIDs choice)
+std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice)
 {
   using namespace Models;
   switch (choice)
@@ -52,8 +51,7 @@ FChoose(ModelIDs choice)
   }
 }
 
-ModelIDs
-getModel(const std::string &s)
+ModelIDs getModel(const std::string &s)
 {
   std::string ModelInput = s;
   std::transform(
@@ -70,8 +68,7 @@ getModel(const std::string &s)
   return ModelIDs::NotSet;
 }
 
-std::unordered_map<ModelIDs, std::string>
-InvertModelNames()
+std::unordered_map<ModelIDs, std::string> InvertModelNames()
 {
   std::unordered_map<ModelIDs, std::string> IMN;
   for (const auto &el : ModelNames)
@@ -88,8 +85,7 @@ InvertModelNames()
 
 } // namespace ModelID
 
-void
-ShowInputError()
+void ShowInputError()
 {
   std::cerr << "The chosen Method for the thermal mass corrections is ";
   if (C_UseParwani)

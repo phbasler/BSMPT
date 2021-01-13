@@ -39,11 +39,10 @@ using namespace Eigen;
 namespace BSMPT
 {
 
-double
-Class_Potential_Origin::Vl(double MassSquared,
-                           double Temp,
-                           int n,
-                           int diff) const
+double Class_Potential_Origin::Vl(double MassSquared,
+                                  double Temp,
+                                  int n,
+                                  int diff) const
 {
 
   double Mass = std::sqrt((MassSquared));
@@ -92,11 +91,10 @@ Class_Potential_Origin::Vl(double MassSquared,
   return PotVal;
 }
 
-double
-Class_Potential_Origin::Vsf(double MassSquared,
-                            double Temp,
-                            int n,
-                            int diff) const
+double Class_Potential_Origin::Vsf(double MassSquared,
+                                   double Temp,
+                                   int n,
+                                   int diff) const
 {
   double PotVal = 0;
   //	std::cout << scale << std::endl;
@@ -161,11 +159,10 @@ Class_Potential_Origin::Vsf(double MassSquared,
   return PotVal;
 }
 
-double
-Class_Potential_Origin::Vsb(double MassSquaredIn,
-                            double Temp,
-                            int n,
-                            int diff) const
+double Class_Potential_Origin::Vsb(double MassSquaredIn,
+                                   double Temp,
+                                   int n,
+                                   int diff) const
 {
   double MassSquared = (MassSquaredIn);
   double PotVal      = 0;
@@ -234,11 +231,10 @@ Class_Potential_Origin::Vsb(double MassSquaredIn,
   return PotVal;
 }
 
-double
-Class_Potential_Origin::boson_legacy(double MassSquared,
-                                     double Temp,
-                                     double cb,
-                                     int diff) const
+double Class_Potential_Origin::boson_legacy(double MassSquared,
+                                            double Temp,
+                                            double cb,
+                                            int diff) const
 {
   double resPotVal   = 0;
   long double PotVal = 0;
@@ -328,10 +324,9 @@ Class_Potential_Origin::boson_legacy(double MassSquared,
   return resPotVal;
 }
 
-double
-Class_Potential_Origin::fermion_legacy(double MassSquared,
-                                       double Temp,
-                                       int diff) const
+double Class_Potential_Origin::fermion_legacy(double MassSquared,
+                                              double Temp,
+                                              int diff) const
 {
   long double PotVal = 0;
   long double PotCW  = CWTerm(MassSquared, C_CWcbFermion, diff);

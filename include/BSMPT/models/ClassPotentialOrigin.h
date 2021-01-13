@@ -616,136 +616,79 @@ public:
    * @brief get_scale
    * @return the MSBar renormalisation scale
    */
-  double
-  get_scale() const
-  {
-    return scale;
-  }
+  double get_scale() const { return scale; }
 
   /**
    * @brief set_scale sets the MSBar renormalisation scale to scale_new
    * @param scale_new
    */
-  void
-  set_scale(double scale_new)
-  {
-    scale = scale_new;
-  }
+  void set_scale(double scale_new) { scale = scale_new; }
   /**
    * @brief get_nPar
    * @return nPar
    */
-  std::size_t
-  get_nPar() const
-  {
-    return nPar;
-  }
+  std::size_t get_nPar() const { return nPar; }
   /**
    * @brief get_nParCT
    * @return nParCT
    */
-  std::size_t
-  get_nParCT() const
-  {
-    return nParCT;
-  }
+  std::size_t get_nParCT() const { return nParCT; }
   /**
    * @brief get_nVEV
    * @return nVEV
    */
-  std::size_t
-  get_nVEV() const
-  {
-    return nVEV;
-  }
+  std::size_t get_nVEV() const { return nVEV; }
   /**
    * @brief get_vevTreeMin
    * @return vevTreeMin
    */
-  std::vector<double>
-  get_vevTreeMin() const
-  {
-    return vevTreeMin;
-  }
+  std::vector<double> get_vevTreeMin() const { return vevTreeMin; }
   /**
    * @brief get_vevTreeMin
    * @param k
    * @return vevTreeMin.at(k)
    */
-  double
-  get_vevTreeMin(const std::size_t &k) const
-  {
-    return vevTreeMin.at(k);
-  }
+  double get_vevTreeMin(const std::size_t &k) const { return vevTreeMin.at(k); }
   /**
    * @brief get_parStored
    * @return parStored
    */
-  std::vector<double>
-  get_parStored() const
-  {
-    return parStored;
-  }
+  std::vector<double> get_parStored() const { return parStored; }
   /**
    * @brief get_parCTStored
    * @return parCTStored
    */
-  std::vector<double>
-  get_parCTStored() const
-  {
-    return parCTStored;
-  }
+  std::vector<double> get_parCTStored() const { return parCTStored; }
   /**
    * @brief get_NGauge
    * @return NGauge
    */
-  std::size_t
-  get_NGauge() const
-  {
-    return NGauge;
-  }
+  std::size_t get_NGauge() const { return NGauge; }
   /**
    * @brief get_NQuarks
    * @return NQuarks
    */
-  std::size_t
-  get_NQuarks() const
-  {
-    return NQuarks;
-  }
+  std::size_t get_NQuarks() const { return NQuarks; }
   /**
    * @brief get_NHiggs
    * @return NHiggs
    */
-  std::size_t
-  get_NHiggs() const
-  {
-    return NHiggs;
-  }
+  std::size_t get_NHiggs() const { return NHiggs; }
   /**
    * @brief get_NLepton
    * @return NLepton
    */
-  std::size_t
-  get_NLepton() const
-  {
-    return NLepton;
-  }
+  std::size_t get_NLepton() const { return NLepton; }
   /**
    * @brief get_Model
    * @return ModelID of the Model
    */
-  ModelID::ModelIDs
-  get_Model() const
-  {
-    return Model;
-  }
+  ModelID::ModelIDs get_Model() const { return Model; }
   /**
    * @brief set_InputLineNumber
    * @param InputLineNumber_in value to set InputLineNumber
    */
-  void
-  set_InputLineNumber(int InputLineNumber_in)
+  void set_InputLineNumber(int InputLineNumber_in)
   {
     InputLineNumber = InputLineNumber_in;
   }
@@ -756,10 +699,9 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsTreePhysical[i][j][k]
    */
-  double
-  get_TripleHiggsCorrectionsTreePhysical(std::size_t i,
-                                         std::size_t j,
-                                         std::size_t k) const
+  double get_TripleHiggsCorrectionsTreePhysical(std::size_t i,
+                                                std::size_t j,
+                                                std::size_t k) const
   {
     return TripleHiggsCorrectionsTreePhysical.at(i).at(j).at(k);
   }
@@ -770,10 +712,9 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsCTPhysical[i][j][k]
    */
-  double
-  get_TripleHiggsCorrectionsCTPhysical(std::size_t i,
-                                       std::size_t j,
-                                       std::size_t k) const
+  double get_TripleHiggsCorrectionsCTPhysical(std::size_t i,
+                                              std::size_t j,
+                                              std::size_t k) const
   {
     return TripleHiggsCorrectionsCTPhysical.at(i).at(j).at(k);
   }
@@ -784,10 +725,9 @@ public:
    * @param k
    * @return TripleHiggsCorrectionsCWPhysical[i][j][k]
    */
-  double
-  get_TripleHiggsCorrectionsCWPhysical(std::size_t i,
-                                       std::size_t j,
-                                       std::size_t k) const
+  double get_TripleHiggsCorrectionsCWPhysical(std::size_t i,
+                                              std::size_t j,
+                                              std::size_t k) const
   {
     return TripleHiggsCorrectionsCWPhysical.at(i).at(j).at(k);
   }
@@ -795,14 +735,12 @@ public:
   /**
    * Sets the UseIndexCol var
    */
-  void
-  setUseIndexCol(std::string legend);
+  void setUseIndexCol(std::string legend);
 
   /**
    * Initializes all vectors needed for the calculations.
    */
-  void
-  initVectors();
+  void initVectors();
 
   /**
    * Calculates the effective potential and its derivatives.
@@ -813,11 +751,10 @@ public:
    * @param Order 0 returns the tree level potential and 1 the NLO potential.
    * Default value is the NLO potential
    */
-  double
-  VEff(const std::vector<double> &v,
-       double Temp = 0,
-       int diff    = 0,
-       int Order   = 1) const;
+  double VEff(const std::vector<double> &v,
+              double Temp = 0,
+              int diff    = 0,
+              int Order   = 1) const;
   /**
    * Calculates the tree-level potential and its derivatives.
    * @param v the configuration of all VEVs at which the potential should be
@@ -827,10 +764,9 @@ public:
    * @param ForceExplicitCalculation Calculate the tensors directly from the
    * tensors even if VTreeSimplified() is given
    */
-  double
-  VTree(const std::vector<double> &v,
-        int diff                      = 0,
-        bool ForceExplicitCalculation = false) const;
+  double VTree(const std::vector<double> &v,
+               int diff                      = 0,
+               bool ForceExplicitCalculation = false) const;
   /**
    * Calculates the counterterm potential and its derivatives
    * @param v the configuration of all VEVs at which the potential should be
@@ -840,10 +776,9 @@ public:
    * @param ForceExplicitCalculation Calculate the tensors directly from the
    * tensors even if VCounterSimplified() is given
    */
-  double
-  CounterTerm(const std::vector<double> &v,
-              int diff                      = 0,
-              bool ForceExplicitCalculation = false) const;
+  double CounterTerm(const std::vector<double> &v,
+                     int diff                      = 0,
+                     bool ForceExplicitCalculation = false) const;
   /**
    * Calculates the Coleman-Weinberg and temperature-dependent 1-loop part of
    * the effective potential and its derivatives.
@@ -854,120 +789,103 @@ public:
    * @param Temp the temperature at which the potential should be evaluated
    * @return the value of the one-loop part of the effective potential
    */
-  double
-  V1Loop(const std::vector<double> &v, double Temp, int diff) const;
+  double V1Loop(const std::vector<double> &v, double Temp, int diff) const;
   /**
    * This function calculates the EW breaking VEV from all contributing field
    * configurations.
    */
-  double
-  EWSBVEV(const std::vector<double> &v) const;
+  double EWSBVEV(const std::vector<double> &v) const;
 
   /**
    * Reads the string linestr and sets the parameter point
    */
-  virtual void
-  ReadAndSet(const std::string &linestr, std::vector<double> &par) = 0;
+  virtual void ReadAndSet(const std::string &linestr,
+                          std::vector<double> &par) = 0;
   /**
    * Adds the name of the counterterms to the legend of the output file. This
    * has to be specified in the model file.
    */
-  virtual std::vector<std::string>
-  addLegendCT() const = 0;
+  virtual std::vector<std::string> addLegendCT() const = 0;
   /**
    * Adds the name of the VEVs, together with the critical VEV, the critical
    * temperature and the ratio, to the legend of the output file. This has to be
    * specified in the model file.
    */
-  virtual std::vector<std::string>
-  addLegendTemp() const = 0;
+  virtual std::vector<std::string> addLegendTemp() const = 0;
   /**
    * Adds the name of the triple Higgs couplings at T=0 to the legend of the
    * output file. This has to be specified in the model file.
    */
-  virtual std::vector<std::string>
-  addLegendTripleCouplings() const = 0;
+  virtual std::vector<std::string> addLegendTripleCouplings() const = 0;
   /**
    * Adds the name of the VEVs to the legend of the output file. This has to be
    * specified in the model file.
    */
-  virtual std::vector<std::string>
-  addLegendVEV() const = 0;
+  virtual std::vector<std::string> addLegendVEV() const = 0;
 
   /**
    * Reads the Lagrangian parameters from the vector 'par' and sets them to the
    * model parameters. This also sets the VEV configuration as well as the
    * scale. This has to be specified in the model file.
    */
-  virtual void
-  set_gen(const std::vector<double> &par) = 0;
+  virtual void set_gen(const std::vector<double> &par) = 0;
   /**
    * Reads the counterterm parameters from the vector 'par' and sets them to the
    * model parameters as well as the Tensors \p Curvature_Higgs_CT_L1, \p
    * Curvature_Higgs_CT_L2, \p Curvature_Higgs_CT_L3 , \p Curvature_Higgs_CT_L4
    * . This has to be specified in the model file.
    */
-  virtual void
-  set_CT_Pot_Par(const std::vector<double> &par) = 0;
+  virtual void set_CT_Pot_Par(const std::vector<double> &par) = 0;
   /**
    * This will produce a terminal output of all the model parameters.
    * This has to be specified in the model file.
    */
-  virtual void
-  write() const = 0;
+  virtual void write() const = 0;
 
-  void
-  set_All(const std::vector<double> &par, const std::vector<double> &parCT);
+  void set_All(const std::vector<double> &par,
+               const std::vector<double> &parCT);
 
   /**
    * This will set all the tensors needed to describe the tree-level Lagrangian
    *  except for the counterterms in the potential.
    * This has to be specified in the model file.
    */
-  virtual void
-  SetCurvatureArrays() = 0;
+  virtual void SetCurvatureArrays() = 0;
   /**
     Calculates all triple and quartic couplings in the physical basis
  */
-  void
-  CalculatePhysicalCouplings();
+  void CalculatePhysicalCouplings();
   /**
    * Calculates the first derivative of the Coleman-Weinberg potential evaluated
    * at the tree-level minimum.
    */
-  std::vector<double>
-  WeinbergFirstDerivative() const;
+  std::vector<double> WeinbergFirstDerivative() const;
   /**
    * Calculates the second derivative of the Coleman-Weinberg potential at the
    * tree-level minimum.
    */
-  std::vector<double>
-  WeinbergSecondDerivative() const;
+  std::vector<double> WeinbergSecondDerivative() const;
   /**
    * Calculates the third derivative of the Coleman-Weinberg potential at the
    * tree-level minimum.
    */
-  std::vector<double>
-  WeinbergThirdDerivative() const;
+  std::vector<double> WeinbergThirdDerivative() const;
   /**
    * Calculates the Debye corrections to the Higgs mass matrix.
    * If you can provide CalculateDebyeSimplified() with the Matrix as this will
    * reduce the runtime.
    */
-  void
-  CalculateDebye();
+  void CalculateDebye();
   /**
    * Calculates the Debye corrections to the gauge sector. By using
    * CalculateDebyeGaugeSimplified() the runtime can be reduced.
    */
-  void
-  CalculateDebyeGauge();
+  void CalculateDebyeGauge();
   /**
    * Sets a tensor needed to calculate the contribution of the counterterm
    * potential to the triple Higgs couplings.
    */
-  void
-  Prepare_Triple();
+  void Prepare_Triple();
 
   /**
    * You can give the explicit Debye corrections to the Higgs mass matrix with
@@ -975,8 +893,7 @@ public:
    * CalculateDebye(). If you know the corrections use this and let the function
    * return true, this will save you a lot of computing time.
    */
-  virtual bool
-  CalculateDebyeSimplified() = 0;
+  virtual bool CalculateDebyeSimplified() = 0;
 
   /**
    * You can give the explicit Debye corrections to the gauge boson mass matrix
@@ -984,15 +901,13 @@ public:
    * CalculateDebyeGauge(). If you know the corrections use this and let the
    * function return true, this will save you a lot of computing time.
    */
-  virtual bool
-  CalculateDebyeGaugeSimplified() = 0;
+  virtual bool CalculateDebyeGaugeSimplified() = 0;
 
   /**
    * You can give the explicit form of your tree-level potential here. This
    * speeds up the computation time.
    */
-  virtual double
-  VTreeSimplified(const std::vector<double> &v) const = 0;
+  virtual double VTreeSimplified(const std::vector<double> &v) const = 0;
   /**
    * @brief UseVTreeSimplified Decides wether VTreeSimplified will be used or
    * not. VTreeSimplified returns 0 if UseVTreeSimplified is false Set in
@@ -1003,8 +918,7 @@ public:
    * You can give the explicit form of your counterterm potential here. This
    * speeds up the computation time.
    */
-  virtual double
-  VCounterSimplified(const std::vector<double> &v) const = 0;
+  virtual double VCounterSimplified(const std::vector<double> &v) const = 0;
   /**
    * @brief UseVCounterSimplified Decides wether VCounterSimplified will be used
    * or not. VCounterSimplified returns 0 if UseVCounterSimplified is false Set
@@ -1023,10 +937,9 @@ public:
    * @return Vector in which the eigenvalues m^2 of the mass matrix will be
    * stored
    */
-  std::vector<double>
-  HiggsMassesSquared(const std::vector<double> &v,
-                     const double &Temp = 0,
-                     const int &diff    = 0) const;
+  std::vector<double> HiggsMassesSquared(const std::vector<double> &v,
+                                         const double &Temp = 0,
+                                         const int &diff    = 0) const;
   /**
    * Calculates the gauge mass matrix and saves all eigenvalues
    * @param v the configuration of all VEVs at which the eigenvalues should be
@@ -1038,10 +951,9 @@ public:
    * @return Vector in which the eigenvalues m^2 of the mass matrix will be
    * stored
    */
-  std::vector<double>
-  GaugeMassesSquared(const std::vector<double> &v,
-                     const double &Temp = 0,
-                     const int &diff    = 0) const;
+  std::vector<double> GaugeMassesSquared(const std::vector<double> &v,
+                                         const double &Temp = 0,
+                                         const int &diff    = 0) const;
   /**
    * Calculates the quark mass matrix and saves all eigenvalues, this assumes
    * the same masses for different colours.
@@ -1052,8 +964,8 @@ public:
    * @return Vector in which the eigenvalues m^2 of the mass matrix will be
    * stored
    */
-  std::vector<double>
-  QuarkMassesSquared(const std::vector<double> &v, const int &diff = 0) const;
+  std::vector<double> QuarkMassesSquared(const std::vector<double> &v,
+                                         const int &diff = 0) const;
   /**
    * Calculates the lepton mass matrix and saves all eigenvalues
    * @param v the configuration of all VEVs at which the eigenvalues should be
@@ -1063,8 +975,8 @@ public:
    * @return Vector in which the eigenvalues m^2 of the mass matrix will be
    * stored
    */
-  std::vector<double>
-  LeptonMassesSquared(const std::vector<double> &v, const int &diff = 0) const;
+  std::vector<double> LeptonMassesSquared(const std::vector<double> &v,
+                                          const int &diff = 0) const;
 
   /**
    * Calculates the quark mass matrix and saves all eigenvalues, this assumes
@@ -1084,8 +996,7 @@ public:
    * @return the Mass Matrix for the Quarks of the form $ M^{IJ} = Y^{IJ} +
    * Y^{IJk} v_k $
    */
-  Eigen::MatrixXcd
-  QuarkMassMatrix(const std::vector<double> &v) const;
+  Eigen::MatrixXcd QuarkMassMatrix(const std::vector<double> &v) const;
   /**
    * Calculates the quark mass matrix and saves all eigenvalues, this assumes
    * the same masses for different colours.
@@ -1104,8 +1015,7 @@ public:
    * @return the Mass Matrix for the Leptons of the form $ M^{IJ} = Y^{IJ} +
    * Y^{IJk} v_k $
    */
-  Eigen::MatrixXcd
-  LeptonMassMatrix(const std::vector<double> &v) const;
+  Eigen::MatrixXcd LeptonMassMatrix(const std::vector<double> &v) const;
 
   /**
    * Calculates the triple Higgs couplings at NLO in the mass basis.
@@ -1113,14 +1023,12 @@ public:
    * Use the vector TripleHiggsCorrectionsCWPhysical to save your couplings and
    * set the nTripleCouplings to the number of couplings you want as output.
    */
-  virtual void
-  TripleHiggsCouplings() = 0;
+  virtual void TripleHiggsCouplings() = 0;
   /**
    * Calculates the function f^1 needed for the derivatives of the Coleman
    * Weinberg potential.
    */
-  double
-  fbase(double MassSquaredA, double MassSquaredB) const;
+  double fbase(double MassSquaredA, double MassSquaredB) const;
   /**
    * Calculates the function f^2 needed for the 3rd derivatives of the Coleman
    * Weinberg potential.
@@ -1131,22 +1039,19 @@ public:
    * Calculates the counterterm parameters. Here you need to work out the scheme
    * and implement the formulas. This has to be specified in the model file.
    */
-  virtual std::vector<double>
-  calc_CT() const = 0;
+  virtual std::vector<double> calc_CT() const = 0;
 
   /**
    * Calculates the Coleman-Weinberg contribution of a particle with m^2 =
    * MassSquared and the constant scheme-dependent parameter cb as well as the
    * first derivative with respect to m^2.
    */
-  double
-  CWTerm(double MassSquared, double cb, int diff = 0) const;
+  double CWTerm(double MassSquared, double cb, int diff = 0) const;
   /**
    * Calculates Re(log(MassSquared)) and returns 0 if the argument is too small
    * as this function is only called with an (m^2)^n in front of it.
    */
-  double
-  FCW(double MassSquared) const;
+  double FCW(double MassSquared) const;
   /**
    * @brief Calculation of the bosonic std::size_tegral + Coleman-Weinberg
    * potential __without__ taking d.o.f. std::size_to account
@@ -1161,8 +1066,7 @@ public:
    *
    *
    */
-  double
-  boson(double MassSquared, double Temp, double cb, int diff = 0) const;
+  double boson(double MassSquared, double Temp, double cb, int diff = 0) const;
   /**
    * Deprecated version of boson() as present in the v1.X release. Still here
    * for legacy reasons
@@ -1181,8 +1085,7 @@ public:
    * @param diff :  0 = Value of the potential, diff > 0 returns the derivative
    * w.r.t. m^2 and diff=-1 w.r.t Temp
    */
-  double
-  fermion(double MassSquared, double Temp, int diff = 0) const;
+  double fermion(double MassSquared, double Temp, int diff = 0) const;
   /**
    * Deprecated version of fermion() as present in the v1.X release. Still here
    * for legacy reasons
@@ -1227,8 +1130,7 @@ public:
    * Resets all bools. Needed if you want to deal with multiple posize_ts one
    * after another with the same pointer.
    */
-  void
-  resetbools();
+  void resetbools();
 
   /**
    * This will convert the vector VEVminimizer with the VEVs used by the
@@ -1266,8 +1168,7 @@ public:
    * @return the mass eigenvalues in the vector and then the derivatives in the
    * same order
    */
-  std::vector<double>
-  SecondDerivativeOfEigenvaluesNonRepeated(
+  std::vector<double> SecondDerivativeOfEigenvaluesNonRepeated(
       const Eigen::Ref<Eigen::MatrixXd> M,
       const Eigen::Ref<Eigen::MatrixXd> MDiffX,
       const Eigen::Ref<Eigen::MatrixXd> MDiffY,
@@ -1277,23 +1178,20 @@ public:
    * This function will check if the VEV at NLO is still close enough to the LO
    * VEV. v has to be given in the configuration of the minimizer.
    */
-  bool
-  CheckNLOVEV(const std::vector<double> &v) const;
+  bool CheckNLOVEV(const std::vector<double> &v) const;
 
   /**
    * This is a possible debugging function.
    */
-  virtual void
-  Debugging(const std::vector<double> &input,
-            std::vector<double> &output) const = 0;
+  virtual void Debugging(const std::vector<double> &input,
+                         std::vector<double> &output) const = 0;
 
   /**
    * Checks if the tensors are correctly implemented. For this the fermion,
    * quark and gauge boson masses are calculated and printed next to the values
    * defined in SMparah.h
    */
-  void
-  CheckImplementation(
+  void CheckImplementation(
       const int &WhichMinimizer = Minimizer::WhichMinimizerDefault) const;
 
   /**
@@ -1305,14 +1203,12 @@ public:
    * @brief FindSignSymmetries checks for all possible sign changes in the VEV
    * components and checks for all possible Z2 symmetries
    */
-  void
-  FindSignSymmetries();
+  void FindSignSymmetries();
 
   /**
    * Set the parameter UseTreeLevel to the input
    */
-  void
-  SetUseTreeLevel(bool val);
+  void SetUseTreeLevel(bool val);
 
   /**
    * Gets the parameter line as an Input and calls
@@ -1330,26 +1226,23 @@ public:
    * set_gen()
    * @return Vector with the CT
    */
-  std::vector<double>
-  initModel(const std::vector<double> &par);
+  std::vector<double> initModel(const std::vector<double> &par);
 
   /**
    * @brief resetScale changes the MSBar scale to newScale
    * @param newScale the new Scale in GeV
    * @return the CT at the new scale
    */
-  std::vector<double>
-  resetScale(const double &newScale);
+  std::vector<double> resetScale(const double &newScale);
 
   /**
    * Calculate the ratio of the latent heat w.r.t. the energy density of the
    * plasma background Formula taken from
    */
 
-  double
-  CalculateRatioAlpha(const std::vector<double> &vev_symmetric,
-                      const std::vector<double> &vev_broken,
-                      const double &Temp) const;
+  double CalculateRatioAlpha(const std::vector<double> &vev_symmetric,
+                             const std::vector<double> &vev_broken,
+                             const double &Temp) const;
 };
 
 } // namespace BSMPT

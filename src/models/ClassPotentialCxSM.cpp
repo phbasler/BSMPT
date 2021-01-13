@@ -73,8 +73,7 @@ Class_CxSM::~Class_CxSM()
  * returns a string which tells the user the chronological order of the
  * counterterms. Use this to complement the legend of the given input file
  */
-std::vector<std::string>
-Class_CxSM::addLegendCT() const
+std::vector<std::string> Class_CxSM::addLegendCT() const
 {
   std::vector<std::string> labels;
   labels.push_back("dms");
@@ -100,8 +99,7 @@ Class_CxSM::addLegendCT() const
  * the critical temperature. Use this to complement the legend of the given
  * input file
  */
-std::vector<std::string>
-Class_CxSM::addLegendTemp() const
+std::vector<std::string> Class_CxSM::addLegendTemp() const
 {
   std::vector<std::string> labels;
   labels.push_back("T_c");
@@ -118,8 +116,7 @@ Class_CxSM::addLegendTemp() const
  * Higgs couplings. Use this to complement the legend of the given input file
  *
  */
-std::vector<std::string>
-Class_CxSM::addLegendTripleCouplings() const
+std::vector<std::string> Class_CxSM::addLegendTripleCouplings() const
 {
   std::vector<std::string> labels;
   std::vector<std::string> particles;
@@ -156,8 +153,7 @@ Class_CxSM::addLegendTripleCouplings() const
  * returns a string which tells the user the chronological order of the VEVs.
  * Use this to complement the legend of the given input file
  */
-std::vector<std::string>
-Class_CxSM::addLegendVEV() const
+std::vector<std::string> Class_CxSM::addLegendVEV() const
 {
   std::vector<std::string> labels;
   labels.push_back("omega");
@@ -169,8 +165,8 @@ Class_CxSM::addLegendVEV() const
 /**
  * Reads the string linestr and sets the parameter point
  */
-void
-Class_CxSM::ReadAndSet(const std::string &linestr, std::vector<double> &par)
+void Class_CxSM::ReadAndSet(const std::string &linestr,
+                            std::vector<double> &par)
 {
   //	std::cout << linestr << std::endl;
   std::stringstream ss(linestr);
@@ -215,8 +211,7 @@ Class_CxSM::ReadAndSet(const std::string &linestr, std::vector<double> &par)
   return;
 }
 
-void
-Class_CxSM::set_gen(const std::vector<double> &par)
+void Class_CxSM::set_gen(const std::vector<double> &par)
 {
 
   vh     = par[0];
@@ -291,8 +286,7 @@ Class_CxSM::set_gen(const std::vector<double> &par)
  * set your counterterm parameters from the entries of par as well as the
  * entries of Curvature_Higgs_CT_L1 to Curvature_Higgs_CT_L4.
  */
-void
-Class_CxSM::set_CT_Pot_Par(const std::vector<double> &par)
+void Class_CxSM::set_CT_Pot_Par(const std::vector<double> &par)
 {
 
   dmsq    = par[0];
@@ -428,8 +422,7 @@ Class_CxSM::set_CT_Pot_Par(const std::vector<double> &par)
 /**
  * console output of all Parameters
  */
-void
-Class_CxSM::write() const
+void Class_CxSM::write() const
 {
   std::cout << "The parameters are : " << std::endl;
   std::cout << "\tlambda = " << lambda << std::endl
@@ -593,8 +586,7 @@ Class_CxSM::write() const
  * Calculates the counterterms. Here you need to work out the scheme and
  * implement the formulas.
  */
-std::vector<double>
-Class_CxSM::calc_CT() const
+std::vector<double> Class_CxSM::calc_CT() const
 {
   std::vector<double> parCT;
   parCT.resize(nParCT);
@@ -781,8 +773,7 @@ Class_CxSM::calc_CT() const
   return parCT;
 }
 
-void
-Class_CxSM::TripleHiggsCouplings()
+void Class_CxSM::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
@@ -878,8 +869,7 @@ Class_CxSM::TripleHiggsCouplings()
   }
 }
 
-void
-Class_CxSM::SetCurvatureArrays()
+void Class_CxSM::SetCurvatureArrays()
 {
   /*
    *  Here you have to set the vectors
@@ -1198,8 +1188,7 @@ Class_CxSM::SetCurvatureArrays()
   SetCurvatureDone = true;
 }
 
-bool
-Class_CxSM::CalculateDebyeSimplified()
+bool Class_CxSM::CalculateDebyeSimplified()
 {
   return false;
   /*
@@ -1209,8 +1198,7 @@ Class_CxSM::CalculateDebyeSimplified()
    */
 }
 
-bool
-Class_CxSM::CalculateDebyeGaugeSimplified()
+bool Class_CxSM::CalculateDebyeGaugeSimplified()
 {
   /*
    * Use this function if you calculated the Debye corrections to the gauge mass
@@ -1220,25 +1208,22 @@ Class_CxSM::CalculateDebyeGaugeSimplified()
 
   return false;
 }
-double
-Class_CxSM::VTreeSimplified(const std::vector<double> &v) const
+double Class_CxSM::VTreeSimplified(const std::vector<double> &v) const
 {
   (void)v;
 
   return 0;
 }
 
-double
-Class_CxSM::VCounterSimplified(const std::vector<double> &v) const
+double Class_CxSM::VCounterSimplified(const std::vector<double> &v) const
 {
   (void)v;
   if (not UseVCounterSimplified) return 0;
   return 0;
 }
 
-void
-Class_CxSM::Debugging(const std::vector<double> &input,
-                      std::vector<double> &output) const
+void Class_CxSM::Debugging(const std::vector<double> &input,
+                           std::vector<double> &output) const
 {
 
   (void)input;

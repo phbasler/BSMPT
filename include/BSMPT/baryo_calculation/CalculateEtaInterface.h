@@ -157,8 +157,7 @@ public:
    * Returns a string with the labels of the used EWBG methods stored in
    * CalculateEtaInterface::method_transport
    */
-  std::vector<std::string>
-  legend() const;
+  std::vector<std::string> legend() const;
   /**
    * Sets the numerical values needed for the calculation
    * @param vw_input Sets the wall velocity CalculateEtaInterface::vw
@@ -208,8 +207,7 @@ public:
    * CalculateEtaInterface::setNumerics()
    * @return The results of the different EWBG methods
    */
-  std::vector<double>
-  CalcEta();
+  std::vector<double> CalcEta();
   /**
    * Calls the CalculateEtaInterface::setNumerics() function and then calculates
    * the EWBG methods stored in CalculateEtaInterface::method_transport
@@ -261,39 +259,33 @@ public:
    * Sets the wall velocity CalculateEtaInterface::vw
    * @param vw_in Input value for the wall velocity CalculateEtaInterface::vw
    */
-  void
-  setvw(double vw_in);
+  void setvw(double vw_in);
 
   /**
    * @return Wall thickness LW calculated through GSL_integration_mubl::init()
    */
-  double
-  getLW() const;
+  double getLW() const;
 
   /**
    * @brief get_class_CalcGamM
    * @return Calc_Gam_inp
    */
-  Calc_Gam_M
-  get_class_CalcGamM() const;
+  Calc_Gam_M get_class_CalcGamM() const;
   /**
    * @brief get_class_Scp
    * @return Calc_Scp_inp
    */
-  Calc_Scp
-  get_class_Scp() const;
+  Calc_Scp get_class_Scp() const;
   /**
    * @brief get_class_kappa
    * @return Calc_kappa_inp
    */
-  Calc_kappa_t
-  get_class_kappa() const;
+  Calc_kappa_t get_class_kappa() const;
 
   /**
    * @brief getSymmetricCPViolatingPhase_top
    */
-  auto
-  getSymmetricCPViolatingPhase_top() const
+  auto getSymmetricCPViolatingPhase_top() const
   {
     return GSL_integration_mubl_container.getSymmetricCPViolatingPhase_top();
   }
@@ -301,8 +293,7 @@ public:
   /**
    * @brief getBrokenCPViolatingPhase_top
    */
-  auto
-  getBrokenCPViolatingPhase_top() const
+  auto getBrokenCPViolatingPhase_top() const
   {
     return GSL_integration_mubl_container.getBrokenCPViolatingPhase_top();
   }
@@ -310,8 +301,7 @@ public:
   /**
    * @brief getSymmetricCPViolatingPhase_bot
    */
-  auto
-  getSymmetricCPViolatingPhase_bot() const
+  auto getSymmetricCPViolatingPhase_bot() const
   {
     return GSL_integration_mubl_container.getSymmetricCPViolatingPhase_bot();
   }
@@ -319,8 +309,7 @@ public:
   /**
    * @brief getBrokenCPViolatingPhase_bot
    */
-  auto
-  getBrokenCPViolatingPhase_bot() const
+  auto getBrokenCPViolatingPhase_bot() const
   {
     return GSL_integration_mubl_container.getBrokenCPViolatingPhase_bot();
   }
@@ -328,8 +317,7 @@ public:
   /**
    * @brief getSymmetricCPViolatingPhase_tau
    */
-  auto
-  getSymmetricCPViolatingPhase_tau() const
+  auto getSymmetricCPViolatingPhase_tau() const
   {
     return GSL_integration_mubl_container.getSymmetricCPViolatingPhase_tau();
   }
@@ -337,8 +325,7 @@ public:
   /**
    * @brief getBrokenCPViolatingPhase_tau
    */
-  auto
-  getBrokenCPViolatingPhase_tau() const
+  auto getBrokenCPViolatingPhase_tau() const
   {
     return GSL_integration_mubl_container.getBrokenCPViolatingPhase_tau();
   }
@@ -348,8 +335,7 @@ public:
    * underlying GSL_integration_mubl
    * @param method
    */
-  void
-  set_transport_method(TransportMethod method)
+  void set_transport_method(TransportMethod method)
   {
     GSL_integration_mubl_container.set_transport_method(method);
   }
@@ -357,8 +343,7 @@ public:
   /**
    * @brief getGSL_integration_mubl_container
    */
-  auto
-  getGSL_integration_mubl_container() const
+  auto getGSL_integration_mubl_container() const
   {
     return GSL_integration_mubl_container;
   }

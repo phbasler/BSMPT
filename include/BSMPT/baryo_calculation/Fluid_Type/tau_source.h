@@ -54,8 +54,7 @@ public:
    * potentials in respect to the wall distance z.
    * @param z Current wall distance.
    */
-  void
-  operator()(const state_type &omega, state_type &domega, const double z);
+  void operator()(const state_type &omega, state_type &domega, const double z);
   /**
    * @brief Calc_nL Calculates the sum of all left-handed fermions in front of
    * the bubble wall contributing to the SU(2) sphaleron transition.
@@ -65,8 +64,7 @@ public:
    * @return Returns the left-handed fermion density in front of the bubble wall
    * evaluated at z_end.
    */
-  double
-  Calc_nL(double z_start, double z_end) const;
+  double Calc_nL(double z_start, double z_end) const;
 };
 
 } // namespace Baryo

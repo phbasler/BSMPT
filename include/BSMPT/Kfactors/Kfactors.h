@@ -47,8 +47,7 @@ struct GSL_integration
 /**
  * Helper function which displays the numbers in a more readable way
  */
-void
-display_results(std::string title, double result, double error);
+void display_results(std::string title, double result, double error);
 
 /**
  * Calculates the distribution f0, defined in Eq(13) in 0604159
@@ -58,8 +57,7 @@ display_results(std::string title, double result, double error);
  * @param diff number of derivatives w.r.t. E0, diff = 0 no derivative and diff
  * = 1 or 2 accordingly
  */
-double
-distribution_f0(double E0, int s, double Temp, int diff = 0);
+double distribution_f0(double E0, int s, double Temp, int diff = 0);
 
 /**
  * Evaluates the integrand in the K functions
@@ -70,19 +68,17 @@ distribution_f0(double E0, int s, double Temp, int diff = 0);
  * @param s s=-1 yields the function for a bosonic distribution, s=+1 for a
  * fermionic one
  */
-double
-K_integrand(const std::vector<double> &p,
-            double masssquared,
-            int switchvalue,
-            int s,
-            double Temp);
+double K_integrand(const std::vector<double> &p,
+                   double masssquared,
+                   int switchvalue,
+                   int s,
+                   double Temp);
 
 /**
  * Interface to communicate the value of K_integrand() to the GSL integration
  * routine
  */
-double
-K_integrand_gsl(double *x, std::size_t dim, void *params);
+double K_integrand_gsl(double *x, std::size_t dim, void *params);
 
 /**
  * Calculates the values of the K functions given in Eq (23) in 0604159 without
@@ -93,8 +89,7 @@ K_integrand_gsl(double *x, std::size_t dim, void *params);
  * @param s s=-1 yields the function for a bosonic distribution, s=+1 for a
  * fermionic one
  */
-double
-K_integration(double masssquared, double Temp, int switchvalue, int s);
+double K_integration(double masssquared, double Temp, int switchvalue, int s);
 
 /**
  * Calculates the normalized K function
@@ -104,24 +99,21 @@ K_integration(double masssquared, double Temp, int switchvalue, int s);
  * @param s s=-1 yields the function for a bosonic distribution, s=+1 for a
  * fermionic one
  */
-double
-K_functions(double masssquared, double Temp, int switchvalue, int s);
+double K_functions(double masssquared, double Temp, int switchvalue, int s);
 /**
  * Integrand to calculate the normalization for the Ktilde functions. Used in
  * Ktilde_normalization()
  * @param x vector which containts the momentum
  * @param params GSL_integration struct
  */
-double
-Ktilde_normalization_func(double x, void *params);
+double Ktilde_normalization_func(double x, void *params);
 /**
  * Calculates the normalization for the non tilde K functions
  * @param Temp Temperature
  * @param s +1 for fermions and -1 for bosons
  * @param masssquared m^2 value
  */
-double
-Ktilde_normalization(double Temp, int s, double masssquared);
+double Ktilde_normalization(double Temp, int s, double masssquared);
 
 } // namespace Kfactors
 } // namespace BSMPT

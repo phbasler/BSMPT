@@ -44,8 +44,7 @@ namespace Wall
  * @param vevsymmetric the electroweak VEV in the symmetric minimum
  * @return The thickness of the wall in 1/GeV
  */
-double
-calculate_wall_thickness_plane(
+double calculate_wall_thickness_plane(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
     const double &Temp,
     const std::vector<double> &vcritical,
@@ -61,8 +60,7 @@ calculate_wall_thickness_plane(
  * @param vevsymmetric the electroweak VEV in the symmetric minimum
  * @return
  */
-double
-calculate_wall_thickness_1D(
+double calculate_wall_thickness_1D(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const std::vector<double> &vcritical,
@@ -77,8 +75,7 @@ calculate_wall_thickness_1D(
  * @param solV vector to store the solution
  * @return true if successfull, false if not
  */
-bool
-GSL_Find_Maximum_line(
+bool GSL_Find_Maximum_line(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const std::vector<double> &vcritical,
@@ -95,10 +92,9 @@ GSL_Find_Maximum_line(
  * @param initial_guess starting point for the local optimisation
  * @return true if successfull, false if not
  */
-bool
-GSL_Maximize_From_S_gen_line(struct GSL_params &params,
-                             std::vector<std::vector<double>> &solution,
-                             double initial_guess);
+bool GSL_Maximize_From_S_gen_line(struct GSL_params &params,
+                                  std::vector<std::vector<double>> &solution,
+                                  double initial_guess);
 
 /**
  * @brief GSL_VEFF_gen_all_maximum_line Maximization along the line
@@ -106,8 +102,7 @@ GSL_Maximize_From_S_gen_line(struct GSL_params &params,
  * @param p pointer to the params struct storing the parameters
  * @return -1*VEff at the parameter point
  */
-double
-GSL_VEFF_gen_all_maximum_line(
+double GSL_VEFF_gen_all_maximum_line(
     double t,
     void *p); // 1D Maximization along the line from 0 to omega
 

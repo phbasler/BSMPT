@@ -67,8 +67,7 @@ Class_Potential_R2HDM::~Class_Potential_R2HDM()
  * returns a string which tells the user the chronological order of the
  * counterterms. Use this to complement the legend of the given inputfile
  */
-std::vector<std::string>
-Class_Potential_R2HDM::addLegendCT() const
+std::vector<std::string> Class_Potential_R2HDM::addLegendCT() const
 {
   std::vector<std::string> labels;
   labels.push_back("Dm11sq");
@@ -90,8 +89,7 @@ Class_Potential_R2HDM::addLegendCT() const
  * the critical temperature. Use this to complement the legend of the given
  * inputfile
  */
-std::vector<std::string>
-Class_Potential_R2HDM::addLegendTemp() const
+std::vector<std::string> Class_Potential_R2HDM::addLegendTemp() const
 {
   std::vector<std::string> labels;
   labels.push_back("T_c");
@@ -109,8 +107,7 @@ Class_Potential_R2HDM::addLegendTemp() const
  * returns a string which tells the user the chronological order of the VEVs.
  * Use this to complement the legend of the given inputfile
  */
-std::vector<std::string>
-Class_Potential_R2HDM::addLegendVEV() const
+std::vector<std::string> Class_Potential_R2HDM::addLegendVEV() const
 {
   std::vector<std::string> labels;
   labels.push_back("omega_CB");
@@ -125,8 +122,7 @@ Class_Potential_R2HDM::addLegendVEV() const
  * higgs couplings. Use this to complement the legend of the given inputfile
  *
  */
-std::vector<std::string>
-Class_Potential_R2HDM::addLegendTripleCouplings() const
+std::vector<std::string> Class_Potential_R2HDM::addLegendTripleCouplings() const
 {
   std::vector<std::string> labels;
   std::vector<std::string> particles;
@@ -159,9 +155,8 @@ Class_Potential_R2HDM::addLegendTripleCouplings() const
   return labels;
 }
 
-void
-Class_Potential_R2HDM::ReadAndSet(const std::string &linestr,
-                                  std::vector<double> &par)
+void Class_Potential_R2HDM::ReadAndSet(const std::string &linestr,
+                                       std::vector<double> &par)
 {
   std::stringstream ss(linestr);
   double tmp;
@@ -225,8 +220,7 @@ Class_Potential_R2HDM::ReadAndSet(const std::string &linestr,
 /**
  * Set Class Object with an CP-Conserving Point
  */
-void
-Class_Potential_R2HDM::set_gen(const std::vector<double> &par)
+void Class_Potential_R2HDM::set_gen(const std::vector<double> &par)
 {
 
   // double *p = (double *)par;
@@ -296,8 +290,7 @@ Class_Potential_R2HDM::set_gen(const std::vector<double> &par)
   vevTree = MinimizeOrderVEV(vevTreeMin);
 }
 
-void
-Class_Potential_R2HDM::set_CT_Pot_Par(const std::vector<double> &p)
+void Class_Potential_R2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 {
   //	double *p = (double *)par;
 
@@ -519,8 +512,7 @@ Class_Potential_R2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 /**
  * Console-Output of all Parameters
  */
-void
-Class_Potential_R2HDM::write() const
+void Class_Potential_R2HDM::write() const
 {
   typedef std::numeric_limits<double> dbl;
   std::cout.precision(dbl::max_digits10);
@@ -638,8 +630,7 @@ Class_Potential_R2HDM::write() const
 /**
  * Calculates the counterterms in the 2HDM
  */
-std::vector<double>
-Class_Potential_R2HDM::calc_CT() const
+std::vector<double> Class_Potential_R2HDM::calc_CT() const
 {
   std::vector<double> parCT;
 
@@ -750,8 +741,7 @@ Class_Potential_R2HDM::calc_CT() const
  * Use the vector TripleHiggsCorrectionsCWPhysical to save your couplings and
  * set the nTripleCouplings to the number of couplings you want as output.
  */
-void
-Class_Potential_R2HDM::TripleHiggsCouplings()
+void Class_Potential_R2HDM::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
@@ -882,8 +872,7 @@ Class_Potential_R2HDM::TripleHiggsCouplings()
   }
 }
 
-void
-Class_Potential_R2HDM::SetCurvatureArrays()
+void Class_Potential_R2HDM::SetCurvatureArrays()
 {
   initVectors();
 
@@ -1359,8 +1348,7 @@ Class_Potential_R2HDM::SetCurvatureArrays()
   SetCurvatureDone = true;
 }
 
-bool
-Class_Potential_R2HDM::CalculateDebyeSimplified()
+bool Class_Potential_R2HDM::CalculateDebyeSimplified()
 {
   double cb = 0;
 
@@ -1400,8 +1388,7 @@ Class_Potential_R2HDM::CalculateDebyeSimplified()
   return true;
 }
 
-bool
-Class_Potential_R2HDM::CalculateDebyeGaugeSimplified()
+bool Class_Potential_R2HDM::CalculateDebyeGaugeSimplified()
 {
   DebyeGauge[0][0] = 2 * C_g * C_g;
   DebyeGauge[1][1] = 2 * C_g * C_g;
@@ -1429,9 +1416,8 @@ Class_Potential_R2HDM::VCounterSimplified(const std::vector<double> &v) const
   return res;
 }
 
-void
-Class_Potential_R2HDM::Debugging(const std::vector<double> &input,
-                                 std::vector<double> &output) const
+void Class_Potential_R2HDM::Debugging(const std::vector<double> &input,
+                                      std::vector<double> &output) const
 {
   (void)input;
   (void)output;

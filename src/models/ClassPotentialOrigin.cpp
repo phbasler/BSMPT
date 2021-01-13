@@ -49,9 +49,8 @@ Class_Potential_Origin::~Class_Potential_Origin()
  * This will call set_gen(par), SetCurvatureArrays, set_CT_Pot_Par(parCT),
  * CalculateDebye() as well as CalculateDebyeGauge()
  */
-void
-Class_Potential_Origin::set_All(const std::vector<double> &par,
-                                const std::vector<double> &parCT)
+void Class_Potential_Origin::set_All(const std::vector<double> &par,
+                                     const std::vector<double> &parCT)
 {
 
   set_gen(par);
@@ -61,8 +60,7 @@ Class_Potential_Origin::set_All(const std::vector<double> &par,
   CalculateDebyeGauge();
 }
 
-void
-Class_Potential_Origin::Prepare_Triple()
+void Class_Potential_Origin::Prepare_Triple()
 {
   for (std::size_t a = 0; a < NHiggs; a++)
   {
@@ -81,8 +79,7 @@ Class_Potential_Origin::Prepare_Triple()
   }
 }
 
-double
-Class_Potential_Origin::FCW(double MassSquared) const
+double Class_Potential_Origin::FCW(double MassSquared) const
 {
   double res = 0;
   double x;
@@ -114,11 +111,10 @@ Class_Potential_Origin::CWTerm(double MassSquared, double cb, int diff) const
   return PotVal;
 }
 
-double
-Class_Potential_Origin::boson(double MassSquared,
-                              double Temp,
-                              double cb,
-                              int diff) const
+double Class_Potential_Origin::boson(double MassSquared,
+                                     double Temp,
+                                     double cb,
+                                     int diff) const
 {
   double res = 0;
   if (diff >= 0) res = CWTerm(std::abs(MassSquared), cb, diff);
@@ -173,8 +169,7 @@ Class_Potential_Origin::fermion(double MassSquared, double Temp, int diff) const
   return res;
 }
 
-std::vector<double>
-Class_Potential_Origin::FirstDerivativeOfEigenvalues(
+std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(
     const Ref<MatrixXcd> M,
     const Ref<MatrixXcd> MDiff) const
 {
@@ -295,10 +290,9 @@ Class_Potential_Origin::FirstDerivativeOfEigenvalues(
   return res;
 }
 
-double
-Class_Potential_Origin::fbaseTri(double MassSquaredA,
-                                 double MassSquaredB,
-                                 double MassSquaredC) const
+double Class_Potential_Origin::fbaseTri(double MassSquaredA,
+                                        double MassSquaredB,
+                                        double MassSquaredC) const
 {
   double res  = 0;
   double mas  = MassSquaredA;
@@ -398,8 +392,8 @@ Class_Potential_Origin::fbaseTri(double MassSquaredA,
   return res;
 }
 
-double
-Class_Potential_Origin::fbase(double MassSquaredA, double MassSquaredB) const
+double Class_Potential_Origin::fbase(double MassSquaredA,
+                                     double MassSquaredB) const
 {
   double res  = 0;
   double LogA = 0;
@@ -501,8 +495,7 @@ Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepeated(
   return res;
 }
 
-void
-Class_Potential_Origin::CalculatePhysicalCouplings()
+void Class_Potential_Origin::CalculatePhysicalCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   const double ZeroMass = std::pow(10, -5);
@@ -943,8 +936,7 @@ Class_Potential_Origin::CalculatePhysicalCouplings()
   return;
 }
 
-std::vector<double>
-Class_Potential_Origin::WeinbergFirstDerivative() const
+std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
 {
   std::vector<double> res;
   if (!CalcCouplingsdone)
@@ -1038,8 +1030,7 @@ Class_Potential_Origin::WeinbergFirstDerivative() const
   return res;
 }
 
-std::vector<double>
-Class_Potential_Origin::WeinbergSecondDerivative() const
+std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
 {
   if (!CalcCouplingsdone)
   {
@@ -1192,8 +1183,7 @@ Class_Potential_Origin::WeinbergSecondDerivative() const
   return res;
 }
 
-std::vector<double>
-Class_Potential_Origin::WeinbergThirdDerivative() const
+std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
 {
 
   if (not CalcCouplingsdone)
@@ -1870,10 +1860,9 @@ Class_Potential_Origin::LeptonMassesSquared(const std::vector<double> &v,
   return res;
 }
 
-double
-Class_Potential_Origin::VTree(const std::vector<double> &v,
-                              int diff,
-                              bool ForceExplicitCalculation) const
+double Class_Potential_Origin::VTree(const std::vector<double> &v,
+                                     int diff,
+                                     bool ForceExplicitCalculation) const
 {
   double res = 0;
 
@@ -1937,10 +1926,9 @@ Class_Potential_Origin::VTree(const std::vector<double> &v,
   return res;
 }
 
-double
-Class_Potential_Origin::CounterTerm(const std::vector<double> &v,
-                                    int diff,
-                                    bool ForceExplicitCalculation) const
+double Class_Potential_Origin::CounterTerm(const std::vector<double> &v,
+                                           int diff,
+                                           bool ForceExplicitCalculation) const
 {
   double res = 0;
   if (not ForceExplicitCalculation)
@@ -1993,11 +1981,10 @@ Class_Potential_Origin::CounterTerm(const std::vector<double> &v,
   return res;
 }
 
-double
-Class_Potential_Origin::VEff(const std::vector<double> &v,
-                             double Temp,
-                             int diff,
-                             int Order) const
+double Class_Potential_Origin::VEff(const std::vector<double> &v,
+                                    double Temp,
+                                    int diff,
+                                    int Order) const
 {
   if (v.size() != nVEV and v.size() != NHiggs)
   {
@@ -2035,10 +2022,9 @@ Class_Potential_Origin::VEff(const std::vector<double> &v,
   return resOut;
 }
 
-double
-Class_Potential_Origin::V1Loop(const std::vector<double> &v,
-                               double Temp,
-                               int diff) const
+double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
+                                      double Temp,
+                                      int diff) const
 {
   double res = 0;
 
@@ -2261,8 +2247,7 @@ Class_Potential_Origin::V1Loop(const std::vector<double> &v,
   return res;
 }
 
-void
-Class_Potential_Origin::CalculateDebye()
+void Class_Potential_Origin::CalculateDebye()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
 
@@ -2337,8 +2322,7 @@ Class_Potential_Origin::CalculateDebye()
   }
 }
 
-void
-Class_Potential_Origin::CalculateDebyeGauge()
+void Class_Potential_Origin::CalculateDebyeGauge()
 {
   for (std::size_t i = 0; i < NGauge; i++)
   {
@@ -2378,8 +2362,7 @@ Class_Potential_Origin::CalculateDebyeGauge()
   }
 }
 
-void
-Class_Potential_Origin::initVectors()
+void Class_Potential_Origin::initVectors()
 {
   using vec2 = std::vector<std::vector<double>>;
   using vec3 = std::vector<std::vector<std::vector<double>>>;
@@ -2439,8 +2422,7 @@ Class_Potential_Origin::initVectors()
   HiggsVev = std::vector<double>(NHiggs, 0);
 }
 
-void
-Class_Potential_Origin::resetbools()
+void Class_Potential_Origin::resetbools()
 {
   SetCurvatureDone          = false;
   CalcCouplingsdone         = false;
@@ -2449,8 +2431,7 @@ Class_Potential_Origin::resetbools()
   parCTStored.clear();
 }
 
-bool
-Class_Potential_Origin::CheckNLOVEV(const std::vector<double> &v) const
+bool Class_Potential_Origin::CheckNLOVEV(const std::vector<double> &v) const
 {
   // std::vector<double> vPotential;
   double MaxDiff           = 0;
@@ -2464,8 +2445,7 @@ Class_Potential_Origin::CheckNLOVEV(const std::vector<double> &v) const
   return (MaxDiff < AllowedDifference);
 }
 
-double
-Class_Potential_Origin::EWSBVEV(const std::vector<double> &v) const
+double Class_Potential_Origin::EWSBVEV(const std::vector<double> &v) const
 {
   double res = 0;
   for (std::size_t i = 0; i < NHiggs; i++)
@@ -2486,14 +2466,13 @@ Class_Potential_Origin::EWSBVEV(const std::vector<double> &v) const
   return res;
 }
 
-void
-Class_Potential_Origin::setUseIndexCol(std::string legend)
+void Class_Potential_Origin::setUseIndexCol(std::string legend)
 {
   UseIndexCol = legend.rfind(sep, 0) == 0;
 }
 
-void
-Class_Potential_Origin::CheckImplementation(const int &WhichMinimizer) const
+void Class_Potential_Origin::CheckImplementation(
+    const int &WhichMinimizer) const
 {
   using std::pow;
 
@@ -3032,8 +3011,7 @@ Class_Potential_Origin::CheckImplementation(const int &WhichMinimizer) const
   }
 }
 
-void
-Class_Potential_Origin::FindSignSymmetries()
+void Class_Potential_Origin::FindSignSymmetries()
 {
   SignSymmetries.clear();
   std::vector<double> testvev, testvevPotential;
@@ -3069,8 +3047,7 @@ Class_Potential_Origin::FindSignSymmetries()
   }
 }
 
-void
-Class_Potential_Origin::SetUseTreeLevel(bool val)
+void Class_Potential_Origin::SetUseTreeLevel(bool val)
 {
   UseTreeLevel = val;
 }
@@ -3111,8 +3088,7 @@ Class_Potential_Origin::initModel(const std::vector<double> &par)
   return parCT;
 }
 
-std::vector<double>
-Class_Potential_Origin::resetScale(const double &newScale)
+std::vector<double> Class_Potential_Origin::resetScale(const double &newScale)
 {
   scale      = newScale;
   auto parCT = calc_CT();
@@ -3271,8 +3247,7 @@ Class_Potential_Origin::LeptonMasses(const std::vector<double> &v) const
   return res;
 }
 
-double
-Class_Potential_Origin::CalculateRatioAlpha(
+double Class_Potential_Origin::CalculateRatioAlpha(
     const std::vector<double> &vev_symmetric,
     const std::vector<double> &vev_broken,
     const double &Temp) const
@@ -3291,8 +3266,7 @@ Class_Potential_Origin::CalculateRatioAlpha(
   return res;
 }
 
-std::vector<double>
-Class_Potential_Origin::MinimizeOrderVEV(
+std::vector<double> Class_Potential_Origin::MinimizeOrderVEV(
     const std::vector<double> &vevMinimizer) const
 {
   std::vector<double> vevFunction;

@@ -144,8 +144,7 @@ the function call. This will have 9 entries, the first is the mass and then the
    * @param vev The VEV configuration at which to compute the W mass
    * @param T The temperature at which to compute the W mass
    */
-  double
-  get_W_mass(const std::vector<double> &vev, const double &T) const;
+  double get_W_mass(const std::vector<double> &vev, const double &T) const;
 
   /**
    * Calculates the VEV at a given distance z from the wall
@@ -153,8 +152,7 @@ the function call. This will have 9 entries, the first is the mass and then the
    * is in the symmetric phase.
    * @return vector in which the VEV configuration will be stored
    */
-  std::vector<double>
-  calculate_vev(const double &z) const;
+  std::vector<double> calculate_vev(const double &z) const;
 
   /**
    * Calculates the derivatives of the VEV at a given distance z from the wall
@@ -162,8 +160,7 @@ the function call. This will have 9 entries, the first is the mass and then the
    * is in the symmetric phase.
    * @return vector in which the VEV configuration will be stored
    */
-  std::vector<double>
-  calculate_vev_derivative(const double &z) const;
+  std::vector<double> calculate_vev_derivative(const double &z) const;
 
   /**
    * Calculates the CP violating angle theta according to 0605242 and its
@@ -173,8 +170,7 @@ the function call. This will have 9 entries, the first is the mass and then the
    * @param diff Switch if the actual value should be returned (0), the first
    * derivative (1) or the second (2)
    */
-  double
-  calculate_theta(const double &z, const int &diff) const;
+  double calculate_theta(const double &z, const int &diff) const;
 };
 
 /**
@@ -285,91 +281,74 @@ public:
   /**
    * set the CP violating phase in the symmetric vacuum
    */
-  void
-  setSymmetricCPViolatingPhase(double Phase);
+  void setSymmetricCPViolatingPhase(double Phase);
   /**
    * get the CP violating phase in the symmetric vacuum
    */
-  double
-  getSymmetricCPViolatingPhase() const;
+  double getSymmetricCPViolatingPhase() const;
   /**
    * get the CP violating phase in the symmetric vacuum
    */
-  double
-  getBrokenCPViolatingPhase() const;
+  double getBrokenCPViolatingPhase() const;
   /**
    * get the CP-violating phase of the top quark in the symmetric vacuum
    */
-  double
-  getSymmetricCPViolatingPhase_top() const;
+  double getSymmetricCPViolatingPhase_top() const;
   /**
    * get the CP-violating phase of the bot quark in the symmetric vacuum
    */
-  double
-  getSymmetricCPViolatingPhase_bot() const;
+  double getSymmetricCPViolatingPhase_bot() const;
   /**
    * get the CP-violating phase of the tau quark in the symmetric vacuum
    */
-  double
-  getSymmetricCPViolatingPhase_tau() const;
+  double getSymmetricCPViolatingPhase_tau() const;
 
   /**
    * get the CP-violating phase of the top quark in the broken vacuum
    */
-  double
-  getBrokenCPViolatingPhase_top() const;
+  double getBrokenCPViolatingPhase_top() const;
   /**
    * get the CP-violating phase of the bot quark in the broken vacuum
    */
-  double
-  getBrokenCPViolatingPhase_bot() const;
+  double getBrokenCPViolatingPhase_bot() const;
   /**
    * get the CP-violating phase of the tau quark in the broken vacuum
    */
-  double
-  getBrokenCPViolatingPhase_tau() const;
+  double getBrokenCPViolatingPhase_tau() const;
 
   /**
    * get critical VEV
    */
-  std::vector<double>
-  getVEVCritical() const;
+  std::vector<double> getVEVCritical() const;
   /**
    * get vev_symmetric
    */
-  std::vector<double>
-  getVEVsym() const;
+  std::vector<double> getVEVsym() const;
   /**
    * get TC
    */
-  double
-  getTC() const;
+  double getTC() const;
   /**
    * set TC
    */
-  void
-  setTC(double TC_in);
+  void setTC(double TC_in);
   /**
    * get zmax
    */
-  double
-  getZMAX() const;
+  double getZMAX() const;
   /**
    * set vw
    */
-  void
-  setvw(double vw_in);
+  void setvw(double vw_in);
   /**
    * get vw
    */
-  double
-  getvw() const;
+  double getvw() const;
   /**
    * @brief getLW
    * @return LW
    */
-  double
-  getLW() const;
+  double getLW() const;
 
   /**
    * @brief setpar sets par
@@ -379,52 +358,44 @@ public:
    * @brief getpar
    * @return par
    */
-  std::vector<double>
-  getpar();
+  std::vector<double> getpar();
   /**
    * Set function to chose the method for the transport equations
    */
-  void
-  set_transport_method(TransportMethod method);
+  void set_transport_method(TransportMethod method);
   /**
    * @brief get_transport_method
    * @return transport_method
    */
-  TransportMethod
-  get_transport_method();
+  TransportMethod get_transport_method();
   /**
    * @brief setZMAX defines the value to treat mu(ZMAX) = 0
    * @param z_in new value to set zMAX to
    * @param MultiplesOfLW if true sets zMAX = z_in * LW
    */
-  void
-  setZMAX(double z_in, bool MultiplesOfLW);
+  void setZMAX(double z_in, bool MultiplesOfLW);
 
   /**
    * @brief set_vev_sym_theta
    * @param vev_in new value of vev_sym_theta
    */
-  void
-  set_vev_sym_theta(std::vector<double> &vev_in);
+  void set_vev_sym_theta(std::vector<double> &vev_in);
   /**
    * @brief get_vev_sym_theta
    * @return  vev_sym_theta
    */
-  std::vector<double>
-  get_vev_sym_theta() const;
+  std::vector<double> get_vev_sym_theta() const;
 
   /**
    * set the UseVelocityTransportEquations parameter
    */
-  void
-  setUseVelocityTransportEquations(bool in);
+  void setUseVelocityTransportEquations(bool in);
 
   /**
    * @brief getUseVelocityTransportEquations
    * @return the UseVelocityTransportEquations parameter
    */
-  bool
-  getUseVelocityTransportEquations() const;
+  bool getUseVelocityTransportEquations() const;
 
   /**
    * @brief init initialises the parameters of struct
@@ -434,20 +405,18 @@ public:
    * @param TC_input new value of TC
    * @param modelPointer_input shared_ptr for the model
    */
-  void
-  init(const double &vw_input,
-       std::vector<double> &vev_critical_input,
-       std::vector<double> &vev_symmetric_input,
-       const double &TC_input,
-       std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
-       const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
+  void init(const double &vw_input,
+            std::vector<double> &vev_critical_input,
+            std::vector<double> &vev_symmetric_input,
+            const double &TC_input,
+            std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
+            const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
   /**
    * @brief getModelPointer
    * @return the shared_ptr to the model
    */
-  std::shared_ptr<Class_Potential_Origin>
-  getModelPointer() const;
+  std::shared_ptr<Class_Potential_Origin> getModelPointer() const;
 };
 
 /**
@@ -490,23 +459,20 @@ calculateTransportEquation(const double &z,
  * @param p GSL_integration_mubl object with the necessary information for the
  * integration
  */
-double
-mubl_func(double z, void *p);
+double mubl_func(double z, void *p);
 
 /**
  * Calculates the integrand necessary for the baryon-antibaryon asymmetry
  * @param z distance to the wall
  * @param p void pointer to a GSL_integration_mubl struct
  */
-double
-eta_integrand_func(double z, void *p);
+double eta_integrand_func(double z, void *p);
 
 /**
  * Integrate over mu_BL without using the interpolation for mu_BL
  * @param p GSL_integration_mubl without the mubl spline
  */
-double
-Integrate_mubl(const struct GSL_integration_mubl &p);
+double Integrate_mubl(const struct GSL_integration_mubl &p);
 
 /**
  * generate the spline of 0605242 Eq (47)
@@ -527,15 +493,13 @@ generate_mubl_spline(const struct GSL_integration_mubl &p, int nstep);
  * @param p GSL_mubl_interpolation object with the spline of mu_BL calculated in
  * generate_mubl_spline
  */
-double
-mubl_interpolation(double z, void *p);
+double mubl_interpolation(double z, void *p);
 
 /**
  * Integrates over mubl_interpolation and evaluates 0605242 Eq (48)
  * @param p GSL_integration_mubl with the mubl spline
  */
-double
-Integrate_mubl_interpolated(const struct GSL_integration_mubl &p);
+double Integrate_mubl_interpolated(const struct GSL_integration_mubl &p);
 
 /**
  * struct for intermediate outputs during the ODE solving.
@@ -552,8 +516,7 @@ struct push_back_state_and_time
   {
   }
 
-  void
-  operator()(const state_type &x, double t)
+  void operator()(const state_type &x, double t)
   {
     m_states.push_back(x);
     m_times.push_back(t);

@@ -81,8 +81,7 @@ Class_Template::~Class_Template()
  * returns a string which tells the user the chronological order of the
  * counterterms. Use this to complement the legend of the given input file
  */
-std::vector<std::string>
-Class_Template::addLegendCT() const
+std::vector<std::string> Class_Template::addLegendCT() const
 {
   std::vector<std::string> labels;
   labels.push_back("dT");
@@ -96,8 +95,7 @@ Class_Template::addLegendCT() const
  * the critical temperature. Use this to complement the legend of the given
  * input file
  */
-std::vector<std::string>
-Class_Template::addLegendTemp() const
+std::vector<std::string> Class_Template::addLegendTemp() const
 {
   std::vector<std::string> labels;
   labels.push_back("T_c"); // Label for the critical temperature
@@ -114,8 +112,7 @@ Class_Template::addLegendTemp() const
  * Higgs couplings. Use this to complement the legend of the given input file
  *
  */
-std::vector<std::string>
-Class_Template::addLegendTripleCouplings() const
+std::vector<std::string> Class_Template::addLegendTripleCouplings() const
 {
   std::vector<std::string> labels;
   std::vector<std::string> particles;
@@ -148,8 +145,7 @@ Class_Template::addLegendTripleCouplings() const
  * returns a string which tells the user the chronological order of the VEVs.
  * Use this to complement the legend of the given input file
  */
-std::vector<std::string>
-Class_Template::addLegendVEV() const
+std::vector<std::string> Class_Template::addLegendVEV() const
 {
   std::vector<std::string> labels;
   // out = "Your VEV order";
@@ -160,8 +156,8 @@ Class_Template::addLegendVEV() const
 /**
  * Reads the string linestr and sets the parameter point
  */
-void
-Class_Template::ReadAndSet(const std::string &linestr, std::vector<double> &par)
+void Class_Template::ReadAndSet(const std::string &linestr,
+                                std::vector<double> &par)
 {
   std::stringstream ss(linestr);
   double tmp;
@@ -191,8 +187,7 @@ Class_Template::ReadAndSet(const std::string &linestr, std::vector<double> &par)
 /**
  * Set Class Object as well as the VEV configuration
  */
-void
-Class_Template::set_gen(const std::vector<double> &par)
+void Class_Template::set_gen(const std::vector<double> &par)
 {
   ms     = par[0]; // Class member is set accordingly to the input parameters
   lambda = par[1]; // Class member is set accordingly to the input parameters
@@ -212,8 +207,7 @@ Class_Template::set_gen(const std::vector<double> &par)
  * set your counterterm parameters from the entries of par as well as the
  * entries of Curvature_Higgs_CT_L1 to Curvature_Higgs_CT_L4.
  */
-void
-Class_Template::set_CT_Pot_Par(const std::vector<double> &par)
+void Class_Template::set_CT_Pot_Par(const std::vector<double> &par)
 {
 
   dT      = par[0];
@@ -228,8 +222,7 @@ Class_Template::set_CT_Pot_Par(const std::vector<double> &par)
 /**
  * console output of all Parameters
  */
-void
-Class_Template::write() const
+void Class_Template::write() const
 {
 
   std::cout << "Model = " << Model << std::endl;
@@ -250,8 +243,7 @@ Class_Template::write() const
  * Calculates the counterterms. Here you need to work out the scheme and
  * implement the formulas.
  */
-std::vector<double>
-Class_Template::calc_CT() const
+std::vector<double> Class_Template::calc_CT() const
 {
 
   std::vector<double> parCT;
@@ -295,8 +287,7 @@ Class_Template::calc_CT() const
   return parCT;
 }
 
-void
-Class_Template::TripleHiggsCouplings()
+void Class_Template::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
@@ -392,8 +383,7 @@ Class_Template::TripleHiggsCouplings()
   }
 }
 
-void
-Class_Template::SetCurvatureArrays()
+void Class_Template::SetCurvatureArrays()
 {
   /*
    *  Here you have to set the vectors
@@ -417,8 +407,7 @@ Class_Template::SetCurvatureArrays()
   Curvature_Quark_F2H1[0][1][0] = yt;
 }
 
-bool
-Class_Template::CalculateDebyeSimplified()
+bool Class_Template::CalculateDebyeSimplified()
 {
   return false;
   /*
@@ -428,8 +417,7 @@ Class_Template::CalculateDebyeSimplified()
    */
 }
 
-bool
-Class_Template::CalculateDebyeGaugeSimplified()
+bool Class_Template::CalculateDebyeGaugeSimplified()
 {
   /*
    * Use this function if you calculated the Debye corrections to the gauge mass
@@ -439,8 +427,7 @@ Class_Template::CalculateDebyeGaugeSimplified()
 
   return false;
 }
-double
-Class_Template::VTreeSimplified(const std::vector<double> &v) const
+double Class_Template::VTreeSimplified(const std::vector<double> &v) const
 {
   if (not UseVTreeSimplified) return 0;
   double res = 0;
@@ -451,8 +438,7 @@ Class_Template::VTreeSimplified(const std::vector<double> &v) const
   return res;
 }
 
-double
-Class_Template::VCounterSimplified(const std::vector<double> &v) const
+double Class_Template::VCounterSimplified(const std::vector<double> &v) const
 {
   if (not UseVCounterSimplified) return 0;
   double res = 0;
@@ -462,9 +448,8 @@ Class_Template::VCounterSimplified(const std::vector<double> &v) const
   return res;
 }
 
-void
-Class_Template::Debugging(const std::vector<double> &input,
-                          std::vector<double> &output) const
+void Class_Template::Debugging(const std::vector<double> &input,
+                               std::vector<double> &output) const
 {
   (void)input;
   (void)output;

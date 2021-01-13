@@ -172,8 +172,7 @@ TransformCoordinates(const std::vector<double> &vMinTilde,
  * @param p Pointer to a PointerContainerMinPlane struct which contains the
  * model information
  */
-double
-GSL_VEFF_Minimize_Plane(const gsl_vector *v, void *p);
+double GSL_VEFF_Minimize_Plane(const gsl_vector *v, void *p);
 
 /**
  * Uses the GSL minimisation routines to find the next local minimum from a
@@ -184,10 +183,9 @@ GSL_VEFF_Minimize_Plane(const gsl_vector *v, void *p);
  * @param start Starting point from where to look for the next local minimum
  * @returns The final status of the gsl minimization process.
  */
-int
-GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane &p,
-                                  std::vector<double> &sol,
-                                  const std::vector<double> &start);
+int GSL_Minimize_Plane_From_S_gen_all(const struct PointerContainerMinPlane &p,
+                                      std::vector<double> &sol,
+                                      const std::vector<double> &start);
 
 /**
  * Minimise the Potential from different random starting points and choose the

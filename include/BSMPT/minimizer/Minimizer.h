@@ -71,10 +71,9 @@ const std::size_t Num_threads = std::thread::hardware_concurrency();
  * @param UseNLopt Should NLopt be used?
  * @return
  */
-constexpr int
-CalcWhichMinimizer(bool UseGSL   = UseGSLDefault,
-                   bool UseCMAES = UseLibCMAESDefault,
-                   bool UseNLopt = UseNLoptDefault)
+constexpr int CalcWhichMinimizer(bool UseGSL   = UseGSLDefault,
+                                 bool UseCMAES = UseLibCMAESDefault,
+                                 bool UseNLopt = UseNLoptDefault)
 {
   return static_cast<int>(UseCMAES) + 2 * static_cast<int>(UseGSL) +
          4 * static_cast<int>(UseNLopt);
@@ -102,8 +101,7 @@ struct MinimizersToUse
  * @param WhichMinimizer
  * @return
  */
-MinimizersToUse
-GetMinimizers(int WhichMinimizer);
+MinimizersToUse GetMinimizers(int WhichMinimizer);
 
 /**
  * @brief WhichMinimizerDefault default value for the Minimizers to use

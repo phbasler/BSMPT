@@ -53,16 +53,14 @@ private:
    * @param w = sqrt(m^2+k^2)
    * @return hf(w)
    */
-  double
-  hf(double w);
+  double hf(double w);
   /**
    * @brief hf_prime Calculates the derivative of h_f function as in
    * arXiv:1710.04061
    * @param w = sqrt(m^2+k^2)
    * @return hf'(w)
    */
-  double
-  hf_prime(double w);
+  double hf_prime(double w);
 
 public:
   /**
@@ -100,21 +98,19 @@ public:
    * @param vw Wall velocity
    * @param mt Quark mass
    */
-  void
-  set_class(double T,
-            double vw,
-            double mt,
-            double m_thermal,
-            double dm_thermal,
-            bool use_lep = false);
+  void set_class(double T,
+                 double vw,
+                 double mt,
+                 double m_thermal,
+                 double dm_thermal,
+                 bool use_lep = false);
   /**
    * @brief operator () Needed for the boost interface.
    * @param Gam Current state of Gam_M.
    * @param dGam Current derivative of Gam_M.
    * @param k Integration variable/Momentum.
    */
-  void
-  operator()(const state_type &Gam, state_type &dGam, const double k);
+  void operator()(const state_type &Gam, state_type &dGam, const double k);
 };
 /**
  * @brief Nintegrate_GamM The numerical evaluation of the relaxation rates at
@@ -122,8 +118,7 @@ public:
  * @param C_Gam Class reference to pass the parameters.
  * @return Relaxation rate at given temperature and quark mass.
  */
-double
-Nintegrate_GamM(Calc_Gam_M &C_Gam);
+double Nintegrate_GamM(Calc_Gam_M &C_Gam);
 /**
  * @brief The Calc_Scp class Class instance for the numerical evaluation of the
  * CP-violating source terms at given temperature and quark mass.
@@ -136,16 +131,14 @@ private:
    * @param w = sqrt(m^2+k^2)
    * @return Distribution function of a fermion.
    */
-  double
-  nf(double w);
+  double nf(double w);
   /**
    * @brief nf Derivative of the distribution function of fermions at given
    * temperature and mass.
    * @param w = sqrt(m^2+k^2)
    * @return Derivative of the distribution function of a fermion.
    */
-  double
-  nf_prime(double w);
+  double nf_prime(double w);
 
 public:
   double GamT;
@@ -186,8 +179,7 @@ public:
    * @param dScp Current derivative of Scp.
    * @param k Integration variable/Momentum.
    */
-  void
-  operator()(const state_type &Scp, state_type &dScp, const double k);
+  void operator()(const state_type &Scp, state_type &dScp, const double k);
   /**
    * @brief set_class Defines all needed parameter of the class Calc_Scp
    * @param T Temperature
@@ -196,14 +188,13 @@ public:
    * @param theta_prime Derivative of the quark phase in respect of the wall
    * distance z
    */
-  void
-  set_class(double T,
-            double vw,
-            double mt,
-            double theta_prime,
-            double msqrt_thermal_in,
-            double dmsqrt_thermal_in,
-            bool use_lep = false);
+  void set_class(double T,
+                 double vw,
+                 double mt,
+                 double theta_prime,
+                 double msqrt_thermal_in,
+                 double dmsqrt_thermal_in,
+                 bool use_lep = false);
 };
 /**
  * @brief Nintegrate_Scp Numerical evaluation of the CP-violating source terms
@@ -211,8 +202,7 @@ public:
  * @param C_Scp Class reference to pass the parameters.
  * @return Value of Scp at given temperature and quark mass.
  */
-double
-Nintegrate_Scp(Calc_Scp &C_Scp);
+double Nintegrate_Scp(Calc_Scp &C_Scp);
 
 /**
  * @brief The Calc_kappa_t class Class instance for the numerical calculation of
@@ -235,13 +225,11 @@ public:
    * @param Temp_in Temperature
    * @param mt_in Quark mass
    */
-  void
-  set_class(double Temp_in, double mt_in);
+  void set_class(double Temp_in, double mt_in);
   /**
    * @brief operator () Needed for the boost interface.
    */
-  void
-  operator()(const state_type &, state_type &, const double);
+  void operator()(const state_type &, state_type &, const double);
 };
 /**
  * @brief NIntegrate_kappa Numerical Numerical evaluation of the statistical
@@ -249,8 +237,7 @@ public:
  * @param C_kap Class reference to pass the needed parameters
  * @return Value of the statistical factor at given temperature and mass.
  */
-double
-NIntegrate_kappa(const Calc_kappa_t &C_kap);
+double NIntegrate_kappa(const Calc_kappa_t &C_kap);
 /**
  * Numerical evaluation of the eta value;
  * Checked with 1710.04061
@@ -281,11 +268,10 @@ private:
 
 public:
   double prefactor;
-  void
-  set_class(std::vector<double> array_z,
-            std::vector<double> array_nL,
-            double Temp,
-            double vw);
+  void set_class(std::vector<double> array_z,
+                 std::vector<double> array_nL,
+                 double Temp,
+                 double vw);
   /**
    * @brief set_class Set function to set all class parameters.
    * @param arr Grid for the cubic spline of the left-handed quark density as
@@ -293,18 +279,16 @@ public:
    * @param Temp Temperature
    * @param vw Bubble wall velocity
    */
-  void
-  set_class(std::pair<std::vector<double>, std::vector<double>> arr,
-            double Temp,
-            double vw);
+  void set_class(std::pair<std::vector<double>, std::vector<double>> arr,
+                 double Temp,
+                 double vw);
   /**
    * @brief operator () Needed for the boost interface.
    * @param eta Current state of eta.
    * @param deta Current state of the derivative of eta.
    * @param z Bubble wall distance.
    */
-  void
-  operator()(const state_type &eta, state_type &deta, const double z);
+  void operator()(const state_type &eta, state_type &deta, const double z);
 };
 /**
  * @brief Nintegrate_eta Numerical evaluation of the eta value at a given
@@ -315,10 +299,9 @@ public:
  * @param z_end Distance at which eta is evaluated.
  * @return Numerical value of eta.
  */
-double
-Nintegrate_eta(const Calc_eta &C_eta,
-               const double &z_start,
-               const double &z_end);
+double Nintegrate_eta(const Calc_eta &C_eta,
+                      const double &z_start,
+                      const double &z_end);
 
 /**
  * @brief The gen_fluid class Class instance overhead for all transport classes.
@@ -495,12 +478,11 @@ public:
    * @param Calc_kappa_inp Class reference for the numerical evaluation of the
    * statistical factor.
    */
-  void
-  set_class(const int bottom_mass_inp,
-            struct GSL_integration_mubl &container,
-            const Calc_Gam_M &calc_Gam_obj,
-            const Calc_Scp &Calc_Scp_obj,
-            const Calc_kappa_t &Calc_kappa_inp);
+  void set_class(const int bottom_mass_inp,
+                 struct GSL_integration_mubl &container,
+                 const Calc_Gam_M &calc_Gam_obj,
+                 const Calc_Scp &Calc_Scp_obj,
+                 const Calc_kappa_t &Calc_kappa_inp);
   /**
    * @brief Right-handed thermal mass of the top quark as defined in Eq (97,98)
    * in 1910.11794
@@ -545,8 +527,8 @@ public:
    * @return Pair of right-handed thermal mass and the mass difference of right-
    * and left-handed thermal mass
    */
-  std::pair<double, double>
-  Calc_ThermalMass_q(double &YukCoupling_in, double &T_in);
+  std::pair<double, double> Calc_ThermalMass_q(double &YukCoupling_in,
+                                               double &T_in);
   /**
    * @brief Calc_ThermalMass_l Calculates the right-handed thermal mass of the
    * lepton and the difference of right- and left-handed quark thermal mass
@@ -555,8 +537,8 @@ public:
    * @return Pair of right-handed thermal mass and the mass difference of right-
    * and left-handed thermal mass
    */
-  std::pair<double, double>
-  Calc_ThermalMass_l(double &YukCoupling_in, double &T_in);
+  std::pair<double, double> Calc_ThermalMass_l(double &YukCoupling_in,
+                                               double &T_in);
 
   /**
    * @brief top_func Calculation of the top and bot mass at a given distance of
@@ -566,10 +548,9 @@ public:
    * @param m_quark_prime m_quark_prime[0/1]-->Derivative of the top/bot quark
    * mass in respect of the wall distance z.
    */
-  void
-  top_func(double z,
-           std::vector<double> &m_quark,
-           std::vector<double> &m_quark_prime);
+  void top_func(double z,
+                std::vector<double> &m_quark,
+                std::vector<double> &m_quark_prime);
   /**
    * @brief tau_func Calculation of the tau mass and derivative.
    * @param z Wall distance.
@@ -577,14 +558,11 @@ public:
    * @param m_lep_prime Return the derivative of the tau lepton mass in respect
    * of the bubble wall distance z.
    */
-  void
-  tau_func(double z,
-           std::vector<double> &m_lep,
-           std::vector<double> &m_lep_prime);
-  std::vector<double>
-  omegaprime(double z);
-  double
-  atan2_mod(double Im, double Re);
+  void tau_func(double z,
+                std::vector<double> &m_lep,
+                std::vector<double> &m_lep_prime);
+  std::vector<double> omegaprime(double z);
+  double atan2_mod(double Im, double Re);
   /**
    * @brief Calc_theta Caclulates the phase profile over the bubble wall by
    * assuming the Kink-profile ansatz.
@@ -594,8 +572,7 @@ public:
    * @return The value of the CP-violating phase at given distance of the bubble
    * wall z and the boundary values CP_sym and CP_brk
    */
-  std::vector<double>
-  Calc_theta(double z, double CP_sym, double CP_brk);
+  std::vector<double> Calc_theta(double z, double CP_sym, double CP_brk);
 };
 
 } // namespace Baryo

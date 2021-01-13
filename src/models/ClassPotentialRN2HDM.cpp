@@ -74,8 +74,7 @@ Class_Potential_RN2HDM::~Class_Potential_RN2HDM()
  * returns a string which tells the user the chronological order of the
  * counterterms. Use this to complement the legend of the given inputfile
  */
-std::vector<std::string>
-Class_Potential_RN2HDM::addLegendCT() const
+std::vector<std::string> Class_Potential_RN2HDM::addLegendCT() const
 {
   std::vector<std::string> labels;
   labels.push_back("Du11sq");
@@ -101,8 +100,7 @@ Class_Potential_RN2HDM::addLegendCT() const
  * the critical temperature. Use this to complement the legend of the given
  * inputfile
  */
-std::vector<std::string>
-Class_Potential_RN2HDM::addLegendTemp() const
+std::vector<std::string> Class_Potential_RN2HDM::addLegendTemp() const
 {
   std::vector<std::string> labels;
   labels.push_back("T_c");
@@ -162,8 +160,7 @@ Class_Potential_RN2HDM::addLegendTripleCouplings() const
  * returns a string which tells the user the chronological order of the VEVs.
  * Use this to complement the legend of the given inputfile
  */
-std::vector<std::string>
-Class_Potential_RN2HDM::addLegendVEV() const
+std::vector<std::string> Class_Potential_RN2HDM::addLegendVEV() const
 {
   std::vector<std::string> labels;
   labels.push_back("omega_{CB");
@@ -174,9 +171,8 @@ Class_Potential_RN2HDM::addLegendVEV() const
   return labels;
 }
 
-void
-Class_Potential_RN2HDM::ReadAndSet(const std::string &linestr,
-                                   std::vector<double> &par)
+void Class_Potential_RN2HDM::ReadAndSet(const std::string &linestr,
+                                        std::vector<double> &par)
 {
   std::stringstream ss(linestr);
   double tmp;
@@ -234,8 +230,7 @@ Class_Potential_RN2HDM::ReadAndSet(const std::string &linestr,
   return;
 }
 
-void
-Class_Potential_RN2HDM::set_gen(const std::vector<double> &p)
+void Class_Potential_RN2HDM::set_gen(const std::vector<double> &p)
 {
 
   L1       = p[0];
@@ -284,8 +279,7 @@ Class_Potential_RN2HDM::set_gen(const std::vector<double> &p)
  *
  *
  */
-void
-Class_Potential_RN2HDM::set_CT_Pot_Par(const std::vector<double> &p)
+void Class_Potential_RN2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 {
   //	double *p = (double *)par;
 
@@ -451,8 +445,7 @@ Class_Potential_RN2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 /**
  * Console-Output of all Parameters
  */
-void
-Class_Potential_RN2HDM::write() const
+void Class_Potential_RN2HDM::write() const
 {
   typedef std::numeric_limits<double> dbl;
   std::cout.precision(dbl::max_digits10);
@@ -638,8 +631,7 @@ Class_Potential_RN2HDM::write() const
   std::cout << std::abs(NeutralMixing(2, 2)) << " zeta_3 \n";
 }
 
-std::vector<double>
-Class_Potential_RN2HDM::calc_CT() const
+std::vector<double> Class_Potential_RN2HDM::calc_CT() const
 {
   std::vector<double> parCT;
 
@@ -800,8 +792,7 @@ Class_Potential_RN2HDM::calc_CT() const
   return parCT;
 }
 
-void
-Class_Potential_RN2HDM::TripleHiggsCouplings()
+void Class_Potential_RN2HDM::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
@@ -967,8 +958,7 @@ Class_Potential_RN2HDM::TripleHiggsCouplings()
   }
 }
 
-void
-Class_Potential_RN2HDM::SetCurvatureArrays()
+void Class_Potential_RN2HDM::SetCurvatureArrays()
 {
   initVectors();
 
@@ -3109,8 +3099,7 @@ Class_Potential_RN2HDM::SetCurvatureArrays()
   SetCurvatureDone = true;
 }
 
-bool
-Class_Potential_RN2HDM::CalculateDebyeSimplified()
+bool Class_Potential_RN2HDM::CalculateDebyeSimplified()
 {
   double cb = 0;
 
@@ -3155,8 +3144,7 @@ Class_Potential_RN2HDM::CalculateDebyeSimplified()
   return true;
 }
 
-bool
-Class_Potential_RN2HDM::CalculateDebyeGaugeSimplified()
+bool Class_Potential_RN2HDM::CalculateDebyeGaugeSimplified()
 {
   DebyeGauge[0][0] = 2 * C_g * C_g;
   DebyeGauge[1][1] = 2 * C_g * C_g;
@@ -3184,9 +3172,8 @@ Class_Potential_RN2HDM::VCounterSimplified(const std::vector<double> &v) const
   return res;
 }
 
-void
-Class_Potential_RN2HDM::Debugging(const std::vector<double> &input,
-                                  std::vector<double> &output) const
+void Class_Potential_RN2HDM::Debugging(const std::vector<double> &input,
+                                       std::vector<double> &output) const
 {
   (void)input;
   (void)output;

@@ -71,8 +71,7 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
  * @brief InvertModelNames
  * @return The switched map to ModelNames
  */
-std::unordered_map<ModelIDs, std::string>
-InvertModelNames();
+std::unordered_map<ModelIDs, std::string> InvertModelNames();
 
 /**
  * @param choice ModelIDs for the Model under investigation
@@ -81,8 +80,7 @@ InvertModelNames();
  * @throw Runtime error if an invalid model was given into choice
  */
 
-std::unique_ptr<Class_Potential_Origin>
-FChoose(ModelIDs choice);
+std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice);
 
 /**
  *
@@ -91,15 +89,13 @@ FChoose(ModelIDs choice);
  * @return If a match in ModelNames is found, return the corresponding ModelIDs
  * entry, otherwise return ModelIDs::NoSet
  */
-ModelIDs
-getModel(const std::string &s);
+ModelIDs getModel(const std::string &s);
 } // namespace ModelID
 
 /**
  * @brief ShowInputError shows all the available models in the terminal
  */
-void
-ShowInputError();
+void ShowInputError();
 
 } // namespace BSMPT
 

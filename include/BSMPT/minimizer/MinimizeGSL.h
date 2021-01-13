@@ -57,17 +57,15 @@ struct GSL_params
  * Calculates the value of the effective potential at the vev v and temperature
  * p->Temp for the gsl interface
  */
-double
-GSL_VEFF_gen_all(const gsl_vector *v, void *p);
+double GSL_VEFF_gen_all(const gsl_vector *v, void *p);
 
 /**
  * Calculates the next local minimum in the model from the point start
  * @returns The final status of the gsl minimization process.
  */
-int
-GSL_Minimize_From_S_gen_all(struct GSL_params &p,
-                            std::vector<double> &sol,
-                            const std::vector<double> &start);
+int GSL_Minimize_From_S_gen_all(struct GSL_params &p,
+                                std::vector<double> &sol,
+                                const std::vector<double> &start);
 
 /**
  * Minimize the Potential from different random starting points and choose the
@@ -80,8 +78,7 @@ GSL_Minimize_From_S_gen_all(struct GSL_params &p,
  * @return first: vector with candidate for the global minimum, second: True if
  * a candidate for the global minimum is found and false otherwise
  */
-std::pair<std::vector<double>, bool>
-GSL_Minimize_gen_all(
+std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const int &seed);
@@ -98,8 +95,7 @@ GSL_Minimize_gen_all(
  * @return first: vector with candidate for the global minimum, second: True if
  * a candidate for the global minimum is found and false otherwise
  */
-std::pair<std::vector<double>, bool>
-GSL_Minimize_gen_all(
+std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const int &seed,
@@ -118,8 +114,7 @@ GSL_Minimize_gen_all(
  * @return first: vector with the solution, second: True if a candidate for the
  * global minimum is found and false otherwise
  */
-std::pair<std::vector<double>, bool>
-GSL_Minimize_gen_all(
+std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const int &seed,

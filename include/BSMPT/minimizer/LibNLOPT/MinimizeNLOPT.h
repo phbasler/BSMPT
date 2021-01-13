@@ -97,10 +97,9 @@ MinimizePlaneUsingNLOPT(const struct PointerContainerMinPlane &params);
  * @param data pointer to PointerContainerMinPlane struct
  * @return
  */
-double
-NLOPTVEffPlane(const std::vector<double> &x,
-               std::vector<double> &grad,
-               void *data);
+double NLOPTVEffPlane(const std::vector<double> &x,
+                      std::vector<double> &grad,
+                      void *data);
 
 /**
  * @brief FindLocalMinimum finds the local minimum near the starting point
