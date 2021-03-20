@@ -713,15 +713,20 @@ std::vector<double> Class_Potential_R2HDM::calc_CT() const
                   (double)pow((double)v2, (double)(-2)));
 
   // DT1
-  parCT.push_back(HesseWeinberg(1, 3) * v2 + HesseWeinberg(0, 0) * v1 -
-                  NablaWeinberg(4));
+  double tmp =
+      HesseWeinberg(1, 3) * v2 + HesseWeinberg(0, 0) * v1 - NablaWeinberg(4);
+  if (std::abs(tmp) < 1e-9) tmp = 0;
+  parCT.push_back(tmp);
   // DT2
-  parCT.push_back(HesseWeinberg(1, 3) * v1 + HesseWeinberg(3, 3) * v2 -
-                  NablaWeinberg(6));
+  tmp = HesseWeinberg(1, 3) * v1 + HesseWeinberg(3, 3) * v2 - NablaWeinberg(6);
+  if (std::abs(tmp) < 1e-9) tmp = 0;
+  parCT.push_back(tmp);
   // DT3
-  parCT.push_back(-(-v1 * v1 * HesseWeinberg(4, 5) -
-                    HesseWeinberg(4, 7) * v1 * v2 + NablaWeinberg(7) * v2) /
-                  v2);
+  tmp = -(-v1 * v1 * HesseWeinberg(4, 5) - HesseWeinberg(4, 7) * v1 * v2 +
+          NablaWeinberg(7) * v2) /
+        v2;
+  if (std::abs(tmp) < 1e-9) tmp = 0;
+  parCT.push_back(tmp);
 
   //	double Identities[5];
   //	Identities[0] = HesseWeinberg(0, 0) - HesseWeinberg(1, 1);

@@ -19,7 +19,7 @@ set(CMAKE_CXX_FLAGS_DEBUG
     "${CMAKE_CXX_FLAGS_DEBUG} -pedantic -Wall -Wextra -Wmissing-declarations -Wmissing-include-dirs -Wshadow  -DCOMPILEDEBUG=true"
 )
 set(CMAKE_CXX_FLAGS_RELEASE
-    "${CMAKE_CXX_FLAGS_RELEASE} -pedantic -Wall -Wextra -Wshadow")
+    "${CMAKE_CXX_FLAGS_RELEASE} -O3 -pedantic -Wall -Wextra -Wshadow")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
@@ -29,7 +29,7 @@ option(MakeAdditionalTesting "Build the executables used for further testing" OF
 
 find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
-find_package(Boost 1.66 REQUIRED)
+find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
 find_package(Threads REQUIRED)
 

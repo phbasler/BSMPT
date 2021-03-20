@@ -1476,8 +1476,10 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
       {
         MassMatrix(i, j) += Curvature_Higgs_L3[i][j][k] * v[k];
         for (std::size_t l = 0; l < NHiggs; l++)
+        {
           MassMatrix(i, j) +=
               0.5 * Curvature_Higgs_L4[i][j][k][l] * v[k] * v[l];
+        }
       }
 
       if (Temp != 0)
@@ -1930,8 +1932,9 @@ double Class_Potential_Origin::CounterTerm(const std::vector<double> &v,
                                            int diff,
                                            bool ForceExplicitCalculation) const
 {
+
   double res = 0;
-  if (not ForceExplicitCalculation)
+  if (not ForceExplicitCalculation and UseVCounterSimplified)
   {
     res = VCounterSimplified(v);
     if (UseVCounterSimplified and diff == 0) return res;
@@ -2059,16 +2062,23 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
     {
       HiggsMassesZeroTempVec = HiggsMassesSquared(v, 0);
       for (std::size_t k = 0; k < NHiggs; k++)
+      {
         res += boson(HiggsMassesZeroTempVec[k], Temp, C_CWcbHiggs, 0);
+      }
       for (std::size_t k = 0; k < NGauge; k++)
+      {
         res += 3 * boson(GaugeMassesZeroTempVec[k], Temp, C_CWcbGB, 0);
+      }
       double AddContQuark = 0;
       for (std::size_t k = 0; k < NQuarks; k++)
+      {
         AddContQuark += -2 * fermion(QuarkMassesVec[k], Temp, 0);
-      for (std::size_t k = 0; k < NColour; k++)
-        res += AddContQuark;
+      }
+      res += NColour * AddContQuark;
       for (std::size_t k = 0; k < NLepton; k++)
+      {
         res += -2 * fermion(LeptonMassesVec[k], Temp, 0);
+      }
 
       double VDebay = 0;
       for (std::size_t k = 0; k < NHiggs; k++)

@@ -172,9 +172,25 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
 
   std::default_random_engine randGen(seed);
   double RNDMax        = 500;
-  std::size_t MaxTries = 600;
+  std::size_t MaxTries = 600; // 600;
   std::atomic<std::size_t> tries{0};
   std::size_t nCol = dim + 2;
+
+  std::queue<std::vector<double>> StartingPoints;
+  for (std::size_t i{0}; i < MaxTries; ++i)
+  {
+    std::vector<double> start(dim);
+    for (std::size_t j = 0; j < dim; ++j)
+    {
+      start.at(j) =
+          RNDMax *
+          (-1 +
+           2 * std::generate_canonical<double,
+                                       std::numeric_limits<double>::digits>(
+                   randGen));
+    }
+    StartingPoints.push(start);
+  }
 
   struct MinimizeParams
   {
@@ -190,28 +206,20 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
 
   auto thread_Job = [](std::atomic<std::size_t> &mFoundSolutions,
                        std::size_t mMaxSol,
-                       std::atomic<std::size_t> &mtries,
-                       std::size_t mMaxTries,
-                       std::size_t mdim,
-                       double mRNDMax,
-                       std::default_random_engine &mrandGen,
+                       std::queue<std::vector<double>> &mStartingPoints,
                        GSL_params &mparams,
                        std::mutex &mWriteResultLock,
                        std::queue<std::vector<double>> &mResults) {
-    while (mFoundSolutions < mMaxSol and mtries <= mMaxTries)
+    while (mFoundSolutions < mMaxSol and not mStartingPoints.empty())
     {
-
-      std::vector<double> start(mdim);
-      std::vector<double> sol;
-      for (std::size_t j = 0; j < mdim; ++j)
+      std::vector<double> start;
       {
-        start.at(j) =
-            mRNDMax *
-            (-1 +
-             2 * std::generate_canonical<double,
-                                         std::numeric_limits<double>::digits>(
-                     mrandGen));
+        std::unique_lock<std::mutex> lock(mWriteResultLock);
+        start = mStartingPoints.front();
+        mStartingPoints.pop();
       }
+
+      std::vector<double> sol;
       auto status = GSL_Minimize_From_S_gen_all(mparams, sol, start);
       if (status == GSL_SUCCESS)
       {
@@ -227,11 +235,7 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     MinThreads.push_back(std::thread([&]() {
       thread_Job(FoundSolutions,
                  MaxSol,
-                 tries,
-                 MaxTries,
-                 dim,
-                 RNDMax,
-                 randGen,
+                 StartingPoints,
                  params,
                  WriteResultLock,
                  Results);

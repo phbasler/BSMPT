@@ -34,6 +34,8 @@
 
 #include <BSMPT/minimizer/MinimizeGSL.h>
 
+#include <exception>
+
 #ifdef libcmaes_FOUND
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
 #endif

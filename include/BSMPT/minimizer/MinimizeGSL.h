@@ -38,7 +38,7 @@ namespace Minimizer
 /**
  * @brief GSL_Tolerance Tolerance used in the GSL routines
  */
-const double GSL_Tolerance = std::pow(10, -6);
+const double GSL_Tolerance = std::pow(10, -4);
 
 /**
  * struct containing the required Parameters of the model for the gsl interface
