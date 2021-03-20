@@ -23,10 +23,9 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "BSMPT", "index.html", [
-    [ "BSMPT - A tool for calculating the temperature dependent  effective potential in various extended Higgs models", "index.html", [
+    [ "BSMPT - A tool for calculating the temperature dependent  effective", "index.html", [
       [ "Introduction", "index.html#intro_sec", null ],
-      [ "Citation", "index.html#Citation", null ],
-      [ "Installation", "index.html#install_sec", [
+      [ "Citation", "index.html#Citation", [
         [ "Dependencies", "index.html#Dependencies", null ],
         [ "build", "index.html#build", null ]
       ] ],
@@ -34,9 +33,7 @@ var NAVTREE =
         [ "BSMPT", "index.html#BSMPT", null ],
         [ "CalcCT", "index.html#CalcCT", null ],
         [ "NLOVEV", "index.html#NLOVEV", null ],
-        [ "VEVEVO", "index.html#VEVEVO", null ],
         [ "TripleHiggsCouplingNLO", "index.html#TripleHiggsCouplingNLO", null ],
-        [ "CalculateEWBG", "index.html#CalculateEWBG", null ],
         [ "RenormScale", "index.html#RenormScale", null ],
         [ "PlotEWBG_vw", "index.html#PlotEWBG_vw", null ],
         [ "PlotEWBG_nL", "index.html#PlotEWBG_nL", null ],
@@ -112,11 +109,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9ade50b656b4576690a5aead36d9aaf5c9",
-"classBSMPT_1_1Baryo_1_1transport__equations.html#a488c6c4b4339ff3685b601ec22e42256",
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a8acd68b095ce616bedc6c10d4a640cc8",
-"functions_vars.html",
-"structCLIOptions.html#a398fd309c150edab6e17bb67a96195d2"
+"Plot1D_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97",
+"classBSMPT_1_1Class__Potential__Origin.html#a1a63c7b90e0d1d365d2bb1a307eec09b",
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae62f1afe91f41ff019ee93ba47ec4c38",
+"hierarchy.html",
+"structCLIOptions.html#ad522c0b6f98ddc47e896f84e86585a14"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

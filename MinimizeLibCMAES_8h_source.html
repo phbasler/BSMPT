@@ -113,43 +113,46 @@ $(document).ready(function(){initNavTree('MinimizeLibCMAES_8h_source.html',''); 
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">        along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef MINIMIZELIBCMAES_H</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define MINIMIZELIBCMAES_H</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#ifndef MINIMIZELIBCMAES_H</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define MINIMIZELIBCMAES_H</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>BSMPT {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>BSMPT</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span>Class_Potential_Origin;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>Minimizer{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">struct </span>PointerContainerMinPlane;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span>LibCMAES {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">   40</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">LibCMAESReturn</a>{</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    std::vector&lt;double&gt; result;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">int</span> CMAESStatus;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<a class="code" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">LibCMAESReturn</a> <a class="code" href="MinimizeLibCMAES_8h.html#af506e99fa7f2ffe56f849a56c9627210">min_cmaes_gen_all</a>(</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">const</span> std::shared_ptr&lt;Class_Potential_Origin&gt;&amp; modelPointer,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">double</span>&amp; Temp,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">const</span> std::vector&lt;double&gt;&amp; VevMinimum);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<a class="code" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">LibCMAESReturn</a> <a class="code" href="MinimizeLibCMAES_8h.html#a77908f6ea21871692ac33938604f133b">CMAES_Minimize_Plane_gen_all</a>(<span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html">PointerContainerMinPlane</a>&amp; params,</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">const</span> std::vector&lt;double&gt;&amp; Start);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;}</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#endif // MINIMIZELIBCMAES_H</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>Minimizer</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">struct </span>PointerContainerMinPlane;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>LibCMAES</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">   42</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">LibCMAESReturn</a></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  std::vector&lt;double&gt; result;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keywordtype">int</span> CMAESStatus;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<a class="code" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">LibCMAESReturn</a></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<a class="code" href="MinimizeLibCMAES_8h.html#af506e99fa7f2ffe56f849a56c9627210">min_cmaes_gen_all</a>(<span class="keyword">const</span> std::shared_ptr&lt;Class_Potential_Origin&gt; &amp;modelPointer,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                  <span class="keyword">const</span> std::vector&lt;double&gt; &amp;VevMinimum);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<a class="code" href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">LibCMAESReturn</a></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<a class="code" href="MinimizeLibCMAES_8h.html#a77908f6ea21871692ac33938604f133b">CMAES_Minimize_Plane_gen_all</a>(<span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html">PointerContainerMinPlane</a> &amp;params,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                             <span class="keyword">const</span> std::vector&lt;double&gt; &amp;Start);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <span class="comment">// namespace LibCMAES</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace Minimizer</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// namespace BSMPT</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#endif // MINIMIZELIBCMAES_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aMinimizeLibCMAES_8h_html_a77908f6ea21871692ac33938604f133b"><div class="ttname"><a href="MinimizeLibCMAES_8h.html#a77908f6ea21871692ac33938604f133b">BSMPT::Minimizer::LibCMAES::CMAES_Minimize_Plane_gen_all</a></div><div class="ttdeci">LibCMAESReturn CMAES_Minimize_Plane_gen_all(const struct PointerContainerMinPlane &amp;params, const std::vector&lt; double &gt; &amp;Start)</div><div class="ttdef"><b>Definition:</b> MinimizeLibCMAES.cpp:103</div></div>
-<div class="ttc" id="astructBSMPT_1_1Minimizer_1_1PointerContainerMinPlane_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html">BSMPT::Minimizer::PointerContainerMinPlane</a></div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:61</div></div>
-<div class="ttc" id="astructBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">BSMPT::Minimizer::LibCMAES::LibCMAESReturn</a></div><div class="ttdoc">The LibCMAESReturn struct which is returned by the routine.</div><div class="ttdef"><b>Definition:</b> MinimizeLibCMAES.h:40</div></div>
-<div class="ttc" id="aMinimizeLibCMAES_8h_html_af506e99fa7f2ffe56f849a56c9627210"><div class="ttname"><a href="MinimizeLibCMAES_8h.html#af506e99fa7f2ffe56f849a56c9627210">BSMPT::Minimizer::LibCMAES::min_cmaes_gen_all</a></div><div class="ttdeci">LibCMAESReturn min_cmaes_gen_all(const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const std::vector&lt; double &gt; &amp;VevMinimum)</div><div class="ttdef"><b>Definition:</b> MinimizeLibCMAES.cpp:43</div></div>
+<div class="ttc" id="aMinimizeLibCMAES_8h_html_a77908f6ea21871692ac33938604f133b"><div class="ttname"><a href="MinimizeLibCMAES_8h.html#a77908f6ea21871692ac33938604f133b">BSMPT::Minimizer::LibCMAES::CMAES_Minimize_Plane_gen_all</a></div><div class="ttdeci">LibCMAESReturn CMAES_Minimize_Plane_gen_all(const struct PointerContainerMinPlane &amp;params, const std::vector&lt; double &gt; &amp;Start)</div><div class="ttdef"><b>Definition:</b> MinimizeLibCMAES.cpp:100</div></div>
+<div class="ttc" id="astructBSMPT_1_1Minimizer_1_1PointerContainerMinPlane_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html">BSMPT::Minimizer::PointerContainerMinPlane</a></div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:65</div></div>
+<div class="ttc" id="astructBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html">BSMPT::Minimizer::LibCMAES::LibCMAESReturn</a></div><div class="ttdoc">The LibCMAESReturn struct which is returned by the routine.</div><div class="ttdef"><b>Definition:</b> MinimizeLibCMAES.h:42</div></div>
+<div class="ttc" id="aMinimizeLibCMAES_8h_html_af506e99fa7f2ffe56f849a56c9627210"><div class="ttname"><a href="MinimizeLibCMAES_8h.html#af506e99fa7f2ffe56f849a56c9627210">BSMPT::Minimizer::LibCMAES::min_cmaes_gen_all</a></div><div class="ttdeci">LibCMAESReturn min_cmaes_gen_all(const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const std::vector&lt; double &gt; &amp;VevMinimum)</div><div class="ttdef"><b>Definition:</b> MinimizeLibCMAES.cpp:47</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -99,11 +99,11 @@ $(document).ready(function(){initNavTree('Minimizer_8h.html',''); initResizable(
 <div class="title">Minimizer.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<div class="textblock"><code>#include &lt;BSMPT/config.h&gt;</code><br />
+<code>#include &lt;<a class="el" href="IncludeAllModels_8h_source.html">BSMPT/models/IncludeAllModels.h</a>&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
-<code>#include &lt;BSMPT/config.h&gt;</code><br />
-<code>#include &lt;<a class="el" href="IncludeAllModels_8h_source.html">BSMPT/models/IncludeAllModels.h</a>&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="Minimizer_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -120,12 +120,12 @@ Classes</h2></td></tr>
 Enumerations</h2></td></tr>
 <tr class="memitem:af3175c2bdc228d061d1d2f85eb9086f9"><td class="memItemLeft" align="right" valign="top"><a id="af3175c2bdc228d061d1d2f85eb9086f9"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9">BSMPT::Minimizer::MinimizerStatus</a> { <br />
 &#160;&#160;<b>SUCCESS</b> = 1, 
-<b>NOTVANISHINGATFINALTEMP</b> =-1, 
-<b>NOTNLOSTABLE</b> =-2, 
-<b>NUMERICALLYUNSTABLE</b> =-3, 
+<b>NOTVANISHINGATFINALTEMP</b> = -1, 
+<b>NOTNLOSTABLE</b> = -2, 
+<b>NUMERICALLYUNSTABLE</b> = -3, 
 <br />
-&#160;&#160;<b>BELOWTHRESHOLD</b> =-4, 
-<b>NLOVEVZEROORINF</b> =-5
+&#160;&#160;<b>BELOWTHRESHOLD</b> = -4, 
+<b>NLOVEVZEROORINF</b> = -5
 <br />
  }</td></tr>
 <tr class="memdesc:af3175c2bdc228d061d1d2f85eb9086f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MinimizerStatus enum for the Statusflags of the minimizer. <br /></td></tr>

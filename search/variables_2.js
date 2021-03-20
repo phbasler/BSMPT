@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['debyegauge_927',['DebyeGauge',['../classBSMPT_1_1Class__Potential__Origin.html#a83870563c084a6f236c03fd1bb7bbe49',1,'BSMPT::Class_Potential_Origin']]],
-  ['debyehiggs_928',['DebyeHiggs',['../classBSMPT_1_1Class__Potential__Origin.html#a9e1b6333d8fc3f8de47f5c40dc8e4657',1,'BSMPT::Class_Potential_Origin']]],
+  ['debyegauge_927',['DebyeGauge',['../classBSMPT_1_1Class__Potential__Origin.html#a1cec0ba505a3046333469cc18a7ae278',1,'BSMPT::Class_Potential_Origin']]],
+  ['debyehiggs_928',['DebyeHiggs',['../classBSMPT_1_1Class__Potential__Origin.html#ab3fd89752dd217bf39a1fb7ee6ef4fe9',1,'BSMPT::Class_Potential_Origin']]],
   ['delta_929',['delta',['../include_2BSMPT_2models_2SMparam_8h.html#a3f12171b36ec9534024cd4ea25852b2f',1,'BSMPT']]],
   ['dh_930',['Dh',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a758b5b217796ae68603657e304cf99fd',1,'BSMPT::Baryo::gen_fluid']]],
   ['dlep_931',['Dlep',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#aca878fb0aad0407692e2514a224d856e',1,'BSMPT::Baryo::gen_fluid']]],
