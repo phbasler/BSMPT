@@ -232,6 +232,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4c48ee6b958ffe420294566d432c9acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad96f6afd38e9de1e26b8e6212437c13d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ad96f6afd38e9de1e26b8e6212437c13d">HiggsMassesSquared</a> (const std::vector&lt; double &gt; &amp;v, const double &amp;Temp=0, const int &amp;diff=0) const</td></tr>
 <tr class="separator:ad96f6afd38e9de1e26b8e6212437c13d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c9435618c3985b6b7fcac20806b9074"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a3c9435618c3985b6b7fcac20806b9074">HiggsMassMatrix</a> (const std::vector&lt; double &gt; &amp;v, double Temp=0, int diff=0) const</td></tr>
+<tr class="memdesc:a3c9435618c3985b6b7fcac20806b9074"><td class="mdescLeft">&#160;</td><td class="mdescRight">HiggsMassMatrix calculates the Higgs mass matrix.  <a href="classBSMPT_1_1Class__Potential__Origin.html#a3c9435618c3985b6b7fcac20806b9074">More...</a><br /></td></tr>
+<tr class="separator:a3c9435618c3985b6b7fcac20806b9074"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22cefea56334029d64afc93138025742"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a22cefea56334029d64afc93138025742">GaugeMassesSquared</a> (const std::vector&lt; double &gt; &amp;v, const double &amp;Temp=0, const int &amp;diff=0) const</td></tr>
 <tr class="separator:a22cefea56334029d64afc93138025742"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac44e7fc8a629a38600beab82f275a21c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ac44e7fc8a629a38600beab82f275a21c">QuarkMassesSquared</a> (const std::vector&lt; double &gt; &amp;v, const int &amp;diff=0) const</td></tr>
@@ -305,6 +308,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:af26d07c48897459522164616bab31409"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add691d65a58de93a08e03e01817b0d1c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#add691d65a58de93a08e03e01817b0d1c">CalculateRatioAlpha</a> (const std::vector&lt; double &gt; &amp;vev_symmetric, const std::vector&lt; double &gt; &amp;vev_broken, const double &amp;Temp) const</td></tr>
 <tr class="separator:add691d65a58de93a08e03e01817b0d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93027829ab6605b5a153316129cbbcef"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a93027829ab6605b5a153316129cbbcef">NablaVCT</a> (const std::vector&lt; double &gt; &amp;v) const</td></tr>
+<tr class="memdesc:a93027829ab6605b5a153316129cbbcef"><td class="mdescLeft">&#160;</td><td class="mdescRight">NablaVCT.  <a href="classBSMPT_1_1Class__Potential__Origin.html#a93027829ab6605b5a153316129cbbcef">More...</a><br /></td></tr>
+<tr class="separator:a93027829ab6605b5a153316129cbbcef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae702abe1bd93771de6bc23413aeaef64"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ae702abe1bd93771de6bc23413aeaef64">HessianCT</a> (const std::vector&lt; double &gt; &amp;v) const</td></tr>
+<tr class="memdesc:ae702abe1bd93771de6bc23413aeaef64"><td class="mdescLeft">&#160;</td><td class="mdescRight">HessianWeinberg.  <a href="classBSMPT_1_1Class__Potential__Origin.html#ae702abe1bd93771de6bc23413aeaef64">More...</a><br /></td></tr>
+<tr class="separator:ae702abe1bd93771de6bc23413aeaef64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -1830,6 +1839,27 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
 
 </div>
 </div>
+<a id="ae702abe1bd93771de6bc23413aeaef64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae702abe1bd93771de6bc23413aeaef64">&#9670;&nbsp;</a></span>HessianCT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::MatrixXd BSMPT::Class_Potential_Origin::HessianCT </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>HessianWeinberg. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
 <a id="ad96f6afd38e9de1e26b8e6212437c13d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad96f6afd38e9de1e26b8e6212437c13d">&#9670;&nbsp;</a></span>HiggsMassesSquared()</h2>
 
@@ -1870,6 +1900,51 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Vector in which the eigenvalues m^2 of the mass matrix will be stored </dd></dl>
+
+</div>
+</div>
+<a id="a3c9435618c3985b6b7fcac20806b9074"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c9435618c3985b6b7fcac20806b9074">&#9670;&nbsp;</a></span>HiggsMassMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MatrixXd BSMPT::Class_Potential_Origin::HiggsMassMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>Temp</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>diff</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>HiggsMassMatrix calculates the Higgs mass matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v</td><td>the configuration of all VEVs at which the Mass Matrix should be evaluated </td></tr>
+    <tr><td class="paramname">Temp</td><td>The temperature at which the Debye corrected masses should be calculated </td></tr>
+    <tr><td class="paramname">diff</td><td>0 returns the masses and i!=0 returns the derivative the Mass Matrix w.r.t v_i, i = -1 returns the derivative w.r.t. to the temperature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
@@ -2045,6 +2120,27 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>vector with all VEVs, filled with zeroes for fields which do not have a VEV </dd></dl>
+
+</div>
+</div>
+<a id="a93027829ab6605b5a153316129cbbcef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93027829ab6605b5a153316129cbbcef">&#9670;&nbsp;</a></span>NablaVCT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::VectorXd BSMPT::Class_Potential_Origin::NablaVCT </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>NablaVCT. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>

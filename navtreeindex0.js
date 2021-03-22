@@ -243,11 +243,11 @@ var NAVTREEINDEX0 =
 "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9ad0749aaba8b833466dfcbb0428e4f89c":[5,0,0,0,2,4,2,0],
 "Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9ade50b656b4576690a5aead36d9aaf5c9":[5,0,0,0,2,4,2,2],
 "Minimizer_8h_source.html":[5,0,0,0,2,4],
+"ModelTestfunctions_8h_source.html":[5,0,0,0,3,7],
 "NLOVEV_8cpp.html":[5,0,1,4,5],
 "NLOVEV_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97":[5,0,1,4,5,1],
 "NegativeBosonSpline_8h.html":[5,0,0,0,4,0],
 "NegativeBosonSpline_8h.html#a062ab089c6d9fefd5a4799a23a446b9a":[5,0,0,0,4,0,1],
 "NegativeBosonSpline_8h.html#ae7be2f10cd4525049e5abd8460b3eabb":[5,0,0,0,4,0,0],
-"NegativeBosonSpline_8h_source.html":[5,0,0,0,4,0],
-"Plot1D_8cpp.html":[5,0,1,4,6]
+"NegativeBosonSpline_8h_source.html":[5,0,0,0,4,0]
 };

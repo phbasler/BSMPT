@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"Plot1D_8cpp.html":[5,0,1,4,6],
 "Plot1D_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97":[5,0,1,4,6,0],
 "PlotEWBG__mu_8cpp.html":[5,0,1,4,7],
 "PlotEWBG__mu_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97":[5,0,1,4,7,1],
@@ -239,15 +240,14 @@ var NAVTREEINDEX1 =
 "classBSMPT_1_1Baryo_1_1transport__equations.html#afdeb30863af8f90afe62a27945a356d1":[4,0,0,0,13,15],
 "classBSMPT_1_1Class__Potential__Origin.html":[4,0,0,5],
 "classBSMPT_1_1Class__Potential__Origin.html#a0207feb67f6f45d985ce80575fe4dcac":[4,0,0,5,29],
-"classBSMPT_1_1Class__Potential__Origin.html#a02f00f70f83e5ddcfc1e85744fe86e58":[4,0,0,5,131],
-"classBSMPT_1_1Class__Potential__Origin.html#a05d1cd916f02957de88a411a1dfc48e4":[4,0,0,5,79],
-"classBSMPT_1_1Class__Potential__Origin.html#a0910e59e597c46f796666b0d5f3ed2f5":[4,0,0,5,117],
-"classBSMPT_1_1Class__Potential__Origin.html#a0e383fd333a8fdc4f7539a5790bdd64b":[4,0,0,5,107],
-"classBSMPT_1_1Class__Potential__Origin.html#a105701013dedcfb38d44c4dda3c0f1e0":[4,0,0,5,136],
+"classBSMPT_1_1Class__Potential__Origin.html#a02f00f70f83e5ddcfc1e85744fe86e58":[4,0,0,5,134],
+"classBSMPT_1_1Class__Potential__Origin.html#a05d1cd916f02957de88a411a1dfc48e4":[4,0,0,5,82],
+"classBSMPT_1_1Class__Potential__Origin.html#a0910e59e597c46f796666b0d5f3ed2f5":[4,0,0,5,120],
+"classBSMPT_1_1Class__Potential__Origin.html#a0e383fd333a8fdc4f7539a5790bdd64b":[4,0,0,5,110],
+"classBSMPT_1_1Class__Potential__Origin.html#a105701013dedcfb38d44c4dda3c0f1e0":[4,0,0,5,139],
 "classBSMPT_1_1Class__Potential__Origin.html#a109af4ea19569cdacbe5b55a71250dfb":[4,0,0,5,13],
-"classBSMPT_1_1Class__Potential__Origin.html#a15c0f9b10a492e2aa859a70a8dcb26fc":[4,0,0,5,46],
-"classBSMPT_1_1Class__Potential__Origin.html#a15f18208f05b6ed2316b22d50f0fba7b":[4,0,0,5,65],
+"classBSMPT_1_1Class__Potential__Origin.html#a15c0f9b10a492e2aa859a70a8dcb26fc":[4,0,0,5,48],
+"classBSMPT_1_1Class__Potential__Origin.html#a15f18208f05b6ed2316b22d50f0fba7b":[4,0,0,5,68],
 "classBSMPT_1_1Class__Potential__Origin.html#a16150813f8e3aaf6133af7c655c85a89":[4,0,0,5,16],
-"classBSMPT_1_1Class__Potential__Origin.html#a17a3b7917eaab5902c70e8f866b649b7":[4,0,0,5,77],
-"classBSMPT_1_1Class__Potential__Origin.html#a18ab10fcc0681f824083e8ad0b54004f":[4,0,0,5,97]
+"classBSMPT_1_1Class__Potential__Origin.html#a17a3b7917eaab5902c70e8f866b649b7":[4,0,0,5,80]
 };

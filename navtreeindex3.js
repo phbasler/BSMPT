@@ -1,5 +1,9 @@
 var NAVTREEINDEX3 =
 {
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ad90df66778a2f4fafff4f40dff3dd90e":[4,0,0,3,1,44],
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ada135a9e16d77c150101c863de94b45f":[4,0,0,3,1,38],
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#adbe7ce4ef3ef30480c455a17380be142":[4,0,0,3,1,66],
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae538c844f00d7b72a7c1f7561496b526":[4,0,0,3,1,47],
 "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae62f1afe91f41ff019ee93ba47ec4c38":[4,0,0,3,1,32],
 "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae82eeb0e20f16c9171c6a1af6b5736e0":[4,0,0,3,1,16],
 "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae9b9c0be713ba5326d49450f1d8bfbb4":[4,0,0,3,1,37],
@@ -245,9 +249,5 @@ var NAVTREEINDEX3 =
 "gen__func__fluid_8h.html#a323ee6ffc4f7c9a53b40e9c7cfb1b8d2":[5,0,0,0,0,0,2,9],
 "gen__func__fluid_8h.html#a762fa7df4493970be1610c7ecfa60281":[5,0,0,0,0,0,2,8],
 "gen__func__fluid_8h.html#aac99f6f51f849acc27dc80e64682fbcf":[5,0,0,0,0,0,2,5],
-"gen__func__fluid_8h.html#ac66de1dc47e89bcf3001efae44ee4d03":[5,0,0,0,0,0,2,6],
-"gen__func__fluid_8h_source.html":[5,0,0,0,0,0,2],
-"globals.html":[5,1,0],
-"globals_func.html":[5,1,1],
-"globals_vars.html":[5,1,2]
+"gen__func__fluid_8h.html#ac66de1dc47e89bcf3001efae44ee4d03":[5,0,0,0,0,0,2,6]
 };
