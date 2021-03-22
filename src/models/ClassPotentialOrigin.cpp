@@ -30,6 +30,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility.h>
 using namespace Eigen;
 
@@ -1429,6 +1430,93 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
   return res;
 }
 
+MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
+                                                 double Temp,
+                                                 int diff) const
+{
+  MatrixXd res(NHiggs, NHiggs);
+  if (v.size() != nVEV and v.size() != NHiggs)
+  {
+    std::string ErrorString =
+        std::string("You have called ") + std::string(__func__) +
+        std::string(
+            " with an invalid vev configuration. Your vev is of dimension ") +
+        std::to_string(v.size()) + std::string(" and it should be ") +
+        std::to_string(NHiggs) + std::string(".");
+    throw std::runtime_error(ErrorString);
+  }
+  if (v.size() == nVEV and nVEV != NHiggs)
+  {
+    std::cerr << __func__
+              << " is being called with a wrong sized vev configuration. It "
+                 "has the dimension of "
+              << nVEV << " while it should have " << NHiggs
+              << ". For now this is transformed but please fix this to reduce "
+                 "the runtime."
+              << std::endl;
+    std::vector<double> Transformedv;
+    Transformedv = MinimizeOrderVEV(v);
+    res          = HiggsMassMatrix(Transformedv, Temp, diff);
+    return res;
+  }
+  if (!SetCurvatureDone)
+  {
+    //        SetCurvatureArrays();
+    throw std::runtime_error(
+        "SetCurvatureDone is not set. The Model is not initiliased correctly");
+  }
+
+  if (diff == 0)
+  {
+    for (std::size_t i = 0; i < NHiggs; i++)
+    {
+      for (std::size_t j = 0; j < NHiggs; j++)
+      {
+        res(i, j) = Curvature_Higgs_L2[i][j];
+        for (std::size_t k = 0; k < NHiggs; k++)
+        {
+          res(i, j) += Curvature_Higgs_L3[i][j][k] * v[k];
+          for (std::size_t l = 0; l < NHiggs; l++)
+          {
+            res(i, j) += 0.5 * Curvature_Higgs_L4[i][j][k][l] * v[k] * v[l];
+          }
+        }
+
+        if (Temp != 0)
+        {
+          res(i, j) += DebyeHiggs[i][j] * std::pow(Temp, 2);
+        }
+      }
+    }
+  }
+  else if (static_cast<size_t>(diff) <= NHiggs and diff > 0)
+  {
+    std::size_t x0 = diff - 1;
+    for (std::size_t i = 0; i < NHiggs; i++)
+    {
+      for (std::size_t j = 0; j < NHiggs; j++)
+      {
+        res(i, j) = Curvature_Higgs_L3[i][j][x0];
+        for (std::size_t k = 0; k < NHiggs; k++)
+        {
+          res(i, j) += Curvature_Higgs_L4[i][j][x0][k] * v[k];
+        }
+      }
+    }
+  }
+  else if (diff == -1)
+  {
+    for (std::size_t i = 0; i < NHiggs; i++)
+    {
+      for (std::size_t j = 0; j < NHiggs; j++)
+      {
+        res(i, j) = 2 * DebyeHiggs[i][j] * Temp;
+      }
+    }
+  }
+  return res;
+}
+
 std::vector<double>
 Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
                                            const double &Temp,
@@ -2494,98 +2582,24 @@ void Class_Potential_Origin::CheckImplementation(
   std::vector<std::string> TestNames, TestResults;
 
   TestNames.push_back("CT number/label match");
-  TestResults.push_back(Pass);
-  if (addLegendCT().size() != nParCT)
-  {
-    std::cerr << "WARNING: The number of labels for the Counterterms does not "
-                 "match the number of Counterterms."
-              << " If you don't fix this, then your header will not match the "
-                 "numerical output in the output file."
-              << std::endl;
-    TestResults.at(TestResults.size() - 1) = Fail;
-  }
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNumberOfCTParameters(*this)));
 
   TestNames.push_back("VEV number/label match");
-  TestResults.push_back(Pass);
-  if (addLegendVEV().size() != nVEV)
-  {
-    std::cerr << "WARNING: The number of labels for the VEVs does not match "
-                 "the number of VEVs defined in the model."
-              << " If you don't fix this, then your header will not match the "
-                 "numerical output in the output file."
-              << std::endl;
-    TestResults.at(TestResults.size() - 1) = Fail;
-  }
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNumberOfVEVLabels(*this)));
 
   TestNames.push_back("addLegendTemp number/label match");
-  TestResults.push_back(Pass);
-  if (addLegendTemp().size() != nVEV + 3)
-  {
-    std::cerr
-        << "WARNING: The number of labels in addLegendTemp does not match the "
-           "number of VEVs + 3."
-        << " If you don't fix this, then your header will not match the "
-           "numerical output in the output file."
-        << " It is expected to be label for the critical temperature, the cirtical VEV, the ratio of VEV and temperature and the labels\
-                     for the VEVs."
-        << std::endl;
-    TestResults.at(TestResults.size() - 1) = Fail;
-  }
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckLegendTemp(*this)));
 
   TestNames.push_back("addLegendTripleCouplings number/label match");
-  TestResults.push_back(Pass);
-  {
-    std::size_t ExpectedTripleHiggs = 0;
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      for (std::size_t j = i; j < NHiggs; j++)
-      {
-        for (std::size_t k = j; k < NHiggs; k++)
-        {
-          ExpectedTripleHiggs++;
-        }
-      }
-    }
-    ExpectedTripleHiggs *= 3;
-    if (addLegendTripleCouplings().size() != ExpectedTripleHiggs)
-    {
-      std::cerr
-          << "WARNING: The number of labels in addLegendTripleCouplings does "
-             "not match the number of calculated Triple Higgs Couplings."
-          << " If you don't fix this, then your header will not match the "
-             "numerical output in the output file."
-          << std::endl;
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNumberOfTripleCouplings(*this)));
 
   TestNames.push_back("CKM matrix unitarity");
-  TestResults.push_back(Pass);
-  double ZeroMass = std::pow(10, -5);
-  {
-    // Checks if the implemented CKM Matrix is unitary
-    MatrixXcd VCKM(3, 3);
-    VCKM(0, 0) = C_Vud;
-    VCKM(0, 1) = C_Vus;
-    VCKM(0, 2) = C_Vub;
-    VCKM(1, 0) = C_Vcd;
-    VCKM(1, 1) = C_Vcs;
-    VCKM(1, 2) = C_Vcb;
-    VCKM(2, 0) = C_Vtd;
-    VCKM(2, 1) = C_Vts;
-    VCKM(2, 2) = C_Vtb;
-
-    auto norm = (VCKM.adjoint() * VCKM - MatrixXcd::Identity(3, 3)).norm();
-    if (norm > 1e-5)
-    {
-      std::cerr << "Your CKM implementation is not unitary!" << std::endl;
-      std::cerr << "Your CKM Matrix V is given by \n" << VCKM << std::endl;
-      std::cerr << "with adjoint(V)*V = \n"
-                << VCKM.adjoint() * VCKM << std::endl;
-      std::cerr << "The norm deviating from 1 is " << norm << std::endl;
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckCKMUnitarity()));
 
   std::cout << std::endl
             << "This function calculates the masses of the gauge bosons, "
@@ -2593,388 +2607,39 @@ void Class_Potential_Origin::CheckImplementation(
             << "with the parameters defined in SMparam.h." << std::endl;
 
   TestNames.push_back("Matching gauge boson masses with SMparam.h");
-  TestResults.push_back(Pass);
-  {
-    std::vector<double> gaugeMassesInput;
-    gaugeMassesInput.push_back(0);
-    gaugeMassesInput.push_back(pow(C_MassW, 2));
-    gaugeMassesInput.push_back(pow(C_MassW, 2));
-    gaugeMassesInput.push_back(pow(C_MassZ, 2));
-    std::sort(gaugeMassesInput.begin(), gaugeMassesInput.end());
-    auto GaugeMassCalculated = GaugeMassesSquared(vevTree, 0, 0);
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckGaugeBosonMasses(*this)));
 
-    std::string prsize_tline1 = "The SM gauge boson masses squared are : ";
-    std::string prsize_tline2 =
-        "The calculated gauge boson masses squared are : ";
-    auto maxlength = std::max(prsize_tline1.size(), prsize_tline2.size());
-    auto addline1  = maxlength - prsize_tline1.size();
-    auto addline2  = maxlength - prsize_tline2.size();
-
-    std::cout << prsize_tline1 << std::setw(addline1) << " ";
-    for (auto x : gaugeMassesInput)
-      std::cout << x << sep;
-    std::cout << std::endl;
-    std::cout << prsize_tline2 << std::setw(addline2);
-    for (auto x : GaugeMassCalculated)
-      std::cout << x << sep;
-    std::cout << std::endl;
-
-    std::cout << std::endl;
-
-    double sum{0};
-    for (std::size_t i{0}; i < NGauge; ++i)
-    {
-      sum += std::abs(GaugeMassCalculated.at(i) - gaugeMassesInput.at(i));
-    }
-    if (sum > ZeroMass)
-    {
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
-
+  auto FermionCheck = ModelTests::CheckFermionicMasses(*this);
   TestNames.push_back("Matching lepton masses with SMparam.h");
-  TestResults.push_back(Pass);
+  TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.first));
   TestNames.push_back("Matching quark masses with SMparam.h");
-  TestResults.push_back(Pass);
-  {
-    std::vector<double> leptonMassesInput, quarkMassesInput;
-    leptonMassesInput.push_back(0);
-    leptonMassesInput.push_back(0);
-    leptonMassesInput.push_back(0);
-    leptonMassesInput.push_back(pow(C_MassElectron, 2));
-    leptonMassesInput.push_back(pow(-C_MassElectron, 2));
-    leptonMassesInput.push_back(pow(C_MassMu, 2));
-    leptonMassesInput.push_back(pow(-C_MassMu, 2));
-    leptonMassesInput.push_back(pow(C_MassTau, 2));
-    leptonMassesInput.push_back(pow(-C_MassTau, 2));
-
-    quarkMassesInput.push_back(pow(C_MassUp, 2));
-    quarkMassesInput.push_back(pow(-C_MassUp, 2));
-    quarkMassesInput.push_back(pow(C_MassCharm, 2));
-    quarkMassesInput.push_back(pow(-C_MassCharm, 2));
-    quarkMassesInput.push_back(pow(C_MassTop, 2));
-    quarkMassesInput.push_back(pow(-C_MassTop, 2));
-
-    quarkMassesInput.push_back(pow(C_MassDown, 2));
-    quarkMassesInput.push_back(pow(-C_MassDown, 2));
-    quarkMassesInput.push_back(pow(C_MassStrange, 2));
-    quarkMassesInput.push_back(pow(-C_MassStrange, 2));
-    quarkMassesInput.push_back(pow(C_MassBottom, 2));
-    quarkMassesInput.push_back(pow(-C_MassBottom, 2));
-
-    if (NLepton == 0)
-    {
-      for (std::size_t i = 0; i < leptonMassesInput.size(); i++)
-        quarkMassesInput.push_back(leptonMassesInput.at(i));
-    }
-
-    std::sort(leptonMassesInput.begin(), leptonMassesInput.end());
-    std::sort(quarkMassesInput.begin(), quarkMassesInput.end());
-
-    auto leptonMassCalculated = LeptonMassesSquared(vevTree, 0);
-    auto quarkMassCalculated  = QuarkMassesSquared(vevTree, 0);
-
-    if (NLepton != 0)
-    {
-      std::string prsize_tline1 = "The SM lepton masses squared are : ";
-      std::string prsize_tline2 = "The calculated lepton masses squared are : ";
-      auto maxlength = std::max(prsize_tline1.size(), prsize_tline2.size());
-      auto addline1  = maxlength - prsize_tline1.size();
-      auto addline2  = maxlength - prsize_tline2.size();
-
-      std::cout << prsize_tline1 << std::setw(addline1) << " ";
-      for (auto x : leptonMassesInput)
-        std::cout << x << sep;
-      std::cout << std::endl;
-      std::cout << prsize_tline2 << std::setw(addline2);
-      for (auto x : leptonMassCalculated)
-        std::cout << x << sep;
-      std::cout << std::endl;
-      std::cout << std::endl;
-
-      double sum{0};
-      for (std::size_t i{0};
-           i < std::min(leptonMassCalculated.size(), leptonMassesInput.size());
-           ++i)
-      {
-        sum += std::abs(leptonMassCalculated.at(i) - leptonMassesInput.at(i));
-      }
-      if (leptonMassCalculated.size() > leptonMassesInput.size())
-      {
-        for (std::size_t i{leptonMassesInput.size()};
-             i < leptonMassCalculated.size();
-             ++i)
-        {
-          sum += std::abs(leptonMassCalculated.at(i));
-        }
-      }
-      else if (leptonMassesInput.size() > leptonMassCalculated.size())
-      {
-        for (std::size_t i{leptonMassCalculated.size()};
-             i < leptonMassesInput.size();
-             ++i)
-        {
-          sum += std::abs(leptonMassesInput.at(i));
-        }
-      }
-      if (sum > ZeroMass)
-      {
-        TestResults.at(TestResults.size() - 2) = Fail;
-      }
-    }
-
-    std::string prsize_tline1 = "The SM quark masses squared are : ";
-    std::string prsize_tline2 = "The calculated quark masses squared are : ";
-    auto maxlength = std::max(prsize_tline1.size(), prsize_tline2.size());
-    auto addline1  = maxlength - prsize_tline1.size();
-    auto addline2  = maxlength - prsize_tline2.size();
-
-    std::cout << prsize_tline1 << std::setw(addline1) << " ";
-    for (auto x : quarkMassesInput)
-      std::cout << x << sep;
-    std::cout << std::endl;
-    std::cout << prsize_tline2 << std::setw(addline2);
-    for (auto x : quarkMassCalculated)
-      std::cout << x << sep;
-    std::cout << std::endl << std::endl;
-
-    double sum{0};
-    for (std::size_t i{0}; i < NQuarks; ++i)
-    {
-      sum += std::abs(quarkMassCalculated.at(i) - quarkMassesInput.at(i));
-    }
-    if (sum > ZeroMass)
-    {
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
+  TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.second));
 
   TestNames.push_back("Correct EW Minimum");
-  TestResults.push_back(Pass);
-  {
-    std::vector<double> CalculatedHiggsVEV, CheckVector, start;
-    for (const auto &x : vevTreeMin)
-      start.push_back(0.5 * x);
-
-    CalculatedHiggsVEV = Minimizer::Minimize_gen_all_tree_level(
-        Model, parStored, parCTStored, CheckVector, start, WhichMinimizer);
-
-    std::string prsize_tline1 =
-        "The given VEV configuration at tree-level is : ";
-    std::string prsize_tline2 =
-        "The calculated VEV configuration at tree-level is : ";
-    auto maxlength = std::max(prsize_tline1.size(), prsize_tline2.size());
-    auto addline1  = maxlength - prsize_tline1.size();
-    auto addline2  = maxlength - prsize_tline2.size();
-
-    std::cout << prsize_tline1 << std::setw(addline1) << " ";
-    for (auto x : vevTreeMin)
-      std::cout << x << sep;
-    std::cout << std::endl;
-    std::cout << prsize_tline2 << std::setw(addline2);
-    for (auto x : CalculatedHiggsVEV)
-      std::cout << x << sep;
-    std::cout << std::endl << std::endl;
-
-    double sum{0};
-    for (std::size_t i{0}; i < nVEV; ++i)
-    {
-      sum += std::abs(std::abs(CalculatedHiggsVEV.at(i)) -
-                      std::abs(vevTreeMin.at(i)));
-    }
-    if (sum > 0.5)
-    {
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckTreeLevelMin(*this, WhichMinimizer)));
 
   TestNames.push_back("Tadpole relations fullfilled");
-  TestResults.push_back(Pass);
-  {
-    double SurviveTadpole = 0;
-    for (std::size_t i = 0; i < NHiggs; i++)
-      SurviveTadpole += std::abs(VTree(vevTree, i + 1));
-
-    if (SurviveTadpole > 1e-5)
-    {
-      std::cout << "The given input parameter does not fulfill the tadpole "
-                   "relations and is not a minimum of the potential."
-                << std::endl
-                << "This may happen if all your parameters are read in from an "
-                   "input file. Try applying the minimum conditions"
-                << " in the set_gen function." << std::endl
-                << std::endl;
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckTadpoleRelations(*this)));
 
   TestNames.push_back("Matching Masses between NLO and tree-level");
-  TestResults.push_back(Pass);
-  {
-    std::vector<double> WeinbergNabla, WeinbergHesse;
-    WeinbergNabla = WeinbergFirstDerivative();
-    WeinbergHesse = WeinbergSecondDerivative();
-
-    VectorXd NablaWeinberg(NHiggs), NablaVCT(NHiggs);
-    MatrixXd HesseWeinberg(NHiggs, NHiggs), HesseVCT(NHiggs, NHiggs);
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      NablaWeinberg[i] = WeinbergNabla[i];
-      for (std::size_t j = 0; j < NHiggs; j++)
-        HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
-    }
-
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      NablaVCT(i) = Curvature_Higgs_CT_L1[i];
-      for (std::size_t j = 0; j < NHiggs; j++)
-      {
-        NablaVCT(i) += Curvature_Higgs_CT_L2[i][j] * vevTree[j];
-        HesseVCT(i, j) = Curvature_Higgs_CT_L2[i][j];
-        for (std::size_t k = 0; k < NHiggs; k++)
-        {
-          NablaVCT(i) +=
-              0.5 * Curvature_Higgs_CT_L3[i][j][k] * vevTree[j] * vevTree[k];
-          HesseVCT(i, j) += Curvature_Higgs_CT_L3[i][j][k] * vevTree[k];
-          for (std::size_t l = 0; l < NHiggs; l++)
-          {
-            NablaVCT(i) += 1.0 / 6.0 * Curvature_Higgs_CT_L4[i][j][k][l] *
-                           vevTree[j] * vevTree[k] * vevTree[l];
-            HesseVCT(i, j) += 0.5 * Curvature_Higgs_CT_L4[i][j][k][l] *
-                              vevTree[k] * vevTree[l];
-          }
-        }
-      }
-    }
-
-    MatrixXd MassMatrix(NHiggs, NHiggs);
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      for (std::size_t j = 0; j < NHiggs; j++)
-      {
-        MassMatrix(i, j) = Curvature_Higgs_L2[i][j];
-        for (std::size_t k = 0; k < NHiggs; k++)
-        {
-          MassMatrix(i, j) += Curvature_Higgs_L3[i][j][k] * vevTree[k];
-          for (std::size_t l = 0; l < NHiggs; l++)
-            MassMatrix(i, j) +=
-                0.5 * Curvature_Higgs_L4[i][j][k][l] * vevTree[k] * vevTree[l];
-        }
-      }
-    }
-
-    SelfAdjointEigenSolver<MatrixXd> esTree(MassMatrix, EigenvaluesOnly);
-    SelfAdjointEigenSolver<MatrixXd> esNLO(
-        MassMatrix + HesseVCT + HesseWeinberg, EigenvaluesOnly);
-
-    std::vector<double> TreeMass, NLOMass;
-
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      if (std::abs(esTree.eigenvalues()[i]) < ZeroMass)
-        TreeMass.push_back(0);
-      else
-        TreeMass.push_back(esTree.eigenvalues()[i]);
-      if (std::abs(esNLO.eigenvalues()[i]) < ZeroMass)
-        NLOMass.push_back(0);
-      else
-        NLOMass.push_back(esNLO.eigenvalues()[i]);
-    }
-
-    std::cout << "The higgs masses squared at LO | NLO are : " << std::endl;
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      std::cout << "m_i^2 = " << TreeMass[i] << " | " << NLOMass[i]
-                << std::endl;
-    }
-
-    double sum{0.0};
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      double z = std::abs(std::abs(NLOMass[i]) - TreeMass.at(i));
-      double n = std::max(std::abs(NLOMass[i]), std::abs(TreeMass[i]));
-      if (n != 0) sum += z / n;
-    }
-    if (sum > 0.5)
-    {
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
-  }
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckNLOMasses(*this)));
 
   if (UseVTreeSimplified)
   {
     TestNames.push_back("Checking VTreeSimplified");
-    TestResults.push_back(Pass);
-    std::default_random_engine randGen(0);
-    double ValSimplified = 0, ValTensor = 0, PotentialDifference = 0;
-    std::vector<double> VevDummyConfigForMinimiser(nVEV);
-    double RNDMax = 500;
-    for (int i = 0; i < 10; i++)
-    {
-      for (std::size_t j = 0; j < nVEV; j++)
-        VevDummyConfigForMinimiser.at(j) =
-            RNDMax *
-            (-1 +
-             2 * std::generate_canonical<double,
-                                         std::numeric_limits<double>::digits>(
-                     randGen));
-      auto VevDummyConfigForPotential =
-          MinimizeOrderVEV(VevDummyConfigForMinimiser);
-      ValSimplified = VTree(VevDummyConfigForPotential);
-      ValTensor     = VTree(
-          VevDummyConfigForPotential, 0, true /* = ForceExplicitCalculation */);
-      PotentialDifference += std::abs(ValTensor - ValSimplified) /
-                             (std::abs(ValTensor) + std::abs(ValSimplified));
-    }
-    if (PotentialDifference > 1e-5)
-    {
-      std::cout << "You provided a simplified version of the tree-level "
-                   "potential but it yields"
-                << " different results for the same input compared to the "
-                   "explicit calculation. "
-                << "Recheck your implementation of the simplified tree-level "
-                   "potential."
-                << std::endl;
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
+    TestResults.push_back(ModelTests::TestResultsToString(
+        ModelTests::CheckVTreeSimplified(*this)));
   }
 
   if (UseVCounterSimplified)
   {
     TestNames.push_back("Checking VCounterSimplified");
-    TestResults.push_back(Pass);
-    std::default_random_engine randGen(0);
-    double ValCTSimplified = 0, ValCTTensor = 0, PotentialCTDifference = 0;
-    std::vector<double> VevDummyConfigForMinimiser(nVEV);
-    double RNDMax = 500;
-    for (int i = 0; i < 10; i++)
-    {
-      for (std::size_t j = 0; j < nVEV; j++)
-        VevDummyConfigForMinimiser.at(j) =
-            RNDMax *
-            (-1 +
-             2 * std::generate_canonical<double,
-                                         std::numeric_limits<double>::digits>(
-                     randGen));
-      auto VevDummyConfigForPotential =
-          MinimizeOrderVEV(VevDummyConfigForMinimiser);
-      ValCTSimplified = CounterTerm(VevDummyConfigForPotential);
-      ValCTTensor     = CounterTerm(VevDummyConfigForPotential, 0, true);
-      PotentialCTDifference +=
-          std::abs(ValCTTensor - ValCTSimplified) /
-          (std::abs(ValCTSimplified) + std::abs(ValCTTensor));
-    }
-    if (PotentialCTDifference > 1)
-    {
-      std::cout << "You provided a simplified version of the counterterm "
-                   "potential but it yields"
-                << " different results for the same input compared to the "
-                   "explicit calculation. "
-                << "Recheck your implementation of the simplified counterterm "
-                   "potential."
-                << std::endl;
-      TestResults.at(TestResults.size() - 1) = Fail;
-    }
+    TestResults.push_back(ModelTests::TestResultsToString(
+        ModelTests::CheckVCounterSimplified(*this)));
   }
 
   if (TestNames.size() != TestResults.size())
@@ -3295,4 +2960,50 @@ std::vector<double> Class_Potential_Origin::MinimizeOrderVEV(
   return vevFunction;
 }
 
+Eigen::VectorXd
+Class_Potential_Origin::NablaVCT(const std::vector<double> &v) const
+{
+  VectorXd result(NHiggs);
+  for (std::size_t i{0}; i < NHiggs; ++i)
+  {
+    result(i) = Curvature_Higgs_CT_L1[i];
+    for (std::size_t j{0}; j < NHiggs; ++j)
+    {
+      result(i) += Curvature_Higgs_CT_L2[i][j] * v.at(j);
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        result(i) += 0.5 * Curvature_Higgs_CT_L3[i][j][k] * v.at(j) * v.at(k);
+        for (std::size_t l = 0; l < NHiggs; l++)
+        {
+          result(i) += 1.0 / 6.0 * Curvature_Higgs_CT_L4[i][j][k][l] * v.at(j) *
+                       v.at(k) * v.at(l);
+        }
+      }
+    }
+  }
+  return result;
+}
+
+Eigen::MatrixXd
+Class_Potential_Origin::HessianCT(const std::vector<double> &v) const
+{
+  Eigen::MatrixXd result(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      result(i, j) = Curvature_Higgs_CT_L2[i][j];
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        result(i, j) += Curvature_Higgs_CT_L3[i][j][k] * v.at(k);
+        for (std::size_t l = 0; l < NHiggs; l++)
+        {
+          result(i, j) +=
+              0.5 * Curvature_Higgs_CT_L4[i][j][k][l] * v.at(k) * v.at(l);
+        }
+      }
+    }
+  }
+  return result;
+}
 } // namespace BSMPT

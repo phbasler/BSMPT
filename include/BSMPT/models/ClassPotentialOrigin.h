@@ -940,6 +940,21 @@ public:
   std::vector<double> HiggsMassesSquared(const std::vector<double> &v,
                                          const double &Temp = 0,
                                          const int &diff    = 0) const;
+
+  /**
+   * @brief HiggsMassMatrix calculates the Higgs mass matrix
+   * @param v the configuration of all VEVs at which the Mass Matrix should be
+   * evaluated
+   * @param Temp The temperature at which the Debye corrected masses should be
+   * calculated
+   * @param diff 0 returns the masses and i!=0 returns the derivative the Mass
+   * Matrix w.r.t v_i, i = -1 returns the derivative w.r.t. to the temperature
+   * @return
+   */
+  Eigen::MatrixXd HiggsMassMatrix(const std::vector<double> &v,
+                                  double Temp = 0,
+                                  int diff    = 0) const;
+
   /**
    * Calculates the gauge mass matrix and saves all eigenvalues
    * @param v the configuration of all VEVs at which the eigenvalues should be
@@ -1243,6 +1258,17 @@ public:
   double CalculateRatioAlpha(const std::vector<double> &vev_symmetric,
                              const std::vector<double> &vev_broken,
                              const double &Temp) const;
+
+  /**
+   * @brief NablaVCT
+   * @return
+   */
+  Eigen::VectorXd NablaVCT(const std::vector<double> &v) const;
+  /**
+   * @brief HessianWeinberg
+   * @return
+   */
+  Eigen::MatrixXd HessianCT(const std::vector<double> &v) const;
 };
 
 } // namespace BSMPT
