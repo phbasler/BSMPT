@@ -127,7 +127,7 @@ TestResults CheckGaugeBosonMasses(const Class_Potential_Origin &point)
   gaugeMassesInput.push_back(pow(C_MassZ, 2));
   std::sort(gaugeMassesInput.begin(), gaugeMassesInput.end());
   auto GaugeMassCalculated =
-      point.GaugeMassesSquared(point.get_vevTreeMin(), 0, 0);
+      point.GaugeMassesSquared(point.MinimizeOrderVEV(point.get_vevTreeMin()), 0, 0);
   if (GaugeMassCalculated.size() != gaugeMassesInput.size())
   {
     return TestResults::Fail;
@@ -199,9 +199,9 @@ CheckFermionicMasses(const Class_Potential_Origin &point)
   std::sort(quarkMassesInput.begin(), quarkMassesInput.end());
 
   auto leptonMassCalculated =
-      point.LeptonMassesSquared(point.get_vevTreeMin(), 0);
+      point.LeptonMassesSquared(point.MinimizeOrderVEV(point.get_vevTreeMin()), 0);
   auto quarkMassCalculated =
-      point.QuarkMassesSquared(point.get_vevTreeMin(), 0);
+      point.QuarkMassesSquared(point.MinimizeOrderVEV(point.get_vevTreeMin()), 0);
 
   const double ZeroMass = 1e-5;
   if (point.get_NLepton() != 0)
