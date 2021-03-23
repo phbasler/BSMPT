@@ -193,9 +193,3 @@ TEST_CASE("Checking VCounterSimplified for R2HDM", "[r2hdm]")
     REQUIRE(true);
   }
 }
-
-TEST_CASE("Checking CKM Unitarity for R2HDM", "[r2hdm]")
-{
-  using namespace BSMPT;
-  REQUIRE(ModelTests::CheckCKMUnitarity() == ModelTests::TestResults::Pass);
-}
