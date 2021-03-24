@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <vector>
-#include <random>
 #include <BSMPT/config.h>
+#include <iostream>
+#include <random>
+#include <string>
+#include <vector>
 
 #ifdef Boost_FOUND
 #include <boost/version.hpp>
@@ -37,12 +37,13 @@
 /**
  * @file
  */
-namespace BSMPT {
+namespace BSMPT
+{
 
 /**
  * @brief StringStartsWith checks if str starts with prefix
  */
-bool StringStartsWith(const std::string& str, const std::string& prefix);
+bool StringStartsWith(const std::string &str, const std::string &prefix);
 
 /**
  * @brief seperator used to write into output files
@@ -52,40 +53,41 @@ const std::string sep = "\t";
 /**
  * Overload to print out vectors with the << operator
  */
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const std::vector<T>& vec)
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
 {
-    bool first = true;
-    for (const auto& el : vec)
+  bool first = true;
+  for (const auto &el : vec)
+  {
+    if (not first)
     {
-        if(not first) {
-            os << sep;
-        }
-        else{
-            first = false;
-        }
-        os << el;
+      os << sep;
     }
-    return os;
+    else
+    {
+      first = false;
+    }
+    os << el;
+  }
+  return os;
 }
-
 
 /**
  * @brief operator << overload for the model parameter
  */
-namespace ModelID {
-  enum class ModelIDs;
+namespace ModelID
+{
+enum class ModelIDs;
 }
-std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model);
-
+std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model);
 
 #if BOOST_VERSION >= 107200
-template<typename T>
-using boost_cubic_b_spline = boost::math::interpolators::cardinal_cubic_b_spline<T>;
+template <typename T>
+using boost_cubic_b_spline =
+    boost::math::interpolators::cardinal_cubic_b_spline<T>;
 #else
-template<typename T>
+template <typename T>
 using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
 #endif
 
-}
-
+} // namespace BSMPT

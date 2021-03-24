@@ -14,30 +14,25 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility.h>
 #include <string>
-#include <BSMPT/models/IncludeAllModels.h>
-
-
-
 
 /**
  * @file
  */
-namespace BSMPT {
-
-std::ostream& operator<<(std::ostream& os, const ModelID::ModelIDs& Model)
+namespace BSMPT
 {
-    static auto IMN = BSMPT::ModelID::InvertModelNames();
-    os << IMN.at(Model);
-    return os;
-}
-bool StringStartsWith(const std::string& str, const std::string& prefix)
+
+std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
 {
-    return str.size() >= prefix.size() and str.find(prefix) == 0;
+  static auto IMN = BSMPT::ModelID::InvertModelNames();
+  os << IMN.at(Model);
+  return os;
+}
+bool StringStartsWith(const std::string &str, const std::string &prefix)
+{
+  return str.size() >= prefix.size() and str.find(prefix) == 0;
 }
 
-
-
-}
+} // namespace BSMPT
