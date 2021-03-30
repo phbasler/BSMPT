@@ -866,6 +866,11 @@ public:
    */
   std::vector<double> WeinbergSecondDerivative() const;
   /**
+   * Calculates the second derivative of the Coleman-Weinberg potential at the
+   * tree-level minimum.
+   */
+  Eigen::MatrixXd WeinbergSecondDerivativeAsMatrixXd() const;
+  /**
    * Calculates the third derivative of the Coleman-Weinberg potential at the
    * tree-level minimum.
    */

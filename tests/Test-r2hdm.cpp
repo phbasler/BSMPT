@@ -193,3 +193,25 @@ TEST_CASE("Checking VCounterSimplified for R2HDM", "[r2hdm]")
     REQUIRE(true);
   }
 }
+
+TEST_CASE("Checking first derivative of the sum of CT and CW in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+  auto result = ModelTests::CheckCTConditionsFirstDerivative(*modelPointer);
+  REQUIRE(result == ModelTests::TestResults::Pass);
+}
+
+TEST_CASE("Checking second derivative of the sum of CT and CW in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+  auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
+  REQUIRE(result == ModelTests::TestResults::Pass);
+}

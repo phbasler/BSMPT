@@ -29,6 +29,10 @@ TestResults CheckTadpoleRelations(const Class_Potential_Origin &point);
 TestResults CheckNLOMasses(const Class_Potential_Origin &point);
 TestResults CheckVTreeSimplified(const Class_Potential_Origin &point);
 TestResults CheckVCounterSimplified(const Class_Potential_Origin &point);
+TestResults
+CheckCTConditionsFirstDerivative(const Class_Potential_Origin &point);
+TestResults
+CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point);
 
 TestResults CheckCKMUnitarity();
 

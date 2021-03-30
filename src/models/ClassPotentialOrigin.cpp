@@ -1031,7 +1031,8 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
   return res;
 }
 
-std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
+Eigen::MatrixXd
+Class_Potential_Origin::WeinbergSecondDerivativeAsMatrixXd() const
 {
   if (!CalcCouplingsdone)
   {
@@ -1040,7 +1041,6 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
     retmes += " tries to use Physical couplings but they are not initialised.";
     throw std::runtime_error(retmes);
   }
-  std::vector<double> res;
   const double NumZero = std::pow(10, -10);
   MatrixXd GaugePart(NHiggs, NHiggs), HiggsPart(NHiggs, NHiggs),
       QuarkPart(NHiggs, NHiggs), LeptonPart(NHiggs, NHiggs);
@@ -1172,7 +1172,13 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
       if (std::abs(ResMatrix(i, j)) < NumZero) ResMatrix(i, j) = 0;
     }
   }
+  return ResMatrix;
+}
+std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
+{
 
+  auto ResMatrix = WeinbergSecondDerivativeAsMatrixXd();
+  std::vector<double> res;
   for (std::size_t i = 0; i < NHiggs; i++)
   {
     for (std::size_t j = 0; j < NHiggs; j++)
