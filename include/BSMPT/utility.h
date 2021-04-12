@@ -81,6 +81,7 @@ enum class ModelIDs;
 }
 std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model);
 
+#ifdef Boost_FOUND
 #if BOOST_VERSION >= 107200
 template <typename T>
 using boost_cubic_b_spline =
@@ -88,6 +89,7 @@ using boost_cubic_b_spline =
 #else
 template <typename T>
 using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
+#endif
 #endif
 
 } // namespace BSMPT
