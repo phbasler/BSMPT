@@ -1272,6 +1272,11 @@ public:
    */
   Eigen::MatrixXd HessianCT(const std::vector<double> &v) const;
 
+  /**
+   * @brief GetCTIdentities
+   * @return vector with the identities required to vanish for the CT
+   * calculations. Returns an empty vector if not set otherwise.
+   */
   virtual std::vector<double> GetCTIdentities() const;
 };
 
