@@ -215,3 +215,14 @@ TEST_CASE("Checking second derivative of the sum of CT and CW in the C2HDM",
   auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
+
+TEST_CASE("Checking the identities required to vanish for the CT in the C2HDM",
+          "[c2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+  auto result = ModelTests::CheckCTIdentities(*modelPointer);
+  REQUIRE(result == ModelTests::TestResults::Pass);
+}

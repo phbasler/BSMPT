@@ -566,5 +566,20 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point)
   return result;
 }
 
+TestResults CheckCTIdentities(const Class_Potential_Origin &point)
+{
+  auto result     = TestResults::Pass;
+  auto identities = point.GetCTIdentities();
+  for (const auto &el : identities)
+  {
+    if (std::abs(el) > 1e-5)
+    {
+      result = TestResults::Fail;
+      break;
+    }
+  }
+  return result;
+}
+
 } // namespace ModelTests
 } // namespace BSMPT

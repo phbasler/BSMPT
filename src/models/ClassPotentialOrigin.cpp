@@ -3012,4 +3012,10 @@ Class_Potential_Origin::HessianCT(const std::vector<double> &v) const
   }
   return result;
 }
+
+std::vector<double> Class_Potential_Origin::GetCTIdentities() const
+{
+  return std::vector<double>();
+}
+
 } // namespace BSMPT

@@ -33,6 +33,7 @@ TestResults
 CheckCTConditionsFirstDerivative(const Class_Potential_Origin &point);
 TestResults
 CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point);
+TestResults CheckCTIdentities(const Class_Potential_Origin &point);
 
 TestResults CheckCKMUnitarity();
 

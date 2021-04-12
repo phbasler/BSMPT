@@ -40,11 +40,8 @@ potential in various extended Higgs models
  *  \section Citation
  *  If you use this program for your work please cite
 https://arxiv.org/abs/1803.02846 and https://arxiv.org/abs/2007.01725
- *
- *  \section install_sec Installation
- *
- *
- *
+
+ * \section Installation
  * \subsection Dependencies
 1. [GSL](http://www.gnu.org/software/gsl/) library: The code assume GSL is
 installed in PATH
@@ -1274,6 +1271,8 @@ public:
    * @return
    */
   Eigen::MatrixXd HessianCT(const std::vector<double> &v) const;
+
+  virtual std::vector<double> GetCTIdentities() const;
 };
 
 } // namespace BSMPT
