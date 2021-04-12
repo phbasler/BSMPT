@@ -162,16 +162,18 @@ $(document).ready(function(){initNavTree('utility_8h_source.html',''); initResiz
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;std::ostream &amp;<a class="code" href="utility_8h.html#adc8d51ff68d9148100c44051d41c46ae">operator&lt;&lt;</a>(std::ostream &amp;os, <span class="keyword">const</span> <a class="code" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;Model);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#if BOOST_VERSION &gt;= 107200</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">using</span> boost_cubic_b_spline =</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    boost::math::interpolators::cardinal_cubic_b_spline&lt;T&gt;;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">using</span> boost_cubic_b_spline = boost::math::cubic_b_spline&lt;T&gt;;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;} <span class="comment">// namespace BSMPT</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#ifdef Boost_FOUND</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#if BOOST_VERSION &gt;= 107200</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">using</span> boost_cubic_b_spline =</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    boost::math::interpolators::cardinal_cubic_b_spline&lt;T&gt;;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="keyword">using</span> boost_cubic_b_spline = boost::math::cubic_b_spline&lt;T&gt;;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;} <span class="comment">// namespace BSMPT</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="autility_8h_html_adc8d51ff68d9148100c44051d41c46ae"><div class="ttname"><a href="utility_8h.html#adc8d51ff68d9148100c44051d41c46ae">BSMPT::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const std::vector&lt; T &gt; &amp;vec)</div><div class="ttdef"><b>Definition:</b> utility.h:57</div></div>
