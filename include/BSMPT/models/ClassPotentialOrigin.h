@@ -183,11 +183,11 @@ example/C2HDM_Input.dat_vevevo.
  * The C2HDM example is called through
  *
  * 	 	./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat
-example/test_TripleHiggsNLO.dat 2 2
+example/test_TripleHiggsCouplingNLO.dat 2 2
  *
  * with the result given in example/test_TripleHiggsNLO.dat which
  * can be compared with the already available file
-example/C2HDM_Input.dat_TripleHiggsNLO .
+example/C2HDM_Input.dat_TripleHiggsCouplingNLO .
  *
  *  \subsection CalculateEWBG
  *  This program calculates the difference between baryons and anti-baryons
