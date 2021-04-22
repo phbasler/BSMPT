@@ -39,7 +39,12 @@ endif()
 add_library(Minimizer ${header} ${src})
 target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads)
 if(libcmaes_FOUND)
-  target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
+  if(TARGET libcmaes::cmaes)
+    target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
+  elseif(TARGET BSMPT::cmaes)
+    target_link_libraries(Minimizer PRIVATE BSMPT::cmaes OpenMP::OpenMP_CXX)
+    endif()
+
 endif()
 
 

@@ -87,12 +87,6 @@ set(ExportList
   Utility
   )
 
-if(EXPORT_CMAES)
-  set(ExportList
-    ${ExportList}
-    cmaes
-    )
-endif(EXPORT_CMAES)
 
 if(Boost_FOUND)
 set(ExportList
@@ -103,11 +97,23 @@ set(ExportList
   )
 endif(Boost_FOUND)
 
+
 export(
   TARGETS ${ExportList}
   NAMESPACE BSMPT::
   FILE BSMPTTargets.cmake
   )
+
+if(EXPORT_CMAES)
+  export(
+  TARGETS cmaes
+  NAMESPACE libcmaes::
+  APPEND FILE BSMPTTargets.cmake
+  )
+endif(EXPORT_CMAES)
+
+
+
 
 configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
 
