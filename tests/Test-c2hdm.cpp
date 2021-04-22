@@ -40,7 +40,7 @@ TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
   }
 }
 
-TEST_CASE("Checking EWPT for C2HDM", "[c2hdm-ewpt]")
+TEST_CASE("Checking EWPT for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -267,11 +267,13 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
     {
       for (std::size_t k{0}; k < NHiggs; ++k)
       {
-        // INFO("Current Minimizer Set-up:\t"<<Minimizer::WhichMinimizerDefault);
-        // INFO("Failed at Tree-Coupling ("
+        // INFO("Current Minimizer
+        // Set-up:\t"<<Minimizer::WhichMinimizerDefault); INFO("Failed at
+        // Tree-Coupling ("
         //      << i << "," << j << "," << k << ")\tFound:\t"
         //      << modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k)
-        //      << "\tExpextec:\t" << Expected.CheckTripleTree.at(i).at(j).at(k));
+        //      << "\tExpextec:\t" <<
+        //      Expected.CheckTripleTree.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
               Expected.CheckTripleTree.at(i).at(j).at(k));
         // INFO("Failed at CT-Coupling ("

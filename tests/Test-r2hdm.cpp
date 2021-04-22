@@ -6,6 +6,10 @@
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility.h>
 
+#include "GenerateTestCompares/R2HDM.h"
+
+const Compare_R2HDM Expected;
+
 const std::vector<double> example_point_R2HDM{/* lambda_1 = */ 2.740595,
                                               /* lambda_2 = */ 0.242356,
                                               /* lambda_3 = */ 5.534491,
@@ -44,11 +48,15 @@ TEST_CASE("Checking EWPT for R2HDM", "[r2hdm]")
   std::vector<double> Check;
   auto EWPT = Minimizer::PTFinder_gen_all(
       modelPointer, 0, 300, Minimizer::WhichMinimizerDefault);
-  const double omega_c_expected = 190.7376740105783;
-  const double Tc_expected      = 155.2825927734375;
-  const std::vector<double> min_expected{
-      0, -54.246714903745641, -182.86102430293158, 0};
+
+  const double omega_c_expected =
+      Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).vc;
+  const double Tc_expected =
+      Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).Tc;
+  const std::vector<double> min_expected =
+      Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).EWMinimum;
   REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
+
   REQUIRE(std::abs(omega_c_expected - EWPT.vc) / omega_c_expected <= 1e-4);
   REQUIRE(std::abs(Tc_expected - EWPT.Tc) / Tc_expected <= 1e-4);
   for (std::size_t i{0}; i < EWPT.EWMinimum.size(); ++i)
@@ -214,4 +222,43 @@ TEST_CASE("Checking second derivative of the sum of CT and CW in the R2HDM",
   modelPointer->initModel(example_point_R2HDM);
   auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
+}
+
+TEST_CASE("Checking triple higgs NLO couplings in the R2HDM", "[r2hdm]")
+{
+
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+  modelPointer->Prepare_Triple();
+  modelPointer->TripleHiggsCouplings();
+
+  auto Check = [](auto result, auto expected) {
+    if (expected != 0)
+    {
+      REQUIRE(std::abs(result - expected) / std::abs(expected) < 1e-4);
+    }
+    else
+    {
+      REQUIRE(std::abs(result) < 1e-4);
+    }
+  };
+
+  auto NHiggs = modelPointer->get_NHiggs();
+  for (std::size_t i{0}; i < NHiggs; ++i)
+  {
+    for (std::size_t j{0}; j < NHiggs; ++j)
+    {
+      for (std::size_t k{0}; k < NHiggs; ++k)
+      {
+        Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
+              Expected.CheckTripleTree.at(i).at(j).at(k));
+        Check(modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k),
+              Expected.CheckTripleCT.at(i).at(j).at(k));
+        Check(modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k),
+              Expected.CheckTripleCW.at(i).at(j).at(k));
+      }
+    }
+  }
 }

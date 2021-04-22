@@ -6,6 +6,8 @@
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility.h>
 
+#include "GenerateTestCompares/RN2HDM.h"
+
 const std::vector<double> example_point_RN2HDM{/* lambda_1 = */ 0.300812,
                                                /* lambda_2 = */ 0.321809,
                                                /* lambda_3 = */ -0.133425,
@@ -20,6 +22,7 @@ const std::vector<double> example_point_RN2HDM{/* lambda_1 = */ 0.300812,
                                                /* Yukawa Type = */ 1};
 
 constexpr auto Model = BSMPT::ModelID::ModelIDs::RN2HDM;
+const Compare_RN2HDM Expected;
 
 TEST_CASE("Checking NLOVEV for N2HDM", "[n2hdm]")
 {
@@ -50,12 +53,14 @@ TEST_CASE("Checking EWPT for N2HDM", "[n2hdm]")
   std::vector<double> Check;
   auto EWPT = Minimizer::PTFinder_gen_all(
       modelPointer, 0, 300, Minimizer::WhichMinimizerDefault);
-  const double omega_c_expected = 180.5917335676395;
-  const double Tc_expected      = 120.7305908203125;
-  const std::vector<double> min_expected{
-      0, 0, -32.70827526931041, -177.6050195289305, -297.0418903961274};
-
+  const double omega_c_expected =
+      Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).vc;
+  const double Tc_expected =
+      Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).Tc;
+  const std::vector<double> min_expected =
+      Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).EWMinimum;
   REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
+
   std::cout << "Passed" << std::endl;
   REQUIRE(std::abs(omega_c_expected - EWPT.vc) / omega_c_expected <= 1e-2);
   std::cout << "Passed" << std::endl;
@@ -225,4 +230,43 @@ TEST_CASE("Checking second derivative of the sum of CT and CW in the N2HDM",
   modelPointer->initModel(example_point_RN2HDM);
   auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
+}
+
+TEST_CASE("Checking triple higgs NLO couplings in the N2HDM", "[n2hdm]")
+{
+
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::RN2HDM);
+  modelPointer->initModel(example_point_RN2HDM);
+  modelPointer->Prepare_Triple();
+  modelPointer->TripleHiggsCouplings();
+
+  auto Check = [](auto result, auto expected) {
+    if (expected != 0)
+    {
+      REQUIRE(std::abs(result - expected) / std::abs(expected) < 1e-4);
+    }
+    else
+    {
+      REQUIRE(std::abs(result) < 1e-4);
+    }
+  };
+
+  auto NHiggs = modelPointer->get_NHiggs();
+  for (std::size_t i{0}; i < NHiggs; ++i)
+  {
+    for (std::size_t j{0}; j < NHiggs; ++j)
+    {
+      for (std::size_t k{0}; k < NHiggs; ++k)
+      {
+        Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
+              Expected.CheckTripleTree.at(i).at(j).at(k));
+        Check(modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k),
+              Expected.CheckTripleCT.at(i).at(j).at(k));
+        Check(modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k),
+              Expected.CheckTripleCW.at(i).at(j).at(k));
+      }
+    }
+  }
 }
