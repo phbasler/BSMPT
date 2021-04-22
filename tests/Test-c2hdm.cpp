@@ -64,6 +64,11 @@ TEST_CASE("Checking EWPT for C2HDM", "[c2hdm-ewpt]")
     auto expected = std::abs(min_expected.at(i));
     if (expected != 0)
     {
+      UNSCOPED_INFO("Current Option for Minimizer:\t"
+                    << Minimizer::WhichMinimizerDefault);
+      UNSCOPED_INFO("This ist the position:"
+                    << i << "\tFound solution =" << EWPT.EWMinimum.at(i)
+                    << "\tExpected solution = " << min_expected.at(i));
       REQUIRE(std::abs(res - expected) / expected <= 1e-4);
     }
     else
@@ -262,10 +267,23 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
     {
       for (std::size_t k{0}; k < NHiggs; ++k)
       {
+        // INFO("Current Minimizer Set-up:\t"<<Minimizer::WhichMinimizerDefault);
+        // INFO("Failed at Tree-Coupling ("
+        //      << i << "," << j << "," << k << ")\tFound:\t"
+        //      << modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k)
+        //      << "\tExpextec:\t" << Expected.CheckTripleTree.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
               Expected.CheckTripleTree.at(i).at(j).at(k));
+        // INFO("Failed at CT-Coupling ("
+        //      << i << "," << j << "," << k << ")\tFound:\t"
+        //      << modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k)
+        //      << "\tExpextec:\t" << Expected.CheckTripleCT.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k),
               Expected.CheckTripleCT.at(i).at(j).at(k));
+        // INFO("Failed at CW-Coupling ("
+        //      << i << "," << j << "," << k << ")\tFound:\t"
+        //      << modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k)
+        //      << "\tExpextec:\t" << Expected.CheckTripleCW.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k),
               Expected.CheckTripleCW.at(i).at(j).at(k));
       }
