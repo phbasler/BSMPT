@@ -139,23 +139,25 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const int &seed,
-    const std::size_t &MaxSol)
+    const std::size_t &MaxSol,
+    bool UseMultiThreading)
 {
   std::vector<std::vector<double>> saveAllMinima;
-  auto result =
-      GSL_Minimize_gen_all(modelPointer, Temp, seed, saveAllMinima, MaxSol);
+  auto result = GSL_Minimize_gen_all(
+      modelPointer, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
   return result;
 }
 
 std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
-    const int &seed)
+    const int &seed,
+    bool UseMultiThreading)
 {
   std::vector<std::vector<double>> saveAllMinima;
   std::size_t MaxSol = 20;
-  auto result =
-      GSL_Minimize_gen_all(modelPointer, Temp, seed, saveAllMinima, MaxSol);
+  auto result        = GSL_Minimize_gen_all(
+      modelPointer, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
   return result;
 }
 
@@ -164,7 +166,8 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const double &Temp,
     const int &seed,
     std::vector<std::vector<double>> &saveAllMinima,
-    const std::size_t &MaxSol)
+    const std::size_t &MaxSol,
+    bool UseMultiThreading)
 {
   struct GSL_params params(modelPointer, Temp);
 
@@ -173,8 +176,7 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
   std::default_random_engine randGen(seed);
   double RNDMax        = 500;
   std::size_t MaxTries = 600; // 600;
-  std::atomic<std::size_t> tries{0};
-  std::size_t nCol = dim + 2;
+  std::size_t nCol     = dim + 2;
 
   std::queue<std::vector<double>> StartingPoints;
   for (std::size_t i{0}; i < MaxTries; ++i)
@@ -209,12 +211,17 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
                        std::queue<std::vector<double>> &mStartingPoints,
                        GSL_params &mparams,
                        std::mutex &mWriteResultLock,
-                       std::queue<std::vector<double>> &mResults) {
+                       std::queue<std::vector<double>> &mResults,
+                       bool UseLock = true) {
     while (mFoundSolutions < mMaxSol and not mStartingPoints.empty())
     {
       std::vector<double> start;
       {
-        std::unique_lock<std::mutex> lock(mWriteResultLock);
+        std::unique_lock<std::mutex> lock;
+        if (UseLock)
+        {
+          lock = std::unique_lock<std::mutex>(mWriteResultLock);
+        }
         start = mStartingPoints.front();
         mStartingPoints.pop();
       }
@@ -223,28 +230,46 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
       auto status = GSL_Minimize_From_S_gen_all(mparams, sol, start);
       if (status == GSL_SUCCESS)
       {
-        std::unique_lock<std::mutex> lock(mWriteResultLock);
+        std::unique_lock<std::mutex> lock;
+        if (UseLock)
+        {
+          lock = std::unique_lock<std::mutex>(mWriteResultLock);
+        }
         ++mFoundSolutions;
         mResults.push(sol);
       }
     }
   };
 
-  for (std::size_t i = 0; i < Num_threads; ++i)
+  if (UseMultiThreading)
   {
-    MinThreads.push_back(std::thread([&]() {
-      thread_Job(FoundSolutions,
-                 MaxSol,
-                 StartingPoints,
-                 params,
-                 WriteResultLock,
-                 Results);
-    }));
-  }
 
-  for (auto &thr : MinThreads)
+    for (std::size_t i = 0; i < Num_threads; ++i)
+    {
+      MinThreads.push_back(std::thread([&]() {
+        thread_Job(FoundSolutions,
+                   MaxSol,
+                   StartingPoints,
+                   params,
+                   WriteResultLock,
+                   Results);
+      }));
+    }
+
+    for (auto &thr : MinThreads)
+    {
+      if (thr.joinable()) thr.join();
+    }
+  }
+  else
   {
-    if (thr.joinable()) thr.join();
+    thread_Job(FoundSolutions,
+               MaxSol,
+               StartingPoints,
+               params,
+               WriteResultLock,
+               Results,
+               false);
   }
 
   while (not Results.empty())

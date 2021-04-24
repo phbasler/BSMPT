@@ -104,7 +104,8 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &Temp,
                  std::vector<double> &Check,
                  const std::vector<double> &start,
-                 const int &WhichMinimizer)
+                 const int &WhichMinimizer,
+                 bool UseMultithreading)
 {
   std::vector<double> PotValues;
   std::vector<std::vector<double>> Minima;
@@ -134,21 +135,37 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
     if (UseMinimizer.UseCMAES or UseMinimizer.UseNLopt)
     {
-      thread_GSL =
-          std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
-            std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-                modelPointer, Temp, 5); // If additionally CMAES is minimising
-                                        // GSL does not need as much solutions
-          });
+      if (UseMultithreading)
+      {
+        thread_GSL =
+            std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
+              std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
+                  modelPointer, Temp, 5); // If additionally CMAES is minimising
+                                          // GSL does not need as much solutions
+            });
+      }
+      else
+      {
+        std::tie(solGSLMin, gslMinSuc) =
+            GSL_Minimize_gen_all(modelPointer, Temp, 5, UseMultithreading);
+      }
     }
     else
     {
       std::size_t MaxSol = 50;
-      thread_GSL         = std::thread(
-          [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
-            std::tie(solGSLMin, gslMinSuc) =
-                GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
-          });
+      if (UseMultithreading)
+      {
+        thread_GSL = std::thread(
+            [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
+              std::tie(solGSLMin, gslMinSuc) =
+                  GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
+            });
+      }
+      else
+      {
+        std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
+            modelPointer, Temp, 5, MaxSol, UseMultithreading);
+      }
     }
   }
 #ifdef libcmaes_FOUND
@@ -156,9 +173,16 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   LibCMAES::LibCMAESReturn LibCMAES;
   if (UseMinimizer.UseCMAES)
   {
-    thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
+    if (UseMultithreading)
+    {
+      thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
+        LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
+      });
+    }
+    else
+    {
       LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
-    });
+    }
   }
 #else
   (void)start;
@@ -169,14 +193,21 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   std::thread thread_NLopt;
   if (UseMinimizer.UseNLopt)
   {
-    thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
+    if (UseMultithreading)
+    {
+      thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
+        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
+      });
+    }
+    else
+    {
       NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
-    });
+    }
   }
 #endif
 
 #ifdef NLopt_FOUND
-  if (thread_NLopt.joinable())
+  if (UseMultithreading and thread_NLopt.joinable())
   {
     thread_NLopt.join();
   }
@@ -189,7 +220,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 #endif
 
 #ifdef libcmaes_FOUND
-  if (thread_CMAES.joinable())
+  if (UseMultithreading and thread_CMAES.joinable())
   {
     thread_CMAES.join();
     auto errC          = LibCMAES.CMAESStatus;
@@ -201,7 +232,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   }
 #endif
 
-  if (thread_GSL.joinable())
+  if (UseMultithreading and thread_GSL.joinable())
   {
     thread_GSL.join();
   }

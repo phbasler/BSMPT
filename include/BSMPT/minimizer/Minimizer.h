@@ -114,7 +114,8 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &Temp,
                  std::vector<double> &Check,
                  const std::vector<double> &start,
-                 const int &WhichMinimizer = WhichMinimizerDefault);
+                 const int &WhichMinimizer = WhichMinimizerDefault,
+                 bool UseMultithreading    = true);
 
 /**
  * @brief The MinimizerStatus enum for the Statusflags of the minimizer
