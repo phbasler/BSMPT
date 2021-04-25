@@ -123,8 +123,12 @@ try
       std::vector<double> vevsymmetricSolution, checksym, startpoint;
       for (const auto &el : EWPT.EWMinimum)
         startpoint.push_back(0.5 * el);
-      auto VEVsym = Minimizer::Minimize_gen_all(
-          modelPointer, EWPT.Tc + 1, checksym, startpoint, args.WhichMinimizer);
+      auto VEVsym = Minimizer::Minimize_gen_all(modelPointer,
+                                                EWPT.Tc + 1,
+                                                checksym,
+                                                startpoint,
+                                                args.WhichMinimizer,
+                                                args.UseMultithreading);
 
       if (args.FirstLine == args.LastLine)
       {
