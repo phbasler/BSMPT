@@ -34,7 +34,7 @@ Class_Potential_C2HDM::Class_Potential_C2HDM()
   NChargedHiggs = 4;
 
   nPar   = 9;
-  nParCT = 13;
+  nParCT = 14;
 
   nVEV = 4;
   if (!IncludeChargeBreakingVEV) nVEV = 3;
@@ -93,6 +93,7 @@ std::vector<std::string> Class_Potential_C2HDM::addLegendCT() const
   labels.push_back("DT1");
   labels.push_back("DT2");
   labels.push_back("DT3");
+  labels.push_back("Dim_L6");
   return labels;
 }
 
@@ -2125,6 +2126,7 @@ void Class_Potential_C2HDM::write() const
   std::cout << "DT1 := " << DT1 << ";\n";
   std::cout << "DT2 := " << DT2 << ";\n";
   std::cout << "DT3:= " << DT3 << ";\n";
+  std::cout << "DIL6:= " << DIL6CT << ";\n";
 
   if (CalcCouplingsdone)
   {
@@ -2313,8 +2315,11 @@ std::vector<double> Class_Potential_C2HDM::calc_CT() const
       HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
   }
 
-  double freepar = -(2 * HesseWeinberg(3, 3)) / std::pow(v1, 2) +
-                  (2 * HesseWeinberg(7, 7)) / std::pow(v1, 2); //Free CT parameter is chosen such that DL4CT is zero
+  double freepar =
+      -(2 * HesseWeinberg(3, 3)) / std::pow(v1, 2) +
+      (2 * HesseWeinberg(7, 7)) /
+          std::pow(v1,
+                   2); // Free CT parameter is chosen such that DL4CT is zero
   // Du1CT
   parCT.push_back(freepar * std::pow(v2, 2) + HesseWeinberg(4, 4) / 2. +
                   (v2 * HesseWeinberg(4, 6)) / (2. * v1) -
@@ -3159,8 +3164,8 @@ Class_Potential_C2HDM::VCounterSimplified(const std::vector<double> &v) const
   res += DT2 * v2;
   res += DT3 * vcp;
   res += DTCharged * vcb;
-  res += -0.5*DIL6CT*std::pow(v1,3)*vcp; //Additional CT 
-  
+  res += -0.5 * DIL6CT * std::pow(v1, 3) * vcp; // Additional CT
+
   return res;
 }
 
