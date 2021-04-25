@@ -267,7 +267,8 @@ EWPTReturnType
 PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &TempStart,
                  const double &TempEnd,
-                 const int &WhichMinimizer)
+                 const int &WhichMinimizer,
+                 bool UseMultithreading)
 {
 
   EWPTReturnType result;
@@ -288,8 +289,12 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   for (std::size_t k = 0; k < dim; k++)
     startEnde.push_back(modelPointer->get_vevTreeMin(k));
-  solEnd = Minimize_gen_all(
-      modelPointer, TempEnd, checkEnde, startEnde, WhichMinimizer);
+  solEnd    = Minimize_gen_all(modelPointer,
+                            TempEnd,
+                            checkEnde,
+                            startEnde,
+                            WhichMinimizer,
+                            UseMultithreading);
   solEndPot = modelPointer->MinimizeOrderVEV(solEnd);
   vEnd      = modelPointer->EWSBVEV(solEndPot);
 
@@ -304,8 +309,12 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   for (std::size_t k = 0; k < dim; k++)
     startStart.push_back(modelPointer->get_vevTreeMin(k));
-  solStart = Minimize_gen_all(
-      modelPointer, TempStart, checkStart, startStart, WhichMinimizer);
+  solStart    = Minimize_gen_all(modelPointer,
+                              TempStart,
+                              checkStart,
+                              startStart,
+                              WhichMinimizer,
+                              UseMultithreading);
   solStartPot = modelPointer->MinimizeOrderVEV(solStart);
   vStart      = modelPointer->EWSBVEV(solStartPot);
 
@@ -337,8 +346,12 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     solMitte.clear();
     checkMitte.clear();
     solMittePot.clear();
-    solMitte = Minimize_gen_all(
-        modelPointer, TM, checkMitte, startMitte, WhichMinimizer);
+    solMitte    = Minimize_gen_all(modelPointer,
+                                TM,
+                                checkMitte,
+                                startMitte,
+                                WhichMinimizer,
+                                UseMultithreading);
     solMittePot = modelPointer->MinimizeOrderVEV(solMitte);
     vMitte      = modelPointer->EWSBVEV(solMittePot);
 
@@ -392,13 +405,15 @@ Minimize_gen_all_tree_level(const ModelID::ModelIDs &Model,
                             const std::vector<double> &parCT,
                             std::vector<double> &Check,
                             const std::vector<double> &start,
-                            int WhichMinimizer)
+                            int WhichMinimizer,
+                            bool UseMultithreading)
 {
   std::shared_ptr<Class_Potential_Origin> modelPointer =
       ModelID::FChoose(Model);
   modelPointer->set_All(par, parCT);
   modelPointer->SetUseTreeLevel(true);
-  auto sol = Minimize_gen_all(modelPointer, 0, Check, start, WhichMinimizer);
+  auto sol = Minimize_gen_all(
+      modelPointer, 0, Check, start, WhichMinimizer, UseMultithreading);
   modelPointer->SetUseTreeLevel(false);
   return sol;
 }

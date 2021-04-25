@@ -173,7 +173,8 @@ EWPTReturnType
 PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &TempStart,
                  const double &TempEnd,
-                 const int &WhichMinimizer = WhichMinimizerDefault);
+                 const int &WhichMinimizer = WhichMinimizerDefault,
+                 bool UseMultithreading    = true);
 
 /**
  * @brief Minimize_gen_all_tree_level Minimizes the tree-level potential
@@ -192,7 +193,8 @@ Minimize_gen_all_tree_level(const ModelID::ModelIDs &Model,
                             const std::vector<double> &parCT,
                             std::vector<double> &Check,
                             const std::vector<double> &start,
-                            int WhichMinimizer = WhichMinimizerDefault);
+                            int WhichMinimizer     = WhichMinimizerDefault,
+                            bool UseMultithreading = true);
 
 /**
  * @brief FindNextLocalMinima finds the local minima from the given starting
