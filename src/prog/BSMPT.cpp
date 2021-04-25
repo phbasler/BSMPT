@@ -54,6 +54,7 @@ struct CLIOptions
   bool UseCMAES{Minimizer::UseLibCMAESDefault};
   bool UseNLopt{Minimizer::UseNLoptDefault};
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+  bool UseMultithreading{true};
 
   CLIOptions(int argc, char *argv[]);
   bool good() const;
@@ -118,7 +119,7 @@ try
       }
 
       auto EWPT = Minimizer::PTFinder_gen_all(
-          modelPointer, 0, 300, args.WhichMinimizer);
+          modelPointer, 0, 300, args.WhichMinimizer, args.UseMultithreading);
       std::vector<double> vevsymmetricSolution, checksym, startpoint;
       for (const auto &el : EWPT.EWMinimum)
         startpoint.push_back(0.5 * el);
@@ -249,6 +250,10 @@ CLIOptions::CLIOptions(int argc, char *argv[])
               << "Use the NLopt library to minimize the effective potential"
               << std::endl;
     std::cout << std::setw(SizeOfFirstColumn) << std::left
+              << "--UseMultithreading = true"
+              << "Enables/Disables multi threading for the minimizers"
+              << std::endl;
+    std::cout << std::setw(SizeOfFirstColumn) << std::left
               << "--TerminalOutput="
               << "y/n Turns on additional information in the terminal during "
                  "the calculation."
@@ -310,6 +315,11 @@ CLIOptions::CLIOptions(int argc, char *argv[])
       else if (StringStartsWith(el, "--usenlopt="))
       {
         UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
+      }
+      else if (StringStartsWith(el, "--usemultithreading="))
+      {
+        UseMultithreading =
+            el.substr(std::string("--usemultithreading=").size()) == "true";
       }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
