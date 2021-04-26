@@ -34,7 +34,7 @@ Class_Potential_C2HDM::Class_Potential_C2HDM()
   NChargedHiggs = 4;
 
   nPar   = 9;
-  nParCT = 14;
+  nParCT = 15;
 
   nVEV = 4;
   if (!IncludeChargeBreakingVEV) nVEV = 3;

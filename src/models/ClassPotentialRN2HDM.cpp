@@ -163,7 +163,7 @@ Class_Potential_RN2HDM::addLegendTripleCouplings() const
 std::vector<std::string> Class_Potential_RN2HDM::addLegendVEV() const
 {
   std::vector<std::string> labels;
-  labels.push_back("omega_{CB");
+  labels.push_back("omega_{CB}");
   labels.push_back("omega_{CP}");
   labels.push_back("omega_1");
   labels.push_back("omega_2");
