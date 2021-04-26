@@ -90,6 +90,7 @@ std::vector<std::string> Class_Potential_C2HDM::addLegendCT() const
   labels.push_back("DL4");
   labels.push_back("Dre_L5");
   labels.push_back("Dim_L5");
+  labels.push_back("DTCharged");
   labels.push_back("DT1");
   labels.push_back("DT2");
   labels.push_back("DT3");
