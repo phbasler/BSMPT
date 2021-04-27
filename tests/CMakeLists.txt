@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 add_library(Catch catch.cpp)
 target_include_directories(Catch INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 

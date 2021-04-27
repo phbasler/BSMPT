@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Changelog
 
 # 2020/07/06: Release of v2.0

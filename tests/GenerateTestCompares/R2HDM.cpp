@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "R2HDM.h" 
 Compare_R2HDM::Compare_R2HDM()
 {

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/Kfactors")
 set(header
 	${header_path}/Kfactors.h
