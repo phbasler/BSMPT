@@ -73,17 +73,7 @@ else(Boost_FOUND)
   message("PlotEWBG_nL will not compile as Boost is missing")
 endif(Boost_FOUND)
 
-add_executable(RenormScale prog/RenormScale.cpp)
-target_link_libraries(RenormScale Minimizer Models Utility)
-target_compile_features(RenormScale PUBLIC cxx_std_14)
 
-if(Boost_FOUND)
-add_executable(EWBGRenormScale prog/PlotEWBG_mu.cpp)
-target_link_libraries(EWBGRenormScale Minimizer Models Baryo Utility)
-target_compile_features(EWBGRenormScale PUBLIC cxx_std_14)
-else(Boost_FOUND)
-  message("EWBGRenormScale will not compile as Boost is missing")
-endif(Boost_FOUND)
 
 
 
