@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -585,5 +586,10 @@ TestResults CheckCTIdentities(const Class_Potential_Origin &point)
   return result;
 }
 
+TestResults CheckCTNumber(const Class_Potential_Origin &point)
+{
+  return (point.calc_CT().size() == point.get_nParCT()) ? TestResults::Pass
+                                                        : TestResults::Fail;
+}
 } // namespace ModelTests
 } // namespace BSMPT

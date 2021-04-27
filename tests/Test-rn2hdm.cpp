@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -273,4 +274,14 @@ TEST_CASE("Checking triple higgs NLO couplings in the N2HDM", "[n2hdm]")
       }
     }
   }
+}
+
+TEST_CASE("Check number of calculated CT parameters in the N2HDM", "[n2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::RN2HDM);
+  modelPointer->initModel(example_point_RN2HDM);
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckCTNumber(*modelPointer));
 }

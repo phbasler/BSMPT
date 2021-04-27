@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -38,6 +39,7 @@ CheckCTConditionsFirstDerivative(const Class_Potential_Origin &point);
 TestResults
 CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point);
 TestResults CheckCTIdentities(const Class_Potential_Origin &point);
+TestResults CheckCTNumber(const Class_Potential_Origin &point);
 
 TestResults CheckCKMUnitarity();
 
