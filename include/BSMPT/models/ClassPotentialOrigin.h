@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -42,7 +43,8 @@ After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake`
 to link Eigen3
 
 3. [libcmaes](https://github.com/beniz/libcmaes): Additionally to GSL you should
-either use libcmaes or NLopt. For libcmaes you have to set
+either use libcmaes or NLopt. If libcmaes is not found automatically you can set
+the path with
 
     `-Dlibcmaes_ROOT=/path/to/cmaes`
 
@@ -192,12 +194,6 @@ config_file
  *  with the result given in example/test_EWBG.dat which can be compared with
 the already available file example/C2HDM_Input.dat_EWBG.
  *
- * \subsection RenormScale
- * This executable varies the MSbar renormalisation scale of a given parameter
-point between a factor of 0.5 and 1.5 of its original
- * value and calculates the EWPT and the CT parameters at each scale. As no RGE
-running is included yet, this has to be taken with
- * caution.
  *
  * \subsection PlotEWBG_vw
  * This executable varies the wall velocity of a given parameter point and
@@ -207,12 +203,6 @@ calculates the EWBG for each velocity.
  * This executable calculates the left-handed fermion density in front of the
 wall as a function of the distance to the bubble wall.
  *
- * \subsection EWBGRenormScale
- * This executable varies the MSbar renormalisation scale of a given parameter
-point between a factor of 0.5 and 1.5 of its original
- * value and calculates the EWBG and the CT parameters at each scale. As no RGE
-running is included yet, this has to be taken with
- * caution.
  *
  *
  */
