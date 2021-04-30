@@ -48,7 +48,7 @@ the path with
 
     `-Dlibcmaes_ROOT=/path/to/cmaes`
 
-    If cmaes is not installed then it will be installed in your build directory.
+   If cmaes is not installed then it will be installed in your build directory.
 For more details on the libcmaes installation, e.g. possible dependencies, visit
 their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to
 install or use it, you can set `-DUseLibCMAES=OFF`
@@ -64,7 +64,7 @@ With the dependencies and options you can build the programm with
 
         mkdir build && cd build
         cmake (OPTIONS from Dependencies) ..
-        make
+        cmake --build . -j
 
 
 Note to Mac Users: You have to use the g++ compiler as clang does not support
@@ -140,7 +140,7 @@ compared with the already available file
  * can be compared with the already available file
 example/C2HDM_Input.dat_NLOVEV.
  *
- *  \subsection VEVEVO
+ * \subsection VEVEVO
  * This program calculates the evolution of the vacuum expecation value of a
 given point with the temperature.
  * It is called through
@@ -153,7 +153,7 @@ with 'Tempstep' until 'Tempend'.
  * For our C2HDM example this would be
  *
  *  	./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5
-150
+        150
  *
  * where the result for the NLO VEV is given in example/test_VEVEVO.dat as
  * function of the temperature in the interval between 0 and 150 GeV in steps of
@@ -177,21 +177,23 @@ example/test_TripleHiggsCouplingNLO.dat 2 2
  * can be compared with the already available file
 example/C2HDM_Input.dat_TripleHiggsCouplingNLO .
  *
- *  \subsection CalculateEWBG
- *  This program calculates the difference between baryons and anti-baryons
+ * \subsection CalculateEWBG
+ *
+ * This program calculates the difference between baryons and anti-baryons
 normalized to the photon density generated through the EWPT.
  *  Please beware that this is only tested for the C2HDM so far and the general
 implementation is future work. It is called through
  *
  *  	./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd
-config_file
+        config_file
+
  *
- *  An example is given for the example/C2HDM_Input.dat parameter point through
+ * An example is given for the example/C2HDM_Input.dat parameter point through
  *
  *      ./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat
-2 2 example/EWBG_config.txt
+        2 2 example/EWBG_config.txt
  *
- *  with the result given in example/test_EWBG.dat which can be compared with
+ * with the result given in example/test_EWBG.dat which can be compared with
 the already available file example/C2HDM_Input.dat_EWBG.
  *
  *

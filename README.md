@@ -69,8 +69,8 @@ With the dependencies and options you can build the programm with
   
         mkdir build && cd build  
         cmake (OPTIONS from Dependencies) ..  
-        make -j  
-        make doc
+        cmake --build . -j  
+        cmake --build . -j -t doc
     
 
 The make doc will use doxygen to create the online help in build/html which can be opened locally.
