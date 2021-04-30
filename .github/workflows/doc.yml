@@ -20,7 +20,7 @@ jobs:
      - name: installPackages
        run: sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-cxx-dev libboost-all-dev doxygen
      - name: cmake
-       run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. && make doc
+       run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. && cmake --build . -j -t doc
      - name: Deploy
        uses: JamesIves/github-pages-deploy-action@releases/v3
        with:
