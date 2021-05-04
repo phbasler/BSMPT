@@ -6,6 +6,15 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Changelog
 
+# 2020/01/03: Release of v2.1
+- Changed to multithreading in the minimizer
+- Included a fix for deprecating cubic splines starting in boost 1.72
+- Fixed an out-of-bounds error which caused a crash on mac
+- Provided some first unit tests with the ctest environment
+- Updated the cmaes inclusion to their new cmake setup
+- Updated the NLopt inclusion to use their delivered FindCmake instead of our own
+
+
 # 2020/07/06: Release of v2.0
 
 ## New Physics
