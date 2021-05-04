@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.1.0</span>
+   &#160;<span id="projectnumber">2.2.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -121,12 +121,12 @@ Functions</h2></td></tr>
 <tr class="separator:aefc02a1cc27518df3f9fa7386e513e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b4b2c773619ab5483982cfb92380024"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#a4b4b2c773619ab5483982cfb92380024">BSMPT::Minimizer::GSL_Minimize_From_S_gen_all</a> (struct GSL_params &amp;p, std::vector&lt; double &gt; &amp;sol, const std::vector&lt; double &gt; &amp;start)</td></tr>
 <tr class="separator:a4b4b2c773619ab5483982cfb92380024"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14779b16048d4b797180c72fee762664"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; double &gt;, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#a14779b16048d4b797180c72fee762664">BSMPT::Minimizer::GSL_Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed, const std::size_t &amp;MaxSol)</td></tr>
-<tr class="separator:a14779b16048d4b797180c72fee762664"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1d3d1d594dddb67de0221136636f96c"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; double &gt;, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#aa1d3d1d594dddb67de0221136636f96c">BSMPT::Minimizer::GSL_Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed)</td></tr>
-<tr class="separator:aa1d3d1d594dddb67de0221136636f96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabb34357316a6e706252c685584c76fa"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; double &gt;, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#aabb34357316a6e706252c685584c76fa">BSMPT::Minimizer::GSL_Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed, std::vector&lt; std::vector&lt; double &gt;&gt; &amp;saveAllMinima, const std::size_t &amp;MaxSol)</td></tr>
-<tr class="separator:aabb34357316a6e706252c685584c76fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb91f474b15c7bc88e79f19c4648a210"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; double &gt;, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#acb91f474b15c7bc88e79f19c4648a210">BSMPT::Minimizer::GSL_Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed, const std::size_t &amp;MaxSol, bool UseMultiThreading=true)</td></tr>
+<tr class="separator:acb91f474b15c7bc88e79f19c4648a210"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f7f12376bb61e3723eafc9517ac38d7"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; double &gt;, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#a9f7f12376bb61e3723eafc9517ac38d7">BSMPT::Minimizer::GSL_Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed, bool UseMultiThreading=true)</td></tr>
+<tr class="separator:a9f7f12376bb61e3723eafc9517ac38d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66a09f59a1ae6359ef17156ab1c5e31c"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; double &gt;, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeGSL_8h.html#a66a09f59a1ae6359ef17156ab1c5e31c">BSMPT::Minimizer::GSL_Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed, std::vector&lt; std::vector&lt; double &gt;&gt; &amp;saveAllMinima, const std::size_t &amp;MaxSol, bool UseMultiThreading=true)</td></tr>
+<tr class="separator:a66a09f59a1ae6359ef17156ab1c5e31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Using the Nelder-Mead Simplex algorithm, implemented in gsl, to find multiple local minima of the model and compare them to find a candidate for the global minimum. </p>
@@ -166,8 +166,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa1d3d1d594dddb67de0221136636f96c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1d3d1d594dddb67de0221136636f96c">&#9670;&nbsp;</a></span>GSL_Minimize_gen_all() <span class="overload">[1/3]</span></h2>
+<a id="a9f7f12376bb61e3723eafc9517ac38d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f7f12376bb61e3723eafc9517ac38d7">&#9670;&nbsp;</a></span>GSL_Minimize_gen_all() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +188,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>seed</em>&#160;</td>
+          <td class="paramname"><em>seed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>UseMultiThreading</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -202,6 +208,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">modelPointer</td><td>parameter point to minimise </td></tr>
     <tr><td class="paramname">Temp</td><td>Temperature at which to minimise the parameter point </td></tr>
     <tr><td class="paramname">seed</td><td>seed used to find the random starting points for the local optimisations </td></tr>
+    <tr><td class="paramname">UseMultiThreading</td><td>Decides if the algorithm should use multithreading or not </td></tr>
   </table>
   </dd>
 </dl>
@@ -209,8 +216,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a14779b16048d4b797180c72fee762664"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14779b16048d4b797180c72fee762664">&#9670;&nbsp;</a></span>GSL_Minimize_gen_all() <span class="overload">[2/3]</span></h2>
+<a id="acb91f474b15c7bc88e79f19c4648a210"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb91f474b15c7bc88e79f19c4648a210">&#9670;&nbsp;</a></span>GSL_Minimize_gen_all() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,7 +244,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::size_t &amp;&#160;</td>
-          <td class="paramname"><em>MaxSol</em>&#160;</td>
+          <td class="paramname"><em>MaxSol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>UseMultiThreading</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -252,6 +265,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">Temp</td><td>Temperature at which to minimise the parameter point </td></tr>
     <tr><td class="paramname">seed</td><td>seed used to find the random starting points for the local optimisations </td></tr>
     <tr><td class="paramname">MaxSol</td><td>numbers of local minima to find </td></tr>
+    <tr><td class="paramname">UseMultiThreading</td><td>Decides if the algorithm should use multithreading or not </td></tr>
   </table>
   </dd>
 </dl>
@@ -259,8 +273,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aabb34357316a6e706252c685584c76fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabb34357316a6e706252c685584c76fa">&#9670;&nbsp;</a></span>GSL_Minimize_gen_all() <span class="overload">[3/3]</span></h2>
+<a id="a66a09f59a1ae6359ef17156ab1c5e31c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66a09f59a1ae6359ef17156ab1c5e31c">&#9670;&nbsp;</a></span>GSL_Minimize_gen_all() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,7 +307,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::size_t &amp;&#160;</td>
-          <td class="paramname"><em>MaxSol</em>&#160;</td>
+          <td class="paramname"><em>MaxSol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>UseMultiThreading</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -309,6 +329,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">seed</td><td>seed used to find the random starting points for the local optimisations </td></tr>
     <tr><td class="paramname">saveAllMinima</td><td>List of all local minima </td></tr>
     <tr><td class="paramname">MaxSol</td><td>numbers of local minima to find </td></tr>
+    <tr><td class="paramname">UseMultiThreading</td><td>Decides if the algorithm should use multithreading or not </td></tr>
   </table>
   </dd>
 </dl>

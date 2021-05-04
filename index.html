@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.1.0</span>
+   &#160;<span id="projectnumber">2.2.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -100,8 +100,10 @@ Introduction</h1>
 <p>BSMPT - Beyond the Standard Model Phase Transitions: BSMPT is a C++ tool BSMPT for the calculation of the strength of the electroweak phase transition in extended Higgs sectors. For this the loop-corrected effective potential at finite temperature is calculated including the daisy resummation of the bosonic masses. The program calculates the vacuum expectation value (VEV) v of the potential as a function of the temperature, and in particular the critical VEV v_c at the temperature T_c where the phase transition takes place. Furthermore, the loop-corrected trilinear Higgs self-couplings are provided at T=0. The renormalization scheme is chosen such that the loop-corrected masses and mixing angles remain at their tree-level input values. For details, see: <a href="https://arxiv.org/abs/1803.02846">https://arxiv.org/abs/1803.02846</a>. The code itself can be downloaded at <a href="https://github.com/phbasler/BSMPT">https://github.com/phbasler/BSMPT</a>.</p>
 <h1><a class="anchor" id="Citation"></a>
 Citation</h1>
-<p>If you use this program for your work please cite <a href="https://arxiv.org/abs/1803.02846">https://arxiv.org/abs/1803.02846</a> and <a href="https://arxiv.org/abs/2007.01725">https://arxiv.org/abs/2007.01725</a> </p><pre class="fragment">\section install_sec Installation
-</pre><h2><a class="anchor" id="Dependencies"></a>
+<p>If you use this program for your work please cite <a href="https://arxiv.org/abs/1803.02846">https://arxiv.org/abs/1803.02846</a> and <a href="https://arxiv.org/abs/2007.01725">https://arxiv.org/abs/2007.01725</a></p>
+<h1><a class="anchor" id="Installation"></a>
+Installation</h1>
+<h2><a class="anchor" id="Dependencies"></a>
 Dependencies</h2>
 <ol type="1">
 <li><a href="http://www.gnu.org/software/gsl/">GSL</a> library: The code assume GSL is installed in PATH</li>
@@ -109,10 +111,9 @@ Dependencies</h2>
     cmake -DCMAKE_INSTALL_PREFIX=/path/to/installedEigen  ..
     make install
 </pre> After that you can use <code>-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake</code> to link Eigen3</li>
-<li><a href="https://github.com/beniz/libcmaes">libcmaes</a>: Additionally to GSL you should either use libcmaes or NLopt. For libcmaes you have to set <pre class="fragment">`-Dlibcmaes_ROOT=/path/to/cmaes`
-
-If cmaes is not installed then it will be installed in your build directory.
-</pre> For more details on the libcmaes installation, e.g. possible dependencies, visit their <a href="https://github.com/CMA-ES/libcmaes/wiki">wiki</a>. If you don't want to install or use it, you can set <code>-DUseLibCMAES=OFF</code></li>
+<li><p class="startli"><a href="https://github.com/beniz/libcmaes">libcmaes</a>: Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is not found automatically you can set the path with </p><pre class="fragment">`-Dlibcmaes_ROOT=/path/to/cmaes`
+</pre><p class="startli">If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their <a href="https://github.com/CMA-ES/libcmaes/wiki">wiki</a>. If you don't want to install or use it, you can set <code>-DUseLibCMAES=OFF</code></p>
+</li>
 <li><a href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>: With <code>-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt</code> you need to tell where NLopt is installed. If you do not then NLopt will not be used.</li>
 <li><a href="https://www.boost.org/">Boost</a> : It should be found automatically, if not you can use <code>-DBOOST_ROOT=/path/to/boost</code></li>
 </ol>
@@ -120,7 +121,7 @@ If cmaes is not installed then it will be installed in your build directory.
 build</h2>
 <p>With the dependencies and options you can build the programm with </p><pre class="fragment">    mkdir build &amp;&amp; cd build
     cmake (OPTIONS from Dependencies) ..
-    make
+    cmake --build . -j
 </pre><p>Note to Mac Users: You have to use the g++ compiler as clang does not support OpenMP. If you get the error "missing libcmaes_config.h" during the compilation, please check if the file is in build/libcmaes-0.9.5. If so, copy it to /path/to/libcmaes/include/libcmaes</p>
 <h1><a class="anchor" id="executables_sec"></a>
 Executables</h1>
@@ -141,38 +142,34 @@ CalcCT</h2>
 NLOVEV</h2>
 <p>This calculates the VEV at 1-loop order at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called through </p><pre class="fragment"> ./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
 </pre><p>and for the C2HDM example it is given by </p><pre class="fragment"> ./bin/NLOVEV c2hdm example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
-</pre><p>where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV. </p><pre class="fragment">\subsection VEVEVO
-</pre><p> This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through</p>
+</pre><p>where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.</p>
+<h2><a class="anchor" id="VEVEVO"></a>
+VEVEVO</h2>
+<p>This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through</p>
 <p>./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend</p>
 <p>where 'Tempstart' is the starting value of the temperature which increases with 'Tempstep' until 'Tempend'.</p>
 <p>For our C2HDM example this would be </p><pre class="fragment"> ./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5
-</pre><p> 150</p>
-<p>where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.</p>
+ 150
+</pre><p>where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.</p>
 <h2><a class="anchor" id="TripleHiggsCouplingNLO"></a>
 TripleHiggsCouplingNLO</h2>
 <p>This program calculates the trilinear Higgs self-couplings at NLO at zero temperature. It is called through </p><pre class="fragment"> ./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
 </pre><p>The C2HDM example is called through </p><pre class="fragment"> ./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat
-</pre><p> example/test_TripleHiggsNLO.dat 2 2</p>
-<p>with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsNLO . </p><pre class="fragment">\subsection CalculateEWBG
-This program calculates the difference between baryons and anti-baryons
-</pre><p> normalized to the photon density generated through the EWPT. Please beware that this is only tested for the C2HDM so far and the general implementation is future work. It is called through </p><pre class="fragment">    ./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd
-</pre><p> config_file </p><pre class="fragment">An example is given for the example/C2HDM_Input.dat parameter point through
-
-    ./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat
-</pre><p> 2 2 example/EWBG_config.txt </p><pre class="fragment">with the result given in example/test_EWBG.dat which can be compared with
-</pre><p> the already available file example/C2HDM_Input.dat_EWBG.</p>
-<h2><a class="anchor" id="RenormScale"></a>
-RenormScale</h2>
-<p>This executable varies the MSbar renormalisation scale of a given parameter point between a factor of 0.5 and 1.5 of its original value and calculates the EWPT and the CT parameters at each scale. As no RGE running is included yet, this has to be taken with caution.</p>
+</pre><p> example/test_TripleHiggsCouplingNLO.dat 2 2</p>
+<p>with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsCouplingNLO .</p>
+<h2><a class="anchor" id="CalculateEWBG"></a>
+CalculateEWBG</h2>
+<p>This program calculates the difference between baryons and anti-baryons normalized to the photon density generated through the EWPT. Please beware that this is only tested for the C2HDM so far and the general implementation is future work. It is called through </p><pre class="fragment">    ./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd
+    config_file
+</pre><p>An example is given for the example/C2HDM_Input.dat parameter point through </p><pre class="fragment"> ./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat
+ 2 2 example/EWBG_config.txt
+</pre><p>with the result given in example/test_EWBG.dat which can be compared with the already available file example/C2HDM_Input.dat_EWBG.</p>
 <h2><a class="anchor" id="PlotEWBG_vw"></a>
 PlotEWBG_vw</h2>
 <p>This executable varies the wall velocity of a given parameter point and calculates the EWBG for each velocity.</p>
 <h2><a class="anchor" id="PlotEWBG_nL"></a>
 PlotEWBG_nL</h2>
-<p>This executable calculates the left-handed fermion density in front of the wall as a function of the distance to the bubble wall.</p>
-<h2><a class="anchor" id="EWBGRenormScale"></a>
-EWBGRenormScale</h2>
-<p>This executable varies the MSbar renormalisation scale of a given parameter point between a factor of 0.5 and 1.5 of its original value and calculates the EWBG and the CT parameters at each scale. As no RGE running is included yet, this has to be taken with caution. </p>
+<p>This executable calculates the left-handed fermion density in front of the wall as a function of the distance to the bubble wall. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

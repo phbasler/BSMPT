@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['prepare_5ftriple_813',['Prepare_Triple',['../classBSMPT_1_1Class__Potential__Origin.html#a776694d96393cc52b7eacedce4582903',1,'BSMPT::Class_Potential_Origin']]],
-  ['ptfinder_5fgen_5fall_814',['PTFinder_gen_all',['../Minimizer_8h.html#a391651025dceacd12f4b85a7c191b06f',1,'BSMPT::Minimizer']]]
+  ['prepare_5ftriple_812',['Prepare_Triple',['../classBSMPT_1_1Class__Potential__Origin.html#a776694d96393cc52b7eacedce4582903',1,'BSMPT::Class_Potential_Origin']]],
+  ['ptfinder_5fgen_5fall_813',['PTFinder_gen_all',['../Minimizer_8h.html#a211218e6b6deed7426dc1db2fe9c2851',1,'BSMPT::Minimizer']]]
 ];

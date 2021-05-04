@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.1.0</span>
+   &#160;<span id="projectnumber">2.2.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -139,15 +139,15 @@ Functions</h2></td></tr>
 <tr class="memitem:a3ac152f5d63263e90befeadbea1c14d0"><td class="memItemLeft" align="right" valign="top">MinimizersToUse&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a3ac152f5d63263e90befeadbea1c14d0">BSMPT::Minimizer::GetMinimizers</a> (int WhichMinimizer)</td></tr>
 <tr class="memdesc:a3ac152f5d63263e90befeadbea1c14d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetMinimizers returns a struct containing the bools deciding which minimizers should be used or not.  <a href="Minimizer_8h.html#a3ac152f5d63263e90befeadbea1c14d0">More...</a><br /></td></tr>
 <tr class="separator:a3ac152f5d63263e90befeadbea1c14d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88c7250e51b094e110ea67fd48438afd"><td class="memItemLeft" align="right" valign="top"><a id="a88c7250e51b094e110ea67fd48438afd"></a>
-std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a88c7250e51b094e110ea67fd48438afd">BSMPT::Minimizer::Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, const int &amp;WhichMinimizer)</td></tr>
-<tr class="memdesc:a88c7250e51b094e110ea67fd48438afd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimization of the Model Minimizes the given Potential with parameters par and CT-parameters parCT at a given Temperature Temp and writes the solution in the std::vector sol. The Minimization Debugging Options are written in the std::vector Check. The std::vector Start gives the start value for the CMA-ES Minimization. <br /></td></tr>
-<tr class="separator:a88c7250e51b094e110ea67fd48438afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a391651025dceacd12f4b85a7c191b06f"><td class="memItemLeft" align="right" valign="top">EWPTReturnType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a391651025dceacd12f4b85a7c191b06f">BSMPT::Minimizer::PTFinder_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;TempStart, const double &amp;TempEnd, const int &amp;WhichMinimizer=WhichMinimizerDefault)</td></tr>
-<tr class="separator:a391651025dceacd12f4b85a7c191b06f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f9686f97a8aeb1b96db142a690c42f4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a4f9686f97a8aeb1b96db142a690c42f4">BSMPT::Minimizer::Minimize_gen_all_tree_level</a> (const ModelID::ModelIDs &amp;Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, int WhichMinimizer=WhichMinimizerDefault)</td></tr>
-<tr class="memdesc:a4f9686f97a8aeb1b96db142a690c42f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimize_gen_all_tree_level Minimizes the tree-level potential.  <a href="Minimizer_8h.html#a4f9686f97a8aeb1b96db142a690c42f4">More...</a><br /></td></tr>
-<tr class="separator:a4f9686f97a8aeb1b96db142a690c42f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c41c83bf7eb501efb9fdaa3f88adf1c"><td class="memItemLeft" align="right" valign="top"><a id="a6c41c83bf7eb501efb9fdaa3f88adf1c"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a6c41c83bf7eb501efb9fdaa3f88adf1c">BSMPT::Minimizer::Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, const int &amp;WhichMinimizer, bool UseMultithreading)</td></tr>
+<tr class="memdesc:a6c41c83bf7eb501efb9fdaa3f88adf1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimization of the Model Minimizes the given Potential with parameters par and CT-parameters parCT at a given Temperature Temp and writes the solution in the std::vector sol. The Minimization Debugging Options are written in the std::vector Check. The std::vector Start gives the start value for the CMA-ES Minimization. <br /></td></tr>
+<tr class="separator:a6c41c83bf7eb501efb9fdaa3f88adf1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a211218e6b6deed7426dc1db2fe9c2851"><td class="memItemLeft" align="right" valign="top">EWPTReturnType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a211218e6b6deed7426dc1db2fe9c2851">BSMPT::Minimizer::PTFinder_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;TempStart, const double &amp;TempEnd, const int &amp;WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>
+<tr class="separator:a211218e6b6deed7426dc1db2fe9c2851"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a4c2e16cbb0844539d8304dbc6ea500ef">BSMPT::Minimizer::Minimize_gen_all_tree_level</a> (const ModelID::ModelIDs &amp;Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, int WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>
+<tr class="memdesc:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimize_gen_all_tree_level Minimizes the tree-level potential.  <a href="Minimizer_8h.html#a4c2e16cbb0844539d8304dbc6ea500ef">More...</a><br /></td></tr>
+<tr class="separator:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21ca763ce1943f7345b2869ed58bb4ef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a21ca763ce1943f7345b2869ed58bb4ef">BSMPT::Minimizer::FindNextLocalMinima</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;model, const std::vector&lt; double &gt; &amp;StartingPoint, const double &amp;temperature, int WhichMinimizer=WhichMinimizerDefault)</td></tr>
 <tr class="memdesc:a21ca763ce1943f7345b2869ed58bb4ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">FindNextLocalMinima finds the local minima from the given starting point at the given temperature.  <a href="Minimizer_8h.html#a21ca763ce1943f7345b2869ed58bb4ef">More...</a><br /></td></tr>
 <tr class="separator:a21ca763ce1943f7345b2869ed58bb4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -390,8 +390,8 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 </div>
 </div>
-<a id="a4f9686f97a8aeb1b96db142a690c42f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f9686f97a8aeb1b96db142a690c42f4">&#9670;&nbsp;</a></span>Minimize_gen_all_tree_level()</h2>
+<a id="a4c2e16cbb0844539d8304dbc6ea500ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c2e16cbb0844539d8304dbc6ea500ef">&#9670;&nbsp;</a></span>Minimize_gen_all_tree_level()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -430,7 +430,13 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>WhichMinimizer</em> = <code>WhichMinimizerDefault</code>&#160;</td>
+          <td class="paramname"><em>WhichMinimizer</em> = <code>WhichMinimizerDefault</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>UseMultithreading</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -456,8 +462,8 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 
 </div>
 </div>
-<a id="a391651025dceacd12f4b85a7c191b06f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a391651025dceacd12f4b85a7c191b06f">&#9670;&nbsp;</a></span>PTFinder_gen_all()</h2>
+<a id="a211218e6b6deed7426dc1db2fe9c2851"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a211218e6b6deed7426dc1db2fe9c2851">&#9670;&nbsp;</a></span>PTFinder_gen_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -484,7 +490,13 @@ constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>WhichMinimizer</em> = <code>WhichMinimizerDefault</code>&#160;</td>
+          <td class="paramname"><em>WhichMinimizer</em> = <code>WhichMinimizerDefault</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>UseMultithreading</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
