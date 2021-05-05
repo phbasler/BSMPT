@@ -16,7 +16,7 @@ jobs:
       with:
           persist-credentials: false
     - name: installPackages
-      run: brew install eigen && brew install gsl && brew install nlopt && brew install boost
+      run: brew install eigen && brew install gsl && brew install nlopt && brew install boost && brew install libomp
     - name: cmake
       run: mkdir build && cd build && cmake ..
     - name: make
