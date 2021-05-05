@@ -6,7 +6,7 @@ name: develop Mac CI
 
 on:
   push:
-    branches: [ MacCI ]
+    branches: [ develop ]
     
 jobs:
   build-mac:
