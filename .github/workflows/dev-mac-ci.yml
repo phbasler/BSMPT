@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: develop Mac CI
+
+on:
+  push:
+    branches: [ MacCI ]
+    
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name: cmake
+      run: mkdir build && cd build && cmake ..
