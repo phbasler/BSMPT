@@ -1,5 +1,10 @@
+<!--
+SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
 
-Program: BSMPT version 2.1
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
+Program: BSMPT version 2.2
 
 Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 
@@ -64,8 +69,8 @@ With the dependencies and options you can build the programm with
   
         mkdir build && cd build  
         cmake (OPTIONS from Dependencies) ..  
-        make -j  
-        make doc
+        cmake --build . -j  
+        cmake --build . -j -t doc
     
 
 The make doc will use doxygen to create the online help in build/html which can be opened locally.

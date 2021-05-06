@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility.h>
@@ -126,8 +131,8 @@ TestResults CheckGaugeBosonMasses(const Class_Potential_Origin &point)
   gaugeMassesInput.push_back(pow(C_MassW, 2));
   gaugeMassesInput.push_back(pow(C_MassZ, 2));
   std::sort(gaugeMassesInput.begin(), gaugeMassesInput.end());
-  auto GaugeMassCalculated =
-      point.GaugeMassesSquared(point.MinimizeOrderVEV(point.get_vevTreeMin()), 0, 0);
+  auto GaugeMassCalculated = point.GaugeMassesSquared(
+      point.MinimizeOrderVEV(point.get_vevTreeMin()), 0, 0);
   if (GaugeMassCalculated.size() != gaugeMassesInput.size())
   {
     return TestResults::Fail;
@@ -198,10 +203,10 @@ CheckFermionicMasses(const Class_Potential_Origin &point)
   std::sort(leptonMassesInput.begin(), leptonMassesInput.end());
   std::sort(quarkMassesInput.begin(), quarkMassesInput.end());
 
-  auto leptonMassCalculated =
-      point.LeptonMassesSquared(point.MinimizeOrderVEV(point.get_vevTreeMin()), 0);
-  auto quarkMassCalculated =
-      point.QuarkMassesSquared(point.MinimizeOrderVEV(point.get_vevTreeMin()), 0);
+  auto leptonMassCalculated = point.LeptonMassesSquared(
+      point.MinimizeOrderVEV(point.get_vevTreeMin()), 0);
+  auto quarkMassCalculated = point.QuarkMassesSquared(
+      point.MinimizeOrderVEV(point.get_vevTreeMin()), 0);
 
   const double ZeroMass = 1e-5;
   if (point.get_NLepton() != 0)
@@ -356,17 +361,16 @@ TestResults CheckNLOMasses(const Class_Potential_Origin &point)
   auto NHiggs  = point.get_NHiggs();
   auto vevTree = point.MinimizeOrderVEV(point.get_vevTreeMin());
   auto result  = TestResults::Pass;
-  std::vector<double> WeinbergNabla, WeinbergHesse;
+
+  auto HesseWeinberg = point.WeinbergSecondDerivativeAsMatrixXd();
+
+  std::vector<double> WeinbergNabla;
   WeinbergNabla = point.WeinbergFirstDerivative();
-  WeinbergHesse = point.WeinbergSecondDerivative();
 
   VectorXd NablaWeinberg(NHiggs);
-  MatrixXd HesseWeinberg(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
     NablaWeinberg[i] = WeinbergNabla[i];
-    for (std::size_t j = 0; j < NHiggs; j++)
-      HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
   }
 
   auto NablaVCT   = point.NablaVCT(vevTree);
@@ -516,6 +520,76 @@ TestResults CheckCKMUnitarity()
     std::cerr << "The norm deviating from 1 is " << norm << std::endl;
   }
   return result;
+}
+
+TestResults
+CheckCTConditionsFirstDerivative(const Class_Potential_Origin &point)
+{
+  using namespace Eigen;
+  auto NHiggs  = point.get_NHiggs();
+  auto vevTree = point.MinimizeOrderVEV(point.get_vevTreeMin());
+  auto result  = TestResults::Pass;
+
+  std::vector<double> WeinbergNabla;
+  WeinbergNabla = point.WeinbergFirstDerivative();
+
+  auto NablaVCT = point.NablaVCT(vevTree);
+
+  for (std::size_t i{0}; i < NHiggs; ++i)
+  {
+    if (std::abs(WeinbergNabla.at(i) + NablaVCT(i)) > 1e-5)
+    {
+      result = TestResults::Fail;
+      break;
+    }
+  }
+  return result;
+}
+
+TestResults
+CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point)
+{
+  using namespace Eigen;
+  auto NHiggs  = point.get_NHiggs();
+  auto vevTree = point.MinimizeOrderVEV(point.get_vevTreeMin());
+  auto result  = TestResults::Pass;
+
+  auto HesseWeinberg = point.WeinbergSecondDerivativeAsMatrixXd();
+
+  auto HesseVCT = point.HessianCT(vevTree);
+  for (std::size_t i{0}; i < NHiggs; ++i)
+  {
+    for (std::size_t j{0}; j < NHiggs; ++j)
+    {
+      if (std::abs(HesseVCT(i, j) + HesseWeinberg(i, j)) > 1e-5)
+      {
+        result = TestResults::Fail;
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+TestResults CheckCTIdentities(const Class_Potential_Origin &point)
+{
+  auto result     = TestResults::Pass;
+  auto identities = point.GetCTIdentities();
+  for (const auto &el : identities)
+  {
+    if (std::abs(el) > 1e-5)
+    {
+      result = TestResults::Fail;
+      break;
+    }
+  }
+  return result;
+}
+
+TestResults CheckCTNumber(const Class_Potential_Origin &point)
+{
+  return (point.calc_CT().size() == point.get_nParCT()) ? TestResults::Pass
+                                                        : TestResults::Fail;
 }
 } // namespace ModelTests
 } // namespace BSMPT

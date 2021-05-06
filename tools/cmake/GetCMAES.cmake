@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 if(CMAES_ROOT OR DEFINED ENV{CMAES_ROOT})
   find_package(CMAES REQUIRED)
 else()

@@ -1,7 +1,11 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 cmake_minimum_required(VERSION 3.13)
 project(
   BSMPT
-  VERSION 2.1.0
+  VERSION 2.2.0
   LANGUAGES C CXX)
 
 # -------------------------------- setup cmake --------------------------------
@@ -87,12 +91,6 @@ set(ExportList
   Utility
   )
 
-if(EXPORT_CMAES)
-  set(ExportList
-    ${ExportList}
-    cmaes
-    )
-endif(EXPORT_CMAES)
 
 if(Boost_FOUND)
 set(ExportList
@@ -103,11 +101,23 @@ set(ExportList
   )
 endif(Boost_FOUND)
 
+
 export(
   TARGETS ${ExportList}
   NAMESPACE BSMPT::
   FILE BSMPTTargets.cmake
   )
+
+if(EXPORT_CMAES)
+  export(
+  TARGETS cmaes
+  NAMESPACE libcmaes::
+  APPEND FILE BSMPTTargets.cmake
+  )
+endif(EXPORT_CMAES)
+
+
+
 
 configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
 

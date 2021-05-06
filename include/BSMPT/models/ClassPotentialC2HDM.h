@@ -1,21 +1,7 @@
-/*
- * ClassPotentialC2HDM.h
- *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * @file
@@ -102,6 +88,7 @@ public:
          Du1CT = 0, DRu3CT = 0;
   double DIL5CT = 0, DIu3CT = 0;
   double DT1 = 0, DT2 = 0, DT3 = 0, DTCharged = 0;
+  double DIL6CT=0;
   double TanBeta = 0, C_CosBeta = 0, C_SinBeta = 0, C_CosBetaSquared = 0,
          C_SinBetaSquared = 0;
   double beta             = 0;
@@ -110,8 +97,7 @@ public:
   double CTempC1 = 0, CTempC2 = 0, CTempCS = 0;
   double R_Hh_1 = 0, R_Hh_2 = 0, R_Hh_3 = 0, R_Hl_1 = 0, R_Hl_2 = 0, R_Hl_3 = 0,
          R_Hsm_1 = 0, R_Hsm_2 = 0, R_Hsm_3 = 0;
-  double g1uu = 0, g2uu = 0;
-
+  
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;

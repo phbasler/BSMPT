@@ -1,21 +1,7 @@
-/*
- * ClassPotentialOrigin.cpp
- *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <gsl/gsl_sf_gamma.h>
 #include <iomanip>
@@ -1031,7 +1017,8 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
   return res;
 }
 
-std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
+Eigen::MatrixXd
+Class_Potential_Origin::WeinbergSecondDerivativeAsMatrixXd() const
 {
   if (!CalcCouplingsdone)
   {
@@ -1040,7 +1027,6 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
     retmes += " tries to use Physical couplings but they are not initialised.";
     throw std::runtime_error(retmes);
   }
-  std::vector<double> res;
   const double NumZero = std::pow(10, -10);
   MatrixXd GaugePart(NHiggs, NHiggs), HiggsPart(NHiggs, NHiggs),
       QuarkPart(NHiggs, NHiggs), LeptonPart(NHiggs, NHiggs);
@@ -1172,7 +1158,13 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
       if (std::abs(ResMatrix(i, j)) < NumZero) ResMatrix(i, j) = 0;
     }
   }
+  return ResMatrix;
+}
+std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
+{
 
+  auto ResMatrix = WeinbergSecondDerivativeAsMatrixXd();
+  std::vector<double> res;
   for (std::size_t i = 0; i < NHiggs; i++)
   {
     for (std::size_t j = 0; j < NHiggs; j++)
@@ -3006,4 +2998,10 @@ Class_Potential_Origin::HessianCT(const std::vector<double> &v) const
   }
   return result;
 }
+
+std::vector<double> Class_Potential_Origin::GetCTIdentities() const
+{
+  return std::vector<double>();
+}
+
 } // namespace BSMPT

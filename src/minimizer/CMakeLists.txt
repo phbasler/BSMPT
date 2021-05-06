@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/minimizer")
 set(header
 	${header_path}/Minimizer.h
@@ -38,6 +42,7 @@ endif()
 
 add_library(Minimizer ${header} ${src})
 target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads)
+
 if(libcmaes_FOUND)
   target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
 endif()

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 /*
  *Two Step Scan for the N2HDM
  *Created on: 3.4.2918

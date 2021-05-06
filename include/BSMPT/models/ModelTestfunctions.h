@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma once
 #include <string>
 
@@ -29,6 +34,12 @@ TestResults CheckTadpoleRelations(const Class_Potential_Origin &point);
 TestResults CheckNLOMasses(const Class_Potential_Origin &point);
 TestResults CheckVTreeSimplified(const Class_Potential_Origin &point);
 TestResults CheckVCounterSimplified(const Class_Potential_Origin &point);
+TestResults
+CheckCTConditionsFirstDerivative(const Class_Potential_Origin &point);
+TestResults
+CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point);
+TestResults CheckCTIdentities(const Class_Potential_Origin &point);
+TestResults CheckCTNumber(const Class_Potential_Origin &point);
 
 TestResults CheckCKMUnitarity();
 

@@ -1,22 +1,7 @@
-
-/*
- * Minimizer.cpp
- *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
@@ -104,7 +89,8 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &Temp,
                  std::vector<double> &Check,
                  const std::vector<double> &start,
-                 const int &WhichMinimizer)
+                 const int &WhichMinimizer,
+                 bool UseMultithreading)
 {
   std::vector<double> PotValues;
   std::vector<std::vector<double>> Minima;
@@ -134,21 +120,37 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
     if (UseMinimizer.UseCMAES or UseMinimizer.UseNLopt)
     {
-      thread_GSL =
-          std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
-            std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-                modelPointer, Temp, 5); // If additionally CMAES is minimising
-                                        // GSL does not need as much solutions
-          });
+      if (UseMultithreading)
+      {
+        thread_GSL =
+            std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
+              std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
+                  modelPointer, Temp, 5); // If additionally CMAES is minimising
+                                          // GSL does not need as much solutions
+            });
+      }
+      else
+      {
+        std::tie(solGSLMin, gslMinSuc) =
+            GSL_Minimize_gen_all(modelPointer, Temp, 5, UseMultithreading);
+      }
     }
     else
     {
       std::size_t MaxSol = 50;
-      thread_GSL         = std::thread(
-          [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
-            std::tie(solGSLMin, gslMinSuc) =
-                GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
-          });
+      if (UseMultithreading)
+      {
+        thread_GSL = std::thread(
+            [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
+              std::tie(solGSLMin, gslMinSuc) =
+                  GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
+            });
+      }
+      else
+      {
+        std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
+            modelPointer, Temp, 5, MaxSol, UseMultithreading);
+      }
     }
   }
 #ifdef libcmaes_FOUND
@@ -156,9 +158,16 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   LibCMAES::LibCMAESReturn LibCMAES;
   if (UseMinimizer.UseCMAES)
   {
-    thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
+    if (UseMultithreading)
+    {
+      thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
+        LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
+      });
+    }
+    else
+    {
       LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
-    });
+    }
   }
 #else
   (void)start;
@@ -169,14 +178,21 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   std::thread thread_NLopt;
   if (UseMinimizer.UseNLopt)
   {
-    thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
+    if (UseMultithreading)
+    {
+      thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
+        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
+      });
+    }
+    else
+    {
       NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
-    });
+    }
   }
 #endif
 
 #ifdef NLopt_FOUND
-  if (thread_NLopt.joinable())
+  if (UseMultithreading and thread_NLopt.joinable())
   {
     thread_NLopt.join();
   }
@@ -189,7 +205,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 #endif
 
 #ifdef libcmaes_FOUND
-  if (thread_CMAES.joinable())
+  if (UseMultithreading and thread_CMAES.joinable())
   {
     thread_CMAES.join();
     auto errC          = LibCMAES.CMAESStatus;
@@ -201,7 +217,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   }
 #endif
 
-  if (thread_GSL.joinable())
+  if (UseMultithreading and thread_GSL.joinable())
   {
     thread_GSL.join();
   }
@@ -236,7 +252,8 @@ EWPTReturnType
 PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &TempStart,
                  const double &TempEnd,
-                 const int &WhichMinimizer)
+                 const int &WhichMinimizer,
+                 bool UseMultithreading)
 {
 
   EWPTReturnType result;
@@ -257,8 +274,12 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   for (std::size_t k = 0; k < dim; k++)
     startEnde.push_back(modelPointer->get_vevTreeMin(k));
-  solEnd = Minimize_gen_all(
-      modelPointer, TempEnd, checkEnde, startEnde, WhichMinimizer);
+  solEnd    = Minimize_gen_all(modelPointer,
+                            TempEnd,
+                            checkEnde,
+                            startEnde,
+                            WhichMinimizer,
+                            UseMultithreading);
   solEndPot = modelPointer->MinimizeOrderVEV(solEnd);
   vEnd      = modelPointer->EWSBVEV(solEndPot);
 
@@ -273,8 +294,12 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   for (std::size_t k = 0; k < dim; k++)
     startStart.push_back(modelPointer->get_vevTreeMin(k));
-  solStart = Minimize_gen_all(
-      modelPointer, TempStart, checkStart, startStart, WhichMinimizer);
+  solStart    = Minimize_gen_all(modelPointer,
+                              TempStart,
+                              checkStart,
+                              startStart,
+                              WhichMinimizer,
+                              UseMultithreading);
   solStartPot = modelPointer->MinimizeOrderVEV(solStart);
   vStart      = modelPointer->EWSBVEV(solStartPot);
 
@@ -306,8 +331,12 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     solMitte.clear();
     checkMitte.clear();
     solMittePot.clear();
-    solMitte = Minimize_gen_all(
-        modelPointer, TM, checkMitte, startMitte, WhichMinimizer);
+    solMitte    = Minimize_gen_all(modelPointer,
+                                TM,
+                                checkMitte,
+                                startMitte,
+                                WhichMinimizer,
+                                UseMultithreading);
     solMittePot = modelPointer->MinimizeOrderVEV(solMitte);
     vMitte      = modelPointer->EWSBVEV(solMittePot);
 
@@ -361,13 +390,15 @@ Minimize_gen_all_tree_level(const ModelID::ModelIDs &Model,
                             const std::vector<double> &parCT,
                             std::vector<double> &Check,
                             const std::vector<double> &start,
-                            int WhichMinimizer)
+                            int WhichMinimizer,
+                            bool UseMultithreading)
 {
   std::shared_ptr<Class_Potential_Origin> modelPointer =
       ModelID::FChoose(Model);
   modelPointer->set_All(par, parCT);
   modelPointer->SetUseTreeLevel(true);
-  auto sol = Minimize_gen_all(modelPointer, 0, Check, start, WhichMinimizer);
+  auto sol = Minimize_gen_all(
+      modelPointer, 0, Check, start, WhichMinimizer, UseMultithreading);
   modelPointer->SetUseTreeLevel(false);
   return sol;
 }

@@ -1,23 +1,7 @@
-/*
- * CalculateEWBG.cpp
- *
- *
- *      Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
- Müller
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * @file
@@ -55,6 +39,7 @@ struct CLIOptions
   bool UseCMAES{Minimizer::UseLibCMAESDefault};
   bool UseNLopt{Minimizer::UseNLoptDefault};
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+  bool UseMultithreading{true};
 
   CLIOptions(int argc, char *argv[]);
   bool good() const;
@@ -137,7 +122,7 @@ try
 
       // Call: BSMPT
       auto EWPT = Minimizer::PTFinder_gen_all(
-          modelPointer, 0, 300, args.WhichMinimizer);
+          modelPointer, 0, 300, args.WhichMinimizer, args.UseMultithreading);
       // Define parameters for eta
       std::vector<double> eta;
       if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and
@@ -149,11 +134,13 @@ try
         std::vector<double> vevsymmetricSolution, checksym, startpoint;
         for (const auto &el : EWPT.EWMinimum)
           startpoint.push_back(0.5 * el);
-        vevsymmetricSolution = Minimizer::Minimize_gen_all(modelPointer,
-                                                           EWPT.Tc + 1,
-                                                           checksym,
-                                                           startpoint,
-                                                           args.WhichMinimizer);
+        vevsymmetricSolution =
+            Minimizer::Minimize_gen_all(modelPointer,
+                                        EWPT.Tc + 1,
+                                        checksym,
+                                        startpoint,
+                                        args.WhichMinimizer,
+                                        args.UseMultithreading);
         // Call: Calculation of eta in the different implemented approaches
         if (args.TerminalOutput) std::cout << "Calling CalcEta..." << std::endl;
         eta = EtaInterface.CalcEta(args.vw,
@@ -300,6 +287,10 @@ CLIOptions::CLIOptions(int argc, char *argv[])
     std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
               << "Use the NLopt library to minimize the effective potential"
               << std::endl;
+    std::cout << std::setw(SizeOfFirstColumn) << std::left
+              << "--UseMultithreading = true"
+              << "Enables/Disables multi threading for the minimizers"
+              << std::endl;
     ShowInputError();
   }
 
@@ -365,6 +356,11 @@ CLIOptions::CLIOptions(int argc, char *argv[])
       else if (StringStartsWith(el, "--usenlopt="))
       {
         UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
+      }
+      else if (StringStartsWith(el, "--usemultithreading="))
+      {
+        UseMultithreading =
+            el.substr(std::string("--usemultithreading=").size()) == "true";
       }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);

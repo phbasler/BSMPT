@@ -1,21 +1,8 @@
-/*
- * ClassPotentialOrigin.h
- *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * @file
@@ -40,11 +27,8 @@ potential in various extended Higgs models
  *  \section Citation
  *  If you use this program for your work please cite
 https://arxiv.org/abs/1803.02846 and https://arxiv.org/abs/2007.01725
- *
- *  \section install_sec Installation
- *
- *
- *
+
+ * \section Installation
  * \subsection Dependencies
 1. [GSL](http://www.gnu.org/software/gsl/) library: The code assume GSL is
 installed in PATH
@@ -59,11 +43,12 @@ After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake`
 to link Eigen3
 
 3. [libcmaes](https://github.com/beniz/libcmaes): Additionally to GSL you should
-either use libcmaes or NLopt. For libcmaes you have to set
+either use libcmaes or NLopt. If libcmaes is not found automatically you can set
+the path with
 
     `-Dlibcmaes_ROOT=/path/to/cmaes`
 
-    If cmaes is not installed then it will be installed in your build directory.
+   If cmaes is not installed then it will be installed in your build directory.
 For more details on the libcmaes installation, e.g. possible dependencies, visit
 their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to
 install or use it, you can set `-DUseLibCMAES=OFF`
@@ -79,7 +64,7 @@ With the dependencies and options you can build the programm with
 
         mkdir build && cd build
         cmake (OPTIONS from Dependencies) ..
-        make
+        cmake --build . -j
 
 
 Note to Mac Users: You have to use the g++ compiler as clang does not support
@@ -155,7 +140,7 @@ compared with the already available file
  * can be compared with the already available file
 example/C2HDM_Input.dat_NLOVEV.
  *
- *  \subsection VEVEVO
+ * \subsection VEVEVO
  * This program calculates the evolution of the vacuum expecation value of a
 given point with the temperature.
  * It is called through
@@ -168,7 +153,7 @@ with 'Tempstep' until 'Tempend'.
  * For our C2HDM example this would be
  *
  *  	./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5
-150
+        150
  *
  * where the result for the NLO VEV is given in example/test_VEVEVO.dat as
  * function of the temperature in the interval between 0 and 150 GeV in steps of
@@ -186,35 +171,31 @@ example/C2HDM_Input.dat_vevevo.
  * The C2HDM example is called through
  *
  * 	 	./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat
-example/test_TripleHiggsNLO.dat 2 2
+example/test_TripleHiggsCouplingNLO.dat 2 2
  *
  * with the result given in example/test_TripleHiggsNLO.dat which
  * can be compared with the already available file
-example/C2HDM_Input.dat_TripleHiggsNLO .
+example/C2HDM_Input.dat_TripleHiggsCouplingNLO .
  *
- *  \subsection CalculateEWBG
- *  This program calculates the difference between baryons and anti-baryons
+ * \subsection CalculateEWBG
+ *
+ * This program calculates the difference between baryons and anti-baryons
 normalized to the photon density generated through the EWPT.
  *  Please beware that this is only tested for the C2HDM so far and the general
 implementation is future work. It is called through
  *
  *  	./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd
-config_file
+        config_file
+
  *
- *  An example is given for the example/C2HDM_Input.dat parameter point through
+ * An example is given for the example/C2HDM_Input.dat parameter point through
  *
  *      ./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat
-2 2 example/EWBG_config.txt
+        2 2 example/EWBG_config.txt
  *
- *  with the result given in example/test_EWBG.dat which can be compared with
+ * with the result given in example/test_EWBG.dat which can be compared with
 the already available file example/C2HDM_Input.dat_EWBG.
  *
- * \subsection RenormScale
- * This executable varies the MSbar renormalisation scale of a given parameter
-point between a factor of 0.5 and 1.5 of its original
- * value and calculates the EWPT and the CT parameters at each scale. As no RGE
-running is included yet, this has to be taken with
- * caution.
  *
  * \subsection PlotEWBG_vw
  * This executable varies the wall velocity of a given parameter point and
@@ -224,12 +205,6 @@ calculates the EWBG for each velocity.
  * This executable calculates the left-handed fermion density in front of the
 wall as a function of the distance to the bubble wall.
  *
- * \subsection EWBGRenormScale
- * This executable varies the MSbar renormalisation scale of a given parameter
-point between a factor of 0.5 and 1.5 of its original
- * value and calculates the EWBG and the CT parameters at each scale. As no RGE
-running is included yet, this has to be taken with
- * caution.
  *
  *
  */
@@ -866,6 +841,11 @@ public:
    */
   std::vector<double> WeinbergSecondDerivative() const;
   /**
+   * Calculates the second derivative of the Coleman-Weinberg potential at the
+   * tree-level minimum.
+   */
+  Eigen::MatrixXd WeinbergSecondDerivativeAsMatrixXd() const;
+  /**
    * Calculates the third derivative of the Coleman-Weinberg potential at the
    * tree-level minimum.
    */
@@ -1269,6 +1249,13 @@ public:
    * @return
    */
   Eigen::MatrixXd HessianCT(const std::vector<double> &v) const;
+
+  /**
+   * @brief GetCTIdentities
+   * @return vector with the identities required to vanish for the CT
+   * calculations. Returns an empty vector if not set otherwise.
+   */
+  virtual std::vector<double> GetCTIdentities() const;
 };
 
 } // namespace BSMPT

@@ -1,4 +1,25 @@
+<!--
+SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+
 # Changelog
+
+# 2021/05/06: Release of v2.2 
+- Unit tests are provided for the models 'ch2dm', 'n2hdm' and 'r2hdm'
+- Fixed the renormalisation scheme for the C2HDM 
+- Added the option to turn off the multithreading in the minimization
+- Removed the following binaries: 'RenormScale' and 'EWBGRenormScale'
+
+# 2020/01/03: Release of v2.1
+- Changed to multithreading in the minimizer
+- Included a fix for deprecating cubic splines starting in boost 1.72
+- Fixed an out-of-bounds error which caused a crash on mac
+- Provided some first unit tests with the ctest environment
+- Updated the cmaes inclusion to their new cmake setup
+- Updated the NLopt inclusion to use their delivered FindCmake instead of our own
+
 
 # 2020/07/06: Release of v2.0
 

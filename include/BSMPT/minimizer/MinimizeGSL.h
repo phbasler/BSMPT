@@ -1,21 +1,7 @@
-/*
- * MinimizeGSL.h
- *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * @file
@@ -75,13 +61,16 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params &p,
  * @param Temp Temperature at which to minimise the parameter point
  * @param seed seed used to find the random starting points for the local
  * optimisations
+ * @param UseMultiThreading Decides if the algorithm should use multithreading
+ * or not
  * @return first: vector with candidate for the global minimum, second: True if
  * a candidate for the global minimum is found and false otherwise
  */
 std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
-    const int &seed);
+    const int &seed,
+    bool UseMultiThreading = true);
 
 /**
  * Minimize the Potential from different random starting points and choose the
@@ -92,6 +81,8 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
  * @param seed seed used to find the random starting points for the local
  * optimisations
  * @param MaxSol numbers of local minima to find
+ * @param UseMultiThreading Decides if the algorithm should use multithreading
+ * or not
  * @return first: vector with candidate for the global minimum, second: True if
  * a candidate for the global minimum is found and false otherwise
  */
@@ -99,7 +90,8 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     const double &Temp,
     const int &seed,
-    const std::size_t &MaxSol);
+    const std::size_t &MaxSol,
+    bool UseMultiThreading = true);
 
 /**
  * Minimize the Potential from different random starting points and choose the
@@ -111,6 +103,8 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
  * optimisations
  * @param saveAllMinima List of all local minima
  * @param MaxSol numbers of local minima to find
+ * @param UseMultiThreading Decides if the algorithm should use multithreading
+ * or not
  * @return first: vector with the solution, second: True if a candidate for the
  * global minimum is found and false otherwise
  */
@@ -119,7 +113,8 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
     const double &Temp,
     const int &seed,
     std::vector<std::vector<double>> &saveAllMinima,
-    const std::size_t &MaxSol);
+    const std::size_t &MaxSol,
+    bool UseMultiThreading = true);
 
 } // namespace Minimizer
 } // namespace BSMPT
