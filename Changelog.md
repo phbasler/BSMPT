@@ -6,6 +6,12 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Changelog
 
+# 2021/05/06: Release of v2.2 
+- Unit tests are provided for the models 'ch2dm', 'n2hdm' and 'r2hdm'
+- Fixed the renormalisation scheme for the C2HDM 
+- Added the option to turn off the multithreading in the minimization
+- Removed the following binaries: 'RenormScale' and 'EWBGRenormScale'
+
 # 2020/01/03: Release of v2.1
 - Changed to multithreading in the minimizer
 - Included a fix for deprecating cubic splines starting in boost 1.72
