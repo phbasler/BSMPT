@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,7 +10,7 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 #include <gsl/gsl_integration.h>
 
 /**
@@ -765,40 +766,44 @@ transport_equations &transport_equations::operator()(const state_type &x,
 
     //		  //ddmut2
     //		dxdt[4] = (double) ((-3 * K2t * K6t * mut2 * vw * vw * dmtsquared *
-    //dmtsquared + 27 * GSS * K1b * K6t * mub2 * vw * dmtsquared + 27 * GSS *
-    //K1t * K6t * mut2 * vw * dmtsquared - 27 * GSS * K1t * K6t * mutc2 * vw *
-    //dmtsquared - 3 * K1t * K6t * dmut2 * vw * vw * dmtsquared + 6 * GM * K6t *
-    //mut2 * vw * dmtsquared + 6 * GM * K6t * mutc2 * vw * dmtsquared + 3 * GSS
+    // dmtsquared + 27 * GSS * K1b * K6t * mub2 * vw * dmtsquared + 27 * GSS *
+    // K1t * K6t * mut2 * vw * dmtsquared - 27 * GSS * K1t * K6t * mutc2 * vw *
+    // dmtsquared - 3 * K1t * K6t * dmut2 * vw * vw * dmtsquared + 6 * GM * K6t
+    // * mut2 * vw * dmtsquared + 6 * GM * K6t * mutc2 * vw * dmtsquared + 3 *
+    // GSS
     //* K6t * mub2 * vw * dmtsquared + 3 * GSS * K6t * mut2 * vw * dmtsquared +
-    //3 * GSS * K6t * mutc2 * vw * dmtsquared - 3 * GTTot * K2t * mut2 * vw *
-    //dmtsquared - 3 * GW * K6t * mub2 * vw * dmtsquared + 3 * GW * K6t * mut2 *
-    //vw * dmtsquared + 3 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t *
-    //mut2 * vw * dmtsquared + 3 * GY * K6t * mutc2 * vw * dmtsquared + 27 * GSS
+    // 3 * GSS * K6t * mutc2 * vw * dmtsquared - 3 * GTTot * K2t * mut2 * vw *
+    // dmtsquared - 3 * GW * K6t * mub2 * vw * dmtsquared + 3 * GW * K6t * mut2
+    // * vw * dmtsquared + 3 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t *
+    // mut2 * vw * dmtsquared + 3 * GY * K6t * mutc2 * vw * dmtsquared + 27 *
+    // GSS
     //* GTTot * K1b * mub2 + 27 * GSS * GTTot * K1t * mut2 - 27 * GSS * GTTot *
-    //K1t * mutc2 - 3 * GTTot * K1t * dmut2 * vw + 6 * GM * GTTot * mut2 + 6 *
-    //GM * GTTot * mutc2 + 3 * GSS * GTTot * mub2 + 3 * GSS * GTTot * mut2 + 3 *
-    //GSS * GTTot * mutc2 - 3 * GTTot * GW * mub2 + 3 * GTTot * GW * mut2 + 3 *
-    //GTTot * GY * muh2 + 3 * GTTot * GY * mut2 + 3 * GTTot * GY * mutc2 - dSt)
+    // K1t * mutc2 - 3 * GTTot * K1t * dmut2 * vw + 6 * GM * GTTot * mut2 + 6 *
+    // GM * GTTot * mutc2 + 3 * GSS * GTTot * mub2 + 3 * GSS * GTTot * mut2 + 3
+    // * GSS * GTTot * mutc2 - 3 * GTTot * GW * mub2 + 3 * GTTot * GW * mut2 + 3
+    // * GTTot * GY * muh2 + 3 * GTTot * GY * mut2 + 3 * GTTot * GY * mutc2 -
+    // dSt)
     /// K4t) / 0.3e1;
     //		//ddmutc2
     //		dxdt[6] = (double) ((-3 * vw * vw * K2t * dmtsquared * dmtsquared *
-    //mutc2 * K6t + 27 * GSS * K1b * K6t * mub2 * vw * dmtsquared + 27 * GSS *
-    //K1t * K6t * mut2 * vw * dmtsquared - 27 * GSS * K1t * K6t * mutc2 * vw *
-    //dmtsquared - 3 * vw * vw * K1t * dmutc2 * K6t * dmtsquared + 6 * GM * K6t
+    // mutc2 * K6t + 27 * GSS * K1b * K6t * mub2 * vw * dmtsquared + 27 * GSS *
+    // K1t * K6t * mut2 * vw * dmtsquared - 27 * GSS * K1t * K6t * mutc2 * vw *
+    // dmtsquared - 3 * vw * vw * K1t * dmutc2 * K6t * dmtsquared + 6 * GM * K6t
     //* mut2 * vw * dmtsquared + 6 * GM * K6t * mutc2 * vw * dmtsquared + 3 *
-    //GSS * K6t * mub2 * vw * dmtsquared + 3 * GSS * K6t * mut2 * vw *
-    //dmtsquared + 3 * GSS * K6t * mutc2 * vw * dmtsquared + 3 * GY * K6t * vw *
-    //dmtsquared * mub2 + 6 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t *
-    //mut2 * vw * dmtsquared + 6 * GY * K6t * mutc2 * vw * dmtsquared - dSt) /
-    //K4t) / 0.3e1;
+    // GSS * K6t * mub2 * vw * dmtsquared + 3 * GSS * K6t * mut2 * vw *
+    // dmtsquared + 3 * GSS * K6t * mutc2 * vw * dmtsquared + 3 * GY * K6t * vw
+    // * dmtsquared * mub2 + 6 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t
+    // * mut2 * vw * dmtsquared + 6 * GY * K6t * mutc2 * vw * dmtsquared - dSt) /
+    // K4t) / 0.3e1;
     //		//ddmuh2
     //		dxdt[7] = (double) (GHTot * (-4 * vw * K1h * dmuh2 + 3 * mub2 * GY + 6
     //* muh2 * GY + 3 * mut2 * GY + 6 * mutc2 * GY + 4 * GH * muh2) / K4h) /
-    //0.4e1;
+    // 0.4e1;
     //		//ddmub2
     //		dxdt[5] = GBTot * (9 * GSS * mub2 * K1b + 9 * mut2 * GSS * K1t - 9 *
-    //GSS * mutc2 * K1t - vw * K1b * dmub2 + GSS * mub2 + mut2 * GSS + GSS *
-    //mutc2 + mub2 * GW - mut2 * GW + mub2 * GY + muh2 * GY + mutc2 * GY) / K4b;
+    // GSS * mutc2 * K1t - vw * K1b * dmub2 + GSS * mub2 + mut2 * GSS + GSS *
+    // mutc2 + mub2 * GW - mut2 * GW + mub2 * GY + muh2 * GY + mutc2 * GY) /
+    // K4b;
   }
 
   return *this;
@@ -832,7 +837,8 @@ calculateTransportEquation(const double &z,
 
   // steps = integrate(transport,x,zInitial,z,stepsize_initial);
   //	steps = integrate_adaptive( make_controlled( abs_err , rel_err ,
-  //error_stepper_type() ) ,RGE , x , EnergyStart , EnergyEnd , stepsize_initial
+  // error_stepper_type() ) ,RGE , x , EnergyStart , EnergyEnd ,
+  // stepsize_initial
   //);
 
   integrate_adaptive(make_controlled(abs_err, rel_err, error_stepper_type()),

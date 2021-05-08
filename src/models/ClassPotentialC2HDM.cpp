@@ -1,11 +1,12 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/models/ClassPotentialC2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 namespace BSMPT
