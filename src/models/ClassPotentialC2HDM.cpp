@@ -2075,8 +2075,7 @@ void Class_Potential_C2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 void Class_Potential_C2HDM::write() const
 {
   std::stringstream ss;
-  typedef std::numeric_limits<double> dbl;
-  std::cout.precision(dbl::max_digits10);
+  ss.precision(std::numeric_limits<double>::max_digits10);
 
   double MSM = 0, MhUp = 0, MhDown = 0;
 
