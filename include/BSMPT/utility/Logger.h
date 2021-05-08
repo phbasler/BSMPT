@@ -7,6 +7,7 @@
 #pragma once
 
 #include <fstream>
+#include <map>
 
 /**
  * @file
@@ -19,7 +20,10 @@ enum class LoggingLevel
 {
   None,
   Default,
-  Detailed
+  MinimizerDetailed,
+  ProgDetailed,
+  EWBGDetailed,
+  Debug
 };
 
 class BSMPTLogger
@@ -35,19 +39,27 @@ private:
   BSMPTLogger &operator=(BSMPTLogger &&) = default;
 
   void SetOStream(std::ostream &Ostream);
+  void SetOStream(const std::string &file);
   template <typename T> void Write(LoggingLevel level, const T &toWrite)
   {
-    if (level <= mCurrentLevel)
+    auto pos = mCurrentSetup.find(level);
+    if (pos != mCurrentSetup.end() and pos->second)
     {
       mOstream << toWrite << std::endl;
     }
   }
-  void SetLevel(LoggingLevel level);
-  void SetLoggingFile(const std::string &file);
+  void SetLevel(const std::map<LoggingLevel, bool> &level);
+  void Disable();
 
   std::ostream mOstream;
   std::ofstream mfilestream;
-  LoggingLevel mCurrentLevel{LoggingLevel::Default};
+
+  std::map<LoggingLevel, bool> mCurrentSetup{
+      {LoggingLevel::Default, true},
+      {LoggingLevel::EWBGDetailed, false},
+      {LoggingLevel::ProgDetailed, false},
+      {LoggingLevel::ProgDetailed, false},
+      {LoggingLevel::Debug, false}};
 };
 
 class Logger
@@ -58,21 +70,25 @@ public:
   Logger &operator=(const Logger &) = delete;
   Logger &operator=(Logger &&) = delete;
 
-  static void SetLevel(LoggingLevel level) { Instance().SetLevel(level); }
+  static void SetLevel(const std::map<LoggingLevel, bool> &Setup)
+  {
+    Instance().SetLevel(Setup);
+  }
 
   static void SetOStream(std::ostream &Ostream)
   {
     Instance().SetOStream(Ostream);
+  }
+  static void SetOStream(const std::string &file)
+  {
+    Instance().SetOStream(file);
   }
   template <typename T> static void Write(LoggingLevel level, const T &toWrite)
   {
     Instance().Write(level, toWrite);
   }
 
-  static void SetLoggingFile(const std::string &file)
-  {
-    Instance().SetLoggingFile(file);
-  }
+  static void Disable() { Instance().Disable(); }
 
 private:
   static BSMPTLogger &Instance()

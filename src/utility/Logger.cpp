@@ -19,15 +19,31 @@ void BSMPTLogger::SetOStream(std::ostream &Ostream)
   mOstream.rdbuf(Ostream.rdbuf());
 }
 
-void BSMPTLogger::SetLevel(LoggingLevel level)
+void BSMPTLogger::SetLevel(const std::map<LoggingLevel, bool> &Setup)
 {
-  mCurrentLevel = level;
+  for (const auto &el : Setup)
+  {
+    auto pos = mCurrentSetup.find(el.first);
+    if (pos != mCurrentSetup.end())
+    {
+      pos->second = el.second;
+    }
+    else
+    {
+      mCurrentSetup.emplace(el);
+    }
+  }
 }
 
-void BSMPTLogger::SetLoggingFile(const std::string &file)
+void BSMPTLogger::SetOStream(const std::string &file)
 {
   mfilestream = std::ofstream(file);
   mOstream.rdbuf(mfilestream.rdbuf());
+}
+
+void BSMPTLogger::Disable()
+{
+  mCurrentSetup.clear();
 }
 
 } // namespace BSMPT
