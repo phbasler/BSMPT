@@ -1,10 +1,11 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/baryo_calculation/Fluid_Type/tau_source.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 
 /**
  * @file
