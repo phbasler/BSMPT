@@ -217,7 +217,6 @@ bool GSL_Find_Maximum_line(
     const std::vector<double> &vevsymmetric,
     std::vector<double> &solV)
 {
-  std::cout << std::scientific;
 
   struct GSL_params params;
   params.Temp         = Temp;

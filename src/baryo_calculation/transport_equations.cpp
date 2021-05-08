@@ -10,6 +10,7 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <gsl/gsl_integration.h>
 
@@ -226,15 +227,6 @@ void GSL_integration_mubl::init(
   LW = Wall::calculate_wall_thickness_plane(
       modelPointer, TC, vev_critical, vev_symmetric, WhichMinimizer);
 
-  if (false)
-  {
-    double LW1D = Wall::calculate_wall_thickness_1D(
-        modelPointer, TC, vev_critical, vev_symmetric);
-    std::cout << "The 1D LW is given by " << LW1D << std::endl;
-    std::cout << "The relative error to the plane LW is given by "
-              << (LW - LW1D) / LW * 100 << " %" << std::endl;
-  }
-
   zmax = 4 * LW;
 
   // Find minimum slightly before the symmetric phase to define the CP-violating
@@ -390,7 +382,6 @@ double transport_equations::get_W_mass(const std::vector<double> &vev,
 
   for (int j = modelPointer->get_NGauge() - 1; j >= 0; j--)
   {
-    // std::cout << res.at(j) << std::endl;
     if (nrepeat[j] > 1)
     {
       if (std::isnan(res.at(j)))
@@ -424,9 +415,10 @@ std::vector<double> transport_equations::get_top_mass_and_derivative(
   res.push_back(topmasssquared);
   if (std::isnan(topmasssquared))
   {
+    std::stringstream ss;
     for (std::size_t i = 0; i < vev.size(); i++)
-      std::cout << vev.at(i) << sep;
-    std::cout << std::endl;
+      ss << vev.at(i) << sep;
+    Logger::Write(LoggingLevel::EWBGDetailed, ss.str());
     std::string retmessage = "Nan found in ";
     retmessage += __func__;
     throw std::runtime_error(retmessage);
@@ -440,8 +432,10 @@ std::vector<double> transport_equations::get_top_mass_and_derivative(
       retmessage += __func__;
       retmessage += " at deriv number ";
       retmessage += std::to_string(i);
+      std::stringstream ss;
       for (std::size_t j = 0; j < vev.size(); j++)
-        std::cout << vev.at(j) << sep;
+        ss << vev.at(j) << sep;
+      Logger::Write(LoggingLevel::EWBGDetailed, ss.str());
       throw std::runtime_error(retmessage);
     }
   }
@@ -522,7 +516,6 @@ transport_equations &transport_equations::operator()(const state_type &x,
                                                      state_type &dxdt,
                                                      const double z)
 {
-  std::cout << std::scientific;
   std::vector<double> topres;
   std::vector<double> vev, vevdiff;
 
@@ -774,8 +767,8 @@ transport_equations &transport_equations::operator()(const state_type &x,
     //* K6t * mub2 * vw * dmtsquared + 3 * GSS * K6t * mut2 * vw * dmtsquared +
     // 3 * GSS * K6t * mutc2 * vw * dmtsquared - 3 * GTTot * K2t * mut2 * vw *
     // dmtsquared - 3 * GW * K6t * mub2 * vw * dmtsquared + 3 * GW * K6t * mut2
-    // * vw * dmtsquared + 3 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t *
-    // mut2 * vw * dmtsquared + 3 * GY * K6t * mutc2 * vw * dmtsquared + 27 *
+    // * vw * dmtsquared + 3 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t
+    // * mut2 * vw * dmtsquared + 3 * GY * K6t * mutc2 * vw * dmtsquared + 27 *
     // GSS
     //* GTTot * K1b * mub2 + 27 * GSS * GTTot * K1t * mut2 - 27 * GSS * GTTot *
     // K1t * mutc2 - 3 * GTTot * K1t * dmut2 * vw + 6 * GM * GTTot * mut2 + 6 *
@@ -792,9 +785,10 @@ transport_equations &transport_equations::operator()(const state_type &x,
     //* mut2 * vw * dmtsquared + 6 * GM * K6t * mutc2 * vw * dmtsquared + 3 *
     // GSS * K6t * mub2 * vw * dmtsquared + 3 * GSS * K6t * mut2 * vw *
     // dmtsquared + 3 * GSS * K6t * mutc2 * vw * dmtsquared + 3 * GY * K6t * vw
-    // * dmtsquared * mub2 + 6 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY * K6t
-    // * mut2 * vw * dmtsquared + 6 * GY * K6t * mutc2 * vw * dmtsquared - dSt) /
-    // K4t) / 0.3e1;
+    // * dmtsquared * mub2 + 6 * GY * K6t * muh2 * vw * dmtsquared + 3 * GY *
+    // K6t
+    // * mut2 * vw * dmtsquared + 6 * GY * K6t * mutc2 * vw * dmtsquared - dSt)
+    // / K4t) / 0.3e1;
     //		//ddmuh2
     //		dxdt[7] = (double) (GHTot * (-4 * vw * K1h * dmuh2 + 3 * mub2 * GY + 6
     //* muh2 * GY + 3 * mut2 * GY + 6 * mutc2 * GY + 4 * GH * muh2) / K4h) /
@@ -869,11 +863,12 @@ calculateTransportEquation(const double &z,
 
   if (std::isnan(parEnd.at(0)))
   {
-    std::cout << "Nan in " << __func__ << std::endl
-              << "parEnd.size() = " << parEnd.size() << "\nparEnd = ";
+    std::stringstream ss;
+    ss << "Nan in " << __func__ << std::endl
+       << "parEnd.size() = " << parEnd.size() << "\nparEnd = ";
     for (std::size_t i = 0; i < parEnd.size(); i++)
-      std::cout << parEnd.at(i) << sep;
-    std::cout << std::endl;
+      ss << parEnd.at(i) << sep;
+    Logger::Write(LoggingLevel::EWBGDetailed, ss.str());
   }
   return parEnd;
 }
@@ -896,9 +891,11 @@ double mubl_func(double z, void *p)
       0.5 * (1 + 4 * K1t) * mut2 + 0.5 * (1 + 4 * K1b) * mub2 - 2 * K1t * mutc2;
   if (std::isnan(res))
   {
-    std::cout << "res = nan at z = " << z << std::endl;
-    std::cout << "K1t = " << K1t << "\nK1b = " << K1b << "\nmut2 = " << mut2
-              << "\nmub2 = " << mub2 << "\nmutc2 = " << mutc2 << std::endl;
+    std::stringstream ss;
+    ss << "res = nan at z = " << z << std::endl;
+    ss << "K1t = " << K1t << "\nK1b = " << K1b << "\nmut2 = " << mut2
+       << "\nmub2 = " << mub2 << "\nmutc2 = " << mutc2;
+    Logger::Write(LoggingLevel::EWBGDetailed, ss.str());
   }
   return res;
 }
