@@ -15,6 +15,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
@@ -48,7 +49,6 @@ struct CLIOptions
 int main(int argc, char *argv[])
 try
 {
-
   /**
    * PrintErrorLines decides if parameter points with no valid EWPT (no NLO
    * stability or T=300 vanishing VEV) are printed in the output file
