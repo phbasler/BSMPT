@@ -15,6 +15,7 @@
 
 #include <BSMPT/models/ClassTemplate.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
@@ -212,18 +213,19 @@ void Class_Template::set_CT_Pot_Par(const std::vector<double> &par)
 void Class_Template::write() const
 {
 
-  std::cout << "Model = " << Model << std::endl;
+  std::stringstream ss;
+  ss << "Model = " << Model << std::endl;
 
-  std::cout << "The parameters are : " << std::endl;
-  std::cout << "lambda = " << lambda << std::endl
-            << "m^2 = " << ms << std::endl;
+  ss << "The parameters are : " << std::endl;
+  ss << "lambda = " << lambda << std::endl << "m^2 = " << ms << std::endl;
 
-  std::cout << "The counterterm parameters are : " << std::endl;
-  std::cout << "dT = " << dT << std::endl
-            << "dlambda = " << dlambda << std::endl
-            << "dm^2 = " << dms << std::endl;
+  ss << "The counterterm parameters are : " << std::endl;
+  ss << "dT = " << dT << std::endl
+     << "dlambda = " << dlambda << std::endl
+     << "dm^2 = " << dms << std::endl;
 
-  std::cout << "The scale is given by mu = " << scale << " GeV " << std::endl;
+  ss << "The scale is given by mu = " << scale << " GeV " << std::endl;
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 /**

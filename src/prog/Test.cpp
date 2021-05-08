@@ -15,6 +15,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy
 #include <fstream>
@@ -55,17 +56,17 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
 
-  std::cout << "Found file" << std::endl;
+  Logger::Write(LoggingLevel::ProgDetailed, "Found file");
 
   std::string linestr;
   std::unique_ptr<Class_Potential_Origin> modelPointer =
       ModelID::FChoose(args.Model);
 
-  std::cout << "Created modelpointer " << std::endl;
+  Logger::Write(LoggingLevel::ProgDetailed, "Created modelpointer ");
 
   while (getline(infile, linestr))
   {
@@ -78,7 +79,7 @@ try
     }
     if (linecounter == args.Line and linecounter != 1)
     {
-      std::cout << "Found line" << std::endl;
+      Logger::Write(LoggingLevel::ProgDetailed, "Found line");
       modelPointer->initModel(linestr);
       modelPointer->write();
       std::vector<double> dummy;
@@ -109,38 +110,40 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   if (argc < 4 or args.at(0) == "--help")
   {
+    std::stringstream ss;
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout << "Test performs a serious of tests on the given model. "
-                 "Intended for testing new models."
-              << std::endl
-              << "It is called either by " << std::endl
-              << "./Test model input Line" << std::endl
-              << "or with the following arguments" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--help"
-              << "Shows this menu" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--model="
-              << "The model you want to test" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--input="
-              << "The input file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--Line="
-              << "The line in the input file with the parameter point used to "
-                 "check the model."
-              << std::endl;
+    ss << "Test performs a serious of tests on the given model. "
+          "Intended for testing new models."
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./Test model input Line" << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to test" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--Line="
+       << "The line in the input file with the parameter point used to "
+          "check the model."
+       << std::endl;
     std::string GSLhelp{"--UseGSL="};
     GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-              << "Use the GSL library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
+       << "Use the GSL library to minimize the effective potential"
+       << std::endl;
     std::string CMAEShelp{"--UseCMAES="};
     CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-              << "Use the CMAES library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
+       << "Use the CMAES library to minimize the effective potential"
+       << std::endl;
     std::string NLoptHelp{"--UseNLopt="};
     NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-              << "Use the NLopt library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
+       << "Use the NLopt library to minimize the effective potential"
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     ShowInputError();
   }
 
@@ -169,7 +172,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
       else if (StringStartsWith(el, "--input="))
       {
         InputFile = arg.substr(std::string("--input=").size());
-        std::cout << "Inputfile = " << InputFile << std::endl;
+        Logger::Write(LoggingLevel::ProgDetailed, "Inputfile = " + InputFile);
       }
       else if (StringStartsWith(el, "--line="))
       {

@@ -1,11 +1,14 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/Kfactors/Kfactors.h>
+#include <BSMPT/utility/Logger.h>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 #include <gsl/gsl_integration.h>
 
@@ -170,11 +173,12 @@ double K_functions(double masssquared, double Temp, int switchvalue, int s)
 
 void display_results(std::string title, double result, double error)
 {
-  std::cout << std::scientific;
-  std::cout << title << "==================\n";
-  // printf ("%s ==================\n", title);
-  std::cout << "result = " << result << std::endl;
-  std::cout << "sigma = " << error << std::endl;
+  std::stringstream ss;
+  ss << std::scientific;
+  ss << title << "==================\n"
+     << "result = " << result << std::endl;
+  ss << "sigma = " << error << std::endl;
+  Logger::Write(LoggingLevel::EWBGDetailed, ss.str());
 }
 
 double Ktilde_normalization_func(double x, void *p)
