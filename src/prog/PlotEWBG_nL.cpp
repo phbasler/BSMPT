@@ -15,6 +15,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Pot...
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
@@ -62,14 +63,15 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
 
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
 
@@ -106,20 +108,24 @@ try
   infile.close();
   if (!found)
   {
-    std::cout << "Line not found !\n";
-    return -1;
+    Logger::Write(LoggingLevel::Default, "Line not found !");
+    return EXIT_FAILURE;
   }
 
   if (args.TerminalOutput) modelPointer->write();
   // CALL: BSMPT-->Phasetransition
-  if (args.TerminalOutput) std::cout << "PTFinder called..." << std::endl;
+  if (args.TerminalOutput)
+    Logger::Write(
+        LoggingLevel::ProgDetailed, "PTFinder called...", __FILE__, __LINE__);
   auto EWPT =
       Minimizer::PTFinder_gen_all(modelPointer, 0, 300, args.WhichMinimizer);
   // SFOEWPT FOUND
   if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and
       C_PT * EWPT.Tc < EWPT.vc)
   {
-    if (args.TerminalOutput) std::cout << "SFOEWPT found..." << std::endl;
+    if (args.TerminalOutput)
+      Logger::Write(
+          LoggingLevel::ProgDetailed, "SFOEWPT found...", __FILE__, __LINE__);
     std::vector<double> vcritical, vbarrier;
     vcritical = EWPT.EWMinimum;
     double TC = EWPT.Tc;
@@ -134,7 +140,11 @@ try
     /////////////////////////////////////////////////////////////////////////////////
     std::size_t nstep = 100;
 
-    if (args.TerminalOutput) std::cout << "Set up the numerics " << std::endl;
+    if (args.TerminalOutput)
+      Logger::Write(LoggingLevel::ProgDetailed,
+                    "Set up the numerics ",
+                    __FILE__,
+                    __LINE__);
     EtaInterface.setNumerics(
         args.vw,
         EWPT.EWMinimum,
@@ -144,7 +154,10 @@ try
         args.WhichMinimizer); // Set up parameter container for Baryo
                               // Calculation-->Calls container.init
     if (args.TerminalOutput)
-      std::cout << "Starting setting the class instances" << std::endl;
+      Logger::Write(LoggingLevel::ProgDetailed,
+                    "Starting setting the class instances",
+                    __FILE__,
+                    __LINE__);
     BSMPT::Baryo::tau_source C_tau;
     EtaInterface.set_transport_method(
         TransportMethod::tau); // setting to tau class
@@ -192,7 +205,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
@@ -205,52 +218,53 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   if (argc < 7 or args.at(0) == "--help")
   {
+    std::stringstream ss;
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout << "Calculation of the left-handed chemical potentials or "
-                 "particle densities triggering the EW"
-              << " sphaleron transitions as a function of the wall distance z ."
-              << std::endl
-              << "It is called either by " << std::endl
-              << "./PlotEWBG_nL Model Inputfile Outputfile Line vw "
-                 "EWBGConfigFile TerminalOutput(y/n)"
-              << std::endl
-              << "or with the following arguments" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--help"
-              << "Shows this menu" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--model="
-              << "The model you want to investigate" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--input="
-              << "The input file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--output="
-              << "The output file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--Line="
-              << "The line with the given parameter point. Expects line 1 to "
-                 "be a legend."
-              << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--config="
-              << "The EWBG config file." << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left
-              << "--TerminalOutput="
-              << "y/n Turns on additional information in the terminal during "
-                 "the calculation."
-              << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--vw="
-              << "The wall velocity. Default value of 0.1." << std::endl;
+    ss << "Calculation of the left-handed chemical potentials or "
+          "particle densities triggering the EW"
+       << " sphaleron transitions as a function of the wall distance z ."
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./PlotEWBG_nL Model Inputfile Outputfile Line vw "
+          "EWBGConfigFile TerminalOutput(y/n)"
+       << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--output="
+       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--Line="
+       << "The line with the given parameter point. Expects line 1 to "
+          "be a legend."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--config="
+       << "The EWBG config file." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
+       << "y/n Turns on additional information in the terminal during "
+          "the calculation."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--vw="
+       << "The wall velocity. Default value of 0.1." << std::endl;
     std::string GSLhelp{"--UseGSL="};
     GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-              << "Use the GSL library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
+       << "Use the GSL library to minimize the effective potential"
+       << std::endl;
     std::string CMAEShelp{"--UseCMAES="};
     CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-              << "Use the CMAES library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
+       << "Use the CMAES library to minimize the effective potential"
+       << std::endl;
     std::string NLoptHelp{"--UseNLopt="};
     NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-              << "Use the NLopt library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
+       << "Use the NLopt library to minimize the effective potential"
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     ShowInputError();
   }
 
@@ -359,15 +373,15 @@ bool CLIOptions::good() const
   }
   if (Model == ModelID::ModelIDs::NotSet)
   {
-    std::cerr
-        << "Your Model parameter does not match with the implemented Models."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "Your Model parameter does not match with the implemented Models.");
     ShowInputError();
     return false;
   }
   if (Line < 1)
   {
-    std::cerr << "Start line counting with 1" << std::endl;
+    Logger::Write(LoggingLevel::Default, "Start line counting with 1");
     return false;
   }
   return true;

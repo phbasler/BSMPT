@@ -49,9 +49,13 @@ private:
     auto pos = mCurrentSetup.find(level);
     if (pos != mCurrentSetup.end() and pos->second)
     {
-      if (level != LoggingLevel::Default)
+      if (not file.empty())
       {
-        mOstream << "file: " << file << "; Line: " << line << "; ";
+        mOstream << "file: " << file << "; ";
+      }
+      if (line >= 0)
+      {
+        mOstream << "Line: " << line << "; ";
       }
       mOstream << toWrite << std::endl;
     }
@@ -97,14 +101,13 @@ public:
     Instance().SetOStream(file);
   }
   template <typename T>
-  static void WriteIMP(LoggingLevel level,
-                       const T &toWrite,
-                       const std::string &file,
-                       int line)
+  static void Write(LoggingLevel level,
+                    const T &toWrite,
+                    const std::string &file = "",
+                    int line                = -1)
   {
     Instance().Write(level, toWrite, file, line);
   }
-#define Write(x, y) WriteIMP(x, y, __FILE__, __LINE__)
 
   static void Disable() { Instance().Disable(); }
 

@@ -199,7 +199,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 

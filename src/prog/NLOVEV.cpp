@@ -57,13 +57,14 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cerr << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cerr << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
   std::string linestr;
@@ -136,7 +137,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
