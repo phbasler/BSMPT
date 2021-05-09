@@ -46,11 +46,11 @@ TestResults CheckNumberOfCTParameters(const Class_Potential_Origin &point)
   }
   else
   {
-    std::cerr << "WARNING: The number of labels for the Counterterms does not "
-                 "match the number of Counterterms."
-              << " If you don't fix this, then your header will not match the "
-                 "numerical output in the output file."
-              << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "WARNING: The number of labels for the Counterterms does not "
+                  "match the number of Counterterms."
+                  " If you don't fix this, then your header will not match the "
+                  "numerical output in the output file.");
   }
   return result;
 }
@@ -65,11 +65,11 @@ TestResults CheckNumberOfVEVLabels(const Class_Potential_Origin &point)
   }
   else
   {
-    std::cerr << "WARNING: The number of labels for the VEVs does not match "
-                 "the number of VEVs defined in the model."
-              << " If you don't fix this, then your header will not match the "
-                 "numerical output in the output file."
-              << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "WARNING: The number of labels for the VEVs does not match "
+                  "the number of VEVs defined in the model."
+                  " If you don't fix this, then your header will not match the "
+                  "numerical output in the output file.");
   }
 
   return result;
@@ -82,14 +82,14 @@ TestResults CheckLegendTemp(const Class_Potential_Origin &point)
                     : TestResults::Fail;
   if (result == TestResults::Fail)
   {
-    std::cerr
-        << "WARNING: The number of labels in addLegendTemp does not match the "
-           "number of VEVs + 3."
-        << " If you don't fix this, then your header will not match the "
-           "numerical output in the output file."
-        << " It is expected to be label for the critical temperature, the cirtical VEV, the ratio of VEV and temperature and the labels\
-                       for the VEVs."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "WARNING: The number of labels in addLegendTemp does not match the "
+        "number of VEVs + 3."
+        " If you don't fix this, then your header will not match the "
+        "numerical output in the output file."
+        " It is expected to be label for the critical temperature, the cirtical VEV, the ratio of VEV and temperature and the labels\
+                       for the VEVs.");
   }
   return result;
 }
@@ -113,12 +113,12 @@ TestResults CheckNumberOfTripleCouplings(const Class_Potential_Origin &point)
                     : TestResults::Fail;
   if (result == TestResults::Fail)
   {
-    std::cerr
-        << "WARNING: The number of labels in addLegendTripleCouplings does "
-           "not match the number of calculated Triple Higgs Couplings."
-        << " If you don't fix this, then your header will not match the "
-           "numerical output in the output file."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "WARNING: The number of labels in addLegendTripleCouplings does "
+        "not match the number of calculated Triple Higgs Couplings."
+        " If you don't fix this, then your header will not match the "
+        "numerical output in the output file.");
   }
   return result;
 }
@@ -525,10 +525,16 @@ TestResults CheckCKMUnitarity()
   if (result == TestResults::Fail)
   {
 
-    std::cerr << "Your CKM implementation is not unitary!" << std::endl;
-    std::cerr << "Your CKM Matrix V is given by \n" << VCKM << std::endl;
-    std::cerr << "with adjoint(V)*V = \n" << VCKM.adjoint() * VCKM << std::endl;
-    std::cerr << "The norm deviating from 1 is " << norm << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Your CKM implementation is not unitary!");
+    std::stringstream ss;
+    ss << "Your CKM Matrix V is given by \n" << VCKM << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    ss.clear();
+    ss << "with adjoint(V)*V = \n" << VCKM.adjoint() * VCKM << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    Logger::Write(LoggingLevel::Default,
+                  "The norm deviating from 1 is " + std::to_string(norm));
   }
   return result;
 }

@@ -368,10 +368,12 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA,
     throwstring += " in function ";
     throwstring += __func__;
     throwstring += "\n";
-    std::cerr << "Found nan at line = " << InputLineNumber << " in function "
-              << __func__ << std::endl;
-    std::cerr << mas << sep << mbs << sep << mcs << sep << res << sep << C
-              << std::endl;
+    std::stringstream ss;
+    ss << "Found nan at line = " << InputLineNumber << " in function "
+       << __func__ << std::endl;
+    ss << mas << sep << mbs << sep << mcs << sep << res << sep << C
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str(), __FILE__, __LINE__);
     throw std::runtime_error(throwstring.c_str());
   }
 
@@ -436,7 +438,7 @@ Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepeated(
   {
     if (std::abs(Eigenvalues[i] - Eigenvalues[i + 1]) < EVThres)
     {
-      std::cerr << "ERROR ! repeated eigenvalues. \n";
+      Logger::Write(LoggingLevel::Default, "ERROR ! repeated eigenvalues.");
     }
   }
 
@@ -1438,13 +1440,15 @@ MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = HiggsMassMatrix(Transformedv, Temp, diff);
@@ -1526,13 +1530,15 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = HiggsMassesSquared(Transformedv, Temp, diff);
@@ -1660,13 +1666,15 @@ Class_Potential_Origin::GaugeMassesSquared(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = GaugeMassesSquared(Transformedv, Temp, diff);
@@ -2087,13 +2095,15 @@ double Class_Potential_Origin::VEff(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     return VEff(Transformedv, Temp, diff);
@@ -2792,13 +2802,15 @@ Class_Potential_Origin::QuarkMassMatrix(const std::vector<double> &v) const
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     MIJ          = QuarkMassMatrix(Transformedv);
@@ -2866,13 +2878,15 @@ Class_Potential_Origin::LeptonMassMatrix(const std::vector<double> &v) const
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = LeptonMassMatrix(Transformedv);

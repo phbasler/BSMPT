@@ -17,6 +17,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
@@ -299,9 +300,10 @@ double Class_Potential_Origin::boson_legacy(double MassSquared,
       else
       {
         PotVal = 0;
-        std::cerr << "This is not implemented yet! You called the derivative "
-                     "of the bosonic"
-                  << " std::size_tegral for negative m^2" << std::endl;
+        Logger::Write(LoggingLevel::Default,
+                      "This is not implemented yet! You called the derivative "
+                      "of the bosonic"
+                      " std::size_tegral for negative m^2");
       }
     }
   }

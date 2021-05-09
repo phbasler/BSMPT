@@ -97,7 +97,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
@@ -225,15 +225,15 @@ bool CLIOptions::good() const
   }
   if (Model == ModelID::ModelIDs::NotSet)
   {
-    std::cerr
-        << "Your Model parameter does not match with the implemented Models."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "Your Model parameter does not match with the implemented Models.");
     ShowInputError();
     return false;
   }
   if (Line < 1)
   {
-    std::cerr << "Start line counting with 1" << std::endl;
+    Logger::Write(LoggingLevel::Default, "Start line counting with 1");
     return false;
   }
   return true;

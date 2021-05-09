@@ -80,7 +80,11 @@ double K_integrand(const std::vector<double> &p,
     res = std::abs(pz) * distribution_f0(E0, s, Temp, 0) /
           (2.0 * std::pow(E0, 3) * E0z);
     break;
-  default: std::cerr << "Wrong call for " << __func__ << std::endl; break;
+  default:
+    Logger::Write(LoggingLevel::Default,
+                  std::string("Wrong call for ") + __func__);
+
+    break;
   }
 
   return res;
@@ -157,7 +161,8 @@ double K_functions(double masssquared, double Temp, int switchvalue, int s)
   double norm      = 0;
   if (switchvalue > 10)
   {
-    std::cerr << "Wrong switch value for K_functions ! " << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Wrong switch value for K_functions ! ");
     exit(EXIT_FAILURE);
   }
   else if (switchvalue == 5 or switchvalue == 6 or switchvalue == 10)

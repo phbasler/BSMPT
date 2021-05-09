@@ -12,6 +12,7 @@
 
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <fstream>
 #include <iomanip>
@@ -49,13 +50,14 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
   std::string linestr;
@@ -75,7 +77,8 @@ try
     if (linecounter > args.LastLine) break;
     if (args.TerminalOutput)
     {
-      std::cout << "\rCurrently at line " << linecounter << std::flush;
+      Logger::Write(LoggingLevel::ProgDetailed,
+                    "Currently at line " + std::to_string(linecounter));
     }
     if (linecounter == 1)
     {
@@ -129,7 +132,6 @@ try
     linecounter++;
     if (infile.eof()) break;
   }
-  if (args.TerminalOutput) std::cout << std::endl;
 
   outfile.close();
 
@@ -141,7 +143,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
@@ -153,32 +155,33 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   if (argc < 6 or args.at(0) == "--help")
   {
+    std::stringstream ss;
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout
-        << "TripleHiggsNLO calculates the coupling between three Higgs bosons"
-        << std::endl
-        << "It is called either by " << std::endl
-        << "./TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd"
-        << std::endl
-        << "or with the following arguments" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--help"
-        << "Shows this menu" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--model="
-        << "The model you want to investigate" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--input="
-        << "The input file in tsv format" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--output="
-        << "The output file in tsv format" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
-        << "The first line in the input file to calculate the EWPT. Expects "
-           "line 1 to be a legend."
-        << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
-        << "The last line in the input file to calculate the EWPT." << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
-        << "y/n Turns on additional information in the terminal during the "
-           "calculation."
-        << std::endl;
+    ss << "TripleHiggsNLO calculates the coupling between three Higgs bosons"
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd"
+       << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--output="
+       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
+       << "The first line in the input file to calculate the EWPT. Expects "
+          "line 1 to be a legend."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
+       << "The last line in the input file to calculate the EWPT." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
+       << "y/n Turns on additional information in the terminal during the "
+          "calculation."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     ShowInputError();
   }
 
@@ -246,20 +249,20 @@ bool CLIOptions::good() const
   if (Model == ModelID::ModelIDs::NotSet)
   {
 
-    std::cerr
-        << "Your Model parameter does not match with the implemented Models."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "Your Model parameter does not match with the implemented Models.");
     ShowInputError();
     return false;
   }
   if (FirstLine < 1)
   {
-    std::cout << "Start line counting with 1" << std::endl;
+    Logger::Write(LoggingLevel::Default, "Start line counting with 1");
     return false;
   }
   if (FirstLine > LastLine)
   {
-    std::cout << "Firstline is smaller then LastLine " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Firstline is smaller then LastLine ");
     return false;
   }
   return true;
