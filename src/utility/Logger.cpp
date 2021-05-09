@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <BSMPT/utility/Logger.h>
+
 namespace BSMPT
 {
 void BSMPTLogger::SetOStream(std::ostream &Ostream)
@@ -33,6 +34,11 @@ void BSMPTLogger::SetLevel(const std::map<LoggingLevel, bool> &Setup)
       mCurrentSetup.emplace(el);
     }
   }
+}
+
+void BSMPTLogger::SetLevel(LoggingLevel level, bool enable)
+{
+  mCurrentSetup[level] = enable;
 }
 
 void BSMPTLogger::SetOStream(const std::string &file)

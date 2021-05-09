@@ -1,4 +1,3 @@
-
 set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/utility")
 set(header
   ${header_path}/utility.h
@@ -12,3 +11,4 @@ if(Boost_FOUND)
   target_link_libraries(Utility PUBLIC Boost::boost)
 endif()
 target_compile_features(Utility PUBLIC cxx_std_14)
+

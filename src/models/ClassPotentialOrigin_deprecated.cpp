@@ -84,10 +84,8 @@ double Class_Potential_Origin::Vsf(double MassSquared,
                                    int diff) const
 {
   double PotVal = 0;
-  //	std::cout << scale << std::endl;
-  double logM = FCW(MassSquared) + std::log(scale * scale);
-  //	std::cout << logM << std::endl;
-  double cf = 1.5 + 2 * std::log(4 * M_PI) -
+  double logM   = FCW(MassSquared) + std::log(scale * scale);
+  double cf     = 1.5 + 2 * std::log(4 * M_PI) -
               2 * ThermalFunctions::C_euler_gamma - 2 * std::log(4);
   if (diff == 0)
   {
