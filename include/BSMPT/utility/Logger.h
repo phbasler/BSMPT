@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <vector>
 
 /**
  * @file
@@ -17,6 +18,9 @@ namespace BSMPT
 {
 
 class Logger;
+
+void ShowLoggerHelp();
+void SetLogger(const std::vector<std::string> &args);
 
 enum class LoggingLevel
 {

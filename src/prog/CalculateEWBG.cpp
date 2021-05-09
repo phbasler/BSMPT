@@ -299,6 +299,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
        << "--UseMultithreading = true"
        << "Enables/Disables multi threading for the minimizers" << std::endl;
     Logger::Write(LoggingLevel::Default, ss.str());
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -313,6 +314,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -370,8 +372,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         UseMultithreading =
             el.substr(std::string("--usemultithreading=").size()) == "true";
       }
+      else
+      {
+        UnusedArgs.push_back(el);
+      }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+    SetLogger(UnusedArgs);
   }
   else
   {
