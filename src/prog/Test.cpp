@@ -144,6 +144,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
        << "Use the NLopt library to minimize the effective potential"
        << std::endl;
     Logger::Write(LoggingLevel::Default, ss.str());
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -158,6 +159,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   const std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -190,8 +192,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
       {
         UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
       }
+      else
+      {
+        UnusedArgs.push_back(el);
+      }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+    SetLogger(UnusedArgs);
   }
   else
   {

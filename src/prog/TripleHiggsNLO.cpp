@@ -182,6 +182,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
           "calculation."
        << std::endl;
     Logger::Write(LoggingLevel::Default, ss.str());
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -196,6 +197,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   const std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusuedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -228,7 +230,12 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         TerminalOutput =
             el.substr(std::string("--terminaloutput=").size()) == "y";
       }
+      else
+      {
+        UnusuedArgs.push_back(el);
+      }
     }
+    SetLogger(UnusuedArgs);
   }
   else
   {
