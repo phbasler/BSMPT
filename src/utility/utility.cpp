@@ -20,6 +20,14 @@ std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
   os << IMN.at(Model);
   return os;
 }
+
+std::string ModelIDToString(const ModelID::ModelIDs &Model)
+{
+  std::stringstream ss;
+  ss << Model;
+  return ss.str();
+}
+
 bool StringStartsWith(const std::string &str, const std::string &prefix)
 {
   return str.size() >= prefix.size() and str.find(prefix) == 0;

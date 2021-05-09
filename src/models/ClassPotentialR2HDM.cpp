@@ -6,6 +6,7 @@
 
 #include <BSMPT/models/ClassPotentialR2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 
 namespace BSMPT
@@ -265,9 +266,6 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double> &par)
     CTempC1 += 12.0 / 48.0 * cb * cb;
   }
 
-  //	std::cout << "CT1 = " << CTempC1 << "\tCTempC2 = " << CTempC2 <<
-  // std::endl;
-
   vevTreeMin.resize(nVEV);
   vevTreeMin[0] = 0;
   vevTreeMin[1] = C_vev0 * C_CosBeta;
@@ -501,44 +499,43 @@ void Class_Potential_R2HDM::set_CT_Pot_Par(const std::vector<double> &p)
  */
 void Class_Potential_R2HDM::write() const
 {
+  std::stringstream ss;
   typedef std::numeric_limits<double> dbl;
-  std::cout.precision(dbl::max_digits10);
+  ss.precision(dbl::max_digits10);
 
-  std::cout << "scale = " << scale << "\n";
+  ss << "scale = " << scale << "\n";
 
-  std::cout << "The parameters are : \n";
-  std::cout << "Model = " << Model << "\n";
-  std::cout << "v1 = " << C_vev0 * C_CosBeta << "\n";
-  std::cout << "v2 = " << C_vev0 * C_SinBeta << "\n";
-  std::cout << "Type = " << Type << "\n";
+  ss << "The parameters are : \n";
+  ss << "Model = " << Model << "\n";
+  ss << "v1 = " << C_vev0 * C_CosBeta << "\n";
+  ss << "v2 = " << C_vev0 * C_SinBeta << "\n";
+  ss << "Type = " << Type << "\n";
 
-  std::cout << "beta = " << beta << std::endl;
-  std::cout << "tan(beta) = " << TanBeta << std::endl;
-  std::cout << "Lambda1 = " << L1 << std::endl;
-  // std::cout << "Lambda1/2 = " << 0.5*L1 << std::endl;
-  std::cout << "Lambda2 = " << L2 << std::endl;
-  // std::cout << "Lambda2/2 = " << L2*0.5 << std::endl;
-  std::cout << "Lambda3 = " << L3 << std::endl;
-  std::cout << "Lambda4 = " << L4 << std::endl;
-  std::cout << "Re(Lambda5) = " << RL5 << std::endl;
-  std::cout << "Re(m_12^2) = " << RealMMix << std::endl;
-  std::cout << "m_{11}^2 = " << u1 << std::endl;
-  std::cout << "m_{22}^2 = " << u2 << std::endl;
+  ss << "beta = " << beta << std::endl;
+  ss << "tan(beta) = " << TanBeta << std::endl;
+  ss << "Lambda1 = " << L1 << std::endl;
+  ss << "Lambda2 = " << L2 << std::endl;
+  ss << "Lambda3 = " << L3 << std::endl;
+  ss << "Lambda4 = " << L4 << std::endl;
+  ss << "Re(Lambda5) = " << RL5 << std::endl;
+  ss << "Re(m_12^2) = " << RealMMix << std::endl;
+  ss << "m_{11}^2 = " << u1 << std::endl;
+  ss << "m_{22}^2 = " << u2 << std::endl;
 
-  std::cout << "The counterterms are :\n";
+  ss << "The counterterms are :\n";
 
-  std::cout << "DL1 := " << DL1CT << ";\n";
-  std::cout << "DL2 := " << DL2CT << ";\n";
-  std::cout << "DL3 := " << DL3CT << ";\n";
-  std::cout << "DL4 := " << DL4CT << ";\n";
-  std::cout << "DRL5 := " << DRL5CT << ";\n";
-  std::cout << "Du1 := " << Du1CT << ";\n";
-  std::cout << "Du2 := " << Du2CT << ";\n";
-  std::cout << "DRu3 := " << DRu3CT << ";\n";
+  ss << "DL1 := " << DL1CT << ";\n";
+  ss << "DL2 := " << DL2CT << ";\n";
+  ss << "DL3 := " << DL3CT << ";\n";
+  ss << "DL4 := " << DL4CT << ";\n";
+  ss << "DRL5 := " << DRL5CT << ";\n";
+  ss << "Du1 := " << Du1CT << ";\n";
+  ss << "Du2 := " << Du2CT << ";\n";
+  ss << "DRu3 := " << DRu3CT << ";\n";
 
-  std::cout << "DT1 := " << DT1 << ";\n";
-  std::cout << "DT2 := " << DT2 << ";\n";
-  std::cout << "DT3:= " << DT3 << ";" << std::endl;
+  ss << "DT1 := " << DT1 << ";\n";
+  ss << "DT2 := " << DT2 << ";\n";
+  ss << "DT3:= " << DT3 << ";" << std::endl;
 
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
@@ -583,35 +580,31 @@ void Class_Potential_R2HDM::write() const
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
-  std::cout << "The mass spectrum is given by :\n";
-  std::cout << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n";
-  std::cout << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n";
-  std::cout << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
-            << "m_h = " << std::sqrt(HiggsMasses[posN[0]]) << " GeV \n"
-            << "m_H = " << std::sqrt(HiggsMasses[posN[1]]) << " GeV \n"
-            << "m_A = " << std::sqrt(HiggsMasses[posA]) << " GeV \n";
+  ss << "The mass spectrum is given by :\n";
+  ss << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n";
+  ss << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n";
+  ss << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
+     << "m_h = " << std::sqrt(HiggsMasses[posN[0]]) << " GeV \n"
+     << "m_H = " << std::sqrt(HiggsMasses[posN[1]]) << " GeV \n"
+     << "m_A = " << std::sqrt(HiggsMasses[posA]) << " GeV \n";
 
-  std::cout << "The neutral mixing Matrix is given by :\n";
-  std::cout << "h = " << HiggsRot(posN[0], 4) << " zeta_1 ";
+  ss << "The neutral mixing Matrix is given by :\n";
+  ss << "h = " << HiggsRot(posN[0], 4) << " zeta_1 ";
   bool IsNegative = HiggsRot(posN[0], 6) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(HiggsRot(posN[0], 6)) << " zeta_2\n"
-            << "H = " << HiggsRot(posN[1], 4) << " zeta_1 ";
+    ss << "+";
+  ss << std::abs(HiggsRot(posN[0], 6)) << " zeta_2\n"
+     << "H = " << HiggsRot(posN[1], 4) << " zeta_1 ";
   IsNegative = HiggsRot(posN[1], 6) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(HiggsRot(posN[1], 6)) << " zeta_2" << std::endl;
+    ss << "+";
+  ss << std::abs(HiggsRot(posN[1], 6)) << " zeta_2" << std::endl;
 
-  //	std::cout << "The tree-level eigenvalues are given by \n";
-  //	for(std::size_t i=0;i<NHiggs;i++) std::cout << HiggsMasses[i] <<
-  // std::endl;
-  //
-  //
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 /**

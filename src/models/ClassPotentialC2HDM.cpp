@@ -2165,8 +2165,6 @@ void Class_Potential_C2HDM::write() const
     for (int i = 0; i < 3; i++)
     {
       NeutralHiggs[i] = HiggsMasses[posN[i]];
-      // std::cout << NeutralHiggs[i] << "\t" << std::sqrt(NeutralHiggs[i]) <<
-      // std::endl;
     }
     for (int i = 0; i < 3; i++)
     {
@@ -2420,7 +2418,6 @@ void Class_Potential_C2HDM::TripleHiggsCouplings()
       HiggsRot(i, j) = HiggsRotationMatrix[i][j];
     }
   }
-  //    std::cout << "HiggsRot = \n" << HiggsRot2 << "\n" << std::endl;
   MatrixXd HiggsRotSort(NHiggs, NHiggs);
   int posMHCS1 = 0, posMHCS2 = 0;
   int posN[3];
@@ -2462,8 +2459,6 @@ void Class_Potential_C2HDM::TripleHiggsCouplings()
     for (int i = 0; i < 3; i++)
     {
       NeutralHiggs[i] = HiggsMasses[posN[i]];
-      // std::cout << NeutralHiggs[i] << "\t" << std::sqrt(NeutralHiggs[i]) <<
-      // std::endl;
     }
     for (int i = 0; i < 3; i++)
     {
@@ -3130,14 +3125,10 @@ Class_Potential_C2HDM::VCounterSimplified(const std::vector<double> &v) const
 
   double v1, v2, vcp, vcb;
 
-  //	std::cout << "v.size() = " << v.size() << std::endl;
-
   vcb = v[2];
   v1  = v[4];
   v2  = v[6];
   vcp = v[7];
-
-  //	std::cout << vcb << "\t" << v1 << "\t" << v2 << "\t" << vcp << std::endl;
 
   double C22 = v2 * v2 + vcp * vcp + vcb * vcb;
 

@@ -15,6 +15,7 @@
  */
 namespace BSMPT
 {
+
 class Logger;
 
 enum class LoggingLevel
@@ -41,15 +42,22 @@ private:
 
   void SetOStream(std::ostream &Ostream);
   void SetOStream(const std::string &file);
-  template <typename T> void Write(LoggingLevel level, const T &toWrite)
+  template <typename T>
+  void
+  Write(LoggingLevel level, const T &toWrite, const std::string &file, int line)
   {
     auto pos = mCurrentSetup.find(level);
     if (pos != mCurrentSetup.end() and pos->second)
     {
+      if (level != LoggingLevel::Default)
+      {
+        mOstream << "file: " << file << "; Line: " << line << "; ";
+      }
       mOstream << toWrite << std::endl;
     }
   }
   void SetLevel(const std::map<LoggingLevel, bool> &level);
+  void SetLevel(LoggingLevel level, bool enable);
   void Disable();
 
   std::ostream mOstream;
@@ -75,6 +83,10 @@ public:
   {
     Instance().SetLevel(Setup);
   }
+  static void SetLevel(LoggingLevel level, bool enable)
+  {
+    Instance().SetLevel(level, enable);
+  }
 
   static void SetOStream(std::ostream &Ostream)
   {
@@ -84,10 +96,15 @@ public:
   {
     Instance().SetOStream(file);
   }
-  template <typename T> static void Write(LoggingLevel level, const T &toWrite)
+  template <typename T>
+  static void WriteIMP(LoggingLevel level,
+                       const T &toWrite,
+                       const std::string &file,
+                       int line)
   {
-    Instance().Write(level, toWrite);
+    Instance().Write(level, toWrite, file, line);
   }
+#define Write(x, y) WriteIMP(x, y, __FILE__, __LINE__)
 
   static void Disable() { Instance().Disable(); }
 

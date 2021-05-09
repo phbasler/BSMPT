@@ -14,6 +14,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Pot...
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
@@ -59,14 +60,15 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
 
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
 
@@ -103,20 +105,22 @@ try
   infile.close();
   if (!found)
   {
-    std::cout << "Line not found !\n";
-    return -1;
+    Logger::Write(LoggingLevel::Default, "Line not found !");
+    return EXIT_FAILURE;
   }
 
   if (args.TerminalOutput) modelPointer->write();
   // CALL: BSMPT-->Phasetransition
-  if (args.TerminalOutput) std::cout << "PTFinder called..." << std::endl;
+  if (args.TerminalOutput)
+    Logger::Write(LoggingLevel::ProgDetailed, "PTFinder called...");
   auto EWPT = Minimizer::PTFinder_gen_all(modelPointer, 0, 300);
 
   // SFOEWPT FOUND
   if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and
       C_PT * EWPT.Tc < EWPT.vc)
   {
-    if (args.TerminalOutput) std::cout << "SFOEWPT found..." << std::endl;
+    if (args.TerminalOutput)
+      Logger::Write(LoggingLevel::ProgDetailed, "SFOEWPT found...");
     std::vector<double> vcritical, vbarrier;
     vcritical = EWPT.EWMinimum;
     double TC = EWPT.Tc;
