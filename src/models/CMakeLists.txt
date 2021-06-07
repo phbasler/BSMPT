@@ -17,6 +17,7 @@ set(header
 
   # Here you can add your new model
   ${header_path}/ClassTemplate.h
+  ${header_path}/ClassPotentialCPintheDark.h
 )
 
 set(src
@@ -35,6 +36,7 @@ set(src
 
   # Here you can add your new model
   ClassTemplate.cpp
+  ClassPotentialCPintheDark.cpp
 )
 
 add_library(Models ${header} ${src})

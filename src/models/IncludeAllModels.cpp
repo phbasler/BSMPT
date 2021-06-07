@@ -15,6 +15,7 @@
 #include <utility>   // for pair
 
 #include <BSMPT/models/ClassTemplate.h>
+#include <BSMPT/models/ClassPotentialCPintheDark.h>
 
 namespace BSMPT
 {
@@ -33,6 +34,7 @@ std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice)
     break;
   case ModelIDs::CXSM: return std::make_unique<Class_CxSM>(); break;
   case ModelIDs::TEMPLATE: return std::unique_ptr<Class_Template>(); break;
+  case ModelIDs::CPINTHEDARK: return std::make_unique<Class_Potential_CPintheDark>(); break;
   default: throw std::runtime_error("Invalid model");
   }
 }
