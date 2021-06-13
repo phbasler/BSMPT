@@ -41,7 +41,7 @@ TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
   {
     auto expected = std::abs(modelPointer->get_vevTreeMin(i));
     auto res      = std::abs(sol.at(i));
-    REQUIRE(std::abs(res - expected) <= 1e-4);
+    REQUIRE(res == Approx(expected).margin(1e-4));
   }
 }
 
@@ -61,24 +61,25 @@ TEST_CASE("Checking EWPT for C2HDM", "[c2hdm]")
   const std::vector<double> min_expected =
       Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).EWMinimum;
   REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
-  REQUIRE(std::abs(omega_c_expected - EWPT.vc) / omega_c_expected <= 1e-4);
-  REQUIRE(std::abs(Tc_expected - EWPT.Tc) / Tc_expected <= 1e-4);
+  REQUIRE(std::abs(EWPT.vc) == Approx(omega_c_expected).epsilon(1e-4));
+  REQUIRE(EWPT.Tc == Approx(Tc_expected).epsilon(1e-4));
+  const double threshold = 1e-4;
   for (std::size_t i{0}; i < EWPT.EWMinimum.size(); ++i)
   {
     auto res      = std::abs(EWPT.EWMinimum.at(i));
     auto expected = std::abs(min_expected.at(i));
-    if (expected != 0)
+    if (expected > threshold)
     {
       UNSCOPED_INFO("Current Option for Minimizer:\t"
                     << Minimizer::WhichMinimizerDefault);
       UNSCOPED_INFO("This ist the position:"
                     << i << "\tFound solution =" << EWPT.EWMinimum.at(i)
                     << "\tExpected solution = " << min_expected.at(i));
-      REQUIRE(std::abs(res - expected) / expected <= 1e-4);
+      REQUIRE(res == Approx(expected).epsilon(1e-4));
     }
     else
     {
-      REQUIRE(res <= 1e-4);
+      REQUIRE(res <= threshold);
     }
   }
 }
@@ -257,7 +258,7 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
   auto Check = [](auto result, auto expected) {
     if (expected != 0)
     {
-      REQUIRE(std::abs(result - expected) / std::abs(expected) < 1e-4);
+      REQUIRE(result == Approx(expected).epsilon(1e-4));
     }
     else
     {
@@ -307,47 +308,3 @@ TEST_CASE("Check number of calculated CT parameters in the C2HDM", "[c2hdm]")
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckCTNumber(*modelPointer));
 }
-
-// TEST_CASE("Create EWPT compares", "[c2hdm-setup]")
-//{
-//  using namespace BSMPT;
-//  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-//      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-//  modelPointer->initModel(example_point_C2HDM);
-
-//  int WhichMin;
-//  Minimizer::EWPTReturnType EWPT;
-
-//  std::ofstream outfile("dummy.txt");
-
-//  std::map<int, Minimizer::EWPTReturnType> mdata;
-//  for (bool UseGSL : {false, true})
-//  {
-//    for (bool UseCMAES : {false, true})
-//    {
-//      for (bool UseNLopt : {false, true})
-//      {
-//        if (not UseGSL and not UseCMAES and not UseNLopt) continue;
-
-//        WhichMin = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
-//        EWPT     = Minimizer::PTFinder_gen_all(modelPointer, 0, 300,
-//        WhichMin); mdata[WhichMin] = EWPT; outfile << "EWPTPerSetting[" <<
-//        WhichMin
-//                << "].Tc = " << mdata[WhichMin].Tc << ";" << std::endl
-//                << "EWPTPerSetting[" << WhichMin
-//                << "].vc = " << mdata[WhichMin].vc << ";" << std::endl;
-//        for (const auto &el : EWPT.EWMinimum)
-//        {
-//          if (std::abs(el) > 1e-5)
-//            outfile << "EWPTPerSetting[" << WhichMin <<
-//            "].EWMinimum.push_back("
-//                    << el << ");" << std::endl;
-//          else
-//            outfile << "EWPTPerSetting[" << WhichMin <<
-//            "].EWMinimum.push_back("
-//                    << 0 << ");" << std::endl;
-//        }
-//      }
-//    }
-//  }
-//}

@@ -20,7 +20,7 @@ jobs:
       with:
           persist-credentials: false
     - name : installPackages
-      run : sudo apt update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libboost-all-dev
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libboost-all-dev
     - name: cmake
       run: mkdir build && cd build && cmake .. 
     - name: make
