@@ -65,8 +65,8 @@ TEST_CASE("Checking EWPT for N2HDM", "[n2hdm]")
   const std::vector<double> min_expected =
       Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).EWMinimum;
   REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
-  REQUIRE(std::abs(EWPT.vc) == Approx(omega_c_expected).epsilon(1e-4));
-  REQUIRE(EWPT.Tc == Approx(Tc_expected).epsilon(1e-4));
+  REQUIRE(std::abs(EWPT.vc) == Approx(omega_c_expected).epsilon(1e-2));
+  REQUIRE(EWPT.Tc == Approx(Tc_expected).epsilon(1e-2));
   const double threshold = 1e-2;
   for (std::size_t i{0}; i < EWPT.EWMinimum.size(); ++i)
   {
