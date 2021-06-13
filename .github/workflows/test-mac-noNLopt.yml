@@ -3,11 +3,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: ctest mac CI
+name: ctest mac CI without NLopt
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, CI-Updates ]
   pull_request:
     branches: [ master, develop ]
 
