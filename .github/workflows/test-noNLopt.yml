@@ -6,7 +6,7 @@ name: ctest CI without NLopt
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, CI-Updates ]
   pull_request:
     branches: [ master, develop ]
 
