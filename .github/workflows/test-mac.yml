@@ -1,0 +1,48 @@
+ 
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: ctest mac CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : brew install eigen gsl nlopt boost libomp
+    - name: cmake
+      run: mkdir build && cd build && cmake .. 
+    - name: make
+      run: cd build && cmake --build . -j
+    - name: Test
+      run: cd build && ctest --output-on-failure
+      
+  NoNLopt:
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : brew install eigen gsl boost libomp
+    - name: cmake
+      run: mkdir buildNoNLOPT && cd buildNoNLOPT && cmake .. 
+    - name: make
+      run: cd buildNoNLOPT && cmake --build . -j
+    - name: Test
+      run: cd buildNoNLOPT && ctest --output-on-failure
+    

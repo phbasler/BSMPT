@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: ctest CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+    - name: cmake
+      run: mkdir build && cd build && cmake .. 
+    - name: make
+      run: cd build && cmake --build . -j
+    - name: Test
+      run: cd build && ctest --output-on-failure
+      
+  NoNLopt:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libboost-all-dev
+    - name: cmake
+      run: mkdir buildNoNLOPT && cd buildNoNLOPT && cmake .. 
+    - name: make
+      run: cd buildNoNLOPT && cmake --build . -j
+    - name: Test
+      run: cd buildNoNLOPT && ctest --output-on-failure
+
+
+
