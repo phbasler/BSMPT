@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,7 +10,8 @@
 
 #include <BSMPT/models/ClassPotentialRN2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 #include <iomanip>
 using namespace Eigen;
 
@@ -248,8 +250,6 @@ void Class_Potential_RN2HDM::set_gen(const std::vector<double> &p)
        0.5 * v1 * v1 * (L3 + L4 + RL5) - 0.5 * Nvs * Nvs * NL8;
   Nus = -0.5 * NL6 * Nvs * Nvs - 0.5 * NL7 * v1 * v1 - 0.5 * NL8 * v2 * v2;
 
-  //	std::cout << CTempC1 << "\t" << CTempC2 << "\t" << CTempCS << std::endl;
-
   vevTreeMin.resize(nVEV);
   vevTreeMin[0] = 0;
   vevTreeMin[1] = 0;
@@ -433,58 +433,57 @@ void Class_Potential_RN2HDM::set_CT_Pot_Par(const std::vector<double> &p)
  */
 void Class_Potential_RN2HDM::write() const
 {
+  std::stringstream ss;
   typedef std::numeric_limits<double> dbl;
-  std::cout.precision(dbl::max_digits10);
-  std::cout << std::setprecision(16);
+  ss.precision(dbl::max_digits10);
+  ss << std::setprecision(16);
 
-  std::cout << "scale = " << scale << "\n";
+  ss << "scale = " << scale << "\n";
 
-  std::cout << "The parameters are :   \n";
-  std::cout << "Model = " << Model << "\n";
-  std::cout << "Renorm Scale = " << scale << "\n";
-  std::cout << "v1 = " << C_vev0 * C_CosBeta << "\n";
-  std::cout << "v2 = " << C_vev0 * C_SinBeta << "\n";
-  std::cout << "Type = " << Type << "\n";
+  ss << "The parameters are :   \n";
+  ss << "Model = " << Model << "\n";
+  ss << "Renorm Scale = " << scale << "\n";
+  ss << "v1 = " << C_vev0 * C_CosBeta << "\n";
+  ss << "v2 = " << C_vev0 * C_SinBeta << "\n";
+  ss << "Type = " << Type << "\n";
 
-  std::cout << "beta = " << beta << std::endl;
-  std::cout << "tan(beta) = " << TanBeta << std::endl;
-  std::cout << "Lambda1 = " << L1 << std::endl;
-  // std::cout << "Lambda1/2 = " << 0.5*L1 << std::endl;
-  std::cout << "Lambda2 = " << L2 << std::endl;
-  // std::cout << "Lambda2/2 = " << L2*0.5 << std::endl;
-  std::cout << "Lambda3 = " << L3 << std::endl;
-  std::cout << "Lambda4 = " << L4 << std::endl;
-  std::cout << "Re(Lambda5) = " << RL5 << std::endl;
-  std::cout << "Re(m_12^2) = " << RealMMix << std::endl;
-  std::cout << "m_{11}^2 = " << u1 << std::endl;
-  std::cout << "m_{22}^2 = " << u2 << std::endl;
-  std::cout << "L6 = " << NL6 << "\n";
-  std::cout << "L7 = " << NL7 << "\n";
-  std::cout << "L8 = " << NL8 << "\n";
-  std::cout << "m_s^2 = " << Nus << "\n";
-  std::cout << "v_s = " << Nvs << "\n";
+  ss << "beta = " << beta << std::endl;
+  ss << "tan(beta) = " << TanBeta << std::endl;
+  ss << "Lambda1 = " << L1 << std::endl;
+  ss << "Lambda2 = " << L2 << std::endl;
+  ss << "Lambda3 = " << L3 << std::endl;
+  ss << "Lambda4 = " << L4 << std::endl;
+  ss << "Re(Lambda5) = " << RL5 << std::endl;
+  ss << "Re(m_12^2) = " << RealMMix << std::endl;
+  ss << "m_{11}^2 = " << u1 << std::endl;
+  ss << "m_{22}^2 = " << u2 << std::endl;
+  ss << "L6 = " << NL6 << "\n";
+  ss << "L7 = " << NL7 << "\n";
+  ss << "L8 = " << NL8 << "\n";
+  ss << "m_s^2 = " << Nus << "\n";
+  ss << "v_s = " << Nvs << "\n";
 
-  std::cout << "The counterterms are :\n";
+  ss << "The counterterms are :\n";
 
-  std::cout << "DL1 := " << DL1CT << ";\n";
-  std::cout << "DL2 := " << DL2CT << ";\n";
-  std::cout << "DL3 := " << DL3CT << ";\n";
-  std::cout << "DL4 := " << DL4CT << ";\n";
-  std::cout << "DRL5 := " << DRL5CT << ";\n";
+  ss << "DL1 := " << DL1CT << ";\n";
+  ss << "DL2 := " << DL2CT << ";\n";
+  ss << "DL3 := " << DL3CT << ";\n";
+  ss << "DL4 := " << DL4CT << ";\n";
+  ss << "DRL5 := " << DRL5CT << ";\n";
 
-  std::cout << "Du1 := " << Du1CT << ";\n";
-  std::cout << "Du2 := " << Du2CT << ";\n";
-  std::cout << "DRu3 := " << DRu3CT << ";\n";
+  ss << "Du1 := " << Du1CT << ";\n";
+  ss << "Du2 := " << Du2CT << ";\n";
+  ss << "DRu3 := " << DRu3CT << ";\n";
 
-  std::cout << "DT1 := " << DT1 << ";\n";
-  std::cout << "DT2 := " << DT2 << ";\n";
-  std::cout << "DT3:= " << DT3 << ";\n";
+  ss << "DT1 := " << DT1 << ";\n";
+  ss << "DT2 := " << DT2 << ";\n";
+  ss << "DT3:= " << DT3 << ";\n";
 
-  std::cout << "Dus := " << NDus << ";\n";
-  std::cout << "DL6 := " << NDL6 << ";\n";
-  std::cout << "DL7 := " << NDL7 << ";\n";
-  std::cout << "DL8 := " << NDL8 << ";\n";
-  std::cout << "DTS := " << NDTS << ";\n";
+  ss << "Dus := " << NDus << ";\n";
+  ss << "DL6 := " << NDL6 << ";\n";
+  ss << "DL7 := " << NDL7 << ";\n";
+  ss << "DL8 := " << NDL8 << ";\n";
+  ss << "DTS := " << NDTS << ";\n";
 
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
@@ -568,53 +567,54 @@ void Class_Potential_RN2HDM::write() const
     NeutralMixing(2, i) = HiggsRot(posN[2], i + 6);
   }
 
-  std::cout << "The mass spectrum is given by :\n";
-  std::cout << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
-            << "m_A = " << std::sqrt(HiggsMasses[posA]) << " GeV \n"
-            << "m_{H_SM} = " << MSMlocal << " GeV \n"
-            << "m_{H_l} = " << MhDownlocal << " GeV \n"
-            << "m_{H_h} = " << MhUplocal << " GeV \n";
+  ss << "The mass spectrum is given by :\n";
+  ss << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
+     << "m_A = " << std::sqrt(HiggsMasses[posA]) << " GeV \n"
+     << "m_{H_SM} = " << MSMlocal << " GeV \n"
+     << "m_{H_l} = " << MhDownlocal << " GeV \n"
+     << "m_{H_h} = " << MhUplocal << " GeV \n";
 
-  std::cout << "The neutral mixing Matrix is given by :\n";
+  ss << "The neutral mixing Matrix is given by :\n";
   bool IsNegative = NeutralMixing(0, 1) < 0;
-  std::cout << "H_{SM} = " << NeutralMixing(0, 0) << " zeta_1 ";
+  ss << "H_{SM} = " << NeutralMixing(0, 0) << " zeta_1 ";
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMixing(0, 1)) << " zeta_2 ";
+    ss << "+";
+  ss << std::abs(NeutralMixing(0, 1)) << " zeta_2 ";
   IsNegative = NeutralMixing(0, 2) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMixing(0, 2)) << " zeta_3 \n"
-            << "H_{l} = " << NeutralMixing(1, 0) << " zeta_1 ";
+    ss << "+";
+  ss << std::abs(NeutralMixing(0, 2)) << " zeta_3 \n"
+     << "H_{l} = " << NeutralMixing(1, 0) << " zeta_1 ";
   IsNegative = NeutralMixing(1, 1) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMixing(1, 1)) << " zeta_2 ";
+    ss << "+";
+  ss << std::abs(NeutralMixing(1, 1)) << " zeta_2 ";
   IsNegative = NeutralMixing(1, 2) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMixing(1, 2)) << " zeta_3 \n"
-            << "H_{h} = " << NeutralMixing(2, 0) << " zeta_1 ";
+    ss << "+";
+  ss << std::abs(NeutralMixing(1, 2)) << " zeta_3 \n"
+     << "H_{h} = " << NeutralMixing(2, 0) << " zeta_1 ";
   IsNegative = NeutralMixing(2, 1) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMixing(2, 1)) << " zeta_2 ";
+    ss << "+";
+  ss << std::abs(NeutralMixing(2, 1)) << " zeta_2 ";
   IsNegative = NeutralMixing(2, 2) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMixing(2, 2)) << " zeta_3 \n";
+    ss << "+";
+  ss << std::abs(NeutralMixing(2, 2)) << " zeta_3 \n";
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 std::vector<double> Class_Potential_RN2HDM::calc_CT() const
@@ -639,8 +639,6 @@ std::vector<double> Class_Potential_RN2HDM::calc_CT() const
 
   double v1 = C_vev0 * C_CosBeta;
   double v2 = C_vev0 * C_SinBeta;
-
-  std::cout << std::setprecision(16);
 
   VectorXd NablaWeinberg(NHiggs);
   MatrixXd HesseWeinberg(NHiggs, NHiggs), HiggsRot(NHiggs, NHiggs);

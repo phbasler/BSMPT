@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,7 +12,7 @@
 #include <BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid.h>
 #include <BSMPT/Kfactors/Kfactors_grid/KtildeInterpolation.h>
 #include <BSMPT/Kfactors/KfactorsinterpolatedGSL.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 
 #include <iostream>
 

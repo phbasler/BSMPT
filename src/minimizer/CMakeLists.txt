@@ -41,7 +41,7 @@ endif()
 
 
 add_library(Minimizer ${header} ${src})
-target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads)
+target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads Utility)
 
 if(libcmaes_FOUND)
   target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)

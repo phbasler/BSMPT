@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,6 +12,7 @@
  */
 
 #include <BSMPT/minimizer/MinimizeGSL.h>
+#include <BSMPT/utility/Logger.h>
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
@@ -273,16 +275,18 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
 
   if (saveAllMinima.size() == 0)
   {
-    std::cerr << "No solutions found during the GSL minimization at T = "
-              << Temp << " GeV "
-              << "\n";
+    Logger::Write(LoggingLevel::Default,
+                  "No solutions found during the GSL minimization at T = " +
+                      std::to_string(Temp) + " GeV ");
     return std::make_pair(std::vector<double>{}, false);
   }
 
   if (saveAllMinima.size() < MaxSol)
   {
-    std::cerr << "Found " << saveAllMinima.size() << " of  " << MaxSol
-              << " solutions at T = " << Temp << std::endl;
+    Logger::Write(LoggingLevel::MinimizerDetailed,
+                  "Found " + std::to_string(saveAllMinima.size()) + " of  " +
+                      std::to_string(MaxSol) +
+                      " solutions at T = " + std::to_string(Temp));
   }
 
   std::size_t minIndex = 0;

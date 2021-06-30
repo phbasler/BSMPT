@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -14,7 +15,8 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
 #include <iomanip>
@@ -47,7 +49,6 @@ struct CLIOptions
 int main(int argc, char *argv[])
 try
 {
-
   /**
    * PrintErrorLines decides if parameter points with no valid EWPT (no NLO
    * stability or T=300 vanishing VEV) are printed in the output file
@@ -64,14 +65,16 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file " << args.InputFile << " not found " << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Input file " + args.InputFile + " not found ");
     return EXIT_FAILURE;
   }
 
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
   std::string linestr;
@@ -93,7 +96,8 @@ try
     {
       if (args.TerminalOutput)
       {
-        std::cout << "Currently at line " << linecounter << std::endl;
+        Logger::Write(LoggingLevel::ProgDetailed,
+                      "Currently at line " + std::to_string(linecounter));
       }
       std::pair<std::vector<double>, std::vector<double>> parameters =
           modelPointer->initModel(linestr);
@@ -117,35 +121,45 @@ try
       if (args.FirstLine == args.LastLine)
       {
         auto dimensionnames = modelPointer->addLegendTemp();
-        std::cout << "Success ? " << static_cast<int>(EWPT.StatusFlag) << sep
-                  << " (1 = Yes , -1 = No, v/T reached a value below " << C_PT
-                  << " during the calculation) \n";
+        Logger::Write(
+            LoggingLevel::Default,
+            "Success ? " + std::to_string(static_cast<int>(EWPT.StatusFlag)) +
+                sep + " (1 = Yes , -1 = No, v/T reached a value below " +
+                std::to_string(C_PT) + " during the calculation)");
         if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS)
         {
-          std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
-          std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
-          std::cout << "xi_c = " << dimensionnames.at(2) << " = "
-                    << EWPT.vc / EWPT.Tc << std::endl;
+          Logger::Write(LoggingLevel::Default,
+                        dimensionnames.at(1) + " = " + std::to_string(EWPT.vc) +
+                            " GeV");
+          Logger::Write(LoggingLevel::Default,
+                        dimensionnames.at(0) + " = " + std::to_string(EWPT.Tc) +
+                            " GeV");
+          Logger::Write(LoggingLevel::Default,
+                        "xi_c = " + dimensionnames.at(2) + " = " +
+                            std::to_string(EWPT.vc / EWPT.Tc));
           for (std::size_t i = 0; i < modelPointer->get_nVEV(); i++)
           {
-            std::cout << dimensionnames.at(i + 3) << " = "
-                      << EWPT.EWMinimum.at(i) << " GeV\n";
+            Logger::Write(LoggingLevel::Default,
+                          dimensionnames.at(i + 3) + " = " +
+                              std::to_string(EWPT.EWMinimum.at(i)) + " GeV");
           }
-          std::cout << "Symmetric VEV config" << std::endl;
+          Logger::Write(LoggingLevel::Default, "Symmetric VEV config");
           for (std::size_t i = 0; i < modelPointer->get_nVEV(); i++)
           {
-            std::cout << dimensionnames.at(i + 3) << " = " << VEVsym.at(i)
-                      << " GeV\n";
+            Logger::Write(LoggingLevel::Default,
+                          dimensionnames.at(i + 3) + " = " +
+                              std::to_string(VEVsym.at(i)) + " GeV");
           }
         }
         else if (EWPT.Tc == 300)
         {
-          std::cout << dimensionnames.at(1) << " != 0 GeV at T = 300 GeV."
-                    << std::endl;
+          Logger::Write(LoggingLevel::Default,
+                        dimensionnames.at(1) + " != 0 GeV at T = 300 GeV.");
         }
         else if (EWPT.Tc == 0)
         {
-          std::cout << "This point is not vacuum stable." << std::endl;
+          Logger::Write(LoggingLevel::Default,
+                        "This point is not vacuum stable.");
         }
       }
       if (PrintErrorLines)
@@ -176,7 +190,6 @@ try
     linecounter++;
     if (infile.eof()) break;
   }
-  if (args.TerminalOutput) std::cout << std::endl;
   outfile.close();
   return EXIT_SUCCESS;
 }
@@ -186,7 +199,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
@@ -200,52 +213,52 @@ CLIOptions::CLIOptions(int argc, char *argv[])
   if (argc < 6 or args.at(0) == "--help")
   {
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout
-        << std::boolalpha
-        << "BSMPT calculates the strength of the electroweak phase transition"
-        << std::endl
-        << "It is called either by " << std::endl
-        << "./BSMPT model input output FirstLine LastLine" << std::endl
-        << "or with the following arguments" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--help"
-        << "Shows this menu" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--model="
-        << "The model you want to investigate" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--input="
-        << "The input file in tsv format" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--output="
-        << "The output file in tsv format" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
-        << "The first line in the input file to calculate the EWPT. Expects "
-           "line 1 to be a legend."
-        << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
-        << "The last line in the input file to calculate the EWPT."
-        << std::endl;
+    std::stringstream ss;
+
+    ss << std::boolalpha
+       << "BSMPT calculates the strength of the electroweak phase transition"
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./BSMPT model input output FirstLine LastLine" << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--output="
+       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
+       << "The first line in the input file to calculate the EWPT. Expects "
+          "line 1 to be a legend."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
+       << "The last line in the input file to calculate the EWPT." << std::endl;
     std::string GSLhelp{"--UseGSL="};
     GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-              << "Use the GSL library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
+       << "Use the GSL library to minimize the effective potential"
+       << std::endl;
     std::string CMAEShelp{"--UseCMAES="};
     CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-              << "Use the CMAES library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
+       << "Use the CMAES library to minimize the effective potential"
+       << std::endl;
     std::string NLoptHelp{"--UseNLopt="};
     NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-              << "Use the NLopt library to minimize the effective potential"
-              << std::endl;
-    std::cout << std::setw(SizeOfFirstColumn) << std::left
-              << "--UseMultithreading = true"
-              << "Enables/Disables multi threading for the minimizers"
-              << std::endl;
-    std::cout << std::setw(SizeOfFirstColumn) << std::left
-              << "--TerminalOutput="
-              << "y/n Turns on additional information in the terminal during "
-                 "the calculation."
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
+       << "Use the NLopt library to minimize the effective potential"
+       << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left
+       << "--UseMultithreading = true"
+       << "Enables/Disables multi threading for the minimizers" << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
+       << "y/n Turns on additional information in the terminal during "
+          "the calculation."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -260,6 +273,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -309,8 +323,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         UseMultithreading =
             el.substr(std::string("--usemultithreading=").size()) == "true";
       }
+      else
+      {
+        UnusedArgs.push_back(el);
+      }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+    SetLogger(UnusedArgs);
   }
   else
   {
@@ -352,20 +371,20 @@ bool CLIOptions::good() const
   if (Model == ModelID::ModelIDs::NotSet)
   {
 
-    std::cerr
-        << "Your Model parameter does not match with the implemented Models."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "Your Model parameter does not match with the implemented Models.");
     ShowInputError();
     return false;
   }
   if (FirstLine < 1)
   {
-    std::cout << "Start line counting with 1" << std::endl;
+    Logger::Write(LoggingLevel::Default, "Start line counting with 1");
     return false;
   }
   if (FirstLine > LastLine)
   {
-    std::cout << "Firstline is smaller then LastLine " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Firstline is smaller then LastLine ");
     return false;
   }
   return true;

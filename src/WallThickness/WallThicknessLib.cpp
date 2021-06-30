@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,7 +11,7 @@
 #include <BSMPT/WallThickness/WallThicknessLib.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 
 #include <gsl/gsl_min.h>
 
@@ -216,7 +217,6 @@ bool GSL_Find_Maximum_line(
     const std::vector<double> &vevsymmetric,
     std::vector<double> &solV)
 {
-  std::cout << std::scientific;
 
   struct GSL_params params;
   params.Temp         = Temp;

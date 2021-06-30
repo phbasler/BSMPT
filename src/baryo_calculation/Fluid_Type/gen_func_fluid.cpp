@@ -1,10 +1,12 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/baryo_calculation/Fluid_Type/gen_func_fluid.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
+#include <BSMPT/utility/Logger.h>
 
 /**
  * @file
@@ -459,7 +461,8 @@ gen_fluid::Calc_theta(double z, double CP_sym, double CP_brk)
   std::vector<double> res;
   res.resize(3);
   if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDM)
-    std::cerr << "This is only programmed for the C2HDM" << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "This is only programmed for the C2HDM");
   if ((std::abs(CP_sym) < 1e-12) and (std::abs(CP_brk) < 1e-12))
   {
     res[0] = 0;

@@ -1,10 +1,12 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/models/ClassPotentialCxSM.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 using namespace Eigen;
 
 /**
@@ -154,7 +156,6 @@ std::vector<std::string> Class_CxSM::addLegendVEV() const
 void Class_CxSM::ReadAndSet(const std::string &linestr,
                             std::vector<double> &par)
 {
-  //	std::cout << linestr << std::endl;
   std::stringstream ss(linestr);
   double tmp;
 
@@ -410,38 +411,39 @@ void Class_CxSM::set_CT_Pot_Par(const std::vector<double> &par)
  */
 void Class_CxSM::write() const
 {
-  std::cout << "The parameters are : " << std::endl;
-  std::cout << "\tlambda = " << lambda << std::endl
-            << "\tm^2 = " << msq << std::endl
-            << "\tdelta_2 = " << delta2 << std::endl
-            << "\tb2 = " << b2 << std::endl
-            << "\td2 = " << d2 << std::endl
-            << "\tReb1 = " << Reb1 << "\n"
-            << "\tImb1 = " << Imb1 << "\n"
-            << "\tRea1 = " << Rea1 << "\n"
-            << "\tIma1 = " << Ima1 << "\n"
-            << "\tvh = " << vh << "\n"
-            << "\tva = " << va << "\n"
-            << "\tvs = " << vs << std::endl;
+  std::stringstream ss;
+  ss << "The parameters are : " << std::endl;
+  ss << "\tlambda = " << lambda << std::endl
+     << "\tm^2 = " << msq << std::endl
+     << "\tdelta_2 = " << delta2 << std::endl
+     << "\tb2 = " << b2 << std::endl
+     << "\td2 = " << d2 << std::endl
+     << "\tReb1 = " << Reb1 << "\n"
+     << "\tImb1 = " << Imb1 << "\n"
+     << "\tRea1 = " << Rea1 << "\n"
+     << "\tIma1 = " << Ima1 << "\n"
+     << "\tvh = " << vh << "\n"
+     << "\tva = " << va << "\n"
+     << "\tvs = " << vs << std::endl;
 
-  std::cout << "The counterterm parameters are : " << std::endl;
-  std::cout << "\tdlambda = " << dlambda << std::endl
-            << "\tdm^2 = " << dmsq << std::endl
-            << "\tddelta_2 = " << ddelta2 << std::endl
-            << "\tdb2 = " << db2 << "\n"
-            << "\tdd2 = " << dd2 << "\n"
-            << "\tdReb1 = " << dReb1 << "\n"
-            << "\tdImb1 = " << dImb1 << "\n"
-            << "\tdRea1 = " << dRea1 << "\n"
-            << "\tdIma1 = " << dIma1 << "\n"
-            << "\tdT1 = " << dT1 << "\n"
-            << "\tdT2 = " << dT2 << "\n"
-            << "\tdT3 = " << dT3 << "\n"
-            << "\tdT4 = " << dT4 << "\n"
-            << "\tdT5 = " << dT5 << "\n"
-            << "\tdT6 = " << dT6 << std::endl;
+  ss << "The counterterm parameters are : " << std::endl;
+  ss << "\tdlambda = " << dlambda << std::endl
+     << "\tdm^2 = " << dmsq << std::endl
+     << "\tddelta_2 = " << ddelta2 << std::endl
+     << "\tdb2 = " << db2 << "\n"
+     << "\tdd2 = " << dd2 << "\n"
+     << "\tdReb1 = " << dReb1 << "\n"
+     << "\tdImb1 = " << dImb1 << "\n"
+     << "\tdRea1 = " << dRea1 << "\n"
+     << "\tdIma1 = " << dIma1 << "\n"
+     << "\tdT1 = " << dT1 << "\n"
+     << "\tdT2 = " << dT2 << "\n"
+     << "\tdT3 = " << dT3 << "\n"
+     << "\tdT4 = " << dT4 << "\n"
+     << "\tdT5 = " << dT5 << "\n"
+     << "\tdT6 = " << dT6 << std::endl;
 
-  std::cout << "The scale is given by mu = " << scale << " GeV " << std::endl;
+  ss << "The scale is given by mu = " << scale << " GeV " << std::endl;
 
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
@@ -476,8 +478,6 @@ void Class_CxSM::write() const
   for (int i = 0; i < 3; i++)
   {
     NeutralHiggs[i] = HiggsMasses[posN[i]];
-    // std::cout << NeutralHiggs[i] << "\t" << std::sqrt(NeutralHiggs[i]) <<
-    // std::endl;
   }
   for (int i = 0; i < 3; i++)
   {
@@ -520,52 +520,53 @@ void Class_CxSM::write() const
       NeutralMatrix(i, j) = HiggsRot(posN[i], j + 3);
   }
 
-  std::cout << "The mass spectrum is given by :\n";
-  std::cout << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n"
-            << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n"
-            << "m_{H_SM} = " << MSM << " GeV \n"
-            << "m_{H_l} = " << MhDown << " GeV \n"
-            << "m_{H_h} = " << MhUp << " GeV \n";
-  std::cout << "The neutral mixing Matrix is given by :\n";
+  ss << "The mass spectrum is given by :\n";
+  ss << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n"
+     << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n"
+     << "m_{H_SM} = " << MSM << " GeV \n"
+     << "m_{H_l} = " << MhDown << " GeV \n"
+     << "m_{H_h} = " << MhUp << " GeV \n";
+  ss << "The neutral mixing Matrix is given by :\n";
   bool IsNegative = NeutralMatrix(0, 1) < 0;
-  std::cout << "H_{SM} = " << NeutralMatrix(0, 0) << " h ";
+  ss << "H_{SM} = " << NeutralMatrix(0, 0) << " h ";
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMatrix(0, 1)) << " a ";
+    ss << "+";
+  ss << std::abs(NeutralMatrix(0, 1)) << " a ";
   IsNegative = NeutralMatrix(0, 2) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMatrix(0, 2)) << " s \n"
-            << "H_{l} = " << NeutralMatrix(1, 0) << " h ";
+    ss << "+";
+  ss << std::abs(NeutralMatrix(0, 2)) << " s \n"
+     << "H_{l} = " << NeutralMatrix(1, 0) << " h ";
   IsNegative = NeutralMatrix(1, 1) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMatrix(1, 1)) << " a ";
+    ss << "+";
+  ss << std::abs(NeutralMatrix(1, 1)) << " a ";
   IsNegative = NeutralMatrix(1, 2) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMatrix(1, 2)) << " s \n"
-            << "H_{h} = " << NeutralMatrix(2, 0) << " h ";
+    ss << "+";
+  ss << std::abs(NeutralMatrix(1, 2)) << " s \n"
+     << "H_{h} = " << NeutralMatrix(2, 0) << " h ";
   IsNegative = NeutralMatrix(2, 1) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMatrix(2, 1)) << " a ";
+    ss << "+";
+  ss << std::abs(NeutralMatrix(2, 1)) << " a ";
   IsNegative = NeutralMatrix(2, 2) < 0;
   if (IsNegative)
-    std::cout << "-";
+    ss << "-";
   else
-    std::cout << "+";
-  std::cout << std::abs(NeutralMatrix(2, 2)) << " s \n";
+    ss << "+";
+  ss << std::abs(NeutralMatrix(2, 2)) << " s \n";
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 /**
@@ -1214,7 +1215,7 @@ void Class_CxSM::Debugging(const std::vector<double> &input,
 
   (void)input;
   (void)output;
-  std::cout << "Start " << __func__ << std::endl;
+  Logger::Write(LoggingLevel::Debug, std::string("Start ") + __func__);
 
   bool Debug = true;
 
@@ -1248,7 +1249,7 @@ void Class_CxSM::Debugging(const std::vector<double> &input,
       HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
   }
 
-  std::cout << "Start " << std::endl;
+  Logger::Write(LoggingLevel::Debug, "Start ");
 
   // Calculate Tree Level Masses
   std::vector<double> LOMasses(NHiggs), NLOMasses(NHiggs);
@@ -1300,10 +1301,12 @@ void Class_CxSM::Debugging(const std::vector<double> &input,
     NLOMasses[i] = es.eigenvalues()[i];
   }
 
-  std::cout << "Print LO | NLO Mass^2 " << std::endl;
+  Logger::Write(LoggingLevel::Debug, "Print LO | NLO Mass^2 ");
   for (std::size_t i = 0; i < NHiggs; i++)
   {
-    std::cout << LOMasses[i] << " | " << NLOMasses[i] << std::endl;
+    Logger::Write(LoggingLevel::Debug,
+                  std::to_string(LOMasses[i]) + " | " +
+                      std::to_string(NLOMasses[i]));
   }
 
   MatrixXd HesseCT(NHiggs, NHiggs);
@@ -1330,10 +1333,11 @@ void Class_CxSM::Debugging(const std::vector<double> &input,
     for (std::size_t j = 0; j < NHiggs; j++)
       if (std::abs(Add(i, j)) <= 1e-5) Add(i, j) = 0;
 
-  std::cout << "Hesse CT  = \n"
-            << HesseCT << "\n\n\n CT + CW = " << Add << std::endl;
+  std::stringstream ss;
+  ss << "Hesse CT  = \n" << HesseCT << "\n\n\n CT + CW = " << Add << std::endl;
 
-  std::cout << "Hesse CW = \n" << HesseWeinberg << std::endl;
+  ss << "Hesse CW = \n" << HesseWeinberg << std::endl;
+  Logger::Write(LoggingLevel::Debug, ss.str());
 
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -1358,27 +1362,28 @@ void Class_CxSM::Debugging(const std::vector<double> &input,
   AddNabla = NablaWeinberg + NablaCT;
   for (std::size_t i = 0; i < NHiggs; i++)
     if (std::abs(AddNabla[i]) <= 1e-5) AddNabla[i] = 0;
-  std::cout << "NablaCT  = " << NablaCT.transpose() << "\n"
-            << "NablaCW = " << NablaWeinberg.transpose() << "\n"
-            << "AddNabla = " << AddNabla.transpose() << "\n";
+  ss.clear();
+  ss << "NablaCT  = " << NablaCT.transpose() << "\n"
+     << "NablaCW = " << NablaWeinberg.transpose() << "\n"
+     << "AddNabla = " << AddNabla.transpose() << "\n";
 
-  std::cout << "dT4 = " << HesseWeinberg(0, 0) * vh - NablaWeinberg(3)
-            << std::endl;
-  std::cout << "ahhsI = "
-            << std::sqrt(2) *
-                   (HesseWeinberg(4, 5) * va * va -
-                    vs * (HesseWeinberg(5, 5) * va - NablaWeinberg(5))) /
-                   (vh * vh * vs)
-            << std::endl;
+  ss << "dT4 = " << HesseWeinberg(0, 0) * vh - NablaWeinberg(3) << std::endl;
+  ss << "ahhsI = "
+     << std::sqrt(2) *
+            (HesseWeinberg(4, 5) * va * va -
+             vs * (HesseWeinberg(5, 5) * va - NablaWeinberg(5))) /
+            (vh * vh * vs)
+     << std::endl;
 
-  std::cout << "HT = " << HesseWeinberg(3, 5) * vs - HesseWeinberg(3, 4) * va
-            << std::endl
-            << "HT rel =  "
-            << (HesseWeinberg(3, 5) * vs - HesseWeinberg(3, 4) * va) /
-                   (HesseWeinberg(3, 5) * vs + HesseWeinberg(3, 4) * va)
-            << std::endl;
+  ss << "HT = " << HesseWeinberg(3, 5) * vs - HesseWeinberg(3, 4) * va
+     << std::endl
+     << "HT rel =  "
+     << (HesseWeinberg(3, 5) * vs - HesseWeinberg(3, 4) * va) /
+            (HesseWeinberg(3, 5) * vs + HesseWeinberg(3, 4) * va)
+     << std::endl;
 
-  std::cout << "End " << __func__ << std::endl;
+  ss << "End " << __func__ << std::endl;
+  Logger::Write(LoggingLevel::Debug, ss.str());
 }
 } // namespace Models
 } // namespace BSMPT

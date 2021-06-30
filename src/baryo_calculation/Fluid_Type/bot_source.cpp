@@ -1,9 +1,11 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/baryo_calculation/Fluid_Type/bot_source.h>
+#include <BSMPT/utility/Logger.h>
 
 /**
  * @file
@@ -111,7 +113,8 @@ void bot_source::operator()(const state_type &omega,
   }
   if ((bot_mass_flag != 1) and (bot_mass_flag != 2))
   {
-    std::cout << "bot_mass_flag = " << bot_mass_flag << std::endl;
+    Logger::Write(LoggingLevel::EWBGDetailed,
+                  "bot_mass_flag = " + std::to_string(bot_mass_flag));
     throw std::runtime_error("No valid bot_mass_flag @ operator()");
   }
 

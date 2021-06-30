@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,7 +18,8 @@
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 namespace BSMPT
@@ -184,11 +186,8 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(
   for (std::size_t i = 0; i < nSize; i++)
   {
     Eigenvalues[i] = es.eigenvalues()[i];
-    // std::cout << Eigenvalues[i] << sep << std::abs(Eigenvalues[i]) <<
-    // std::endl;
     if (std::abs(Eigenvalues[i]) < EVThres)
     {
-      // std::cout << "hallo" << std::endl;
       Eigenvalues[i] = 0;
     }
   }
@@ -369,10 +368,12 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA,
     throwstring += " in function ";
     throwstring += __func__;
     throwstring += "\n";
-    std::cerr << "Found nan at line = " << InputLineNumber << " in function "
-              << __func__ << std::endl;
-    std::cerr << mas << sep << mbs << sep << mcs << sep << res << sep << C
-              << std::endl;
+    std::stringstream ss;
+    ss << "Found nan at line = " << InputLineNumber << " in function "
+       << __func__ << std::endl;
+    ss << mas << sep << mbs << sep << mcs << sep << res << sep << C
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str(), __FILE__, __LINE__);
     throw std::runtime_error(throwstring.c_str());
   }
 
@@ -437,7 +438,7 @@ Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepeated(
   {
     if (std::abs(Eigenvalues[i] - Eigenvalues[i + 1]) < EVThres)
     {
-      std::cerr << "ERROR ! repeated eigenvalues. \n";
+      Logger::Write(LoggingLevel::Default, "ERROR ! repeated eigenvalues.");
     }
   }
 
@@ -1439,13 +1440,15 @@ MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = HiggsMassMatrix(Transformedv, Temp, diff);
@@ -1527,13 +1530,15 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = HiggsMassesSquared(Transformedv, Temp, diff);
@@ -1593,10 +1598,13 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
   }
   else if (diff == 0 and res.size() != 0 and res.size() != NHiggs)
   {
-    std::cout << "Something went wrong in " << __func__ << std::endl;
-    std::cout << __func__ << "Is calculating the mass for " << NHiggs
-              << "fields but the resolution vector has a size of " << res.size()
-              << ". This should be zero or " << NHiggs << std::endl;
+    Logger::Write(LoggingLevel::Debug,
+                  std::string("Something went wrong in ") + __func__ + ".\n" +
+                      __func__ + "Is calculating the mass for " +
+                      std::to_string(NHiggs) +
+                      "fields but the resolution vector has a size of " +
+                      std::to_string(res.size()) + ". This should be zero or " +
+                      std::to_string(NHiggs));
   }
   else if ((size_t)diff <= NHiggs and diff > 0)
   {
@@ -1658,13 +1666,15 @@ Class_Potential_Origin::GaugeMassesSquared(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = GaugeMassesSquared(Transformedv, Temp, diff);
@@ -1796,41 +1806,43 @@ Class_Potential_Origin::QuarkMassesSquared(const std::vector<double> &v,
     {
       if (std::isnan(res.at(j)))
       {
-        std::cout << "MassMatrix = \n"
-                  << MassMatrix << "\nDiff = \n"
-                  << Diff << std::endl;
-        std::cout << "Fermion Masses : ";
+        std::stringstream ss;
+        ss << "MassMatrix = \n"
+           << MassMatrix << "\nDiff = \n"
+           << Diff << std::endl;
+        ss << "Fermion Masses : ";
         for (std::size_t i = 0; i < NQuarks; i++)
-          std::cout << std::sqrt(std::abs(res.at(i))) << sep;
-        std::cout << std::endl;
-        std::cout << "VEV fields : ";
+          ss << std::sqrt(std::abs(res.at(i))) << sep;
+        ss << std::endl;
+        ss << "VEV fields : ";
         for (std::size_t i = 0; i < v.size(); i++)
-          std::cout << v.at(i) << sep;
-        std::cout << std::endl;
+          ss << v.at(i) << sep;
+        ss << std::endl;
 
         for (std::size_t l = 0; l < NHiggs; l++)
         {
 
-          std::cout << "Curvature_Quark * v an Higgs  =  :" << l << "\n";
+          ss << "Curvature_Quark * v an Higgs  =  :" << l << "\n";
           for (std::size_t a = 0; a < NQuarks; a++)
           {
             for (std::size_t i = 0; i < NQuarks; i++)
             {
-              std::cout << Curvature_Quark_F2H1[a][i][l] * v[l] << sep;
+              ss << Curvature_Quark_F2H1[a][i][l] * v[l] << sep;
             }
-            std::cout << std::endl;
+            ss << std::endl;
           }
-          std::cout << "conj Curvature_Quark an Higgs = :" << l << "\n";
+          ss << "conj Curvature_Quark an Higgs = :" << l << "\n";
           for (std::size_t a = 0; a < NQuarks; a++)
           {
             for (std::size_t i = 0; i < NQuarks; i++)
             {
-              std::cout << std::conj(Curvature_Quark_F2H1[a][i][l]) * v[l]
-                        << sep;
+              ss << std::conj(Curvature_Quark_F2H1[a][i][l]) * v[l] << sep;
             }
-            std::cout << std::endl;
+            ss << std::endl;
           }
         }
+
+        Logger::Write(LoggingLevel::Debug, ss.str());
 
         std::string retmessage = "Nan found in ";
         retmessage += __func__;
@@ -1892,41 +1904,43 @@ Class_Potential_Origin::LeptonMassesSquared(const std::vector<double> &v,
     {
       if (std::isnan(res.at(j)))
       {
-        std::cout << "MassMatrix = \n"
-                  << MassMatrix << "\nDiff = \n"
-                  << Diff << std::endl;
-        std::cout << "Fermion Masses : ";
+        std::stringstream ss;
+        ss << "MassMatrix = \n"
+           << MassMatrix << "\nDiff = \n"
+           << Diff << std::endl;
+        ss << "Fermion Masses : ";
         for (std::size_t i = 0; i < NLepton; i++)
-          std::cout << std::sqrt(std::abs(res.at(i))) << sep;
-        std::cout << std::endl;
-        std::cout << "VEV fields : ";
+          ss << std::sqrt(std::abs(res.at(i))) << sep;
+        ss << std::endl;
+        ss << "VEV fields : ";
         for (std::size_t i = 0; i < v.size(); i++)
-          std::cout << v.at(i) << sep;
-        std::cout << std::endl;
+          ss << v.at(i) << sep;
+        ss << std::endl;
 
         for (std::size_t l = 0; l < NHiggs; l++)
         {
 
-          std::cout << "Curvature_Lepton * v an Higgs  =  :" << l << "\n";
+          ss << "Curvature_Lepton * v an Higgs  =  :" << l << "\n";
           for (std::size_t a = 0; a < NLepton; a++)
           {
             for (std::size_t i = 0; i < NLepton; i++)
             {
-              std::cout << Curvature_Lepton_F2H1[a][i][l] * v[l] << sep;
+              ss << Curvature_Lepton_F2H1[a][i][l] * v[l] << sep;
             }
-            std::cout << std::endl;
+            ss << std::endl;
           }
-          std::cout << "conj Curvature_Lepton an Higgs = :" << l << "\n";
+          ss << "conj Curvature_Lepton an Higgs = :" << l << "\n";
           for (std::size_t a = 0; a < NLepton; a++)
           {
             for (std::size_t i = 0; i < NLepton; i++)
             {
-              std::cout << std::conj(Curvature_Lepton_F2H1[a][i][l]) * v[l]
-                        << sep;
+              ss << std::conj(Curvature_Lepton_F2H1[a][i][l]) * v[l] << sep;
             }
-            std::cout << std::endl;
+            ss << std::endl;
           }
         }
+
+        Logger::Write(LoggingLevel::Debug, ss.str());
 
         std::string retmessage = "Nan found in ";
         retmessage += __func__;
@@ -2081,13 +2095,15 @@ double Class_Potential_Origin::VEff(const std::vector<double> &v,
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     return VEff(Transformedv, Temp, diff);
@@ -2569,7 +2585,8 @@ void Class_Potential_Origin::CheckImplementation(
   const std::string Pass = "Pass";
   const std::string Fail = "Fail";
 
-  std::cout << "The tested Model is the " << Model << std::endl;
+  Logger::Write(LoggingLevel::Default,
+                "The tested Model is the " + ModelIDToString(Model));
 
   std::vector<std::string> TestNames, TestResults;
 
@@ -2593,10 +2610,10 @@ void Class_Potential_Origin::CheckImplementation(
   TestResults.push_back(
       ModelTests::TestResultsToString(ModelTests::CheckCKMUnitarity()));
 
-  std::cout << std::endl
-            << "This function calculates the masses of the gauge bosons, "
-               "fermions and Higgs boson and compares them "
-            << "with the parameters defined in SMparam.h." << std::endl;
+  Logger::Write(LoggingLevel::Default,
+                "This function calculates the masses of the gauge bosons, "
+                "fermions and Higgs boson and compares them "
+                "with the parameters defined in SMparam.h.");
 
   TestNames.push_back("Matching gauge boson masses with SMparam.h");
   TestResults.push_back(ModelTests::TestResultsToString(
@@ -2636,8 +2653,10 @@ void Class_Potential_Origin::CheckImplementation(
 
   if (TestNames.size() != TestResults.size())
   {
-    std::cout << "TestNames : " << std::endl << TestNames << std::endl;
-    std::cout << "TestResults : " << std::endl << TestResults << std::endl;
+    std::stringstream ss;
+    ss << "TestNames : " << std::endl << TestNames << std::endl;
+    ss << "TestResults : " << std::endl << TestResults << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::string errmsg{
         "Mismatch between the number of labels for the tests and the results."};
     errmsg += "TestNames.size() = " + std::to_string(TestNames.size());
@@ -2651,8 +2670,8 @@ void Class_Potential_Origin::CheckImplementation(
     if (el == Pass) Passes++;
   }
 
-  std::cout << "\nTEST | Pass/Fail\n================================\n"
-            << std::endl;
+  std::stringstream ss;
+  ss << "\nTEST | Pass/Fail\n================================\n" << std::endl;
   auto maxsize = TestNames.at(0).size();
   for (const auto &el : TestNames)
   {
@@ -2661,21 +2680,22 @@ void Class_Potential_Origin::CheckImplementation(
   maxsize += 5;
   for (std::size_t i{0}; i < TestNames.size(); ++i)
   {
-    std::cout << std::setw(maxsize) << std::left << TestNames.at(i) << "| "
-              << TestResults.at(i) << std::endl;
+    ss << std::setw(maxsize) << std::left << TestNames.at(i) << "| "
+       << TestResults.at(i) << std::endl;
   }
 
-  std::cout << Passes << " tests out of " << TestResults.size() << " passed.\n"
-            << std::endl;
+  ss << Passes << " tests out of " << TestResults.size() << " passed.\n"
+     << std::endl;
   if (Passes != TestResults.size())
   {
-    std::cout << TestResults.size() - Passes
-              << " tests failed. Please check and try again." << std::endl;
+    ss << TestResults.size() - Passes
+       << " tests failed. Please check and try again." << std::endl;
   }
   else
   {
-    std::cout << "You're good to go!\n" << std::endl;
+    ss << "You're good to go!\n" << std::endl;
   }
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 void Class_Potential_Origin::FindSignSymmetries()
@@ -2782,13 +2802,15 @@ Class_Potential_Origin::QuarkMassMatrix(const std::vector<double> &v) const
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     MIJ          = QuarkMassMatrix(Transformedv);
@@ -2796,8 +2818,6 @@ Class_Potential_Origin::QuarkMassMatrix(const std::vector<double> &v) const
   }
   if (!SetCurvatureDone)
   {
-    //        SetCurvatureArrays(); std::cout << "Reset of Set Curvature " <<
-    //        std::endl;
     std::string retmes = __func__;
     retmes += " is called before SetCurvatureArrays() is called. \n";
     throw std::runtime_error(retmes);
@@ -2858,13 +2878,15 @@ Class_Potential_Origin::LeptonMassMatrix(const std::vector<double> &v) const
   }
   if (v.size() == nVEV and nVEV != NHiggs)
   {
-    std::cerr << __func__
-              << " is being called with a wrong sized vev configuration. It "
-                 "has the dimension of "
-              << nVEV << " while it should have " << NHiggs
-              << ". For now this is transformed but please fix this to reduce "
-                 "the runtime."
-              << std::endl;
+    std::stringstream ss;
+    ss << __func__
+       << " is being called with a wrong sized vev configuration. It "
+          "has the dimension of "
+       << nVEV << " while it should have " << NHiggs
+       << ". For now this is transformed but please fix this to reduce "
+          "the runtime."
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
     std::vector<double> Transformedv;
     Transformedv = MinimizeOrderVEV(v);
     res          = LeptonMassMatrix(Transformedv);
@@ -2872,8 +2894,6 @@ Class_Potential_Origin::LeptonMassMatrix(const std::vector<double> &v) const
   }
   if (!SetCurvatureDone)
   {
-    //        SetCurvatureArrays(); std::cout << "Reset of Set Curvature " <<
-    //        std::endl;
     std::string retmes = __func__;
     retmes += " is called before SetCurvatureArrays();\n";
     throw std::runtime_error(retmes);
