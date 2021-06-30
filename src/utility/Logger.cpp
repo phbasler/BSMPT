@@ -23,7 +23,7 @@ static std::map<std::string, LoggingLevel> LoggingPrefixes{
     },
     {"--logginglevel::debug=", LoggingLevel::Debug},
     {"--logginglevel::ewbgdetailed=", LoggingLevel::EWBGDetailed},
-    {"--logginglevel::progdetailed", LoggingLevel::ProgDetailed},
+    {"--logginglevel::progdetailed=", LoggingLevel::ProgDetailed},
     {"--logginglevel::minimizerdetailed=", LoggingLevel::MinimizerDetailed}};
 
 void ShowLoggerHelp()
