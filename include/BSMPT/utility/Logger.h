@@ -75,7 +75,7 @@ private:
       {LoggingLevel::Default, true},
       {LoggingLevel::EWBGDetailed, false},
       {LoggingLevel::ProgDetailed, false},
-      {LoggingLevel::ProgDetailed, false},
+      {LoggingLevel::MinimizerDetailed, false},
       {LoggingLevel::Debug, false}};
 };
 
