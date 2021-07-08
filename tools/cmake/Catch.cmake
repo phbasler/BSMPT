@@ -1,6 +1,4 @@
-# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
-#
-# SPDX-License-Identifier: GPL-3.0-or-later
+
 
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
