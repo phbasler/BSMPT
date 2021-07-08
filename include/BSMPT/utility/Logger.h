@@ -39,11 +39,6 @@ public:
   BSMPTLogger(std::ostream &os) : mOstream{os.rdbuf()} {}
 
 private:
-  BSMPTLogger(const BSMPTLogger &) = default;
-  BSMPTLogger(BSMPTLogger &&)      = default;
-  BSMPTLogger &operator=(const BSMPTLogger &) = default;
-  BSMPTLogger &operator=(BSMPTLogger &&) = default;
-
   void SetOStream(std::ostream &Ostream);
   void SetOStream(const std::string &file);
   template <typename T>
