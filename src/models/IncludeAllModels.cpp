@@ -1,9 +1,11 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/models/ClassPotentialC2HDM.h>
+#include <BSMPT/models/ClassPotentialCPintheDark.h>
 #include <BSMPT/models/ClassPotentialCxSM.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/ClassPotentialR2HDM.h>
@@ -15,7 +17,6 @@
 #include <utility>   // for pair
 
 #include <BSMPT/models/ClassTemplate.h>
-#include <BSMPT/models/ClassPotentialCPintheDark.h>
 
 namespace BSMPT
 {
@@ -33,8 +34,10 @@ std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice)
     return std::make_unique<Class_Potential_RN2HDM>();
     break;
   case ModelIDs::CXSM: return std::make_unique<Class_CxSM>(); break;
+  case ModelIDs::CPINTHEDARK:
+    return std::make_unique<Class_Potential_CPintheDark>();
+    break;
   case ModelIDs::TEMPLATE: return std::unique_ptr<Class_Template>(); break;
-  case ModelIDs::CPINTHEDARK: return std::make_unique<Class_Potential_CPintheDark>(); break;
   default: throw std::runtime_error("Invalid model");
   }
 }

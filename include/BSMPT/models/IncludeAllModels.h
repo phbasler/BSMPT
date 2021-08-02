@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -33,10 +34,10 @@ enum class ModelIDs
   R2HDM,
   RN2HDM,
   CXSM,
+  CPINTHEDARK,
 
   // Here you start adding your models
   TEMPLATE,
-  CPINTHEDARK,
 
   // DO NOT EDIT the part below
   stop
@@ -51,8 +52,8 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
     {"r2hdm", ModelIDs::R2HDM},
     {"n2hdm", ModelIDs::RN2HDM},
     {"cxsm", ModelIDs::CXSM},
-    {"template", ModelIDs::TEMPLATE},
     {"cpinthedark", ModelIDs::CPINTHEDARK},
+    {"template", ModelIDs::TEMPLATE},
 };
 
 /**

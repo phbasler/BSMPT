@@ -14,10 +14,10 @@ set(header
 	${header_path}/ClassPotentialR2HDM.h
   ${header_path}/ClassPotentialRN2HDM.h
   ${header_path}/ClassPotentialCxSM.h
+  ${header_path}/ClassPotentialCPintheDark.h
 
   # Here you can add your new model
   ${header_path}/ClassTemplate.h
-  ${header_path}/ClassPotentialCPintheDark.h
 )
 
 set(src
@@ -32,11 +32,10 @@ set(src
   ClassPotentialR2HDM.cpp
   ClassPotentialRN2HDM.cpp
   ClassPotentialCxSM.cpp
-
+  ClassPotentialCPintheDark.cpp
 
   # Here you can add your new model
   ClassTemplate.cpp
-  ClassPotentialCPintheDark.cpp
 )
 
 add_library(Models ${header} ${src})

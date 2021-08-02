@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -277,408 +278,6 @@ std::vector<double> Class_Potential_Origin::FirstDerivativeOfEigenvalues(
   return res;
 }
 
-double Class_Potential_Origin::fbaseFour(double MassSquaredA, double MassSquaredB, double MassSquaredC, double MassSquaredD) const {
-
-    // maximize the numerical precision
-    typedef std::numeric_limits< double > dbl;
-    std::setprecision(dbl::max_digits10);
-
-    double res = 0;
-    double mas = MassSquaredA;
-    double mbs = MassSquaredB;
-    double mcs = MassSquaredC;
-    double mds = MassSquaredD;
-    double LogA = 0, LogB = 0, LogC = 0, LogD = 0;
-    double thresZero = 1e-6;
-    double thresDeg = 1e-6;
-    if(std::abs(mas) < thresZero) mas = 0;
-    if(std::abs(mbs) < thresZero) mbs = 0;
-    if(std::abs(mcs) < thresZero) mcs = 0;
-    if(std::abs(mds) < thresZero) mds = 0;
-    if(std::abs(mas-mbs) < thresDeg) mbs = mas;
-    if(std::abs(mas-mcs) < thresDeg) mcs = mas;
-    if(std::abs(mas-mds) < thresDeg) mds = mas;
-    if(std::abs(mbs-mcs) < thresDeg) mcs = mbs;
-    if(std::abs(mbs-mds) < thresDeg) mds = mbs;
-    if(std::abs(mcs-mds) < thresDeg) mds = mcs;
-
-    if(mas != 0) LogA = std::log(mas) - 2*std::log(scale);
-    if(mbs != 0) LogB = std::log(mbs) - 2*std::log(scale);
-    if(mcs != 0) LogC = std::log(mcs) - 2*std::log(scale);
-    if(mds != 0) LogD = std::log(mds) - 2*std::log(scale);
-
-    std::size_t C = 0;
-
-    // all masses are zero
-    if(mas == 0 and mbs == 0 and mcs == 0 and mds == 0) 
-    {
-        C = 1;
-        // f0000
-        res = 0; 
-    }
-    
-    // one mass is non-zero, the other ones are zero
-    else if (mas != 0 and mbs == 0 and mcs == 0 and mds == 0)
-    {
-        C = 2;
-        // fa000
-        res = LogA / (mas * mas); 
-    }
-    else if (mas == 0 and mbs != 0 and mcs == 0 and mds == 0)
-    {
-        C = 3;
-        // f0b00
-        res = LogB / (mbs * mbs); 
-    }
-    else if (mas == 0 and mbs == 0 and mcs != 0 and mds == 0)
-    {
-        C = 4;
-        // f00c0
-        res = LogC / (mcs * mcs); 
-    }
-    else if (mas == 0 and mbs == 0 and mcs == 0 and mds != 0)
-    {
-        C = 5;
-        // f000d
-        res = LogD / (mds * mds); 
-    }
-
-    // two masses are non-zero, the other masses are zero
-    // 1) they are equal
-    else if (mas == mbs and mas != 0 and mcs == 0 and mds == 0)
-    {
-        C = 6;
-        // faa00
-        res = (2. - LogA) / (mas * mas);
-    }
-    else if (mas == mcs and mas != 0 and mbs == 0 and mds == 0)
-    {
-        C = 7;
-        // fa0a0
-        res = (2. - LogA) / (mas * mas);
-    }
-    else if (mas == mds and mas != 0 and mbs == 0 and mcs == 0)
-    {
-        C = 8;
-        // fa00a
-        res = (2. - LogA) / (mas * mas);
-    }
-    else if (mbs == mcs and mbs != 0 and mas == 0 and mds == 0)
-    {
-        C = 9;
-        // f0bb0
-        res = (2. - LogB) / (mbs * mbs);
-    }
-    else if (mbs == mds and mbs != 0 and mas == 0 and mcs == 0)
-    {
-        C = 10;
-        // f0b0b
-        res = (2. - LogB) / (mbs * mbs);
-    }
-    else if (mcs == mds and mcs != 0 and mas == 0 and mbs == 0)
-    {
-        C = 11;
-        // f00cc
-        res = (2. - LogC) / (mcs * mcs);
-    }
-    
-    // 2) they are non-equal
-    else if (mas != 0 and mbs != 0 and mas != mbs and mcs == 0 and mds == 0)
-    {
-        C = 12;
-        // fab00
-        res = 1./(mas*mbs) + (mbs*LogA-mas*LogB)/(mas*mbs*(mas-mbs));
-    }
-    else if (mas != 0 and mcs != 0 and mas != mcs and mbs == 0 and mds == 0)
-    {
-        C = 13;
-        // fa0c0
-        res = 1./(mas*mcs) + (mcs*LogA-mas*LogC)/(mas*mcs*(mas-mcs));
-    }
-    else if (mas != 0 and mds != 0 and mas != mds and mbs == 0 and mcs == 0)
-    {
-        C = 14;
-        // fa00d
-        res = 1./(mas*mds) + (mds*LogA-mas*LogD)/(mas*mds*(mas-mds));
-    }
-    else if (mbs != 0 and mcs != 0 and mbs != mcs and mas == 0 and mds == 0)
-    {
-        C = 15;
-        // f0bc0
-        res = 1./(mbs*mcs) + (mcs*LogB-mbs*LogC)/(mbs*mcs*(mbs-mcs));
-    }
-    else if (mbs != 0 and mds != 0 and mbs != mds and mas == 0 and mcs == 0)
-    {
-        C = 16;
-        // f0b0d
-        res = 1./(mbs*mds) + (mds*LogB-mbs*LogD)/(mbs*mds*(mbs-mds));
-    }
-    else if (mcs != 0 and mds != 0 and mcs != mds and mas == 0 and mbs == 0)
-    {
-        C = 17;
-        // f00cd
-        res = 1./(mcs*mds) + (mds*LogC-mcs*LogD)/(mcs*mds*(mcs-mds));
-    }
-
-    // three masses are non-zero, the remaining mass is zero
-    // 1) the three masses are equal
-    else if (mas == 0 and mbs == mcs and mbs == mds and mbs != 0)
-    {
-        C = 18;
-        // f0bbb
-        res = -1./(2. * mbs * mbs);
-    }
-    else if (mbs == 0 and mas == mcs and mas == mds and mas != 0)
-    {
-        C = 19;
-        // fa0aa
-        res = -1./(2. * mas * mas);        
-    }
-    else if (mcs == 0 and mas == mbs and mas == mds and mas != 0)
-    {
-        C = 20;
-        // faa0a
-        res = -1./(2. * mas * mas); 
-    }
-    else if (mds == 0 and mas == mbs and mas == mcs and mas != 0)
-    {
-        C = 21;
-        // faaa0
-        res = -1./(2. * mas * mas); 
-    }
-    
-    // 2) two of the three non-zero masses are equal
-    else if (mas == 0 and mbs != 0 and mcs != 0 and mds != 0)
-    {
-        if (mbs == mcs and mds != mbs)
-        {
-            C = 22;
-            // f0bbd
-            res = (mbs - mds + mbs * LogD - mbs * LogB) / (mbs * (mbs - mds) * (mbs - mds));
-        }
-        else if (mbs == mds and mcs != mbs)
-        {
-            C = 23;
-            // f0bcb
-            res = (mbs - mcs + mbs * LogC - mbs * LogB) / (mbs * (mbs - mcs) * (mbs - mcs));
-        }
-        else if (mcs == mds and mbs != mcs)
-        {
-            C = 24;
-            // f0bcc
-            res = (mcs - mbs + mcs * LogB - mcs * LogC) / (mcs * (mbs - mcs) * (mbs  - mcs));
-        }
-    }
-    else if (mas != 0 and mbs == 0 and mcs != 0 and mds != 0)
-    {
-        if (mas == mcs and mds != mas)
-        {
-            C = 25;
-            // fa0ad
-            res = (mas - mds + mas * LogD - mas * LogA) / (mas * (mas - mds) * (mas - mds));
-        }
-        else if (mas == mds and mcs != mas)
-        {
-            C = 26;
-            // fa0ca
-            res = (mas - mcs + mas * LogC - mas * LogA) / (mas * (mas - mcs) * (mas - mcs));
-        }
-        else if (mcs == mds and mas != mcs)
-        {
-            C = 27;
-            // fa0cc
-            res = (mcs - mas + mcs * LogA - mcs * LogC) / (mcs * (mcs - mas) * (mcs - mas));
-        }
-    }
-    else if (mas != 0 and mbs != 0 and mcs == 0 and mds != 0)
-    {
-        if (mas == mbs and mds != mas)
-        {
-            C = 28;
-            // faa0d
-            res = (mas - mds + mas * LogD - mas * LogA) / (mas * (mas - mds) * (mas - mds));
-        }
-        else if (mas == mds and mbs != mas)
-        {
-            C = 29;
-            // fab0a
-            res = (mas - mbs + mas * LogB - mas * LogA) / (mas * (mas - mbs) * (mas - mbs));
-        }
-        else if (mbs == mds and mas != mbs)
-        {
-            C = 30;
-            // fab0b
-            res = (mbs - mas + mbs * LogA - mbs * LogB) / (mbs * (mas - mbs) * (mas - mbs));
-        }
-    }
-    else if (mas != 0 and mbs != 0 and mcs != 0 and mds == 0)
-    {
-        if (mas == mbs and mcs != mas)
-        {
-            C = 31;
-            // faac0
-            res = (mas - mcs + mas * LogC - mas * LogA) / (mas * (mas - mcs) * (mas - mcs));
-        }
-        else if (mas == mcs and mbs != mas)
-        {
-            C = 32;
-            // faba0
-            res = (mas - mbs + mas * LogB - mas * LogA) / (mas * (mas - mbs) * (mas - mbs));
-        }
-        else if (mbs == mcs and mas != mbs)
-        {
-            C = 33;
-            // fabb0
-            res = (mbs - mas + mbs * LogA - mbs * LogB) / (mbs * (mas - mbs) * (mas - mbs));
-        } 
-    }
-    
-    // 3) all three non-zero masses are different
-    else if (mas == 0 and mbs != mcs and mbs != mds and mcs != mds and mbs != 0 and mcs != 0 and mds != 0)
-    {
-        C = 34;
-        // f0bcd
-        res = LogB / (mbs - mcs) / (mbs - mds) + LogC / (mcs - mbs) / (mcs - mds) + LogD / (mds - mbs) / (mds - mcs);
-    }
-    else if (mbs == 0 and mas != mcs and mas != mds and mcs != mds and mas != 0 and mcs != 0 and mds != 0)
-    {
-        C = 35;
-        // fa0cd
-        res = LogA / (mas - mcs) / (mas - mds) + LogC / (mcs - mas) / (mcs - mds) + LogD / (mds - mas) / (mds - mcs);
-    }
-    else if (mcs == 0 and mas != mbs and mas != mds and mbs != mds and mas != 0 and mbs != 0 and mds != 0)
-    {
-        C = 36;
-        // fab0d
-        res = LogA / (mas - mbs) / (mas - mds) + LogB / (mbs - mas) / (mbs - mds) + LogD / (mds - mas) / (mds - mbs);
-    }
-    else if (mds == 0 and mas != mbs and mas != mcs and mbs != mcs and mas != 0 and mbs != 0 and mcs != 0)
-    {
-        C = 37;
-        // fabc0
-        res = LogA / (mas - mbs) / (mas - mcs) + LogB / (mbs - mas) / (mbs - mcs) + LogC / (mcs - mas) / (mcs - mbs);
-    }
-
-    // all four masses are non-zero
-    // 1) all four masses are equal
-    else if (mas == mbs and mbs == mcs and mcs == mds and mas != 0)
-    {
-        C = 38;
-        // faaaa
-        res = -1/(6 * mas * mas);
-    }
-    // 2) only two of the masses are equal
-    // 2.1) remaining two are not equal
-    else if (mas == mbs and mcs != mds and mas != mcs and mas != mds and mas != 0 and mcs != 0 and mds != 0)
-    {
-        C = 39;
-        // faacd
-        res = (mcs*(mas-mds)*(mas-mds)*LogC - mds*(mas-mcs)*(mas-mcs)*LogD + (mcs-mds)*((mas-mcs)*(mas-mds)+(-mas*mas+mcs*mds)*LogA))/((mas-mcs)*(mas-mcs)*(mas-mds)*(mas-mds)*(mcs-mds));
-    }
-    else if (mas == mcs and mbs != mds and mas != mbs and mas != mds and mas != 0 and mbs != 0 and mds != 0)
-    {
-        C = 40;
-        // fabad
-        res = (mbs*(mas-mds)*(mas-mds)*LogB - mds*(mas-mbs)*(mas-mbs)*LogD + (mbs-mds)*((mas-mbs)*(mas-mds)+(-mas*mas+mbs*mds)*LogA))/((mas-mbs)*(mas-mbs)*(mas-mds)*(mas-mds)*(mbs-mds));
-    }
-    else if (mas == mds and mbs != mcs and mas != mbs and mas != mcs and mas != 0 and mbs != 0 and mcs != 0)
-    {
-        C = 41;
-        // fabca
-        res = (mbs*(mas-mcs)*(mas-mcs)*LogB - mcs*(mas-mbs)*(mas-mbs)*LogC + (mbs-mcs)*((mas-mbs)*(mas-mcs)+(-mas*mas+mbs*mcs)*LogA))/((mas-mbs)*(mas-mbs)*(mas-mcs)*(mas-mcs)*(mbs-mcs));
-    }
-    else if (mbs == mcs and mas != mds and mbs != mas and mbs != mds and mbs != 0 and mas != 0 and mds != 0)
-    {
-        C = 42;
-        // fabbd
-        res = (mas*(mbs-mds)*(mbs-mds)*LogA - mds*(mas-mbs)*(mas-mbs)*LogD + (mas-mds)*(-(mas-mbs)*(mbs-mds)+(-mbs*mbs+mas*mds)*LogB))/((mas-mbs)*(mas-mbs)*(mbs-mds)*(mbs-mds)*(mas-mds));
-    }
-    else if (mbs == mds and mas != mcs and mbs != mas and mbs != mcs and mbs != 0 and mas != 0 and mcs != 0)
-    {
-        C = 43;
-        // fabcb
-        res = (mas*(mbs-mcs)*(mbs-mcs)*LogA - mcs*(mas-mbs)*(mas-mbs)*LogC + (mas-mcs)*(-(mas-mbs)*(mbs-mcs)+(-mbs*mbs+mas*mcs)*LogB))/((mas-mbs)*(mas-mbs)*(mbs-mcs)*(mbs-mcs)*(mas-mcs));
-    }
-    else if (mcs == mds and mas != mbs and mcs != mas and mcs != mbs and mcs != 0 and mcs != 0 and mds != 0)
-    {
-        C = 44;
-        // fabcc
-        res = (mas*(mbs-mcs)*(mbs-mcs)*LogA - mbs*(mas-mcs)*(mas-mcs)*LogB + (mas-mbs)*((mas-mcs)*(mbs-mcs)+(-mcs*mcs+mas*mbs)*LogC))/((mas-mcs)*(mas-mcs)*(mbs-mcs)*(mbs-mcs)*(mas-mbs));
-    }
-    // 2.2) remaining two are also equal
-    else if (mas == mbs and mcs == mds and mas != mcs and mas != 0 and mcs != 0)
-    {
-        C = 45;
-        // faacc
-        res = (2.*(mas-mcs)+(mas+mcs)*(LogC-LogA)) / ((mas-mcs)*(mas-mcs)*(mas-mcs));
-    }
-    else if (mas == mcs and mbs == mds and mas != mbs and mas != 0 and mbs != 0)
-    {
-        C = 46;
-        // fabab
-        res = (2.*(mas-mbs)+(mas+mbs)*(LogB-LogA)) / ((mas-mbs)*(mas-mbs)*(mas-mbs));
-    }
-    else if (mas == mds and mbs == mcs and mas != mbs and mas != 0 and mbs != 0)
-    {
-        C = 47;
-        // fabba
-        res = (2.*(mas-mbs)+(mas+mbs)*(LogB-LogA)) / ((mas-mbs)*(mas-mbs)*(mas-mbs));
-    }
-    
-
-    // 3) three of the masses are equal
-    else if (mas == mbs and mas == mcs and mas != 0 and mas != mds and mds != 0)
-    {
-        C = 48;
-        // faaad
-        res = ( - mas*mas + mds*mds + 2. * mas * mds * (LogA-LogD)) / ( 2. * mas * (mas - mds)*(mas - mds)*(mas - mds));
-    }
-    else if (mas == mbs and mas == mds and mas != 0 and mas != mcs and mcs != 0)
-    {
-        C = 49;
-        // faaca
-        res = ( - mas*mas + mcs*mcs + 2. * mas * mcs * (LogA-LogC)) / ( 2. * mas * (mas - mcs)*(mas - mcs)*(mas - mcs));
-    }
-    else if (mas == mcs and mas == mds and mas != 0 and mas != mbs and mbs != 0)
-    {
-        C = 50;
-        // fabaa
-        res = ( - mas*mas + mbs*mbs + 2. * mas * mbs * (LogA-LogB)) / ( 2. * mas * (mas - mbs)*(mas - mbs)*(mas - mbs));
-    }
-    else if (mbs == mcs and mbs == mds and mbs != 0 and mas != mbs and mas != 0)
-    {
-        C = 51;
-        // fabbb
-        res = ( - mbs*mbs + mas*mas + 2. * mbs * mas * (LogB-LogA)) / ( 2. * mbs * (mbs - mas)*(mbs - mas)*(mbs - mas));
-    }
-    
-    // 4) all four masses are non-equal
-    else
-    {
-        C = 52;
-        // fabcd
-        res = mas * LogA / ((mas-mbs)*(mas-mcs)*(mas-mds));
-        res += mbs * LogB / ((mbs-mas)*(mbs-mcs)*(mbs-mds));
-        res += mcs * LogC / ((mcs-mas)*(mcs-mbs)*(mcs-mds));
-        res += mds * LogD / ((mds-mas)*(mds-mbs)*(mds-mcs));
-    }
-
-    if(std::isnan(res) or std::isinf(res) or std::abs(res)>1e10) {
-    	std::string throwstring = "Found nan at line = ";
-    	throwstring += std::to_string(InputLineNumber);
-    	throwstring += " in function ";
-    	throwstring+= __func__;
-    	throwstring+= "\n";
-    	std::cerr << "Found nan at line = " << InputLineNumber << " in function " << __func__ << std::endl;
-        std::cerr << mas << sep << mbs << sep << mcs << sep << mds << sep << C << sep << res << std::endl;
-    	throw std::runtime_error(throwstring.c_str());
-    }  
-
-    // if(std::abs(res)>1e10) std::cout << "f_abcd = " << res << " with mas = " << mas << " mbs = " << mbs << " mcs = " << mcs << " mds = " << mds << " C: " << C << std::endl;
-
-    return res;
-}
-
 double Class_Potential_Origin::fbaseTri(double MassSquaredA,
                                         double MassSquaredB,
                                         double MassSquaredC) const
@@ -775,6 +374,475 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA,
               << __func__ << std::endl;
     std::cerr << mas << sep << mbs << sep << mcs << sep << res << sep << C
               << std::endl;
+    throw std::runtime_error(throwstring.c_str());
+  }
+
+  return res;
+}
+
+double Class_Potential_Origin::fbaseFour(double MassSquaredA,
+                                         double MassSquaredB,
+                                         double MassSquaredC,
+                                         double MassSquaredD) const
+{
+
+  // maximize the numerical precision
+  typedef std::numeric_limits<double> dbl;
+  std::setprecision(dbl::max_digits10);
+
+  double res  = 0;
+  double mas  = MassSquaredA;
+  double mbs  = MassSquaredB;
+  double mcs  = MassSquaredC;
+  double mds  = MassSquaredD;
+  double LogA = 0, LogB = 0, LogC = 0, LogD = 0;
+  double thresZero = 1e-6;
+  double thresDeg  = 1e-6;
+  if (std::abs(mas) < thresZero) mas = 0;
+  if (std::abs(mbs) < thresZero) mbs = 0;
+  if (std::abs(mcs) < thresZero) mcs = 0;
+  if (std::abs(mds) < thresZero) mds = 0;
+  if (std::abs(mas - mbs) < thresDeg) mbs = mas;
+  if (std::abs(mas - mcs) < thresDeg) mcs = mas;
+  if (std::abs(mas - mds) < thresDeg) mds = mas;
+  if (std::abs(mbs - mcs) < thresDeg) mcs = mbs;
+  if (std::abs(mbs - mds) < thresDeg) mds = mbs;
+  if (std::abs(mcs - mds) < thresDeg) mds = mcs;
+
+  if (mas != 0) LogA = std::log(mas) - 2 * std::log(scale);
+  if (mbs != 0) LogB = std::log(mbs) - 2 * std::log(scale);
+  if (mcs != 0) LogC = std::log(mcs) - 2 * std::log(scale);
+  if (mds != 0) LogD = std::log(mds) - 2 * std::log(scale);
+
+  std::size_t C = 0;
+
+  // all masses are zero
+  if (mas == 0 and mbs == 0 and mcs == 0 and mds == 0)
+  {
+    C = 1;
+    // f0000
+    res = 0;
+  }
+
+  // one mass is non-zero, the other ones are zero
+  else if (mas != 0 and mbs == 0 and mcs == 0 and mds == 0)
+  {
+    C = 2;
+    // fa000
+    res = LogA / (mas * mas);
+  }
+  else if (mas == 0 and mbs != 0 and mcs == 0 and mds == 0)
+  {
+    C = 3;
+    // f0b00
+    res = LogB / (mbs * mbs);
+  }
+  else if (mas == 0 and mbs == 0 and mcs != 0 and mds == 0)
+  {
+    C = 4;
+    // f00c0
+    res = LogC / (mcs * mcs);
+  }
+  else if (mas == 0 and mbs == 0 and mcs == 0 and mds != 0)
+  {
+    C = 5;
+    // f000d
+    res = LogD / (mds * mds);
+  }
+
+  // two masses are non-zero, the other masses are zero
+  // 1) they are equal
+  else if (mas == mbs and mas != 0 and mcs == 0 and mds == 0)
+  {
+    C = 6;
+    // faa00
+    res = (2. - LogA) / (mas * mas);
+  }
+  else if (mas == mcs and mas != 0 and mbs == 0 and mds == 0)
+  {
+    C = 7;
+    // fa0a0
+    res = (2. - LogA) / (mas * mas);
+  }
+  else if (mas == mds and mas != 0 and mbs == 0 and mcs == 0)
+  {
+    C = 8;
+    // fa00a
+    res = (2. - LogA) / (mas * mas);
+  }
+  else if (mbs == mcs and mbs != 0 and mas == 0 and mds == 0)
+  {
+    C = 9;
+    // f0bb0
+    res = (2. - LogB) / (mbs * mbs);
+  }
+  else if (mbs == mds and mbs != 0 and mas == 0 and mcs == 0)
+  {
+    C = 10;
+    // f0b0b
+    res = (2. - LogB) / (mbs * mbs);
+  }
+  else if (mcs == mds and mcs != 0 and mas == 0 and mbs == 0)
+  {
+    C = 11;
+    // f00cc
+    res = (2. - LogC) / (mcs * mcs);
+  }
+
+  // 2) they are non-equal
+  else if (mas != 0 and mbs != 0 and mas != mbs and mcs == 0 and mds == 0)
+  {
+    C = 12;
+    // fab00
+    res = 1. / (mas * mbs) +
+          (mbs * LogA - mas * LogB) / (mas * mbs * (mas - mbs));
+  }
+  else if (mas != 0 and mcs != 0 and mas != mcs and mbs == 0 and mds == 0)
+  {
+    C = 13;
+    // fa0c0
+    res = 1. / (mas * mcs) +
+          (mcs * LogA - mas * LogC) / (mas * mcs * (mas - mcs));
+  }
+  else if (mas != 0 and mds != 0 and mas != mds and mbs == 0 and mcs == 0)
+  {
+    C = 14;
+    // fa00d
+    res = 1. / (mas * mds) +
+          (mds * LogA - mas * LogD) / (mas * mds * (mas - mds));
+  }
+  else if (mbs != 0 and mcs != 0 and mbs != mcs and mas == 0 and mds == 0)
+  {
+    C = 15;
+    // f0bc0
+    res = 1. / (mbs * mcs) +
+          (mcs * LogB - mbs * LogC) / (mbs * mcs * (mbs - mcs));
+  }
+  else if (mbs != 0 and mds != 0 and mbs != mds and mas == 0 and mcs == 0)
+  {
+    C = 16;
+    // f0b0d
+    res = 1. / (mbs * mds) +
+          (mds * LogB - mbs * LogD) / (mbs * mds * (mbs - mds));
+  }
+  else if (mcs != 0 and mds != 0 and mcs != mds and mas == 0 and mbs == 0)
+  {
+    C = 17;
+    // f00cd
+    res = 1. / (mcs * mds) +
+          (mds * LogC - mcs * LogD) / (mcs * mds * (mcs - mds));
+  }
+
+  // three masses are non-zero, the remaining mass is zero
+  // 1) the three masses are equal
+  else if (mas == 0 and mbs == mcs and mbs == mds and mbs != 0)
+  {
+    C = 18;
+    // f0bbb
+    res = -1. / (2. * mbs * mbs);
+  }
+  else if (mbs == 0 and mas == mcs and mas == mds and mas != 0)
+  {
+    C = 19;
+    // fa0aa
+    res = -1. / (2. * mas * mas);
+  }
+  else if (mcs == 0 and mas == mbs and mas == mds and mas != 0)
+  {
+    C = 20;
+    // faa0a
+    res = -1. / (2. * mas * mas);
+  }
+  else if (mds == 0 and mas == mbs and mas == mcs and mas != 0)
+  {
+    C = 21;
+    // faaa0
+    res = -1. / (2. * mas * mas);
+  }
+
+  // 2) two of the three non-zero masses are equal
+  else if (mas == 0 and mbs != 0 and mcs != 0 and mds != 0)
+  {
+    if (mbs == mcs and mds != mbs)
+    {
+      C = 22;
+      // f0bbd
+      res = (mbs - mds + mbs * LogD - mbs * LogB) /
+            (mbs * (mbs - mds) * (mbs - mds));
+    }
+    else if (mbs == mds and mcs != mbs)
+    {
+      C = 23;
+      // f0bcb
+      res = (mbs - mcs + mbs * LogC - mbs * LogB) /
+            (mbs * (mbs - mcs) * (mbs - mcs));
+    }
+    else if (mcs == mds and mbs != mcs)
+    {
+      C = 24;
+      // f0bcc
+      res = (mcs - mbs + mcs * LogB - mcs * LogC) /
+            (mcs * (mbs - mcs) * (mbs - mcs));
+    }
+  }
+  else if (mas != 0 and mbs == 0 and mcs != 0 and mds != 0)
+  {
+    if (mas == mcs and mds != mas)
+    {
+      C = 25;
+      // fa0ad
+      res = (mas - mds + mas * LogD - mas * LogA) /
+            (mas * (mas - mds) * (mas - mds));
+    }
+    else if (mas == mds and mcs != mas)
+    {
+      C = 26;
+      // fa0ca
+      res = (mas - mcs + mas * LogC - mas * LogA) /
+            (mas * (mas - mcs) * (mas - mcs));
+    }
+    else if (mcs == mds and mas != mcs)
+    {
+      C = 27;
+      // fa0cc
+      res = (mcs - mas + mcs * LogA - mcs * LogC) /
+            (mcs * (mcs - mas) * (mcs - mas));
+    }
+  }
+  else if (mas != 0 and mbs != 0 and mcs == 0 and mds != 0)
+  {
+    if (mas == mbs and mds != mas)
+    {
+      C = 28;
+      // faa0d
+      res = (mas - mds + mas * LogD - mas * LogA) /
+            (mas * (mas - mds) * (mas - mds));
+    }
+    else if (mas == mds and mbs != mas)
+    {
+      C = 29;
+      // fab0a
+      res = (mas - mbs + mas * LogB - mas * LogA) /
+            (mas * (mas - mbs) * (mas - mbs));
+    }
+    else if (mbs == mds and mas != mbs)
+    {
+      C = 30;
+      // fab0b
+      res = (mbs - mas + mbs * LogA - mbs * LogB) /
+            (mbs * (mas - mbs) * (mas - mbs));
+    }
+  }
+  else if (mas != 0 and mbs != 0 and mcs != 0 and mds == 0)
+  {
+    if (mas == mbs and mcs != mas)
+    {
+      C = 31;
+      // faac0
+      res = (mas - mcs + mas * LogC - mas * LogA) /
+            (mas * (mas - mcs) * (mas - mcs));
+    }
+    else if (mas == mcs and mbs != mas)
+    {
+      C = 32;
+      // faba0
+      res = (mas - mbs + mas * LogB - mas * LogA) /
+            (mas * (mas - mbs) * (mas - mbs));
+    }
+    else if (mbs == mcs and mas != mbs)
+    {
+      C = 33;
+      // fabb0
+      res = (mbs - mas + mbs * LogA - mbs * LogB) /
+            (mbs * (mas - mbs) * (mas - mbs));
+    }
+  }
+
+  // 3) all three non-zero masses are different
+  else if (mas == 0 and mbs != mcs and mbs != mds and mcs != mds and
+           mbs != 0 and mcs != 0 and mds != 0)
+  {
+    C = 34;
+    // f0bcd
+    res = LogB / (mbs - mcs) / (mbs - mds) + LogC / (mcs - mbs) / (mcs - mds) +
+          LogD / (mds - mbs) / (mds - mcs);
+  }
+  else if (mbs == 0 and mas != mcs and mas != mds and mcs != mds and
+           mas != 0 and mcs != 0 and mds != 0)
+  {
+    C = 35;
+    // fa0cd
+    res = LogA / (mas - mcs) / (mas - mds) + LogC / (mcs - mas) / (mcs - mds) +
+          LogD / (mds - mas) / (mds - mcs);
+  }
+  else if (mcs == 0 and mas != mbs and mas != mds and mbs != mds and
+           mas != 0 and mbs != 0 and mds != 0)
+  {
+    C = 36;
+    // fab0d
+    res = LogA / (mas - mbs) / (mas - mds) + LogB / (mbs - mas) / (mbs - mds) +
+          LogD / (mds - mas) / (mds - mbs);
+  }
+  else if (mds == 0 and mas != mbs and mas != mcs and mbs != mcs and
+           mas != 0 and mbs != 0 and mcs != 0)
+  {
+    C = 37;
+    // fabc0
+    res = LogA / (mas - mbs) / (mas - mcs) + LogB / (mbs - mas) / (mbs - mcs) +
+          LogC / (mcs - mas) / (mcs - mbs);
+  }
+
+  // all four masses are non-zero
+  // 1) all four masses are equal
+  else if (mas == mbs and mbs == mcs and mcs == mds and mas != 0)
+  {
+    C = 38;
+    // faaaa
+    res = -1 / (6 * mas * mas);
+  }
+  // 2) only two of the masses are equal
+  // 2.1) remaining two are not equal
+  else if (mas == mbs and mcs != mds and mas != mcs and mas != mds and
+           mas != 0 and mcs != 0 and mds != 0)
+  {
+    C = 39;
+    // faacd
+    res = (mcs * (mas - mds) * (mas - mds) * LogC -
+           mds * (mas - mcs) * (mas - mcs) * LogD +
+           (mcs - mds) *
+               ((mas - mcs) * (mas - mds) + (-mas * mas + mcs * mds) * LogA)) /
+          ((mas - mcs) * (mas - mcs) * (mas - mds) * (mas - mds) * (mcs - mds));
+  }
+  else if (mas == mcs and mbs != mds and mas != mbs and mas != mds and
+           mas != 0 and mbs != 0 and mds != 0)
+  {
+    C = 40;
+    // fabad
+    res = (mbs * (mas - mds) * (mas - mds) * LogB -
+           mds * (mas - mbs) * (mas - mbs) * LogD +
+           (mbs - mds) *
+               ((mas - mbs) * (mas - mds) + (-mas * mas + mbs * mds) * LogA)) /
+          ((mas - mbs) * (mas - mbs) * (mas - mds) * (mas - mds) * (mbs - mds));
+  }
+  else if (mas == mds and mbs != mcs and mas != mbs and mas != mcs and
+           mas != 0 and mbs != 0 and mcs != 0)
+  {
+    C = 41;
+    // fabca
+    res = (mbs * (mas - mcs) * (mas - mcs) * LogB -
+           mcs * (mas - mbs) * (mas - mbs) * LogC +
+           (mbs - mcs) *
+               ((mas - mbs) * (mas - mcs) + (-mas * mas + mbs * mcs) * LogA)) /
+          ((mas - mbs) * (mas - mbs) * (mas - mcs) * (mas - mcs) * (mbs - mcs));
+  }
+  else if (mbs == mcs and mas != mds and mbs != mas and mbs != mds and
+           mbs != 0 and mas != 0 and mds != 0)
+  {
+    C = 42;
+    // fabbd
+    res = (mas * (mbs - mds) * (mbs - mds) * LogA -
+           mds * (mas - mbs) * (mas - mbs) * LogD +
+           (mas - mds) *
+               (-(mas - mbs) * (mbs - mds) + (-mbs * mbs + mas * mds) * LogB)) /
+          ((mas - mbs) * (mas - mbs) * (mbs - mds) * (mbs - mds) * (mas - mds));
+  }
+  else if (mbs == mds and mas != mcs and mbs != mas and mbs != mcs and
+           mbs != 0 and mas != 0 and mcs != 0)
+  {
+    C = 43;
+    // fabcb
+    res = (mas * (mbs - mcs) * (mbs - mcs) * LogA -
+           mcs * (mas - mbs) * (mas - mbs) * LogC +
+           (mas - mcs) *
+               (-(mas - mbs) * (mbs - mcs) + (-mbs * mbs + mas * mcs) * LogB)) /
+          ((mas - mbs) * (mas - mbs) * (mbs - mcs) * (mbs - mcs) * (mas - mcs));
+  }
+  else if (mcs == mds and mas != mbs and mcs != mas and mcs != mbs and
+           mcs != 0 and mcs != 0 and mds != 0)
+  {
+    C = 44;
+    // fabcc
+    res = (mas * (mbs - mcs) * (mbs - mcs) * LogA -
+           mbs * (mas - mcs) * (mas - mcs) * LogB +
+           (mas - mbs) *
+               ((mas - mcs) * (mbs - mcs) + (-mcs * mcs + mas * mbs) * LogC)) /
+          ((mas - mcs) * (mas - mcs) * (mbs - mcs) * (mbs - mcs) * (mas - mbs));
+  }
+  // 2.2) remaining two are also equal
+  else if (mas == mbs and mcs == mds and mas != mcs and mas != 0 and mcs != 0)
+  {
+    C = 45;
+    // faacc
+    res = (2. * (mas - mcs) + (mas + mcs) * (LogC - LogA)) /
+          ((mas - mcs) * (mas - mcs) * (mas - mcs));
+  }
+  else if (mas == mcs and mbs == mds and mas != mbs and mas != 0 and mbs != 0)
+  {
+    C = 46;
+    // fabab
+    res = (2. * (mas - mbs) + (mas + mbs) * (LogB - LogA)) /
+          ((mas - mbs) * (mas - mbs) * (mas - mbs));
+  }
+  else if (mas == mds and mbs == mcs and mas != mbs and mas != 0 and mbs != 0)
+  {
+    C = 47;
+    // fabba
+    res = (2. * (mas - mbs) + (mas + mbs) * (LogB - LogA)) /
+          ((mas - mbs) * (mas - mbs) * (mas - mbs));
+  }
+
+  // 3) three of the masses are equal
+  else if (mas == mbs and mas == mcs and mas != 0 and mas != mds and mds != 0)
+  {
+    C = 48;
+    // faaad
+    res = (-mas * mas + mds * mds + 2. * mas * mds * (LogA - LogD)) /
+          (2. * mas * (mas - mds) * (mas - mds) * (mas - mds));
+  }
+  else if (mas == mbs and mas == mds and mas != 0 and mas != mcs and mcs != 0)
+  {
+    C = 49;
+    // faaca
+    res = (-mas * mas + mcs * mcs + 2. * mas * mcs * (LogA - LogC)) /
+          (2. * mas * (mas - mcs) * (mas - mcs) * (mas - mcs));
+  }
+  else if (mas == mcs and mas == mds and mas != 0 and mas != mbs and mbs != 0)
+  {
+    C = 50;
+    // fabaa
+    res = (-mas * mas + mbs * mbs + 2. * mas * mbs * (LogA - LogB)) /
+          (2. * mas * (mas - mbs) * (mas - mbs) * (mas - mbs));
+  }
+  else if (mbs == mcs and mbs == mds and mbs != 0 and mas != mbs and mas != 0)
+  {
+    C = 51;
+    // fabbb
+    res = (-mbs * mbs + mas * mas + 2. * mbs * mas * (LogB - LogA)) /
+          (2. * mbs * (mbs - mas) * (mbs - mas) * (mbs - mas));
+  }
+
+  // 4) all four masses are non-equal
+  else
+  {
+    C = 52;
+    // fabcd
+    res = mas * LogA / ((mas - mbs) * (mas - mcs) * (mas - mds));
+    res += mbs * LogB / ((mbs - mas) * (mbs - mcs) * (mbs - mds));
+    res += mcs * LogC / ((mcs - mas) * (mcs - mbs) * (mcs - mds));
+    res += mds * LogD / ((mds - mas) * (mds - mbs) * (mds - mcs));
+  }
+
+  if (std::isnan(res) or std::isinf(res) or std::abs(res) > 1e10)
+  {
+    std::string throwstring = "Found nan at line = ";
+    throwstring += std::to_string(InputLineNumber);
+    throwstring += " in function ";
+    throwstring += __func__;
+    throwstring += "\n";
+    std::cerr << "Found nan at line = " << InputLineNumber << " in function "
+              << __func__ << std::endl;
+    std::cerr << mas << sep << mbs << sep << mcs << sep << mds << sep << C
+              << sep << res << std::endl;
     throw std::runtime_error(throwstring.c_str());
   }
 
@@ -1824,334 +1892,426 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
   return res;
 }
 
-std::vector<double> Class_Potential_Origin::WeinbergForthDerivative() const {
+std::vector<double> Class_Potential_Origin::WeinbergForthDerivative() const
+{
 
-    if(not CalcCouplingsdone){
-        std::string retmes = __func__;
-        retmes += " tries to use Physical couplings but they are not initialised.";
-        throw std::runtime_error(retmes);
-    }
+  if (not CalcCouplingsdone)
+  {
+    std::string retmes = __func__;
+    retmes += " tries to use Physical couplings but they are not initialised.";
+    throw std::runtime_error(retmes);
+  }
 
-    const double NumZero = std::pow(10,-10);
-    double epsilon = 1.0/(16.0*M_PI*M_PI);
+  const double NumZero = std::pow(10, -10);
+  double epsilon       = 1.0 / (16.0 * M_PI * M_PI);
 
-    std::vector<double> res;
+  std::vector<double> res;
 
-    std::vector<std::vector<std::vector<std::vector< std::complex<double>>>>> restmp;
-    std::vector<std::vector<std::vector<std::vector< std::complex<double>>>>> QuarkPart;
-    std::vector<std::vector<std::vector<std::vector< std::complex<double>>>>> LeptonPart;
-    std::vector<std::vector<std::vector<std::vector< std::complex<double>>>>> QuarkPartSym;
-    std::vector<std::vector<std::vector<std::vector< std::complex<double>>>>> LeptonPartSym;
-    std::vector<std::vector<std::vector<std::vector<double>>>> resGaugeBase;
-    std::vector<std::vector<std::vector<std::vector<double>>>> HiggsPart;
-    std::vector<std::vector<std::vector<std::vector<double>>>> GaugePart;
-    std::vector<std::vector<std::vector<std::vector<double>>>> HiggsPartSym;
-    std::vector<std::vector<std::vector<std::vector<double>>>> GaugePartSym;
+  std::vector<std::vector<std::vector<std::vector<std::complex<double>>>>>
+      restmp;
+  std::vector<std::vector<std::vector<std::vector<std::complex<double>>>>>
+      QuarkPart;
+  std::vector<std::vector<std::vector<std::vector<std::complex<double>>>>>
+      LeptonPart;
+  std::vector<std::vector<std::vector<std::vector<std::complex<double>>>>>
+      QuarkPartSym;
+  std::vector<std::vector<std::vector<std::vector<std::complex<double>>>>>
+      LeptonPartSym;
+  std::vector<std::vector<std::vector<std::vector<double>>>> resGaugeBase;
+  std::vector<std::vector<std::vector<std::vector<double>>>> HiggsPart;
+  std::vector<std::vector<std::vector<std::vector<double>>>> GaugePart;
+  std::vector<std::vector<std::vector<std::vector<double>>>> HiggsPartSym;
+  std::vector<std::vector<std::vector<std::vector<double>>>> GaugePartSym;
 
-    restmp.resize(NHiggs);
-    QuarkPart.resize(NHiggs);
-    LeptonPart.resize(NHiggs);
-    QuarkPartSym.resize(NHiggs);
-    LeptonPartSym.resize(NHiggs);
-    resGaugeBase.resize(NHiggs);
-    HiggsPart.resize(NHiggs);
-    GaugePart.resize(NHiggs);
-    HiggsPartSym.resize(NHiggs);
-    GaugePartSym.resize(NHiggs);
+  restmp.resize(NHiggs);
+  QuarkPart.resize(NHiggs);
+  LeptonPart.resize(NHiggs);
+  QuarkPartSym.resize(NHiggs);
+  LeptonPartSym.resize(NHiggs);
+  resGaugeBase.resize(NHiggs);
+  HiggsPart.resize(NHiggs);
+  GaugePart.resize(NHiggs);
+  HiggsPartSym.resize(NHiggs);
+  GaugePartSym.resize(NHiggs);
 
-    for(std::size_t i=0;i<NHiggs; i++)
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    restmp[i].resize(NHiggs);
+    QuarkPart[i].resize(NHiggs);
+    LeptonPart[i].resize(NHiggs);
+    QuarkPartSym[i].resize(NHiggs);
+    LeptonPartSym[i].resize(NHiggs);
+    resGaugeBase[i].resize(NHiggs);
+    HiggsPart[i].resize(NHiggs);
+    GaugePart[i].resize(NHiggs);
+    HiggsPartSym[i].resize(NHiggs);
+    GaugePartSym[i].resize(NHiggs);
+    for (std::size_t j = 0; j < NHiggs; j++)
     {
-        restmp[i].resize(NHiggs);
-        QuarkPart[i].resize(NHiggs);
-        LeptonPart[i].resize(NHiggs);
-        QuarkPartSym[i].resize(NHiggs);
-        LeptonPartSym[i].resize(NHiggs);
-        resGaugeBase[i].resize(NHiggs);
-        HiggsPart[i].resize(NHiggs);
-        GaugePart[i].resize(NHiggs);
-        HiggsPartSym[i].resize(NHiggs);
-        GaugePartSym[i].resize(NHiggs);
-        for(std::size_t j=0;j<NHiggs; j++)
-        {
-            restmp[i][j].resize(NHiggs);
-            QuarkPart[i][j].resize(NHiggs);
-            LeptonPart[i][j].resize(NHiggs);
-            QuarkPartSym[i][j].resize(NHiggs);
-            LeptonPartSym[i][j].resize(NHiggs);
-            resGaugeBase[i][j].resize(NHiggs);
-            HiggsPart[i][j].resize(NHiggs);
-            GaugePart[i][j].resize(NHiggs);
-            HiggsPartSym[i][j].resize(NHiggs);
-            GaugePartSym[i][j].resize(NHiggs);
-            for(std::size_t k=0;k<NHiggs; k++)
-            {
-                restmp[i][j][k].resize(NHiggs);
-                QuarkPart[i][j][k].resize(NHiggs);
-                LeptonPart[i][j][k].resize(NHiggs);
-                QuarkPartSym[i][j][k].resize(NHiggs);
-                LeptonPartSym[i][j][k].resize(NHiggs);
-                resGaugeBase[i][j][k].resize(NHiggs);
-                HiggsPart[i][j][k].resize(NHiggs);
-                GaugePart[i][j][k].resize(NHiggs);
-                HiggsPartSym[i][j][k].resize(NHiggs);
-                GaugePartSym[i][j][k].resize(NHiggs);
-            }
-        }
+      restmp[i][j].resize(NHiggs);
+      QuarkPart[i][j].resize(NHiggs);
+      LeptonPart[i][j].resize(NHiggs);
+      QuarkPartSym[i][j].resize(NHiggs);
+      LeptonPartSym[i][j].resize(NHiggs);
+      resGaugeBase[i][j].resize(NHiggs);
+      HiggsPart[i][j].resize(NHiggs);
+      GaugePart[i][j].resize(NHiggs);
+      HiggsPartSym[i][j].resize(NHiggs);
+      GaugePartSym[i][j].resize(NHiggs);
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        restmp[i][j][k].resize(NHiggs);
+        QuarkPart[i][j][k].resize(NHiggs);
+        LeptonPart[i][j][k].resize(NHiggs);
+        QuarkPartSym[i][j][k].resize(NHiggs);
+        LeptonPartSym[i][j][k].resize(NHiggs);
+        resGaugeBase[i][j][k].resize(NHiggs);
+        HiggsPart[i][j][k].resize(NHiggs);
+        GaugePart[i][j][k].resize(NHiggs);
+        HiggsPartSym[i][j][k].resize(NHiggs);
+        GaugePartSym[i][j][k].resize(NHiggs);
+      }
     }
+  }
 
-    for(std::size_t i1=0; i1<NHiggs; i1++)
+  for (std::size_t i1 = 0; i1 < NHiggs; i1++)
+  {
+    for (std::size_t i2 = 0; i2 < NHiggs; i2++)
     {
-        for(std::size_t i2=0; i2<NHiggs; i2++)
+      for (std::size_t i3 = 0; i3 < NHiggs; i3++)
+      {
+        for (std::size_t i4 = 0; i4 < NHiggs; i4++)
         {
-            for(std::size_t i3=0; i3<NHiggs; i3++)
+          HiggsPart[i1][i2][i3][i4] = 0;
+          for (std::size_t a = 0; a < NHiggs; a++)
+          {
+            for (std::size_t b = 0; b < NHiggs; b++)
             {
-                for(std::size_t i4=0; i4<NHiggs; i4++)
+              double f1 = Couplings_Higgs_Quartic[a][b][i1][i4];
+              double f2 = Couplings_Higgs_Quartic[b][a][i2][i3];
+              double f3 = fbase(MassSquaredHiggs[a], MassSquaredHiggs[b]) -
+                          C_CWcbHiggs + 0.5;
+
+              HiggsPart[i1][i2][i3][i4] += f1 * f2 * f3;
+
+              for (std::size_t c = 0; c < NHiggs; c++)
+              {
+                for (std::size_t d = 0; d < NHiggs; d++)
                 {
-                    HiggsPart[i1][i2][i3][i4] = 0;
-                    for(std::size_t a=0; a<NHiggs; a++)
-                    {
-                        for(std::size_t b=0; b<NHiggs; b++)
-                        {
-                            double f1 = Couplings_Higgs_Quartic[a][b][i1][i4];
-                            double f2 = Couplings_Higgs_Quartic[b][a][i2][i3];
-                            double f3 = fbase(MassSquaredHiggs[a],MassSquaredHiggs[b]) - C_CWcbHiggs + 0.5;
+                  double f11 = fbaseFour(MassSquaredHiggs[a],
+                                         MassSquaredHiggs[b],
+                                         MassSquaredHiggs[c],
+                                         MassSquaredHiggs[d]);
+                  double f12 = Couplings_Higgs_Triple[a][b][i4];
+                  double f13 = Couplings_Higgs_Triple[b][c][i1];
+                  double f14 = Couplings_Higgs_Triple[c][d][i2];
+                  double f15 = Couplings_Higgs_Triple[d][a][i3];
 
-                            HiggsPart[i1][i2][i3][i4] += f1*f2*f3;
-                            
-                            for(std::size_t c=0; c<NHiggs; c++)
-                            {
-                                for(std::size_t d=0; d<NHiggs; d++)
-                                {
-                                    double f11 = fbaseFour(MassSquaredHiggs[a],MassSquaredHiggs[b],MassSquaredHiggs[c],MassSquaredHiggs[d]);
-                                    double f12 = Couplings_Higgs_Triple[a][b][i4];
-                                    double f13 = Couplings_Higgs_Triple[b][c][i1];
-                                    double f14 = Couplings_Higgs_Triple[c][d][i2];
-                                    double f15 = Couplings_Higgs_Triple[d][a][i3];
-
-                                    HiggsPart[i1][i2][i3][i4] += 2.0*f11*f12*f13*f14*f15;
-                                }
-
-                                double f21 = fbaseTri(MassSquaredHiggs[a],MassSquaredHiggs[b],MassSquaredHiggs[c]);
-                                double f22 = Couplings_Higgs_Triple[a][b][i4];
-                                double f23 = Couplings_Higgs_Quartic[b][c][i1][i2];
-                                double f24 = Couplings_Higgs_Triple[c][a][i3];
-
-                                HiggsPart[i1][i2][i3][i4] += 4.0*f21*f22*f23*f24;
-                            }
-                        }
-                    }
-
-                    GaugePart[i1][i2][i3][i4] = 0;
-                    for(std::size_t a=0; a<NGauge; a++)
-                    {
-                        for(std::size_t b=0; b<NGauge; b++)
-                        {
-                            double f1 = Couplings_Gauge_Higgs_22[a][b][i1][i4];
-                            double f2 = Couplings_Gauge_Higgs_22[b][a][i2][i3];
-                            double f3 = fbase(MassSquaredGauge[a],MassSquaredGauge[b]) - C_CWcbGB + 0.5;
-
-                            GaugePart[i1][i2][i3][i4] += f1*f2*f3;
-                            
-                            for(std::size_t c=0; c<NGauge; c++)
-                            {
-                                for(std::size_t d=0; d<NGauge; d++)
-                                {
-                                    double f11 = fbaseFour(MassSquaredGauge[a],MassSquaredGauge[b],MassSquaredGauge[c],MassSquaredGauge[d]);
-                                    double f12 = Couplings_Gauge_Higgs_21[a][b][i4];
-                                    double f13 = Couplings_Gauge_Higgs_21[b][c][i1];
-                                    double f14 = Couplings_Gauge_Higgs_21[c][d][i2];
-                                    double f15 = Couplings_Gauge_Higgs_21[d][a][i3];
-
-                                    
-
-                                    GaugePart[i1][i2][i3][i4] += 2.0*f11*f12*f13*f14*f15;
-                                }
-
-                                double f21 = fbaseTri(MassSquaredGauge[a],MassSquaredGauge[b],MassSquaredGauge[c]);
-                                double f22 = Couplings_Gauge_Higgs_21[a][b][i4];
-                                double f23 = Couplings_Gauge_Higgs_22[b][c][i1][i2];
-                                double f24 = Couplings_Gauge_Higgs_21[c][a][i3];
-
-                                GaugePart[i1][i2][i3][i4] += 4.0*f21*f22*f23*f24;
-                            }
-                        }
-                    }
-
-                    QuarkPart[i1][i2][i3][i4] = 0;
-                    for(std::size_t a=0; a<NQuarks; a++)
-                    {
-                        for(std::size_t b=0; b<NQuarks; b++)
-                        {
-                            std::complex<double> f1 = Couplings_Quark_Higgs_22[a][b][i1][i4];
-                            std::complex<double> f2 = Couplings_Quark_Higgs_22[b][a][i2][i3];
-                            std::complex<double> f3 = fbase(MassSquaredQuark[a],MassSquaredQuark[b]) - C_CWcbFermion + 0.5;
-
-                            QuarkPart[i1][i2][i3][i4] += f1*f2*f3;
-                            
-                            for(std::size_t c=0; c<NQuarks; c++)
-                            {
-                                for(std::size_t d=0; d<NQuarks; d++)
-                                {
-                                    std::complex<double> f11 = fbaseFour(MassSquaredQuark[a],MassSquaredQuark[b],MassSquaredQuark[c],MassSquaredQuark[d]);
-                                    std::complex<double> f12 = Couplings_Quark_Higgs_21[a][b][i4];
-                                    std::complex<double> f13 = Couplings_Quark_Higgs_21[b][c][i1];
-                                    std::complex<double> f14 = Couplings_Quark_Higgs_21[c][d][i2];
-                                    std::complex<double> f15 = Couplings_Quark_Higgs_21[d][a][i3];
-
-                                    
-
-                                    QuarkPart[i1][i2][i3][i4] += 2.0*f11*f12*f13*f14*f15;
-                                }
-
-                                std::complex<double> f21 = fbaseTri(MassSquaredQuark[a],MassSquaredQuark[b],MassSquaredQuark[c]);
-                                std::complex<double> f22 = Couplings_Quark_Higgs_21[a][b][i4];
-                                std::complex<double> f23 = Couplings_Quark_Higgs_22[b][c][i1][i2];
-                                std::complex<double> f24 = Couplings_Quark_Higgs_21[c][a][i3];
-
-                                QuarkPart[i1][i2][i3][i4] += 4.0*f21*f22*f23*f24;
-                            }
-                        }
-                    }
-
-                    LeptonPart[i1][i2][i3][i4] = 0;
-                    for(std::size_t a=0; a<NLepton; a++)
-                    {
-                        for(std::size_t b=0; b<NLepton; b++)
-                        {
-                            std::complex<double> f1 = Couplings_Lepton_Higgs_22[a][b][i1][i4];
-                            std::complex<double> f2 = Couplings_Lepton_Higgs_22[b][a][i2][i3];
-                            std::complex<double> f3 = fbase(MassSquaredLepton[a],MassSquaredLepton[b]) - C_CWcbFermion + 0.5;
-
-                            LeptonPart[i1][i2][i3][i4] += f1*f2*f3;
-                            
-                            for(std::size_t c=0; c<NLepton; c++)
-                            {
-                                for(std::size_t d=0; d<NLepton; d++)
-                                {
-                                    std::complex<double> f11 = fbaseFour(MassSquaredLepton[a],MassSquaredLepton[b],MassSquaredLepton[c],MassSquaredLepton[d]);
-                                    std::complex<double> f12 = Couplings_Lepton_Higgs_21[a][b][i4];
-                                    std::complex<double> f13 = Couplings_Lepton_Higgs_21[b][c][i1];
-                                    std::complex<double> f14 = Couplings_Lepton_Higgs_21[c][d][i2];
-                                    std::complex<double> f15 = Couplings_Lepton_Higgs_21[d][a][i3];
-
-                                    LeptonPart[i1][i2][i3][i4] += 2.0*f11*f12*f13*f14*f15;
-                                }
-
-                                std::complex<double> f21 = fbaseTri(MassSquaredLepton[a],MassSquaredLepton[b],MassSquaredLepton[c]);
-                                std::complex<double> f22 = Couplings_Lepton_Higgs_21[a][b][i4];
-                                std::complex<double> f23 = Couplings_Lepton_Higgs_22[b][c][i1][i2];
-                                std::complex<double> f24 = Couplings_Lepton_Higgs_21[c][a][i3];
-
-                                LeptonPart[i1][i2][i3][i4] += 4.0*f21*f22*f23*f24;
-                            }
-                        }
-                    }
+                  HiggsPart[i1][i2][i3][i4] +=
+                      2.0 * f11 * f12 * f13 * f14 * f15;
                 }
-            }
-        }
-    }
 
-    for(std::size_t i1=0; i1<NHiggs; i1++)
-    {
-        for(std::size_t i2=0; i2<NHiggs; i2++)
-        {
-            for(std::size_t i3=0; i3<NHiggs; i3++)
+                double f21 = fbaseTri(MassSquaredHiggs[a],
+                                      MassSquaredHiggs[b],
+                                      MassSquaredHiggs[c]);
+                double f22 = Couplings_Higgs_Triple[a][b][i4];
+                double f23 = Couplings_Higgs_Quartic[b][c][i1][i2];
+                double f24 = Couplings_Higgs_Triple[c][a][i3];
+
+                HiggsPart[i1][i2][i3][i4] += 4.0 * f21 * f22 * f23 * f24;
+              }
+            }
+          }
+
+          GaugePart[i1][i2][i3][i4] = 0;
+          for (std::size_t a = 0; a < NGauge; a++)
+          {
+            for (std::size_t b = 0; b < NGauge; b++)
             {
-                for(std::size_t i4=0; i4<NHiggs; i4++)
+              double f1 = Couplings_Gauge_Higgs_22[a][b][i1][i4];
+              double f2 = Couplings_Gauge_Higgs_22[b][a][i2][i3];
+              double f3 = fbase(MassSquaredGauge[a], MassSquaredGauge[b]) -
+                          C_CWcbGB + 0.5;
+
+              GaugePart[i1][i2][i3][i4] += f1 * f2 * f3;
+
+              for (std::size_t c = 0; c < NGauge; c++)
+              {
+                for (std::size_t d = 0; d < NGauge; d++)
                 {
-                    HiggsPartSym[i1][i2][i3][i4] = HiggsPart[i1][i2][i3][i4] + HiggsPart[i1][i2][i4][i3] + HiggsPart[i1][i3][i2][i4] + HiggsPart[i1][i3][i4][i2] + HiggsPart[i1][i4][i2][i3] + HiggsPart[i1][i4][i3][i2];
-                    HiggsPartSym[i1][i2][i3][i4] += HiggsPart[i2][i1][i3][i4] + HiggsPart[i2][i1][i4][i3] + HiggsPart[i2][i3][i1][i4] + HiggsPart[i2][i3][i4][i1] + HiggsPart[i2][i4][i1][i3] + HiggsPart[i2][i4][i3][i1];
-                    HiggsPartSym[i1][i2][i3][i4] += HiggsPart[i3][i1][i2][i4] + HiggsPart[i3][i1][i4][i2] + HiggsPart[i3][i2][i1][i4] + HiggsPart[i3][i2][i4][i1] + HiggsPart[i3][i4][i1][i2] + HiggsPart[i3][i4][i2][i1];
-                    HiggsPartSym[i1][i2][i3][i4] += HiggsPart[i4][i1][i2][i3] + HiggsPart[i4][i1][i3][i2] + HiggsPart[i4][i2][i1][i3] + HiggsPart[i4][i2][i3][i1] + HiggsPart[i4][i3][i1][i2] + HiggsPart[i4][i3][i2][i1];
-                    HiggsPartSym[i1][i2][i3][i4] *= 1.0/24.0;
+                  double f11 = fbaseFour(MassSquaredGauge[a],
+                                         MassSquaredGauge[b],
+                                         MassSquaredGauge[c],
+                                         MassSquaredGauge[d]);
+                  double f12 = Couplings_Gauge_Higgs_21[a][b][i4];
+                  double f13 = Couplings_Gauge_Higgs_21[b][c][i1];
+                  double f14 = Couplings_Gauge_Higgs_21[c][d][i2];
+                  double f15 = Couplings_Gauge_Higgs_21[d][a][i3];
 
-                    GaugePartSym[i1][i2][i3][i4] = GaugePart[i1][i2][i3][i4] + GaugePart[i1][i2][i4][i3] + GaugePart[i1][i3][i2][i4] + GaugePart[i1][i3][i4][i2] + GaugePart[i1][i4][i2][i3] + GaugePart[i1][i4][i3][i2];
-                    GaugePartSym[i1][i2][i3][i4] += GaugePart[i2][i1][i3][i4] + GaugePart[i2][i1][i4][i3] + GaugePart[i2][i3][i1][i4] + GaugePart[i2][i3][i4][i1] + GaugePart[i2][i4][i1][i3] + GaugePart[i2][i4][i3][i1];
-                    GaugePartSym[i1][i2][i3][i4] += GaugePart[i3][i1][i2][i4] + GaugePart[i3][i1][i4][i2] + GaugePart[i3][i2][i1][i4] + GaugePart[i3][i2][i4][i1] + GaugePart[i3][i4][i1][i2] + GaugePart[i3][i4][i2][i1];
-                    GaugePartSym[i1][i2][i3][i4] += GaugePart[i4][i1][i2][i3] + GaugePart[i4][i1][i3][i2] + GaugePart[i4][i2][i1][i3] + GaugePart[i4][i2][i3][i1] + GaugePart[i4][i3][i1][i2] + GaugePart[i4][i3][i2][i1];
-                    GaugePartSym[i1][i2][i3][i4] *= 1.0/24.0;
-
-                    QuarkPartSym[i1][i2][i3][i4] = QuarkPart[i1][i2][i3][i4] + QuarkPart[i1][i2][i4][i3] + QuarkPart[i1][i3][i2][i4] + QuarkPart[i1][i3][i4][i2] + QuarkPart[i1][i4][i2][i3] + QuarkPart[i1][i4][i3][i2];
-                    QuarkPartSym[i1][i2][i3][i4] += QuarkPart[i2][i1][i3][i4] + QuarkPart[i2][i1][i4][i3] + QuarkPart[i2][i3][i1][i4] + QuarkPart[i2][i3][i4][i1] + QuarkPart[i2][i4][i1][i3] + QuarkPart[i2][i4][i3][i1];
-                    QuarkPartSym[i1][i2][i3][i4] += QuarkPart[i3][i1][i2][i4] + QuarkPart[i3][i1][i4][i2] + QuarkPart[i3][i2][i1][i4] + QuarkPart[i3][i2][i4][i1] + QuarkPart[i3][i4][i1][i2] + QuarkPart[i3][i4][i2][i1];
-                    QuarkPartSym[i1][i2][i3][i4] += QuarkPart[i4][i1][i2][i3] + QuarkPart[i4][i1][i3][i2] + QuarkPart[i4][i2][i1][i3] + QuarkPart[i4][i2][i3][i1] + QuarkPart[i4][i3][i1][i2] + QuarkPart[i4][i3][i2][i1];
-                    QuarkPartSym[i1][i2][i3][i4] *= 1.0/24.0;
-
-                    LeptonPartSym[i1][i2][i3][i4] = LeptonPart[i1][i2][i3][i4] + LeptonPart[i1][i2][i4][i3] + LeptonPart[i1][i3][i2][i4] + LeptonPart[i1][i3][i4][i2] + LeptonPart[i1][i4][i2][i3] + LeptonPart[i1][i4][i3][i2];
-                    LeptonPartSym[i1][i2][i3][i4] += LeptonPart[i2][i1][i3][i4] + LeptonPart[i2][i1][i4][i3] + LeptonPart[i2][i3][i1][i4] + LeptonPart[i2][i3][i4][i1] + LeptonPart[i2][i4][i1][i3] + LeptonPart[i2][i4][i3][i1];
-                    LeptonPartSym[i1][i2][i3][i4] += LeptonPart[i3][i1][i2][i4] + LeptonPart[i3][i1][i4][i2] + LeptonPart[i3][i2][i1][i4] + LeptonPart[i3][i2][i4][i1] + LeptonPart[i3][i4][i1][i2] + LeptonPart[i3][i4][i2][i1];
-                    LeptonPartSym[i1][i2][i3][i4] += LeptonPart[i4][i1][i2][i3] + LeptonPart[i4][i1][i3][i2] + LeptonPart[i4][i2][i1][i3] + LeptonPart[i4][i2][i3][i1] + LeptonPart[i4][i3][i1][i2] + LeptonPart[i4][i3][i2][i1];
-                    LeptonPartSym[i1][i2][i3][i4] *= 1.0/24.0;
+                  GaugePart[i1][i2][i3][i4] +=
+                      2.0 * f11 * f12 * f13 * f14 * f15;
                 }
-            }
-        }
-    }
 
-    for(std::size_t i1=0; i1<NHiggs; i1++)
-    {
-        for(std::size_t i2=0; i2<NHiggs; i2++)
-        {
-            for(std::size_t i3=0; i3<NHiggs; i3++)
+                double f21 = fbaseTri(MassSquaredGauge[a],
+                                      MassSquaredGauge[b],
+                                      MassSquaredGauge[c]);
+                double f22 = Couplings_Gauge_Higgs_21[a][b][i4];
+                double f23 = Couplings_Gauge_Higgs_22[b][c][i1][i2];
+                double f24 = Couplings_Gauge_Higgs_21[c][a][i3];
+
+                GaugePart[i1][i2][i3][i4] += 4.0 * f21 * f22 * f23 * f24;
+              }
+            }
+          }
+
+          QuarkPart[i1][i2][i3][i4] = 0;
+          for (std::size_t a = 0; a < NQuarks; a++)
+          {
+            for (std::size_t b = 0; b < NQuarks; b++)
             {
-                for(std::size_t i4=0; i4<NHiggs; i4++)
-                {
-                    restmp[i1][i2][i3][i4] = 3.0 * 0.5 * HiggsPartSym[i1][i2][i3][i4];
-                    restmp[i1][i2][i3][i4] += 3.0 * 1.5 * GaugePartSym[i1][i2][i3][i4];
-                    restmp[i1][i2][i3][i4] += 3.0 * (-1.0) * LeptonPartSym[i1][i2][i3][i4];
-                    restmp[i1][i2][i3][i4] += 3.0 * (-3.0) * QuarkPartSym[i1][i2][i3][i4];
-                }
-            }
-        }
-    }
+              std::complex<double> f1 = Couplings_Quark_Higgs_22[a][b][i1][i4];
+              std::complex<double> f2 = Couplings_Quark_Higgs_22[b][a][i2][i3];
+              std::complex<double> f3 =
+                  fbase(MassSquaredQuark[a], MassSquaredQuark[b]) -
+                  C_CWcbFermion + 0.5;
 
-    for(std::size_t j1=0; j1<NHiggs; j1++)
-    {
-        for(std::size_t j2=0; j2<NHiggs; j2++)
-        {
-            for(std::size_t j3=0; j3<NHiggs; j3++)
+              QuarkPart[i1][i2][i3][i4] += f1 * f2 * f3;
+
+              for (std::size_t c = 0; c < NQuarks; c++)
+              {
+                for (std::size_t d = 0; d < NQuarks; d++)
+                {
+                  std::complex<double> f11 = fbaseFour(MassSquaredQuark[a],
+                                                       MassSquaredQuark[b],
+                                                       MassSquaredQuark[c],
+                                                       MassSquaredQuark[d]);
+                  std::complex<double> f12 = Couplings_Quark_Higgs_21[a][b][i4];
+                  std::complex<double> f13 = Couplings_Quark_Higgs_21[b][c][i1];
+                  std::complex<double> f14 = Couplings_Quark_Higgs_21[c][d][i2];
+                  std::complex<double> f15 = Couplings_Quark_Higgs_21[d][a][i3];
+
+                  QuarkPart[i1][i2][i3][i4] +=
+                      2.0 * f11 * f12 * f13 * f14 * f15;
+                }
+
+                std::complex<double> f21 = fbaseTri(MassSquaredQuark[a],
+                                                    MassSquaredQuark[b],
+                                                    MassSquaredQuark[c]);
+                std::complex<double> f22 = Couplings_Quark_Higgs_21[a][b][i4];
+                std::complex<double> f23 =
+                    Couplings_Quark_Higgs_22[b][c][i1][i2];
+                std::complex<double> f24 = Couplings_Quark_Higgs_21[c][a][i3];
+
+                QuarkPart[i1][i2][i3][i4] += 4.0 * f21 * f22 * f23 * f24;
+              }
+            }
+          }
+
+          LeptonPart[i1][i2][i3][i4] = 0;
+          for (std::size_t a = 0; a < NLepton; a++)
+          {
+            for (std::size_t b = 0; b < NLepton; b++)
             {
-                for(std::size_t j4=0; j4<NHiggs; j4++)
+              std::complex<double> f1 = Couplings_Lepton_Higgs_22[a][b][i1][i4];
+              std::complex<double> f2 = Couplings_Lepton_Higgs_22[b][a][i2][i3];
+              std::complex<double> f3 =
+                  fbase(MassSquaredLepton[a], MassSquaredLepton[b]) -
+                  C_CWcbFermion + 0.5;
+
+              LeptonPart[i1][i2][i3][i4] += f1 * f2 * f3;
+
+              for (std::size_t c = 0; c < NLepton; c++)
+              {
+                for (std::size_t d = 0; d < NLepton; d++)
                 {
-                    resGaugeBase[j1][j2][j3][j4] = 0;
-                    
-                    for(std::size_t i1=0; i1<NHiggs; i1++)
-                    {
-                        for(std::size_t i2=0; i2<NHiggs; i2++)
-                        {
-                            for(std::size_t i3=0; i3<NHiggs; i3++)
-                            {
-                                for(std::size_t i4=0; i4<NHiggs; i4++)
-                                {
-                                    double RotFac = HiggsRotationMatrix[i1][j1]*HiggsRotationMatrix[i2][j2]*HiggsRotationMatrix[i3][j3]*HiggsRotationMatrix[i4][j4];
-                                    resGaugeBase[j1][j2][j3][j4] += RotFac*restmp[i1][i2][i3][i4].real();
-                                }
-                            }
-                        }
-                    }
+                  std::complex<double> f11 = fbaseFour(MassSquaredLepton[a],
+                                                       MassSquaredLepton[b],
+                                                       MassSquaredLepton[c],
+                                                       MassSquaredLepton[d]);
+                  std::complex<double> f12 =
+                      Couplings_Lepton_Higgs_21[a][b][i4];
+                  std::complex<double> f13 =
+                      Couplings_Lepton_Higgs_21[b][c][i1];
+                  std::complex<double> f14 =
+                      Couplings_Lepton_Higgs_21[c][d][i2];
+                  std::complex<double> f15 =
+                      Couplings_Lepton_Higgs_21[d][a][i3];
 
-                    resGaugeBase[j1][j2][j3][j4] *= epsilon;
-                    if(std::abs(resGaugeBase[j1][j2][j3][j4]) < NumZero) resGaugeBase[j1][j2][j3][j4] = 0;
+                  LeptonPart[i1][i2][i3][i4] +=
+                      2.0 * f11 * f12 * f13 * f14 * f15;
                 }
-            }
-        }
-    }
 
-    for(std::size_t j1=0; j1<NHiggs; j1++)
+                std::complex<double> f21 = fbaseTri(MassSquaredLepton[a],
+                                                    MassSquaredLepton[b],
+                                                    MassSquaredLepton[c]);
+                std::complex<double> f22 = Couplings_Lepton_Higgs_21[a][b][i4];
+                std::complex<double> f23 =
+                    Couplings_Lepton_Higgs_22[b][c][i1][i2];
+                std::complex<double> f24 = Couplings_Lepton_Higgs_21[c][a][i3];
+
+                LeptonPart[i1][i2][i3][i4] += 4.0 * f21 * f22 * f23 * f24;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  for (std::size_t i1 = 0; i1 < NHiggs; i1++)
+  {
+    for (std::size_t i2 = 0; i2 < NHiggs; i2++)
     {
-        for(std::size_t j2=0; j2<NHiggs; j2++)
+      for (std::size_t i3 = 0; i3 < NHiggs; i3++)
+      {
+        for (std::size_t i4 = 0; i4 < NHiggs; i4++)
         {
-            for(std::size_t j3=0; j3<NHiggs; j3++)
-            {
-                for(std::size_t j4=0; j4<NHiggs; j4++)
-                {
-                    res.push_back(resGaugeBase[j4][j3][j2][j1]);
+          HiggsPartSym[i1][i2][i3][i4] =
+              HiggsPart[i1][i2][i3][i4] + HiggsPart[i1][i2][i4][i3] +
+              HiggsPart[i1][i3][i2][i4] + HiggsPart[i1][i3][i4][i2] +
+              HiggsPart[i1][i4][i2][i3] + HiggsPart[i1][i4][i3][i2];
+          HiggsPartSym[i1][i2][i3][i4] +=
+              HiggsPart[i2][i1][i3][i4] + HiggsPart[i2][i1][i4][i3] +
+              HiggsPart[i2][i3][i1][i4] + HiggsPart[i2][i3][i4][i1] +
+              HiggsPart[i2][i4][i1][i3] + HiggsPart[i2][i4][i3][i1];
+          HiggsPartSym[i1][i2][i3][i4] +=
+              HiggsPart[i3][i1][i2][i4] + HiggsPart[i3][i1][i4][i2] +
+              HiggsPart[i3][i2][i1][i4] + HiggsPart[i3][i2][i4][i1] +
+              HiggsPart[i3][i4][i1][i2] + HiggsPart[i3][i4][i2][i1];
+          HiggsPartSym[i1][i2][i3][i4] +=
+              HiggsPart[i4][i1][i2][i3] + HiggsPart[i4][i1][i3][i2] +
+              HiggsPart[i4][i2][i1][i3] + HiggsPart[i4][i2][i3][i1] +
+              HiggsPart[i4][i3][i1][i2] + HiggsPart[i4][i3][i2][i1];
+          HiggsPartSym[i1][i2][i3][i4] *= 1.0 / 24.0;
 
-                }
-            }
+          GaugePartSym[i1][i2][i3][i4] =
+              GaugePart[i1][i2][i3][i4] + GaugePart[i1][i2][i4][i3] +
+              GaugePart[i1][i3][i2][i4] + GaugePart[i1][i3][i4][i2] +
+              GaugePart[i1][i4][i2][i3] + GaugePart[i1][i4][i3][i2];
+          GaugePartSym[i1][i2][i3][i4] +=
+              GaugePart[i2][i1][i3][i4] + GaugePart[i2][i1][i4][i3] +
+              GaugePart[i2][i3][i1][i4] + GaugePart[i2][i3][i4][i1] +
+              GaugePart[i2][i4][i1][i3] + GaugePart[i2][i4][i3][i1];
+          GaugePartSym[i1][i2][i3][i4] +=
+              GaugePart[i3][i1][i2][i4] + GaugePart[i3][i1][i4][i2] +
+              GaugePart[i3][i2][i1][i4] + GaugePart[i3][i2][i4][i1] +
+              GaugePart[i3][i4][i1][i2] + GaugePart[i3][i4][i2][i1];
+          GaugePartSym[i1][i2][i3][i4] +=
+              GaugePart[i4][i1][i2][i3] + GaugePart[i4][i1][i3][i2] +
+              GaugePart[i4][i2][i1][i3] + GaugePart[i4][i2][i3][i1] +
+              GaugePart[i4][i3][i1][i2] + GaugePart[i4][i3][i2][i1];
+          GaugePartSym[i1][i2][i3][i4] *= 1.0 / 24.0;
+
+          QuarkPartSym[i1][i2][i3][i4] =
+              QuarkPart[i1][i2][i3][i4] + QuarkPart[i1][i2][i4][i3] +
+              QuarkPart[i1][i3][i2][i4] + QuarkPart[i1][i3][i4][i2] +
+              QuarkPart[i1][i4][i2][i3] + QuarkPart[i1][i4][i3][i2];
+          QuarkPartSym[i1][i2][i3][i4] +=
+              QuarkPart[i2][i1][i3][i4] + QuarkPart[i2][i1][i4][i3] +
+              QuarkPart[i2][i3][i1][i4] + QuarkPart[i2][i3][i4][i1] +
+              QuarkPart[i2][i4][i1][i3] + QuarkPart[i2][i4][i3][i1];
+          QuarkPartSym[i1][i2][i3][i4] +=
+              QuarkPart[i3][i1][i2][i4] + QuarkPart[i3][i1][i4][i2] +
+              QuarkPart[i3][i2][i1][i4] + QuarkPart[i3][i2][i4][i1] +
+              QuarkPart[i3][i4][i1][i2] + QuarkPart[i3][i4][i2][i1];
+          QuarkPartSym[i1][i2][i3][i4] +=
+              QuarkPart[i4][i1][i2][i3] + QuarkPart[i4][i1][i3][i2] +
+              QuarkPart[i4][i2][i1][i3] + QuarkPart[i4][i2][i3][i1] +
+              QuarkPart[i4][i3][i1][i2] + QuarkPart[i4][i3][i2][i1];
+          QuarkPartSym[i1][i2][i3][i4] *= 1.0 / 24.0;
+
+          LeptonPartSym[i1][i2][i3][i4] =
+              LeptonPart[i1][i2][i3][i4] + LeptonPart[i1][i2][i4][i3] +
+              LeptonPart[i1][i3][i2][i4] + LeptonPart[i1][i3][i4][i2] +
+              LeptonPart[i1][i4][i2][i3] + LeptonPart[i1][i4][i3][i2];
+          LeptonPartSym[i1][i2][i3][i4] +=
+              LeptonPart[i2][i1][i3][i4] + LeptonPart[i2][i1][i4][i3] +
+              LeptonPart[i2][i3][i1][i4] + LeptonPart[i2][i3][i4][i1] +
+              LeptonPart[i2][i4][i1][i3] + LeptonPart[i2][i4][i3][i1];
+          LeptonPartSym[i1][i2][i3][i4] +=
+              LeptonPart[i3][i1][i2][i4] + LeptonPart[i3][i1][i4][i2] +
+              LeptonPart[i3][i2][i1][i4] + LeptonPart[i3][i2][i4][i1] +
+              LeptonPart[i3][i4][i1][i2] + LeptonPart[i3][i4][i2][i1];
+          LeptonPartSym[i1][i2][i3][i4] +=
+              LeptonPart[i4][i1][i2][i3] + LeptonPart[i4][i1][i3][i2] +
+              LeptonPart[i4][i2][i1][i3] + LeptonPart[i4][i2][i3][i1] +
+              LeptonPart[i4][i3][i1][i2] + LeptonPart[i4][i3][i2][i1];
+          LeptonPartSym[i1][i2][i3][i4] *= 1.0 / 24.0;
         }
+      }
     }
+  }
 
-    return res;
+  for (std::size_t i1 = 0; i1 < NHiggs; i1++)
+  {
+    for (std::size_t i2 = 0; i2 < NHiggs; i2++)
+    {
+      for (std::size_t i3 = 0; i3 < NHiggs; i3++)
+      {
+        for (std::size_t i4 = 0; i4 < NHiggs; i4++)
+        {
+          restmp[i1][i2][i3][i4] = 3.0 * 0.5 * HiggsPartSym[i1][i2][i3][i4];
+          restmp[i1][i2][i3][i4] += 3.0 * 1.5 * GaugePartSym[i1][i2][i3][i4];
+          restmp[i1][i2][i3][i4] +=
+              3.0 * (-1.0) * LeptonPartSym[i1][i2][i3][i4];
+          restmp[i1][i2][i3][i4] += 3.0 * (-3.0) * QuarkPartSym[i1][i2][i3][i4];
+        }
+      }
+    }
+  }
+
+  for (std::size_t j1 = 0; j1 < NHiggs; j1++)
+  {
+    for (std::size_t j2 = 0; j2 < NHiggs; j2++)
+    {
+      for (std::size_t j3 = 0; j3 < NHiggs; j3++)
+      {
+        for (std::size_t j4 = 0; j4 < NHiggs; j4++)
+        {
+          resGaugeBase[j1][j2][j3][j4] = 0;
+
+          for (std::size_t i1 = 0; i1 < NHiggs; i1++)
+          {
+            for (std::size_t i2 = 0; i2 < NHiggs; i2++)
+            {
+              for (std::size_t i3 = 0; i3 < NHiggs; i3++)
+              {
+                for (std::size_t i4 = 0; i4 < NHiggs; i4++)
+                {
+                  double RotFac = HiggsRotationMatrix[i1][j1] *
+                                  HiggsRotationMatrix[i2][j2] *
+                                  HiggsRotationMatrix[i3][j3] *
+                                  HiggsRotationMatrix[i4][j4];
+                  resGaugeBase[j1][j2][j3][j4] +=
+                      RotFac * restmp[i1][i2][i3][i4].real();
+                }
+              }
+            }
+          }
+
+          resGaugeBase[j1][j2][j3][j4] *= epsilon;
+          if (std::abs(resGaugeBase[j1][j2][j3][j4]) < NumZero)
+            resGaugeBase[j1][j2][j3][j4] = 0;
+        }
+      }
+    }
+  }
+
+  for (std::size_t j1 = 0; j1 < NHiggs; j1++)
+  {
+    for (std::size_t j2 = 0; j2 < NHiggs; j2++)
+    {
+      for (std::size_t j3 = 0; j3 < NHiggs; j3++)
+      {
+        for (std::size_t j4 = 0; j4 < NHiggs; j4++)
+        {
+          res.push_back(resGaugeBase[j4][j3][j2][j1]);
+        }
+      }
+    }
+  }
+
+  return res;
 }
 
 MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
