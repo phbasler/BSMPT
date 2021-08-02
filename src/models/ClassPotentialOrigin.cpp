@@ -18,7 +18,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 namespace BSMPT

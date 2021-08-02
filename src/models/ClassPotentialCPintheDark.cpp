@@ -30,7 +30,7 @@
 
 #include <BSMPT/models/ClassPotentialCPintheDark.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 namespace BSMPT
