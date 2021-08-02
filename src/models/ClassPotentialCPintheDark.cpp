@@ -22,7 +22,6 @@
 #include "Eigen/IterativeLinearSolvers"
 #include <BSMPT/models/SMparam.h> // for C_vev0, C_MassTop, C_g
 #include <algorithm>              // for max, copy
-#include <ext/alloc_traits.h>     // for __alloc_traits<>::value_type
 #include <iomanip>
 #include <iostream> // for operator<<, endl, basic_o...
 #include <memory>   // for allocator_traits<>::value...
