@@ -60,11 +60,11 @@ Class_Potential_CPintheDark::Class_Potential_CPintheDark()
 
   // Set UseVTreeSimplified to use the tree-level potential defined in
   // VTreeSimplified
-  UseVTreeSimplified = false;
+  UseVTreeSimplified = true;
 
   // Set UseVCounterSimplified to use the counterterm potential defined in
   // VCounterSimplified
-  UseVCounterSimplified = false;
+  UseVCounterSimplified = true;
 }
 
 Class_Potential_CPintheDark::~Class_Potential_CPintheDark()
