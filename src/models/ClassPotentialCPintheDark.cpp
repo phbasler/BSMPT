@@ -1,21 +1,11 @@
 /*
  * ClassPotentialCPintheDark.cpp
- *
- *  Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner, Jonas
+// Müller and Lisa Biermann
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "Eigen/Dense"
 #include "Eigen/Eigenvalues"
@@ -2240,8 +2230,8 @@ Class_Potential_CPintheDark::VTreeSimplified(const std::vector<double> &v) const
   double vcb, v_1, v_2, vcp, vs;
 
   vcb = v[2];
-  v_1  = v[4];
-  v_2  = v[6];
+  v_1 = v[4];
+  v_2 = v[6];
   vcp = v[7];
   vs  = v[8];
 
@@ -2252,14 +2242,16 @@ Class_Potential_CPintheDark::VTreeSimplified(const std::vector<double> &v) const
   res += 0.5 * mSs * std::pow(vs, 2);
   res += ReA * v_1 * v_2 * vs;
   res += -ImA * v_1 * vcp * vs;
-  res += 1.0 / 8.0 * L1 * std::pow(v_1,4);
-  res += 1.0 / 8.0 * L2 * std::pow(C22,2);
-  res += 1.0 / 4.0 * L3 * std::pow(v_1,2) * C22;
-  res += 1.0 / 4.0 * L4 * std::pow(v_1,2) * (std::pow(v_2,2) + std::pow(vcp,2));
-  res += 1.0 / 4.0 * L5 * std::pow(v_1,2) * (std::pow(v_2,2) - std::pow(vcp,2));
-  res += 1.0 / 4.0 * L6 * std::pow(vs,4);
-  res += 1.0 / 4.0 * L7 * std::pow(v_1,2) * std::pow(vs,2);
-  res += 0.5 * L8 * C22 * std::pow(vs,2);
+  res += 1.0 / 8.0 * L1 * std::pow(v_1, 4);
+  res += 1.0 / 8.0 * L2 * std::pow(C22, 2);
+  res += 1.0 / 4.0 * L3 * std::pow(v_1, 2) * C22;
+  res +=
+      1.0 / 4.0 * L4 * std::pow(v_1, 2) * (std::pow(v_2, 2) + std::pow(vcp, 2));
+  res +=
+      1.0 / 4.0 * L5 * std::pow(v_1, 2) * (std::pow(v_2, 2) - std::pow(vcp, 2));
+  res += 1.0 / 4.0 * L6 * std::pow(vs, 4);
+  res += 1.0 / 4.0 * L7 * std::pow(v_1, 2) * std::pow(vs, 2);
+  res += 0.5 * L8 * C22 * std::pow(vs, 2);
 
   return res;
 }
@@ -2269,12 +2261,12 @@ double Class_Potential_CPintheDark::VCounterSimplified(
 {
   double res = 0;
   if (not UseVCounterSimplified) return 0;
-  
+
   double vcb, v_1, v_2, vcp, vs;
 
   vcb = v[2];
-  v_1  = v[4];
-  v_2  = v[6];
+  v_1 = v[4];
+  v_2 = v[6];
   vcp = v[7];
   vs  = v[8];
 
@@ -2285,20 +2277,22 @@ double Class_Potential_CPintheDark::VCounterSimplified(
   res += 0.5 * dmSs * std::pow(vs, 2);
   res += dReA * v_1 * v_2 * vs;
   res += -dImA * v_1 * vcp * vs;
-  res += 1.0 / 8.0 * dL1 * std::pow(v_1,4);
-  res += 1.0 / 8.0 * dL2 * std::pow(C22,2);
-  res += 1.0 / 4.0 * dL3 * std::pow(v_1,2) * C22;
-  res += 1.0 / 4.0 * dL4 * std::pow(v_1,2) * (std::pow(v_2,2) + std::pow(vcp,2));
-  res += 1.0 / 4.0 * dL5 * std::pow(v_1,2) * (std::pow(v_2,2) - std::pow(vcp,2));
-  res += 1.0 / 4.0 * dL6 * std::pow(vs,4);
-  res += 1.0 / 4.0 * dL7 * std::pow(v_1,2) * std::pow(vs,2);
-  res += 0.5 * dL8 * C22 * std::pow(vs,2);
+  res += 1.0 / 8.0 * dL1 * std::pow(v_1, 4);
+  res += 1.0 / 8.0 * dL2 * std::pow(C22, 2);
+  res += 1.0 / 4.0 * dL3 * std::pow(v_1, 2) * C22;
+  res += 1.0 / 4.0 * dL4 * std::pow(v_1, 2) *
+         (std::pow(v_2, 2) + std::pow(vcp, 2));
+  res += 1.0 / 4.0 * dL5 * std::pow(v_1, 2) *
+         (std::pow(v_2, 2) - std::pow(vcp, 2));
+  res += 1.0 / 4.0 * dL6 * std::pow(vs, 4);
+  res += 1.0 / 4.0 * dL7 * std::pow(v_1, 2) * std::pow(vs, 2);
+  res += 0.5 * dL8 * C22 * std::pow(vs, 2);
   res += dTCB * vcb;
   res += dT1 * v_1;
   res += dT2 * v_2;
   res += dTCP * vcp;
   res += dTS * vs;
-  res += -0.5 * dImL5 * std::pow(v_1,2) * v_2 * vcp;
+  res += -0.5 * dImL5 * std::pow(v_1, 2) * v_2 * vcp;
 
   return res;
 }
