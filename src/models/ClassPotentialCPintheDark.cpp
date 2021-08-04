@@ -19,6 +19,7 @@
 
 #include <BSMPT/models/ClassPotentialCPintheDark.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
@@ -1126,48 +1127,51 @@ void Class_Potential_CPintheDark::set_CT_Pot_Par(const std::vector<double> &par)
  */
 void Class_Potential_CPintheDark::write() const
 {
+  std::stringstream ss;
   typedef std::numeric_limits<double> dbl;
-  std::cout.precision(dbl::max_digits10);
+  ss.precision(dbl::max_digits10);
 
-  std::cout << "Model = " << Model << std::endl;
+  ss << "Model = " << Model << "\n";
 
-  std::cout << "The parameters are : " << std::endl;
-  std::cout << "m11s = " << m11s << std::endl;
-  std::cout << "m22s = " << m22s << std::endl;
-  std::cout << "mSs = " << mSs << std::endl;
-  std::cout << "ReA = " << ReA << std::endl;
-  std::cout << "ImA = " << ImA << std::endl;
-  std::cout << "L1 = " << L1 << std::endl;
-  std::cout << "L2 = " << L2 << std::endl;
-  std::cout << "L3 = " << L3 << std::endl;
-  std::cout << "L4 = " << L4 << std::endl;
-  std::cout << "L5 = " << L5 << std::endl;
-  std::cout << "L6 = " << L6 << std::endl;
-  std::cout << "L7 = " << L7 << std::endl;
-  std::cout << "L8 = " << L8 << std::endl;
+  ss << "The parameters are : "
+     << "\n";
+  ss << "m11s = " << m11s << "\n";
+  ss << "m22s = " << m22s << "\n";
+  ss << "mSs = " << mSs << "\n";
+  ss << "ReA = " << ReA << "\n";
+  ss << "ImA = " << ImA << "\n";
+  ss << "L1 = " << L1 << "\n";
+  ss << "L2 = " << L2 << "\n";
+  ss << "L3 = " << L3 << "\n";
+  ss << "L4 = " << L4 << "\n";
+  ss << "L5 = " << L5 << "\n";
+  ss << "L6 = " << L6 << "\n";
+  ss << "L7 = " << L7 << "\n";
+  ss << "L8 = " << L8 << "\n";
 
-  std::cout << "The counterterm parameters are : " << std::endl;
-  std::cout << "dm11s = " << dm11s << std::endl;
-  std::cout << "dm22s = " << dm22s << std::endl;
-  std::cout << "dmSs = " << dmSs << std::endl;
-  std::cout << "dReA = " << dReA << std::endl;
-  std::cout << "dImA = " << dImA << std::endl;
-  std::cout << "dL1 = " << dL1 << std::endl;
-  std::cout << "dL2 = " << dL2 << std::endl;
-  std::cout << "dL3 = " << dL3 << std::endl;
-  std::cout << "dL4 = " << dL4 << std::endl;
-  std::cout << "dL5 = " << dL5 << std::endl;
-  std::cout << "dL6 = " << dL6 << std::endl;
-  std::cout << "dL7 = " << dL7 << std::endl;
-  std::cout << "dL8 = " << dL8 << std::endl;
-  std::cout << "dTCB = " << dTCB << std::endl;
-  std::cout << "dT1 = " << dT1 << std::endl;
-  std::cout << "dT2 = " << dT2 << std::endl;
-  std::cout << "dTCP = " << dTCP << std::endl;
-  std::cout << "dTS = " << dTS << std::endl;
-  std::cout << "dImL5 = " << dImL5 << std::endl;
+  ss << "The counterterm parameters are : "
+     << "\n";
+  ss << "dm11s = " << dm11s << "\n";
+  ss << "dm22s = " << dm22s << "\n";
+  ss << "dmSs = " << dmSs << "\n";
+  ss << "dReA = " << dReA << "\n";
+  ss << "dImA = " << dImA << "\n";
+  ss << "dL1 = " << dL1 << "\n";
+  ss << "dL2 = " << dL2 << "\n";
+  ss << "dL3 = " << dL3 << "\n";
+  ss << "dL4 = " << dL4 << "\n";
+  ss << "dL5 = " << dL5 << "\n";
+  ss << "dL6 = " << dL6 << "\n";
+  ss << "dL7 = " << dL7 << "\n";
+  ss << "dL8 = " << dL8 << "\n";
+  ss << "dTCB = " << dTCB << "\n";
+  ss << "dT1 = " << dT1 << "\n";
+  ss << "dT2 = " << dT2 << "\n";
+  ss << "dTCP = " << dTCP << "\n";
+  ss << "dTS = " << dTS << "\n";
+  ss << "dImL5 = " << dImL5 << "\n";
 
-  std::cout << "The scale is given by mu = " << scale << " GeV " << std::endl;
+  ss << "The scale is given by mu = " << scale << " GeV \n";
 
   std::size_t posGp  = 0;
   std::size_t posGm  = 0;
@@ -1222,16 +1226,18 @@ void Class_Potential_CPintheDark::write() const
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
-  std::cout << "The mass spectrum is given by :\n";
-  std::cout << "m_{G^+} = " << std::sqrt(HiggsMasses[posGp]) << " GeV \n"
-            << "m_{G^-} = " << std::sqrt(HiggsMasses[posGm]) << " GeV \n"
-            << "m_{H^+} = " << std::sqrt(HiggsMasses[posHp]) << " GeV \n"
-            << "m_{H^-} = " << std::sqrt(HiggsMasses[posHm]) << " GeV \n"
-            << "m_{hSM} = " << std::sqrt(HiggsMasses[posHSM]) << " GeV \n"
-            << "m_{G^0} = " << std::sqrt(HiggsMasses[posG0]) << " GeV \n"
-            << "m_{h_1} = " << std::sqrt(HiggsMasses[posh1]) << " GeV \n"
-            << "m_{h_2} = " << std::sqrt(HiggsMasses[posh2]) << " GeV \n"
-            << "m_{h_3} = " << std::sqrt(HiggsMasses[posh3]) << " GeV \n";
+  ss << "The mass spectrum is given by :\n";
+  ss << "m_{G^+} = " << std::sqrt(HiggsMasses[posGp]) << " GeV \n"
+     << "m_{G^-} = " << std::sqrt(HiggsMasses[posGm]) << " GeV \n"
+     << "m_{H^+} = " << std::sqrt(HiggsMasses[posHp]) << " GeV \n"
+     << "m_{H^-} = " << std::sqrt(HiggsMasses[posHm]) << " GeV \n"
+     << "m_{hSM} = " << std::sqrt(HiggsMasses[posHSM]) << " GeV \n"
+     << "m_{G^0} = " << std::sqrt(HiggsMasses[posG0]) << " GeV \n"
+     << "m_{h_1} = " << std::sqrt(HiggsMasses[posh1]) << " GeV \n"
+     << "m_{h_2} = " << std::sqrt(HiggsMasses[posh2]) << " GeV \n"
+     << "m_{h_3} = " << std::sqrt(HiggsMasses[posh3]) << " GeV \n";
+
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 /**
@@ -2251,7 +2257,7 @@ Class_Potential_CPintheDark::VTreeSimplified(const std::vector<double> &v) const
       1.0 / 4.0 * L5 * std::pow(v_1, 2) * (std::pow(v_2, 2) - std::pow(vcp, 2));
   res += 1.0 / 4.0 * L6 * std::pow(vs, 4);
   res += 1.0 / 4.0 * L7 * std::pow(v_1, 2) * std::pow(vs, 2);
-  res += 0.5 * L8 * C22 * std::pow(vs, 2);
+  res += 1.0 / 4.0 * L8 * C22 * std::pow(vs, 2);
 
   return res;
 }
@@ -2286,7 +2292,7 @@ double Class_Potential_CPintheDark::VCounterSimplified(
          (std::pow(v_2, 2) - std::pow(vcp, 2));
   res += 1.0 / 4.0 * dL6 * std::pow(vs, 4);
   res += 1.0 / 4.0 * dL7 * std::pow(v_1, 2) * std::pow(vs, 2);
-  res += 0.5 * dL8 * C22 * std::pow(vs, 2);
+  res += 1.0 / 4.0 * dL8 * C22 * std::pow(vs, 2);
   res += dTCB * vcb;
   res += dT1 * v_1;
   res += dT2 * v_2;
