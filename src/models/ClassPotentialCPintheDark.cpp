@@ -2234,9 +2234,32 @@ bool Class_Potential_CPintheDark::CalculateDebyeGaugeSimplified()
 double
 Class_Potential_CPintheDark::VTreeSimplified(const std::vector<double> &v) const
 {
-  (void)v;
-  if (not UseVTreeSimplified) return 0;
   double res = 0;
+  if (not UseVTreeSimplified) return 0;
+
+  double vcb, v_1, v_2, vcp, vs;
+
+  vcb = v[2];
+  v_1  = v[4];
+  v_2  = v[6];
+  vcp = v[7];
+  vs  = v[8];
+
+  double C22 = std::pow(vcb, 2) + std::pow(v_2, 2) + std::pow(vcp, 2);
+
+  res += 0.5 * m11s * std::pow(v_1, 2);
+  res += 0.5 * m22s * C22;
+  res += 0.5 * mSs * std::pow(vs, 2);
+  res += ReA * v_1 * v_2 * vs;
+  res += -ImA * v_1 * vcp * vs;
+  res += 1.0 / 8.0 * L1 * std::pow(v_1,4);
+  res += 1.0 / 8.0 * L2 * std::pow(C22,2);
+  res += 1.0 / 4.0 * L3 * std::pow(v_1,2) * C22;
+  res += 1.0 / 4.0 * L4 * std::pow(v_1,2) * (std::pow(v_2,2) + std::pow(vcp,2));
+  res += 1.0 / 4.0 * L5 * std::pow(v_1,2) * (std::pow(v_2,2) - std::pow(vcp,2));
+  res += 1.0 / 4.0 * L6 * std::pow(vs,4);
+  res += 1.0 / 4.0 * L7 * std::pow(v_1,2) * std::pow(vs,2);
+  res += 0.5 * L8 * C22 * std::pow(vs,2);
 
   return res;
 }
@@ -2244,9 +2267,38 @@ Class_Potential_CPintheDark::VTreeSimplified(const std::vector<double> &v) const
 double Class_Potential_CPintheDark::VCounterSimplified(
     const std::vector<double> &v) const
 {
-  (void)v;
-  if (not UseVCounterSimplified) return 0;
   double res = 0;
+  if (not UseVCounterSimplified) return 0;
+  
+  double vcb, v_1, v_2, vcp, vs;
+
+  vcb = v[2];
+  v_1  = v[4];
+  v_2  = v[6];
+  vcp = v[7];
+  vs  = v[8];
+
+  double C22 = std::pow(vcb, 2) + std::pow(v_2, 2) + std::pow(vcp, 2);
+
+  res += 0.5 * dm11s * std::pow(v_1, 2);
+  res += 0.5 * dm22s * C22;
+  res += 0.5 * dmSs * std::pow(vs, 2);
+  res += dReA * v_1 * v_2 * vs;
+  res += -dImA * v_1 * vcp * vs;
+  res += 1.0 / 8.0 * dL1 * std::pow(v_1,4);
+  res += 1.0 / 8.0 * dL2 * std::pow(C22,2);
+  res += 1.0 / 4.0 * dL3 * std::pow(v_1,2) * C22;
+  res += 1.0 / 4.0 * dL4 * std::pow(v_1,2) * (std::pow(v_2,2) + std::pow(vcp,2));
+  res += 1.0 / 4.0 * dL5 * std::pow(v_1,2) * (std::pow(v_2,2) - std::pow(vcp,2));
+  res += 1.0 / 4.0 * dL6 * std::pow(vs,4);
+  res += 1.0 / 4.0 * dL7 * std::pow(v_1,2) * std::pow(vs,2);
+  res += 0.5 * dL8 * C22 * std::pow(vs,2);
+  res += dTCB * vcb;
+  res += dT1 * v_1;
+  res += dT2 * v_2;
+  res += dTCP * vcp;
+  res += dTS * vs;
+  res += -0.5 * dImL5 * std::pow(v_1,2) * v_2 * vcp;
 
   return res;
 }
