@@ -851,6 +851,11 @@ public:
    */
   std::vector<double> WeinbergThirdDerivative() const;
   /**
+   * Calculates the forth derivative of the Coleman-Weinberg potential at the
+   * tree-level minimum.
+   */
+  std::vector<double> WeinbergForthDerivative() const;
+  /**
    * Calculates the Debye corrections to the Higgs mass matrix.
    * If you can provide CalculateDebyeSimplified() with the Matrix as this will
    * reduce the runtime.
@@ -1030,6 +1035,15 @@ public:
    */
   double
   fbaseTri(double MassSquaredA, double MassSquaredB, double MassSquaredC) const;
+  /**
+   * Calculates the function f needed for the 4th derivatives of the Coleman
+   * Weinberg potential.
+   */
+  double fbaseFour(double MassSquaredA,
+                   double MassSquaredB,
+                   double MassSquaredC,
+                   double MassSquaredD) const;
+
   /**
    * Calculates the counterterm parameters. Here you need to work out the scheme
    * and implement the formulas. This has to be specified in the model file.
