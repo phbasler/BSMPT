@@ -94,13 +94,6 @@ if(MakeAdditionalTesting)
     message("Kfactor_grid will not compile as Boost is missing")
   endif(Boost_FOUND)
 
-  if(Boost_FOUND)
-  add_executable(WallThickness prog/WallThickness.cpp)
-  target_link_libraries(WallThickness Minimizer Models LibWallThickness Utility)
-  target_compile_features(WallThickness PUBLIC cxx_std_14)
-  else(Boost_FOUND)
-    message("WallThickness will not compile as Boost is missing")
-  endif(Boost_FOUND)
 
 endif(MakeAdditionalTesting)
 

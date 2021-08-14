@@ -5,6 +5,9 @@ SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
 # Changelog
+# 2021/05/XX: Release of v2.3
+- Changed cout output to a Logger which provides different levels. How to set them is shown under the --help option
+- CP in the dark is now added as a model
 
 # 2021/05/06: Release of v2.2 
 - Unit tests are provided for the models 'ch2dm', 'n2hdm' and 'r2hdm'
