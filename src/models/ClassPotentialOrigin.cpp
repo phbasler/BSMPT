@@ -832,17 +832,19 @@ double Class_Potential_Origin::fbaseFour(double MassSquaredA,
     res += mds * LogD / ((mds - mas) * (mds - mbs) * (mds - mcs));
   }
 
-  if (std::isnan(res) or std::isinf(res) or std::abs(res) > 1e10)
+  if (std::isnan(res) or std::isinf(res))
   {
     std::string throwstring = "Found nan at line = ";
     throwstring += std::to_string(InputLineNumber);
     throwstring += " in function ";
     throwstring += __func__;
     throwstring += "\n";
-    std::cerr << "Found nan at line = " << InputLineNumber << " in function "
-              << __func__ << std::endl;
-    std::cerr << mas << sep << mbs << sep << mcs << sep << mds << sep << C
-              << sep << res << std::endl;
+    std::stringstream ss;
+    ss << "Found nan at line = " << InputLineNumber << " in function "
+       << __func__ << std::endl;
+    ss << mas << sep << mbs << sep << mcs << sep << mds << sep << C << sep
+       << res << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str(), __FILE__, __LINE__);
     throw std::runtime_error(throwstring.c_str());
   }
 
