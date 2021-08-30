@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8,6 +9,7 @@
  */
 
 #include <BSMPT/minimizer/MinimizePlane.h>
+#include <BSMPT/utility/Logger.h>
 #include <gsl/gsl_errno.h>    // for gsl_set_error_handler...
 #include <gsl/gsl_multimin.h> // for gsl_multimin_fminimizer
 
@@ -352,9 +354,9 @@ GSL_Minimize_Plane_gen_all(const struct PointerContainerMinPlane &params,
   } while (tries <= MinTries);
   if (numOfSol == 0)
   {
-    std::cerr << "No solutions found during the GSL minimization at T = "
-              << params.Temp << " GeV "
-              << "\n";
+    Logger::Write(LoggingLevel::MinimizerDetailed,
+                  "No solutions found during the GSL minimization at T = " +
+                      std::to_string(params.Temp) + " GeV ");
     res.StatusFlag = false;
     return res;
   }

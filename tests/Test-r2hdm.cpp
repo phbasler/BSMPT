@@ -9,7 +9,6 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
-#include <BSMPT/utility.h>
 
 #include "GenerateTestCompares/R2HDM.h"
 
@@ -40,7 +39,7 @@ TEST_CASE("Checking NLOVEV for R2HDM", "[r2hdm]")
   {
     auto expected = std::abs(modelPointer->get_vevTreeMin(i));
     auto res      = std::abs(sol.at(i));
-    REQUIRE(std::abs(res - expected) <= 1e-4);
+    REQUIRE(res == Approx(expected).margin(1e-4));
   }
 }
 
@@ -62,19 +61,20 @@ TEST_CASE("Checking EWPT for R2HDM", "[r2hdm]")
       Expected.EWPTPerSetting.at(Minimizer::WhichMinimizerDefault).EWMinimum;
   REQUIRE(EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS);
 
-  REQUIRE(std::abs(omega_c_expected - EWPT.vc) / omega_c_expected <= 1e-4);
-  REQUIRE(std::abs(Tc_expected - EWPT.Tc) / Tc_expected <= 1e-4);
+  REQUIRE(std::abs(EWPT.vc) == Approx(omega_c_expected).epsilon(1e-4));
+  REQUIRE(EWPT.Tc == Approx(Tc_expected).epsilon(1e-4));
+  const double threshold = 1e-4;
   for (std::size_t i{0}; i < EWPT.EWMinimum.size(); ++i)
   {
     auto res      = std::abs(EWPT.EWMinimum.at(i));
     auto expected = std::abs(min_expected.at(i));
-    if (expected != 0)
+    if (expected > threshold)
     {
-      REQUIRE(std::abs(res - expected) / expected <= 1e-4);
+      REQUIRE(res == Approx(expected).epsilon(1e-4));
     }
     else
     {
-      REQUIRE(res <= 1e-4);
+      REQUIRE(res <= threshold);
     }
   }
 }
@@ -242,7 +242,7 @@ TEST_CASE("Checking triple higgs NLO couplings in the R2HDM", "[r2hdm]")
   auto Check = [](auto result, auto expected) {
     if (expected != 0)
     {
-      REQUIRE(std::abs(result - expected) / std::abs(expected) < 1e-4);
+      REQUIRE(result == Approx(expected).epsilon(1e-4));
     }
     else
     {

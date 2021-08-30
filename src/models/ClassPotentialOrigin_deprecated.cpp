@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,7 +17,8 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 #pragma GCC diagnostic push
@@ -83,10 +85,8 @@ double Class_Potential_Origin::Vsf(double MassSquared,
                                    int diff) const
 {
   double PotVal = 0;
-  //	std::cout << scale << std::endl;
-  double logM = FCW(MassSquared) + std::log(scale * scale);
-  //	std::cout << logM << std::endl;
-  double cf = 1.5 + 2 * std::log(4 * M_PI) -
+  double logM   = FCW(MassSquared) + std::log(scale * scale);
+  double cf     = 1.5 + 2 * std::log(4 * M_PI) -
               2 * ThermalFunctions::C_euler_gamma - 2 * std::log(4);
   if (diff == 0)
   {
@@ -300,9 +300,10 @@ double Class_Potential_Origin::boson_legacy(double MassSquared,
       else
       {
         PotVal = 0;
-        std::cerr << "This is not implemented yet! You called the derivative "
-                     "of the bosonic"
-                  << " std::size_tegral for negative m^2" << std::endl;
+        Logger::Write(LoggingLevel::Default,
+                      "This is not implemented yet! You called the derivative "
+                      "of the bosonic"
+                      " std::size_tegral for negative m^2");
       }
     }
   }

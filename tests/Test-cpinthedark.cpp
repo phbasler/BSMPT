@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
-// Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner, Jonas
+// Müller and Lisa Biermann
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,27 +10,32 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
-#include "GenerateTestCompares/C2HDM.h"
+#include "GenerateTestCompares/CPINTHEDARK.h"
 #include <fstream>
 
-const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
-                                              /* lambda_2 = */ 0.274365,
-                                              /* lambda_3 = */ 4.71019,
-                                              /* lambda_4 = */ -2.23056,
-                                              /* Re(lambda_5) = */ -2.43487,
-                                              /* Im(lambda_5) = */ 0.124948,
-                                              /* Re(m_{12}^2) = */ 2706.86,
-                                              /* tan(beta) = */ 4.64487,
-                                              /* Yukawa Type = */ 1};
+const std::vector<double> example_point_CPINTHEDARK{
+    /* m11s = */ -7823.7540500000005,
+    /* m22s = */ 242571.64899822656,
+    /* mSs = */ 109399.20176343,
+    /* ReA = */ 93.784159581909734,
+    /* ImA = */ 126.30387933116994,
+    /* L1 = */ 0.25810698810286969,
+    /* L2 = */ 4.6911643599657609,
+    /* L3 = */ -0.21517372505705856,
+    /* L4 = */ -0.42508424793839744,
+    /* L5 = */ -0.13790431680607695,
+    /* L6 = */ 15.075540949860104,
+    /* L7 = */ 6.7788372529237835,
+    /* L8 = */ -1.8651245632976341};
 
-const Compare_C2HDM Expected;
+const Compare_CPINTHEDARK Expected;
 
-TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
+TEST_CASE("Checking NLOVEV for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   std::vector<double> Check;
   auto sol = Minimizer::Minimize_gen_all(modelPointer,
                                          0,
@@ -45,12 +50,12 @@ TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
   }
 }
 
-TEST_CASE("Checking EWPT for C2HDM", "[c2hdm]")
+TEST_CASE("Checking EWPT for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   std::vector<double> Check;
   auto EWPT = Minimizer::PTFinder_gen_all(
       modelPointer, 0, 300, Minimizer::WhichMinimizerDefault);
@@ -84,108 +89,111 @@ TEST_CASE("Checking EWPT for C2HDM", "[c2hdm]")
   }
 }
 
-TEST_CASE("Checking number of CT parameters for C2HDM", "[c2hdm]")
+TEST_CASE("Checking number of CT parameters for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNumberOfCTParameters(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking number of VEV labels for C2HDM", "[c2hdm]")
+TEST_CASE("Checking number of VEV labels for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNumberOfVEVLabels(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE(
-    "Checking number of labels for temperature dependend results for C2HDM",
-    "[c2hdm]")
+TEST_CASE("Checking number of labels for temperature dependend results for "
+          "CPINTHEDARK",
+          "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckLegendTemp(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking number of triple Higgs couplings for C2HDM", "[c2hdm]")
+TEST_CASE("Checking number of triple Higgs couplings for CPINTHEDARK",
+          "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNumberOfTripleCouplings(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking Gauge Boson masses for C2HDM", "[c2hdm]")
+TEST_CASE("Checking Gauge Boson masses for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckGaugeBosonMasses(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking fermion and quark masses masses for C2HDM", "[c2hdm]")
+TEST_CASE("Checking fermion and quark masses masses for CPINTHEDARK",
+          "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckFermionicMasses(*modelPointer);
   REQUIRE(result.first == ModelTests::TestResults::Pass);
   REQUIRE(result.second == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking tree level minimum for C2HDM", "[c2hdm]")
+TEST_CASE("Checking tree level minimum for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckTreeLevelMin(*modelPointer,
                                               Minimizer::WhichMinimizerDefault);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking tree level tadpoles for C2HDM", "[c2hdm]")
+TEST_CASE("Checking tree level tadpoles for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckTadpoleRelations(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking NLO masses matching tree level masses for C2HDM", "[c2hdm]")
+TEST_CASE("Checking NLO masses matching tree level masses for CPINTHEDARK",
+          "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNLOMasses(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking VTreeSimplified for C2HDM", "[c2hdm]")
+TEST_CASE("Checking VTreeSimplified for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
   if (modelPointer->UseVTreeSimplified)
   {
-    modelPointer->initModel(example_point_C2HDM);
+    modelPointer->initModel(example_point_CPINTHEDARK);
     auto result = ModelTests::CheckVTreeSimplified(*modelPointer);
     REQUIRE(result == ModelTests::TestResults::Pass);
   }
@@ -195,14 +203,14 @@ TEST_CASE("Checking VTreeSimplified for C2HDM", "[c2hdm]")
   }
 }
 
-TEST_CASE("Checking VCounterSimplified for C2HDM", "[c2hdm]")
+TEST_CASE("Checking VCounterSimplified for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
   if (modelPointer->UseVCounterSimplified)
   {
-    modelPointer->initModel(example_point_C2HDM);
+    modelPointer->initModel(example_point_CPINTHEDARK);
     auto result = ModelTests::CheckVCounterSimplified(*modelPointer);
     REQUIRE(result == ModelTests::TestResults::Pass);
   }
@@ -212,50 +220,55 @@ TEST_CASE("Checking VCounterSimplified for C2HDM", "[c2hdm]")
   }
 }
 
-TEST_CASE("Checking first derivative of the sum of CT and CW in the C2HDM",
-          "[c2hdm]")
+TEST_CASE(
+    "Checking first derivative of the sum of CT and CW in the CPINTHEDARK",
+    "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckCTConditionsFirstDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking second derivative of the sum of CT and CW in the C2HDM",
-          "[c2hdm]")
+TEST_CASE(
+    "Checking second derivative of the sum of CT and CW in the CPINTHEDARK",
+    "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking the identities required to vanish for the CT in the C2HDM",
-          "[c2hdm]")
+TEST_CASE(
+    "Checking the identities required to vanish for the CT in the CPINTHEDARK",
+    "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckCTIdentities(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
 }
 
-TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
+TEST_CASE("Checking triple higgs NLO couplings in the CPINTHEDARK",
+          "[cpinthedark]")
 {
 
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   modelPointer->Prepare_Triple();
   modelPointer->TripleHiggsCouplings();
 
-  auto Check = [](auto result, auto expected) {
+  auto Check = [](auto result, auto expected)
+  {
     if (expected != 0)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
@@ -299,12 +312,13 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
   }
 }
 
-TEST_CASE("Check number of calculated CT parameters in the C2HDM", "[c2hdm]")
+TEST_CASE("Check number of calculated CT parameters in the CPINTHEDARK",
+          "[cpinthedark]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+  modelPointer->initModel(example_point_CPINTHEDARK);
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckCTNumber(*modelPointer));
 }

@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,7 +16,7 @@
 #include <boost/numeric/odeint.hpp>
 #include <boost/numeric/odeint/iterator/const_step_time_iterator.hpp>
 
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/utility.h>
 
 namespace BSMPT
 {

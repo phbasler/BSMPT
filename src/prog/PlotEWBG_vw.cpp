@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -13,7 +14,8 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Pot...
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
 #include <iostream>
@@ -58,14 +60,15 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
 
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
 
@@ -102,20 +105,22 @@ try
   infile.close();
   if (!found)
   {
-    std::cout << "Line not found !\n";
-    return -1;
+    Logger::Write(LoggingLevel::Default, "Line not found !");
+    return EXIT_FAILURE;
   }
 
   if (args.TerminalOutput) modelPointer->write();
   // CALL: BSMPT-->Phasetransition
-  if (args.TerminalOutput) std::cout << "PTFinder called..." << std::endl;
+  if (args.TerminalOutput)
+    Logger::Write(LoggingLevel::ProgDetailed, "PTFinder called...");
   auto EWPT = Minimizer::PTFinder_gen_all(modelPointer, 0, 300);
 
   // SFOEWPT FOUND
   if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and
       C_PT * EWPT.Tc < EWPT.vc)
   {
-    if (args.TerminalOutput) std::cout << "SFOEWPT found..." << std::endl;
+    if (args.TerminalOutput)
+      Logger::Write(LoggingLevel::ProgDetailed, "SFOEWPT found...");
     std::vector<double> vcritical, vbarrier;
     vcritical = EWPT.EWMinimum;
     double TC = EWPT.Tc;
@@ -129,10 +134,13 @@ try
         Minimizer::Minimize_gen_all(modelPointer, TC + 1, checksym, startpoint);
     double vw = 0;
     if (args.TerminalOutput)
-      std::cout << "Currently calculating vw:" << std::endl;
+      Logger::Write(LoggingLevel::ProgDetailed,
+                    "Currently calculating vw:",
+                    __FILE__,
+                    __LINE__);
     for (vw = args.vw_min; vw <= args.vw_max; vw += args.vw_Stepsize)
     {
-      std::cout << "\rvw = " << vw << "\n";
+      Logger::Write(LoggingLevel::Default, "\rvw = " + std::to_string(vw));
       auto eta = EtaInterface.CalcEta(vw,
                                       vcritical,
                                       vevsymmetricSolution,
@@ -160,7 +168,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
@@ -173,55 +181,57 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   if (argc < 9 or args.at(0) == "--help")
   {
+    std::stringstream ss;
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout << "PlotEWBG_vw calculates the EWBG for varying wall velocity "
-                 "for a given parameter point."
-              << std::endl
-              << "It is called either by " << std::endl
-              << "./PlotEWBG_vw Model Inputfile Outputfile Line vwMin "
-                 "vwStepsize vwMax EWBGConfigFile TerminalOutput(y/n)"
-              << std::endl
-              << "or with the following arguments" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--help"
-              << "Shows this menu" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--model="
-              << "The model you want to investigate" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--input="
-              << "The input file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--output="
-              << "The output file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--Line="
-              << "The line with the given parameter point. Expects line 1 to "
-                 "be a legend."
-              << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--config="
-              << "The EWBG config file." << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left
-              << "--TerminalOutput="
-              << "y/n Turns on additional information in the terminal during "
-                 "the calculation."
-              << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--vw_min="
-              << "The minimum wall velocity." << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--vw_max="
-              << "The maximum wall velocity." << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--vw_Stepsize="
-              << "The stepsize to increase the wall velocity." << std::endl;
+    ss << "PlotEWBG_vw calculates the EWBG for varying wall velocity "
+          "for a given parameter point."
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./PlotEWBG_vw Model Inputfile Outputfile Line vwMin "
+          "vwStepsize vwMax EWBGConfigFile TerminalOutput(y/n)"
+       << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--output="
+       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--Line="
+       << "The line with the given parameter point. Expects line 1 to "
+          "be a legend."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--config="
+       << "The EWBG config file." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
+       << "y/n Turns on additional information in the terminal during "
+          "the calculation."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--vw_min="
+       << "The minimum wall velocity." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--vw_max="
+       << "The maximum wall velocity." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--vw_Stepsize="
+       << "The stepsize to increase the wall velocity." << std::endl;
     std::string GSLhelp{"--UseGSL="};
     GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-              << "Use the GSL library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
+       << "Use the GSL library to minimize the effective potential"
+       << std::endl;
     std::string CMAEShelp{"--UseCMAES="};
     CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-              << "Use the CMAES library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
+       << "Use the CMAES library to minimize the effective potential"
+       << std::endl;
     std::string NLoptHelp{"--UseNLopt="};
     NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-              << "Use the NLopt library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
+       << "Use the NLopt library to minimize the effective potential"
+       << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -236,6 +246,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   const std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusuedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -293,8 +304,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
       {
         UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
       }
+      else
+      {
+        UnusuedArgs.push_back(el);
+      }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+    SetLogger(UnusuedArgs);
   }
   else
   {
@@ -350,15 +366,15 @@ bool CLIOptions::good() const
   }
   if (Model == ModelID::ModelIDs::NotSet)
   {
-    std::cerr
-        << "Your Model parameter does not match with the implemented Models."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "Your Model parameter does not match with the implemented Models.");
     ShowInputError();
     return false;
   }
   if (Line < 1)
   {
-    std::cerr << "Start line counting with 1" << std::endl;
+    Logger::Write(LoggingLevel::Default, "Start line counting with 1");
     return false;
   }
 

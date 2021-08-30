@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,7 +16,8 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
 #include <iomanip>
@@ -58,13 +60,14 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
   std::string linestr;
@@ -92,7 +95,7 @@ try
   infile.close();
   if (!found)
   {
-    std::cout << "Line not found !\n";
+    Logger::Write(LoggingLevel::Default, "Line not found!");
     return EXIT_FAILURE;
   }
 
@@ -112,13 +115,6 @@ try
   for (const auto &x : vevsymmetricSolution)
     absvevsymmetricSolution += std::pow(x, 2);
 
-  if (absvevsymmetricSolution != 0)
-  {
-    std::cout
-        << "Check for sign of non vanishing components of symmetric vacuum : "
-        << std::endl;
-  }
-
   struct Baryo::GSL_integration_mubl p;
   p.init(args.vw,
          EWPT.EWMinimum,
@@ -127,11 +123,16 @@ try
          modelPointer,
          args.WhichMinimizer);
 
-  std::cout << "vw = " << args.vw << std::endl;
-  std::cout << "LW = " << p.getLW() * EWPT.Tc << "/TC" << std::endl;
-  std::cout << "T_C = " << EWPT.Tc << std::endl;
+  Logger::Write(LoggingLevel::ProgDetailed, "vw = " + std::to_string(args.vw));
+  Logger::Write(LoggingLevel::ProgDetailed,
+                "LW = " + std::to_string(p.getLW() * EWPT.Tc) + "/TC");
+  Logger::Write(LoggingLevel::ProgDetailed, "T_C = " + std::to_string(EWPT.Tc));
   for (std::size_t i = 0; i < modelPointer->get_nVEV(); i++)
-    std::cout << "v_" << i << " = " << EWPT.EWMinimum.at(i) << std::endl;
+  {
+    Logger::Write(LoggingLevel::ProgDetailed,
+                  "v_" + std::to_string(i) + " = " +
+                      std::to_string(EWPT.EWMinimum.at(i)));
+  }
 
   std::size_t nstep = 1000;
   double zmin       = 0;
@@ -164,42 +165,44 @@ CLIOptions::CLIOptions(int argc, char *argv[])
   if (argc < 5 or args.at(0) == "--help")
   {
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout << "CreateMuGrid calculates the mu_{BL} potential in front of "
-                 "the bubble wall"
-              << std::endl
-              << "It is called either by " << std::endl
-              << "./CreateMuGrid model input output Line" << std::endl
-              << "or with the following arguments" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--help"
-              << "Shows this menu" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--model="
-              << "The model you want to investigate" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--input="
-              << "The input file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--output="
-              << "The output file in tsv format" << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--Line="
-              << "The line in the input file to calculate the EWPT. Expects "
-                 "line 1 to be a legend."
-              << std::endl
-              << std::setw(SizeOfFirstColumn) << std::left << "--vw="
-              << "Wall velocity for the EWBG calculation. Default value of 0.1."
-              << std::endl;
+    std::stringstream ss;
+    ss << "CreateMuGrid calculates the mu_{BL} potential in front of "
+          "the bubble wall"
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./CreateMuGrid model input output Line" << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--output="
+       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--Line="
+       << "The line in the input file to calculate the EWPT. Expects "
+          "line 1 to be a legend."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--vw="
+       << "Wall velocity for the EWBG calculation. Default value of 0.1."
+       << std::endl;
     std::string GSLhelp{"--UseGSL="};
     GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-              << "Use the GSL library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
+       << "Use the GSL library to minimize the effective potential"
+       << std::endl;
     std::string CMAEShelp{"--UseCMAES="};
     CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-              << "Use the CMAES library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
+       << "Use the CMAES library to minimize the effective potential"
+       << std::endl;
     std::string NLoptHelp{"--UseNLopt="};
     NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-              << "Use the NLopt library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
+       << "Use the NLopt library to minimize the effective potential"
+       << std::endl;
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -214,6 +217,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   const std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -253,8 +257,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
       {
         UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
       }
+      else
+      {
+        UnusedArgs.push_back(el);
+      }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+    SetLogger(UnusedArgs);
   }
   else
   {

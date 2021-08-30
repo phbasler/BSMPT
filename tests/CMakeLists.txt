@@ -12,12 +12,14 @@ set(header
   GenerateTestCompares/C2HDM.h
   GenerateTestCompares/R2HDM.h
   GenerateTestCompares/RN2HDM.h
+  GenerateTestCompares/CPINTHEDARK.h
   )
 
 set(src
   GenerateTestCompares/C2HDM.cpp
   GenerateTestCompares/R2HDM.cpp
   GenerateTestCompares/RN2HDM.cpp
+  GenerateTestCompares/CPINTHEDARK.cpp
   )
 
 add_library(TestCompares ${header} ${src})

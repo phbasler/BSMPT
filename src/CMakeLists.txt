@@ -14,15 +14,8 @@ add_subdirectory(ThermalFunctions)
 
 #==============================Utility==================================
 
-set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT")
-set(header ${CMAKE_SOURCE_DIR}/include/BSMPT/utility.h)
-set(src utility.cpp)
-add_library(Utility ${header} ${src})
-target_include_directories(Utility PUBLIC ${BSMPT_SOURCE_DIR}/include ${BSMPT_BINARY_DIR}/include)
-if(Boost_FOUND)
-  target_link_libraries(Utility PUBLIC Boost::boost)
-endif()
-target_compile_features(Utility PUBLIC cxx_std_14)
+add_subdirectory(utility)
+
 
 
 #==============================EXE======================================
@@ -101,13 +94,6 @@ if(MakeAdditionalTesting)
     message("Kfactor_grid will not compile as Boost is missing")
   endif(Boost_FOUND)
 
-  if(Boost_FOUND)
-  add_executable(WallThickness prog/WallThickness.cpp)
-  target_link_libraries(WallThickness Minimizer Models LibWallThickness Utility)
-  target_compile_features(WallThickness PUBLIC cxx_std_14)
-  else(Boost_FOUND)
-    message("WallThickness will not compile as Boost is missing")
-  endif(Boost_FOUND)
 
 endif(MakeAdditionalTesting)
 

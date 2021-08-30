@@ -5,7 +5,8 @@
 
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/ModelTestfunctions.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 #include <iomanip>
 
 namespace BSMPT
@@ -45,11 +46,11 @@ TestResults CheckNumberOfCTParameters(const Class_Potential_Origin &point)
   }
   else
   {
-    std::cerr << "WARNING: The number of labels for the Counterterms does not "
-                 "match the number of Counterterms."
-              << " If you don't fix this, then your header will not match the "
-                 "numerical output in the output file."
-              << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "WARNING: The number of labels for the Counterterms does not "
+                  "match the number of Counterterms."
+                  " If you don't fix this, then your header will not match the "
+                  "numerical output in the output file.");
   }
   return result;
 }
@@ -64,11 +65,11 @@ TestResults CheckNumberOfVEVLabels(const Class_Potential_Origin &point)
   }
   else
   {
-    std::cerr << "WARNING: The number of labels for the VEVs does not match "
-                 "the number of VEVs defined in the model."
-              << " If you don't fix this, then your header will not match the "
-                 "numerical output in the output file."
-              << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "WARNING: The number of labels for the VEVs does not match "
+                  "the number of VEVs defined in the model."
+                  " If you don't fix this, then your header will not match the "
+                  "numerical output in the output file.");
   }
 
   return result;
@@ -81,14 +82,14 @@ TestResults CheckLegendTemp(const Class_Potential_Origin &point)
                     : TestResults::Fail;
   if (result == TestResults::Fail)
   {
-    std::cerr
-        << "WARNING: The number of labels in addLegendTemp does not match the "
-           "number of VEVs + 3."
-        << " If you don't fix this, then your header will not match the "
-           "numerical output in the output file."
-        << " It is expected to be label for the critical temperature, the cirtical VEV, the ratio of VEV and temperature and the labels\
-                       for the VEVs."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "WARNING: The number of labels in addLegendTemp does not match the "
+        "number of VEVs + 3."
+        " If you don't fix this, then your header will not match the "
+        "numerical output in the output file."
+        " It is expected to be label for the critical temperature, the cirtical VEV, the ratio of VEV and temperature and the labels\
+                       for the VEVs.");
   }
   return result;
 }
@@ -112,12 +113,12 @@ TestResults CheckNumberOfTripleCouplings(const Class_Potential_Origin &point)
                     : TestResults::Fail;
   if (result == TestResults::Fail)
   {
-    std::cerr
-        << "WARNING: The number of labels in addLegendTripleCouplings does "
-           "not match the number of calculated Triple Higgs Couplings."
-        << " If you don't fix this, then your header will not match the "
-           "numerical output in the output file."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "WARNING: The number of labels in addLegendTripleCouplings does "
+        "not match the number of calculated Triple Higgs Couplings."
+        " If you don't fix this, then your header will not match the "
+        "numerical output in the output file.");
   }
   return result;
 }
@@ -151,16 +152,17 @@ TestResults CheckGaugeBosonMasses(const Class_Potential_Origin &point)
   auto addline1  = maxlength - prsize_tline1.size();
   auto addline2  = maxlength - prsize_tline2.size();
 
-  std::cout << prsize_tline1 << std::setw(addline1) << " ";
+  std::stringstream ss;
+  ss << prsize_tline1 << std::setw(addline1) << " ";
   for (auto x : gaugeMassesInput)
-    std::cout << x << sep;
-  std::cout << std::endl;
-  std::cout << prsize_tline2 << std::setw(addline2);
+    ss << x << sep;
+  ss << std::endl;
+  ss << prsize_tline2 << std::setw(addline2);
   for (auto x : GaugeMassCalculated)
-    std::cout << x << sep;
-  std::cout << std::endl;
+    ss << x << sep;
+  ss << std::endl;
 
-  std::cout << std::endl;
+  Logger::Write(LoggingLevel::ProgDetailed, ss.str());
 
   return result;
 }
@@ -217,15 +219,17 @@ CheckFermionicMasses(const Class_Potential_Origin &point)
     auto addline1  = maxlength - prsize_tline1.size();
     auto addline2  = maxlength - prsize_tline2.size();
 
-    std::cout << prsize_tline1 << std::setw(addline1) << " ";
+    std::stringstream ss;
+    ss << prsize_tline1 << std::setw(addline1) << " ";
     for (auto x : leptonMassesInput)
-      std::cout << x << sep;
-    std::cout << std::endl;
-    std::cout << prsize_tline2 << std::setw(addline2);
+      ss << x << sep;
+    ss << std::endl;
+    ss << prsize_tline2 << std::setw(addline2);
     for (auto x : leptonMassCalculated)
-      std::cout << x << sep;
-    std::cout << std::endl;
-    std::cout << std::endl;
+      ss << x << sep;
+    ss << std::endl;
+    ss << std::endl;
+    Logger::Write(LoggingLevel::ProgDetailed, ss.str());
 
     double sum{0};
     for (std::size_t i{0};
@@ -264,14 +268,18 @@ CheckFermionicMasses(const Class_Potential_Origin &point)
   auto addline1  = maxlength - prsize_tline1.size();
   auto addline2  = maxlength - prsize_tline2.size();
 
-  std::cout << prsize_tline1 << std::setw(addline1) << " ";
-  for (auto x : quarkMassesInput)
-    std::cout << x << sep;
-  std::cout << std::endl;
-  std::cout << prsize_tline2 << std::setw(addline2);
-  for (auto x : quarkMassCalculated)
-    std::cout << x << sep;
-  std::cout << std::endl << std::endl;
+  {
+    std::stringstream ss;
+    ss << prsize_tline1 << std::setw(addline1) << " ";
+    for (auto x : quarkMassesInput)
+      ss << x << sep;
+    ss << std::endl;
+    ss << prsize_tline2 << std::setw(addline2);
+    for (auto x : quarkMassCalculated)
+      ss << x << sep;
+    ss << std::endl << std::endl;
+    Logger::Write(LoggingLevel::ProgDetailed, ss.str());
+  }
 
   double sum{0};
   for (std::size_t i{0}; i < quarkMassCalculated.size(); ++i)
@@ -309,14 +317,16 @@ TestResults CheckTreeLevelMin(const Class_Potential_Origin &point,
   auto addline1  = maxlength - prsize_tline1.size();
   auto addline2  = maxlength - prsize_tline2.size();
 
-  std::cout << prsize_tline1 << std::setw(addline1) << " ";
+  std::stringstream ss;
+  ss << prsize_tline1 << std::setw(addline1) << " ";
   for (auto x : point.get_vevTreeMin())
-    std::cout << x << sep;
-  std::cout << std::endl;
-  std::cout << prsize_tline2 << std::setw(addline2);
+    ss << x << sep;
+  ss << std::endl;
+  ss << prsize_tline2 << std::setw(addline2);
   for (auto x : CalculatedHiggsVEV)
-    std::cout << x << sep;
-  std::cout << std::endl << std::endl;
+    ss << x << sep;
+  ss << std::endl << std::endl;
+  Logger::Write(LoggingLevel::ProgDetailed, ss.str());
 
   double sum{0};
   for (std::size_t i{0}; i < point.get_nVEV(); ++i)
@@ -343,13 +353,12 @@ TestResults CheckTadpoleRelations(const Class_Potential_Origin &point)
 
   if (SurviveTadpole > 1e-5)
   {
-    std::cout << "The given input parameter does not fulfill the tadpole "
-                 "relations and is not a minimum of the potential."
-              << std::endl
-              << "This may happen if all your parameters are read in from an "
-                 "input file. Try applying the minimum conditions"
-              << " in the set_gen function." << std::endl
-              << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "The given input parameter does not fulfill the tadpole relations and "
+        "is not a minimum of the potential.\n This may happen if all your "
+        "parameters are read in from an input file. Try applying the minimum "
+        "conditions in the set_gen function.\n");
     result = TestResults::Fail;
   }
   return result;
@@ -396,11 +405,13 @@ TestResults CheckNLOMasses(const Class_Potential_Origin &point)
       NLOMass.push_back(esNLO.eigenvalues()[i]);
   }
 
-  std::cout << "The higgs masses squared at LO | NLO are : " << std::endl;
+  std::stringstream ss;
+  ss << "The higgs masses squared at LO | NLO are : " << std::endl;
   for (std::size_t i = 0; i < NHiggs; i++)
   {
-    std::cout << "m_i^2 = " << TreeMass[i] << " | " << NLOMass[i] << std::endl;
+    ss << "m_i^2 = " << TreeMass[i] << " | " << NLOMass[i] << std::endl;
   }
+  Logger::Write(LoggingLevel::ProgDetailed, ss.str());
 
   double sum{0.0};
   for (std::size_t i = 0; i < NHiggs; i++)
@@ -443,13 +454,13 @@ TestResults CheckVTreeSimplified(const Class_Potential_Origin &point)
   }
   if (PotentialDifference > 1e-5)
   {
-    std::cout << "You provided a simplified version of the tree-level "
-                 "potential but it yields"
-              << " different results for the same input compared to the "
-                 "explicit calculation. "
-              << "Recheck your implementation of the simplified tree-level "
-                 "potential."
-              << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "You provided a simplified version of the tree-level "
+                  "potential but it yields"
+                  " different results for the same input compared to the "
+                  "explicit calculation. "
+                  "Recheck your implementation of the simplified tree-level "
+                  "potential.");
     result = TestResults::Fail;
   }
 
@@ -482,13 +493,13 @@ TestResults CheckVCounterSimplified(const Class_Potential_Origin &point)
   }
   if (PotentialCTDifference > 1)
   {
-    std::cout << "You provided a simplified version of the counterterm "
-                 "potential but it yields"
-              << " different results for the same input compared to the "
-                 "explicit calculation. "
-              << "Recheck your implementation of the simplified counterterm "
-                 "potential."
-              << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "You provided a simplified version of the counterterm "
+                  "potential but it yields"
+                  " different results for the same input compared to the "
+                  "explicit calculation. "
+                  "Recheck your implementation of the simplified counterterm "
+                  "potential.");
     result = TestResults::Fail;
   }
   return result;
@@ -514,10 +525,16 @@ TestResults CheckCKMUnitarity()
   if (result == TestResults::Fail)
   {
 
-    std::cerr << "Your CKM implementation is not unitary!" << std::endl;
-    std::cerr << "Your CKM Matrix V is given by \n" << VCKM << std::endl;
-    std::cerr << "with adjoint(V)*V = \n" << VCKM.adjoint() * VCKM << std::endl;
-    std::cerr << "The norm deviating from 1 is " << norm << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Your CKM implementation is not unitary!");
+    std::stringstream ss;
+    ss << "Your CKM Matrix V is given by \n" << VCKM << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    ss.clear();
+    ss << "with adjoint(V)*V = \n" << VCKM.adjoint() * VCKM << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    Logger::Write(LoggingLevel::Default,
+                  "The norm deviating from 1 is " + std::to_string(norm));
   }
   return result;
 }

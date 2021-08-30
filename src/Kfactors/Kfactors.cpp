@@ -1,11 +1,14 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/Kfactors/Kfactors.h>
+#include <BSMPT/utility/Logger.h>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 #include <gsl/gsl_integration.h>
 
@@ -77,7 +80,11 @@ double K_integrand(const std::vector<double> &p,
     res = std::abs(pz) * distribution_f0(E0, s, Temp, 0) /
           (2.0 * std::pow(E0, 3) * E0z);
     break;
-  default: std::cerr << "Wrong call for " << __func__ << std::endl; break;
+  default:
+    Logger::Write(LoggingLevel::Default,
+                  std::string("Wrong call for ") + __func__);
+
+    break;
   }
 
   return res;
@@ -154,7 +161,8 @@ double K_functions(double masssquared, double Temp, int switchvalue, int s)
   double norm      = 0;
   if (switchvalue > 10)
   {
-    std::cerr << "Wrong switch value for K_functions ! " << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Wrong switch value for K_functions ! ");
     exit(EXIT_FAILURE);
   }
   else if (switchvalue == 5 or switchvalue == 6 or switchvalue == 10)
@@ -170,11 +178,12 @@ double K_functions(double masssquared, double Temp, int switchvalue, int s)
 
 void display_results(std::string title, double result, double error)
 {
-  std::cout << std::scientific;
-  std::cout << title << "==================\n";
-  // printf ("%s ==================\n", title);
-  std::cout << "result = " << result << std::endl;
-  std::cout << "sigma = " << error << std::endl;
+  std::stringstream ss;
+  ss << std::scientific;
+  ss << title << "==================\n"
+     << "result = " << result << std::endl;
+  ss << "sigma = " << error << std::endl;
+  Logger::Write(LoggingLevel::EWBGDetailed, ss.str());
 }
 
 double Ktilde_normalization_func(double x, void *p)

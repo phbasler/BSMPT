@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,7 +17,8 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Pot...
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 #include <algorithm> // for max, copy
 #include <fstream>
 #include <iostream>
@@ -63,14 +65,15 @@ try
   std::ifstream infile(args.InputFile);
   if (!infile.good())
   {
-    std::cout << "Input file not found " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Input file not found ");
     return EXIT_FAILURE;
   }
 
   std::ofstream outfile(args.OutputFile);
   if (!outfile.good())
   {
-    std::cout << "Can not create file " << args.OutputFile << std::endl;
+    Logger::Write(LoggingLevel::Default,
+                  "Can not create file " + args.OutputFile);
     return EXIT_FAILURE;
   }
   std::string linestr;
@@ -108,7 +111,8 @@ try
     {
       if (args.TerminalOutput)
       {
-        std::cout << "Currently at line " << linecounter << std::endl;
+        Logger::Write(LoggingLevel::ProgDetailed,
+                      "Currently at line " + std::to_string(linecounter));
       }
       // Begin: Parameter Set Up for BSMPT
       auto parameters = modelPointer->initModel(linestr);
@@ -116,9 +120,10 @@ try
       if (args.FirstLine == args.LastLine)
       {
         modelPointer->write();
-        std::cout << "vw = " << args.vw << std::endl;
+        Logger::Write(LoggingLevel::Default, "vw = " + std::to_string(args.vw));
       }
-      if (args.TerminalOutput) std::cout << "Calling PTFinder" << std::endl;
+      if (args.TerminalOutput)
+        Logger::Write(LoggingLevel::ProgDetailed, "Calling PTFinder");
 
       // Call: BSMPT
       auto EWPT = Minimizer::PTFinder_gen_all(
@@ -128,7 +133,8 @@ try
       if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS and
           C_PT * EWPT.Tc < EWPT.vc)
       {
-        if (args.TerminalOutput) std::cout << "SFOEWPT found..." << std::endl;
+        if (args.TerminalOutput)
+          Logger::Write(LoggingLevel::ProgDetailed, "SFOEWPT found...");
         // Find the minimum in the symmetric phase. For this minimise at T = Tc
         // + 1
         std::vector<double> vevsymmetricSolution, checksym, startpoint;
@@ -142,7 +148,8 @@ try
                                         args.WhichMinimizer,
                                         args.UseMultithreading);
         // Call: Calculation of eta in the different implemented approaches
-        if (args.TerminalOutput) std::cout << "Calling CalcEta..." << std::endl;
+        if (args.TerminalOutput)
+          Logger::Write(LoggingLevel::ProgDetailed, "Calling CalcEta...");
         eta = EtaInterface.CalcEta(args.vw,
                                    EWPT.EWMinimum,
                                    vevsymmetricSolution,
@@ -188,35 +195,36 @@ try
 
       if (args.FirstLine == args.LastLine)
       {
+        std::stringstream ss;
         auto dimensionnames = modelPointer->addLegendTemp();
-        std::cout << "Succeded ? " << static_cast<int>(EWPT.StatusFlag) << sep
-                  << " (1 = Success , -1 = v/T reached a value below " << C_PT
-                  << " during the calculation) \n";
+        ss << "Succeded ? " << static_cast<int>(EWPT.StatusFlag) << sep
+           << " (1 = Success , -1 = v/T reached a value below " << C_PT
+           << " during the calculation) \n";
         if (EWPT.StatusFlag == Minimizer::MinimizerStatus::SUCCESS)
         {
-          std::cout << std::scientific;
-          std::cout << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
-          std::cout << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
-          std::cout << "xi_c = " << dimensionnames.at(2) << " = "
-                    << EWPT.vc / EWPT.Tc << std::endl;
+          ss << std::scientific;
+          ss << dimensionnames.at(1) << " = " << EWPT.vc << " GeV\n";
+          ss << dimensionnames.at(0) << " = " << EWPT.Tc << " GeV\n";
+          ss << "xi_c = " << dimensionnames.at(2) << " = " << EWPT.vc / EWPT.Tc
+             << std::endl;
           for (std::size_t i = 0; i < modelPointer->get_nVEV(); i++)
           {
-            std::cout << dimensionnames.at(i + 3) << " = "
-                      << EWPT.EWMinimum.at(i) << " GeV\n";
+            ss << dimensionnames.at(i + 3) << " = " << EWPT.EWMinimum.at(i)
+               << " GeV\n";
           }
-          std::cout << "The Wall thickness is given by L_W  = "
-                    << EtaInterface.getLW() << "GeV^-2\n"
-                    << "L_W * T = " << EtaInterface.getLW() * EWPT.Tc << "\n";
+          ss << "The Wall thickness is given by L_W  = " << EtaInterface.getLW()
+             << "GeV^-2\n"
+             << "L_W * T = " << EtaInterface.getLW() * EWPT.Tc << "\n";
           for (std::size_t i = 0; i < etaLegend.size(); i++)
-            std::cout << etaLegend.at(i) << " = " << eta.at(i) << std::endl;
+            ss << etaLegend.at(i) << " = " << eta.at(i) << std::endl;
         }
+        Logger::Write(LoggingLevel::Default, ss.str());
 
       } // END: LineStart == LineEnd
     }   // END: Valid Line
     linecounter++;
     if (infile.eof()) break;
   } // END: Input Read
-  if (args.TerminalOutput) std::cout << std::endl;
   // Closing & Free
   outfile.close();
   return EXIT_SUCCESS;
@@ -227,7 +235,7 @@ catch (int)
 }
 catch (exception &e)
 {
-  std::cerr << e.what() << std::endl;
+  Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
 }
 
@@ -241,56 +249,57 @@ CLIOptions::CLIOptions(int argc, char *argv[])
   if (argc < 7 or args.at(0) == "--help")
   {
     int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::cout
-        << "CalculateEWBG calculates the strength of the electroweak "
-           "baryogenesis"
-        << std::endl
-        << "It is called either by " << std::endl
-        << "./CalculateEWBG model input output FirstLine LastLine ConfigFile"
-        << std::endl
-        << "or with the following arguments" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--help"
-        << "Shows this menu" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--model="
-        << "The model you want to investigate" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--input="
-        << "The input file in tsv format" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--output="
-        << "The output file in tsv format" << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
-        << "The first line in the input file to calculate the EWPT. Expects "
-           "line 1 to be a legend."
-        << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
-        << "The last line in the input file to calculate the EWPT." << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--config="
-        << "The EWBG config file." << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
-        << "y/n Turns on additional information in the terminal during the "
-           "calculation."
-        << std::endl
-        << std::setw(SizeOfFirstColumn) << std::left << "--vw="
-        << "Wall velocity for the EWBG calculation. Default value of 0.1."
-        << std::endl;
+    std::stringstream ss;
+    ss << "CalculateEWBG calculates the strength of the electroweak "
+          "baryogenesis"
+       << std::endl
+       << "It is called either by " << std::endl
+       << "./CalculateEWBG model input output FirstLine LastLine ConfigFile"
+       << std::endl
+       << "or with the following arguments" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--help"
+       << "Shows this menu" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--model="
+       << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--input="
+       << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--output="
+       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
+       << "The first line in the input file to calculate the EWPT. Expects "
+          "line 1 to be a legend."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
+       << "The last line in the input file to calculate the EWPT." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--config="
+       << "The EWBG config file." << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
+       << "y/n Turns on additional information in the terminal during the "
+          "calculation."
+       << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left << "--vw="
+       << "Wall velocity for the EWBG calculation. Default value of 0.1."
+       << std::endl;
     std::string GSLhelp{"--UseGSL="};
     GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-              << "Use the GSL library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
+       << "Use the GSL library to minimize the effective potential"
+       << std::endl;
     std::string CMAEShelp{"--UseCMAES="};
     CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-              << "Use the CMAES library to minimize the effective potential"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
+       << "Use the CMAES library to minimize the effective potential"
+       << std::endl;
     std::string NLoptHelp{"--UseNLopt="};
     NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    std::cout << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-              << "Use the NLopt library to minimize the effective potential"
-              << std::endl;
-    std::cout << std::setw(SizeOfFirstColumn) << std::left
-              << "--UseMultithreading = true"
-              << "Enables/Disables multi threading for the minimizers"
-              << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
+       << "Use the NLopt library to minimize the effective potential"
+       << std::endl;
+    ss << std::setw(SizeOfFirstColumn) << std::left
+       << "--UseMultithreading = true"
+       << "Enables/Disables multi threading for the minimizers" << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    ShowLoggerHelp();
     ShowInputError();
   }
 
@@ -305,6 +314,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
 
   std::string prefix{"--"};
   bool UsePrefix = StringStartsWith(args.at(0), prefix);
+  std::vector<std::string> UnusedArgs;
   if (UsePrefix)
   {
     for (const auto &arg : args)
@@ -362,8 +372,13 @@ CLIOptions::CLIOptions(int argc, char *argv[])
         UseMultithreading =
             el.substr(std::string("--usemultithreading=").size()) == "true";
       }
+      else
+      {
+        UnusedArgs.push_back(el);
+      }
     }
     WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+    SetLogger(UnusedArgs);
   }
   else
   {
@@ -409,20 +424,20 @@ bool CLIOptions::good() const
   }
   if (Model == ModelID::ModelIDs::NotSet)
   {
-    std::cerr
-        << "Your Model parameter does not match with the implemented Models."
-        << std::endl;
+    Logger::Write(
+        LoggingLevel::Default,
+        "Your Model parameter does not match with the implemented Models.");
     ShowInputError();
     return false;
   }
   if (FirstLine < 1)
   {
-    std::cout << "Start line counting with 1" << std::endl;
+    Logger::Write(LoggingLevel::Default, "Start line counting with 1");
     return false;
   }
   if (FirstLine > LastLine)
   {
-    std::cout << "Firstline is smaller then LastLine " << std::endl;
+    Logger::Write(LoggingLevel::Default, "Firstline is smaller then LastLine ");
     return false;
   }
 
