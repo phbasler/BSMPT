@@ -10,8 +10,6 @@ var structCLIOptions =
     [ "CLIOptions", "structCLIOptions.html#ad522c0b6f98ddc47e896f84e86585a14", null ],
     [ "CLIOptions", "structCLIOptions.html#ad522c0b6f98ddc47e896f84e86585a14", null ],
     [ "CLIOptions", "structCLIOptions.html#ad522c0b6f98ddc47e896f84e86585a14", null ],
-    [ "CLIOptions", "structCLIOptions.html#ad522c0b6f98ddc47e896f84e86585a14", null ],
-    [ "good", "structCLIOptions.html#a8918c9804ce48b0957ff1b277889dbf3", null ],
     [ "good", "structCLIOptions.html#a8918c9804ce48b0957ff1b277889dbf3", null ],
     [ "good", "structCLIOptions.html#a8918c9804ce48b0957ff1b277889dbf3", null ],
     [ "good", "structCLIOptions.html#a8918c9804ce48b0957ff1b277889dbf3", null ],

@@ -3,6 +3,7 @@ var dir_bb8717ff0746bf0bf107fee8a4e4f2a9 =
     [ "ClassPotentialC2HDM.h", "ClassPotentialC2HDM_8h.html", [
       [ "Class_Potential_C2HDM", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM" ]
     ] ],
+    [ "ClassPotentialCPintheDark.h", "ClassPotentialCPintheDark_8h.html", null ],
     [ "ClassPotentialCxSM.h", "ClassPotentialCxSM_8h.html", [
       [ "Class_CxSM", "classBSMPT_1_1Models_1_1Class__CxSM.html", "classBSMPT_1_1Models_1_1Class__CxSM" ]
     ] ],

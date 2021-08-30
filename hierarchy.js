@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "BSMPT::Baryo::AdditionalBaryoArgs", "structBSMPT_1_1Baryo_1_1AdditionalBaryoArgs.html", null ],
+    [ "BSMPT::BSMPTLogger", "classBSMPT_1_1BSMPTLogger.html", null ],
     [ "BSMPT::Baryo::Calc_eta", "classBSMPT_1_1Baryo_1_1Calc__eta.html", null ],
     [ "BSMPT::Baryo::Calc_Gam_M", "classBSMPT_1_1Baryo_1_1Calc__Gam__M.html", null ],
     [ "BSMPT::Baryo::Calc_kappa_t", "classBSMPT_1_1Baryo_1_1Calc__kappa__t.html", null ],
@@ -27,6 +28,7 @@ var hierarchy =
     [ "BSMPT::Minimizer::GSL_params", "structBSMPT_1_1Minimizer_1_1GSL__params.html", null ],
     [ "BSMPT::Minimizer::GSLPlaneReturn", "structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html", null ],
     [ "BSMPT::Minimizer::LibCMAES::LibCMAESReturn", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html", null ],
+    [ "BSMPT::Logger", "classBSMPT_1_1Logger.html", null ],
     [ "BSMPT::Minimizer::MinimizePlaneReturn", "structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn.html", null ],
     [ "BSMPT::Minimizer::MinimizersToUse", "structBSMPT_1_1Minimizer_1_1MinimizersToUse.html", null ],
     [ "BSMPT::Minimizer::LibNLOPT::NLOPTReturnType", "structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html", null ],

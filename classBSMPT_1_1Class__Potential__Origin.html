@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.2.0</span>
+   &#160;<span id="projectnumber">2.3.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -218,6 +218,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a49c4a5c2acf476be6d955d7935d18c44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30972969a72173545df03d5760f6008a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a30972969a72173545df03d5760f6008a">WeinbergThirdDerivative</a> () const</td></tr>
 <tr class="separator:a30972969a72173545df03d5760f6008a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37fb5103b26272a63e88219ba06427bb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a37fb5103b26272a63e88219ba06427bb">WeinbergForthDerivative</a> () const</td></tr>
+<tr class="separator:a37fb5103b26272a63e88219ba06427bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad59a8446581b3d7c4cafda0a7c3cafbf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ad59a8446581b3d7c4cafda0a7c3cafbf">CalculateDebye</a> ()</td></tr>
 <tr class="separator:ad59a8446581b3d7c4cafda0a7c3cafbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a455973537914024e14258a96d7e6ce52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a455973537914024e14258a96d7e6ce52">CalculateDebyeGauge</a> ()</td></tr>
@@ -259,6 +261,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5263fc7975148453add75acc1d794f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade6fef24b58a094c0f970810d3a2490f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ade6fef24b58a094c0f970810d3a2490f">fbaseTri</a> (double MassSquaredA, double MassSquaredB, double MassSquaredC) const</td></tr>
 <tr class="separator:ade6fef24b58a094c0f970810d3a2490f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf0beda0a2b2b028e19913cea9501b8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a4bf0beda0a2b2b028e19913cea9501b8">fbaseFour</a> (double MassSquaredA, double MassSquaredB, double MassSquaredC, double MassSquaredD) const</td></tr>
+<tr class="separator:a4bf0beda0a2b2b028e19913cea9501b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c58d7eb86c2c7a5379930ad988cac52"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a7c58d7eb86c2c7a5379930ad988cac52">calc_CT</a> () const =0</td></tr>
 <tr class="separator:a7c58d7eb86c2c7a5379930ad988cac52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a234541b83ffa51dae80a6690e8a1b562"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a234541b83ffa51dae80a6690e8a1b562">CWTerm</a> (double MassSquared, double cb, int diff=0) const</td></tr>
@@ -1099,6 +1103,47 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
       </table>
 </div><div class="memdoc">
 <p>Calculates the function f^1 needed for the derivatives of the Coleman Weinberg potential. </p>
+
+</div>
+</div>
+<a id="a4bf0beda0a2b2b028e19913cea9501b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bf0beda0a2b2b028e19913cea9501b8">&#9670;&nbsp;</a></span>fbaseFour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::Class_Potential_Origin::fbaseFour </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>MassSquaredA</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>MassSquaredB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>MassSquaredC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>MassSquaredD</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculates the function f needed for the 4th derivatives of the Coleman Weinberg potential. </p>
 
 </div>
 </div>
@@ -3006,6 +3051,24 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
       </table>
 </div><div class="memdoc">
 <p>Calculates the first derivative of the Coleman-Weinberg potential evaluated at the tree-level minimum. </p>
+
+</div>
+</div>
+<a id="a37fb5103b26272a63e88219ba06427bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37fb5103b26272a63e88219ba06427bb">&#9670;&nbsp;</a></span>WeinbergForthDerivative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; BSMPT::Class_Potential_Origin::WeinbergForthDerivative </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculates the forth derivative of the Coleman-Weinberg potential at the tree-level minimum. </p>
 
 </div>
 </div>

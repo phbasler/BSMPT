@@ -45,7 +45,9 @@ var annotated_dup =
       [ "Wall", null, [
         [ "GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", "structBSMPT_1_1Wall_1_1GSL__params" ]
       ] ],
-      [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html", "classBSMPT_1_1Class__Potential__Origin" ]
+      [ "BSMPTLogger", "classBSMPT_1_1BSMPTLogger.html", "classBSMPT_1_1BSMPTLogger" ],
+      [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html", "classBSMPT_1_1Class__Potential__Origin" ],
+      [ "Logger", "classBSMPT_1_1Logger.html", "classBSMPT_1_1Logger" ]
     ] ],
     [ "CLIOptions", "structCLIOptions.html", "structCLIOptions" ]
 ];

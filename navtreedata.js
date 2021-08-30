@@ -44,9 +44,10 @@ var NAVTREE =
     [ "README", "md_README.html", null ],
     [ "Changelog", "md_Changelog.html", [
       [ "Changelog", "md_Changelog.html#autotoc_md8", null ],
-      [ "2021/05/06: Release of v2.2", "md_Changelog.html#autotoc_md9", null ],
-      [ "2020/01/03: Release of v2.1", "md_Changelog.html#autotoc_md10", null ],
-      [ "2020/07/06: Release of v2.0", "md_Changelog.html#autotoc_md11", [
+      [ "2021/08/30: Release of v2.3", "md_Changelog.html#autotoc_md9", null ],
+      [ "2021/05/06: Release of v2.2", "md_Changelog.html#autotoc_md10", null ],
+      [ "2020/01/03: Release of v2.1", "md_Changelog.html#autotoc_md11", null ],
+      [ "2020/07/06: Release of v2.0", "md_Changelog.html#autotoc_md12", [
         [ "Installation:", "md_README.html#autotoc_md2", [
           [ "Citation:", "md_README.html#autotoc_md1", null ],
           [ "Dependencies", "md_README.html#autotoc_md3", null ],
@@ -54,31 +55,31 @@ var NAVTREE =
           [ "Unit tests", "md_README.html#autotoc_md5", null ]
         ] ],
         [ "How to add a new model (for further details, also see the manual):", "md_README.html#autotoc_md7", null ],
-        [ "New Physics", "md_Changelog.html#autotoc_md12", [
-          [ "Baryo", "md_Changelog.html#autotoc_md13", null ],
-          [ "WallThickness", "md_Changelog.html#autotoc_md14", null ],
-          [ "ThermalFunctions", "md_Changelog.html#autotoc_md15", null ],
-          [ "Kfactors", "md_Changelog.html#autotoc_md16", null ],
-          [ "Minimizer", "md_Changelog.html#autotoc_md17", null ]
+        [ "New Physics", "md_Changelog.html#autotoc_md13", [
+          [ "Baryo", "md_Changelog.html#autotoc_md14", null ],
+          [ "WallThickness", "md_Changelog.html#autotoc_md15", null ],
+          [ "ThermalFunctions", "md_Changelog.html#autotoc_md16", null ],
+          [ "Kfactors", "md_Changelog.html#autotoc_md17", null ],
+          [ "Minimizer", "md_Changelog.html#autotoc_md18", null ]
         ] ],
-        [ "Models", "md_Changelog.html#autotoc_md18", null ],
-        [ "BSMPT as a package", "md_Changelog.html#autotoc_md19", null ],
-        [ "Changes in Test", "md_Changelog.html#autotoc_md20", null ],
-        [ "Changes in the Installation Routine", "md_Changelog.html#autotoc_md21", null ],
-        [ "Differences in how to include a new model", "md_Changelog.html#autotoc_md22", null ]
+        [ "Models", "md_Changelog.html#autotoc_md19", null ],
+        [ "BSMPT as a package", "md_Changelog.html#autotoc_md20", null ],
+        [ "Changes in Test", "md_Changelog.html#autotoc_md21", null ],
+        [ "Changes in the Installation Routine", "md_Changelog.html#autotoc_md22", null ],
+        [ "Differences in how to include a new model", "md_Changelog.html#autotoc_md23", null ]
       ] ],
-      [ "2019/12/11: Release of v1.1.2", "md_Changelog.html#autotoc_md23", null ],
-      [ "2019/10/07: Release of v1.1", "md_Changelog.html#autotoc_md24", null ],
-      [ "2019/09/27", "md_Changelog.html#autotoc_md25", null ],
-      [ "2019/08/05", "md_Changelog.html#autotoc_md26", null ],
-      [ "2018/11/06", "md_Changelog.html#autotoc_md27", null ],
-      [ "2018/09/25", "md_Changelog.html#autotoc_md28", null ],
-      [ "2018/07/11", "md_Changelog.html#autotoc_md29", null ],
-      [ "2018/07/02", "md_Changelog.html#autotoc_md30", null ],
-      [ "2018/06/25", "md_Changelog.html#autotoc_md31", null ],
-      [ "2018/04/23", "md_Changelog.html#autotoc_md32", null ],
-      [ "2018/03/30", "md_Changelog.html#autotoc_md33", null ],
-      [ "2018/03/07: v1.0", "md_Changelog.html#autotoc_md34", null ]
+      [ "2019/12/11: Release of v1.1.2", "md_Changelog.html#autotoc_md24", null ],
+      [ "2019/10/07: Release of v1.1", "md_Changelog.html#autotoc_md25", null ],
+      [ "2019/09/27", "md_Changelog.html#autotoc_md26", null ],
+      [ "2019/08/05", "md_Changelog.html#autotoc_md27", null ],
+      [ "2018/11/06", "md_Changelog.html#autotoc_md28", null ],
+      [ "2018/09/25", "md_Changelog.html#autotoc_md29", null ],
+      [ "2018/07/11", "md_Changelog.html#autotoc_md30", null ],
+      [ "2018/07/02", "md_Changelog.html#autotoc_md31", null ],
+      [ "2018/06/25", "md_Changelog.html#autotoc_md32", null ],
+      [ "2018/04/23", "md_Changelog.html#autotoc_md33", null ],
+      [ "2018/03/30", "md_Changelog.html#autotoc_md34", null ],
+      [ "2018/03/07: v1.0", "md_Changelog.html#autotoc_md35", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -113,11 +114,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"Plot1D_8cpp.html",
-"classBSMPT_1_1Class__Potential__Origin.html#a22cefea56334029d64afc93138025742",
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ae62f1afe91f41ff019ee93ba47ec4c38",
-"globals_vars.html",
-"structCLIOptions.html#ad522c0b6f98ddc47e896f84e86585a14"
+"Minimizer_8h.html#ab6f8272942b46cd033293ccb411b6d40",
+"classBSMPT_1_1Baryo_1_1transport__equations.html#aaae66a635afce0e840b4ef5374158c63",
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a7cf0e81712bf6922a39de9e99ee95cb7",
+"functions_p.html",
+"structBSMPT_1_1Wall_1_1GSL__params.html#ab1784e040e3a590f777f9b8fc4e69955"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
