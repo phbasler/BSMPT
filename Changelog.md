@@ -5,7 +5,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
 # Changelog
-# 2021/09/XX: Release of v2.3
+# 2021/08/30: Release of v2.3
 - Changed cout output to a Logger which provides different levels. How to set them is shown under the --help option.
 - CP in the Dark is now added as a model. The implementation follows the conventions of [1807.10322], for further details on the chosen renormalization scheme we refer to our respective publication.
 
