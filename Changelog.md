@@ -5,6 +5,11 @@ SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
 # Changelog
+# 2021/XX/XX: Release of v2.3.1
+- Fixed a bug in the CxSM which would cause Re(a1)=Im(a1)=0 if read a point from a file
+- Added CxSM example point
+- Added CxSM unit tests
+
 # 2021/08/30: Release of v2.3
 - Changed cout output to a Logger which provides different levels. How to set them is shown under the --help option.
 - CP in the Dark is now added as a model. The implementation follows the conventions of [1807.10322], for further details on the chosen renormalization scheme we refer to our respective publication.
