@@ -1,14 +1,17 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>     // for FChoose
-#include <algorithm>                           // for copy, max
-#include <iostream>                            // for operator<<, cout, endl
-#include <math.h>                              // for abs, log10
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
+#include <algorithm> // for copy, max
+#include <iostream>  // for operator<<, cout, endl
+#include <math.h>    // for abs, log10
 #include <memory>
 #include <random>
 #include <thread>
@@ -201,6 +204,10 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   {
     PotValues.push_back(NLOPTResult.PotVal);
     Minima.push_back(NLOPTResult.Minimum);
+    std::stringstream ss;
+    ss << "NLopt candidate: " << NLOPTResult.Minimum << " with potential value "
+       << NLOPTResult.PotVal << std::endl;
+    Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
   }
 #endif
 
@@ -214,6 +221,12 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     PotValues.push_back(modelPointer->VEff(solCMAESPotIn, Temp));
     Minima.push_back(solCMAES);
     Check.push_back(errC);
+
+    std::stringstream ss;
+    ss << "CMAES candidate: " << solCMAES
+       << " with potential value = " << PotValues.at(PotValues.size() - 1)
+       << std::endl;
+    Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
   }
 #endif
 
@@ -227,6 +240,12 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     solGSLMinPot = modelPointer->MinimizeOrderVEV(solGSLMin);
     PotValues.push_back(modelPointer->VEff(solGSLMinPot, Temp));
     Minima.push_back(solGSLMin);
+
+    std::stringstream ss;
+    ss << "GSL found a minimum at (" << solGSLMin
+       << ") with Potential value = " << PotValues.at(PotValues.size() - 1)
+       << std::endl;
+    Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
   }
 
   std::size_t minIndex = 0;

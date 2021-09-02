@@ -7,6 +7,7 @@
 #include <BSMPT/models/ClassPotentialCxSM.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 /**
@@ -164,7 +165,7 @@ void Class_CxSM::ReadAndSet(const std::string &linestr,
     ss >> tmp;
   }
 
-  for (int k = 1; k <= 10; k++)
+  for (int k = 1; k <= 12; k++)
   {
     ss >> tmp;
 
@@ -240,6 +241,7 @@ void Class_CxSM::set_gen(const std::vector<double> &par)
   }
   else if (va == 0 and vs != 0)
   {
+
     Ima1 = -sqrt(0.2e1) * Imb1 * vs / 0.4e1;
     Reb1 = -0.1e1 / vs *
            (d2 * pow(vs, 0.3e1) + delta2 * vh * vh * vs +
