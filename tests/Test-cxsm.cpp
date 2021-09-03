@@ -14,22 +14,22 @@
 #include "GenerateTestCompares/CXSM.h"
 #include <fstream>
 
-const std::vector<double> example_point_CXSM{/* vh = */ 246.219700,
-                                             /* vs = */ 2.100000,
+const std::vector<double> example_point_CXSM{/* vh = */ 246.219651,
+                                             /* vs = */ 540.51152,
                                              /* va = */ 0,
-                                             /* ms = */ -14549.91476,
-                                             /* lambda = */ 0.480000,
-                                             /* delta2 = */ 0.200000,
-                                             /* b2 = */ 45000.000000,
-                                             /* d2 = */ 0.400000,
-                                             /* Reb1 = */ -51062.91318,
-                                             /* Imb1 = */ -0.100000,
-                                             /* Rea1 = */ 0.100000,
-                                             /* Ima1 = */ 0.03889087296};
+                                             /* ms = */ -10201.707997,
+                                             /* lambda = */ 0.516782,
+                                             /* delta2 = */ -0.037398,
+                                             /* b2 = */ -370585.40704,
+                                             /* d2 = */ 2.570175,
+                                             /* Reb1 = */ -3722.817741,
+                                             /* Imb1 = */ 0,
+                                             /* Rea1 = */ 0,
+                                             /* Ima1 = */ 0};
 
 const Compare_CXSM Expected;
 
-TEST_CASE("Checking NLOVEV for CXSM", "[CXSM-fail]")
+TEST_CASE("Checking NLOVEV for CXSM", "[CXSM]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =

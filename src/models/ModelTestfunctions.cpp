@@ -580,7 +580,6 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point)
   using namespace Eigen;
   auto NHiggs  = point.get_NHiggs();
   auto vevTree = point.MinimizeOrderVEV(point.get_vevTreeMin());
-  auto result  = TestResults::Pass;
 
   auto HesseWeinberg = point.WeinbergSecondDerivativeAsMatrixXd();
 
@@ -591,12 +590,17 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point)
     {
       if (std::abs(HesseVCT(i, j) + HesseWeinberg(i, j)) > 1e-5)
       {
-        result = TestResults::Fail;
-        break;
+        std::stringstream ss;
+        ss << "Failed at << (" << i << "," << j << ")"
+           << " with CT = " << HesseVCT(i, j)
+           << "; CW = " << HesseWeinberg(i, j)
+           << "; CT+CW = " << HesseVCT(i, j) + HesseWeinberg(i, j) << std::endl;
+        Logger::Write(LoggingLevel::ProgDetailed, ss.str());
+        return TestResults::Fail;
       }
     }
   }
-  return result;
+  return TestResults::Pass;
 }
 
 TestResults CheckCTIdentities(const Class_Potential_Origin &point)
