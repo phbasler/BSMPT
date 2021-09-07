@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,9 +10,12 @@
 
 #include <BSMPT/ThermalFunctions/NegativeBosonSpline.h>
 #include <BSMPT/ThermalFunctions/ThermalFunctions.h>
+#include <BSMPT/ThermalFunctions/thermalcoefficientcalculator.h>
 #include <BSMPT/models/SMparam.h>
 #include <complex>
 #include <map>
+
+#include <iostream>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_integration.h>
@@ -25,6 +29,40 @@ namespace BSMPT
 {
 namespace ThermalFunctions
 {
+
+static ThermalCoefficientCalculator FermionInterpolatedLowCoefficientCalculator(
+    [](int l) -> double {
+      if (l < 2)
+      {
+        return 0;
+      }
+      else
+      {
+        return gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
+               (gsl_sf_doublefact(2 * l) * (l + 1)) * (pow(2, 2 * l - 1) - 1);
+      }
+    },
+    5);
+static ThermalCoefficientCalculator BosonInterpolatedLowCoefficientCalculator(
+    [](int l) -> double {
+      if (l < 2)
+      {
+        return 0;
+      }
+      else
+      {
+        return gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
+               (gsl_sf_doublefact(2 * l) * (l + 1));
+      }
+    },
+    5);
+
+static ThermalCoefficientCalculator JInterpolatedHighCoefficientCalculator(
+    [](int l) -> double {
+      return 1 / (std::pow(2, l) * gsl_sf_fact(l)) * gsl_sf_gamma(2.5 + l) /
+             gsl_sf_gamma(2.5 - l);
+    },
+    5);
 
 double JbosonIntegrand(const double &x, const double &k, int diff)
 {
@@ -144,7 +182,6 @@ double JfermionInterpolatedLow(const double &x, const int &n, int diff)
   using std::pow;
   double res = 0;
   double cf  = 1.5 + 2 * log(4 * M_PI) - 2 * C_euler_gamma - 2 * log(4);
-  static std::map<int, double> KlMap;
   if (diff == 0)
   {
     res = -7 * pow(M_PI, 4) / 360.0;
@@ -154,18 +191,8 @@ double JfermionInterpolatedLow(const double &x, const int &n, int diff)
 
     for (int l = 2; l <= n; l++)
     {
-      double Kl = 0;
-      auto pos  = KlMap.find(l);
-      if (pos != KlMap.end())
-      {
-        Kl = pos->second;
-      }
-      else
-      {
-        Kl = gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
-             (gsl_sf_doublefact(2 * l) * (l + 1)) * (pow(2, 2 * l - 1) - 1);
-        KlMap[l] = Kl;
-      }
+      double Kl =
+          FermionInterpolatedLowCoefficientCalculator.GetCoefficentAtOrder(l);
       sum += pow(-x / (4 * pow(M_PI, 2)), l) * Kl;
     }
     res += -pow(M_PI, 2) * x * sum;
@@ -178,19 +205,8 @@ double JfermionInterpolatedLow(const double &x, const int &n, int diff)
     double sum = 0;
     for (int l = 2; l <= n; l++)
     {
-      double Kl = 0;
-      auto pos  = KlMap.find(l);
-      if (pos != KlMap.end())
-      {
-        Kl = pos->second;
-      }
-      else
-      {
-        Kl = gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
-             (gsl_sf_doublefact(2 * l) * (l + 1)) * (pow(2, 2 * l - 1) - 1);
-        KlMap[l] = Kl;
-      }
-
+      double Kl =
+          FermionInterpolatedLowCoefficientCalculator.GetCoefficentAtOrder(l);
       sum += -Kl * pow(-x / 4.0, l) * (l + 1) * pow(M_PI, 2 - 2 * l);
     }
     res += sum;
@@ -214,7 +230,6 @@ double JbosonInterpolatedLow(const double &x, const int &n, int diff)
   using std::sqrt;
   double cb  = 1.5 + 2 * std::log(4 * M_PI) - 2 * C_euler_gamma;
   double res = 0;
-  static std::map<int, double> KlMap;
   if (diff == 0)
   {
     res = -pow(M_PI, 4) / 45.0;
@@ -224,18 +239,8 @@ double JbosonInterpolatedLow(const double &x, const int &n, int diff)
     double sum = 0;
     for (int l = 2; l <= n; l++)
     {
-      auto pos  = KlMap.find(l);
-      double Kl = 0;
-      if (pos != KlMap.end())
-      {
-        Kl = pos->second;
-      }
-      else
-      {
-        Kl = gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
-             (gsl_sf_doublefact(2 * l) * (l + 1));
-        KlMap[l] = Kl;
-      }
+      double Kl =
+          BosonInterpolatedLowCoefficientCalculator.GetCoefficentAtOrder(l);
       sum += pow(-x / (4 * pow(M_PI, 2)), l) * Kl;
     }
     res += pow(M_PI, 2) * x * sum;
@@ -249,19 +254,8 @@ double JbosonInterpolatedLow(const double &x, const int &n, int diff)
     double sum = 0;
     for (int l = 2; l <= n; l++)
     {
-      double Kl = 0;
-      auto pos  = KlMap.find(l);
-      if (pos != KlMap.end())
-      {
-        Kl = pos->second;
-      }
-      else
-      {
-
-        Kl = gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
-             (gsl_sf_doublefact(2 * l) * (l + 1));
-        KlMap[l] = Kl;
-      }
+      double Kl =
+          BosonInterpolatedLowCoefficientCalculator.GetCoefficentAtOrder(l);
       sum += Kl * pow(-x / 4.0, l) * (l + 1) * pow(M_PI, 2 - 2 * l);
     }
     res += sum;
@@ -275,25 +269,14 @@ double JInterpolatedHigh(const double &x, const int &n, int diff)
   using std::pow;
   using std::sqrt;
 
-  static std::map<int, double> KlMap;
   double res = 0;
   if (diff == 0)
   {
     double sum = 0;
     for (int l = 0; l <= n; l++)
     {
-      double Kl = 0;
-      auto pos  = KlMap.find(l);
-      if (pos != KlMap.end())
-      {
-        Kl = pos->second;
-      }
-      else
-      {
-        Kl = 1 / (std::pow(2, l) * gsl_sf_fact(l)) * gsl_sf_gamma(2.5 + l) /
-             gsl_sf_gamma(2.5 - l);
-        KlMap[l] = Kl;
-      }
+      double Kl =
+          JInterpolatedHighCoefficientCalculator.GetCoefficentAtOrder(l);
       sum += Kl * pow(x, -l / 2.0);
     }
     res = -exp(-sqrt(x)) * sqrt(M_PI / 2 * pow(x, 1.5)) * sum;
@@ -303,19 +286,8 @@ double JInterpolatedHigh(const double &x, const int &n, int diff)
     double sum = 0;
     for (int l = 0; l <= n; l++)
     {
-      double Kl = 0;
-      auto pos  = KlMap.find(l);
-      if (pos != KlMap.end())
-      {
-        Kl = pos->second;
-      }
-      else
-      {
-        Kl = 1 / (std::pow(2, l) * gsl_sf_fact(l)) * gsl_sf_gamma(2.5 + l) /
-             gsl_sf_gamma(2.5 - l);
-        KlMap[l] = Kl;
-      }
-
+      double Kl =
+          JInterpolatedHighCoefficientCalculator.GetCoefficentAtOrder(l);
       sum += Kl * pow(x, (1 - l) / 2) * (2 * l + 2 * sqrt(x) - 3);
     }
     res = exp(-sqrt(x)) * sqrt(2 * M_PI) / (8 * pow(x, 3.0 / 4.0)) * sum;

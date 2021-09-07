@@ -197,6 +197,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 #ifdef NLopt_FOUND
   if (UseMultithreading and thread_NLopt.joinable())
   {
+    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for NLopt thread");
     thread_NLopt.join();
   }
 
@@ -205,8 +206,8 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     PotValues.push_back(NLOPTResult.PotVal);
     Minima.push_back(NLOPTResult.Minimum);
     std::stringstream ss;
-    ss << "NLopt candidate: " << NLOPTResult.Minimum << " with potential value "
-       << NLOPTResult.PotVal << std::endl;
+    ss << "NLopt candidate at T = " << Temp << " :  " << NLOPTResult.Minimum
+       << " with potential value " << NLOPTResult.PotVal << std::endl;
     Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
   }
 #endif
@@ -214,6 +215,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 #ifdef libcmaes_FOUND
   if (UseMultithreading and thread_CMAES.joinable())
   {
+    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for CMAes Thread");
     thread_CMAES.join();
     auto errC          = LibCMAES.CMAESStatus;
     auto solCMAES      = LibCMAES.result;
@@ -223,7 +225,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     Check.push_back(errC);
 
     std::stringstream ss;
-    ss << "CMAES candidate: " << solCMAES
+    ss << "CMAES candidate at T = " << Temp << " : " << solCMAES
        << " with potential value = " << PotValues.at(PotValues.size() - 1)
        << std::endl;
     Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
@@ -232,6 +234,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   if (UseMultithreading and thread_GSL.joinable())
   {
+    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for GSL thread");
     thread_GSL.join();
   }
 
@@ -242,7 +245,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     Minima.push_back(solGSLMin);
 
     std::stringstream ss;
-    ss << "GSL found a minimum at (" << solGSLMin
+    ss << "GSL found a minimum at T = " << Temp << ": (" << solGSLMin
        << ") with Potential value = " << PotValues.at(PotValues.size() - 1)
        << std::endl;
     Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());

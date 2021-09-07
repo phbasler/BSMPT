@@ -55,13 +55,25 @@ MinimizeUsingNLOPT(const std::shared_ptr<Class_Potential_Origin> &model,
 
   opt.set_min_objective(NLOPTVEff, &settings);
   opt.set_xtol_rel(1e-4);
+  opt.set_maxeval(1000);
+
   double minf;
-  auto result  = opt.optimize(VEV, minf);
-  bool Success = (result == nlopt::SUCCESS) or
-                 (result == nlopt::FTOL_REACHED) or
-                 (result == nlopt::XTOL_REACHED);
-  NLOPTReturnType res(VEV, minf, result, Success);
-  return res;
+  try
+  {
+    auto result  = opt.optimize(VEV, minf);
+    bool Success = (result == nlopt::SUCCESS) or
+                   (result == nlopt::FTOL_REACHED) or
+                   (result == nlopt::XTOL_REACHED);
+    NLOPTReturnType res(VEV, minf, result, Success);
+    return res;
+  }
+  catch (std::exception &e)
+  {
+    (void)e;
+    NLOPTReturnType res(
+        std::vector<double>(), 0, nlopt::result::FORCED_STOP, false);
+    return res;
+  }
 }
 
 double NLOPTVEffPlane(const std::vector<double> &x,
