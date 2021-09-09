@@ -30,8 +30,11 @@ namespace BSMPT
 namespace ThermalFunctions
 {
 
-static ThermalCoefficientCalculator FermionInterpolatedLowCoefficientCalculator(
-    [](int l) -> double {
+namespace
+{
+ThermalCoefficientCalculator FermionInterpolatedLowCoefficientCalculator(
+    [](int l) -> double
+    {
       if (l < 2)
       {
         return 0;
@@ -43,8 +46,10 @@ static ThermalCoefficientCalculator FermionInterpolatedLowCoefficientCalculator(
       }
     },
     5);
-static ThermalCoefficientCalculator BosonInterpolatedLowCoefficientCalculator(
-    [](int l) -> double {
+
+ThermalCoefficientCalculator BosonInterpolatedLowCoefficientCalculator(
+    [](int l) -> double
+    {
       if (l < 2)
       {
         return 0;
@@ -57,12 +62,14 @@ static ThermalCoefficientCalculator BosonInterpolatedLowCoefficientCalculator(
     },
     5);
 
-static ThermalCoefficientCalculator JInterpolatedHighCoefficientCalculator(
-    [](int l) -> double {
+ThermalCoefficientCalculator JInterpolatedHighCoefficientCalculator(
+    [](int l) -> double
+    {
       return 1 / (std::pow(2, l) * gsl_sf_fact(l)) * gsl_sf_gamma(2.5 + l) /
              gsl_sf_gamma(2.5 - l);
     },
     5);
+} // namespace
 
 double JbosonIntegrand(const double &x, const double &k, int diff)
 {
@@ -129,7 +136,8 @@ double JbosonNumericalIntegration(const double &x, int diff)
   GSLTemp dummy;
   dummy.diff = diff;
   dummy.x    = x;
-  F.function = [](double k, void *p) {
+  F.function = [](double k, void *p)
+  {
     struct GSLTemp *params = static_cast<GSLTemp *>(p);
     return JbosonIntegrand(params->x, k, params->diff);
   };
@@ -155,7 +163,8 @@ double JfermionNumericalIntegration(const double &x, int diff)
   GSLTemp dummy;
   dummy.diff = diff;
   dummy.x    = x;
-  F.function = [](double k, void *p) {
+  F.function = [](double k, void *p)
+  {
     struct GSLTemp *params = static_cast<GSLTemp *>(p);
     return JfermionIntegrand(params->x, k, params->diff);
   };
