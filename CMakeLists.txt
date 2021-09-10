@@ -20,7 +20,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_CXX_FLAGS_DEBUG
-    "${CMAKE_CXX_FLAGS_DEBUG} -g -pedantic -Wall -Wextra -Wmissing-declarations -Wmissing-include-dirs -Wshadow  -DCOMPILEDEBUG=true"
+    "${CMAKE_CXX_FLAGS_DEBUG} -pedantic -Wall -Wextra -Wmissing-declarations -Wmissing-include-dirs -Wshadow  -DCOMPILEDEBUG=true"
 )
 set(CMAKE_CXX_FLAGS_RELEASE
     "${CMAKE_CXX_FLAGS_RELEASE} -O3 -pedantic -Wall -Wextra -Wshadow")
@@ -41,7 +41,7 @@ set(EXPORT_CMAES FALSE)
 include(FetchContent)
 if(UseLibCMAES AND NOT WIN32)
   find_package(OpenMP REQUIRED)
-  find_package(libcmaes 0.9.8.1 QUIET)
+  find_package(libcmaes 0.10 QUIET)
     if(NOT libcmaes_FOUND)
       set(EXPORT_CMAES TRUE)
       FetchContent_Declare(

@@ -10,7 +10,7 @@ SPDX-License-Identifier: GPL-3.0-or-later
 - Added CxSM example point
 - Added CxSM unit tests
 - Fixed a race condition in the thermal interpolations causing segfaults on mac
-- Bumped libcmaes to 0.9.8.1
+- Bumped libcmaes to 0.10
 
 # 2021/08/30: Release of v2.3
 - Changed cout output to a Logger which provides different levels. How to set them is shown under the --help option.
