@@ -35,7 +35,7 @@ public:
    * result stored in the map will be returned, otherwise the result will be
    * calculated.
    */
-  [[nodiscard]] double GetCoefficentAtOrder(int n) const;
+  double GetCoefficentAtOrder(int n) const;
 
 private:
   /**
