@@ -1320,8 +1320,6 @@ void Class_Potential_CPintheDark::TripleHiggsCouplings()
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
 
-  std::vector<double> HiggsOrder(NHiggs);
-
   // position indices store the position of the physical fields
   std::size_t posGp  = 0;
   std::size_t posGm  = 0;
