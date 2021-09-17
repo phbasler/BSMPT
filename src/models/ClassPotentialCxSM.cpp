@@ -32,8 +32,8 @@ Class_CxSM::Class_CxSM()
   NNeutralHiggs = 4;               // number of neutral Higgs bosons at T = 0
   NChargedHiggs = 2; // number of charged Higgs bosons  at T = 0 (all d.o.f.)
 
-  nPar   = 10 + 3; // number of parameters in the tree-Level Lagrangian
-  nParCT = 9 + 6;  // number of parameters in the counterterm potential
+  nPar   = 9 + 3; // number of parameters in the tree-Level Lagrangian
+  nParCT = 9 + 6; // number of parameters in the counterterm potential
 
   nVEV = 3; // number of VEVs to minimize the potential
 
@@ -772,11 +772,58 @@ void Class_CxSM::TripleHiggsCouplings()
   // 5 you always want your 6th lightest particle to be the first particle in
   // the vector (which has the index 5 because they are sorted by mass)
 
-  // example for keeping the mass order
+  MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
-    HiggsOrder[i] = i;
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+    }
   }
+
+  std::size_t posGp = 0, posGm = 0, posG0 = 0;
+  std::size_t posH1 = 0, posH2 = 0, posH3 = 0;
+
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    // the rotation matrix is diagonal besides for the neutral scalars
+    if (std::abs(HiggsRot(i, 0)) > 0)
+      posGp = i;
+    else if (std::abs(HiggsRot(i, 1)) > 0)
+      posGm = i;
+    else if (std::abs(HiggsRot(i, 2)) > 0)
+      posG0 = i;
+
+    // the neutral scalars mix
+    if ((std::abs(HiggsRot(i, 3)) + std::abs(HiggsRot(i, 4)) +
+         std::abs(HiggsRot(i, 5))) > 0)
+    {
+      // use that scalars are sorted by mass
+      if (posH1 == 0)
+      {
+        posH1 = i;
+      }
+      else
+      {
+        if (posH2 == 0)
+        {
+          posH2 = i;
+        }
+        else
+        {
+          posH3 = i;
+        }
+      }
+    }
+  }
+
+  // mass order: Gp, Gm, G0, H1, H2, H3
+  HiggsOrder[0] = posGp;
+  HiggsOrder[1] = posGm;
+  HiggsOrder[2] = posG0;
+  HiggsOrder[3] = posH1;
+  HiggsOrder[4] = posH2;
+  HiggsOrder[5] = posH3;
 
   std::vector<double> TripleDeriv;
   TripleDeriv = WeinbergThirdDerivative();
@@ -792,15 +839,6 @@ void Class_CxSM::TripleHiggsCouplings()
         GaugeBasis[i][j][k] =
             TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
       }
-    }
-  }
-
-  MatrixXd HiggsRot(NHiggs, NHiggs);
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    for (std::size_t j = 0; j < NHiggs; j++)
-    {
-      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
     }
   }
 
