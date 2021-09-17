@@ -457,19 +457,21 @@ void Class_CxSM::write() const
   }
 
   int posN[3];
-  posN[0]   = 3;
-  posN[1]   = 4;
-  posN[2]   = 5;
-  int posG1 = 0, posG0 = 0;
-  double testsum = 0;
+  posN[0]         = 3;
+  posN[1]         = 4;
+  posN[2]         = 5;
+  int posGCharged = 0, posG0 = 0;
+  double testsum             = 0;
+  const double ZeroThreshold = 1e-5;
   for (int i = 0; i < 3; i++)
   {
-    testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 2));
-    if (testsum != 0) posG1 = i;
-    //		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
-    //		if(testsum != 0) posG2 = i;
-    testsum = std::abs(HiggsRot(i, 5)) + std::abs(HiggsRot(i, 7));
-    if (testsum != 0) posG0 = i;
+    testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 1));
+    if (testsum > ZeroThreshold and posGCharged == 0)
+    {
+      posGCharged = i;
+    }
+    testsum = std::abs(HiggsRot(i, 2));
+    if (testsum > ZeroThreshold) posG0 = i;
   }
 
   std::vector<double> HiggsMasses;
@@ -523,7 +525,7 @@ void Class_CxSM::write() const
   }
 
   ss << "The mass spectrum is given by :\n";
-  ss << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n"
+  ss << "m_{G^+}^2 = " << HiggsMasses[posGCharged] << " GeV^2 \n"
      << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n"
      << "m_{H_SM} = " << MSM << " GeV \n"
      << "m_{H_l} = " << MhDown << " GeV \n"
