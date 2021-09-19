@@ -785,20 +785,21 @@ void Class_CxSM::TripleHiggsCouplings()
 
   std::size_t posGp = 0, posGm = 0, posG0 = 0;
   std::size_t posH1 = 0, posH2 = 0, posH3 = 0;
+  const double ZeroThreshold = 1e-5;
 
   for (std::size_t i = 0; i < NHiggs; i++)
   {
     // the rotation matrix is diagonal besides for the neutral scalars
-    if (std::abs(HiggsRot(i, 0)) > 0)
+    if (std::abs(HiggsRot(i, 0)) > ZeroThreshold)
       posGp = i;
-    else if (std::abs(HiggsRot(i, 1)) > 0)
+    else if (std::abs(HiggsRot(i, 1)) > ZeroThreshold)
       posGm = i;
-    else if (std::abs(HiggsRot(i, 2)) > 0)
+    else if (std::abs(HiggsRot(i, 2)) > ZeroThreshold)
       posG0 = i;
 
     // the neutral scalars mix
     if ((std::abs(HiggsRot(i, 3)) + std::abs(HiggsRot(i, 4)) +
-         std::abs(HiggsRot(i, 5))) > 0)
+         std::abs(HiggsRot(i, 5))) > ZeroThreshold)
     {
       // use that scalars are sorted by mass
       if (posH1 == 0)

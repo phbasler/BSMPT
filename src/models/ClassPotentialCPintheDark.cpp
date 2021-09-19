@@ -1173,6 +1173,8 @@ void Class_Potential_CPintheDark::write() const
 
   ss << "The scale is given by mu = " << scale << " GeV \n";
 
+  const double ZeroThreshold = 1e-5;
+
   std::size_t posGp  = 0;
   std::size_t posGm  = 0;
   std::size_t posHp  = 0;
@@ -1186,23 +1188,23 @@ void Class_Potential_CPintheDark::write() const
   for (size_t i = 0; i < NHiggs; i++)
   {
     // the rotation matrix is diagonal besides for the neutral dark scalars
-    if (std::abs(HiggsRotationMatrix[i][0]) > 0)
+    if (std::abs(HiggsRotationMatrix[i][0]) > ZeroThreshold)
       posGp = i;
-    else if (std::abs(HiggsRotationMatrix[i][1]) > 0)
+    else if (std::abs(HiggsRotationMatrix[i][1]) > ZeroThreshold)
       posGm = i;
-    else if (std::abs(HiggsRotationMatrix[i][2]) > 0)
+    else if (std::abs(HiggsRotationMatrix[i][2]) > ZeroThreshold)
       posHp = i;
-    else if (std::abs(HiggsRotationMatrix[i][3]) > 0)
+    else if (std::abs(HiggsRotationMatrix[i][3]) > ZeroThreshold)
       posHm = i;
-    else if (std::abs(HiggsRotationMatrix[i][4]) > 0)
+    else if (std::abs(HiggsRotationMatrix[i][4]) > ZeroThreshold)
       posHSM = i;
-    else if (std::abs(HiggsRotationMatrix[i][5]) > 0)
+    else if (std::abs(HiggsRotationMatrix[i][5]) > ZeroThreshold)
       posG0 = i;
 
     // the neutral dark scalars mix
     if ((std::abs(HiggsRotationMatrix[i][6]) +
          std::abs(HiggsRotationMatrix[i][7]) +
-         std::abs(HiggsRotationMatrix[i][8])) > 0)
+         std::abs(HiggsRotationMatrix[i][8])) > ZeroThreshold)
     {
       // use that scalars are sorted by mass
       if (posh1 == 0)
@@ -1340,25 +1342,27 @@ void Class_Potential_CPintheDark::TripleHiggsCouplings()
     }
   }
 
+  const double ZeroThreshold = 1e-5;
+
   for (size_t i = 0; i < NHiggs; i++)
   {
     // the rotation matrix is diagonal besides for the neutral dark scalars
-    if (std::abs(HiggsRot(i, 0)) > 0)
+    if (std::abs(HiggsRot(i, 0)) > ZeroThreshold)
       posGp = i;
-    else if (std::abs(HiggsRot(i, 1)) > 0)
+    else if (std::abs(HiggsRot(i, 1)) > ZeroThreshold)
       posGm = i;
-    else if (std::abs(HiggsRot(i, 2)) > 0)
+    else if (std::abs(HiggsRot(i, 2)) > ZeroThreshold)
       posHp = i;
-    else if (std::abs(HiggsRot(i, 3)) > 0)
+    else if (std::abs(HiggsRot(i, 3)) > ZeroThreshold)
       posHm = i;
-    else if (std::abs(HiggsRot(i, 4)) > 0)
+    else if (std::abs(HiggsRot(i, 4)) > ZeroThreshold)
       posHSM = i;
-    else if (std::abs(HiggsRot(i, 5)) > 0)
+    else if (std::abs(HiggsRot(i, 5)) > ZeroThreshold)
       posG0 = i;
 
     // the neutral dark scalars mix
     if ((std::abs(HiggsRot(i, 6)) + std::abs(HiggsRot(i, 7)) +
-         std::abs(HiggsRot(i, 8))) > 0)
+         std::abs(HiggsRot(i, 8))) > ZeroThreshold)
     {
       // use that scalars are sorted by mass
       if (posh1 == 0)

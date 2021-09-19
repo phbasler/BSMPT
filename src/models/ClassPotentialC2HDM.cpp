@@ -2130,28 +2130,29 @@ void Class_Potential_C2HDM::write() const
 
     int posMHCS1 = 0;
     int posN[3];
-    int countposN  = 0;
-    int posG0      = 0;
-    double testsum = 0;
+    int countposN              = 0;
+    int posG0                  = 0;
+    double testsum             = 0;
+    const double ZeroThreshold = 1e-5;
     for (int i = 0; i < 3; i++)
     {
       //    			testsum = std::abs(HiggsRot(i,0)) + std::abs(HiggsRot(i,2));
-      //    			if(testsum != 0) posG1 = i;
+      //    			if(testsum > ZeroThreshold) posG1 = i;
       //    			testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
-      //    			if(testsum != 0) posG2 = i;
+      //    			if(testsum > ZeroThreshold) posG2 = i;
       testsum = std::abs(HiggsRot(i, 5)) + std::abs(HiggsRot(i, 7));
-      if (testsum != 0) posG0 = i;
+      if (testsum > ZeroThreshold) posG0 = i;
     }
     for (std::size_t i = 3; i < NHiggs; i++)
     {
       testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 2));
-      if (testsum != 0) posMHCS1 = i;
+      if (testsum > ZeroThreshold) posMHCS1 = i;
       //    			testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
-      //    			if(testsum != 0) posMHCS2 = i;
+      //    			if(testsum > ZeroThreshold) posMHCS2 = i;
       testsum = 0;
       for (int k = 4; k < 8; k++)
         testsum += std::abs(HiggsRot(i, k));
-      if (testsum != 0)
+      if (testsum > ZeroThreshold)
       {
         posN[countposN] = i;
         countposN++;
@@ -2423,26 +2424,27 @@ void Class_Potential_C2HDM::TripleHiggsCouplings()
   int posN[3];
   int countposN = 0;
   int posG1 = 0, posG2 = 0, posG0 = 0;
-  double testsum = 0;
+  double testsum             = 0;
+  const double ZeroThreshold = 1e-5;
   for (int i = 0; i < 3; i++)
   {
     testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 2));
-    if (testsum != 0) posG1 = i;
+    if (testsum > ZeroThreshold) posG1 = i;
     testsum = std::abs(HiggsRot(i, 1)) + std::abs(HiggsRot(i, 3));
-    if (testsum != 0) posG2 = i;
+    if (testsum > ZeroThreshold) posG2 = i;
     testsum = std::abs(HiggsRot(i, 5)) + std::abs(HiggsRot(i, 7));
-    if (testsum != 0) posG0 = i;
+    if (testsum > ZeroThreshold) posG0 = i;
   }
   for (std::size_t i = 3; i < NHiggs; i++)
   {
     testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 2));
-    if (testsum != 0) posMHCS1 = i;
+    if (testsum > ZeroThreshold) posMHCS1 = i;
     testsum = std::abs(HiggsRot(i, 1)) + std::abs(HiggsRot(i, 3));
-    if (testsum != 0) posMHCS2 = i;
+    if (testsum > ZeroThreshold) posMHCS2 = i;
     testsum = 0;
     for (int k = 4; k < 8; k++)
       testsum += std::abs(HiggsRot(i, k));
-    if (testsum != 0)
+    if (testsum > ZeroThreshold)
     {
       posN[countposN] = i;
       countposN++;
