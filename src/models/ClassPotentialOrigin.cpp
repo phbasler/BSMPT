@@ -3552,6 +3552,43 @@ void Class_Potential_Origin::CheckImplementation(
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckCTConditionsFirstDerivative(*this)));
 
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lij");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarSecond(Curvature_Higgs_L2)));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lijk");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarThird(Curvature_Higgs_L3)));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lijkl");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarFourth(Curvature_Higgs_L4)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the gauge tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorGauge(Curvature_Gauge_G2H2)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the Lepton tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorLeptonsThird(Curvature_Lepton_F2H1)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the mass Lepton tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorLeptons(Curvature_Lepton_F2)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the Quark tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorQuarksThird(Curvature_Quark_F2H1)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the mass Quark tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorQuarks(Curvature_Quark_F2)));
+
   if (TestNames.size() != TestResults.size())
   {
     std::stringstream ss;
