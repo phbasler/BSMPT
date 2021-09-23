@@ -588,6 +588,27 @@ public:
   virtual ~Class_Potential_Origin();
 
   /**
+   * @brief Get_Curvature_Higgs_L2 allows const ref access to the L_{(S)}^{ij}
+   * Tensor
+   * @return
+   */
+  const auto &Get_Curvature_Higgs_L2() const { return Curvature_Higgs_L2; }
+
+  /**
+   * @brief Get_Curvature_Higgs_L3 allows const ref access to the L_{(S)}^{ijk}
+   * Tensor
+   * @return
+   */
+  const auto &Get_Curvature_Higgs_L3() const { return Curvature_Higgs_L3; }
+
+  /**
+   * @brief Get_Curvature_Higgs_L4 allows const ref access to the L_{(S)}^{ijkl}
+   * Tensor
+   * @return
+   */
+  const auto &Get_Curvature_Higgs_L4() const { return Curvature_Higgs_L4; }
+
+  /**
    * @brief get_scale
    * @return the MSBar renormalisation scale
    */

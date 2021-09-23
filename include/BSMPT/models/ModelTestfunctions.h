@@ -5,6 +5,7 @@
 
 #pragma once
 #include <string>
+#include <vector>
 
 namespace BSMPT
 {
@@ -42,6 +43,15 @@ TestResults CheckCTIdentities(const Class_Potential_Origin &point);
 TestResults CheckCTNumber(const Class_Potential_Origin &point);
 
 TestResults CheckCKMUnitarity();
+TestResults CheckSymmetricTensorScalarSecond(
+    const std::vector<std::vector<double>> &Tensor);
+TestResults CheckSymmetricTensorScalarThird(
+    const std::vector<std::vector<std::vector<double>>> &Tensor);
+TestResults CheckSymmetricTensorScalarFourth(
+    const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor);
+TestResults CheckSymmetricTensorLeptons();
+TestResults CheckSymmetricTensorQuarks();
+TestResults CheckSymmetricTensorGauge();
 
 } // namespace ModelTests
 } // namespace BSMPT

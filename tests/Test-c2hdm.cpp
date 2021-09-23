@@ -308,3 +308,72 @@ TEST_CASE("Check number of calculated CT parameters in the C2HDM", "[c2hdm]")
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckCTNumber(*modelPointer));
 }
+
+TEST_CASE("Check symmetric scalar tensor Lij in the C2HDM", "[c2hdm-new]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorScalarSecond(
+              modelPointer->Get_Curvature_Higgs_L2()));
+}
+
+TEST_CASE("Check symmetric scalar tensor Lijk in the C2HDM", "[c2hdm-new]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorScalarThird(
+              modelPointer->Get_Curvature_Higgs_L3()));
+}
+
+TEST_CASE("Check symmetric scalar tensor Lijkl in the C2HDM", "[c2hdm-new]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorScalarFourth(
+              modelPointer->Get_Curvature_Higgs_L4()));
+}
+
+TEST_CASE("Check symmetric gauge tensor in the C2HDM", "[c2hdm-new]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorGauge());
+}
+
+TEST_CASE("Check symmetric Lepton tensor in the C2HDM", "[c2hdm-new]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorLeptons());
+}
+
+TEST_CASE("Check symmetric quark tensor in the C2HDM", "[c2hdm-new]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorQuarks());
+}
