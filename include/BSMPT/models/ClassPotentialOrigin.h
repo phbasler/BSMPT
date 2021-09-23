@@ -609,6 +609,44 @@ public:
   const auto &Get_Curvature_Higgs_L4() const { return Curvature_Higgs_L4; }
 
   /**
+   * @brief Get_Curvature_Gauge_G2H2 allows const ref access to the G^{abij}
+   * Tensor
+   * @return
+   */
+  const auto &Get_Curvature_Gauge_G2H2() const { return Curvature_Gauge_G2H2; }
+
+  /**
+   * @brief Get_Curvature_Lepton_F2H1 allows const ref access to the Y^{IJk}
+   * Tensor for Leptons
+   * @return
+   */
+  const auto &Get_Curvature_Lepton_F2H1() const
+  {
+    return Curvature_Lepton_F2H1;
+  }
+
+  /**
+   * @brief Get_Curvature_Lepton_F2 allows const ref access to the Y^{IJ}
+   * Tensor for Leptons
+   * @return
+   */
+  const auto &Get_Curvature_Lepton_F2() const { return Curvature_Lepton_F2; }
+
+  /**
+   * @brief Get_Curvature_Quark_F2H1 allows const ref access to the Y^{IJk}
+   * Tensor for Quarks
+   * @return
+   */
+  const auto &Get_Curvature_Quark_F2H1() const { return Curvature_Quark_F2H1; }
+
+  /**
+   * @brief Get_Curvature_Quark_F2 allows const ref access to the Y^{IJ}
+   * Tensor for Quarks
+   * @return
+   */
+  const auto &Get_Curvature_Quark_F2() const { return Curvature_Quark_F2; }
+
+  /**
    * @brief get_scale
    * @return the MSBar renormalisation scale
    */

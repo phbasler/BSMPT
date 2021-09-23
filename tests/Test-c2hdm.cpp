@@ -309,7 +309,8 @@ TEST_CASE("Check number of calculated CT parameters in the C2HDM", "[c2hdm]")
           ModelTests::CheckCTNumber(*modelPointer));
 }
 
-TEST_CASE("Check symmetric scalar tensor Lij in the C2HDM", "[c2hdm-new]")
+TEST_CASE("Check symmetric properties of the scalar tensor Lij in the C2HDM",
+          "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -321,7 +322,8 @@ TEST_CASE("Check symmetric scalar tensor Lij in the C2HDM", "[c2hdm-new]")
               modelPointer->Get_Curvature_Higgs_L2()));
 }
 
-TEST_CASE("Check symmetric scalar tensor Lijk in the C2HDM", "[c2hdm-new]")
+TEST_CASE("Check symmetric properties of the scalar tensor Lijk in the C2HDM",
+          "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -333,7 +335,8 @@ TEST_CASE("Check symmetric scalar tensor Lijk in the C2HDM", "[c2hdm-new]")
               modelPointer->Get_Curvature_Higgs_L3()));
 }
 
-TEST_CASE("Check symmetric scalar tensor Lijkl in the C2HDM", "[c2hdm-new]")
+TEST_CASE("Check symmetric properties of the scalar tensor Lijkl in the C2HDM",
+          "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -345,7 +348,8 @@ TEST_CASE("Check symmetric scalar tensor Lijkl in the C2HDM", "[c2hdm-new]")
               modelPointer->Get_Curvature_Higgs_L4()));
 }
 
-TEST_CASE("Check symmetric gauge tensor in the C2HDM", "[c2hdm-new]")
+TEST_CASE("Check symmetric properties of the gauge tensor in the C2HDM",
+          "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -353,10 +357,12 @@ TEST_CASE("Check symmetric gauge tensor in the C2HDM", "[c2hdm-new]")
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
-          ModelTests::CheckSymmetricTensorGauge());
+          ModelTests::CheckSymmetricTensorGauge(
+              modelPointer->Get_Curvature_Gauge_G2H2()));
 }
 
-TEST_CASE("Check symmetric Lepton tensor in the C2HDM", "[c2hdm-new]")
+TEST_CASE("Check symmetric properties of the Lepton tensor in the C2HDM",
+          "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -364,10 +370,12 @@ TEST_CASE("Check symmetric Lepton tensor in the C2HDM", "[c2hdm-new]")
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
-          ModelTests::CheckSymmetricTensorLeptons());
+          ModelTests::CheckSymmetricTensorLeptonsThird(
+              modelPointer->Get_Curvature_Lepton_F2H1()));
 }
 
-TEST_CASE("Check symmetric quark tensor in the C2HDM", "[c2hdm-new]")
+TEST_CASE("Check symmetric properties of the mass Lepton tensor in the C2HDM",
+          "[c2hdm]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
@@ -375,5 +383,32 @@ TEST_CASE("Check symmetric quark tensor in the C2HDM", "[c2hdm-new]")
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
-          ModelTests::CheckSymmetricTensorQuarks());
+          ModelTests::CheckSymmetricTensorLeptons(
+              modelPointer->Get_Curvature_Lepton_F2()));
+}
+
+TEST_CASE("Check symmetric properties of the mass quark tensor in the C2HDM",
+          "[c2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorQuarks(
+              modelPointer->Get_Curvature_Quark_F2()));
+}
+
+TEST_CASE("Check symmetric properties of the quark tensor in the C2HDM",
+          "[c2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorQuarksThird(
+              modelPointer->Get_Curvature_Quark_F2H1()));
 }

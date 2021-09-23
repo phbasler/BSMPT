@@ -895,17 +895,153 @@ TestResults CheckSymmetricTensorScalarFourth(
   }
   return TestResults::Pass;
 }
-TestResults CheckSymmetricTensorLeptons()
+
+TestResults CheckSymmetricTensorLeptonsThird(
+    const std::vector<std::vector<std::vector<std::complex<double>>>> &Tensor)
 {
-  return TestResults::Fail;
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nDim = Tensor.size();
+  for (const auto &rows : Tensor)
+  {
+    if (nDim != rows.size())
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  const auto nHiggs = Tensor.at(0).at(0).size();
+
+  for (std::size_t i{0}; i < nDim; ++i)
+  {
+    for (std::size_t j{0}; j < nDim; ++j)
+    {
+      for (std::size_t k{0}; k < nHiggs; ++k)
+      {
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(j).at(i).at(k))
+        {
+          return TestResults::Fail;
+        }
+      }
+    }
+  }
+
+  return TestResults::Pass;
 }
-TestResults CheckSymmetricTensorQuarks()
+TestResults CheckSymmetricTensorQuarksThird(
+    const std::vector<std::vector<std::vector<std::complex<double>>>> &Tensor)
 {
-  return TestResults::Fail;
+  return CheckSymmetricTensorLeptonsThird(Tensor);
 }
-TestResults CheckSymmetricTensorGauge()
+
+TestResults CheckSymmetricTensorLeptons(
+    const std::vector<std::vector<std::complex<double>>> &Tensor)
 {
-  return TestResults::Fail;
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nDim = Tensor.size();
+  for (const auto &rows : Tensor)
+  {
+    if (nDim != rows.size())
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  for (std::size_t i{0}; i < nDim; ++i)
+  {
+    for (std::size_t j{0}; j < nDim; ++j)
+    {
+      if (Tensor.at(i).at(j) != Tensor.at(j).at(i))
+      {
+        return TestResults::Fail;
+      }
+    }
+  }
+
+  return TestResults::Pass;
+}
+TestResults CheckSymmetricTensorQuarks(
+    const std::vector<std::vector<std::complex<double>>> &Tensor)
+{
+  return CheckSymmetricTensorLeptons(Tensor);
+}
+TestResults CheckSymmetricTensorGauge(
+    const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nGauge = Tensor.size();
+  for (const auto &rows : Tensor)
+  {
+    if (rows.size() != nGauge)
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  const auto nHiggs = Tensor.at(0).at(0).size();
+
+  if (nHiggs == 0)
+  {
+    return TestResults::Fail;
+  }
+
+  for (const auto &nRowsGauge : Tensor)
+  {
+    for (const auto &nRowsHiggs : nRowsGauge)
+    {
+      if (nRowsHiggs.size() != nHiggs)
+      {
+        return TestResults::Fail;
+      }
+      for (const auto &nColHiggs : nRowsHiggs)
+      {
+        if (nColHiggs.size() != nHiggs)
+        {
+          return TestResults::Fail;
+        }
+      }
+    }
+  }
+
+  for (std::size_t a{0}; a < nGauge; ++a)
+  {
+    for (std::size_t b{0}; b < nGauge; ++b)
+    {
+      for (std::size_t i{0}; i < nHiggs; ++i)
+      {
+        for (std::size_t j{0}; j < nHiggs; ++j)
+        {
+          if (Tensor.at(a).at(b).at(i).at(j) != Tensor.at(a).at(b).at(j).at(i))
+          {
+            return TestResults::Fail;
+          }
+
+          if (Tensor.at(a).at(b).at(i).at(j) != Tensor.at(b).at(a).at(j).at(i))
+          {
+            return TestResults::Fail;
+          }
+
+          if (Tensor.at(a).at(b).at(i).at(j) != Tensor.at(b).at(a).at(i).at(j))
+          {
+            return TestResults::Fail;
+          }
+        }
+      }
+    }
+  }
+
+  return TestResults::Pass;
 }
 
 } // namespace ModelTests

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
+#include <complex>
 #include <string>
 #include <vector>
 
@@ -49,9 +50,16 @@ TestResults CheckSymmetricTensorScalarThird(
     const std::vector<std::vector<std::vector<double>>> &Tensor);
 TestResults CheckSymmetricTensorScalarFourth(
     const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor);
-TestResults CheckSymmetricTensorLeptons();
-TestResults CheckSymmetricTensorQuarks();
-TestResults CheckSymmetricTensorGauge();
+TestResults CheckSymmetricTensorLeptonsThird(
+    const std::vector<std::vector<std::vector<std::complex<double>>>> &Tensor);
+TestResults CheckSymmetricTensorQuarksThird(
+    const std::vector<std::vector<std::vector<std::complex<double>>>> &Tensor);
+TestResults CheckSymmetricTensorLeptons(
+    const std::vector<std::vector<std::complex<double>>> &Tensor);
+TestResults CheckSymmetricTensorQuarks(
+    const std::vector<std::vector<std::complex<double>>> &Tensor);
+TestResults CheckSymmetricTensorGauge(
+    const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor);
 
 } // namespace ModelTests
 } // namespace BSMPT
