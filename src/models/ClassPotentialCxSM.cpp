@@ -7,6 +7,7 @@
 #include <BSMPT/models/ClassPotentialCxSM.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
 using namespace Eigen;
 
 /**
@@ -31,8 +32,8 @@ Class_CxSM::Class_CxSM()
   NNeutralHiggs = 4;               // number of neutral Higgs bosons at T = 0
   NChargedHiggs = 2; // number of charged Higgs bosons  at T = 0 (all d.o.f.)
 
-  nPar   = 10 + 3; // number of parameters in the tree-Level Lagrangian
-  nParCT = 9 + 6;  // number of parameters in the counterterm potential
+  nPar   = 9 + 3; // number of parameters in the tree-Level Lagrangian
+  nParCT = 9 + 6; // number of parameters in the counterterm potential
 
   nVEV = 3; // number of VEVs to minimize the potential
 
@@ -164,7 +165,7 @@ void Class_CxSM::ReadAndSet(const std::string &linestr,
     ss >> tmp;
   }
 
-  for (int k = 1; k <= 10; k++)
+  for (int k = 1; k <= 12; k++)
   {
     ss >> tmp;
 
@@ -240,6 +241,7 @@ void Class_CxSM::set_gen(const std::vector<double> &par)
   }
   else if (va == 0 and vs != 0)
   {
+
     Ima1 = -sqrt(0.2e1) * Imb1 * vs / 0.4e1;
     Reb1 = -0.1e1 / vs *
            (d2 * pow(vs, 0.3e1) + delta2 * vh * vh * vs +
@@ -455,19 +457,21 @@ void Class_CxSM::write() const
   }
 
   int posN[3];
-  posN[0]   = 3;
-  posN[1]   = 4;
-  posN[2]   = 5;
-  int posG1 = 0, posG0 = 0;
-  double testsum = 0;
+  posN[0]         = 3;
+  posN[1]         = 4;
+  posN[2]         = 5;
+  int posGCharged = 0, posG0 = 0;
+  double testsum             = 0;
+  const double ZeroThreshold = 1e-5;
   for (int i = 0; i < 3; i++)
   {
-    testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 2));
-    if (testsum != 0) posG1 = i;
-    //		testsum = std::abs(HiggsRot(i,1)) + std::abs(HiggsRot(i,3));
-    //		if(testsum != 0) posG2 = i;
-    testsum = std::abs(HiggsRot(i, 5)) + std::abs(HiggsRot(i, 7));
-    if (testsum != 0) posG0 = i;
+    testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 1));
+    if (testsum > ZeroThreshold and posGCharged == 0)
+    {
+      posGCharged = i;
+    }
+    testsum = std::abs(HiggsRot(i, 2));
+    if (testsum > ZeroThreshold) posG0 = i;
   }
 
   std::vector<double> HiggsMasses;
@@ -521,7 +525,7 @@ void Class_CxSM::write() const
   }
 
   ss << "The mass spectrum is given by :\n";
-  ss << "m_{G^+}^2 = " << HiggsMasses[posG1] << " GeV^2 \n"
+  ss << "m_{G^+}^2 = " << HiggsMasses[posGCharged] << " GeV^2 \n"
      << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n"
      << "m_{H_SM} = " << MSM << " GeV \n"
      << "m_{H_l} = " << MhDown << " GeV \n"
@@ -770,11 +774,59 @@ void Class_CxSM::TripleHiggsCouplings()
   // 5 you always want your 6th lightest particle to be the first particle in
   // the vector (which has the index 5 because they are sorted by mass)
 
-  // example for keeping the mass order
+  MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
-    HiggsOrder[i] = i;
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+    }
   }
+
+  std::size_t posGp = 0, posGm = 0, posG0 = 0;
+  std::size_t posH1 = 0, posH2 = 0, posH3 = 0;
+  const double ZeroThreshold = 1e-5;
+
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    // the rotation matrix is diagonal besides for the neutral scalars
+    if (std::abs(HiggsRot(i, 0)) > ZeroThreshold)
+      posGp = i;
+    else if (std::abs(HiggsRot(i, 1)) > ZeroThreshold)
+      posGm = i;
+    else if (std::abs(HiggsRot(i, 2)) > ZeroThreshold)
+      posG0 = i;
+
+    // the neutral scalars mix
+    if ((std::abs(HiggsRot(i, 3)) + std::abs(HiggsRot(i, 4)) +
+         std::abs(HiggsRot(i, 5))) > ZeroThreshold)
+    {
+      // use that scalars are sorted by mass
+      if (posH1 == 0)
+      {
+        posH1 = i;
+      }
+      else
+      {
+        if (posH2 == 0)
+        {
+          posH2 = i;
+        }
+        else
+        {
+          posH3 = i;
+        }
+      }
+    }
+  }
+
+  // mass order: Gp, Gm, G0, H1, H2, H3
+  HiggsOrder[0] = posGp;
+  HiggsOrder[1] = posGm;
+  HiggsOrder[2] = posG0;
+  HiggsOrder[3] = posH1;
+  HiggsOrder[4] = posH2;
+  HiggsOrder[5] = posH3;
 
   std::vector<double> TripleDeriv;
   TripleDeriv = WeinbergThirdDerivative();
@@ -790,15 +842,6 @@ void Class_CxSM::TripleHiggsCouplings()
         GaugeBasis[i][j][k] =
             TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
       }
-    }
-  }
-
-  MatrixXd HiggsRot(NHiggs, NHiggs);
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    for (std::size_t j = 0; j < NHiggs; j++)
-    {
-      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
     }
   }
 

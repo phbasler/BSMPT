@@ -141,7 +141,15 @@ TestResults CheckGaugeBosonMasses(const Class_Potential_Origin &point)
   double sum{0};
   for (std::size_t i{0}; i < GaugeMassCalculated.size(); ++i)
   {
-    sum += std::abs(GaugeMassCalculated.at(i) - gaugeMassesInput.at(i));
+    if (gaugeMassesInput.at(i) == 0)
+    {
+      sum += std::abs(GaugeMassCalculated.at(i));
+    }
+    else
+    {
+      sum += (std::abs(GaugeMassCalculated.at(i) - gaugeMassesInput.at(i))) /
+             gaugeMassesInput.at(i);
+    }
   }
   auto result = sum > 1e-5 ? TestResults::Fail : TestResults::Pass;
 
@@ -161,6 +169,8 @@ TestResults CheckGaugeBosonMasses(const Class_Potential_Origin &point)
   for (auto x : GaugeMassCalculated)
     ss << x << sep;
   ss << std::endl;
+
+  ss << "The result is " << sum << std::endl;
 
   Logger::Write(LoggingLevel::ProgDetailed, ss.str());
 
@@ -326,7 +336,6 @@ TestResults CheckTreeLevelMin(const Class_Potential_Origin &point,
   for (auto x : CalculatedHiggsVEV)
     ss << x << sep;
   ss << std::endl << std::endl;
-  Logger::Write(LoggingLevel::ProgDetailed, ss.str());
 
   double sum{0};
   for (std::size_t i{0}; i < point.get_nVEV(); ++i)
@@ -337,8 +346,10 @@ TestResults CheckTreeLevelMin(const Class_Potential_Origin &point,
   if (sum > 0.5)
   {
     result = TestResults::Fail;
+    ss << "Test failed with difference = " << sum;
   }
 
+  Logger::Write(LoggingLevel::ProgDetailed, ss.str());
   return result;
 }
 
@@ -569,7 +580,6 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point)
   using namespace Eigen;
   auto NHiggs  = point.get_NHiggs();
   auto vevTree = point.MinimizeOrderVEV(point.get_vevTreeMin());
-  auto result  = TestResults::Pass;
 
   auto HesseWeinberg = point.WeinbergSecondDerivativeAsMatrixXd();
 
@@ -580,12 +590,17 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point)
     {
       if (std::abs(HesseVCT(i, j) + HesseWeinberg(i, j)) > 1e-5)
       {
-        result = TestResults::Fail;
-        break;
+        std::stringstream ss;
+        ss << "Failed at << (" << i << "," << j << ")"
+           << " with CT = " << HesseVCT(i, j)
+           << "; CW = " << HesseWeinberg(i, j)
+           << "; CT+CW = " << HesseVCT(i, j) + HesseWeinberg(i, j) << std::endl;
+        Logger::Write(LoggingLevel::ProgDetailed, ss.str());
+        return TestResults::Fail;
       }
     }
   }
-  return result;
+  return TestResults::Pass;
 }
 
 TestResults CheckCTIdentities(const Class_Potential_Origin &point)

@@ -3544,6 +3544,14 @@ void Class_Potential_Origin::CheckImplementation(
         ModelTests::CheckVCounterSimplified(*this)));
   }
 
+  TestNames.push_back("Checking second derivative of CW+CT");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCTConditionsSecondDerivative(*this)));
+
+  TestNames.push_back("Checking first derivative of CW+CT");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCTConditionsFirstDerivative(*this)));
+
   if (TestNames.size() != TestResults.size())
   {
     std::stringstream ss;

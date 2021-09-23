@@ -269,7 +269,7 @@ std::vector<double> Class_Template::calc_CT() const
   parCT.push_back(3.0 * t / std::pow(C_vev0, 3) +
                   3.0 / std::pow(C_vev0, 3) * NablaWeinberg(0) -
                   3.0 / std::pow(C_vev0, 2) * HesseWeinberg(0, 0)); // dlambda
-  parCT.push_back(-3.0 / (2 * std::pow(C_vev0, 2)) * NablaWeinberg(0) +
+  parCT.push_back(-3.0 / (2 * C_vev0) * NablaWeinberg(0) +
                   1.0 / 2.0 * HesseWeinberg(0, 0) -
                   3.0 * t / (2 * C_vev0)); // dms
 

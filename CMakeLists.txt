@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(
   BSMPT
-  VERSION 2.3.0
+  VERSION 2.3.1
   LANGUAGES C CXX)
 
 # -------------------------------- setup cmake --------------------------------
@@ -41,7 +41,7 @@ set(EXPORT_CMAES FALSE)
 include(FetchContent)
 if(UseLibCMAES AND NOT WIN32)
   find_package(OpenMP REQUIRED)
-  find_package(libcmaes 0.9.7 QUIET)
+  find_package(libcmaes 0.10 QUIET)
     if(NOT libcmaes_FOUND)
       set(EXPORT_CMAES TRUE)
       FetchContent_Declare(
