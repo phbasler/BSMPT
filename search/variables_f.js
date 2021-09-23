@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['whichminimizerdefault_1084',['WhichMinimizerDefault',['../Minimizer_8h.html#a7ccb1fe7063cb7f7a002e2142740c596',1,'BSMPT::Minimizer']]]
+  ['whichminimizerdefault_1095',['WhichMinimizerDefault',['../Minimizer_8h.html#a7ccb1fe7063cb7f7a002e2142740c596',1,'BSMPT::Minimizer']]]
 ];

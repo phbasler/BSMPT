@@ -1,14 +1,15 @@
 var NAVTREEINDEX0 =
 {
 ".html":[3,0,0],
+".html":[4,0,0,0],
 ".html":[4,0,0,1],
 ".html":[4,0,0,2],
 ".html":[4,0,0,2,0],
 ".html":[4,0,0,2,1],
 ".html":[4,0,0,4],
+".html":[4,0,0,5],
 ".html":[4,0,0,3],
 ".html":[4,0,0],
-".html":[4,0,0,0],
 "BSMPT_8cpp.html":[5,0,1,4,0],
 "BSMPT_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97":[5,0,1,4,0,1],
 "CalcCT_8cpp.html":[5,0,1,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "Minimizer_8h.html#a5577cfcbd4168906c1208442e7eb389f":[5,0,0,0,2,4,10],
 "Minimizer_8h.html#a68ef9a7c5689ba6320a375a5a3180ca6":[5,0,0,0,2,4,13],
 "Minimizer_8h.html#a6c41c83bf7eb501efb9fdaa3f88adf1c":[5,0,0,0,2,4,7],
-"Minimizer_8h.html#a7ccb1fe7063cb7f7a002e2142740c596":[5,0,0,0,2,4,14],
-"Minimizer_8h.html#aa0c9d80c331aebfa6c08b1f7d8a9c588":[5,0,0,0,2,4,3]
+"Minimizer_8h.html#a7ccb1fe7063cb7f7a002e2142740c596":[5,0,0,0,2,4,14]
 };

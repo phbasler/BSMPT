@@ -42,6 +42,9 @@ var annotated_dup =
         [ "Class_Potential_RN2HDM", "classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html", "classBSMPT_1_1Models_1_1Class__Potential__RN2HDM" ],
         [ "Class_Template", "classBSMPT_1_1Models_1_1Class__Template.html", "classBSMPT_1_1Models_1_1Class__Template" ]
       ] ],
+      [ "ThermalFunctions", null, [
+        [ "ThermalCoefficientCalculator", "classBSMPT_1_1ThermalFunctions_1_1ThermalCoefficientCalculator.html", "classBSMPT_1_1ThermalFunctions_1_1ThermalCoefficientCalculator" ]
+      ] ],
       [ "Wall", null, [
         [ "GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", "structBSMPT_1_1Wall_1_1GSL__params" ]
       ] ],

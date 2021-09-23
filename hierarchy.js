@@ -35,5 +35,6 @@ var hierarchy =
     [ "BSMPT::Minimizer::PointerContainerMinPlane", "structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html", null ],
     [ "BSMPT::Baryo::push_back_state_and_time", "structBSMPT_1_1Baryo_1_1push__back__state__and__time.html", null ],
     [ "BSMPT::Minimizer::LibNLOPT::ShareInformationNLOPT", "structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1ShareInformationNLOPT.html", null ],
+    [ "BSMPT::ThermalFunctions::ThermalCoefficientCalculator", "classBSMPT_1_1ThermalFunctions_1_1ThermalCoefficientCalculator.html", null ],
     [ "BSMPT::Baryo::transport_equations", "classBSMPT_1_1Baryo_1_1transport__equations.html", null ]
 ];
