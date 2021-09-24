@@ -2426,15 +2426,16 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
   if (diff == 0 and res.size() == 0)
   {
     SelfAdjointEigenSolver<MatrixXd> es(MassMatrix, EigenvaluesOnly);
-    for (const auto &EV : es.eigenvalues())
+    const auto EV = es.eigenvalues();
+    for (std::size_t i{0}; i < NHiggs; ++i)
     {
-      if (std::abs(EV) < ZeroMass)
+      if (std::abs(EV[i]) < ZeroMass)
       {
         res.push_back(0);
       }
       else
       {
-        res.push_back(EV);
+        res.push_back(EV[i]);
       }
     }
   }
