@@ -1,3 +1,0 @@
-[submodule "tools/eigen-git-mirror"]
-	path = tools/eigen-git-mirror
-	url = git@github.com:eigenteam/eigen-git-mirror.git
