@@ -6,8 +6,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Changelog
 
-# 20XX/XX/XX: Release of v2.3.2
-- TODO
+# 2021/10/20: Release of v2.3.2
+- Fixed wrong linker part if BSMPT::Minimizer was used in an external cmake package 
+- Included tests to check if the Tensors are symmetric
+- Use symmetric tensors to update performance 
 
 # 2021/09/23: Release of v2.3.1
 - Fixed a bug in the CxSM which would cause Re(a1)=Im(a1)=0 if read a point from a file
