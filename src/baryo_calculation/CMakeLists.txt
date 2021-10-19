@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/baryo_calculation")
+set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/baryo_calculation")
 set(header
 	${header_path}/transport_equations.h
 	${header_path}/Fluid_Type/gen_calc.h

@@ -78,50 +78,51 @@ add_subdirectory(src)
 
 
 # -------------------------- export as cmake package --------------------------
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  BSMPTConfigVersion.cmake
-  VERSION ${PACKAGE_VERSION}
-  COMPATIBILITY AnyNewerVersion)
-
-set(ExportList
-  Models
-  Minimizer
-  ThermalFunctions
-  Utility
-  )
-
-
-if(Boost_FOUND)
-set(ExportList
-  ${ExportList}
-  Baryo
-  LibWallThickness
-  Kfactors
-  )
-endif(Boost_FOUND)
-
-
-export(
-  TARGETS ${ExportList}
-  NAMESPACE BSMPT::
-  FILE BSMPTTargets.cmake
-  )
-
-if(EXPORT_CMAES)
-  export(
-  TARGETS cmaes
-  NAMESPACE libcmaes::
-  APPEND FILE BSMPTTargets.cmake
-  )
-endif(EXPORT_CMAES)
-
-
-
-
-configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
-
 if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file(
+    BSMPTConfigVersion.cmake
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY AnyNewerVersion)
+
+  set(ExportList
+    Models
+    Minimizer
+    ThermalFunctions
+    Utility
+    )
+
+
+  if(Boost_FOUND)
+    set(ExportList
+      ${ExportList}
+      Baryo
+      LibWallThickness
+      Kfactors
+      )
+  endif(Boost_FOUND)
+
+
+  export(
+    TARGETS ${ExportList}
+    NAMESPACE BSMPT::
+    FILE BSMPTTargets.cmake
+    )
+
+  if(EXPORT_CMAES)
+    export(
+      TARGETS cmaes
+      NAMESPACE libcmaes::
+      APPEND FILE BSMPTTargets.cmake
+      )
+  endif(EXPORT_CMAES)
+
+
+
+
+  configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
+
+
   export(PACKAGE BSMPT)
 endif()
 
