@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(
   BSMPT
-  VERSION 2.3.2
+  VERSION 2.3.3
   LANGUAGES C CXX)
 
 # -------------------------------- setup cmake --------------------------------
