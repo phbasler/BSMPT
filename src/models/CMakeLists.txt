@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/models")
+set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/models")
 set(header
 
 	${header_path}/SMparam.h

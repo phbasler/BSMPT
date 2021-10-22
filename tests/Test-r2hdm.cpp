@@ -277,3 +277,107 @@ TEST_CASE("Check number of calculated CT parameters in the R2HDM", "[r2hdm]")
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckCTNumber(*modelPointer));
 }
+
+TEST_CASE("Check symmetric properties of the scalar tensor Lij in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorScalarSecond(
+              modelPointer->Get_Curvature_Higgs_L2()));
+}
+
+TEST_CASE("Check symmetric properties of the scalar tensor Lijk in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorScalarThird(
+              modelPointer->Get_Curvature_Higgs_L3()));
+}
+
+TEST_CASE("Check symmetric properties of the scalar tensor Lijkl in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorScalarFourth(
+              modelPointer->Get_Curvature_Higgs_L4()));
+}
+
+TEST_CASE("Check symmetric properties of the gauge tensor in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorGauge(
+              modelPointer->Get_Curvature_Gauge_G2H2()));
+}
+
+TEST_CASE("Check symmetric properties of the Lepton tensor in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorLeptonsThird(
+              modelPointer->Get_Curvature_Lepton_F2H1()));
+}
+
+TEST_CASE("Check symmetric properties of the mass Lepton tensor in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorLeptons(
+              modelPointer->Get_Curvature_Lepton_F2()));
+}
+
+TEST_CASE("Check symmetric properties of the mass quark tensor in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorQuarks(
+              modelPointer->Get_Curvature_Quark_F2()));
+}
+
+TEST_CASE("Check symmetric properties of the quark tensor in the R2HDM",
+          "[r2hdm]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM);
+  modelPointer->initModel(example_point_R2HDM);
+
+  REQUIRE(ModelTests::TestResults::Pass ==
+          ModelTests::CheckSymmetricTensorQuarksThird(
+              modelPointer->Get_Curvature_Quark_F2H1()));
+}

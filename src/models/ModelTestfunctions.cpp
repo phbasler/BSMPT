@@ -7,7 +7,133 @@
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
+#include <array>
 #include <iomanip>
+
+namespace
+{
+BSMPT::ModelTests::TestResults CheckFourPermutation(
+    const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor,
+    std::size_t i,
+    std::size_t j,
+    std::size_t k,
+    std::size_t l)
+{
+  std::array<std::array<std::size_t, 4>, 24> PermutationOrders;
+  PermutationOrders[0][0]  = i;
+  PermutationOrders[0][1]  = j;
+  PermutationOrders[0][2]  = k;
+  PermutationOrders[0][3]  = l;
+  PermutationOrders[1][0]  = i;
+  PermutationOrders[1][1]  = j;
+  PermutationOrders[1][2]  = l;
+  PermutationOrders[1][3]  = k;
+  PermutationOrders[2][0]  = i;
+  PermutationOrders[2][1]  = k;
+  PermutationOrders[2][2]  = j;
+  PermutationOrders[2][3]  = l;
+  PermutationOrders[3][0]  = i;
+  PermutationOrders[3][1]  = k;
+  PermutationOrders[3][2]  = l;
+  PermutationOrders[3][3]  = j;
+  PermutationOrders[4][0]  = i;
+  PermutationOrders[4][1]  = l;
+  PermutationOrders[4][2]  = j;
+  PermutationOrders[4][3]  = k;
+  PermutationOrders[5][0]  = i;
+  PermutationOrders[5][1]  = l;
+  PermutationOrders[5][2]  = k;
+  PermutationOrders[5][3]  = j;
+  PermutationOrders[6][0]  = j;
+  PermutationOrders[6][1]  = i;
+  PermutationOrders[6][2]  = k;
+  PermutationOrders[6][3]  = l;
+  PermutationOrders[7][0]  = j;
+  PermutationOrders[7][1]  = i;
+  PermutationOrders[7][2]  = l;
+  PermutationOrders[7][3]  = k;
+  PermutationOrders[8][0]  = j;
+  PermutationOrders[8][1]  = k;
+  PermutationOrders[8][2]  = i;
+  PermutationOrders[8][3]  = l;
+  PermutationOrders[9][0]  = j;
+  PermutationOrders[9][1]  = k;
+  PermutationOrders[9][2]  = l;
+  PermutationOrders[9][3]  = i;
+  PermutationOrders[10][0] = j;
+  PermutationOrders[10][1] = l;
+  PermutationOrders[10][2] = i;
+  PermutationOrders[10][3] = k;
+  PermutationOrders[11][0] = j;
+  PermutationOrders[11][1] = l;
+  PermutationOrders[11][2] = k;
+  PermutationOrders[11][3] = i;
+  PermutationOrders[12][0] = k;
+  PermutationOrders[12][1] = i;
+  PermutationOrders[12][2] = j;
+  PermutationOrders[12][3] = l;
+  PermutationOrders[13][0] = k;
+  PermutationOrders[13][1] = i;
+  PermutationOrders[13][2] = l;
+  PermutationOrders[13][3] = j;
+  PermutationOrders[14][0] = k;
+  PermutationOrders[14][1] = j;
+  PermutationOrders[14][2] = i;
+  PermutationOrders[14][3] = l;
+  PermutationOrders[15][0] = k;
+  PermutationOrders[15][1] = j;
+  PermutationOrders[15][2] = l;
+  PermutationOrders[15][3] = i;
+  PermutationOrders[16][0] = k;
+  PermutationOrders[16][1] = l;
+  PermutationOrders[16][2] = i;
+  PermutationOrders[16][3] = j;
+  PermutationOrders[17][0] = k;
+  PermutationOrders[17][1] = l;
+  PermutationOrders[17][2] = j;
+  PermutationOrders[17][3] = i;
+  PermutationOrders[18][0] = l;
+  PermutationOrders[18][1] = i;
+  PermutationOrders[18][2] = j;
+  PermutationOrders[18][3] = k;
+  PermutationOrders[19][0] = l;
+  PermutationOrders[19][1] = i;
+  PermutationOrders[19][2] = k;
+  PermutationOrders[19][3] = j;
+  PermutationOrders[20][0] = l;
+  PermutationOrders[20][1] = j;
+  PermutationOrders[20][2] = i;
+  PermutationOrders[20][3] = k;
+  PermutationOrders[21][0] = l;
+  PermutationOrders[21][1] = j;
+  PermutationOrders[21][2] = k;
+  PermutationOrders[21][3] = i;
+  PermutationOrders[22][0] = l;
+  PermutationOrders[22][1] = k;
+  PermutationOrders[22][2] = i;
+  PermutationOrders[22][3] = j;
+  PermutationOrders[23][0] = l;
+  PermutationOrders[23][1] = k;
+  PermutationOrders[23][2] = j;
+  PermutationOrders[23][3] = i;
+
+  for (std::size_t counter{1}; counter < 24; ++counter)
+  {
+    if (Tensor.at(PermutationOrders[0][0])
+            .at(PermutationOrders[0][1])
+            .at(PermutationOrders[0][2])
+            .at(PermutationOrders[0][3]) !=
+        Tensor.at(PermutationOrders[counter][0])
+            .at(PermutationOrders[counter][1])
+            .at(PermutationOrders[counter][2])
+            .at(PermutationOrders[counter][3]))
+    {
+      return BSMPT::ModelTests::TestResults::Fail;
+    }
+  }
+  return BSMPT::ModelTests::TestResults::Pass;
+}
+} // namespace
 
 namespace BSMPT
 {
@@ -623,5 +749,300 @@ TestResults CheckCTNumber(const Class_Potential_Origin &point)
   return (point.calc_CT().size() == point.get_nParCT()) ? TestResults::Pass
                                                         : TestResults::Fail;
 }
+
+TestResults
+CheckSymmetricTensorScalarSecond(const std::vector<std::vector<double>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+  const auto nRows = Tensor.size();
+  const auto nCols = Tensor.at(0).size();
+
+  if (nRows != nCols)
+  {
+    return TestResults::Fail;
+  }
+
+  for (const auto &rows : Tensor)
+  {
+    if (rows.size() != nCols)
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  for (std::size_t i{0}; i < nRows; ++i)
+  {
+    for (std::size_t j{i}; j < nCols; j++)
+    {
+      if (Tensor.at(i).at(j) != Tensor.at(j).at(i))
+      {
+        return TestResults::Fail;
+      }
+    }
+  }
+
+  return TestResults::Pass;
+}
+TestResults CheckSymmetricTensorScalarThird(
+    const std::vector<std::vector<std::vector<double>>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nDim = Tensor.size();
+  for (const auto &first : Tensor)
+  {
+    if (first.size() != nDim)
+    {
+      return TestResults::Fail;
+    }
+    for (const auto &sec : first)
+    {
+      if (sec.size() != nDim)
+      {
+        return TestResults::Fail;
+      }
+    }
+  }
+
+  for (std::size_t i{0}; i < nDim; ++i)
+  {
+    for (std::size_t j{0}; j < nDim; ++j)
+    {
+      for (std::size_t k{0}; k < nDim; ++k)
+      {
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(i).at(k).at(j))
+        {
+          return TestResults::Fail;
+        }
+
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(j).at(i).at(k))
+        {
+          return TestResults::Fail;
+        }
+
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(j).at(k).at(i))
+        {
+          return TestResults::Fail;
+        }
+
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(k).at(i).at(j))
+        {
+          return TestResults::Fail;
+        }
+
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(k).at(j).at(i))
+        {
+          return TestResults::Fail;
+        }
+      }
+    }
+  }
+
+  return TestResults::Pass;
+}
+TestResults CheckSymmetricTensorScalarFourth(
+    const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nDim = Tensor.size();
+  for (const auto &first : Tensor)
+  {
+    if (nDim != first.size())
+    {
+      return TestResults::Fail;
+    }
+    for (const auto &sec : first)
+    {
+      if (sec.size() != nDim)
+      {
+        return TestResults::Fail;
+      }
+      for (const auto &third : sec)
+      {
+        if (third.size() != nDim)
+        {
+          return TestResults::Fail;
+        }
+      }
+    }
+  }
+
+  for (std::size_t i{0}; i < nDim; ++i)
+  {
+    for (std::size_t j{0}; j < nDim; ++j)
+    {
+      for (std::size_t k{0}; k < nDim; ++k)
+      {
+        for (std::size_t l{0}; l < nDim; ++l)
+        {
+          if (CheckFourPermutation(Tensor, i, j, k, l) == TestResults::Fail)
+          {
+            return TestResults::Fail;
+          }
+        }
+      }
+    }
+  }
+  return TestResults::Pass;
+}
+
+TestResults CheckSymmetricTensorLeptonsThird(
+    const std::vector<std::vector<std::vector<std::complex<double>>>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nDim = Tensor.size();
+  for (const auto &rows : Tensor)
+  {
+    if (nDim != rows.size())
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  const auto nHiggs = Tensor.at(0).at(0).size();
+
+  for (std::size_t i{0}; i < nDim; ++i)
+  {
+    for (std::size_t j{0}; j < nDim; ++j)
+    {
+      for (std::size_t k{0}; k < nHiggs; ++k)
+      {
+        if (Tensor.at(i).at(j).at(k) != Tensor.at(j).at(i).at(k))
+        {
+          return TestResults::Fail;
+        }
+      }
+    }
+  }
+
+  return TestResults::Pass;
+}
+TestResults CheckSymmetricTensorQuarksThird(
+    const std::vector<std::vector<std::vector<std::complex<double>>>> &Tensor)
+{
+  return CheckSymmetricTensorLeptonsThird(Tensor);
+}
+
+TestResults CheckSymmetricTensorLeptons(
+    const std::vector<std::vector<std::complex<double>>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nDim = Tensor.size();
+  for (const auto &rows : Tensor)
+  {
+    if (nDim != rows.size())
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  for (std::size_t i{0}; i < nDim; ++i)
+  {
+    for (std::size_t j{0}; j < nDim; ++j)
+    {
+      if (Tensor.at(i).at(j) != Tensor.at(j).at(i))
+      {
+        return TestResults::Fail;
+      }
+    }
+  }
+
+  return TestResults::Pass;
+}
+TestResults CheckSymmetricTensorQuarks(
+    const std::vector<std::vector<std::complex<double>>> &Tensor)
+{
+  return CheckSymmetricTensorLeptons(Tensor);
+}
+TestResults CheckSymmetricTensorGauge(
+    const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor)
+{
+  if (Tensor.empty())
+  {
+    return TestResults::Pass;
+  }
+
+  const auto nGauge = Tensor.size();
+  for (const auto &rows : Tensor)
+  {
+    if (rows.size() != nGauge)
+    {
+      return TestResults::Fail;
+    }
+  }
+
+  const auto nHiggs = Tensor.at(0).at(0).size();
+
+  if (nHiggs == 0)
+  {
+    return TestResults::Fail;
+  }
+
+  for (const auto &nRowsGauge : Tensor)
+  {
+    for (const auto &nRowsHiggs : nRowsGauge)
+    {
+      if (nRowsHiggs.size() != nHiggs)
+      {
+        return TestResults::Fail;
+      }
+      for (const auto &nColHiggs : nRowsHiggs)
+      {
+        if (nColHiggs.size() != nHiggs)
+        {
+          return TestResults::Fail;
+        }
+      }
+    }
+  }
+
+  for (std::size_t a{0}; a < nGauge; ++a)
+  {
+    for (std::size_t b{0}; b < nGauge; ++b)
+    {
+      for (std::size_t i{0}; i < nHiggs; ++i)
+      {
+        for (std::size_t j{0}; j < nHiggs; ++j)
+        {
+          if (Tensor.at(a).at(b).at(i).at(j) != Tensor.at(a).at(b).at(j).at(i))
+          {
+            return TestResults::Fail;
+          }
+
+          if (Tensor.at(a).at(b).at(i).at(j) != Tensor.at(b).at(a).at(j).at(i))
+          {
+            return TestResults::Fail;
+          }
+
+          if (Tensor.at(a).at(b).at(i).at(j) != Tensor.at(b).at(a).at(i).at(j))
+          {
+            return TestResults::Fail;
+          }
+        }
+      }
+    }
+  }
+
+  return TestResults::Pass;
+}
+
 } // namespace ModelTests
 } // namespace BSMPT

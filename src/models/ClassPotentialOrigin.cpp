@@ -2358,7 +2358,7 @@ MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
   {
     for (std::size_t i = 0; i < NHiggs; i++)
     {
-      for (std::size_t j = 0; j < NHiggs; j++)
+      for (std::size_t j = i; j < NHiggs; j++)
       {
         res(i, j) = Curvature_Higgs_L2[i][j];
         for (std::size_t k = 0; k < NHiggs; k++)
@@ -2374,6 +2374,13 @@ MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
         {
           res(i, j) += DebyeHiggs[i][j] * std::pow(Temp, 2);
         }
+      }
+    }
+    for (std::size_t i{1}; i < NHiggs; ++i)
+    {
+      for (std::size_t j{0}; j < i; ++j)
+      {
+        res(i, j) = res(j, i);
       }
     }
   }
@@ -2411,72 +2418,25 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
                                            const int &diff) const
 {
   std::vector<double> res;
-  if (v.size() != nVEV and v.size() != NHiggs)
-  {
-    std::string ErrorString =
-        std::string("You have called ") + std::string(__func__) +
-        std::string(
-            " with an invalid vev configuration. Your vev is of dimension ") +
-        std::to_string(v.size()) + std::string(" and it should be ") +
-        std::to_string(NHiggs) + std::string(".");
-    throw std::runtime_error(ErrorString);
-  }
-  if (v.size() == nVEV and nVEV != NHiggs)
-  {
-    std::stringstream ss;
-    ss << __func__
-       << " is being called with a wrong sized vev configuration. It "
-          "has the dimension of "
-       << nVEV << " while it should have " << NHiggs
-       << ". For now this is transformed but please fix this to reduce "
-          "the runtime."
-       << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    std::vector<double> Transformedv;
-    Transformedv = MinimizeOrderVEV(v);
-    res          = HiggsMassesSquared(Transformedv, Temp, diff);
-    return res;
-  }
-  if (!SetCurvatureDone)
-  {
-    //        SetCurvatureArrays();
-    throw std::runtime_error(
-        "SetCurvatureDone is not set. The Model is not initiliased correctly");
-  }
-  MatrixXd MassMatrix(NHiggs, NHiggs);
-  double ZeroMass = std::pow(10, -5);
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    for (std::size_t j = 0; j < NHiggs; j++)
-    {
-      MassMatrix(i, j) = Curvature_Higgs_L2[i][j];
-      for (std::size_t k = 0; k < NHiggs; k++)
-      {
-        MassMatrix(i, j) += Curvature_Higgs_L3[i][j][k] * v[k];
-        for (std::size_t l = 0; l < NHiggs; l++)
-        {
-          MassMatrix(i, j) +=
-              0.5 * Curvature_Higgs_L4[i][j][k][l] * v[k] * v[l];
-        }
-      }
 
-      if (Temp != 0)
-      {
-        MassMatrix(i, j) += DebyeHiggs[i][j] * std::pow(Temp, 2);
-      }
-    }
-  }
+  auto MassMatrix = HiggsMassMatrix(v, Temp, diff);
+
+  double ZeroMass = std::pow(10, -5);
 
   if (diff == 0 and res.size() == 0)
   {
     SelfAdjointEigenSolver<MatrixXd> es(MassMatrix, EigenvaluesOnly);
-    for (std::size_t i = 0; i < NHiggs; i++)
+    const auto EV = es.eigenvalues();
+    for (std::size_t i{0}; i < NHiggs; ++i)
     {
-      double tmp = es.eigenvalues()[i];
-      if (std::abs(tmp) < ZeroMass)
+      if (std::abs(EV[i]) < ZeroMass)
+      {
         res.push_back(0);
+      }
       else
-        res.push_back(tmp);
+      {
+        res.push_back(EV[i]);
+      }
     }
   }
   else if (diff == 0 and res.size() == NHiggs)
@@ -2499,7 +2459,7 @@ Class_Potential_Origin::HiggsMassesSquared(const std::vector<double> &v,
                       std::to_string(res.size()) + ". This should be zero or " +
                       std::to_string(NHiggs));
   }
-  else if ((size_t)diff <= NHiggs and diff > 0)
+  else if (static_cast<std::size_t>(diff) <= NHiggs and diff > 0)
   {
     MatrixXd Diff(NHiggs, NHiggs);
     std::size_t x0 = diff - 1;
@@ -2582,21 +2542,30 @@ Class_Potential_Origin::GaugeMassesSquared(const std::vector<double> &v,
   }
   MatrixXd MassMatrix(NGauge, NGauge);
   double ZeroMass = std::pow(10, -5);
-  for (std::size_t i = 0; i < NGauge; i++)
+  for (std::size_t a = 0; a < NGauge; a++)
   {
-    for (std::size_t j = 0; j < NGauge; j++)
+    for (std::size_t b = 0; b < NGauge; b++)
     {
-      MassMatrix(i, j) = 0;
-      for (std::size_t k = 0; k < NHiggs; k++)
+      MassMatrix(a, b) = 0;
+      for (std::size_t i = 0; i < NHiggs; i++)
       {
-        for (std::size_t l = 0; l < NHiggs; l++)
-          MassMatrix(i, j) +=
-              0.5 * Curvature_Gauge_G2H2[i][j][k][l] * v[k] * v[l];
+        for (std::size_t j = 0; j < NHiggs; j++)
+          MassMatrix(a, b) +=
+              0.5 * Curvature_Gauge_G2H2[a][b][i][j] * v.at(i) * v.at(j);
       }
+
       if (Temp != 0)
       {
-        MassMatrix(i, j) += DebyeGauge[i][j] * std::pow(Temp, 2);
+        MassMatrix(a, b) += DebyeGauge[a][b] * std::pow(Temp, 2);
       }
+    }
+  }
+
+  for (std::size_t a{1}; a < NGauge; ++a)
+  {
+    for (std::size_t b{0}; b < a; ++b)
+    {
+      MassMatrix(a, b) = MassMatrix(b, a);
     }
   }
 
@@ -3551,6 +3520,43 @@ void Class_Potential_Origin::CheckImplementation(
   TestNames.push_back("Checking first derivative of CW+CT");
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckCTConditionsFirstDerivative(*this)));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lij");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarSecond(Curvature_Higgs_L2)));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lijk");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarThird(Curvature_Higgs_L3)));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lijkl");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarFourth(Curvature_Higgs_L4)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the gauge tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorGauge(Curvature_Gauge_G2H2)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the Lepton tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorLeptonsThird(Curvature_Lepton_F2H1)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the mass Lepton tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorLeptons(Curvature_Lepton_F2)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the Quark tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorQuarksThird(Curvature_Quark_F2H1)));
+
+  TestNames.push_back(
+      "Check symmetric properties of the mass Quark tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorQuarks(Curvature_Quark_F2)));
 
   if (TestNames.size() != TestResults.size())
   {

@@ -1,4 +1,4 @@
-set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/utility")
+set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/utility")
 set(header
   ${header_path}/utility.h
   ${header_path}/Logger.h)

@@ -19,7 +19,7 @@ if(@libcmaes_FOUND@ AND NOT @EXPORT_CMAES@)
 endif(@libcmaes_FOUND@ AND NOT @EXPORT_CMAES@)
 
 if(@NLopt_FOUND@)
-  find_dependency(NLopt)
+  find_dependency(NLopt @NLopt_VERSION@)
 endif(@NLopt_FOUND@)
 
 # Add the targets file
