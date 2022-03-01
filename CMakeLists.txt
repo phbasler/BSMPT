@@ -31,6 +31,8 @@ option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing" OFF)
 
+include(LTO)
+
 find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
@@ -72,6 +74,9 @@ if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
 endif()
 
 configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
+
+
+find_lto(CXX)
 
 
 add_subdirectory(src)
