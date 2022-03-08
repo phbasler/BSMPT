@@ -33,11 +33,34 @@ option(MakeAdditionalTesting "Build the executables used for further testing" OF
 
 include(LTO)
 
+
+
+
 find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
 find_package(Threads REQUIRED)
+
+
+set(CodeCoverageExcludesFromOtherPkgs
+  "${EIGEN3_ROOT_DIR}/*"
+  "${GSL_ROOT_DIR}/*")
+
+if(Boost_FOUND)
+  if(NOT "${Boost_DIR}" STREQUAL "")
+    set(CodeCoverageExcludesFromOtherPkgs
+      ${CodeCoverageExcludesFromOtherPkgs}
+      "${Boost_DIR}/*"
+      )
+  endif()
+  if(NOT "${Boost_ROOT_DIR}" STREQUAL "")
+    set(CodeCoverageExcludesFromOtherPkgs
+      ${CodeCoverageExcludesFromOtherPkgs}
+      "${Boost_ROOT_DIR}/*"
+      )
+  endif()
+endif()
 
 set(EXPORT_CMAES FALSE)
 include(FetchContent)
@@ -60,13 +83,38 @@ if(UseLibCMAES AND NOT WIN32)
         include (GenerateExportHeader)
         generate_export_header (cmaes EXPORT_FILE_NAME ${libcmaes_SOURCE_DIR}/include/libcmaes/cmaes_export.h)
         message(STATUS ${libcmaes_SOURCE_DIR})
+        set(CodeCoverageExcludesFromOtherPkgs
+          ${CodeCoverageExcludesFromOtherPkgs}
+          "${libcmaes_SOURCE_DIR}/*"
+          )
       endif()
       set(libcmaes_FOUND TRUE)
+    else()
+      set(CodeCoverageExcludesFromOtherPkgs
+        ${CodeCoverageExcludesFromOtherPkgs}
+        "${libcmaes_ROOT_DIR}/*"
+        )
     endif()
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
   find_package(NLopt QUIET)
+
+  if(NLopt_FOUND)
+    if(NOT "${NLopt_ROOT_DIR}" STREQUAL "")
+      set(CodeCoverageExcludesFromOtherPkgs
+        ${CodeCoverageExcludesFromOtherPkgs}
+        "${NLopt_ROOT_DIR}/*"
+        )
+    endif()
+    if(NOT "${NLopt_DIR}" STREQUAL "")
+      set(CodeCoverageExcludesFromOtherPkgs
+        ${CodeCoverageExcludesFromOtherPkgs}
+        "${NLopt_DIR}/*"
+        )
+    endif()
+  endif()
+
 endif(UseNLopt)
 
 if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
@@ -74,6 +122,27 @@ if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
 endif()
 
 configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
+
+option(EnableCoverage "Enable code coverage" OFF)
+if(EnableCoverage)
+  include(CodeCoverage)
+  append_coverage_compiler_flags()
+#  set(LCOV_ARGS "--no-external")
+  set(COVERAGE_EXCLUDES
+            "/usr/include/*"
+            "/usr/lib/*"
+            ${CodeCoverageExcludesFromOtherPkgs}
+            "${PROJECT_SOURCE_DIR}/tests/*"
+            "tests/*"
+            "${PROJECT_SOURCE_DIR}/src/prog/*"
+            )
+  SETUP_TARGET_FOR_COVERAGE_LCOV(
+     NAME coverage                 # New target name
+     EXECUTABLE ctest  -j ${n_cores} # Executable in PROJECT_BINARY_DIR
+     BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
+#     EXCLUDE "_deps/*" "${PROJECT_SOURCE_DIR}/tests/*" "${PROJECT_SOURCE_DIR}/src/prog/*"
+   )
+endif(EnableCoverage)
 
 
 find_lto(CXX)
@@ -160,6 +229,7 @@ if(DOXYGEN_FOUND)
 else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation")
 endif(DOXYGEN_FOUND)
+
 
 
 # -------------------- Testing ---------------------------------------------------
