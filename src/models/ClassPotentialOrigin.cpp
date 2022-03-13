@@ -11,6 +11,7 @@
 #include "Eigen/Dense"
 
 #include <gsl/gsl_sf_zeta.h>
+#include <gsl/gsl_math.h>
 
 #include <BSMPT/ThermalFunctions/NegativeBosonSpline.h>
 #include <BSMPT/ThermalFunctions/ThermalFunctions.h>
@@ -386,9 +387,7 @@ double Class_Potential_Origin::fbaseFour(double MassSquaredA,
                                          double MassSquaredD) const
 {
 
-  // maximize the numerical precision
-  typedef std::numeric_limits<double> dbl;
-  std::setprecision(dbl::max_digits10);
+  
 
   double res  = 0;
   double mas  = MassSquaredA;
@@ -840,6 +839,9 @@ double Class_Potential_Origin::fbaseFour(double MassSquaredA,
     throwstring += __func__;
     throwstring += "\n";
     std::stringstream ss;
+    // maximize the numerical precision
+    typedef std::numeric_limits<double> dbl;
+    ss << std::setprecision(dbl::max_digits10);
     ss << "Found nan at line = " << InputLineNumber << " in function "
        << __func__ << std::endl;
     ss << mas << sep << mbs << sep << mcs << sep << mds << sep << C << sep

@@ -37,6 +37,10 @@ class BSMPTLogger
 public:
   friend Logger;
   BSMPTLogger(std::ostream &os) : mOstream{os.rdbuf()} {}
+  BSMPTLogger(const BSMPTLogger &) = delete;
+  BSMPTLogger(BSMPTLogger &&)      = delete;
+  BSMPTLogger &operator=(const BSMPTLogger &) = delete;
+  BSMPTLogger &operator=(BSMPTLogger &&) = delete;
 
 private:
   void SetOStream(std::ostream &Ostream);

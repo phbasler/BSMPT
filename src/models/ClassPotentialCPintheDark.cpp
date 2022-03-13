@@ -1248,10 +1248,6 @@ void Class_Potential_CPintheDark::write() const
  */
 std::vector<double> Class_Potential_CPintheDark::calc_CT() const
 {
-
-  typedef std::numeric_limits<double> dbl;
-  std::setprecision(dbl::max_digits10);
-
   std::vector<double> parCT;
 
   if (!SetCurvatureDone)
@@ -2085,7 +2081,6 @@ void Class_Potential_CPintheDark::SetCurvatureArrays()
   V32 = C_Vts;
   V33 = C_Vtb;
 
-  std::complex<double> II(0, 1); // define imaginary unit
 
   Curvature_Quark_F2H1[0][1][4]   = 0.1e1 / v1 * C_MassUp;
   Curvature_Quark_F2H1[0][1][5]   = -II / v1 * C_MassUp;

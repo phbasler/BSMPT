@@ -2895,8 +2895,6 @@ void Class_Potential_C2HDM::SetCurvatureArrays()
   YIJSL = MatrixXcd::Zero(NLepton, NLepton);
   YIJPL = MatrixXcd::Zero(NLepton, NLepton);
 
-  std::complex<double> II(0, 1);
-
   double v1 = C_vev0 * C_CosBeta;
   double v2 = C_vev0 * C_SinBeta;
   double vL = v2;
