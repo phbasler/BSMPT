@@ -19,7 +19,7 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
-#include <gsl\gsl_math.h>
+#include <gsl/gsl_math.h>
 using namespace Eigen;
 
 #pragma GCC diagnostic push
