@@ -64,6 +64,9 @@ After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake`
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If NLopt is installed through your packet manager cmake will find it automatically. Otherwise, with `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you can tell where NLopt is installed. If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
 5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
 
+### Alternative Install method 
+If you have [conan](https://conan.io/) installed, then you can set the `-DUseConan=ON` flag for cmake and it will download boost, gsl, eigen3 and NLopt (if UseNLopt was not turned off) through [conancenter](https://conan.io/center/).
+
 ### build
 With the dependencies and options you can build the programm with
   
