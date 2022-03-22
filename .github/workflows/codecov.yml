@@ -21,9 +21,9 @@ jobs:
     - name : installPackages
       run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
     - name: cmake
-      run: mkdir build && cd build && cmake ..
+      run: mkdir build && cd build && cmake .. -DEnableCoverage=On
     - name: compile
-      run: cd build && cmake --build . -j -DEnableCoverage=On
+      run: cd build && cmake --build . -j 
     - name: Generate Coverage
       run: cd build && cmake --build . -j -t coverage
     - name: Upload coverage
