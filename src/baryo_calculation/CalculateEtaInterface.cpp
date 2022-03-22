@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -141,8 +142,8 @@ std::vector<std::string> CalculateEtaInterface::legend() const
 
 void CalculateEtaInterface::setNumerics(
     const double &vw_input,
-    std::vector<double> &vev_critical_input,
-    std::vector<double> &vev_symmetric_input,
+    const std::vector<double> &vev_critical_input,
+    const std::vector<double> &vev_symmetric_input,
     const double &TC_input,
     std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
     const int &WhichMinimizer)
@@ -159,8 +160,8 @@ void CalculateEtaInterface::setNumerics(
 
 void CalculateEtaInterface::setNumerics(
     const double &vw_input,
-    std::vector<double> &vev_critical_input,
-    std::vector<double> &vev_symmetric_input,
+    const std::vector<double> &vev_critical_input,
+    const std::vector<double> &vev_symmetric_input,
     const double &TC_input,
     std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
     const AdditionalBaryoArgs &AddBaryoArgs,
@@ -192,8 +193,8 @@ void CalculateEtaInterface::setvw(double vw_in)
 
 std::vector<double> CalculateEtaInterface::CalcEta(
     const double &vw_input,
-    std::vector<double> &vev_critical_input,
-    std::vector<double> &vev_symmetric_input,
+    const std::vector<double> &vev_critical_input,
+    const std::vector<double> &vev_symmetric_input,
     const double &TC_input,
     std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
     const AdditionalBaryoArgs &AddBaryoArgs,
@@ -211,8 +212,8 @@ std::vector<double> CalculateEtaInterface::CalcEta(
 
 std::vector<double> CalculateEtaInterface::CalcEta(
     const double &vw_input,
-    std::vector<double> &vev_critical_input,
-    std::vector<double> &vev_symmetric_input,
+    const std::vector<double> &vev_critical_input,
+    const std::vector<double> &vev_symmetric_input,
     const double &TC_input,
     std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
     const int &WhichMinimizer)

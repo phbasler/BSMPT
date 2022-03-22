@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -159,8 +160,8 @@ public:
    */
   void
   setNumerics(const double &vw_input,
-              std::vector<double> &vev_critical_input,
-              std::vector<double> &vev_symmetric_input,
+              const std::vector<double> &vev_critical_input,
+              const std::vector<double> &vev_symmetric_input,
               const double &TC_input,
               std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
               const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
@@ -181,8 +182,8 @@ public:
    */
   void
   setNumerics(const double &vw_input,
-              std::vector<double> &vev_critical_input,
-              std::vector<double> &vev_symmetric_input,
+              const std::vector<double> &vev_critical_input,
+              const std::vector<double> &vev_symmetric_input,
               const double &TC_input,
               std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
               const AdditionalBaryoArgs &AddBaryoArgs,
@@ -210,8 +211,8 @@ public:
    */
   std::vector<double>
   CalcEta(const double &vw_input,
-          std::vector<double> &vev_critical_input,
-          std::vector<double> &vev_symmetric_input,
+          const std::vector<double> &vev_critical_input,
+          const std::vector<double> &vev_symmetric_input,
           const double &TC_input,
           std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
           const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
@@ -234,8 +235,8 @@ public:
    */
   std::vector<double>
   CalcEta(const double &vw_input,
-          std::vector<double> &vev_critical_input,
-          std::vector<double> &vev_symmetric_input,
+          const std::vector<double> &vev_critical_input,
+          const std::vector<double> &vev_symmetric_input,
           const double &TC_input,
           std::shared_ptr<Class_Potential_Origin> &modelPointer_input,
           const AdditionalBaryoArgs &AddBaryoArgs,
