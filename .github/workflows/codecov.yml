@@ -9,23 +9,27 @@ on:
     branches: [ master, develop ]
   pull_request:
     branches: [ master, develop ]
-
-  steps:
-  - uses: actions/checkout@v2
-    with:
-        persist-credentials: false
-  - name : installPackages
-    run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
-  - name: cmake
-    run: mkdir build && cd build && cmake ..
-  - name: compile
-    run: cd build && cmake --build . -j -DEnableCoverage=On
-  - name: Generate Coverage
-    run: cd build && cmake --build . -j -t coverage
-  - name: Upload coverage
-    uses: codecov/codecov-action@v2
-    with:
-      flags: unittests # optional
-      name: codecov-umbrella # optional
-      fail_ci_if_error: true # optional (default = false)
-      verbose: true # optional (default = false)
+jobs:  
+  coverage:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+    - name: cmake
+      run: mkdir build && cd build && cmake ..
+    - name: compile
+      run: cd build && cmake --build . -j -DEnableCoverage=On
+    - name: Generate Coverage
+      run: cd build && cmake --build . -j -t coverage
+    - name: Upload coverage
+      uses: codecov/codecov-action@v2
+      with:
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
