@@ -8,8 +8,8 @@ Program: BSMPT version 2.3.3
 
 Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 
-![ubuntu](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)
-![mac](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)
+![Ubuntu unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)
+![Mac unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/phbasler/BSMPT/branch/develop/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT)
 [![Documentation](https://img.shields.io/badge/Documentation-master-success)](https://phbasler.github.io/BSMPT/)
 
