@@ -1,4 +1,8 @@
-# sample regex patterns
+coverage:
+  precision: 2
+  round: down
+  range: "75...100"
+
 ignore:
   - "tests/**"
   - "src/prog/**"

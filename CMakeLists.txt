@@ -238,7 +238,7 @@ if(EnableCoverage)
             "${PROJECT_SOURCE_DIR}/tests/*"
             "tests/*"
             "${PROJECT_SOURCE_DIR}/src/prog/*"
-            "${PROJECT_SOURCE_DIR}/src/utility/Logger.cpp"
+            "${PROJECT_SOURCE_DIR}/src/utility/*"
             "${PROJECT_SOURCE_DIR}/include/BSMPT/utility/Logger.h"
             "${PROJECT_SOURCE_DIR}/src/Kfactors/Kfactors.cpp"
             "${PROJECT_SOURCE_DIR}/src/models/ClassPotentialOrigin_deprecated.cpp"
