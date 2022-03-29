@@ -11,8 +11,11 @@ Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 ![Ubuntu unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)
 ![Mac unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)
 [![codecov master](https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT)
-[![codecov develop](https://codecov.io/gh/phbasler/BSMPT/branch/develop/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT/branch/develop)
 [![Documentation](https://img.shields.io/badge/Documentation-master-success)](https://phbasler.github.io/BSMPT/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/phbasler/bsmpt/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/phbasler/bsmpt.svg)](https://github.com/phbasler/BSMPT/blob/master/LICENSE.md)
+[![Latest release](https://badgen.net/github/release/phbasler/bsmpt)](https://github.com/phbasler/bsmpt/releases)
+
 
 Manual: version 2.0
 
