@@ -5,6 +5,7 @@
 name: Ubuntu unit tests
 
 on:
+  workflow_dispatch
   push:
     branches: [ master ]
   pull_request:
