@@ -8,6 +8,8 @@ Program: BSMPT version 2.3.3
 
 Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 
+[![codecov](https://codecov.io/gh/phbasler/BSMPT/branch/develop/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT)
+
 Manual: version 2.0
 
 BSMPT - Beyond the Standard Model Phase Transitions:

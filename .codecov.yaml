@@ -1,0 +1,9 @@
+# sample regex patterns
+ignore:
+  - "tests/**"
+  - "src/prog/**"
+  - "src/utility/Logger.cpp"
+  - "include/BSMPT/utility/Logger.h"
+  - "src/Kfactors/Kfactors.cpp"
+  - "src/models/ClassPotentialOrigin_deprecated.cpp"
+  - "src/models/ClassTemplate.cpp"
