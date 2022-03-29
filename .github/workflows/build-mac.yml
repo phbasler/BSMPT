@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: develop Mac CI
+name: Mac build develop branch
 
 on:
   push:

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: ctest CI
+name: Ubuntu unit tests
 
 on:
   push:
