@@ -111,6 +111,19 @@ void CheckFileForConfig(const std::string &filename,
   }
 }
 
+template <typename T>
+void CompareValues(T expected, T result, double epsilon, double threshold)
+{
+  if (std::abs(expected) >= threshold)
+  {
+    REQUIRE(result == Approx(expected).epsilon(epsilon));
+  }
+  else
+  {
+    REQUIRE(std::abs(result) <= threshold);
+  }
+}
+
 } // namespace
 
 const Compare_C2HDM Expected;
@@ -131,25 +144,17 @@ TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
     startpoint.push_back(0.5 * el);
   vevsymmetricSolution = Minimizer::Minimize_gen_all(
       modelPointer, EWPT.Tc + 1, checksym, startpoint, WhichMin, true);
-  auto min_expected      = Expected.vevSymmetricPerSetting.at(WhichMin);
-  const double threshold = 1e-4;
+  auto min_expected = Expected.vevSymmetricPerSetting.at(WhichMin);
   REQUIRE(vevsymmetricSolution.size() == min_expected.size());
   for (std::size_t i{0}; i < vevsymmetricSolution.size(); ++i)
   {
     auto res      = std::abs(vevsymmetricSolution.at(i));
     auto expected = std::abs(min_expected.at(i));
-    if (expected > threshold)
-    {
-      UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
-      UNSCOPED_INFO("This ist the position:"
-                    << i << "\tFound solution =" << vevsymmetricSolution.at(i)
-                    << "\tExpected solution = " << min_expected.at(i));
-      REQUIRE(res == Approx(expected).epsilon(1e-4));
-    }
-    else
-    {
-      REQUIRE(res <= threshold);
-    }
+    UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
+    UNSCOPED_INFO("This is the position:"
+                  << i << "\tFound solution =" << vevsymmetricSolution.at(i)
+                  << "\tExpected solution = " << min_expected.at(i));
+    CompareValues(expected, res, 1e-4, 1e-4);
   }
 
   // Call: Calculation of eta in the different implemented approaches
@@ -172,23 +177,18 @@ TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
 
     auto expectedEta = Expected.etaPerSetting.at(WhichMin);
     REQUIRE(eta.size() == expectedEta.size());
+    UNSCOPED_INFO("Check eta components");
     const double etaThreshold = 1e-15;
     for (std::size_t i{0}; i < vevsymmetricSolution.size(); ++i)
     {
       auto res      = std::abs(eta.at(i));
       auto expected = std::abs(expectedEta.at(i));
-      if (expected > etaThreshold)
-      {
-        UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
-        UNSCOPED_INFO("This ist the position:"
-                      << i << "\tFound solution =" << vevsymmetricSolution.at(i)
-                      << "\tExpected solution = " << min_expected.at(i));
-        REQUIRE(res == Approx(expected).epsilon(1e-4));
-      }
-      else
-      {
-        REQUIRE(res <= threshold);
-      }
+
+      UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
+      UNSCOPED_INFO("This is the position:"
+                    << i << "\tFound solution =" << eta.at(i)
+                    << "\tExpected solution = " << expectedEta.at(i));
+      CompareValues(expected, res, 1e-2, etaThreshold);
     }
   }
 }
