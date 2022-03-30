@@ -1084,19 +1084,20 @@ public:
    */
   virtual void TripleHiggsCouplings() = 0;
   /**
-   * Calculates the function f^1 needed for the derivatives of the Coleman
-   * Weinberg potential.
+   * Calculates the function f_{ab}^{(1)} (see https://arxiv.org/abs/1606.07069
+   * eq 3.9) needed for the derivatives of the Coleman Weinberg potential.
    */
   double fbase(double MassSquaredA, double MassSquaredB) const;
   /**
-   * Calculates the function f^2 needed for the 3rd derivatives of the Coleman
-   * Weinberg potential.
+   * Calculates the function f_{abc}^{(1)} (see https://arxiv.org/abs/1606.07069
+   * eq 3.9) needed for the 3rd derivatives of the Coleman Weinberg potential.
    */
   double
   fbaseTri(double MassSquaredA, double MassSquaredB, double MassSquaredC) const;
   /**
-   * Calculates the function f needed for the 4th derivatives of the Coleman
-   * Weinberg potential.
+   * Calculates the function f_{abcd}^{(1)} (see
+   * https://arxiv.org/abs/1606.07069 eq 3.9) needed for the 4th derivatives of
+   * the Coleman Weinberg potential.
    */
   double fbaseFour(double MassSquaredA,
                    double MassSquaredB,
