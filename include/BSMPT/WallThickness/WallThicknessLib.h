@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -38,7 +39,7 @@ double calculate_wall_thickness_plane(
     const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
 /**
- * @brief calculate_wall_thickness_1D calculates calculates the wall thickness
+ * @brief calculate_wall_thickness_1D calculates the wall thickness
  * across the straight line from the symmetrical minimum to the broken minimum
  * @param modelPointer Pointer to parameter point
  * @param Temp temperature at which the wall thickness is to be calculated
