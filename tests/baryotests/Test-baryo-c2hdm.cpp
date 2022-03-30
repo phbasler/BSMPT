@@ -13,6 +13,9 @@
 
 #include "GenerateTestCompares/C2HDM.h"
 
+#include <fstream>
+#include <optional>
+
 const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
                                               /* lambda_2 = */ 0.274365,
                                               /* lambda_3 = */ 4.71019,
@@ -22,6 +25,93 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
                                               /* Re(m_{12}^2) = */ 2706.86,
                                               /* tan(beta) = */ 4.64487,
                                               /* Yukawa Type = */ 1};
+
+namespace
+{
+void writeBaryoConfigFile(
+    const std::string &filename,
+    const std::vector<std::optional<std::string>> &includeStrings,
+    std::optional<int> massiveConfig)
+{
+  std::ofstream file(filename);
+  if (includeStrings.at(0).has_value())
+  {
+    file << "VIA Ansatz only including the top quark in the transport "
+            "equations "
+         << "\n"
+         << "Include: " << includeStrings.at(0).value() << "\n";
+  }
+
+  if (includeStrings.at(1).has_value())
+  {
+    file << "VIA Ansatz including the top and bottom quark in the transport "
+            "equations"
+         << "\n"
+         << "Include: " << includeStrings.at(1).value() << "\n";
+  }
+
+  if (includeStrings.at(2).has_value())
+  {
+    file << "VIA Ansatz including the top and bottom quark and the tau lepton "
+            "in "
+            "the transport equations "
+         << "\n"
+         << "Include: " << includeStrings.at(2).value() << "\n";
+  }
+
+  if (massiveConfig.has_value())
+  {
+    file << "VIA Ansatz treating the bottom quark massive "
+         << "\n"
+         << "Massive: " << (massiveConfig.value() == 1 ? " yes " : " no ")
+         << "\n";
+  }
+
+  if (includeStrings.at(3).has_value())
+  {
+    file << "FH Ansatz with the plasma velocities "
+         << "\n"
+         << "Include: " << includeStrings.at(3).value() << "\n";
+  }
+
+  if (includeStrings.at(4).has_value())
+  {
+    file << "FH Ansatz with the plasma velocities replaced through the second "
+            "derivatives "
+         << "\n"
+         << "Include: " << includeStrings.at(4).value() << "\n";
+  }
+}
+
+void CheckFileForConfig(const std::string &filename,
+                        const std::pair<std::vector<bool>, int> &expectedConfig,
+                        const std::string &expectedException)
+{
+  std::string exceptionMessage;
+  std::pair<std::vector<bool>, int> config;
+  try
+  {
+    BSMPT::Baryo::CalculateEtaInterface etaInterface(std::vector<bool>(5, true),
+                                                     1);
+    config = etaInterface.ReadConfigFile(filename);
+  }
+  catch (std::exception &e)
+  {
+    exceptionMessage = e.what();
+  }
+
+  if (expectedException != std::string())
+  {
+    REQUIRE(exceptionMessage == expectedException);
+  }
+  else
+  {
+    REQUIRE(expectedConfig.first == config.first);
+    REQUIRE(expectedConfig.second == config.second);
+  }
+}
+
+} // namespace
 
 const Compare_C2HDM Expected;
 
@@ -100,5 +190,37 @@ TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
         REQUIRE(res <= threshold);
       }
     }
+  }
+}
+
+TEST_CASE("Checking ReadConfig", "[baryo]")
+{
+  {
+    std::string filename = "Readconfig_testA.txt";
+    std::pair<std::vector<bool>, int> expectedConfig;
+    expectedConfig.first  = std::vector<bool>{true, false, true, true, false};
+    expectedConfig.second = 1;
+
+    std::vector<std::optional<std::string>> includeValues{
+        "yes", "no", "yes", "yes", "no"};
+    std::optional<int> massiveConfig = 1;
+    writeBaryoConfigFile(filename, includeValues, massiveConfig);
+    CheckFileForConfig(filename, expectedConfig, std::string());
+  }
+
+  {
+    std::string filename = "Readconfig_testB.txt";
+    std::pair<std::vector<bool>, int> expectedConfig;
+    expectedConfig.first  = std::vector<bool>{};
+    expectedConfig.second = 0;
+
+    std::vector<std::optional<std::string>> includeValues{
+        "yes", "no", "yes", "yes", "someWrongvalue"};
+    std::optional<int> massiveConfig = 1;
+    std::string expectedException =
+        "One of the settings for the EWBG config file is not set to yes or no. "
+        "Please change this.";
+    writeBaryoConfigFile(filename, includeValues, massiveConfig);
+    CheckFileForConfig(filename, expectedConfig, expectedException);
   }
 }
