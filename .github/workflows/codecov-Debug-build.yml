@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: codecov debug build CI
+
+on:
+  push:
+    branches: [ master, develop]
+  pull_request:
+    branches: [ master, develop ]
+jobs:  
+  coverage:
+    runs-on: ubuntu-20.04
+    if: "contains(github.event.head_commit.message, 'trigger_codecov')"
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev lcov
+    - name: cmake
+      run: mkdir build && cd build && cmake .. -DEnableCoverage=On -DCMAKE_BUILD_TYPE=Debug 
+    - name: compile
+      run: cd build && cmake --build . -j 
+    - name: Generate Coverage
+      run: cd build && cmake --build . -j -t coverage
+    - name: Upload coverage
+      uses: codecov/codecov-action@v2
+      with:
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
