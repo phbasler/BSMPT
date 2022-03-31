@@ -21,12 +21,17 @@ jobs:
     - name: compile
       run: cd build && cmake --build . -j --config Release
     - name: run benchmarks
-      run: cd build && ./bin/benchmarks --benchmark-samples 50
+      run: cd build && ./bin/benchmarks --benchmark-samples 50 | tee benchmark_result.txt
+    - name: Archive benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark_result
+        path: build/benchmark_result.txt
     - name: Store benchmark result
       uses: benchmark-action/github-action-benchmark@v1
       with:
         tool: 'catch2'
-        output-file-path: benchmark_result.json
+        output-file-path: build/benchmark_result.json
         auto-push: false
         alert-threshold: '150%'
         fail-on-alert: true
