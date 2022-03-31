@@ -164,32 +164,30 @@ TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
   Baryo::CalculateEtaInterface EtaInterface(config);
   const double testVW = Expected.testVW;
 
-  if (EWPT.vc / EWPT.Tc > 1)
+  REQUIRE(EWPT.vc > EWPT.Tc);
+  auto eta      = EtaInterface.CalcEta(testVW,
+                                  EWPT.EWMinimum,
+                                  vevsymmetricSolution,
+                                  EWPT.Tc,
+                                  modelPointer,
+                                  WhichMin);
+  const auto LW = EtaInterface.getLW();
+  REQUIRE(LW == Approx(Expected.LWPerSetting.at(WhichMin)).epsilon(1e-4));
+
+  auto expectedEta = Expected.etaPerSetting.at(WhichMin);
+  REQUIRE(eta.size() == expectedEta.size());
+  UNSCOPED_INFO("Check eta components");
+  const double etaThreshold = 1e-15;
+  for (std::size_t i{0}; i < vevsymmetricSolution.size(); ++i)
   {
-    auto eta      = EtaInterface.CalcEta(testVW,
-                                    EWPT.EWMinimum,
-                                    vevsymmetricSolution,
-                                    EWPT.Tc,
-                                    modelPointer,
-                                    WhichMin);
-    const auto LW = EtaInterface.getLW();
-    REQUIRE(LW == Approx(Expected.LWPerSetting.at(WhichMin)).epsilon(1e-4));
+    auto res      = std::abs(eta.at(i));
+    auto expected = std::abs(expectedEta.at(i));
 
-    auto expectedEta = Expected.etaPerSetting.at(WhichMin);
-    REQUIRE(eta.size() == expectedEta.size());
-    UNSCOPED_INFO("Check eta components");
-    const double etaThreshold = 1e-15;
-    for (std::size_t i{0}; i < vevsymmetricSolution.size(); ++i)
-    {
-      auto res      = std::abs(eta.at(i));
-      auto expected = std::abs(expectedEta.at(i));
-
-      UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
-      UNSCOPED_INFO("This is the position:"
-                    << i << "\tFound solution =" << eta.at(i)
-                    << "\tExpected solution = " << expectedEta.at(i));
-      CompareValues(expected, res, 1e-2, etaThreshold);
-    }
+    UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
+    UNSCOPED_INFO("This is the position:"
+                  << i << "\tFound solution =" << eta.at(i)
+                  << "\tExpected solution = " << expectedEta.at(i));
+    CompareValues(expected, res, 1e-2, etaThreshold);
   }
 }
 

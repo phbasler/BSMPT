@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: Benchmark on PR
+on:
+  pull_requests:
+    branches: [master, develop]
+
+jobs:
+  PRbenchmarks:
+    runs: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev lcov
+    - name: cmake
+      run: mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release
+    - name: compile
+      run: cd build && cmake --build . -j --config Release
+    - name: run benchmarks
+      run: cd build && ./bin/benchmarks --benchmark-samples 50
+    - name: Store benchmark result
+      uses: benchmark-action/github-action-benchmark@v1
+      with:
+        tool: 'catch2'
+        output-file-path: benchmark_result.json
+        auto-push: false
+        alert-threshold: '150%'
+        fail-on-alert: true
