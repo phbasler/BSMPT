@@ -15,6 +15,7 @@ Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/phbasler/bsmpt/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/phbasler/bsmpt.svg)](https://github.com/phbasler/BSMPT/blob/master/LICENSE.md)
 [![Latest release](https://badgen.net/github/release/phbasler/bsmpt)](https://github.com/phbasler/bsmpt/releases)
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/phbasler/BSMPT.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/phbasler/BSMPT/context:cpp)
 
 
 Manual: version 2.0
