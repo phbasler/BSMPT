@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  mac-tests-fullSetup:
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
@@ -30,7 +30,7 @@ jobs:
     - name: Test
       run: cd build && ctest --output-on-failure
       
-  NoNLopt:
+  mac-tests-NoNLopt:
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
