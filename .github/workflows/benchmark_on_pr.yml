@@ -8,20 +8,20 @@ on:
     branches: [master, develop]
 
 jobs:
-  PRbenchmarks:
-    runs-on: ubuntu-20.04
+  PRbenchmark:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
           persist-credentials: false
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev lcov
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
     - name: cmake
       run: mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release
     - name: compile
-      run: cd build && cmake --build . -j --config Release
+      run: cd build && cmake --build . -j --config Release -t benchmarks
     - name: run benchmarks
-      run: cd build && ./bin/benchmarks --benchmark-samples 50 | tee benchmark_result.txt
+      run: cd build && ./bin/benchmarks --benchmark-samples 2 | tee benchmark_result.txt
     - name: Archive benchmark results
       uses: actions/upload-artifact@v3
       with:
@@ -30,8 +30,11 @@ jobs:
     - name: Store benchmark result
       uses: benchmark-action/github-action-benchmark@v1
       with:
+        name: Catch2 Benchmark
         tool: 'catch2'
         output-file-path: build/benchmark_result.txt
-        auto-push: false
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        auto-push: true
+        benchmark-data-dir-path: "."
         alert-threshold: '150%'
         fail-on-alert: true
