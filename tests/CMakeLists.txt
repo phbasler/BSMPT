@@ -37,9 +37,9 @@ target_compile_features(GenericTests PUBLIC cxx_std_14)
 include(Catch)
 catch_discover_tests(GenericTests)
 
-if(TARGET Baryo)
+if(Boost_FOUND)
   add_subdirectory(baryotests)
-endif()
+endif(Boost_FOUND)
 
 
 

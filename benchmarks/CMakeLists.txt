@@ -16,7 +16,7 @@ add_executable(benchmarks ${SOURCE_FILES})
 target_link_libraries(benchmarks Catch Minimizer Models Utility TestCompares ThermalFunctions)
 target_compile_features(benchmarks PUBLIC cxx_std_14)
 
-if(TARGET Baryo)
+if(Boost_FOUND)
   target_link_libraries(benchmarks Baryo)
-endif()
+endif(Boost_FOUND)
 
