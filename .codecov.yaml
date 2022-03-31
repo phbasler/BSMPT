@@ -5,6 +5,7 @@ coverage:
 
 ignore:
   - "tests/**"
+  - "benchmarks/**"
   - "src/prog/**"
   - "src/utility/Logger.cpp"
   - "include/BSMPT/utility/Logger.h"
