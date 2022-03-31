@@ -20,5 +20,3 @@ if(TARGET Baryo)
   target_link_libraries(benchmarks Baryo)
 endif()
 
-include(Catch)
-catch_discover_tests(benchmarks)
