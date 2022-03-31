@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
+#define CATCH_CONFIG_CONSOLE_WIDTH 500
+
 #include "catch.hpp"
 #include <BSMPT/baryo_calculation/CalculateEtaInterface.h>
 #include <BSMPT/minimizer/Minimizer.h>
@@ -32,13 +34,14 @@ TEST_CASE("Benchmark NLOVEV for C2HDM", "[c2hdm]")
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::C2HDM);
   modelPointer->initModel(example_point_C2HDM);
-  BENCHMARK("Benchmark NLOVEV for C2HDM"){
-  std::vector<double> Check;
-  return Minimizer::Minimize_gen_all(modelPointer,
-                                         0,
-                                         Check,
-                                         modelPointer->get_vevTreeMin(),
-                                         Minimizer::WhichMinimizerDefault);
+  BENCHMARK("NLOVEV")
+  {
+    std::vector<double> Check;
+    return Minimizer::Minimize_gen_all(modelPointer,
+                                       0,
+                                       Check,
+                                       modelPointer->get_vevTreeMin(),
+                                       Minimizer::WhichMinimizerDefault);
   };
 }
 
@@ -48,11 +51,10 @@ TEST_CASE("Benchmark EWPT for C2HDM", "[c2hdm]")
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::C2HDM);
   modelPointer->initModel(example_point_C2HDM);
-  BENCHMARK("Benchmark EWPT for C2HDM")
+  BENCHMARK("EWPT")
   {
     std::vector<double> Check;
     return Minimizer::PTFinder_gen_all(
         modelPointer, 0, 300, Minimizer::WhichMinimizerDefault);
   };
-
 }

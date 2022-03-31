@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
+#define CATCH_CONFIG_CONSOLE_WIDTH 500
+
 #include "catch.hpp"
 #include <BSMPT/baryo_calculation/CalculateEtaInterface.h>
 #include <BSMPT/minimizer/Minimizer.h>
@@ -75,7 +77,7 @@ TEST_CASE("Benchmark EWBG for C2HDM", "[c2hdm]")
       std::pair<std::vector<bool>, int>{std::vector<bool>(5, true), 1};
   const double testVW = Expected.testVW;
 
-  BENCHMARK("Eta C2HDM Calc Benchmark")
+  BENCHMARK("EWBG")
   {
     Baryo::CalculateEtaInterface benchmarkEtaInterface(config);
     return benchmarkEtaInterface.CalcEta(testVW,
