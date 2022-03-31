@@ -6,7 +6,7 @@
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this
                           // in one cpp file
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
-#define CATCH_CONFIG_CONSOLE_WIDTH 500
+#define CATCH_CONFIG_CONSOLE_WIDTH 180
 
 #include "catch.hpp"
 #include <BSMPT/utility/Logger.h>

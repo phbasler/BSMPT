@@ -31,7 +31,7 @@ jobs:
       uses: benchmark-action/github-action-benchmark@v1
       with:
         tool: 'catch2'
-        output-file-path: build/benchmark_result.json
+        output-file-path: build/benchmark_result.txt
         auto-push: false
         alert-threshold: '150%'
         fail-on-alert: true
