@@ -6,7 +6,7 @@ name: Doxygen Deploy
 
 on:
   push:
-    branches: [ master, benchmark ]
+    branches: [ master ]
   
     
     

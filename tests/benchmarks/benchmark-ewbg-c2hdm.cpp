@@ -3,7 +3,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
+#include <benchmark/benchmark.h>
+
 #include <BSMPT/baryo_calculation/CalculateEtaInterface.h>
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
@@ -39,49 +40,40 @@ void CompareValues(T expected, T result, double epsilon, double threshold)
 }
 } // namespace
 
-TEST_CASE("Benchmark EWBG for C2HDM", "[c2hdm]")
+
+static void BM_EWBG(benchmark::State& state)
 {
-  using namespace BSMPT;
-  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-  modelPointer->initModel(example_point_C2HDM);
+    using namespace BSMPT;
+    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+        ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+    modelPointer->initModel(example_point_C2HDM);
 
-  const auto WhichMin = Minimizer::WhichMinimizerDefault;
+    const auto WhichMin = Minimizer::WhichMinimizerDefault;
 
-  const auto EWPT = Expected.EWPTPerSetting.at(WhichMin);
+    const auto EWPT = Expected.EWPTPerSetting.at(WhichMin);
 
-  std::vector<double> vevsymmetricSolution, checksym, startpoint;
-  for (const auto &el : EWPT.EWMinimum)
-    startpoint.push_back(0.5 * el);
-  vevsymmetricSolution = Minimizer::Minimize_gen_all(
-      modelPointer, EWPT.Tc + 1, checksym, startpoint, WhichMin, true);
-  auto min_expected = Expected.vevSymmetricPerSetting.at(WhichMin);
-  REQUIRE(vevsymmetricSolution.size() == min_expected.size());
-  for (std::size_t i{0}; i < vevsymmetricSolution.size(); ++i)
-  {
-    auto res      = std::abs(vevsymmetricSolution.at(i));
-    auto expected = std::abs(min_expected.at(i));
-    UNSCOPED_INFO("Current Option for Minimizer:\t" << WhichMin);
-    UNSCOPED_INFO("This is the position:"
-                  << i << "\tFound solution =" << vevsymmetricSolution.at(i)
-                  << "\tExpected solution = " << min_expected.at(i));
-    CompareValues(expected, res, 1e-4, 1e-4);
-  }
+    std::vector<double> vevsymmetricSolution, checksym, startpoint;
+    for (const auto &el : EWPT.EWMinimum)
+      startpoint.push_back(0.5 * el);
+    vevsymmetricSolution = Minimizer::Minimize_gen_all(
+        modelPointer, EWPT.Tc + 1, checksym, startpoint, WhichMin, true);
+    auto min_expected = Expected.vevSymmetricPerSetting.at(WhichMin);
 
-  // Call: Calculation of eta in the different implemented approaches
+    auto config =
+        std::pair<std::vector<bool>, int>{std::vector<bool>(5, true), 1};
+    const double testVW = Expected.testVW;
 
-  auto config =
-      std::pair<std::vector<bool>, int>{std::vector<bool>(5, true), 1};
-  const double testVW = Expected.testVW;
-
-  BENCHMARK("EWBG")
-  {
-    Baryo::CalculateEtaInterface benchmarkEtaInterface(config);
-    return benchmarkEtaInterface.CalcEta(testVW,
-                                         EWPT.EWMinimum,
-                                         vevsymmetricSolution,
-                                         EWPT.Tc,
-                                         modelPointer,
-                                         WhichMin);
-  };
+    for(auto _ : state)
+    {
+        Baryo::CalculateEtaInterface benchmarkEtaInterface(config);
+        auto result = benchmarkEtaInterface.CalcEta(testVW,
+                                             EWPT.EWMinimum,
+                                             vevsymmetricSolution,
+                                             EWPT.Tc,
+                                             modelPointer,
+                                             WhichMin);
+        (void)result;
+    }
 }
+
+BENCHMARK(BM_EWBG);
