@@ -3,9 +3,6 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#define CATCH_CONFIG_ENABLE_BENCHMARKING
-#define CATCH_CONFIG_CONSOLE_WIDTH 180
-
 #include "catch.hpp"
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
