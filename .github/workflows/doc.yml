@@ -6,7 +6,7 @@ name: Doxygen Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, benchmark ]
   
     
     
@@ -26,3 +26,4 @@ jobs:
        with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build/html # The folder the action should deploy.
+          target-folder: documentation
