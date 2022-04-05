@@ -127,7 +127,6 @@ if(EnableCoverage)
             ${CodeCoverageExcludesFromOtherPkgs}
             "${PROJECT_SOURCE_DIR}/tests/*"
             "tests/*"
-            "benchmarks/*"
             "${PROJECT_SOURCE_DIR}/src/prog/*"
             "${PROJECT_SOURCE_DIR}/src/utility/*"
             "${PROJECT_SOURCE_DIR}/include/BSMPT/utility/Logger.h"
