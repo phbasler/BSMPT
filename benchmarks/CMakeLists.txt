@@ -15,6 +15,12 @@ endif()
 add_executable(benchmarks ${SOURCE_FILES})
 target_link_libraries(benchmarks Catch Minimizer Models Utility TestCompares ThermalFunctions)
 target_compile_features(benchmarks PUBLIC cxx_std_14)
+target_compile_options(
+  benchmarks
+  PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/DCATCH_CONFIG_ENABLE_BENCHMARKING>
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-DCATCH_CONFIG_ENABLE_BENCHMARKING>
+)
 
 if(Boost_FOUND)
   target_link_libraries(benchmarks Baryo)
