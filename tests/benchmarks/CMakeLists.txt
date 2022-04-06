@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 
-find_package(benchmark)
+find_package(benchmark QUIET)
 
 if(benchmark_FOUND)
 set(TESTDIR ${CMAKE_CURRENT_SOURCE_DIR})
