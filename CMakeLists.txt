@@ -28,6 +28,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing" OFF)
+option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
 
 include(LTO)
 
@@ -64,6 +65,10 @@ find_package(GSL 2.1 REQUIRED)
 
 
 find_package(Threads REQUIRED)
+
+if(NOT BOOST_FOUND)
+  set(BSMPTCompileBaryo OFF)
+endif()
 
 
 set(CodeCoverageExcludesFromOtherPkgs
@@ -166,14 +171,14 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     )
 
 
-  if(Boost_FOUND)
+  if(BSMPTCompileBaryo)
     set(ExportList
       ${ExportList}
       Baryo
       LibWallThickness
       Kfactors
       )
-  endif(Boost_FOUND)
+  endif(BSMPTCompileBaryo)
 
 
   export(

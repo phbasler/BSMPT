@@ -20,10 +20,10 @@ jobs:
      - name: installPackages
        run: sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-cxx-dev libboost-all-dev doxygen
      - name: cmake
-       run: mkdir build && cd build && cmake -DUseLibCMAES=OFF .. && cmake --build . -j -t doc
+       run: mkdir build && cd build && cmake .. && cmake --build . -j -t doc
      - name: Deploy
-       uses: JamesIves/github-pages-deploy-action@releases/v3
+       uses: JamesIves/github-pages-deploy-action@v4.3.0
        with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build/html # The folder the action should deploy.
+          branch: gh-pages # The branch the action should deploy to.
+          folder: build/html # The folder the action should deploy.
+          target-folder: documentation
