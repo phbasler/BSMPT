@@ -62,7 +62,7 @@ static void BM_EWPT(benchmark::State& state)
 
 
 BENCHMARK(BM_NLOVEV);
-BENCHMARK(BM_EWPT);
+BENCHMARK(BM_EWPT)->Repetitions(5);
 BENCHMARK_MAIN();
 
 

@@ -76,4 +76,4 @@ static void BM_EWBG(benchmark::State& state)
     }
 }
 
-BENCHMARK(BM_EWBG);
+BENCHMARK(BM_EWBG)->Repetitions(5);
