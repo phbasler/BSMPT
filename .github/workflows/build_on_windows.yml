@@ -6,7 +6,7 @@ name: Windows build develop branch
 
 on:
   push:
-    branches: [ develop, windowsCI ]
+    branches: [ develop ]
 
 jobs:
   build:
@@ -21,14 +21,12 @@ jobs:
       with:
         python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-    - name: cmake help
-      run: cmake --help
     - name: Install conan
       run: pip install conan
     - name: Refresh Shell
       run: refreshenv
     - name: cmake
-      run: cmake -S . -B build -DUseConan=On -DCMAKE_BUILD_TYPE=Release  -G 'Visual Studio 16 2019' -A x64
+      run: cmake -S . -B build -DUseConan=On -DCMAKE_BUILD_TYPE=Release
     - name: make
       run: cd build && cmake --build . -j --config Release
 
