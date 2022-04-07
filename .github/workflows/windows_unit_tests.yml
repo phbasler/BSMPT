@@ -18,17 +18,17 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
           persist-credentials: false
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v3
       with:
-        python-version: 3.7
-    - name: Install Conan
-      run: pip install conan && conan --version
-    - name: Install cmake
-      run: conan install cmake/3.22.3@ -g=virtualrunenv
+        python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+    - name: Install conan
+      run: pip install conan
+    - name: Refresh Shell
+      run: refreshenv
     - name: cmake
       run: mkdir build && cd build && cmake -DUseConan=On -DCMAKE_BUILD_TYPE=Release .. 
     - name: make

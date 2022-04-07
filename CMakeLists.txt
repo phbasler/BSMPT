@@ -41,7 +41,7 @@ if(UseConan)
 				     gsl/2.7				     
 				     boost/1.78.0)
 
-	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	        set(ConanPkgList ${ConanPkgList} benchmark/1.6.1)
 	endif()
 	if(UseNLopt)
