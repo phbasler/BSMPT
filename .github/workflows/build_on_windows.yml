@@ -18,7 +18,7 @@ jobs:
       with:
           persist-credentials: false
     - name: Install conan
-      uses: crazy-max/ghaction-chocolatey@v1
+      uses: crazy-max/ghaction-chocolatey@v1.6.0
       with:
         args: install conan
     - name: cmake
