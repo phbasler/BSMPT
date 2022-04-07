@@ -25,6 +25,8 @@ jobs:
       run: cmake --help
     - name: Install conan
       run: pip install conan
+    - name: Install cmake
+      run: pip install cmake
     - name: Refresh Shell
       run: refreshenv
     - name: cmake
