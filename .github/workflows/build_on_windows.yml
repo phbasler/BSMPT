@@ -21,6 +21,8 @@ jobs:
       uses: crazy-max/ghaction-chocolatey@v1.6.0
       with:
         args: install conan
+    - name: Refresh Shell
+      run: refreshenv
     - name: cmake
       run: mkdir build && cd build && cmake -DUseConan=On -DCMAKE_BUILD_TYPE=Release .. 
     - name: make
