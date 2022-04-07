@@ -26,7 +26,7 @@ jobs:
     - name: Refresh Shell
       run: refreshenv
     - name: cmake
-      run: mkdir build && cd build && cmake -DUseConan=On -DCMAKE_BUILD_TYPE=Release .. 
+      run: mkdir build && cd build && cmake -DUseConan=On -DCMAKE_BUILD_TYPE=Release  -G 'Visual Studio 16 2019' -A x64 .. 
     - name: make
       run: cd build && cmake --build . -j --config Release
 
