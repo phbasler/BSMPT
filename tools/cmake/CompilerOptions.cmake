@@ -26,6 +26,7 @@ if (MSVC)
       "C4061" # enumerator 'identifier' in switch of enum 'enumeration' is not
               # explicitly handled by a case label
               # Disable this because it flags even when there is a default.
+      "C4068"
       "C4100" # 'exarg' : unreferenced formal parameter
       "C4127" # conditional expression is constant
       "C4200" # nonstandard extension used : zero-sized array in
@@ -40,6 +41,7 @@ if (MSVC)
       "C4245" # 'initializing' : conversion from 'long' to
               # 'unsigned long', signed/unsigned mismatch
       "C4267" # conversion from 'size_t' to 'int', possible loss of data
+      "C4355"
       "C4371" # layout of class may have changed from a previous version of the
               # compiler due to better packing of member '...'
       "C4388" # signed/unsigned mismatch
@@ -57,6 +59,7 @@ if (MSVC)
               # side-effect" caused by FD_* macros.
       "C4610" # struct 'argument' can never be instantiated - user defined
               # constructor required.
+      "C4619"
       "C4623" # default constructor was implicitly defined as deleted
       "C4625" # copy constructor could not be generated because a base class
               # copy constructor is inaccessible or deleted

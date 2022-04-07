@@ -11,7 +11,7 @@
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility/utility.h>
 
-#include "GenerateTestCompares/RN2HDM.h"
+#include "RN2HDM.h"
 
 const std::vector<double> example_point_RN2HDM{/* lambda_1 = */ 0.300812,
                                                /* lambda_2 = */ 0.321809,

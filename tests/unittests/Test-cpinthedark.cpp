@@ -10,7 +10,7 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
-#include "GenerateTestCompares/CPINTHEDARK.h"
+#include "CPINTHEDARK.h"
 #include <fstream>
 
 const std::vector<double> example_point_CPINTHEDARK{

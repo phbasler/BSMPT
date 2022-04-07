@@ -10,7 +10,7 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
-#include "GenerateTestCompares/R2HDM.h"
+#include "R2HDM.h"
 
 const Compare_R2HDM Expected;
 

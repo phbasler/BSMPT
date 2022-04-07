@@ -11,7 +11,7 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
-#include "GenerateTestCompares/C2HDM.h"
+#include "C2HDM.h"
 
 #include <fstream>
 #include <optional>

@@ -10,7 +10,7 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
-#include "GenerateTestCompares/C2HDM.h"
+#include "C2HDM.h"
 #include <fstream>
 
 const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,

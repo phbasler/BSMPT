@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: Windows build develop branch
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          persist-credentials: false
+    - name : installPackages
+      uses: crazy-max/ghaction-chocolatey@v1
+      with:
+        args: install conan
+    - name: cmake
+      run: mkdir build && cd build && cmake -DUseConan=On -DCMAKE_BUILD_TYPE=Release .. 
+    - name: make
+      run: cd build && cmake --build . -j --config Release
+
+
+

@@ -5,7 +5,7 @@
 
 #include "catch.hpp"
 
-#include "GenerateTestCompares/C2HDM.h"
+#include "C2HDM.h"
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
 

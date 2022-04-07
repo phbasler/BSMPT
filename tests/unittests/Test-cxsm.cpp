@@ -11,7 +11,7 @@
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/utility/Logger.h>
 
-#include "GenerateTestCompares/CXSM.h"
+#include "CXSM.h"
 #include <fstream>
 
 const std::vector<double> example_point_CXSM{/* vh = */ 246.219651,
