@@ -20,12 +20,15 @@ jobs:
           persist-credentials: false
     - name : installPackages
       run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev lcov
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake .. -DEnableCoverage=On
     - name: compile
-      run: cd build && cmake --build . -j 
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
     - name: Generate Coverage
-      run: cd build && cmake --build . -j -t coverage
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage
       uses: codecov/codecov-action@v2
       with:

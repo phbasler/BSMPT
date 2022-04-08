@@ -23,12 +23,15 @@ jobs:
           persist-credentials: false
     - name : installPackages
       run : brew install eigen gsl nlopt boost libomp
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake .. 
     - name: make
-      run: cd build && cmake --build . -j
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
     - name: Test
-      run: cd build && ctest --output-on-failure
+      run: cd build && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
       
   mac-tests-NoNLopt:
     runs-on: macos-latest
@@ -40,10 +43,13 @@ jobs:
           persist-credentials: false
     - name : installPackages
       run : brew install eigen gsl boost libomp
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir buildNoNLOPT && cd buildNoNLOPT && cmake .. 
     - name: make
-      run: cd buildNoNLOPT && cmake --build . -j
+      run: cd buildNoNLOPT && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
     - name: Test
-      run: cd buildNoNLOPT && ctest --output-on-failure
+      run: cd buildNoNLOPT && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
     

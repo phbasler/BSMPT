@@ -19,10 +19,13 @@ jobs:
           persist-credentials: false
     - name : installPackages
       run : sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake .. 
     - name: make
-      run: cd build && cmake --build . -j
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
 
 
 

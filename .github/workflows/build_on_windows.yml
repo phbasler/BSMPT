@@ -25,10 +25,13 @@ jobs:
       run: pip install conan
     - name: Refresh Shell
       run: refreshenv
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: cmake -S . -B build -DUseConan=On -DCMAKE_BUILD_TYPE=Release
     - name: make
-      run: cd build && cmake --build . -j --config Release
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} --config Release
 
 
 

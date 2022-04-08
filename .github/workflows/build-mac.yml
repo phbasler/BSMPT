@@ -19,7 +19,10 @@ jobs:
           persist-credentials: false
     - name: installPackages
       run: brew install eigen && brew install gsl && brew install nlopt && brew install boost && brew install libomp
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake ..
     - name: make
-      run: cd build && cmake --build . -j
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
