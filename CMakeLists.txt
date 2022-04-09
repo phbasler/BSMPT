@@ -96,9 +96,9 @@ endif()
 
 set(EXPORT_CMAES FALSE)
 include(FetchContent)
-if(UseLibCMAES AND NOT WIN32)
+if(UseLibCMAES)
 	include(CMAES)
-endif(UseLibCMAES AND NOT WIN32)
+endif(UseLibCMAES)
 
 if(UseNLopt)
 	find_package(NLopt QUIET)
