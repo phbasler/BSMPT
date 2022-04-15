@@ -7,7 +7,7 @@
 
 #include <BSMPT/baryo_calculation/CalculateEtaInterface.h>
 #include <BSMPT/minimizer/Minimizer.h>
-#include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
+#include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
