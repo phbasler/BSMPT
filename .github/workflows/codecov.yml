@@ -30,7 +30,7 @@ jobs:
     - name: Generate Coverage
       run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         flags: unittests # optional
         name: codecov-umbrella # optional
