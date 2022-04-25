@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(
   BSMPT
-  VERSION 2.3.2
+  VERSION 2.3.3
   LANGUAGES C CXX)
 
 # -------------------------------- setup cmake --------------------------------
@@ -15,56 +15,108 @@ endif(POLICY CMP0074)
 
 list(APPEND CMAKE_MODULE_PATH "${BSMPT_SOURCE_DIR}/tools/cmake")
 
+include(CompilerOptions)
+
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RELEASE")
+  set(CMAKE_BUILD_TYPE "Release")
 endif(NOT CMAKE_BUILD_TYPE)
 
-set(CMAKE_CXX_FLAGS_DEBUG
-    "${CMAKE_CXX_FLAGS_DEBUG} -pedantic -Wall -Wextra -Wmissing-declarations -Wmissing-include-dirs -Wshadow  -DCOMPILEDEBUG=true"
-)
-set(CMAKE_CXX_FLAGS_RELEASE
-    "${CMAKE_CXX_FLAGS_RELEASE} -O3 -pedantic -Wall -Wextra -Wshadow")
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing" OFF)
+option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
+
+include(LTO)
+
+option(UseConan "Use conan to get dependencies" OFF)
+
+if(UseConan)
+	list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+	include(conan)
+	set(ConanPkgList eigen/3.4.0 
+				     gsl/2.7				     
+				     boost/1.78.0)
+
+	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+	        set(ConanPkgList ${ConanPkgList} benchmark/1.6.1)
+	endif()
+	if(UseNLopt)
+		set(ConanPkgList ${ConanPkgList} nlopt/2.7.1)
+	endif(UseNLopt)
+	conan_cmake_configure(REQUIRES ${ConanPkgList}
+                      GENERATORS cmake_find_package)
+					  
+	
+	conan_cmake_autodetect(settings)
+
+	conan_cmake_install(PATH_OR_REFERENCE .
+                    BUILD missing
+                    REMOTE conancenter
+                    SETTINGS ${settings})
+	
+endif(UseConan)
+
 
 find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
+
+
+
 find_package(Threads REQUIRED)
+
+if(NOT BOOST_FOUND)
+  set(BSMPTCompileBaryo OFF)
+endif()
+
+
+set(CodeCoverageExcludesFromOtherPkgs
+  "${EIGEN3_ROOT_DIR}/*"
+  "${GSL_ROOT_DIR}/*")
+
+if(Boost_FOUND)
+  if(NOT "${Boost_DIR}" STREQUAL "")
+    set(CodeCoverageExcludesFromOtherPkgs
+      ${CodeCoverageExcludesFromOtherPkgs}
+      "${Boost_DIR}/*"
+      )
+  endif()
+  if(NOT "${Boost_ROOT_DIR}" STREQUAL "")
+    set(CodeCoverageExcludesFromOtherPkgs
+      ${CodeCoverageExcludesFromOtherPkgs}
+      "${Boost_ROOT_DIR}/*"
+      )
+  endif()
+endif()
 
 set(EXPORT_CMAES FALSE)
 include(FetchContent)
 if(UseLibCMAES AND NOT WIN32)
-  find_package(OpenMP REQUIRED)
-  find_package(libcmaes 0.10 QUIET)
-    if(NOT libcmaes_FOUND)
-      set(EXPORT_CMAES TRUE)
-      FetchContent_Declare(
-        libcmaes
-        GIT_REPOSITORY https://github.com/CMA-ES/libcmaes.git
-        GIT_TAG master)
-      FetchContent_GetProperties(libcmaes)
-      if(NOT libcmaes_POPULATED)
-        option(LIBCMAES_BUILD_TESTS OFF)
-        option(LIBCMAES_BUILD_PYTHON OFF)
-        option(LIBCMAES_BUILD_EXAMPLES OFF)
-        FetchContent_Populate(libcmaes)
-        add_subdirectory(${libcmaes_SOURCE_DIR} ${libcmaes_BINARY_DIR})
-        include (GenerateExportHeader)
-        generate_export_header (cmaes EXPORT_FILE_NAME ${libcmaes_SOURCE_DIR}/include/libcmaes/cmaes_export.h)
-        message(STATUS ${libcmaes_SOURCE_DIR})
-      endif()
-      set(libcmaes_FOUND TRUE)
-    endif()
+	include(CMAES)
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
-  find_package(NLopt QUIET)
+	find_package(NLopt QUIET)
+  if(NLopt_FOUND)
+    if(NOT "${NLopt_ROOT_DIR}" STREQUAL "")
+      set(CodeCoverageExcludesFromOtherPkgs
+        ${CodeCoverageExcludesFromOtherPkgs}
+        "${NLopt_ROOT_DIR}/*"
+        )
+    endif()
+    if(NOT "${NLopt_DIR}" STREQUAL "")
+      set(CodeCoverageExcludesFromOtherPkgs
+        ${CodeCoverageExcludesFromOtherPkgs}
+        "${NLopt_DIR}/*"
+        )
+    endif()
+  endif()
+
 endif(UseNLopt)
 
 if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
@@ -72,6 +124,36 @@ if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
 endif()
 
 configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
+
+option(EnableCoverage "Enable code coverage" OFF)
+if(EnableCoverage)
+  include(CodeCoverage)
+  append_coverage_compiler_flags()
+#  set(LCOV_ARGS "--no-external")
+  set(COVERAGE_EXCLUDES
+            "/usr/include/*"
+            "/usr/lib/*"
+            ${CodeCoverageExcludesFromOtherPkgs}
+            "${PROJECT_SOURCE_DIR}/tests/*"
+            "tests/*"
+            "${PROJECT_SOURCE_DIR}/src/prog/*"
+            "${PROJECT_SOURCE_DIR}/src/utility/*"
+            "${PROJECT_SOURCE_DIR}/include/BSMPT/utility/Logger.h"
+            "${PROJECT_SOURCE_DIR}/src/Kfactors/Kfactors.cpp"
+            "${PROJECT_SOURCE_DIR}/src/models/ClassPotentialOrigin_deprecated.cpp"
+            "${PROJECT_SOURCE_DIR}/src/models/ClassTemplate.cpp"
+            "${PROJECT_SOURCE_DIR}/src/WallThickness/WallThickness1D.cpp"
+            )
+  SETUP_TARGET_FOR_COVERAGE_LCOV(
+     NAME coverage                 # New target name
+     EXECUTABLE ctest  -j ${n_cores} # Executable in PROJECT_BINARY_DIR
+     BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
+#     EXCLUDE "_deps/*" "${PROJECT_SOURCE_DIR}/tests/*" "${PROJECT_SOURCE_DIR}/src/prog/*"
+   )
+endif(EnableCoverage)
+
+
+find_lto(CXX)
 
 
 add_subdirectory(src)
@@ -93,14 +175,14 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     )
 
 
-  if(Boost_FOUND)
+  if(BSMPTCompileBaryo)
     set(ExportList
       ${ExportList}
       Baryo
       LibWallThickness
       Kfactors
       )
-  endif(Boost_FOUND)
+  endif(BSMPTCompileBaryo)
 
 
   export(
@@ -155,6 +237,7 @@ if(DOXYGEN_FOUND)
 else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation")
 endif(DOXYGEN_FOUND)
+
 
 
 # -------------------- Testing ---------------------------------------------------

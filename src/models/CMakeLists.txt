@@ -43,3 +43,6 @@ target_link_libraries( Models PUBLIC GSL::gsl Eigen3::Eigen Minimizer ThermalFun
 target_include_directories(Models PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Models PUBLIC cxx_std_14)
 
+# Include code-coverage settings:
+#target_link_libraries(Models PUBLIC coverage_config)
+

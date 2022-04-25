@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: Windows build develop branch
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          persist-credentials: false
+    - uses: actions/setup-python@v3
+      with:
+        python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+    - name: Install conan
+      run: pip install conan
+    - name: Refresh Shell
+      run: refreshenv
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
+    - name: cmake
+      run: cmake -S . -B build -DUseConan=On -DCMAKE_BUILD_TYPE=Release
+    - name: make
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} --config Release
+
+
+

@@ -4,9 +4,21 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 2.3.2
+Program: BSMPT version 2.3.3
 
 Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
+
+[![Ubuntu unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test.yml)
+[![Mac unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml)
+[![Windows unit tests](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml)
+[![codecov master](https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT)
+[![Documentation](https://img.shields.io/badge/Documentation-master-success)](https://phbasler.github.io/BSMPT/documentation)
+[![Benchmarks](https://img.shields.io/badge/Benchmark-master-success)](https://phbasler.github.io/BSMPT/benchmarks/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/phbasler/bsmpt/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/phbasler/bsmpt.svg)](https://github.com/phbasler/BSMPT/blob/master/LICENSE.md)
+[![Latest release](https://badgen.net/github/release/phbasler/bsmpt)](https://github.com/phbasler/bsmpt/releases)
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/phbasler/BSMPT.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/phbasler/BSMPT/context:cpp)
+
 
 Manual: version 2.0
 
@@ -29,7 +41,7 @@ user can easily implement further models.
 The program package can be downloaded at:
 https://github.com/phbasler/BSMPT
 
-A short documentation is given at: https://phbasler.github.io/BSMPT/
+A short documentation is given at: https://phbasler.github.io/BSMPT/documentation
 
 Sample input and output files are provided in the directory 'example'.
 
@@ -63,6 +75,9 @@ After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake`
     
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If NLopt is installed through your packet manager cmake will find it automatically. Otherwise, with `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you can tell where NLopt is installed. If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
 5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
+
+### Alternative Install method 
+If you have [conan](https://conan.io/) installed, then you can set the `-DUseConan=ON` flag for cmake and it will download boost, gsl, eigen3 and NLopt (if UseNLopt was not turned off) through [conancenter](https://conan.io/center/).
 
 ### build
 With the dependencies and options you can build the programm with

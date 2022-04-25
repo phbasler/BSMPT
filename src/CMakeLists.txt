@@ -4,11 +4,11 @@
 
 add_subdirectory(minimizer)
 add_subdirectory(models)
-if(Boost_FOUND)
+if(BSMPTCompileBaryo)
   add_subdirectory(baryo_calculation)
   add_subdirectory(WallThickness)
   add_subdirectory(Kfactors)
-endif(Boost_FOUND)
+endif(BSMPTCompileBaryo)
 add_subdirectory(ThermalFunctions)
 
 
@@ -46,29 +46,29 @@ target_compile_features(Test PUBLIC cxx_std_14)
 
 
 
-if(Boost_FOUND)
+if(BSMPTCompileBaryo)
 add_executable(CalculateEWBG prog/CalculateEWBG.cpp)
 target_link_libraries(CalculateEWBG Minimizer Models Baryo Utility)
 target_compile_features(CalculateEWBG PUBLIC cxx_std_14)
-else(Boost_FOUND)
+else(BSMPTCompileBaryo)
   message("CalculateEWBG will not compile as Boost is missing")
-endif(Boost_FOUND)
+endif(BSMPTCompileBaryo)
 
-if(Boost_FOUND)
+if(BSMPTCompileBaryo)
 add_executable(PlotEWBG_vw prog/PlotEWBG_vw.cpp)
 target_link_libraries(PlotEWBG_vw Minimizer Models Baryo Utility)
 target_compile_features(PlotEWBG_vw PUBLIC cxx_std_14)
-else(Boost_FOUND)
+else(BSMPTCompileBaryo)
   message("PlotEWBG_vw will not compile as Boost is missing")
-endif(Boost_FOUND)
+endif(BSMPTCompileBaryo)
 
-if(Boost_FOUND)
+if(BSMPTCompileBaryo)
 add_executable(PlotEWBG_nL prog/PlotEWBG_nL.cpp)
 target_link_libraries(PlotEWBG_nL Minimizer Models Baryo Utility)
 target_compile_features(PlotEWBG_nL PUBLIC cxx_std_14)
-else(Boost_FOUND)
+else(BSMPTCompileBaryo)
   message("PlotEWBG_nL will not compile as Boost is missing")
-endif(Boost_FOUND)
+endif(BSMPTCompileBaryo)
 
 
 
@@ -78,21 +78,21 @@ endif(Boost_FOUND)
 
 if(MakeAdditionalTesting)
 
-  if(Boost_FOUND)
+  if(BSMPTCompileBaryo)
     add_executable(CreateMuGrid prog/CreateMuGrid.cpp)
     target_link_libraries(CreateMuGrid Minimizer Models Baryo Utility)
     target_compile_features(CreateMuGrid PUBLIC cxx_std_14)
-  else(Boost_FOUND)
+  else(BSMPTCompileBaryo)
     message("CreateMuGrid will not compile as Boost is missing")
-  endif(Boost_FOUND)
+  endif(BSMPTCompileBaryo)
 
-  if(Boost_FOUND)
+  if(BSMPTCompileBaryo)
     add_executable(Kfactor_grid prog/Kfactor_grid.cpp)
     target_link_libraries(Kfactor_grid Minimizer Models Kfactors Utility)
     target_compile_features(Kfactor_grid PUBLIC cxx_std_14)
-  else(Boost_FOUND)
+  else(BSMPTCompileBaryo)
     message("Kfactor_grid will not compile as Boost is missing")
-  endif(Boost_FOUND)
+  endif(BSMPTCompileBaryo)
 
 
 endif(MakeAdditionalTesting)

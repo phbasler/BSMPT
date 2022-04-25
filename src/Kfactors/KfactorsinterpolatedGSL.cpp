@@ -14,6 +14,8 @@
 #include <BSMPT/Kfactors/KfactorsinterpolatedGSL.h>
 #include <BSMPT/utility/utility.h>
 
+#include <gsl/gsl_math.h>
+
 #include <iostream>
 
 namespace BSMPT

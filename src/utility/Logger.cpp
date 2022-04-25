@@ -8,10 +8,12 @@
  * @file
  */
 
-#include <iostream>
-
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
 
 namespace BSMPT
 {

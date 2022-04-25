@@ -3,16 +3,17 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: ctest mac CI
+name: Mac unit tests
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master, develop ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  mac-tests-fullSetup:
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
@@ -22,14 +23,17 @@ jobs:
           persist-credentials: false
     - name : installPackages
       run : brew install eigen gsl nlopt boost libomp
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake .. 
     - name: make
-      run: cd build && cmake --build . -j
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
     - name: Test
-      run: cd build && ctest --output-on-failure
+      run: cd build && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
       
-  NoNLopt:
+  mac-tests-NoNLopt:
     runs-on: macos-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
@@ -39,10 +43,13 @@ jobs:
           persist-credentials: false
     - name : installPackages
       run : brew install eigen gsl boost libomp
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
     - name: cmake
       run: mkdir buildNoNLOPT && cd buildNoNLOPT && cmake .. 
     - name: make
-      run: cd buildNoNLOPT && cmake --build . -j
+      run: cd buildNoNLOPT && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
     - name: Test
-      run: cd buildNoNLOPT && ctest --output-on-failure
+      run: cd buildNoNLOPT && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
     

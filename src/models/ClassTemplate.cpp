@@ -150,7 +150,7 @@ void Class_Template::ReadAndSet(const std::string &linestr,
   std::stringstream ss(linestr);
   double tmp;
 
-  double lms, llambda;
+  double lms{0}, llambda{0};
 
   if (UseIndexCol)
   {
