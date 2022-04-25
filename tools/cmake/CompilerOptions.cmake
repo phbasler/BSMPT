@@ -15,6 +15,21 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     "${CMAKE_CXX_FLAGS_RELEASE} -O3 -pedantic -Wextra -Wshadow")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+include(CheckCXXCompilerFlag)
+
+check_cxx_compiler_flag("-march=native" _march_native_works)
+check_cxx_compiler_flag("-xHost" _xhost_works)
+
+if(_march_native_works)
+	message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+elseif(_xhost_works)
+	message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -xHost")
+else()
+	message(STATUS "No suitable compiler flag found for vectorization")
+endif()
+
 if (MSVC)
      set(CMAKE_CXX_FLAGS_DEBUG
        "${CMAKE_CXX_FLAGS_DEBUG} /permissive- /bigobj /w44101")
