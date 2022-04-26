@@ -49,7 +49,7 @@ The code is structured such that users can add their own models.
 The program package can be downloaded at:
 https://github.com/phbasler/BSMPT
 
-A short documentation is given at: [DoxygenLink]
+The documentation of the code is provided at [https://phbasler.github.io/BSMPT/documentation][DoxygenLink].
 
 Sample input and output files are provided in the directory 'example'.
 
@@ -58,31 +58,30 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 For additional information, comments, complaints or suggestions please e-mail
-to:  bsmpt@lists.kit.edu or create a corresponding Issue.
+to:  bsmpt@lists.kit.edu, open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions).
 
 ---
 
 ### Citation:
-If you use this program for your work, please cite [1803.02846](https://arxiv.org/abs/1803.02846) and [2007.01725](https://arxiv.org/abs/2007.01725)
+If you use this program for your work, please cite 
+
+  - [1803.02846](https://arxiv.org/abs/1803.02846)
+  - [2007.01725](https://arxiv.org/abs/2007.01725)
 
 ##Installation:
 
 ### Dependencies
-1. GSL library: The code assume GSL is installed in PATH
-2. Eigen3: If eigen3 is not found automatically, you need to give the path to your eigen3 installation.  To install eigen3 you go to your downloaded eigen3 folder and install it through   
-  
-        mkdir build && cd build  
-        cmake -DCMAKE_INSTALL_PREFIX=/path/to/installedEigen  ..  
-        make install  
-After that you can use `-DEigen3_Dir=/path/to/installedEigen/share/eigen3/cmake` to link Eigen3
-  
-3. libcmaes: Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically, otherwise you can point it to the install direction with
+BSMPT uses cmake which will try to find the following libraries. If they are not found automatically, you can use the -DpackageName_ROOT option of cmake to tell it where to look for the package.
+
+1. [GSL library](https://www.gnu.org/software/gsl/). 
+2. [Eigen3](https://eigen.tuxfamily.org/index.php?title=Main_Page)  
+3. [libcmaes](https://github.com/CMA-ES/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically, otherwise you can point it to the install direction with
     `-Dlibcmaes_ROOT=/path/to/cmaes`  
     
     If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `-DUseLibCMAES=OFF` 
     
-4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If NLopt is installed through your packet manager cmake will find it automatically. Otherwise, with `-DNLopt_DIR=/path/to/installedNLopt/lib/cmake/nlopt` you can tell where NLopt is installed. If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
-5. [Boost](https://www.boost.org/) : It should be found automatically, if not you can use `-DBOOST_ROOT=/path/to/boost`
+4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
+5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. If it is not found then these parts are not available.
 
 ### Alternative Install method 
 If you have [conan](https://conan.io/) installed, then you can set the `-DUseConan=ON` flag for cmake and it will download boost, gsl, eigen3 and NLopt (if UseNLopt was not turned off) through [conancenter](https://conan.io/center/).
@@ -103,7 +102,7 @@ Note to Mac Users: You have to use the g++ compiler as clang does not support Op
 
 
 ### Unit tests
-After calling `make` in the build directory you can call `ctest`or `./bin/GenericTests` to run some checks. Here the NLO VEV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
+After compiling the code call `ctest -j` in the build folder to run some checks. Here the NLO VEV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
 
 ---
 
@@ -129,5 +128,94 @@ Then you can call your model with `./binary YourModelName ...` .
 You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at bsmpt@lists.kit.edu
 
 Also contact us if you have a custom model for BSMPT v1.x and you have trouble converting it to the new notation.
+
+## Executables
+BSMPT provides multiple executables. Here we give a quick overview of them. For every executable you can call them with the `--help` option to get an overview of possible input parameters.
+For the following examples the C2HDM with the example/C2HDM_Input.dat file is used.
+
+### BSMPT
+BSMPT calculates the EWPT for every parameter point in the input file and gives out the results of those parameter points for which \f$v_c/T_c\f$ > 1. 
+To find these points a bisection method is used with the temperature starting between 0 and 300 GeV. The executable is called through:
+
+        ./bin/BSMPT Model Inputfile Outputfile LineStart LineEnd
+
+This will call the specific model to be used, identified through 'Model', and calculate the EWPT for each parameter point (corresponding to one line) between 'LineStart' and 'LineEnd'.
+
+For our example the command
+
+    	./bin/BSMPT c2hdm example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
+
+will calculate for the C2HDM the EWPT for one parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2 which can be compared with the already available file example/C2HDM_Input.dat_BSMPT.
+
+###CalcCT
+This will calculate the counterterms. In the output file the information on the input parameter point is given and the counterterms are added at the end of the line.
+
+It is called through the command
+
+    	./bin/CalcCT Model Inputfile Outputfile LineStart LineEnd
+
+For the C2HDM example this reads
+
+    	./bin/CalcCT c2hdm example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
+
+which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file example/C2HDM_Input.dat_CalcCT.
+
+###NLOVEV
+This calculates the VEV at 1-loop order at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called through
+
+    	./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
+
+and for the C2HDM example it is given by
+
+    	./bin/NLOVEV c2hdm example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
+
+where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.
+
+###VEVEVO
+This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through
+
+    	./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend
+
+where 'Tempstart' is the starting value of the temperature which increases with 'Tempstep' until 'Tempend'.
+
+For our C2HDM example this would be
+
+     	./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
+
+where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.
+
+###TripleHiggsCouplingNLO
+This program calculates the trilinear Higgs self-couplings at NLO at zero temperature. It is called through
+
+    	./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
+
+The C2HDM example is called through
+
+    	./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat example/test_TripleHiggsCouplingNLO.dat 2 2
+
+with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsCouplingNLO .
+
+###CalculateEWBG
+This program calculates the difference between baryons and anti-baryons
+normalized to the photon density generated through the EWPT.
+Please beware that this is only tested for the C2HDM so far and the general
+implementation is future work. It is called through
+
+    	./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd config_file
+
+ An example is given for the example/C2HDM_Input.dat parameter point through
+
+    	./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat 2 2 example/EWBG_config.txt
+
+with the result given in example/test_EWBG.dat which can be compared with
+the already available file example/C2HDM_Input.dat_EWBG.
+
+###PlotEWBG_vw
+This executable varies the wall velocity of a given parameter point and
+calculates the EWBG for each velocity.
+
+###PlotEWBG_nL
+This executable calculates the left-handed fermion density in front of the
+wall as a function of the distance to the bubble wall.
 
 [DoxygenLink]: https://phbasler.github.io/BSMPT/documentation
