@@ -147,7 +147,7 @@ For our example the command
 
 will calculate for the C2HDM the EWPT for one parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2 which can be compared with the already available file example/C2HDM_Input.dat_BSMPT.
 
-###CalcCT
+### CalcCT
 This will calculate the counterterms. In the output file the information on the input parameter point is given and the counterterms are added at the end of the line.
 
 It is called through the command
@@ -160,7 +160,7 @@ For the C2HDM example this reads
 
 which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file example/C2HDM_Input.dat_CalcCT.
 
-###NLOVEV
+### NLOVEV
 This calculates the VEV at 1-loop order at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called through
 
     	./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
@@ -171,7 +171,7 @@ and for the C2HDM example it is given by
 
 where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.
 
-###VEVEVO
+### VEVEVO
 This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through
 
     	./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend
@@ -184,7 +184,7 @@ For our C2HDM example this would be
 
 where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.
 
-###TripleHiggsCouplingNLO
+### TripleHiggsCouplingNLO
 This program calculates the trilinear Higgs self-couplings at NLO at zero temperature. It is called through
 
     	./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
@@ -195,7 +195,7 @@ The C2HDM example is called through
 
 with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsCouplingNLO .
 
-###CalculateEWBG
+### CalculateEWBG
 This program calculates the difference between baryons and anti-baryons
 normalized to the photon density generated through the EWPT.
 Please beware that this is only tested for the C2HDM so far and the general
@@ -210,11 +210,11 @@ implementation is future work. It is called through
 with the result given in example/test_EWBG.dat which can be compared with
 the already available file example/C2HDM_Input.dat_EWBG.
 
-###PlotEWBG_vw
+### PlotEWBG_vw
 This executable varies the wall velocity of a given parameter point and
 calculates the EWBG for each velocity.
 
-###PlotEWBG_nL
+### PlotEWBG_nL
 This executable calculates the left-handed fermion density in front of the
 wall as a function of the distance to the bubble wall.
 
