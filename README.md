@@ -12,7 +12,7 @@ Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 [![Mac unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml)
 [![Windows unit tests](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml)
 [![codecov master](https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT)
-[![Documentation](https://img.shields.io/badge/Documentation-master-success)](https://phbasler.github.io/BSMPT/documentation)
+[![Documentation](https://img.shields.io/badge/Documentation-master-success)][DoxygenLink]
 [![Benchmarks](https://img.shields.io/badge/Benchmark-master-success)](https://phbasler.github.io/BSMPT/benchmarks/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/phbasler/bsmpt/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/phbasler/bsmpt.svg)](https://github.com/phbasler/BSMPT/blob/master/LICENSE.md)
@@ -23,25 +23,33 @@ Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 Manual: version 2.0
 
 BSMPT - Beyond the Standard Model Phase Transitions:
-The C++ program package BSMPT calculates for models with extended
-Higgs sectors the loop-corrected effective potential at finite temperature
-including the daisy resummation of the bosonic masses. The program
-computes the vacuum expectation value (VEV) \f$ v \f$ of the potential
+The C++ program package BSMPT calculates the strength of the electroweak phase transition in extended Higgs sectors. For this the loop-corrected effective potential at finite temperature is calculated including the daisy resummation of the bosonic masses.
+The program computes the vacuum expectation value (VEV) \f$ v \f$ of the potential
 as a function of the temperature, and in particular the critical VEV
 \f$v_c\f$ at the temperature \f$T_c\f$ where the phase transition takes
-place. In addition, the loop-corrected trilinear Higgs self-couplings are
+place. 
+In addition, the loop-corrected trilinear Higgs self-couplings are
 provided. We apply an 'on-shell' renormalization scheme in the sense
 that the loop-corrected masses and mixing angles are required to be
 equal to their tree-level input values. This allows for efficient
-scans in the parameter space of the models. The models implemented so far
-are the CP-conserving and the CP-violating 2-Higgs-Doublet Models (2HDM) and the
-Next-to-Minimal 2HDM (N2HDM). The program structure is such that the
-user can easily implement further models.
+scans in the parameter space of the models. 
+
+The models implemented so far are
+
+  - CP-conserving 2-Higgs-Doublet Models (R2HDM)
+  - CP-violating  2-Higgs-Doublet Models (C2HDM)
+  - Next-to-Minimal 2HDM (N2HDM)
+  - CP in the dark ([arXiv 1807.10322](https://arxiv.org/abs/1807.10322))
+  - Complex Singlet Extension (CxSM)
+
+The code is structured such that users can add their own models.
+
+
 
 The program package can be downloaded at:
 https://github.com/phbasler/BSMPT
 
-A short documentation is given at: https://phbasler.github.io/BSMPT/documentation
+A short documentation is given at: [DoxygenLink]
 
 Sample input and output files are provided in the directory 'example'.
 
@@ -122,3 +130,4 @@ You can use the Test executable to detect possible errors in your implementation
 
 Also contact us if you have a custom model for BSMPT v1.x and you have trouble converting it to the new notation.
 
+[DoxygenLink]: https://phbasler.github.io/BSMPT/documentation

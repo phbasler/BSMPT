@@ -9,7 +9,6 @@
 
 /**
  * @file
- * Model file for CP in the Dark
  */
 
 #pragma once
@@ -25,8 +24,7 @@ namespace Models
  * Implementation of the model CP in the Dark as given in the manual.
  *
  *
- *
- * * \f$-\mathcal{L}_S =
+ * \f$-\mathcal{L}_S =
  * m_{11}^2|\Phi_1|^2+m_{22}^2|\Phi_2|^2+\frac{m_S^2}{2}\Phi_S^2+(A
  * \Phi_1^\dagger\Phi_2\Phi_S+ h.c.)
  * +\frac{\lambda_1}{2}|\Phi_1|^4+\frac{\lambda_2}{2}|\Phi_2|^4+\lambda_3|\Phi_1|^2|\Phi_2|^2+\lambda_4|\Phi_1^\dagger\Phi_2|^2+\frac{\lambda_5}{2}[(\Phi_1^\dagger\Phi_2)^2+(\Phi_2^\dagger\Phi_1)^2]+\frac{\lambda_6}{8}\Phi_S^4+\frac{\lambda_7}{2}|\Phi_1|^2\Phi_S^2+\frac{\lambda_8}{2}|\Phi_2|^2\Phi_S^2
@@ -61,6 +59,7 @@ namespace Models
  * \\ \zeta_2 + \omega_2 + i (\Psi_2 + \omega_\text{CP}) \end{pmatrix}\,, \f$
  * * \f$ \Phi_S = \zeta_S+\omega_S \f$
  *
+ *
  * using the configurations
  *
  * * \f$\text{higgsbase} =
@@ -74,10 +73,12 @@ namespace Models
  *
  * * \f$ \langle \Phi_1 \rangle\big|_{T=0} = \frac{1}{\sqrt{2}}
  * \begin{pmatrix}0\\v_1\end{pmatrix} \f$ with \f$ v_1 \equiv v =
- * 246.22\,\text{GeV}\f\,,$
+ * 246.22\,\text{GeV}\,,\f$
  * * \f$ \langle \Phi_2 \rangle\big|_{T=0} = \begin{pmatrix}0\\0\end{pmatrix}\,,
  * \f$
  * * \f$ \langle \Phi_S \rangle\big|_{T=0} = 0\,. \f$
+ *
+ *
  */
 class Class_Potential_CPintheDark : public Class_Potential_Origin
 {
