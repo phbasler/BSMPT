@@ -68,7 +68,7 @@ If you use this program for your work, please cite
   - [1803.02846](https://arxiv.org/abs/1803.02846)
   - [2007.01725](https://arxiv.org/abs/2007.01725)
 
-##Installation:
+## Installation:
 
 ### Dependencies
 BSMPT uses cmake which will try to find the following libraries. If they are not found automatically, you can use the -DpackageName_ROOT option of cmake to tell it where to look for the package.
@@ -106,7 +106,7 @@ After compiling the code call `ctest -j` in the build folder to run some checks.
 
 ---
 
-##How to add a new model (for further details, also see the manual):
+## How to add a new model (for further details, also see the manual):
 
 To add a new model you have to modify/create five files  
 
