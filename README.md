@@ -95,10 +95,7 @@ With the dependencies and options you can build the programm with
         cmake --build . -j -t doc
     
 
-The make doc will use doxygen to create the online help in build/html which can be opened locally.
-
-
-Note to Mac Users: You have to use the g++ compiler as clang does not support OpenMP. If you get the error "missing libcmaes_config.h" during the compilation, please check if the file is in build/libcmaes-0.9.5. If so, copy it to /path/to/libcmaes/include/libcmaes
+The `-t doc` will use doxygen to create the online help in build/html which can be opened locally.
 
 
 ### Unit tests
