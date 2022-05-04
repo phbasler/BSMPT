@@ -8,6 +8,7 @@ Program: BSMPT version 2.3.3
 
 Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 
+[!["GitHub Discussions"](https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&logo=github&colorB=purple)](https://github.com/phbasler/BSMPT/discussions)
 [![Ubuntu unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test.yml)
 [![Mac unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml)
 [![Windows unit tests](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml)
@@ -18,6 +19,7 @@ Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller
 [![GitHub license](https://img.shields.io/github/license/phbasler/bsmpt.svg)](https://github.com/phbasler/BSMPT/blob/master/LICENSE.md)
 [![Latest release](https://badgen.net/github/release/phbasler/bsmpt)](https://github.com/phbasler/bsmpt/releases)
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/phbasler/BSMPT.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/phbasler/BSMPT/context:cpp)
+
 
 
 Manual: version 2.0
