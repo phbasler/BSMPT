@@ -234,9 +234,9 @@ if(DOXYGEN_FOUND AND CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
                      "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
                      "${CMAKE_CURRENT_SOURCE_DIR}/Changelog.md")
 
-else (DOXYGEN_FOUND)
+else ()
   message("Doxygen need to be installed to generate the doxygen documentation")
-endif(DOXYGEN_FOUND)
+endif()
 
 
 
