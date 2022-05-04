@@ -39,7 +39,7 @@ The models implemented so far are
   - CP-conserving 2-Higgs-Doublet Models (R2HDM)
   - CP-violating  2-Higgs-Doublet Models (C2HDM)
   - Next-to-Minimal 2HDM (N2HDM)
-  - CP in the dark ([arXiv 1807.10322](https://arxiv.org/abs/1807.10322))
+  - CP in the Dark ([arXiv 1807.10322](https://arxiv.org/abs/1807.10322), [arXiv 2204.13425](https://arxiv.org/abs/2204.13425))
   - Complex Singlet Extension (CxSM)
 
 The code is structured such that users can add their own models.
