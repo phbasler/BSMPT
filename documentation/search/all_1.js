@@ -12,6 +12,5 @@ var searchData=
   ['broken_5fcp_5fviolating_5fphase_14',['broken_CP_violating_phase',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a6f4f3c477447ce8e3d85b1dc14d2be90',1,'BSMPT::Baryo::gen_fluid::broken_CP_violating_phase()'],['../classBSMPT_1_1Baryo_1_1transport__equations.html#aaae66a635afce0e840b4ef5374158c63',1,'BSMPT::Baryo::transport_equations::broken_CP_violating_phase()'],['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ae2d7040101d7ec7b3c5da391053d41b7',1,'BSMPT::Baryo::GSL_integration_mubl::broken_CP_violating_phase()']]],
   ['bsmpt_2ecpp_15',['BSMPT.cpp',['../BSMPT_8cpp.html',1,'']]],
   ['bsmptlogger_16',['BSMPTLogger',['../classBSMPT_1_1BSMPTLogger.html',1,'BSMPT']]],
-  ['bsmpt_20_2d_20a_20tool_20for_20calculating_20the_20temperature_20dependent_20_20effective_17',['BSMPT - A tool for calculating the temperature dependent  effective',['../index.html',1,'']]],
-  ['modelid_18',['ModelID',['../namespaceBSMPT_1_1ModelID.html',1,'BSMPT']]]
+  ['modelid_17',['ModelID',['../namespaceBSMPT_1_1ModelID.html',1,'BSMPT']]]
 ];

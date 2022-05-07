@@ -10,6 +10,7 @@ var hierarchy =
     [ "BSMPT::Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html", [
       [ "BSMPT::Models::Class_CxSM", "classBSMPT_1_1Models_1_1Class__CxSM.html", null ],
       [ "BSMPT::Models::Class_Potential_C2HDM", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html", null ],
+      [ "BSMPT::Models::Class_Potential_CPintheDark", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html", null ],
       [ "BSMPT::Models::Class_Potential_R2HDM", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html", null ],
       [ "BSMPT::Models::Class_Potential_RN2HDM", "classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html", null ],
       [ "BSMPT::Models::Class_Template", "classBSMPT_1_1Models_1_1Class__Template.html", null ]
