@@ -2,7 +2,7 @@ from sympy import *
 from sympy.physics.quantum import *
 from sympy.printing.cxxcode import cxxcode
 
-import BSMPTTools as BSMPTTools
+import ModelGenerator as ModelGenerator
 
 
 
@@ -32,13 +32,8 @@ fieldsZero = [(x,0) for x in Higgsfields]
 phiSq = simplify((Dagger(phi)*phi)[0])
 VHiggs = msq/2 * phiSq + la/factorial(4) * phiSq**2
 
-
-toyModel = BSMPTTools.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs)
-#toyModel.printTensors()
-
-# get VCT
-VCT=toyModel.getVCT()
-print("VCT = " + str(VCT))
+# Generate the model
+toyModel = ModelGenerator.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs,zeroTempVEV)
 
 
-toyModel.printCTForCPP(zeroTempVEV)
+toyModel.printModelToCPP()
