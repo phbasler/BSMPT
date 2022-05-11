@@ -6,6 +6,10 @@ SPDX-License-Identifier: GPL-3.0-or-later
 
 # Changelog
 
+# 2022/XX: Release of v2.4.0
+- Added Lisa Biermann to authors
+- TODO
+
 # 2022/04: Release of v2.3.3
 - Allow Conan to manage to dependencies 
 - Include LTO

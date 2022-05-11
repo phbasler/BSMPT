@@ -4,9 +4,9 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete M체hlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 2.3.3
+Program: BSMPT version 2.4.0
 
-Released by: Philipp Basler and Margarete M체hlleitner and Jonas M체ller
+Released by: Philipp Basler and Lisa Biermann and Margarete M체hlleitner and Jonas M체ller
 
 [!["GitHub Discussions"](https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&logo=github&colorB=purple)](https://github.com/phbasler/BSMPT/discussions)
 [![Ubuntu unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test.yml)
