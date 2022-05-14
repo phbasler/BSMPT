@@ -1,5 +1,5 @@
-from sympy import *
-from sympy.physics.quantum import *
+from sympy import symbols, Matrix, diff, simplify, Symbol, linsolve, I, hessian
+from sympy.physics.quantum import Dagger
 from sympy.printing.cxxcode import cxxcode
 
 class ModelGenerator:
@@ -32,7 +32,6 @@ class ModelGenerator:
         self._nHiggs = len(HiggsFields)
         self._VEVAtZeroTemp = VEVAtZeroTemp
         self._calcVCT()
-        self._NablaVCW = MatrixSymbol('NCW',self._nHiggs,1)
         self._NablaVCW = Matrix([[Symbol("NCW[{},{}]".format(i,j),real=True) for j in range(1)] for i in range(self._nHiggs)  ])
         self._HessianVCW = Matrix([[Symbol("HCW[{},{}]".format(i,j),real=True) for j in range(self._nHiggs)] for i in range(self._nHiggs)  ])
         self._TreeLevelTadpoleReplacement = None
