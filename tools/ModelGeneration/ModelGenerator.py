@@ -8,12 +8,21 @@ class ModelGenerator:
     _CTTadpoles = None
     _HiggsFields = None
     _VHiggs =None
-    _nHiggs = None
+    _nHiggs = 0
     _VCT = None
     _NablaVCW = None
     _HessianVCW = None
     _replacementLists = {}
     _VEVAtZeroTemp = None
+    _GaugeFields = []
+    _VGauge = None
+    _nGauge = 0
+    _LeptonFields = []
+    _nLeptons = 0
+    _VLep = 0
+    _QuarkFields = []
+    _nQuarks = 0
+    _VQuarks = 0
     def __init__(self, params, dparams,CTTadpoles,HiggsFields,VHiggs,VEVAtZeroTemp):
         self._params = params
         self._dparams = dparams
@@ -24,7 +33,8 @@ class ModelGenerator:
         self._VEVAtZeroTemp = VEVAtZeroTemp
         self._calcVCT()
         self._NablaVCW = MatrixSymbol('NCW',self._nHiggs,1)
-        self._HessianVCW = MatrixSymbol('HCW',self._nHiggs,self._nHiggs)
+        self._NablaVCW = Matrix([[Symbol("NCW[{},{}]".format(i,j),real=True) for j in range(1)] for i in range(self._nHiggs)  ])
+        self._HessianVCW = Matrix([[Symbol("HCW[{},{}]".format(i,j),real=True) for j in range(self._nHiggs)] for i in range(self._nHiggs)  ])
         self._TreeLevelTadpoleReplacement = None
         self._calcTreeLevelMinimumConditions()
         counter=0
@@ -33,6 +43,26 @@ class ModelGenerator:
             for j in range(self._nHiggs):
                 self._replacementLists['HCW[' + str(counter) + ']'] = 'HesseWeinberg(' + str(i) + "," + str(j) + ")"
                 counter += 1
+                
+        for i in range(self._nHiggs):
+            self._replacementLists['NCW[' + str(i) + ',0]'] = 'NablaWeinberg(' + str(i) + ')'
+            for j in range(self._nHiggs):
+                self._replacementLists['HCW[' + str(i) + ',' + str(j) + "]"] = 'HesseWeinberg(' + str(i) + "," + str(j) + ")"
+
+    def setGauge(self,gaugeFields, VGauge):
+        self._GaugeFields = gaugeFields
+        self._VGauge = VGauge
+        self._nGauge = len(gaugeFields)
+
+    def setLepton(self, leptonFields, VLep):
+        self._LeptonFields = leptonFields
+        self._nLeptons = len(leptonFields)
+        self._VLep = VLep
+
+    def setQuark(self, quarkFields, VQuarks):
+        self._nQuarks = len(quarkFields)
+        self._VQuarks = VQuarks
+        self._QuarkFields = quarkFields
 
     def printVEVOrder(self):
         for i in range(self._nHiggs):
@@ -162,18 +192,51 @@ class ModelGenerator:
         return solutionPairs, identitiesPairs
 
     def convertToCPP(self, expr):
-        code=cxxcode(expr, standard = 'C++11')
+        II = symbols('II',real=True)
+        replExpr = expr.subs(I,II)
+        custom_functions = {
+            'conjugate': 'conj'
+        }
+
+        code=cxxcode(replExpr, standard = 'C++11', user_functions = custom_functions)
         strToPrint = str(code)
         for key,value in self._replacementLists.items():
             strToPrint=strToPrint.replace(key,value)
         return strToPrint
+
+    
 
     def printCTForCPP(self):
         CTPairs, identities = self.calcCTParams()
         for par, val in CTPairs:
             print(self.convertToCPP(par) + " = " + self.convertToCPP(val) + ";")
 
-        
+
+    def printGaugeTensors(self):
+        for a in range(self._nGauge):
+            for b in range(self._nGauge):
+                for i in range(self._nHiggs):
+                    for j in range(self._nHiggs):
+                        val = diff(self._VGauge,self._GaugeFields[a], self._GaugeFields[b], self._HiggsFields[i], self._HiggsFields[j] )
+                        if val != 0:
+                            print("Curvature_Gauge_G2H2.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ").at(" + str(j) + ") = " + self.convertToCPP(val))
+
+    def printLeptons(self):
+        for a in range(self._nLeptons):
+            for b in range(self._nLeptons):
+                for i in range(self._nHiggs):
+                    val = diff(self._VLep, self._LeptonFields[a], self._LeptonFields[b], self._HiggsFields[i] )
+                    if(val != 0):
+                        print("Curvature_Lepton_F2H1.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ") = " + self.convertToCPP(val))
+    
+    def printQuarks(self):
+        for a in range(self._nQuarks):
+            for b in range(self._nQuarks):
+                for i in range(self._nHiggs):
+                    val = diff(self._VQuarks, self._QuarkFields[a], self._QuarkFields[b], self._HiggsFields[i])
+                    if val != 0:
+                        print("Curvature_Quark_F2H1.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ") = " + self.convertToCPP(val))
+
     def printModelToCPP(self):
         print("")
         print("//Begin of VevOrder")
@@ -206,4 +269,19 @@ class ModelGenerator:
         print("")
 
         print("")
+        print("//Begin of Gauge interaction tensors")
+        self.printGaugeTensors()
+        print("//End of Gauge interaction tensors")
+        print("")
+
+        print("")
+        print("//Begin of Lepton interaction tensors")
+        self.printLeptons()
+        print("//End of Lepton interaction tensors")
+        print("")
+
+        print("")
+        print("//Begin of Quark interaction tensors")
+        self.printQuarks()
+        print("//End of Quark interaction tensors")
         print("")
