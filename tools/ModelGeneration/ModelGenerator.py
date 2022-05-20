@@ -1,6 +1,6 @@
-from sympy import symbols, Matrix, diff, simplify, Symbol, linsolve, I, hessian
+from sympy import symbols, Matrix, diff, simplify, Symbol, linsolve, I, hessian, zeros
 from sympy.physics.quantum import Dagger
-from sympy.printing.cxxcode import cxxcode
+from sympy.printing.cxx import cxxcode
 
 class ModelGenerator:
     _params =None 
@@ -14,6 +14,7 @@ class ModelGenerator:
     _HessianVCW = None
     _replacementLists = {}
     _VEVAtZeroTemp = None
+    _VEVAtFiniteTemp = None
     _GaugeFields = []
     _VGauge = None
     _nGauge = 0
@@ -23,7 +24,7 @@ class ModelGenerator:
     _QuarkFields = []
     _nQuarks = 0
     _VQuarks = 0
-    def __init__(self, params, dparams,CTTadpoles,HiggsFields,VHiggs,VEVAtZeroTemp):
+    def __init__(self, params, dparams,CTTadpoles,HiggsFields,VHiggs,VEVAtZeroTemp,finiteTempVEV):
         self._params = params
         self._dparams = dparams
         self._CTTadpoles = CTTadpoles
@@ -36,6 +37,7 @@ class ModelGenerator:
         self._HessianVCW = Matrix([[Symbol("HCW[{},{}]".format(i,j),real=True) for j in range(self._nHiggs)] for i in range(self._nHiggs)  ])
         self._TreeLevelTadpoleReplacement = None
         self._calcTreeLevelMinimumConditions()
+        self._VEVAtFiniteTemp = finiteTempVEV
         counter=0
         for i in range(self._nHiggs):
             self._replacementLists['NCW[' + str(i) + ']'] = 'NablaWeinberg(' + str(i) + ')'
@@ -64,11 +66,11 @@ class ModelGenerator:
         self._QuarkFields = quarkFields
 
     def printVEVOrder(self):
+        vevCounter=0
         for i in range(self._nHiggs):
-            val = self._VEVAtZeroTemp[i][1]
-            vevCounter=0
+            val = self._VEVAtFiniteTemp[i][1]
             if(val != 0):
-                print("VevOrder.at(" + str(i) + ") = " + str(vevCounter))
+                print("VevOrder.at(" + str(vevCounter) + ") = " + str(i))
                 vevCounter+=1
 
     def _calcTreeLevelMinimumConditions(self):
@@ -136,7 +138,8 @@ class ModelGenerator:
             self._VCT = self._VCT + self._dparams[i]*diff(self._VHiggs,self._params[i])
 
         for i in range(len(self._HiggsFields)):
-            self._VCT = self._VCT + self._CTTadpoles[i]*self._HiggsFields[i]
+            newTerm = self._CTTadpoles[i]*self._HiggsFields[i]
+            self._VCT = self._VCT + newTerm
 
         self._VCT = simplify(self._VCT)
 
@@ -174,10 +177,14 @@ class ModelGenerator:
             for j in range(len(dtParamsCombined)):
                 SysMatrix[i,j] = diff(Equations[i],dtParamsCombined[j])
 
+        
+
         return SysMatrix,Target
 
-    def calcCTParams(self):
-        Equations = self._CTGetEquations()
+    def calcCTParams(self,additionalEquations):
+        EquationsFromSystem = self._CTGetEquations()
+        Equations = EquationsFromSystem + additionalEquations
+
         n,m = self._NablaVCW.shape
         NVCWList = [self._NablaVCW[i,j] for i in range(n) for j in range(m)]
         n,m = self._HessianVCW.shape
@@ -188,6 +195,38 @@ class ModelGenerator:
         solution=linsolve(Equations,combinedParams)
         solutionPairs = [(combinedParams[i], solution.args[0][i] ) for i in range(len(dtParamsCombined))]
         identitiesPairs = [(combinedParams[i], solution.args[0][i] ) for i in range(len(dtParamsCombined),len(combinedParams))]
+
+
+        for eq in Equations:
+            testedEquation = eq.subs(solutionPairs)
+            testedEquation = testedEquation.subs(identitiesPairs)
+            testedEquation = simplify(testedEquation)
+            if testedEquation != 0:
+                raise Exception("No solution for identities found")
+
+
+        uniqueSolutions = []
+        nonUniqueSolutions = []
+        for sol in solutionPairs:
+            isUnique = True 
+            for par in self._dparams:
+                if sol[1].diff(par) != 0:
+                    isUnique = False
+
+            if isUnique:
+                uniqueSolutions.append(sol)
+            else:
+                nonUniqueSolutions.append(sol)
+            
+
+        if len(nonUniqueSolutions) != 0:
+            print("Non unique Solutions")
+            for lhs,rhs in nonUniqueSolutions:
+                print(str(lhs) + " = " + str(rhs))
+
+            raise ValueError("You have non unique solutions in your system. Please define additional equations to choose among them.")
+
+
         return solutionPairs, identitiesPairs
 
     def convertToCPP(self, expr):
@@ -197,7 +236,7 @@ class ModelGenerator:
             'conjugate': 'conj'
         }
 
-        code=cxxcode(replExpr, standard = 'C++11', user_functions = custom_functions)
+        code=cxxcode(replExpr, standard = 'C++17', user_functions = custom_functions)
         strToPrint = str(code)
         for key,value in self._replacementLists.items():
             strToPrint=strToPrint.replace(key,value)
@@ -205,8 +244,8 @@ class ModelGenerator:
 
     
 
-    def printCTForCPP(self):
-        CTPairs, identities = self.calcCTParams()
+    def printCTForCPP(self,additionalEquations=[]):
+        CTPairs, identities = self.calcCTParams(additionalEquations)
         for par, val in CTPairs:
             print(self.convertToCPP(par) + " = " + self.convertToCPP(val) + ";")
 
@@ -247,12 +286,6 @@ class ModelGenerator:
         print("//Begin of Tree Level Minimum Relations")
         self.printTreeLevelMinimumConditions()
         print("//End of Tree Level Minimum Relations")
-        print("")
-
-        print("")
-        print("//Begin of Counterterm calculations")
-        self.printCTForCPP()
-        print("//End of Counterterm calculations")
         print("")
 
         print("")
