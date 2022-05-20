@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -29,13 +30,12 @@ namespace LibCMAES
 
 using namespace libcmaes;
 
-LibCMAESReturn
-min_cmaes_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-                  const double &Temp,
-                  const std::vector<double> &Start)
+LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
+                                 const double &Temp,
+                                 const std::vector<double> &Start)
 {
 
-  auto dim = modelPointer->get_nVEV();
+  auto dim = model.get_nVEV();
 
   std::vector<double> x0 = Start;
 
@@ -54,12 +54,14 @@ min_cmaes_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   // cmaparams.set_noisy();
   cmaparams.set_ftolerance(ftol);
 
-  FitFunc cmafunc = [=](const double *v, const int &N) {
+  FitFunc cmafunc = [&](const double *v, const int &N) {
     (void)N;
     std::vector<double> vev;
-    for (std::size_t i{0}; i < modelPointer->get_nVEV(); ++i)
+    for (std::size_t i{0}; i < dim; ++i)
       vev.push_back(v[i]);
-    return modelPointer->VEff(modelPointer->MinimizeOrderVEV(vev), Temp);
+    auto minOrdVEV = model.MinimizeOrderVEV(vev);
+    auto VeffVal   = model.VEff(minOrdVEV, Temp);
+    return VeffVal;
   };
 
   CMASolutions cmasols = cmaes<>(cmafunc, cmaparams);

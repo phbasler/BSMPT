@@ -164,12 +164,12 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     if (UseMultithreading)
     {
       thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
-        LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
+        LibCMAES = LibCMAES::min_cmaes_gen_all(*modelPointer, Temp, start);
       });
     }
     else
     {
-      LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
+      LibCMAES = LibCMAES::min_cmaes_gen_all(*modelPointer, Temp, start);
     }
   }
 #else
@@ -215,7 +215,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 #ifdef libcmaes_FOUND
   if (UseMultithreading and thread_CMAES.joinable())
   {
-    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for CMAes Thread");
+    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for CMAES Thread");
     thread_CMAES.join();
     auto errC          = LibCMAES.CMAESStatus;
     auto solCMAES      = LibCMAES.result;
