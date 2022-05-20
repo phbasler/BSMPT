@@ -1,6 +1,5 @@
 from sympy import symbols, Matrix, simplify, factorial, I, sqrt
 from sympy.physics.quantum import Dagger
-from sympy.printing.cxxcode import cxxcode
 
 from sympy import hessian
 
@@ -52,6 +51,7 @@ phi = Matrix([[rho+I*eta], [zeta+I*psi]]) * 1/sqrt(2)
 
 #replacements
 zeroTempVEV = [(rho,0),(eta,0),(zeta,v),(psi,0)]
+finiteTempVEV = zeroTempVEV
 fieldsZero = [(x,0) for x in Higgsfields]
 
 phiSq = simplify((Dagger(phi)*phi)[0])
@@ -118,10 +118,14 @@ VQuark = simplify(VQuark[0,0])
 
 
 # Generate the model
-toyModel = ModelGenerator.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs,zeroTempVEV)
+toyModel = ModelGenerator.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs,zeroTempVEV,finiteTempVEV)
 toyModel.setGauge([W1,W2,W3,B0],VGauge)
 toyModel.setLepton(LepBase, VFLep)
 toyModel.setQuark(QuarkBase, VQuark)
 
+
+print("//Begin CT Calculation")
+toyModel.printCTForCPP()
+print("//End CT Calculation")
 
 toyModel.printModelToCPP()
