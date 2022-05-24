@@ -217,4 +217,10 @@ calculates the EWBG for each velocity.
 This executable calculates the left-handed fermion density in front of the
 wall as a function of the distance to the bubble wall.
 
+### Generate the C++ code for a model
+We provide currently two methods to generate the tensors and calculate the counter terms for a new model.
+
+1. At tools/ModelGeneration/Maple we provide the maple Worksheet CreateModel.mw which you can use to implement your model and get the tensors. 
+2. At tools/ModelGeneration/sympy we provide a setup using only python3 with sympy (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, SM.py and G2HDM.py which both implement two different models and use the ModelGenerator.py module to calculate the tensors and CT. You can get the CT using `python3 SM.py --show ct` and the tensors by calling `python3 SM.py --show tensors`. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. the G2HDM example).
+
 [DoxygenLink]: https://phbasler.github.io/BSMPT/documentation
