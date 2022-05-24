@@ -3,6 +3,7 @@ from sympy.physics.quantum import Dagger
 from enum import Enum
 
 import ModelGenerator as ModelGenerator
+import argparse
 
 
 class TwoHDMType(Enum):
@@ -115,14 +116,7 @@ if im(VHiggs) != 0:
 G2HDM = ModelGenerator.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs,zeroTempVEV, finiteTempVEV)
 
 
-# additional equations to define a unique CT solution point 
-additionaEquations = []
-additionaEquations.append(dlambda4)
-additionaEquations.append(dRelambda7)
-additionaEquations.append(dRelambda6)
-additionaEquations.append(dImlambda7-dImlambda6)
 
-G2HDM.printCTForCPP(additionaEquations)
 
 # Set Gauge fields
 W1, W2, W3, B0 = symbols('W1 W2 W3 B0',real=True)
@@ -256,6 +250,32 @@ G2HDM.setLepton(LepBase, VFLep)
 G2HDM.setQuark(QuarkBase, VQuark)
 
 
+def setAdditionalCTEquations():
+    # additional equations to define a unique CT solution point 
+    additionaEquations = []
+    additionaEquations.append(dlambda4)
+    additionaEquations.append(dRelambda7)
+    additionaEquations.append(dRelambda6)
+    additionaEquations.append(dImlambda7-dImlambda6)
+    return additionaEquations
 
 
-G2HDM.printModelToCPP()
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-s','--show',choices=['ct','tensor','both'],required=True,help='The part of the model to be printed')
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    method = args.show
+
+    printCT = method == 'ct' or method == 'both'
+    printTensors = method == 'tensor' or method == 'both'
+
+    if printCT:
+        print("//Begin CT Calculation")
+        G2HDM.printCTForCPP(setAdditionalCTEquations())
+        print("//End CT Calculation")
+
+    if printTensors:
+        G2HDM.printModelToCPP()
+    
