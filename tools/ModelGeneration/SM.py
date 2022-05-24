@@ -3,6 +3,7 @@ from sympy.physics.quantum import Dagger
 
 from sympy import hessian
 
+import argparse as argparse
 import ModelGenerator as ModelGenerator
 
 
@@ -124,8 +125,25 @@ toyModel.setLepton(LepBase, VFLep)
 toyModel.setQuark(QuarkBase, VQuark)
 
 
-print("//Begin CT Calculation")
-toyModel.printCTForCPP()
-print("//End CT Calculation")
 
-toyModel.printModelToCPP()
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-s','--show',choices=['ct','tensor','both'],required=True,help='The part of the model to be printed')
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    method = args.show
+
+    printCT = method == 'ct' or method == 'both'
+    printTensors = method == 'tensor' or method == 'both'
+
+    if printCT:
+        print("//Begin CT Calculation")
+        toyModel.printCTForCPP()
+        print("//End CT Calculation")
+
+    if printTensors:
+        toyModel.printModelToCPP()
+    
