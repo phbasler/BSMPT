@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+name: Vectorization Tests
+
+on:
+  push:
+    branches: [ 72-adding-vectorization-causes-runtime-crashes ]
+    
+
+jobs:
+  ubuntu-tests:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          persist-credentials: false
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
+    - name: cmake
+      run: mkdir build && cd build && cmake .. 
+    - name: make
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} -t NLOVEV
+    - name: CMAES
+      run: cd build && ./bin/NLOVEV --model=c2hdm --input=../example/C2HDM_Input.dat --output=test.tsv --firstline=2 --lastline=2 --logginglevel::minimizerdetailed=true --usenlopt=false --usecmaes=true --usegsl=false
+    - name: GSL
+      run: cd build && ./bin/NLOVEV --model=c2hdm --input=../example/C2HDM_Input.dat --output=test.tsv --firstline=2 --lastline=2 --logginglevel::minimizerdetailed=true --usenlopt=false --usecmaes=false --usegsl=true
+    - name: NLopt
+      run: cd build && ./bin/NLOVEV --model=c2hdm --input=../example/C2HDM_Input.dat --output=test.tsv --firstline=2 --lastline=2 --logginglevel::minimizerdetailed=true --usenlopt=true --usecmaes=false --usegsl=false
+      
