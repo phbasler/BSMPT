@@ -130,20 +130,29 @@ toyModel.setQuark(QuarkBase, VQuark)
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-s','--show',choices=['ct','tensor','both'],required=True,help='The part of the model to be printed')
+parser.add_argument('-s','--show',choices=['ct','tensor','treeSimpl','CTSimpl'],required=True,help='The part of the model to be printed')
 
 if __name__ == "__main__":
     args = parser.parse_args()
     method = args.show
 
-    printCT = method == 'ct' or method == 'both'
-    printTensors = method == 'tensor' or method == 'both'
+    printCT = method == 'ct'
+    printTensors = method == 'tensor'
 
     if printCT:
         print("//Begin CT Calculation")
         toyModel.printCTForCPP()
         print("//End CT Calculation")
 
+        print("//Begin CT Order for set_CT_Pot_Par")
+        toyModel.printCTOrder()
+        print("//End CT Order")
+
     if printTensors:
         toyModel.printModelToCPP()
+
+    if method == 'treeSimpl':
+        toyModel.printTreeSimplified()
     
+    if method == 'CTSimpl':
+        toyModel.printVCTSimplified()
