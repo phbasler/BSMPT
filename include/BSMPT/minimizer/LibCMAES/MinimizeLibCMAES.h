@@ -38,7 +38,7 @@ struct LibCMAESReturn
  * guess is given in start.
  * @return the libcmaes run_status of the system
  */
-LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &modelPointer,
+LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
                                  const double &Temp,
                                  const std::vector<double> &VevMinimum);
 

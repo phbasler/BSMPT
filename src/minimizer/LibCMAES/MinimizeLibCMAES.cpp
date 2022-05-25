@@ -35,7 +35,7 @@ LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
                                  const std::vector<double> &Start)
 {
 
-  auto dim = model.get_nVEV();
+  const auto dim = model.get_nVEV();
 
   std::vector<double> x0 = Start;
 
