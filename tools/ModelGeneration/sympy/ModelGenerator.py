@@ -1,4 +1,4 @@
-from sympy import symbols, Matrix, diff, simplify, Symbol, linsolve, I, hessian, zeros
+from sympy import symbols, Matrix, diff, simplify, Symbol, linsolve, I, hessian, zeros, expand
 from sympy.physics.quantum import Dagger
 from sympy.printing.cxx import cxxcode
 
@@ -24,6 +24,7 @@ class ModelGenerator:
     _QuarkFields = []
     _nQuarks = 0
     _VQuarks = 0
+    _CTParVectorOrder=[]
     def __init__(self, params, dparams,CTTadpoles,HiggsFields,VHiggs,VEVAtZeroTemp,finiteTempVEV):
         self._params = params
         self._dparams = dparams
@@ -38,6 +39,7 @@ class ModelGenerator:
         self._TreeLevelTadpoleReplacement = None
         self._calcTreeLevelMinimumConditions()
         self._VEVAtFiniteTemp = finiteTempVEV
+
         counter=0
         for i in range(self._nHiggs):
             self._replacementLists['NCW[' + str(i) + ']'] = 'NablaWeinberg(' + str(i) + ')'
@@ -70,7 +72,7 @@ class ModelGenerator:
         for i in range(self._nHiggs):
             val = self._VEVAtFiniteTemp[i][1]
             if(val != 0):
-                print("VevOrder.at(" + str(vevCounter) + ") = " + str(i))
+                print("VevOrder.at(" + str(vevCounter) + ") = " + str(i) + ";")
                 vevCounter+=1
 
     def _calcTreeLevelMinimumConditions(self):
@@ -96,7 +98,7 @@ class ModelGenerator:
                 print(tensorNamePrefix+"_L1.at(" + str(i) + ") = " + self.convertToCPP(val) + ";")
 
         for i in range(self._nHiggs):
-            for j in range(i,self._nHiggs):
+            for j in range(self._nHiggs):
                 val = diff(potential,self._HiggsFields[i],self._HiggsFields[j])
                 val = val.subs(fieldsZero)
                 val = simplify(val)
@@ -104,8 +106,8 @@ class ModelGenerator:
                     print(tensorNamePrefix+"_L2.at(" + str(i) + ").at(" + str(j) + ") = " + self.convertToCPP(val) + ";" )
 
         for i in range(self._nHiggs):
-            for j in range(i,self._nHiggs):
-                for k in range(j,self._nHiggs):
+            for j in range(self._nHiggs):
+                for k in range(self._nHiggs):
                     val = diff(potential,self._HiggsFields[i],self._HiggsFields[j],self._HiggsFields[k])
                     val = val.subs(fieldsZero)
                     val = simplify(val)
@@ -113,9 +115,9 @@ class ModelGenerator:
                         print(tensorNamePrefix+"_L3.at(" + str(i) + ").at(" + str(j) + ").at("+ str(k) +") = " + self.convertToCPP(val) + ";" )
 
         for i in range(self._nHiggs):
-            for j in range(i,self._nHiggs):
-                for k in range(j,self._nHiggs):
-                    for l in range(k,self._nHiggs):
+            for j in range(self._nHiggs):
+                for k in range(self._nHiggs):
+                    for l in range(self._nHiggs):
                         val = diff(potential,self._HiggsFields[i],self._HiggsFields[j],self._HiggsFields[k],self._HiggsFields[l])
                         val = val.subs(fieldsZero)
                         val = simplify(val)
@@ -226,17 +228,24 @@ class ModelGenerator:
 
             raise ValueError("You have non unique solutions in your system. Please define additional equations to choose among them.")
 
+        for par,val in solutionPairs:
+            self._CTParVectorOrder.append(par)
 
         return solutionPairs, identitiesPairs
 
-    def convertToCPP(self, expr):
+    def convertToCPP(self, expr, assignTo=None):
         II = symbols('II',real=True)
-        replExpr = expr.subs(I,II)
+        replExpr = ""
+        try:
+            replExpr = expr.subs(I,II)
+        except AttributeError:
+            pass
+
         custom_functions = {
             'conjugate': 'conj'
         }
 
-        code=cxxcode(replExpr, standard = 'C++17', user_functions = custom_functions)
+        code=cxxcode(replExpr, standard = 'C++17', user_functions = custom_functions, assign_to=assignTo)
         strToPrint = str(code)
         for key,value in self._replacementLists.items():
             strToPrint=strToPrint.replace(key,value)
@@ -246,9 +255,15 @@ class ModelGenerator:
 
     def printCTForCPP(self,additionalEquations=[]):
         CTPairs, identities = self.calcCTParams(additionalEquations)
-        for par, val in CTPairs:
-            print(self.convertToCPP(par) + " = " + self.convertToCPP(val) + ";")
 
+        for par, val in CTPairs:
+            print("parCT.push_back("+ self.convertToCPP(val) + "); //" + self.convertToCPP(par))
+
+
+    def printCTOrder(self):
+        for i in range(len(self._CTParVectorOrder)):
+            par = self._CTParVectorOrder[i]
+            print(self.convertToCPP(par) + " = par.at(" + str(i) + ");" )
 
     def printGaugeTensors(self):
         for a in range(self._nGauge):
@@ -257,7 +272,7 @@ class ModelGenerator:
                     for j in range(self._nHiggs):
                         val = diff(self._VGauge,self._GaugeFields[a], self._GaugeFields[b], self._HiggsFields[i], self._HiggsFields[j] )
                         if val != 0:
-                            print("Curvature_Gauge_G2H2.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ").at(" + str(j) + ") = " + self.convertToCPP(val))
+                            print("Curvature_Gauge_G2H2.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ").at(" + str(j) + ") = " + self.convertToCPP(val) + ";")
 
     def printLeptons(self):
         for a in range(self._nLeptons):
@@ -265,7 +280,7 @@ class ModelGenerator:
                 for i in range(self._nHiggs):
                     val = diff(self._VLep, self._LeptonFields[a], self._LeptonFields[b], self._HiggsFields[i] )
                     if(val != 0):
-                        print("Curvature_Lepton_F2H1.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ") = " + self.convertToCPP(val))
+                        print("Curvature_Lepton_F2H1.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ") = " + self.convertToCPP(val) + ";")
     
     def printQuarks(self):
         for a in range(self._nQuarks):
@@ -273,9 +288,34 @@ class ModelGenerator:
                 for i in range(self._nHiggs):
                     val = diff(self._VQuarks, self._QuarkFields[a], self._QuarkFields[b], self._HiggsFields[i])
                     if val != 0:
-                        print("Curvature_Quark_F2H1.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ") = " + self.convertToCPP(val))
+                        print("Curvature_Quark_F2H1.at(" + str(a) + ").at(" + str(b) + ").at(" + str(i) + ") = " + self.convertToCPP(val) + ";")
+
+    def printCtrInfo(self):
+        nPar = len(self._params)
+        for i in range(len(self._params)):
+            lhs = self._params[i]
+            rhs = self._TreeLevelTadpoleReplacement[i]
+            if lhs != rhs:
+                nPar -= 1
+
+        print("nPar = " + str(nPar) +";" )
+
+        lenCT = len(self._dparams) + len(self._CTTadpoles)
+        print("nParCT = " + str(lenCT) + ";")
+        nVEV = 0
+        for i in range(self._nHiggs):
+            if self._VEVAtFiniteTemp[i][1] != 0:
+                nVEV += 1
+
+        print("nVEV = " + str(nVEV) + ";")
 
     def printModelToCPP(self):
+        print("")
+        print("//Begin of constructor info")
+        self.printCtrInfo()
+        print("//End of constructor info")
+        print("")
+
         print("")
         print("//Begin of VevOrder")
         self.printVEVOrder()
@@ -317,3 +357,25 @@ class ModelGenerator:
         self.printQuarks()
         print("//End of Quark interaction tensors")
         print("")
+
+    def printTreeSimplified(self):
+        vevCounter=0
+        for i in range(self._nHiggs):
+            val = self._VEVAtFiniteTemp[i][1]
+            if(val != 0):
+                print("double " + self.convertToCPP(val) + " = v.at(" + str(i) + ");")
+                vevCounter+=1
+
+        VS = simplify(expand(self._VHiggs.subs(self._VEVAtFiniteTemp)))
+        print(self.convertToCPP(VS,"res"))
+
+    def printVCTSimplified(self):
+        vevCounter=0
+        for i in range(self._nHiggs):
+            val = self._VEVAtFiniteTemp[i][1]
+            if(val != 0):
+                print("double " + self.convertToCPP(val) + " = v.at(" + str(i) + ");")
+                vevCounter+=1
+
+        VS = simplify(expand(self._VCT.subs(self._VEVAtFiniteTemp)))
+        print(self.convertToCPP(VS,"res"))
