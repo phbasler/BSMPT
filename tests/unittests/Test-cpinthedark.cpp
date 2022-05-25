@@ -268,7 +268,7 @@ TEST_CASE("Checking triple higgs NLO couplings in the CPINTHEDARK",
   modelPointer->TripleHiggsCouplings();
 
   auto Check = [](auto result, auto expected) {
-    if (expected != 0)
+    if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
     }
