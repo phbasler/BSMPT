@@ -105,8 +105,3 @@ endif()
         $<$<CXX_COMPILER_ID:MSVC>:-wd${warning}>
         )
     endforeach()
-
-      add_custom_target(foo)
-      get_target_property(MAIN_CFLAGS foo COMPILE_OPTIONS)
-      # also see: COMPILE_DEFINITIONS INCLUDE_DIRECTORIES
-      message("-- Target compiler flags are: ${MAIN_CFLAGS}")
