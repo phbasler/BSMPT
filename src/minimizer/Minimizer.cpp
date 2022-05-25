@@ -128,14 +128,16 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
         thread_GSL =
             std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
               std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-                  modelPointer, Temp, 5); // If additionally CMAES is minimising
-                                          // GSL does not need as much solutions
+                  *modelPointer,
+                  Temp,
+                  5); // If additionally CMAES is minimising
+                      // GSL does not need as much solutions
             });
       }
       else
       {
         std::tie(solGSLMin, gslMinSuc) =
-            GSL_Minimize_gen_all(modelPointer, Temp, 5, UseMultithreading);
+            GSL_Minimize_gen_all(*modelPointer, Temp, 5, UseMultithreading);
       }
     }
     else
@@ -146,13 +148,13 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
         thread_GSL = std::thread(
             [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
               std::tie(solGSLMin, gslMinSuc) =
-                  GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
+                  GSL_Minimize_gen_all(*modelPointer, Temp, 5, MaxSol);
             });
       }
       else
       {
         std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-            modelPointer, Temp, 5, MaxSol, UseMultithreading);
+            *modelPointer, Temp, 5, MaxSol, UseMultithreading);
       }
     }
   }
@@ -184,12 +186,12 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     if (UseMultithreading)
     {
       thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
-        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
+        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(*modelPointer, Temp);
       });
     }
     else
     {
-      NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
+      NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(*modelPointer, Temp);
     }
   }
 #endif

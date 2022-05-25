@@ -28,26 +28,25 @@ NLOPTVEff(const std::vector<double> &x, std::vector<double> &grad, void *data)
   return settings.model->VEff(PotVEV, settings.Temp);
 }
 
-NLOPTReturnType
-MinimizeUsingNLOPT(const std::shared_ptr<Class_Potential_Origin> &model,
-                   const double &Temp)
+NLOPTReturnType MinimizeUsingNLOPT(const Class_Potential_Origin &model,
+                                   const double &Temp)
 {
-  ShareInformationNLOPT settings(model, Temp);
-  std::vector<double> VEV(model->get_nVEV());
+  ShareInformationNLOPT settings(*model, Temp);
+  std::vector<double> VEV(model.get_nVEV());
 
   nlopt::opt opt(nlopt::GN_ORIG_DIRECT_L,
-                 static_cast<unsigned int>(model->get_nVEV()));
-  std::vector<double> LowerBound(model->get_nVEV(), -300),
-      UpperBound(model->get_nVEV(), 300);
-  for (std::size_t i{0}; i < model->get_nVEV(); ++i)
+                 static_cast<unsigned int>(model.get_nVEV()));
+  std::vector<double> LowerBound(model.get_nVEV(), -300),
+      UpperBound(model.get_nVEV(), 300);
+  for (std::size_t i{0}; i < model.get_nVEV(); ++i)
   {
-    if (std::abs(model->get_vevTreeMin(i)) > UpperBound.at(i))
+    if (std::abs(model.get_vevTreeMin(i)) > UpperBound.at(i))
     {
-      UpperBound.at(i) = 1.5 * model->get_vevTreeMin(i);
+      UpperBound.at(i) = 1.5 * model.get_vevTreeMin(i);
     }
-    if (-std::abs(model->get_vevTreeMin(i)) < LowerBound.at(i))
+    if (-std::abs(model.get_vevTreeMin(i)) < LowerBound.at(i))
     {
-      LowerBound.at(i) = -1.5 * std::abs(model->get_vevTreeMin(i));
+      LowerBound.at(i) = -1.5 * std::abs(model.get_vevTreeMin(i));
     }
   }
   opt.set_lower_bounds(LowerBound);

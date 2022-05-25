@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -57,7 +58,7 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params &p,
  * Minimize the Potential from different random starting points and choose the
  * local minimum with the deepest potential value as the candidate for the
  * global minimum
- * @param modelPointer parameter point to minimise
+ * @param model model reference
  * @param Temp Temperature at which to minimise the parameter point
  * @param seed seed used to find the random starting points for the local
  * optimisations
@@ -66,17 +67,17 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params &p,
  * @return first: vector with candidate for the global minimum, second: True if
  * a candidate for the global minimum is found and false otherwise
  */
-std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-    const double &Temp,
-    const int &seed,
-    bool UseMultiThreading = true);
+std::pair<std::vector<double>, bool>
+GSL_Minimize_gen_all(const Class_Potential_Origin &model,
+                     const double &Temp,
+                     const int &seed,
+                     bool UseMultiThreading = true);
 
 /**
  * Minimize the Potential from different random starting points and choose the
  * local minimum with the deepest potential value as the candidate for the
  * global minimum
- * @param modelPointer parameter point to minimise
+ * @param model model reference
  * @param Temp Temperature at which to minimise the parameter point
  * @param seed seed used to find the random starting points for the local
  * optimisations
@@ -86,18 +87,18 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
  * @return first: vector with candidate for the global minimum, second: True if
  * a candidate for the global minimum is found and false otherwise
  */
-std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-    const double &Temp,
-    const int &seed,
-    const std::size_t &MaxSol,
-    bool UseMultiThreading = true);
+std::pair<std::vector<double>, bool>
+GSL_Minimize_gen_all(const Class_Potential_Origin &model,
+                     const double &Temp,
+                     const int &seed,
+                     const std::size_t &MaxSol,
+                     bool UseMultiThreading = true);
 
 /**
  * Minimize the Potential from different random starting points and choose the
  * local minimum with the deepest potential value as the candidate for the
  * global minimum
- * @param modelPointer parameter point to minimise
+ * @param model model reference
  * @param Temp Temperature at which to minimise the parameter point
  * @param seed seed used to find the random starting points for the local
  * optimisations
@@ -108,13 +109,13 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
  * @return first: vector with the solution, second: True if a candidate for the
  * global minimum is found and false otherwise
  */
-std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-    const double &Temp,
-    const int &seed,
-    std::vector<std::vector<double>> &saveAllMinima,
-    const std::size_t &MaxSol,
-    bool UseMultiThreading = true);
+std::pair<std::vector<double>, bool>
+GSL_Minimize_gen_all(const Class_Potential_Origin &model,
+                     const double &Temp,
+                     const int &seed,
+                     std::vector<std::vector<double>> &saveAllMinima,
+                     const std::size_t &MaxSol,
+                     bool UseMultiThreading = true);
 
 } // namespace Minimizer
 } // namespace BSMPT

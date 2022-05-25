@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -76,14 +77,13 @@ NLOPTVEff(const std::vector<double> &x, std::vector<double> &grad, void *data);
 /**
  * @brief MinimizeUsingNLOPT minimizes the effective potential using the NLopt
  * LN_COBYLA algorithm
- * @param model pointer to the parameter point to be minimized
+ * @param model model reference
  * @param Temp Temperature at which the potential should be minimized
  * @return A ShareInformationNLOPT with the global minimum, the potential value
  * and the nlopt::result of the minimization
  */
-NLOPTReturnType
-MinimizeUsingNLOPT(const std::shared_ptr<Class_Potential_Origin> &model,
-                   const double &Temp);
+NLOPTReturnType MinimizeUsingNLOPT(const Class_Potential_Origin &model,
+                                   const double &Temp);
 
 /**
  * @brief MinimizePlaneUsingNLOPT minimizes the effective potential in a given
