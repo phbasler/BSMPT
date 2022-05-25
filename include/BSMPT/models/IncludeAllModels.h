@@ -38,6 +38,7 @@ enum class ModelIDs
 
   // Here you start adding your models
   TEMPLATE,
+  C2HDMSympy,
 
   // DO NOT EDIT the part below
   stop
@@ -48,7 +49,7 @@ enum class ModelIDs
  * the binary and the ModelIDs element
  */
 const std::unordered_map<std::string, ModelIDs> ModelNames{
-    {"c2hdm", ModelIDs::C2HDM},
+    {"c2hdm", ModelIDs::C2HDMSympy},
     {"r2hdm", ModelIDs::R2HDM},
     {"n2hdm", ModelIDs::RN2HDM},
     {"cxsm", ModelIDs::CXSM},

@@ -27,7 +27,7 @@ TEST_CASE("Check f_{abcd}", "[origin]")
 {
   using namespace BSMPT;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDMSympy);
   modelPointer->initModel(example_point_C2HDM);
   modelPointer->resetScale(200);
 

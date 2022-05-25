@@ -4,7 +4,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include <BSMPT/models/ClassPotentialC2HDM.h>
+#include <BSMPT/models/ClassPotentialC2HDM_orig.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>

@@ -172,7 +172,7 @@ void CalculateEtaInterface::setNumerics(
   vev_symmetric = vev_symmetric_input;
   TC            = TC_input;
   modelPointer  = modelPointer_input;
-  if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDM)
+  if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDMSympy)
   {
     throw std::runtime_error(
         "Baryogenesis is only implemented for the C2HDM at the moment.");

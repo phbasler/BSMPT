@@ -476,7 +476,7 @@ double transport_equations::calculate_theta(const double &z,
 {
   double res      = 0;
   double thetasym = symmetric_CP_violating_phase;
-  if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDM)
+  if (modelPointer->get_Model() != ModelID::ModelIDs::C2HDMSympy)
     Logger::Write(LoggingLevel::Default,
                   "This is only programmed for the C2HDM");
   double thetabrk  = broken_CP_violating_phase;

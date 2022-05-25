@@ -76,8 +76,10 @@ dparams=[dlambda1,dlambda2,dlambda3,dlambda4,dRelambda5,dImlambda5,dRelambda6,dI
 #VEVs
 v1 = symbols('v1', real=True)
 v2 = symbols('v2', real=True)
-vCP = symbols('vCP',real=True)
-vCB = symbols('vCB',real=True)
+w1 = symbols('w1' , real=True)
+w2 = symbols('w2' , real=True)
+wCP = symbols('wCP',real=True)
+wCB = symbols('wCB',real=True)
 
 #Higgsfields
 rho1,eta1,zeta1,psi1 = symbols('rho1 eta1 zeta1 psi1', real=True)
@@ -91,7 +93,7 @@ phi2 = Matrix([[Higgsfields[2]+I*Higgsfields[3]], [Higgsfields[6]+I*Higgsfields[
 
 #replacements
 higgsvevAtZeroTemp = [0,0,0,0,v1,0,v2,0]
-higgsVEVAtFiniteTemp = [0,0,vCB, 0, v1, 0, v2, vCP]
+higgsVEVAtFiniteTemp = [0,0,wCB, 0, w1, 0, w2, wCP]
 zeroTempVEV = [(Higgsfields[i],higgsvevAtZeroTemp[i]) for i in range(len(Higgsfields)) ]
 finiteTempVEV = [(Higgsfields[i],higgsVEVAtFiniteTemp[i]) for i in range(len(Higgsfields)) ]
 fieldsZero = [(x,0) for x in Higgsfields]
@@ -159,18 +161,18 @@ def TypeIILeptons():
     VFLep = 0
     for i in range(len(NuL)):
         for j in range(len(ER)):
-            VFLep += (NuL[i] * PiLep[i,j] * ER[j])*phi1[0]
+            VFLep += (NuL[i] * PiLep[i,j] * ER[j])*phi1[1]
 
     for i in range(len(EL)):
         for j in range(len(ER)):
-            VFLep += (EL[i] * PiLep[i,j] * ER[j])*phi1[1]
+            VFLep += (EL[i] * PiLep[i,j] * ER[j])*phi1[0]
 
     VFLep = simplify(VFLep)
     return VFLep
 
 
 if Chosen2HDMType == TwoHDMType.TypeI or Chosen2HDMType == TwoHDMType.Flipped:
-    VFLep = TypeIILeptons()
+    VFLep = TypeILeptons()
 else:
     VFLep = TypeIILeptons()
 
@@ -185,7 +187,7 @@ UL = symbols('uL cL tL', real=True)
 DL = symbols('dL sL bL', real=True)
 UR = symbols('uR cR tR', real=True)
 DR = symbols('dR sR bR', real=True)
-QuarkBase = UL + DL + UR + DR
+QuarkBase = UR + DR + UL + DL
 
 def TypeIQuarks():
     yb = sqrt(2)*m_bottom/v2
@@ -203,10 +205,14 @@ def TypeIQuarks():
     URVector = Matrix([[x] for x in UR])
     DRVector = Matrix([[x] for x in DR])
 
-    VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phi2[0] 
-    VQuark+= DLVector.transpose() * DownCoupling * DRVector * phi2[0] 
-    VQuark+= ULVector.transpose() * UpCoupling * URVector * phi2[1].conjugate()
-    VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phi2[1].conjugate()
+    phiUp = phi2 
+    phiDown = phi2
+
+    VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phiDown[0]
+    VQuark+= DLVector.transpose() * DownCoupling * DRVector * phiDown[1] 
+
+    VQuark += ULVector.transpose() * UpCoupling * URVector * phiUp[1].conjugate()
+    VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phiUp[0].conjugate()
     VQuark = simplify(VQuark[0,0])
 
     return VQuark
@@ -228,10 +234,14 @@ def TypeIIQuarks():
     URVector = Matrix([[x] for x in UR])
     DRVector = Matrix([[x] for x in DR])
 
-    VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phi1[0] 
-    VQuark+= DLVector.transpose() * DownCoupling * DRVector * phi1[0] 
-    VQuark+= ULVector.transpose() * UpCoupling * URVector * phi2[1].conjugate()
-    VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phi2[1].conjugate()
+    phiUp = phi2 
+    phiDown = phi1
+
+    VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phiDown[0]
+    VQuark+= DLVector.transpose() * DownCoupling * DRVector * phiDown[1] 
+
+    VQuark += ULVector.transpose() * UpCoupling * URVector * phiUp[1].conjugate()
+    VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phiUp[0].conjugate()
     VQuark = simplify(VQuark[0,0])
 
     return VQuark
@@ -256,26 +266,35 @@ def setAdditionalCTEquations():
     additionaEquations.append(dlambda4)
     additionaEquations.append(dRelambda7)
     additionaEquations.append(dRelambda6)
-    additionaEquations.append(dImlambda7-dImlambda6)
+    additionaEquations.append(dImlambda7)
     return additionaEquations
 
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-s','--show',choices=['ct','tensor','both'],required=True,help='The part of the model to be printed')
+parser.add_argument('-s','--show',choices=['ct','tensor','treeSimpl','CTSimpl'],required=True,help='The part of the model to be printed')
 
 if __name__ == "__main__":
     args = parser.parse_args()
     method = args.show
 
-    printCT = method == 'ct' or method == 'both'
-    printTensors = method == 'tensor' or method == 'both'
+    printCT = method == 'ct'
+    printTensors = method == 'tensor'
 
     if printCT:
         print("//Begin CT Calculation")
         G2HDM.printCTForCPP(setAdditionalCTEquations())
         print("//End CT Calculation")
 
+        print("//Begin CT Order for set_CT_Pot_Par")
+        G2HDM.printCTOrder()
+        print("//End CT Order")
+
     if printTensors:
         G2HDM.printModelToCPP()
+
+    if method == 'treeSimpl':
+        G2HDM.printTreeSimplified()
     
+    if method == 'CTSimpl':
+        G2HDM.printVCTSimplified()

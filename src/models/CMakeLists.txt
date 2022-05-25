@@ -10,11 +10,12 @@ set(header
 	${header_path}/ModelTestfunctions.h
 	${header_path}/IncludeAllModels.h
 	${header_path}/ClassPotentialOrigin.h
-	${header_path}/ClassPotentialC2HDM.h
+	${header_path}/ClassPotentialC2HDM_orig.h
 	${header_path}/ClassPotentialR2HDM.h
   ${header_path}/ClassPotentialRN2HDM.h
   ${header_path}/ClassPotentialCxSM.h
   ${header_path}/ClassPotentialCPintheDark.h
+  ${header_path}/C2HDMUsingSympy.h
 
   # Here you can add your new model
   ${header_path}/ClassTemplate.h
@@ -28,11 +29,12 @@ set(src
   ClassPotentialOrigin.cpp
   ClassPotentialOrigin_deprecated.cpp
 
-  ClassPotentialC2HDM.cpp
+  ClassPotentialC2HDM_orig.cpp
   ClassPotentialR2HDM.cpp
   ClassPotentialRN2HDM.cpp
   ClassPotentialCxSM.cpp
   ClassPotentialCPintheDark.cpp
+  C2HDMUsingSympy.cpp
 
   # Here you can add your new model
   ClassTemplate.cpp

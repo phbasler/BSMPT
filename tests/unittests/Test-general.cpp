@@ -17,7 +17,7 @@ TEST_CASE("Check get model", "[general]")
 {
   using namespace BSMPT;
   auto result                = ModelID::getModel("c2hdm");
-  ModelID::ModelIDs expected = ModelID::ModelIDs::C2HDM;
+  ModelID::ModelIDs expected = ModelID::ModelIDs::C2HDMSympy;
   REQUIRE(expected == result);
 }
 
