@@ -100,7 +100,6 @@ endif()
       )
 
     foreach(warning IN LISTS MSVC_DISABLED_WARNINGS_LIST)
-      message(STATUS "warning = ${warning}")
       add_compile_options(
         $<$<CXX_COMPILER_ID:MSVC>:-wd${warning}>
         )
