@@ -100,7 +100,9 @@ endif()
       )
 
     foreach(warning IN LISTS MSVC_DISABLED_WARNINGS_LIST)
+      string(REPLACE "C" "" warning_stripped
+                                  ${warning})
       add_compile_options(
-        $<$<CXX_COMPILER_ID:MSVC>:-wd${warning}>
+        $<$<CXX_COMPILER_ID:MSVC>:-wd${warning_stripped}>
         )
     endforeach()
