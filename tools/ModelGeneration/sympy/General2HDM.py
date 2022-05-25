@@ -1,4 +1,4 @@
-from sympy import symbols, Matrix, simplify, factorial, I, sqrt, im , conjugate, expand
+from sympy import symbols, Matrix, simplify, I, sqrt, im , conjugate, expand
 from sympy.physics.quantum import Dagger
 from enum import Enum
 

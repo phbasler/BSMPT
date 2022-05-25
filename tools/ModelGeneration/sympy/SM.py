@@ -1,7 +1,6 @@
 from sympy import symbols, Matrix, simplify, factorial, I, sqrt
 from sympy.physics.quantum import Dagger
 
-from sympy import hessian
 
 import argparse as argparse
 import ModelGenerator as ModelGenerator

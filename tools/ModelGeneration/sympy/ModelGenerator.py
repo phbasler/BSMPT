@@ -1,5 +1,4 @@
 from sympy import symbols, Matrix, diff, simplify, Symbol, linsolve, I, hessian, zeros, expand
-from sympy.physics.quantum import Dagger
 from sympy.printing.cxx import cxxcode
 
 class ModelGenerator:
