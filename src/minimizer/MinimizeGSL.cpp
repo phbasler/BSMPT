@@ -44,16 +44,16 @@ double GSL_VEFF_gen_all(const gsl_vector *v, void *p)
   struct GSL_params *params = static_cast<GSL_params *>(p);
 
   std::vector<double> vMin;
-  auto nVEVs = params->modelPointer->get_nVEV();
+  auto nVEVs = params->model.get_nVEV();
 
   for (std::size_t i = 0; i < nVEVs; i++)
   {
     vMin.push_back(gsl_vector_get(v, i));
   }
 
-  auto vIn = params->modelPointer->MinimizeOrderVEV(vMin);
+  auto vIn = params->model.MinimizeOrderVEV(vMin);
 
-  double res = params->modelPointer->VEff(vIn, params->Temp, 0);
+  double res = params->model.VEff(vIn, params->Temp, 0);
 
   return res;
 }
@@ -77,7 +77,7 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params &params,
   int status;
   double size;
 
-  std::size_t dim = params.modelPointer->get_nVEV();
+  std::size_t dim = params.model.get_nVEV();
 
   /* Starting point */
   x = gsl_vector_alloc(dim);
@@ -132,7 +132,7 @@ GSL_Minimize_gen_all(const Class_Potential_Origin &model,
 {
   std::vector<std::vector<double>> saveAllMinima;
   auto result = GSL_Minimize_gen_all(
-      *model, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
+      model, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
   return result;
 }
 
@@ -145,7 +145,7 @@ GSL_Minimize_gen_all(const Class_Potential_Origin &model,
   std::vector<std::vector<double>> saveAllMinima;
   std::size_t MaxSol = 20;
   auto result        = GSL_Minimize_gen_all(
-      *model, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
+      model, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
   return result;
 }
 
@@ -157,7 +157,7 @@ GSL_Minimize_gen_all(const Class_Potential_Origin &model,
                      const std::size_t &MaxSol,
                      bool UseMultiThreading)
 {
-  struct GSL_params params(*model, Temp);
+  struct GSL_params params(model, Temp);
 
   std::size_t dim = model.get_nVEV();
 

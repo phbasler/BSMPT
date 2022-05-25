@@ -24,14 +24,14 @@ NLOPTVEff(const std::vector<double> &x, std::vector<double> &grad, void *data)
 {
   auto settings = *static_cast<ShareInformationNLOPT *>(data);
   (void)grad;
-  auto PotVEV = settings.model->MinimizeOrderVEV(x);
-  return settings.model->VEff(PotVEV, settings.Temp);
+  auto PotVEV = settings.model.MinimizeOrderVEV(x);
+  return settings.model.VEff(PotVEV, settings.Temp);
 }
 
 NLOPTReturnType MinimizeUsingNLOPT(const Class_Potential_Origin &model,
                                    const double &Temp)
 {
-  ShareInformationNLOPT settings(*model, Temp);
+  ShareInformationNLOPT settings(model, Temp);
   std::vector<double> VEV(model.get_nVEV());
 
   nlopt::opt opt(nlopt::GN_ORIG_DIRECT_L,
@@ -146,7 +146,7 @@ FindLocalMinimum(const std::shared_ptr<Class_Potential_Origin> &model,
 {
   nlopt::opt opt(nlopt::LN_COBYLA,
                  static_cast<unsigned int>(model->get_nVEV()));
-  ShareInformationNLOPT settings(model, Temp);
+  ShareInformationNLOPT settings(*model, Temp);
   auto VEV = Start;
   opt.set_min_objective(NLOPTVEff, &settings);
   opt.set_xtol_rel(1e-4);

@@ -32,11 +32,10 @@ const double GSL_Tolerance = std::pow(10, -4);
  */
 struct GSL_params
 {
-  std::shared_ptr<Class_Potential_Origin> modelPointer;
+  const Class_Potential_Origin &model;
   double Temp;
-  GSL_params(const std::shared_ptr<Class_Potential_Origin> &model,
-             const double &temperature)
-      : modelPointer{model}
+  GSL_params(const Class_Potential_Origin &modelIN, const double &temperature)
+      : model{modelIN}
       , Temp{temperature} {};
 };
 

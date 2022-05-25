@@ -29,9 +29,9 @@ namespace LibNLOPT
  */
 struct ShareInformationNLOPT
 {
-  std::shared_ptr<Class_Potential_Origin> model;
+  const Class_Potential_Origin &model;
   double Temp;
-  ShareInformationNLOPT(const std::shared_ptr<Class_Potential_Origin> &modelIn,
+  ShareInformationNLOPT(const Class_Potential_Origin &modelIn,
                         const double &TempIn)
       : model{modelIn}
       , Temp{TempIn}

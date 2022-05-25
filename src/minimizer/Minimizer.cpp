@@ -442,7 +442,7 @@ FindNextLocalMinima(const std::shared_ptr<Class_Potential_Origin> &model,
     std::vector<double> GSLSolution;
     std::size_t tries{0}, MaxTries{600};
     int status;
-    GSL_params params(model, temperature);
+    GSL_params params(*model, temperature);
     do
     {
       GSLSolution.clear();
