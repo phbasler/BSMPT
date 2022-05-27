@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -37,10 +38,9 @@ struct LibCMAESReturn
  * guess is given in start.
  * @return the libcmaes run_status of the system
  */
-LibCMAESReturn
-min_cmaes_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-                  const double &Temp,
-                  const std::vector<double> &VevMinimum);
+LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
+                                 const double &Temp,
+                                 const std::vector<double> &VevMinimum);
 
 /**
  * Finds a candidate for the local minimum using the CMAES algorithm.
