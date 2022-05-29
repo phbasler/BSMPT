@@ -21,7 +21,7 @@ set(src
 
 add_library(TestCompares ${header} ${src})
 target_compile_features(TestCompares PUBLIC cxx_std_14)
-target_link_libraries(TestCompares Minimizer)
+target_link_libraries(TestCompares PRIVATE Minimizer )
 target_include_directories(TestCompares PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 

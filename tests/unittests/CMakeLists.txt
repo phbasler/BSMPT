@@ -8,7 +8,8 @@ set(TESTDIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 file(GLOB SOURCE_FILES "Test-*.cpp" CONFIURE_DEPENDS)
 add_executable(GenericTests ${SOURCE_FILES})
-target_link_libraries(GenericTests Catch Minimizer Models Utility TestCompares ThermalFunctions)
+target_link_libraries(GenericTests PRIVATE
+  Catch2WithMain Minimizer Models Utility TestCompares ThermalFunctions)
 target_compile_features(GenericTests PUBLIC cxx_std_14)
 
 include(Catch)
