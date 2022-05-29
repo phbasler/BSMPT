@@ -3,7 +3,11 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
+
+using Approx = Catch::Approx;
+
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
