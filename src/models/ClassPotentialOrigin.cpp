@@ -10,8 +10,8 @@
 
 #include "Eigen/Dense"
 
-#include <gsl/gsl_sf_zeta.h>
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_sf_zeta.h>
 
 #include <BSMPT/ThermalFunctions/NegativeBosonSpline.h>
 #include <BSMPT/ThermalFunctions/ThermalFunctions.h>
@@ -386,8 +386,6 @@ double Class_Potential_Origin::fbaseFour(double MassSquaredA,
                                          double MassSquaredC,
                                          double MassSquaredD) const
 {
-
-  
 
   double res  = 0;
   double mas  = MassSquaredA;
@@ -2647,7 +2645,7 @@ Class_Potential_Origin::QuarkMassesSquared(const std::vector<double> &v,
         res.push_back(tmp);
     }
   }
-  else if (diff > 0 and static_cast<size_t>(diff) <= NHiggs)
+  else if (static_cast<size_t>(diff) <= NHiggs)
   {
     std::size_t m = diff - 1;
     MatrixXcd Diff(NQuarks, NQuarks);
@@ -2745,7 +2743,7 @@ Class_Potential_Origin::LeptonMassesSquared(const std::vector<double> &v,
         res.push_back(tmp);
     }
   }
-  else if (diff > 0 and static_cast<size_t>(diff) <= NHiggs)
+  else if (static_cast<size_t>(diff) <= NHiggs)
   {
 
     auto k         = diff - 1;
