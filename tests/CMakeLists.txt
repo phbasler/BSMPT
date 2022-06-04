@@ -12,6 +12,10 @@ if(NOT Catch2_FOUND)
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG        v3.0.1)
   FetchContent_MakeAvailable(Catch2)
+
+  set(CodeCoverageExcludesFromOtherPkgs
+    "${CodeCoverageExcludesFromOtherPkgs} ${Catch2_SOURCE_DIR}/*")
+
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
@@ -29,11 +33,6 @@ if(Catch2_FOUND)
       "${Catch2_ROOT_DIR}/*"
       )
   endif()
-endif()
-
-if(NOT "${catch2_SOURCE_DIR}" STREQUAL "")
-  set(CodeCoverageExcludesFromOtherPkgs
-    "${CodeCoverageExcludesFromOtherPkgs} ${catch2_SOURCE_DIR}/*")
 endif()
 
 add_subdirectory(catcheventlistener)
