@@ -126,6 +126,8 @@ endif()
 
 configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
 
+# -------------------- Coverage --------------------------------------------------
+
 option(EnableCoverage "Enable code coverage" OFF)
 if(EnableCoverage)
   include(CodeCoverage)
@@ -250,3 +252,5 @@ endif()
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
     add_subdirectory(tests)
 endif()
+
+
