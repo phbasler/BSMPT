@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-find_package(Catch2 3 REQUIRED)
+find_package(Catch2 3 QUIET)
 if(NOT Catch2_FOUND)
   message("Fetching Catch2")
   include(FetchContent)
