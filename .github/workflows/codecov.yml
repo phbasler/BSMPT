@@ -6,9 +6,9 @@ name: codecov CI
 
 on:
   push:
-    branches: [ master]
+    branches: [ master, CodeCovFaultFix]
   pull_request:
-    branches: [ master, develop, CodeCovFaultFix ]
+    branches: [ master, develop ]
   workflow_dispatch:
   
 jobs:  
