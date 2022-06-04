@@ -3,9 +3,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
+using Approx = Catch::Approx;
 #include <BSMPT/ThermalFunctions/thermalcoefficientcalculator.h>
+#include <cmath>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_zeta.h>
 
@@ -21,7 +24,8 @@ TEST_CASE("Check FermionInterpolatedLowCoefficentCalculator", "[thermal]")
         else
         {
           return gsl_sf_doublefact(2 * l - 3) * gsl_sf_zeta(2 * l - 1) /
-                 (gsl_sf_doublefact(2 * l) * (l + 1)) * (pow(2, 2 * l - 1) - 1);
+                 (gsl_sf_doublefact(2 * l) * (l + 1)) *
+                 (std::pow(2, 2 * l - 1) - 1);
         }
       },
       5);

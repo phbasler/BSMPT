@@ -4,7 +4,8 @@
 
 file(GLOB SOURCE_FILES "Test-*.cpp" CONFIURE_DEPENDS)
 add_executable(BaryoTests ${SOURCE_FILES})
-target_link_libraries(BaryoTests Catch Minimizer Models Utility TestCompares ThermalFunctions Baryo)
+target_link_libraries(BaryoTests PRIVATE
+  Catch2::Catch2WithMain CatchEventListener Minimizer Models Utility TestCompares ThermalFunctions Baryo)
 target_compile_features(BaryoTests PUBLIC cxx_std_17)
 
 include(Catch)

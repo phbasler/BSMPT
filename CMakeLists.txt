@@ -148,6 +148,7 @@ endif()
 
 configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
 
+# -------------------- Coverage --------------------------------------------------
 
 if(EnableCoverage)
   include(CodeCoverage)
@@ -171,7 +172,6 @@ if(EnableCoverage)
      NAME coverage                 # New target name
      EXECUTABLE ctest  -j ${n_cores} # Executable in PROJECT_BINARY_DIR
      BASE_DIRECTORY "${PROJECT_SOURCE_DIR}"
-#     EXCLUDE "_deps/*" "${PROJECT_SOURCE_DIR}/tests/*" "${PROJECT_SOURCE_DIR}/src/prog/*"
    )
 endif(EnableCoverage)
 
@@ -273,3 +273,5 @@ endif()
 if(BSMPT_IS_TOPLEVEL AND BUILD_TESTING)
     add_subdirectory(tests)
 endif()
+
+
