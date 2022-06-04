@@ -2,8 +2,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-find_package(Catch2 3 QUIET)
-if(NOT CATCH2_FOUND)
+find_package(Catch2 3 REQUIRED)
+if(NOT Catch2_FOUND)
+  message("Fetching Catch2")
   include(FetchContent)
   FetchContent_Declare(
     Catch2
@@ -14,6 +15,26 @@ if(NOT CATCH2_FOUND)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
+
+if(Catch2_FOUND)
+  if(NOT "${Catch2_DIR}" STREQUAL "")
+    set(CodeCoverageExcludesFromOtherPkgs
+      ${CodeCoverageExcludesFromOtherPkgs}
+      "${Catch2_DIR}/*"
+      )
+  endif()
+  if(NOT "${Catch2_ROOT_DIR}" STREQUAL "")
+    set(CodeCoverageExcludesFromOtherPkgs
+      ${CodeCoverageExcludesFromOtherPkgs}
+      "${Catch2_ROOT_DIR}/*"
+      )
+  endif()
+endif()
+
+if(NOT "${catch2_SOURCE_DIR}" STREQUAL "")
+  set(CodeCoverageExcludesFromOtherPkgs
+    "${CodeCoverageExcludesFromOtherPkgs} ${catch2_SOURCE_DIR}/*")
+endif()
 
 add_subdirectory(catcheventlistener)
 add_subdirectory(GenerateTestCompares)
