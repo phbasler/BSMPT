@@ -15,19 +15,24 @@ add_compile_options(
 
 
 
-include(CheckCXXCompilerFlag)
-
-check_cxx_compiler_flag("-march=native" _march_native_works)
-check_cxx_compiler_flag("-xHost" _xhost_works)
-
-if(_march_native_works)
-	message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
-	add_compile_options(-march=native)
-elseif(_xhost_works)
-	message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
-	add_compile_options(-xHost)
+if(EnableCoverage)
+	message(STATUS "Not adding Vectorization if coverage is calculated")
 else()
-	message(STATUS "No suitable compiler flag found for vectorization")
+	include(CheckCXXCompilerFlag)
+
+	check_cxx_compiler_flag("-march=native" _march_native_works)
+	check_cxx_compiler_flag("-xHost" _xhost_works)
+
+	if(_march_native_works)
+		message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
+		add_compile_options(-march=native)
+	elseif(_xhost_works)
+		message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
+		add_compile_options(-xHost)
+	else()
+		message(STATUS "No suitable compiler flag found for vectorization")
+	endif()
+
 endif()
 
   add_compile_options(

@@ -9,6 +9,15 @@ project(
   LANGUAGES C CXX
   DESCRIPTION "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models")
 
+# -------------------------------- options     --------------------------------
+
+option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
+option(UseNLopt "Use NLopt to minimize the potential" ON)
+option(MakeAdditionalTesting "Build the executables used for further testing" OFF)
+option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
+option(UseConan "Use conan to get dependencies" OFF)
+option(EnableCoverage "Enable code coverage" OFF)
+
 # -------------------------------- setup cmake --------------------------------
 if(POLICY CMP0074)
   cmake_policy(SET CMP0074 NEW) # use <packagename>_ROOT as search path
@@ -26,14 +35,11 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
-option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
-option(UseNLopt "Use NLopt to minimize the potential" ON)
-option(MakeAdditionalTesting "Build the executables used for further testing" OFF)
-option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
+
 
 include(LTO)
 
-option(UseConan "Use conan to get dependencies" OFF)
+
 
 if(UseConan)
 	list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
@@ -126,7 +132,7 @@ endif()
 
 configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
 
-option(EnableCoverage "Enable code coverage" OFF)
+
 if(EnableCoverage)
   include(CodeCoverage)
   append_coverage_compiler_flags()
