@@ -18,6 +18,22 @@ option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
 option(UseConan "Use conan to get dependencies" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
 
+
+set(BSMPT_IS_TOPLEVEL NO)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  set(BSMPT_IS_TOPLEVEL YES)
+endif()
+
+if(NOT BSMPT_IS_TOPLEVEL)
+  set(EnableCoverage OFF)
+endif()
+
+set(BSMPT_USE_VECTORIZATION ON)
+if(EnableCoverage)
+  # The compiler flags don't mix well, so we turn it off in this scenario
+  set(BSMPT_USE_VECTORIZATION OFF)
+endif()
+
 # -------------------------------- setup cmake --------------------------------
 if(POLICY CMP0074)
   cmake_policy(SET CMP0074 NEW) # use <packagename>_ROOT as search path
@@ -218,41 +234,42 @@ endif()
 
 
 # ------------------------ Doxygen --------------------------------------------
+if(BSMPT_IS_TOPLEVEL)
+  find_package(Doxygen)
+  if(DOXYGEN_FOUND)
 
-find_package(Doxygen)
-if(DOXYGEN_FOUND AND CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    set(DOXYGEN_USE_MATHJAX YES)
+    set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
+    set(DOXYGEN_EXCLUDE
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part1.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part2.cpp
+      )
+    set(DOXYGEN_PROJECT_BRIEF ${CMAKE_PROJECT_DESCRIPTION})
+    set(DOXYGEN_EXTRACT_PRIVATE YES)
+    set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_DISTRIBUTE_GROUP_DOC YES)
+    set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
+    set(DOXYGEN_WARN_IF_DOC_ERROR YES)
+    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
 
-  set(DOXYGEN_USE_MATHJAX YES)
-  set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
-  set(DOXYGEN_EXCLUDE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part1.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part2.cpp
-    )
-  set(DOXYGEN_PROJECT_BRIEF ${CMAKE_PROJECT_DESCRIPTION})
-  set(DOXYGEN_EXTRACT_PRIVATE YES)
-  set(DOXYGEN_GENERATE_TREEVIEW YES)
-  set(DOXYGEN_DISTRIBUTE_GROUP_DOC YES)
-  set(DOXYGEN_WARN_IF_UNDOCUMENTED YES)
-  set(DOXYGEN_WARN_IF_DOC_ERROR YES)
-  set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
+    doxygen_add_docs(doc
+      "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/"
+      "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Changelog.md")
 
-  doxygen_add_docs(doc
-                     "${CMAKE_CURRENT_SOURCE_DIR}/include/"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
-                     "${CMAKE_CURRENT_SOURCE_DIR}/Changelog.md")
+  else ()
+    message("Doxygen need to be installed to generate the doxygen documentation")
+  endif()
 
-else ()
-  message("Doxygen need to be installed to generate the doxygen documentation")
-endif()
-
+endif(BSMPT_IS_TOPLEVEL)
 
 
 # -------------------- Testing ---------------------------------------------------
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+if(BSMPT_IS_TOPLEVEL)
     include(CTest)
 endif()
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+if(BSMPT_IS_TOPLEVEL AND BUILD_TESTING)
     add_subdirectory(tests)
 endif()

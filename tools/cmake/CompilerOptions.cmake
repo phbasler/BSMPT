@@ -15,9 +15,7 @@ add_compile_options(
 
 
 
-if(EnableCoverage)
-	message(STATUS "Not adding Vectorization if coverage is calculated")
-else()
+if(BSMPT_USE_VECTORIZATION)
 	include(CheckCXXCompilerFlag)
 
 	check_cxx_compiler_flag("-march=native" _march_native_works)
@@ -32,8 +30,7 @@ else()
 	else()
 		message(STATUS "No suitable compiler flag found for vectorization")
 	endif()
-
-endif()
+endif(BSMPT_USE_VECTORIZATION)
 
   add_compile_options(
     $<$<CXX_COMPILER_ID:MSVC>:/permissive->
