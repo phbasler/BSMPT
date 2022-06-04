@@ -15,20 +15,22 @@ add_compile_options(
 
 
 
-include(CheckCXXCompilerFlag)
+if(BSMPT_USE_VECTORIZATION)
+	include(CheckCXXCompilerFlag)
 
-check_cxx_compiler_flag("-march=native" _march_native_works)
-check_cxx_compiler_flag("-xHost" _xhost_works)
+	check_cxx_compiler_flag("-march=native" _march_native_works)
+	check_cxx_compiler_flag("-xHost" _xhost_works)
 
-if(_march_native_works)
-	message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
-	add_compile_options(-march=native)
-elseif(_xhost_works)
-	message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
-	add_compile_options(-xHost)
-else()
-	message(STATUS "No suitable compiler flag found for vectorization")
-endif()
+	if(_march_native_works)
+		message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
+		add_compile_options(-march=native)
+	elseif(_xhost_works)
+		message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
+		add_compile_options(-xHost)
+	else()
+		message(STATUS "No suitable compiler flag found for vectorization")
+	endif()
+endif(BSMPT_USE_VECTORIZATION)
 
   add_compile_options(
     $<$<CXX_COMPILER_ID:MSVC>:/permissive->
