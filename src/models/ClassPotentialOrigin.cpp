@@ -3390,6 +3390,50 @@ void Class_Potential_Origin::initVectors()
   HiggsVev = std::vector<double>(NHiggs, 0);
 }
 
+void Class_Potential_Origin::sym4Dim(
+    std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor4Dim,
+    std::size_t Nk1,
+    std::size_t Nk2,
+    std::size_t Nk3,
+    std::size_t Nk4)
+{
+  for (std::size_t k1 = 0; k1 < Nk1; k1++)
+  {
+    for (std::size_t k2 = k1; k2 < Nk2; k2++)
+    {
+      for (std::size_t k3 = k2; k3 < Nk3; k3++)
+      {
+        for (std::size_t k4 = k3; k4 < Nk4; k4++)
+        {
+          Tensor4Dim[k1][k2][k4][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k3][k2][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k3][k4][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k4][k2][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k4][k3][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k1][k3][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k1][k4][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k3][k1][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k3][k4][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k4][k1][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k4][k3][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k1][k2][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k1][k4][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k2][k1][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k2][k4][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k4][k1][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k4][k2][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k1][k2][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k1][k3][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k2][k1][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k2][k3][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k3][k1][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k3][k2][k1] = Tensor4Dim[k1][k2][k3][k4];
+        }
+      }
+    }
+  }
+}
+
 void Class_Potential_Origin::resetbools()
 {
   SetCurvatureDone          = false;

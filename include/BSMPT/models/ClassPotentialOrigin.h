@@ -576,6 +576,21 @@ public:
   void initVectors();
 
   /**
+   * @brief sym4Dim Symmetrize scalar 4-dim tensor
+   * @param Tensor4Dim 4-dim scalar tensor
+   * @param Nk1 number of first indices
+   * @param Nk2 number of second indices
+   * @param Nk3 number of third indices
+   * @param Nk4 number of forth indices
+   */
+  void sym4Dim(
+      std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor4Dim,
+      std::size_t Nk1,
+      std::size_t Nk2,
+      std::size_t Nk3,
+      std::size_t Nk4);
+
+  /**
    * Calculates the effective potential and its derivatives.
    * @param v vev configuration at which the potential should be evaluated
    * @param Temp temperature at which the potential should be evaluated
