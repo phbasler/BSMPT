@@ -7,8 +7,16 @@ name: codecov CI
 on:
   push:
     branches: [ master]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
   pull_request:
     branches: [ master, develop ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
   workflow_dispatch:
   
 jobs:  
