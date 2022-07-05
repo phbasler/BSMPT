@@ -6,6 +6,10 @@ name: Benchmark on PR
 on:
   pull_request:
     branches: [master, develop]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
 
 jobs:
   PRbenchmark:
