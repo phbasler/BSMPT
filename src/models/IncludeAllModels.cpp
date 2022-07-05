@@ -38,7 +38,7 @@ std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice)
   case ModelIDs::CPINTHEDARK:
     return std::make_unique<Class_Potential_CPintheDark>();
     break;
-  case ModelIDs::TEMPLATE: return std::unique_ptr<Class_Template>(); break;
+  case ModelIDs::TEMPLATE: return std::make_unique<Class_Template>(); break;
   default: throw std::runtime_error("Invalid model");
   }
 }
