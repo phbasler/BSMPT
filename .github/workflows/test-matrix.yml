@@ -66,5 +66,40 @@ jobs:
     - name: Test
       run: cd build && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
       
+  tests-noNLopt:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-latest]
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    env:
+      ACTIONS_STEP_DEBUG: true
 
+    steps:
+    - uses: actions/checkout@v3
+      with:
+          persist-credentials: false
+          
+    - name : installPackages on Ubuntu
+      if: startsWith(matrix.os, 'ubuntu')
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libboost-all-dev
+    
+    - name: Install packages on Mac
+      if: startsWith(matrix.os, 'macos')
+      run: brew install eigen gsl boost libomp
+      
+      
+    - name: Get number of CPU cores
+      uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
+      
+    - name: cmake generate
+      run:  cmake -S . -B build -DUseConan=OFF -DCMAKE_BUILD_TYPE=Release
+      
+      
+    - name: compile
+      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} --config Release
+    - name: Test
+      run: cd build && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
+      
 
