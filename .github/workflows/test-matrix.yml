@@ -52,12 +52,14 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v1
       id: cpu-cores
       
-    - name: cmake generate
-      run: |
-        UseConan=OFF
-        if [ "${{ matrix.os }}" == windows* ] then UseConan=ON fi
-        cmake -S . -B build -DUseConan=$UseConan -DCMAKE_BUILD_TYPE=Release
-      shell: bash
+    - name: cmake generate Windows
+      if: startsWith(matrix.os, 'windows')
+      run:  cmake -S . -B build -DUseConan=ON -DCMAKE_BUILD_TYPE=Release
+      
+    - name: cmake generate Mac/Unix
+      if: startsWith(matrix.os, 'windows') == false
+      run:  cmake -S . -B build -DUseConan=OFF -DCMAKE_BUILD_TYPE=Release
+      
       
     - name: compile
       run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} --config Release
