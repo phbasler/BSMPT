@@ -55,7 +55,7 @@ jobs:
     - name: cmake generate
       run: |
         UseConan=OFF
-        if [ "${{ matrix.os }}" == windows* ] then UseConan=ON; fi
+        if [ "${{ matrix.os }}" == windows* ] then UseConan=ON fi
         cmake -S . -B build -DUseConan=$UseConan -DCMAKE_BUILD_TYPE=Release
       shell: bash
       
