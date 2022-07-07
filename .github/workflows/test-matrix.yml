@@ -51,11 +51,14 @@ jobs:
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v1
       id: cpu-cores
+      
     - name: cmake generate
       run: |
         UseConan=OFF
         if [[ "${{ matrix.os }}" == windows* ]] then UseConan=ON; fi
         cmake -S . -B build -DUseConan=$UseConan -DCMAKE_BUILD_TYPE=Release
+      shell: bash
+      
     - name: compile
       run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} --config Release
     - name: Test
