@@ -327,6 +327,15 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   solStartPot = modelPointer->MinimizeOrderVEV(solStart);
   vStart      = modelPointer->EWSBVEV(solStartPot);
 
+  if (vStart <= C_threshold or vStart >= 255.0)
+  {
+    result.Tc         = TempEnd;
+    result.vc         = 0;
+    result.StatusFlag = MinimizerStatus::NLOVEVZEROORINF;
+    result.EWMinimum  = std::vector<double>(dim, 0);
+    return result;
+  }
+
   bool SurviveNLO = modelPointer->CheckNLOVEV(solStart);
 
   if (not SurviveNLO and TempStart == 0)
@@ -335,15 +344,6 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     result.vc         = vStart;
     result.StatusFlag = MinimizerStatus::NOTNLOSTABLE;
     result.EWMinimum  = solStart;
-    return result;
-  }
-
-  if (vStart <= C_threshold or vStart >= 255.0)
-  {
-    result.Tc         = TempEnd;
-    result.vc         = 0;
-    result.StatusFlag = MinimizerStatus::NLOVEVZEROORINF;
-    result.EWMinimum  = std::vector<double>(dim, 0);
     return result;
   }
 
