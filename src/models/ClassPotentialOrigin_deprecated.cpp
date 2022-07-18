@@ -295,7 +295,8 @@ double Class_Potential_Origin::boson_legacy(double MassSquared,
       bool NegSpline = true;
       if (NegSpline)
       {
-        PotVal = (std::log(2) / 4.0 - 0.691643) * std::sqrt(std::abs(x));
+        PotVal = static_cast<long double>((std::log(2) / 4.0 - 0.691643) *
+                                          std::sqrt(std::abs(x)));
         PotVal *= Temp * Temp / (2 * M_PI * M_PI);
       }
       else

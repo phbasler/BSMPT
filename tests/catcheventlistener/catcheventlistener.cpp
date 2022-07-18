@@ -3,15 +3,13 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this
-                          // in one cpp file
-
-#include "catch.hpp"
 #include <BSMPT/utility/Logger.h>
-struct MyListener : Catch::TestEventListenerBase
+#include <catch2/reporters/catch_reporter_event_listener.hpp>
+#include <catch2/reporters/catch_reporter_registrars.hpp>
+struct MyListener : Catch::EventListenerBase
 {
 
-  using TestEventListenerBase::TestEventListenerBase; // inherit constructor
+  using EventListenerBase::EventListenerBase; // inherit constructor
 
   void testCaseStarting(Catch::TestCaseInfo const &testInfo) override
   {

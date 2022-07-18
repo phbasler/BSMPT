@@ -10,8 +10,8 @@
 
 #include "Eigen/Dense"
 
-#include <gsl/gsl_sf_zeta.h>
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_sf_zeta.h>
 
 #include <BSMPT/ThermalFunctions/NegativeBosonSpline.h>
 #include <BSMPT/ThermalFunctions/ThermalFunctions.h>
@@ -386,8 +386,6 @@ double Class_Potential_Origin::fbaseFour(double MassSquaredA,
                                          double MassSquaredC,
                                          double MassSquaredD) const
 {
-
-  
 
   double res  = 0;
   double mas  = MassSquaredA;
@@ -2647,7 +2645,7 @@ Class_Potential_Origin::QuarkMassesSquared(const std::vector<double> &v,
         res.push_back(tmp);
     }
   }
-  else if (diff > 0 and static_cast<size_t>(diff) <= NHiggs)
+  else if (static_cast<size_t>(diff) <= NHiggs)
   {
     std::size_t m = diff - 1;
     MatrixXcd Diff(NQuarks, NQuarks);
@@ -2745,7 +2743,7 @@ Class_Potential_Origin::LeptonMassesSquared(const std::vector<double> &v,
         res.push_back(tmp);
     }
   }
-  else if (diff > 0 and static_cast<size_t>(diff) <= NHiggs)
+  else if (static_cast<size_t>(diff) <= NHiggs)
   {
 
     auto k         = diff - 1;
@@ -3390,6 +3388,50 @@ void Class_Potential_Origin::initVectors()
       vec3Complex{NQuarks, vec2Complex{NHiggs, vec1Complex(NHiggs, 0)}}};
 
   HiggsVev = std::vector<double>(NHiggs, 0);
+}
+
+void Class_Potential_Origin::sym4Dim(
+    std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor4Dim,
+    std::size_t Nk1,
+    std::size_t Nk2,
+    std::size_t Nk3,
+    std::size_t Nk4)
+{
+  for (std::size_t k1 = 0; k1 < Nk1; k1++)
+  {
+    for (std::size_t k2 = k1; k2 < Nk2; k2++)
+    {
+      for (std::size_t k3 = k2; k3 < Nk3; k3++)
+      {
+        for (std::size_t k4 = k3; k4 < Nk4; k4++)
+        {
+          Tensor4Dim[k1][k2][k4][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k3][k2][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k3][k4][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k4][k2][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k1][k4][k3][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k1][k3][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k1][k4][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k3][k1][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k3][k4][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k4][k1][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k2][k4][k3][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k1][k2][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k1][k4][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k2][k1][k4] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k2][k4][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k4][k1][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k3][k4][k2][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k1][k2][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k1][k3][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k2][k1][k3] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k2][k3][k1] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k3][k1][k2] = Tensor4Dim[k1][k2][k3][k4];
+          Tensor4Dim[k4][k3][k2][k1] = Tensor4Dim[k1][k2][k3][k4];
+        }
+      }
+    }
+  }
 }
 
 void Class_Potential_Origin::resetbools()

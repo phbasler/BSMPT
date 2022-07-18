@@ -128,14 +128,16 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
         thread_GSL =
             std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
               std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-                  modelPointer, Temp, 5); // If additionally CMAES is minimising
-                                          // GSL does not need as much solutions
+                  *modelPointer,
+                  Temp,
+                  5); // If additionally CMAES is minimising
+                      // GSL does not need as much solutions
             });
       }
       else
       {
         std::tie(solGSLMin, gslMinSuc) =
-            GSL_Minimize_gen_all(modelPointer, Temp, 5, UseMultithreading);
+            GSL_Minimize_gen_all(*modelPointer, Temp, 5, UseMultithreading);
       }
     }
     else
@@ -146,13 +148,13 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
         thread_GSL = std::thread(
             [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
               std::tie(solGSLMin, gslMinSuc) =
-                  GSL_Minimize_gen_all(modelPointer, Temp, 5, MaxSol);
+                  GSL_Minimize_gen_all(*modelPointer, Temp, 5, MaxSol);
             });
       }
       else
       {
         std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-            modelPointer, Temp, 5, MaxSol, UseMultithreading);
+            *modelPointer, Temp, 5, MaxSol, UseMultithreading);
       }
     }
   }
@@ -164,12 +166,12 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     if (UseMultithreading)
     {
       thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
-        LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
+        LibCMAES = LibCMAES::min_cmaes_gen_all(*modelPointer, Temp, start);
       });
     }
     else
     {
-      LibCMAES = LibCMAES::min_cmaes_gen_all(modelPointer, Temp, start);
+      LibCMAES = LibCMAES::min_cmaes_gen_all(*modelPointer, Temp, start);
     }
   }
 #else
@@ -184,12 +186,12 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     if (UseMultithreading)
     {
       thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
-        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
+        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(*modelPointer, Temp);
       });
     }
     else
     {
-      NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(modelPointer, Temp);
+      NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(*modelPointer, Temp);
     }
   }
 #endif
@@ -215,7 +217,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 #ifdef libcmaes_FOUND
   if (UseMultithreading and thread_CMAES.joinable())
   {
-    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for CMAes Thread");
+    Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for CMAES Thread");
     thread_CMAES.join();
     auto errC          = LibCMAES.CMAESStatus;
     auto solCMAES      = LibCMAES.result;
@@ -325,6 +327,15 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   solStartPot = modelPointer->MinimizeOrderVEV(solStart);
   vStart      = modelPointer->EWSBVEV(solStartPot);
 
+  if (vStart <= C_threshold or vStart >= 255.0)
+  {
+    result.Tc         = TempEnd;
+    result.vc         = 0;
+    result.StatusFlag = MinimizerStatus::NLOVEVZEROORINF;
+    result.EWMinimum  = std::vector<double>(dim, 0);
+    return result;
+  }
+
   bool SurviveNLO = modelPointer->CheckNLOVEV(solStart);
 
   if (not SurviveNLO and TempStart == 0)
@@ -333,15 +344,6 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     result.vc         = vStart;
     result.StatusFlag = MinimizerStatus::NOTNLOSTABLE;
     result.EWMinimum  = solStart;
-    return result;
-  }
-
-  if (vStart <= C_threshold or vStart >= 255.0)
-  {
-    result.Tc         = TempEnd;
-    result.vc         = 0;
-    result.StatusFlag = MinimizerStatus::NLOVEVZEROORINF;
-    result.EWMinimum  = std::vector<double>(dim, 0);
     return result;
   }
 
@@ -440,7 +442,7 @@ FindNextLocalMinima(const std::shared_ptr<Class_Potential_Origin> &model,
     std::vector<double> GSLSolution;
     std::size_t tries{0}, MaxTries{600};
     int status;
-    GSL_params params(model, temperature);
+    GSL_params params(*model, temperature);
     do
     {
       GSLSolution.clear();

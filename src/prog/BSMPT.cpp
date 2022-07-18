@@ -151,15 +151,38 @@ try
                               std::to_string(VEVsym.at(i)) + " GeV");
           }
         }
-        else if (EWPT.Tc == 300)
+        else if (EWPT.StatusFlag ==
+                 Minimizer::MinimizerStatus::NOTVANISHINGATFINALTEMP)
         {
-          Logger::Write(LoggingLevel::Default,
-                        dimensionnames.at(1) + " != 0 GeV at T = 300 GeV.");
+          Logger::Write(
+              LoggingLevel::Default,
+              dimensionnames.at(1) +
+                  " != 0 GeV at T = 300 GeV. No SFOEWPT is possible.");
         }
-        else if (EWPT.Tc == 0)
+        else if (EWPT.StatusFlag == Minimizer::MinimizerStatus::NLOVEVZEROORINF)
         {
           Logger::Write(LoggingLevel::Default,
-                        "This point is not vacuum stable.");
+                        dimensionnames.at(1) + " = 0 / > 255 GeV at T = 0 GeV. "
+                                               "The point is not NLO stable.");
+        }
+        else if (EWPT.StatusFlag == Minimizer::MinimizerStatus::NOTNLOSTABLE)
+        {
+          Logger::Write(
+              LoggingLevel::Default,
+              dimensionnames.at(1) +
+                  " != vEW GeV at T = 0 GeV. The point is not NLO stable.");
+        }
+        else if (EWPT.StatusFlag ==
+                 Minimizer::MinimizerStatus::NUMERICALLYUNSTABLE)
+        {
+          Logger::Write(LoggingLevel::Default,
+                        "The point is numerically unstable.");
+        }
+        else if (EWPT.StatusFlag == Minimizer::MinimizerStatus::BELOWTHRESHOLD)
+        {
+          Logger::Write(LoggingLevel::Default,
+                        dimensionnames.at(1) + " < " + std::to_string(C_PT) +
+                            " found.");
         }
       }
       if (PrintErrorLines)

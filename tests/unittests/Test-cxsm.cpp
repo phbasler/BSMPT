@@ -3,7 +3,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
+
+using Approx = Catch::Approx;
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
@@ -47,7 +50,7 @@ TEST_CASE("Checking NLOVEV for CXSM", "[CXSM]")
     auto expected = std::abs(modelPointer->get_vevTreeMin(i));
     auto res      = std::abs(sol.at(i));
 
-    INFO(i << " (res/expected) = (" << res << "/" << expected << ")")
+    INFO(i << " (res/expected) = (" << res << "/" << expected << ")");
 
     REQUIRE(res == Approx(expected).margin(1e-4));
   }
@@ -281,13 +284,13 @@ TEST_CASE("Checking triple higgs NLO couplings in the CXSM", "[CXSM]")
     {
       for (std::size_t k{0}; k < NHiggs; ++k)
       {
-        INFO("Checking TreePhysical")
+        INFO("Checking TreePhysical");
         Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
               Expected.CheckTripleTree.at(i).at(j).at(k));
-        INFO("Checking CTPhysical")
+        INFO("Checking CTPhysical");
         Check(modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k),
               Expected.CheckTripleCT.at(i).at(j).at(k));
-        INFO("Checking CWPhysical")
+        INFO("Checking CWPhysical");
         Check(modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k),
               Expected.CheckTripleCW.at(i).at(j).at(k));
       }

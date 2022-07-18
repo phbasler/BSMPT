@@ -3,7 +3,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
@@ -24,6 +25,8 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
                                               /* Yukawa Type = */ 1};
 
 const Compare_C2HDM Expected;
+
+using Approx = Catch::Approx;
 
 TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
 {
@@ -256,7 +259,7 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
   modelPointer->TripleHiggsCouplings();
 
   auto Check = [](auto result, auto expected) {
-    if (expected != 0)
+    if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
     }

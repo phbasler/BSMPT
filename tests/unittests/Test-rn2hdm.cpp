@@ -3,7 +3,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "catch.hpp"
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
+
+using Approx = Catch::Approx;
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
@@ -244,7 +247,7 @@ TEST_CASE("Checking triple higgs NLO couplings in the N2HDM", "[n2hdm]")
   modelPointer->TripleHiggsCouplings();
 
   auto Check = [](auto result, auto expected) {
-    if (expected != 0)
+    if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
     }

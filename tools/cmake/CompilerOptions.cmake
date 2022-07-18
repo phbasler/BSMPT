@@ -2,27 +2,44 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(CMAKE_CXX_FLAGS_DEBUG
-	  "${CMAKE_CXX_FLAGS_DEBUG} -Wall  -DCOMPILEDEBUG=true"
-)
-set(CMAKE_CXX_FLAGS_RELEASE
-	  "${CMAKE_CXX_FLAGS_RELEASE} -Wall ")
+add_compile_options(
+	$<$<CONFIG:DEBUG>:-DCOMPILEDEBUG=true>
+	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-pedantic>
+	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall>
+	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wextra>
+	$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wshadow>
+	$<$<AND:$<CONFIG:DEBUG>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-Wmissing-declarations>
+	$<$<AND:$<CONFIG:DEBUG>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-Wmissing-include-dirs>
+	$<$<AND:$<CONFIG:RELEASE>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-O3>
+	)
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS_DEBUG
-       "${CMAKE_CXX_FLAGS_DEBUG} -Wextra -Wmissing-declarations -Wmissing-include-dirs -Wshadow -pedantic")
-  set(CMAKE_CXX_FLAGS_RELEASE
-    "${CMAKE_CXX_FLAGS_RELEASE} -O3 -pedantic -Wextra -Wshadow")
-endif(CMAKE_COMPILER_IS_GNUCXX)
 
-if (MSVC)
-     set(CMAKE_CXX_FLAGS_DEBUG
-       "${CMAKE_CXX_FLAGS_DEBUG} /permissive- /bigobj /w44101")
 
-     set(CMAKE_CXX_FLAGS_RELEASE
-        "${CMAKE_CXX_FLAGS_RELEASE} /permissive- /bigobj /w44101 /Ox")
+if(BSMPT_USE_VECTORIZATION)
+	include(CheckCXXCompilerFlag)
 
-     set(MSVC_DISABLED_WARNINGS_LIST
+	check_cxx_compiler_flag("-march=native" _march_native_works)
+	check_cxx_compiler_flag("-xHost" _xhost_works)
+
+	if(_march_native_works)
+		message(STATUS "Using processor's vector instructions (-march=native compiler flag set)")
+		add_compile_options(-march=native)
+	elseif(_xhost_works)
+		message(STATUS "Using processor's vector instructions (-xHost compiler flag set)")
+		add_compile_options(-xHost)
+	else()
+		message(STATUS "No suitable compiler flag found for vectorization")
+	endif()
+endif(BSMPT_USE_VECTORIZATION)
+
+  add_compile_options(
+    $<$<CXX_COMPILER_ID:MSVC>:/permissive->
+    $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:DEBUG>>:/bigobj>
+    $<$<CXX_COMPILER_ID:MSVC>:/w44101>
+    $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<CONFIG:RELEASE>>:/Ox>
+    )
+
+     list(APPEND MSVC_DISABLED_WARNINGS_LIST
       "C4061" # enumerator 'identifier' in switch of enum 'enumeration' is not
               # explicitly handled by a case label
               # Disable this because it flags even when there is a default.
@@ -83,8 +100,11 @@ if (MSVC)
     "C5039"
       "C5045"
       )
-      string(REPLACE "C" " -wd" MSVC_DISABLED_WARNINGS_STR
-                            ${MSVC_DISABLED_WARNINGS_LIST})
 
-      set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${MSVC_DISABLED_WARNINGS_STR}")
- endif()
+    foreach(warning IN LISTS MSVC_DISABLED_WARNINGS_LIST)
+      string(REPLACE "C" "" warning_stripped
+                                  ${warning})
+      add_compile_options(
+        $<$<CXX_COMPILER_ID:MSVC>:-wd${warning_stripped}>
+        )
+    endforeach()

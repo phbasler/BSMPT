@@ -44,16 +44,16 @@ double GSL_VEFF_gen_all(const gsl_vector *v, void *p)
   struct GSL_params *params = static_cast<GSL_params *>(p);
 
   std::vector<double> vMin;
-  auto nVEVs = params->modelPointer->get_nVEV();
+  auto nVEVs = params->model.get_nVEV();
 
   for (std::size_t i = 0; i < nVEVs; i++)
   {
     vMin.push_back(gsl_vector_get(v, i));
   }
 
-  auto vIn = params->modelPointer->MinimizeOrderVEV(vMin);
+  auto vIn = params->model.MinimizeOrderVEV(vMin);
 
-  double res = params->modelPointer->VEff(vIn, params->Temp, 0);
+  double res = params->model.VEff(vIn, params->Temp, 0);
 
   return res;
 }
@@ -77,7 +77,7 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params &params,
   int status;
   double size;
 
-  std::size_t dim = params.modelPointer->get_nVEV();
+  std::size_t dim = params.model.get_nVEV();
 
   /* Starting point */
   x = gsl_vector_alloc(dim);
@@ -123,43 +123,43 @@ int GSL_Minimize_From_S_gen_all(struct GSL_params &params,
   return status;
 }
 
-std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-    const double &Temp,
-    const int &seed,
-    const std::size_t &MaxSol,
-    bool UseMultiThreading)
+std::pair<std::vector<double>, bool>
+GSL_Minimize_gen_all(const Class_Potential_Origin &model,
+                     const double &Temp,
+                     const int &seed,
+                     const std::size_t &MaxSol,
+                     bool UseMultiThreading)
 {
   std::vector<std::vector<double>> saveAllMinima;
   auto result = GSL_Minimize_gen_all(
-      modelPointer, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
+      model, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
   return result;
 }
 
-std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-    const double &Temp,
-    const int &seed,
-    bool UseMultiThreading)
+std::pair<std::vector<double>, bool>
+GSL_Minimize_gen_all(const Class_Potential_Origin &model,
+                     const double &Temp,
+                     const int &seed,
+                     bool UseMultiThreading)
 {
   std::vector<std::vector<double>> saveAllMinima;
   std::size_t MaxSol = 20;
   auto result        = GSL_Minimize_gen_all(
-      modelPointer, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
+      model, Temp, seed, saveAllMinima, MaxSol, UseMultiThreading);
   return result;
 }
 
-std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer,
-    const double &Temp,
-    const int &seed,
-    std::vector<std::vector<double>> &saveAllMinima,
-    const std::size_t &MaxSol,
-    bool UseMultiThreading)
+std::pair<std::vector<double>, bool>
+GSL_Minimize_gen_all(const Class_Potential_Origin &model,
+                     const double &Temp,
+                     const int &seed,
+                     std::vector<std::vector<double>> &saveAllMinima,
+                     const std::size_t &MaxSol,
+                     bool UseMultiThreading)
 {
-  struct GSL_params params(modelPointer, Temp);
+  struct GSL_params params(model, Temp);
 
-  std::size_t dim = modelPointer->get_nVEV();
+  std::size_t dim = model.get_nVEV();
 
   std::default_random_engine randGen(seed);
   double RNDMax        = 500;
@@ -264,12 +264,12 @@ std::pair<std::vector<double>, bool> GSL_Minimize_gen_all(
   {
     auto res = Results.front();
     Results.pop();
-    auto vpot = modelPointer->MinimizeOrderVEV(res);
+    auto vpot = model.MinimizeOrderVEV(res);
     std::vector<double> row(nCol);
     for (std::size_t i = 0; i < dim; ++i)
       row.at(i) = res.at(i);
-    row.at(dim)     = modelPointer->EWSBVEV(vpot);
-    row.at(dim + 1) = modelPointer->VEff(vpot, Temp, 0);
+    row.at(dim)     = model.EWSBVEV(vpot);
+    row.at(dim + 1) = model.VEff(vpot, Temp, 0);
     saveAllMinima.push_back(row);
   }
 
