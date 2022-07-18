@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.3.3</span>
+   &#160;<span id="projectnumber">2.4.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -117,9 +117,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a01152bea3731d373bb7f7fb36cbdf43e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeNLOPT_8h.html#a01152bea3731d373bb7f7fb36cbdf43e">BSMPT::Minimizer::LibNLOPT::NLOPTVEff</a> (const std::vector&lt; double &gt; &amp;x, std::vector&lt; double &gt; &amp;grad, void *data)</td></tr>
 <tr class="memdesc:a01152bea3731d373bb7f7fb36cbdf43e"><td class="mdescLeft">&#160;</td><td class="mdescRight">NLOPTVEff.  <a href="MinimizeNLOPT_8h.html#a01152bea3731d373bb7f7fb36cbdf43e">More...</a><br /></td></tr>
 <tr class="separator:a01152bea3731d373bb7f7fb36cbdf43e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0a21782834f297dab690b625dbab6bb"><td class="memItemLeft" align="right" valign="top">NLOPTReturnType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeNLOPT_8h.html#ac0a21782834f297dab690b625dbab6bb">BSMPT::Minimizer::LibNLOPT::MinimizeUsingNLOPT</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;model, const double &amp;Temp)</td></tr>
-<tr class="memdesc:ac0a21782834f297dab690b625dbab6bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">MinimizeUsingNLOPT minimizes the effective potential using the NLopt LN_COBYLA algorithm.  <a href="MinimizeNLOPT_8h.html#ac0a21782834f297dab690b625dbab6bb">More...</a><br /></td></tr>
-<tr class="separator:ac0a21782834f297dab690b625dbab6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96d8e08d5eac4ea59c5c11b9bf4de089"><td class="memItemLeft" align="right" valign="top">NLOPTReturnType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeNLOPT_8h.html#a96d8e08d5eac4ea59c5c11b9bf4de089">BSMPT::Minimizer::LibNLOPT::MinimizeUsingNLOPT</a> (const Class_Potential_Origin &amp;model, const double &amp;Temp)</td></tr>
+<tr class="memdesc:a96d8e08d5eac4ea59c5c11b9bf4de089"><td class="mdescLeft">&#160;</td><td class="mdescRight">MinimizeUsingNLOPT minimizes the effective potential using the NLopt LN_COBYLA algorithm.  <a href="MinimizeNLOPT_8h.html#a96d8e08d5eac4ea59c5c11b9bf4de089">More...</a><br /></td></tr>
+<tr class="separator:a96d8e08d5eac4ea59c5c11b9bf4de089"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16ac9f140357871103756a647a9b441c"><td class="memItemLeft" align="right" valign="top">NLOPTReturnType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="MinimizeNLOPT_8h.html#a16ac9f140357871103756a647a9b441c">BSMPT::Minimizer::LibNLOPT::MinimizePlaneUsingNLOPT</a> (const struct PointerContainerMinPlane &amp;params)</td></tr>
 <tr class="memdesc:a16ac9f140357871103756a647a9b441c"><td class="mdescLeft">&#160;</td><td class="mdescRight">MinimizePlaneUsingNLOPT minimizes the effective potential in a given plane using the NLopt LN_COBYLA algorithm.  <a href="MinimizeNLOPT_8h.html#a16ac9f140357871103756a647a9b441c">More...</a><br /></td></tr>
 <tr class="separator:a16ac9f140357871103756a647a9b441c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,8 +203,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac0a21782834f297dab690b625dbab6bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0a21782834f297dab690b625dbab6bb">&#9670;&nbsp;</a></span>MinimizeUsingNLOPT()</h2>
+<a id="a96d8e08d5eac4ea59c5c11b9bf4de089"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96d8e08d5eac4ea59c5c11b9bf4de089">&#9670;&nbsp;</a></span>MinimizeUsingNLOPT()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,7 +212,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">NLOPTReturnType BSMPT::Minimizer::LibNLOPT::MinimizeUsingNLOPT </td>
           <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &amp;&#160;</td>
           <td class="paramname"><em>model</em>, </td>
         </tr>
         <tr>
@@ -232,7 +232,7 @@ Functions</h2></td></tr>
 <p>MinimizeUsingNLOPT minimizes the effective potential using the NLopt LN_COBYLA algorithm. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">model</td><td>pointer to the parameter point to be minimized </td></tr>
+    <tr><td class="paramname">model</td><td>model reference </td></tr>
     <tr><td class="paramname">Temp</td><td>Temperature at which the potential should be minimized </td></tr>
   </table>
   </dd>

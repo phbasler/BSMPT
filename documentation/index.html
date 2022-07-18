@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.3.3</span>
+   &#160;<span id="projectnumber">2.4.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -94,8 +94,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">BSMPT Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Program: BSMPT version 2.3.3</p>
-<p>Released by: Philipp Basler and Margarete Mühlleitner and Jonas Müller</p>
+<div class="textblock"><p>Program: BSMPT version 2.4.0</p>
+<p>Released by: Philipp Basler and Lisa Biermann and Margarete Mühlleitner and Jonas Müller</p>
 <p><a href="https://github.com/phbasler/BSMPT/discussions">&lt;img src="https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&amp;logo=github&amp;colorB=purple" alt=""GitHub Discussions""/&gt;</a> <a href="https://github.com/phbasler/BSMPT/actions/workflows/test.yml"><object type="image/svg+xml" data="https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master" style="pointer-events: none;">Ubuntu unit tests</object></a> <a href="https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml"><object type="image/svg+xml" data="https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master" style="pointer-events: none;">Mac unit tests</object></a> <a href="https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml"><object type="image/svg+xml" data="https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml/badge.svg?branch=master" style="pointer-events: none;">Windows unit tests</object></a> <a href="https://codecov.io/gh/phbasler/BSMPT"><object type="image/svg+xml" data="https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5" style="pointer-events: none;">codecov master</object></a> <a href="https://phbasler.github.io/BSMPT/documentation"><img src="https://img.shields.io/badge/Documentation-master-success" alt="Documentation" class="inline"/></a> <a href="https://phbasler.github.io/BSMPT/benchmarks/"><img src="https://img.shields.io/badge/Benchmark-master-success" alt="Benchmarks" class="inline"/></a> <a href="https://github.com/phbasler/bsmpt/graphs/commit-activity"><object type="image/svg+xml" data="https://img.shields.io/badge/Maintained%3F-yes-green.svg" style="pointer-events: none;">Maintenance</object></a> <a href="https://github.com/phbasler/BSMPT/blob/master/LICENSE.md"><object type="image/svg+xml" data="https://img.shields.io/github/license/phbasler/bsmpt.svg" style="pointer-events: none;">GitHub license</object></a> <a href="https://github.com/phbasler/bsmpt/releases"><img src="https://badgen.net/github/release/phbasler/bsmpt" alt="Latest release" class="inline"/></a> <a href="https://lgtm.com/projects/g/phbasler/BSMPT/context:cpp"><object type="image/svg+xml" data="https://img.shields.io/lgtm/grade/cpp/g/phbasler/BSMPT.svg?logo=lgtm&amp;logoWidth=18" style="pointer-events: none;">Language grade: C/C++</object></a></p>
 <p>Manual: version 2.0</p>
 <p>BSMPT - Beyond the Standard Model Phase Transitions: The C++ program package BSMPT calculates the strength of the electroweak phase transition in extended Higgs sectors. For this the loop-corrected effective potential at finite temperature is calculated including the daisy resummation of the bosonic masses. The program computes the vacuum expectation value (VEV) \( v \) of the potential as a function of the temperature, and in particular the critical VEV \(v_c\) at the temperature \(T_c\) where the phase transition takes place. In addition, the loop-corrected trilinear Higgs self-couplings are provided. We apply an 'on-shell' renormalization scheme in the sense that the loop-corrected masses and mixing angles are required to be equal to their tree-level input values. This allows for efficient scans in the parameter space of the models.</p>
@@ -163,48 +163,56 @@ How to add a new model (for further details, also see the manual):</h2>
 <li>In src/models/IncludeAllModels.cpp you have to add <code>#include &lt;BSMPT/models/YourModel.h&gt;</code> to the include list. Also to actually call your model you have to extend the FChoose function. For this you add a new case to the switch statement, which reads <pre class="fragment"> case ModelIDs::YourModel: return std::make_unique&lt;Class_YourModel&gt;(); break;
 </pre></li>
 </ol>
+<h3><a class="anchor" id="autotoc_md9"></a>
+Generate the C++ code for a model</h3>
+<p>We provide currently two methods to generate the tensors and calculate the counter terms for a new model.</p>
+<ol type="1">
+<li>At tools/ModelGeneration/Maple we provide the maple Worksheet CreateModel.mw which you can use to implement your model and get the tensors.</li>
+<li>At tools/ModelGeneration/sympy we provide a setup using only python3 with sympy (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, SM.py and G2HDM.py which both implement two different models and use the ModelGenerator.py module to calculate the tensors and CT. You can get the CT using <code>python3 SM.py --show ct</code> and the tensors by calling <code>python3 SM.py --show tensors</code>. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. the G2HDM example).</li>
+<li>To show the simplified Tree level and counterterm potentials you can use <code>python3 SM.py --show treeSimpl</code> und <code>python3 SM.py --show CTSimpl</code>.</li>
+</ol>
 <p>You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at <a href="#" onclick="location.href='mai'+'lto:'+'bsm'+'pt'+'@li'+'st'+'s.k'+'it'+'.ed'+'u'; return false;">bsmpt<span style="display: none;">.nosp@m.</span>@lis<span style="display: none;">.nosp@m.</span>ts.ki<span style="display: none;">.nosp@m.</span>t.ed<span style="display: none;">.nosp@m.</span>u</a></p>
 <p>Also contact us if you have a custom model for BSMPT v1.x and you have trouble converting it to the new notation.</p>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Executables</h2>
 <p>BSMPT provides multiple executables. Here we give a quick overview of them. For every executable you can call them with the <code>--help</code> option to get an overview of possible input parameters. For the following examples the C2HDM with the example/C2HDM_Input.dat file is used.</p>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md11"></a>
 BSMPT</h3>
 <p>BSMPT calculates the EWPT for every parameter point in the input file and gives out the results of those parameter points for which \(v_c/T_c\) &gt; 1. To find these points a bisection method is used with the temperature starting between 0 and 300 GeV. The executable is called through: </p><pre class="fragment">    ./bin/BSMPT Model Inputfile Outputfile LineStart LineEnd
 </pre><p>This will call the specific model to be used, identified through 'Model', and calculate the EWPT for each parameter point (corresponding to one line) between 'LineStart' and 'LineEnd'.</p>
 <p>For our example the command </p><pre class="fragment">    ./bin/BSMPT c2hdm example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
 </pre><p>will calculate for the C2HDM the EWPT for one parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2 which can be compared with the already available file example/C2HDM_Input.dat_BSMPT.</p>
-<h3><a class="anchor" id="autotoc_md11"></a>
+<h3><a class="anchor" id="autotoc_md12"></a>
 CalcCT</h3>
 <p>This will calculate the counterterms. In the output file the information on the input parameter point is given and the counterterms are added at the end of the line.</p>
 <p>It is called through the command </p><pre class="fragment">    ./bin/CalcCT Model Inputfile Outputfile LineStart LineEnd
 </pre><p>For the C2HDM example this reads </p><pre class="fragment">    ./bin/CalcCT c2hdm example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
 </pre><p>which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file example/C2HDM_Input.dat_CalcCT.</p>
-<h3><a class="anchor" id="autotoc_md12"></a>
+<h3><a class="anchor" id="autotoc_md13"></a>
 NLOVEV</h3>
 <p>This calculates the VEV at 1-loop order at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called through </p><pre class="fragment">    ./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
 </pre><p>and for the C2HDM example it is given by </p><pre class="fragment">    ./bin/NLOVEV c2hdm example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
 </pre><p>where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.</p>
-<h3><a class="anchor" id="autotoc_md13"></a>
+<h3><a class="anchor" id="autotoc_md14"></a>
 VEVEVO</h3>
 <p>This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through </p><pre class="fragment">    ./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend
 </pre><p>where 'Tempstart' is the starting value of the temperature which increases with 'Tempstep' until 'Tempend'.</p>
 <p>For our C2HDM example this would be </p><pre class="fragment">    ./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
 </pre><p>where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.</p>
-<h3><a class="anchor" id="autotoc_md14"></a>
+<h3><a class="anchor" id="autotoc_md15"></a>
 TripleHiggsCouplingNLO</h3>
 <p>This program calculates the trilinear Higgs self-couplings at NLO at zero temperature. It is called through </p><pre class="fragment">    ./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
 </pre><p>The C2HDM example is called through </p><pre class="fragment">    ./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat example/test_TripleHiggsCouplingNLO.dat 2 2
 </pre><p>with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsCouplingNLO .</p>
-<h3><a class="anchor" id="autotoc_md15"></a>
+<h3><a class="anchor" id="autotoc_md16"></a>
 CalculateEWBG</h3>
 <p>This program calculates the difference between baryons and anti-baryons normalized to the photon density generated through the EWPT. Please beware that this is only tested for the C2HDM so far and the general implementation is future work. It is called through </p><pre class="fragment">    ./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd config_file
 </pre><p>An example is given for the example/C2HDM_Input.dat parameter point through </p><pre class="fragment">   ./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat 2 2 example/EWBG_config.txt
 </pre><p>with the result given in example/test_EWBG.dat which can be compared with the already available file example/C2HDM_Input.dat_EWBG.</p>
-<h3><a class="anchor" id="autotoc_md16"></a>
+<h3><a class="anchor" id="autotoc_md17"></a>
 PlotEWBG_vw</h3>
 <p>This executable varies the wall velocity of a given parameter point and calculates the EWBG for each velocity.</p>
-<h3><a class="anchor" id="autotoc_md17"></a>
+<h3><a class="anchor" id="autotoc_md18"></a>
 PlotEWBG_nL</h3>
 <p>This executable calculates the left-handed fermion density in front of the wall as a function of the distance to the bubble wall. </p>
 </div></div><!-- PageDoc -->

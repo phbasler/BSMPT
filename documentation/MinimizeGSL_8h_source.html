@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.3.3</span>
+   &#160;<span id="projectnumber">2.4.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -95,33 +95,33 @@ $(document).ready(function(){initNavTree('MinimizeGSL_8h_source.html',''); initR
 </div><!--header-->
 <div class="contents">
 <a href="MinimizeGSL_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// SPDX-License-Identifier: GPL-3.0-or-later</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#ifndef MINIMIZEGSL_H_</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#define MINIMIZEGSL_H_</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;cmath&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;gsl/gsl_vector_double.h&gt;</span> <span class="comment">// for gsl_vector</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span>BSMPT</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">class </span>Class_Potential_Origin;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>Minimizer</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;{</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c">   27</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">double</span> <a class="code" href="MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c">GSL_Tolerance</a> = std::pow(10, -4);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1GSL__params.html">   32</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1GSL__params.html">GSL_params</a></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  std::shared_ptr&lt;Class_Potential_Origin&gt; modelPointer;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordtype">double</span> Temp;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <a class="code" href="structBSMPT_1_1Minimizer_1_1GSL__params.html">GSL_params</a>(<span class="keyword">const</span> std::shared_ptr&lt;Class_Potential_Origin&gt; &amp;model,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;             <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;temperature)</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      : modelPointer{model}</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Müller</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// SPDX-License-Identifier: GPL-3.0-or-later</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#ifndef MINIMIZEGSL_H_</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define MINIMIZEGSL_H_</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;gsl/gsl_vector_double.h&gt;</span> <span class="comment">// for gsl_vector</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span>BSMPT</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">class </span>Class_Potential_Origin;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>Minimizer</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;{</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c">   28</a></span>&#160;<span class="keyword">const</span> <span class="keywordtype">double</span> <a class="code" href="MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c">GSL_Tolerance</a> = std::pow(10, -4);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1GSL__params.html">   33</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1GSL__params.html">GSL_params</a></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keyword">const</span> <a class="code" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &amp;model;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordtype">double</span> Temp;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <a class="code" href="structBSMPT_1_1Minimizer_1_1GSL__params.html">GSL_params</a>(<span class="keyword">const</span> <a class="code" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &amp;modelIN, <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;temperature)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      : model{modelIN}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      , Temp{temperature} {};</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
@@ -131,26 +131,26 @@ $(document).ready(function(){initNavTree('MinimizeGSL_8h_source.html',''); initR
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                                std::vector&lt;double&gt; &amp;sol,</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                <span class="keyword">const</span> std::vector&lt;double&gt; &amp;start);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;std::pair&lt;std::vector&lt;double&gt;, <span class="keywordtype">bool</span>&gt; <a class="code" href="MinimizeGSL_8h.html#a9f7f12376bb61e3723eafc9517ac38d7">GSL_Minimize_gen_all</a>(</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> std::shared_ptr&lt;Class_Potential_Origin&gt; &amp;modelPointer,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;seed,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">bool</span> UseMultiThreading = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;std::pair&lt;std::vector&lt;double&gt;, <span class="keywordtype">bool</span>&gt;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<a class="code" href="MinimizeGSL_8h.html#a26233dbb1b87405a76eb80699079f4c6">GSL_Minimize_gen_all</a>(<span class="keyword">const</span> <a class="code" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &amp;model,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;seed,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                     <span class="keywordtype">bool</span> UseMultiThreading = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;std::pair&lt;std::vector&lt;double&gt;, <span class="keywordtype">bool</span>&gt; <a class="code" href="MinimizeGSL_8h.html#a9f7f12376bb61e3723eafc9517ac38d7">GSL_Minimize_gen_all</a>(</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">const</span> std::shared_ptr&lt;Class_Potential_Origin&gt; &amp;modelPointer,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;seed,</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">const</span> std::size_t &amp;MaxSol,</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">bool</span> UseMultiThreading = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;std::pair&lt;std::vector&lt;double&gt;, <span class="keywordtype">bool</span>&gt;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<a class="code" href="MinimizeGSL_8h.html#a26233dbb1b87405a76eb80699079f4c6">GSL_Minimize_gen_all</a>(<span class="keyword">const</span> <a class="code" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &amp;model,</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;seed,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                     <span class="keyword">const</span> std::size_t &amp;MaxSol,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                     <span class="keywordtype">bool</span> UseMultiThreading = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;std::pair&lt;std::vector&lt;double&gt;, <span class="keywordtype">bool</span>&gt; <a class="code" href="MinimizeGSL_8h.html#a9f7f12376bb61e3723eafc9517ac38d7">GSL_Minimize_gen_all</a>(</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">const</span> std::shared_ptr&lt;Class_Potential_Origin&gt; &amp;modelPointer,</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;seed,</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    std::vector&lt;std::vector&lt;double&gt;&gt; &amp;saveAllMinima,</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">const</span> std::size_t &amp;MaxSol,</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">bool</span> UseMultiThreading = <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;std::pair&lt;std::vector&lt;double&gt;, <span class="keywordtype">bool</span>&gt;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<a class="code" href="MinimizeGSL_8h.html#a26233dbb1b87405a76eb80699079f4c6">GSL_Minimize_gen_all</a>(<span class="keyword">const</span> <a class="code" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &amp;model,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;Temp,</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                     <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;seed,</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                     std::vector&lt;std::vector&lt;double&gt;&gt; &amp;saveAllMinima,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                     <span class="keyword">const</span> std::size_t &amp;MaxSol,</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                     <span class="keywordtype">bool</span> UseMultiThreading = <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;} <span class="comment">// namespace Minimizer</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;} <span class="comment">// namespace BSMPT</span></div>
@@ -159,10 +159,11 @@ $(document).ready(function(){initNavTree('MinimizeGSL_8h_source.html',''); initR
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aMinimizeGSL_8h_html_a4b4b2c773619ab5483982cfb92380024"><div class="ttname"><a href="MinimizeGSL_8h.html#a4b4b2c773619ab5483982cfb92380024">BSMPT::Minimizer::GSL_Minimize_From_S_gen_all</a></div><div class="ttdeci">int GSL_Minimize_From_S_gen_all(struct GSL_params &amp;p, std::vector&lt; double &gt; &amp;sol, const std::vector&lt; double &gt; &amp;start)</div><div class="ttdef"><b>Definition:</b> MinimizeGSL.cpp:61</div></div>
-<div class="ttc" id="astructBSMPT_1_1Minimizer_1_1GSL__params_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1GSL__params.html">BSMPT::Minimizer::GSL_params</a></div><div class="ttdef"><b>Definition:</b> MinimizeGSL.h:32</div></div>
-<div class="ttc" id="aMinimizeGSL_8h_html_a47dc7a95ee3143d14911588faebd7d3c"><div class="ttname"><a href="MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c">BSMPT::Minimizer::GSL_Tolerance</a></div><div class="ttdeci">const double GSL_Tolerance</div><div class="ttdoc">GSL_Tolerance Tolerance used in the GSL routines.</div><div class="ttdef"><b>Definition:</b> MinimizeGSL.h:27</div></div>
+<div class="ttc" id="aclassBSMPT_1_1Class__Potential__Origin_html"><div class="ttname"><a href="classBSMPT_1_1Class__Potential__Origin.html">BSMPT::Class_Potential_Origin</a></div><div class="ttdoc">The Class_Potential_Origin class Base class for all models. This class contains all numerical calcula...</div><div class="ttdef"><b>Definition:</b> ClassPotentialOrigin.h:56</div></div>
+<div class="ttc" id="astructBSMPT_1_1Minimizer_1_1GSL__params_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1GSL__params.html">BSMPT::Minimizer::GSL_params</a></div><div class="ttdef"><b>Definition:</b> MinimizeGSL.h:33</div></div>
+<div class="ttc" id="aMinimizeGSL_8h_html_a26233dbb1b87405a76eb80699079f4c6"><div class="ttname"><a href="MinimizeGSL_8h.html#a26233dbb1b87405a76eb80699079f4c6">BSMPT::Minimizer::GSL_Minimize_gen_all</a></div><div class="ttdeci">std::pair&lt; std::vector&lt; double &gt;, bool &gt; GSL_Minimize_gen_all(const Class_Potential_Origin &amp;model, const double &amp;Temp, const int &amp;seed, bool UseMultiThreading=true)</div><div class="ttdef"><b>Definition:</b> MinimizeGSL.cpp:140</div></div>
+<div class="ttc" id="aMinimizeGSL_8h_html_a47dc7a95ee3143d14911588faebd7d3c"><div class="ttname"><a href="MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c">BSMPT::Minimizer::GSL_Tolerance</a></div><div class="ttdeci">const double GSL_Tolerance</div><div class="ttdoc">GSL_Tolerance Tolerance used in the GSL routines.</div><div class="ttdef"><b>Definition:</b> MinimizeGSL.h:28</div></div>
 <div class="ttc" id="aMinimizeGSL_8h_html_aefc02a1cc27518df3f9fa7386e513e6b"><div class="ttname"><a href="MinimizeGSL_8h.html#aefc02a1cc27518df3f9fa7386e513e6b">BSMPT::Minimizer::GSL_VEFF_gen_all</a></div><div class="ttdeci">double GSL_VEFF_gen_all(const gsl_vector *v, void *p)</div><div class="ttdef"><b>Definition:</b> MinimizeGSL.cpp:41</div></div>
-<div class="ttc" id="aMinimizeGSL_8h_html_a9f7f12376bb61e3723eafc9517ac38d7"><div class="ttname"><a href="MinimizeGSL_8h.html#a9f7f12376bb61e3723eafc9517ac38d7">BSMPT::Minimizer::GSL_Minimize_gen_all</a></div><div class="ttdeci">std::pair&lt; std::vector&lt; double &gt;, bool &gt; GSL_Minimize_gen_all(const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, const int &amp;seed, bool UseMultiThreading=true)</div><div class="ttdef"><b>Definition:</b> MinimizeGSL.cpp:139</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
