@@ -1,211 +1,149 @@
-/*
- * bot_source.h
- *
- *  Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 /**
  * @file
  */
 
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
-#include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/minimizer/MinimizePlane.h>
+#include <BSMPT/models/ClassPotentialOrigin.h>
 
-#include <libcmaes/candidate.h>                 // for Candidate
-#include <libcmaes/cmaes.h>                     // for cmaes
-#include <libcmaes/cmaparameters.h>             // for CMAParameters
-#include <libcmaes/cmasolutions.h>              // for CMASolutions
-#include <libcmaes/esoptimizer.h>               // for aCMAES
-#include <libcmaes/esostrategy.h>               // for FitFunc
-#include <libcmaes/genopheno.h>                 // for GenoPheno
-#include <libcmaes/noboundstrategy.h>           // for libcmaes
+#include <libcmaes/candidate.h>       // for Candidate
+#include <libcmaes/cmaes.h>           // for cmaes
+#include <libcmaes/cmaparameters.h>   // for CMAParameters
+#include <libcmaes/cmasolutions.h>    // for CMASolutions
+#include <libcmaes/esoptimizer.h>     // for aCMAES
+#include <libcmaes/esostrategy.h>     // for FitFunc
+#include <libcmaes/genopheno.h>       // for GenoPheno
+#include <libcmaes/noboundstrategy.h> // for libcmaes
 
-namespace BSMPT {
-namespace Minimizer{
-PointerContainerMinPlane PCon_Plane;
-namespace LibCMAES {
+namespace BSMPT
+{
+namespace Minimizer
+{
+namespace LibCMAES
+{
 
-
-
-PointerContainer PCon;
 using namespace libcmaes;
 
-
-/**
- * @brief Interface for libcmaes to calculate the value of the effective Potential at vev = v and Temp = PCon_Planes.Temp
- */
-FitFunc CMAES_VEFF_Minimize_Plane = [](const double *v, const int N)
+LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
+                                 const double &Temp,
+                                 const std::vector<double> &Start)
 {
 
-//    double *p = static_cast<double*>(v);//(double *)v;
-    (void) N;
+  const auto dim = model.get_nVEV();
 
-    size_t nVEVs = PCon_Plane.modelPointer->get_nVEV();
+  std::vector<double> x0 = Start;
 
-    std::vector<double> vIn,vMinTilde;
-    vMinTilde.resize(nVEVs-1);
-    for(size_t i=0;i<nVEVs-1;i++) vMinTilde[i] = v[i];
-    auto vMin = TransformCoordinates(vMinTilde,PCon_Plane);
-    vIn=PCon_Plane.modelPointer->MinimizeOrderVEV(vMin);
+  double sigma;
+  sigma = 5;
 
+  // sigma *= 0.5;//0.5;
+  double ftol = 1e-5;
 
-    double res = PCon_Plane.modelPointer->VEff(vIn,PCon_Plane.Temp,0);
-    return res;
+  // CMAParameters<> cmaparams(dim,&x0.front(),sigma);
+  CMAParameters<> cmaparams(x0, sigma);
 
-};
+  // cmaparams.set_mt_feval(true);
+  cmaparams.set_algo(aCMAES);
+  // cmaparams.set_elitism(1);
+  // cmaparams.set_noisy();
+  cmaparams.set_ftolerance(ftol);
 
+  FitFunc cmafunc = [&](const double *v, const int &N) {
+    (void)N;
+    std::vector<double> vev;
+    for (std::size_t i{0}; i < dim; ++i)
+      vev.push_back(v[i]);
+    auto minOrdVEV = model.MinimizeOrderVEV(vev);
+    auto VeffVal   = model.VEff(minOrdVEV, Temp);
+    return VeffVal;
+  };
 
-/**
- *
- *
- * Interface for libcmaes to calculate the value of the effective Potential at vev = v and Temp = Tempcom
- */
-FitFunc fsphere_gen_all = [](const double *v, const int N)
+  CMASolutions cmasols = cmaes<>(cmafunc, cmaparams);
+
+  Candidate bcand = cmasols.best_candidate();
+
+  std::vector<double> xsol = bcand.get_x();
+
+  std::vector<double> sol;
+
+  for (std::size_t i = 0; i < dim; i++)
+  {
+    sol.push_back(xsol.at(i));
+  }
+
+  LibCMAESReturn res;
+  res.CMAESStatus = cmasols.run_status();
+  res.result      = sol;
+
+  return res;
+}
+
+LibCMAESReturn
+CMAES_Minimize_Plane_gen_all(const struct PointerContainerMinPlane &params,
+                             const std::vector<double> &Start)
 {
-    double *p = (double *)v;
-    (void) N;
 
-    int nVEVs = PCon.modelPointer->get_nVEV();
+  std::shared_ptr<Class_Potential_Origin> modelPointer;
 
-    std::vector<double> vIn,vMin;
-    vMin.resize(nVEVs);
-    for(int i=0;i<nVEVs;i++) vMin[i] = p[i];
-    vIn=PCon.modelPointer->MinimizeOrderVEV(vMin);
+  modelPointer = params.modelPointer;
 
-    double res = PCon.modelPointer->VEff(vIn,PCon.Temp,0);
+  auto dim = params.nVEV - 1;
+  std::vector<double> x0(dim);
+
+  double sigma;
+  sigma = 5;
+
+  for (std::size_t i = 0; i < dim; i++)
+    x0[i] = Start.at(i);
+
+  double ftol = 1e-5;
+
+  CMAParameters<> cmaparams(x0, sigma);
+
+  cmaparams.set_algo(aCMAES);
+  cmaparams.set_ftolerance(ftol);
+
+  FitFunc CMAES_VEFF_Minimize_Plane = [=](const double *v, const int &N) {
+    (void)N;
+    std::size_t nVEVs = params.modelPointer->get_nVEV();
+
+    std::vector<double> vMinTilde;
+    vMinTilde.resize(nVEVs - 1);
+    for (std::size_t i = 0; i < nVEVs - 1; i++)
+      vMinTilde[i] = v[i];
+    auto vev = TransformCoordinates(vMinTilde, params);
+
+    double res = params.modelPointer->VEff(
+        params.modelPointer->MinimizeOrderVEV(vev), params.Temp);
     return res;
+  };
 
-};
+  CMASolutions cmasols = cmaes<>(CMAES_VEFF_Minimize_Plane, cmaparams);
 
+  Candidate bcand = cmasols.best_candidate();
 
+  std::vector<double> xsol = bcand.get_x();
 
-LibCMAESReturn min_cmaes_gen_all(
-        const std::shared_ptr<Class_Potential_Origin>& modelPointer,
-        const double& Temp,
-        const std::vector<double>& Start){
+  std::vector<double> sol;
 
-    PCon.Temp = Temp;
+  for (std::size_t i = 0; i < dim; i++)
+  {
+    sol.push_back(xsol.at(i));
+  }
 
+  LibCMAESReturn res;
+  res.result      = TransformCoordinates(sol, params);
+  res.CMAESStatus = cmasols.run_status();
 
-
-    PCon.modelPointer = modelPointer;
-
-    int dim = modelPointer->get_nVEV();
-
-    std::vector<double> x0(dim);
-
-
-    double sigma;
-    sigma = 5;
-
-    for(int i=0;i<dim;i++) x0[i]=Start.at(i);
-
-
-    //sigma *= 0.5;//0.5;
-    double ftol=1e-5;
-
-
-    //CMAParameters<> cmaparams(dim,&x0.front(),sigma);
-    CMAParameters<> cmaparams(x0,sigma);
-
-
-    //cmaparams.set_mt_feval(true);
-    cmaparams.set_algo(aCMAES);
-    //cmaparams.set_elitism(1);
-    //cmaparams.set_noisy();
-    cmaparams.set_ftolerance(ftol);
-
-
-    //CMASolutions cmasols = cmaes<>(fsphere,cmaparams,CMAStrategy<CovarianceUpdate>::_defaultPFunc, grad_fsphere);
-    CMASolutions cmasols = cmaes<>(fsphere_gen_all,cmaparams);
-
-    Candidate bcand = cmasols.best_candidate();
-
-    std::vector<double> xsol = bcand.get_x();
-
-
-    std::vector<double> sol;
-
-    for(int i = 0;i<dim;i++)
-    {
-        sol.push_back(xsol.at(i));
-    }
-
-    LibCMAESReturn res;
-    res.CMAESStatus = cmasols.run_status();
-    res.result = sol;
-
-    return res;
-
-
+  return res;
 }
 
-
-LibCMAESReturn CMAES_Minimize_Plane_gen_all(
-        const struct PointerContainerMinPlane& params,
-        const std::vector<double>& Start){
-
-
-    PCon_Plane = params;
-
-    std::shared_ptr<Class_Potential_Origin> modelPointer;
-
-    modelPointer=params.modelPointer;
-
-    int dim = params.nVEV - 1;
-    std::vector<double> x0(dim);
-
-
-    double sigma;
-    sigma = 5;
-
-    for(int i=0;i<dim;i++) x0[i]=Start.at(i);
-
-    double ftol=1e-5;
-
-
-    CMAParameters<> cmaparams(x0,sigma);
-
-    cmaparams.set_algo(aCMAES);
-    cmaparams.set_ftolerance(ftol);
-
-
-    CMASolutions cmasols = cmaes<>(CMAES_VEFF_Minimize_Plane,cmaparams);
-
-    Candidate bcand = cmasols.best_candidate();
-
-    std::vector<double> xsol = bcand.get_x();
-
-    std::vector<double> sol;
-
-    for(int i = 0;i<dim;i++)
-    {
-        sol.push_back(xsol.at(i));
-    }
-
-    LibCMAESReturn res;
-    res.result = sol;
-    res.CMAESStatus = cmasols.run_status();
-
-    return res;
-
-
-}
-
-}
-}
-}
+} // namespace LibCMAES
+} // namespace Minimizer
+} // namespace BSMPT

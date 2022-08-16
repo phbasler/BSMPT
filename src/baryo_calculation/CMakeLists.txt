@@ -1,4 +1,8 @@
-set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/baryo_calculation")
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/baryo_calculation")
 set(header
 	${header_path}/transport_equations.h
 	${header_path}/Fluid_Type/gen_calc.h
@@ -20,7 +24,7 @@ set(src
 )
 
 add_library(Baryo ${header} ${src})
-target_link_libraries(Baryo PUBLIC Eigen3::Eigen GSL::gsl Minimizer Kfactors lib_WallThickness)
+target_link_libraries(Baryo PUBLIC Eigen3::Eigen GSL::gsl Minimizer Kfactors LibWallThickness Utility Boost::boost)
 #target_compile_options(Baryo PUBLIC ${OpenMP_CXX_FLAGS})
 target_include_directories(Baryo PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Baryo PUBLIC cxx_std_14)

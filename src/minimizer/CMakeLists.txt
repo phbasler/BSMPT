@@ -1,4 +1,8 @@
-set(header_path "${CMAKE_SOURCE_DIR}/include/BSMPT/minimizer")
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/minimizer")
 set(header
 	${header_path}/Minimizer.h
 	${header_path}/MinimizePlane.h
@@ -12,7 +16,7 @@ set(src
 )
 
 
-if(CMAES_FOUND)
+if(libcmaes_FOUND)
 	set(header
 		${header}
 		${header_path}/LibCMAES/MinimizeLibCMAES.h
@@ -37,13 +41,19 @@ endif()
 
 
 add_library(Minimizer ${header} ${src})
-target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl)
-if(CMAES_FOUND)
-  target_link_libraries(Minimizer PUBLIC CMAES::cmaes OpenMP::OpenMP_CXX)
+target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads Utility Models)
+
+if(libcmaes_FOUND)
+  target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
 endif()
 
+
 if(NLopt_FOUND)
-  target_link_libraries(Minimizer PUBLIC nlopt)
+  if(TARGET NLopt::nlopt)
+    target_link_libraries(Minimizer PUBLIC NLopt::nlopt)
+  else()
+    target_link_libraries(Minimizer PUBLIC NLopt::nlopt_cxx)
+  endif()
 endif()
 
 target_include_directories(Minimizer PUBLIC ${BSMPT_SOURCE_DIR}/include

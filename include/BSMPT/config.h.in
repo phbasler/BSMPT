@@ -1,2 +1,5 @@
-#cmakedefine CMAES_FOUND
+#pragma once
+
+#cmakedefine libcmaes_FOUND
 #cmakedefine NLopt_FOUND
+#cmakedefine Boost_FOUND
