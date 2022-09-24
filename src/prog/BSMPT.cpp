@@ -27,6 +27,8 @@
 #include <utility>  // for pair
 #include <vector>   // for vector
 
+#include <BSMPT/utility/parser.h>
+
 using namespace std;
 using namespace BSMPT;
 
@@ -54,6 +56,10 @@ try
    * stability or T=300 vanishing VEV) are printed in the output file
    */
   bool PrintErrorLines = true;
+
+  BSMPT::parser argparser;
+  argparser.print_help();
+  argparser.get_value("gnampf");
 
   const CLIOptions args(argc, argv);
   if (not args.good())
