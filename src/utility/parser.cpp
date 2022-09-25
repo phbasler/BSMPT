@@ -277,7 +277,7 @@ void parser::add_json_input(const std::string &filename)
   }
   add_cli_input(input);
 #else
-  throw parserException("nlohmann_json is required.")
+  throw parserException("nlohmann_json is required.");
 #endif
 }
 void parser::set_help_header(const std::string &header)
