@@ -258,6 +258,7 @@ void parser::print_help() const
 
 void parser::add_json_input(const std::string &filename)
 {
+#ifdef nlohmann_json_FOUND
   using json = nlohmann::json;
   std::ifstream f(filename);
   if (not f.good())
@@ -275,6 +276,9 @@ void parser::add_json_input(const std::string &filename)
     input.emplace_back("--" + key + "=" + value.get<std::string>());
   }
   add_cli_input(input);
+#else
+  throw parserException("nlohmann_json is required.")
+#endif
 }
 void parser::set_help_header(const std::string &header)
 {

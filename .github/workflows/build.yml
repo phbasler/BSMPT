@@ -18,7 +18,7 @@ jobs:
       with:
           persist-credentials: false
     - name : installPackages
-      run : sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+      run : sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev nlohmann-json3-dev
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v1
       id: cpu-cores
