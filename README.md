@@ -137,6 +137,9 @@ Also contact us if you have a custom model for BSMPT v1.x and you have trouble c
 
 ## Executables
 BSMPT provides multiple executables. Here we give a quick overview of them. For every executable you can call them with the `--help` option to get an overview of possible input parameters.
+
+Additionally, every executable has the option to set the `--json=/path/to/your/file.json` which contains a json string with the parameters you can set through the CLI. This can be useful if you want to store the parameters you used for a given call. Please beware that all paths in the json file are considered relative to the current working directory and not to the location of the json file. Examples can be found in `example/JSON`.
+
 For the following examples the C2HDM with the example/C2HDM_Input.dat file is used.
 
 ### BSMPT
