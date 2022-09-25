@@ -331,7 +331,7 @@ BSMPT::parser prepare_parser()
   argparser.add_argument(
       "vw",
       "Wall velocity for the EWBG calculation. Default value of 0.1.",
-      false);
+      true);
   argparser.add_argument("config", "The EWBG config file.", true);
   argparser.add_argument(
       "TerminalOutput",

@@ -1,0 +1,17 @@
+{
+    "FirstLine": "2",
+    "LastLine": "2",
+    "input": "./example/C2HDM_Input.dat",
+    "output": "test.tsv",
+    "model": "c2hdm",
+    "UseNLopt": "true",
+    "UseCMAES": "true",
+    "UseGSL": "true",
+    "UseMultiThreading": "true",
+    "logginglevel::default": "true",
+    "logginglevel::minimizerdetailed": "false",
+    "logginglevel::ewbgdetailed": "false",
+    "logginglevel::debug": "false",
+    "logginglevel::progdetailed": "false",
+    "logginglevel::disabled_comment": "remove _comment from key to disable logger"
+}

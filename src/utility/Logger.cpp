@@ -118,8 +118,6 @@ void BSMPTLogger::SetLevel(const std::map<LoggingLevel, bool> &Setup)
 
 void BSMPTLogger::SetLevel(LoggingLevel level, bool enable)
 {
-  std::cout << "SetLevel(" << static_cast<int>(level) << "," << enable << ")"
-            << std::endl;
   mCurrentSetup[level] = enable;
 }
 

@@ -316,11 +316,6 @@ BSMPT::parser prepare_parser()
       "the calculation.",
       false);
 
-  argparser.add_argument(
-      "vw",
-      "Wall velocity for the EWBG calculation. Default value of 0.1.",
-      false);
-
   std::stringstream ss;
   ss << "PlotEWBG_vw calculates the EWBG for varying wall velocity "
         "for a given parameter point."

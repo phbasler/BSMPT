@@ -33,6 +33,14 @@ namespace BSMPT
 bool StringStartsWith(const std::string &str, const std::string &prefix);
 
 /**
+ * @brief StringEndsWith tests if str ends with suffix
+ * @param str
+ * @param suffix
+ * @return
+ */
+bool StringEndsWith(const std::string &str, const std::string &suffix);
+
+/**
  * @brief seperator used to write into output files
  */
 const std::string sep = "\t";

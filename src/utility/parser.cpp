@@ -1,7 +1,14 @@
+#include <BSMPT/config.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/parser.h>
+#include <BSMPT/utility/utility.h>
 #include <algorithm>
 #include <sstream>
+
+#ifdef nlohmann_json_FOUND
+#include <fstream>
+#include <nlohmann/json.hpp>
+#endif
 
 namespace
 {
@@ -57,6 +64,14 @@ parser::parser()
       "logginglevel::minimizerdetailed",
       "Turn on/off (true/false) the additional output of the minimizers.",
       false);
+  add_argument("logginglevel::default",
+               "Turn on/off (true/false) the default output.",
+               false);
+
+  add_argument("json",
+               "Use a json file to define the input instead of additional cli "
+               "parameters.",
+               false);
 }
 
 void parser::enable_minimizer_options()
@@ -96,7 +111,6 @@ void parser::add_argument(const std::string &argument,
 
 void parser::add_input(const std::vector<std::string> &input)
 {
-  SetLogger(*this);
   if (input.size() == 1)
   {
     std::string arg{input.at(0)};
@@ -106,10 +120,15 @@ void parser::add_input(const std::vector<std::string> &input)
       print_help();
       return;
     }
-    else if (argument == "config")
+    else if (argument == "json")
     {
+#ifdef nlohmann_json_FOUND
       add_json_input(value);
       return;
+#else
+      throw parserException(
+          "nlohmann_json is required for the json config file.");
+#endif
     }
   }
 
@@ -148,6 +167,7 @@ void parser::add_cli_input(const std::vector<std::string> &input)
       }
     }
   }
+  SetLogger(*this);
 }
 
 std::string parser::get_value(const std::string &argument) const
@@ -238,7 +258,23 @@ void parser::print_help() const
 
 void parser::add_json_input(const std::string &filename)
 {
-  (void)filename;
+  using json = nlohmann::json;
+  std::ifstream f(filename);
+  if (not f.good())
+  {
+    throw parserException("Can not open the json file " + filename);
+  }
+  json data = json::parse(f);
+  std::vector<std::string> input;
+  for (const auto &[key, value] : data.items())
+  {
+    if (StringEndsWith(key, "_comment"))
+    {
+      continue;
+    }
+    input.emplace_back("--" + key + "=" + value.get<std::string>());
+  }
+  add_cli_input(input);
 }
 void parser::set_help_header(const std::string &header)
 {

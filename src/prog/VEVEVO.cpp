@@ -283,11 +283,6 @@ BSMPT::parser prepare_parser()
       "the calculation.",
       false);
 
-  argparser.add_argument(
-      "vw",
-      "Wall velocity for the EWBG calculation. Default value of 0.1.",
-      false);
-
   std::stringstream ss;
   ss << "VEVEVO calculates the evolution of the global minimum with "
         "rising temperature for a given parameter point"
