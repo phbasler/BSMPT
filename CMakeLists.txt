@@ -62,7 +62,8 @@ if(UseConan)
 	include(conan)
 	set(ConanPkgList eigen/3.4.0 
 				     gsl/2.7				     
-				     boost/1.78.0)
+						 boost/1.78.0
+						 nlohmann_json/3.10.5)
 
 	if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	        set(ConanPkgList ${ConanPkgList} benchmark/1.6.1)
@@ -88,7 +89,7 @@ find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
-find_package(nlohmann_json 3.2.0 REQUIRED)
+find_package(nlohmann_json 3.10.0)
 
 
 
@@ -116,6 +117,10 @@ if(Boost_FOUND)
       "${Boost_ROOT_DIR}/*"
       )
   endif()
+endif()
+
+if(nlohmann_json_FOUND)
+  set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs} "${nlohmann_json}/*")
 endif()
 
 set(EXPORT_CMAES FALSE)
