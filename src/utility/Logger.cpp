@@ -9,6 +9,7 @@
  */
 
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm>
 #include <iomanip>
@@ -20,13 +21,13 @@ namespace BSMPT
 
 static std::map<std::string, LoggingLevel> LoggingPrefixes{
     {
-        "--logginglevel::default=",
+        "logginglevel::default",
         LoggingLevel::Default,
     },
-    {"--logginglevel::debug=", LoggingLevel::Debug},
-    {"--logginglevel::ewbgdetailed=", LoggingLevel::EWBGDetailed},
-    {"--logginglevel::progdetailed=", LoggingLevel::ProgDetailed},
-    {"--logginglevel::minimizerdetailed=", LoggingLevel::MinimizerDetailed}};
+    {"logginglevel::debug", LoggingLevel::Debug},
+    {"logginglevel::ewbgdetailed", LoggingLevel::EWBGDetailed},
+    {"logginglevel::progdetailed", LoggingLevel::ProgDetailed},
+    {"logginglevel::minimizerdetailed", LoggingLevel::MinimizerDetailed}};
 
 void ShowLoggerHelp()
 {
@@ -44,6 +45,32 @@ void ShowLoggerHelp()
   }
   Logger::Write(LoggingLevel::Default, ss.str());
 }
+
+void SetLogger(const BSMPT::parser &argparser)
+{
+  try
+  {
+    argparser.get_value("logginglevel::disabled");
+    Logger::Disable();
+    return;
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  for (const auto &[prefix, enumValue] : LoggingPrefixes)
+  {
+    try
+    {
+      auto value = argparser.get_value(prefix);
+      Logger::SetLevel(enumValue, value == "true");
+    }
+    catch (BSMPT::parserException &)
+    {
+    }
+  }
+}
+
 void SetLogger(const std::vector<std::string> &args)
 {
   auto posDisable =
@@ -91,6 +118,8 @@ void BSMPTLogger::SetLevel(const std::map<LoggingLevel, bool> &Setup)
 
 void BSMPTLogger::SetLevel(LoggingLevel level, bool enable)
 {
+  std::cout << "SetLevel(" << static_cast<int>(level) << "," << enable << ")"
+            << std::endl;
   mCurrentSetup[level] = enable;
 }
 
@@ -102,6 +131,7 @@ void BSMPTLogger::SetOStream(const std::string &file)
 
 void BSMPTLogger::Disable()
 {
+  std::cout << "Disable logger" << std::endl;
   mCurrentSetup.clear();
 }
 

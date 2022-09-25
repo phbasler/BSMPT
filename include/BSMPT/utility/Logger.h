@@ -18,8 +18,10 @@ namespace BSMPT
 {
 
 class Logger;
+class parser;
 
 void ShowLoggerHelp();
+void SetLogger(const parser &argparser);
 void SetLogger(const std::vector<std::string> &args);
 
 enum class LoggingLevel
@@ -37,10 +39,10 @@ class BSMPTLogger
 public:
   friend Logger;
   BSMPTLogger(std::ostream &os) : mOstream{os.rdbuf()} {}
-  BSMPTLogger(const BSMPTLogger &) = delete;
-  BSMPTLogger(BSMPTLogger &&)      = delete;
+  BSMPTLogger(const BSMPTLogger &)            = delete;
+  BSMPTLogger(BSMPTLogger &&)                 = delete;
   BSMPTLogger &operator=(const BSMPTLogger &) = delete;
-  BSMPTLogger &operator=(BSMPTLogger &&) = delete;
+  BSMPTLogger &operator=(BSMPTLogger &&)      = delete;
 
 private:
   void SetOStream(std::ostream &Ostream);
@@ -81,10 +83,10 @@ private:
 class Logger
 {
 public:
-  Logger(const Logger &) = delete;
-  Logger(Logger &&)      = delete;
+  Logger(const Logger &)            = delete;
+  Logger(Logger &&)                 = delete;
   Logger &operator=(const Logger &) = delete;
-  Logger &operator=(Logger &&) = delete;
+  Logger &operator=(Logger &&)      = delete;
 
   static void SetLevel(const std::map<LoggingLevel, bool> &Setup)
   {
