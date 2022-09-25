@@ -16,6 +16,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
@@ -38,16 +39,23 @@ struct CLIOptions
   bool UseCMAES{Minimizer::UseLibCMAESDefault};
   bool UseNLopt{Minimizer::UseNLoptDefault};
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+  bool UseMultithreading{true};
 
-  CLIOptions(int argc, char *argv[]);
+  CLIOptions(const BSMPT::parser &argparser);
   bool good() const;
 };
+
+BSMPT::parser prepare_parser();
+
+std::vector<std::string> convert_input(int argc, char *argv[]);
 
 int main(int argc, char *argv[])
 try
 {
 
-  const CLIOptions args(argc, argv);
+  auto argparser = prepare_parser();
+  argparser.add_input(convert_input(argc, argv));
+  const CLIOptions args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -102,7 +110,8 @@ try
                                              0,
                                              Check,
                                              modelPointer->get_vevTreeMin(),
-                                             args.WhichMinimizer);
+                                             args.WhichMinimizer,
+                                             args.UseMultithreading);
 
       std::vector<double> solPot, solSym;
       solPot     = modelPointer->MinimizeOrderVEV(sol);
@@ -139,124 +148,6 @@ catch (exception &e)
 {
   Logger::Write(LoggingLevel::Default, e.what());
   return EXIT_FAILURE;
-}
-
-CLIOptions::CLIOptions(int argc, char *argv[])
-{
-  std::vector<std::string> args;
-  for (int i{1}; i < argc; ++i)
-    args.push_back(argv[i]);
-
-  if (argc < 6 or args.at(0) == "--help")
-  {
-    std::stringstream ss;
-    int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    ss << "NLOVEV calculates the EW VEV at NLO" << std::endl
-       << "It is called either by " << std::endl
-       << "./NLOVEV model input output FirstLine LastLine" << std::endl
-       << "or with the following arguments" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--help"
-       << "Shows this menu" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--model="
-       << "The model you want to investigate" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--input="
-       << "The input file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--output="
-       << "The output file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
-       << "The first line in the input file to calculate the NLO EW "
-          "VEV. Expects line 1 to be a legend."
-       << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
-       << "The last line in the input file to calculate the NLO EW VEV."
-       << std::endl;
-    std::string GSLhelp{"--UseGSL="};
-    GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-       << "Use the GSL library to minimize the effective potential"
-       << std::endl;
-    std::string CMAEShelp{"--UseCMAES="};
-    CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-       << "Use the CMAES library to minimize the effective potential"
-       << std::endl;
-    std::string NLoptHelp{"--UseNLopt="};
-    NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-       << "Use the NLopt library to minimize the effective potential"
-       << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    ShowLoggerHelp();
-    ShowInputError();
-  }
-
-  if (args.size() > 0 and args.at(0) == "--help")
-  {
-    throw int{0};
-  }
-  else if (argc < 6)
-  {
-    throw std::runtime_error("Too few arguments.");
-  }
-
-  const std::string prefix{"--"};
-  bool UsePrefix = StringStartsWith(args.at(0), prefix);
-  std::vector<std::string> UnusedArgs;
-  if (UsePrefix)
-  {
-    for (const auto &arg : args)
-    {
-      auto el = arg;
-      std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-      if (StringStartsWith(el, "--model="))
-      {
-        Model =
-            BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-      }
-      else if (StringStartsWith(el, "--input="))
-      {
-        InputFile = arg.substr(std::string("--input=").size());
-      }
-      else if (StringStartsWith(el, "--output="))
-      {
-        OutputFile = arg.substr(std::string("--output=").size());
-      }
-      else if (StringStartsWith(el, "--firstline="))
-      {
-        FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
-      }
-      else if (StringStartsWith(el, "--lastline="))
-      {
-        LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
-      }
-      else if (StringStartsWith(el, "--usegsl="))
-      {
-        UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usecmaes="))
-      {
-        UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usenlopt="))
-      {
-        UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
-      }
-      else
-      {
-        UnusedArgs.push_back(el);
-      }
-    }
-    WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
-    SetLogger(UnusedArgs);
-  }
-  else
-  {
-    Model      = ModelID::getModel(args.at(0));
-    InputFile  = args.at(1);
-    OutputFile = args.at(2);
-    FirstLine  = std::stoi(args.at(3));
-    LastLine   = std::stoi(args.at(4));
-  }
 }
 
 bool CLIOptions::good() const
@@ -300,4 +191,123 @@ bool CLIOptions::good() const
     return false;
   }
   return true;
+}
+
+CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+{
+  argparser.check_required_parameters();
+  Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
+  InputFile  = argparser.get_value("input");
+  OutputFile = argparser.get_value("output");
+  FirstLine  = std::stoi(argparser.get_value("FirstLine"));
+  LastLine   = std::stoi(argparser.get_value("LastLine"));
+
+  try
+  {
+    UseGSL = argparser.get_value_lower_case("UseGSL") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseCMAES = argparser.get_value_lower_case("UseCMAES") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseNLopt = argparser.get_value_lower_case("UseNLopt") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseMultithreading =
+        argparser.get_value_lower_case("UseMultithreading") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+}
+
+BSMPT::parser prepare_parser()
+{
+  BSMPT::parser argparser;
+  argparser.add_argument("model", "The model you want to investigate.", true);
+  argparser.add_argument("input", "The input file in tsv format.", true);
+  argparser.add_argument("output", "The output file in tsv format.", true);
+  argparser.add_argument("FirstLine",
+                         "The first line in the input file to calculate the "
+                         "EWPT. Expects line 1 to be a legend.",
+                         true);
+  argparser.add_argument(
+      "LastLine",
+      "The last line in the input file to calculate the EWPT.",
+      true);
+  argparser.add_argument(
+      "TerminalOutput",
+      "y/n Turns on additional information in the terminal during "
+      "the calculation.",
+      false);
+
+  std::stringstream ss;
+  ss << "NLOVEV calculates the EW VEV at NLO" << std::endl
+     << "It is called either by " << std::endl
+     << "./NLOVEV model input output FirstLine LastLine" << std::endl
+     << "or with the following arguments" << std::endl;
+  argparser.set_help_header(ss.str());
+
+  argparser.enable_minimizer_options();
+
+  return argparser;
+}
+
+std::vector<std::string> convert_input(int argc, char *argv[])
+{
+  std::vector<std::string> arguments;
+  if (argc == 1) return arguments;
+  auto first_arg = std::string(argv[1]);
+
+  bool UsePrefix =
+      StringStartsWith(first_arg, "--") or StringStartsWith(first_arg, "-");
+
+  if (UsePrefix)
+  {
+    for (int i{1}; i < argc; ++i)
+    {
+      arguments.emplace_back(argv[i]);
+    }
+  }
+  else
+  {
+    if (argc >= 2)
+    {
+      arguments.emplace_back("--model=" + std::string(argv[1]));
+    }
+    if (argc >= 3)
+    {
+      arguments.emplace_back("--input=" + std::string(argv[2]));
+    }
+    if (argc >= 4)
+    {
+      arguments.emplace_back("--output=" + std::string(argv[3]));
+    }
+    if (argc >= 5)
+    {
+      arguments.emplace_back("--FirstLine=" + std::string(argv[4]));
+    }
+    if (argc >= 6)
+    {
+      arguments.emplace_back("--LastLine=" + std::string(argv[5]));
+    }
+  }
+  return arguments;
 }

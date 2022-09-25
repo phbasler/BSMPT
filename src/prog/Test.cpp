@@ -16,6 +16,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy
 #include <fstream>
@@ -38,15 +39,23 @@ struct CLIOptions
   bool UseCMAES{Minimizer::UseLibCMAESDefault};
   bool UseNLopt{Minimizer::UseNLoptDefault};
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+  bool UseMultithreading{true};
 
-  CLIOptions(int argc, char *argv[]);
+  CLIOptions(const BSMPT::parser &argparser);
   bool good() const;
 };
+
+BSMPT::parser prepare_parser();
+
+std::vector<std::string> convert_input(int argc, char *argv[]);
+
 int main(int argc, char *argv[])
 try
 {
 
-  const CLIOptions args(argc, argv);
+  auto argparser = prepare_parser();
+  argparser.add_input(convert_input(argc, argv));
+  const CLIOptions args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -101,113 +110,6 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(int argc, char *argv[])
-{
-
-  std::vector<std::string> args;
-  for (int i{1}; i < argc; ++i)
-    args.push_back(argv[i]);
-
-  if (argc < 4 or args.at(0) == "--help")
-  {
-    std::stringstream ss;
-    int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    ss << "Test performs a serious of tests on the given model. "
-          "Intended for testing new models."
-       << std::endl
-       << "It is called either by " << std::endl
-       << "./Test model input Line" << std::endl
-       << "or with the following arguments" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--help"
-       << "Shows this menu" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--model="
-       << "The model you want to test" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--input="
-       << "The input file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--Line="
-       << "The line in the input file with the parameter point used to "
-          "check the model."
-       << std::endl;
-    std::string GSLhelp{"--UseGSL="};
-    GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-       << "Use the GSL library to minimize the effective potential"
-       << std::endl;
-    std::string CMAEShelp{"--UseCMAES="};
-    CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-       << "Use the CMAES library to minimize the effective potential"
-       << std::endl;
-    std::string NLoptHelp{"--UseNLopt="};
-    NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-       << "Use the NLopt library to minimize the effective potential"
-       << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    ShowLoggerHelp();
-    ShowInputError();
-  }
-
-  if (args.size() > 0 and args.at(0) == "--help")
-  {
-    throw int{0};
-  }
-  else if (argc < 4)
-  {
-    throw std::runtime_error("Too few arguments.");
-  }
-
-  const std::string prefix{"--"};
-  bool UsePrefix = StringStartsWith(args.at(0), prefix);
-  std::vector<std::string> UnusedArgs;
-  if (UsePrefix)
-  {
-    for (const auto &arg : args)
-    {
-      auto el = arg;
-      std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-      if (StringStartsWith(el, "--model="))
-      {
-        Model =
-            BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-      }
-      else if (StringStartsWith(el, "--input="))
-      {
-        InputFile = arg.substr(std::string("--input=").size());
-        Logger::Write(LoggingLevel::ProgDetailed, "Inputfile = " + InputFile);
-      }
-      else if (StringStartsWith(el, "--line="))
-      {
-        Line = std::stoi(el.substr(std::string("--line=").size()));
-      }
-      else if (StringStartsWith(el, "--usegsl="))
-      {
-        UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usecmaes="))
-      {
-        UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usenlopt="))
-      {
-        UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
-      }
-      else
-      {
-        UnusedArgs.push_back(el);
-      }
-    }
-    WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
-    SetLogger(UnusedArgs);
-  }
-  else
-  {
-    Model     = ModelID::getModel(args.at(0));
-    InputFile = args.at(1);
-    Line      = std::stoi(args.at(2));
-  }
-}
-
 bool CLIOptions::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
@@ -244,4 +146,106 @@ bool CLIOptions::good() const
     return false;
   }
   return true;
+}
+
+CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+{
+  argparser.check_required_parameters();
+  Model     = BSMPT::ModelID::getModel(argparser.get_value("model"));
+  InputFile = argparser.get_value("input");
+  Line      = std::stoi(argparser.get_value("line"));
+
+  try
+  {
+    UseGSL = argparser.get_value_lower_case("UseGSL") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseCMAES = argparser.get_value_lower_case("UseCMAES") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseNLopt = argparser.get_value_lower_case("UseNLopt") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseMultithreading =
+        argparser.get_value_lower_case("UseMultithreading") == "true";
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+}
+
+BSMPT::parser prepare_parser()
+{
+  BSMPT::parser argparser;
+  argparser.add_argument("model", "The model you want to investigate.", true);
+  argparser.add_argument("input", "The input file in tsv format.", true);
+  argparser.add_argument(
+      "line",
+      "The line in the input file with the parameter point used to "
+      "check the model.",
+      true);
+
+  std::stringstream ss;
+  ss << "Test performs a serious of tests on the given model. "
+        "Intended for testing new models."
+     << std::endl
+     << "It is called either by " << std::endl
+     << "./Test model input Line" << std::endl
+     << "or with the following arguments" << std::endl;
+  argparser.set_help_header(ss.str());
+
+  argparser.enable_minimizer_options();
+
+  return argparser;
+}
+
+std::vector<std::string> convert_input(int argc, char *argv[])
+{
+  std::vector<std::string> arguments;
+  if (argc == 1) return arguments;
+  auto first_arg = std::string(argv[1]);
+
+  bool UsePrefix =
+      StringStartsWith(first_arg, "--") or StringStartsWith(first_arg, "-");
+
+  if (UsePrefix)
+  {
+    for (int i{1}; i < argc; ++i)
+    {
+      arguments.emplace_back(argv[i]);
+    }
+  }
+  else
+  {
+    if (argc >= 2)
+    {
+      arguments.emplace_back("--model=" + std::string(argv[1]));
+    }
+    if (argc >= 3)
+    {
+      arguments.emplace_back("--input=" + std::string(argv[2]));
+    }
+    if (argc >= 4)
+    {
+      arguments.emplace_back("--line=" + std::string(argv[3]));
+    }
+  }
+  return arguments;
 }

@@ -201,6 +201,7 @@ bool parser::all_required_set() const
     (void)key;
     if (not value.value.has_value())
     {
+      throw parserException("The required parameter " + key + " is not set.");
       return false;
     }
   }
