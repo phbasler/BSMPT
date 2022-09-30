@@ -64,5 +64,5 @@ TEST_CASE("Check for all required parameters", "[parser]")
   std::string description{"Example description"};
   std::string header{"Some header"};
   parser.add_argument(argName, description, true);
-  REQUIRE_THROWS_AS(parser.all_required_set(), BSMPT::parserException);
+  REQUIRE_THROWS_AS(parser.check_required_parameters(), BSMPT::parserException);
 }
