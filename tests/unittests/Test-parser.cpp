@@ -1,0 +1,68 @@
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
+#include <catch2/catch_approx.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <sstream>
+
+using Approx = Catch::Approx;
+
+TEST_CASE("Ask unexpected option", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  std::string exceptionMessage;
+  REQUIRE_THROWS_AS(parser.get_value_lower_case("non existent"),
+                    BSMPT::parserException);
+}
+
+TEST_CASE("Set unexpected input", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  std::string argName{"ExampleArg"};
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=foo");
+  REQUIRE_THROWS_AS(parser.add_input(input), BSMPT::parserException);
+}
+
+TEST_CASE("Add argument and retrieve it", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  std::string argName{"ExampleArg"};
+  parser.add_argument(argName, "some example description", false);
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=foo");
+  parser.add_input(input);
+  REQUIRE_NOTHROW(parser.get_value(argName));
+}
+
+TEST_CASE("Check for logger print", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  std::string argName{"ExampleArg"};
+  std::string description{"Example description"};
+  std::string header{"Some header"};
+  parser.add_argument(argName, description, false);
+  parser.set_help_header(header);
+  std::stringstream ss;
+  BSMPT::Logger::SetOStream(ss);
+  parser.print_help();
+  auto str = ss.str();
+  CHECK(str.find(header) != std::string::npos);
+  CHECK(str.find(argName) != std::string::npos);
+  CHECK(str.find(description) != std::string::npos);
+  BSMPT::Logger::SetOStream(std::cout);
+}
+
+TEST_CASE("Check for all required parameters", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  std::string argName{"ExampleArg"};
+  std::string description{"Example description"};
+  std::string header{"Some header"};
+  parser.add_argument(argName, description, true);
+  REQUIRE_THROWS_AS(parser.all_required_set(), BSMPT::parserException);
+}

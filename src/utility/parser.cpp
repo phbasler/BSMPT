@@ -12,18 +12,6 @@
 
 namespace
 {
-std::tuple<std::string, std::string> get_key_value(const std::string &input)
-{
-  auto beginning = input.find_first_not_of("-");
-  auto seperator = input.find("=");
-  if (seperator == std::string::npos)
-  {
-    seperator = input.find(" ");
-  }
-  std::string key   = input.substr(beginning, seperator - beginning);
-  std::string value = input.substr(seperator + 1, input.size());
-  return {key, value};
-}
 
 std::string to_lower(const std::string &input)
 {
@@ -132,42 +120,12 @@ void parser::add_input(const std::vector<std::string> &input)
     }
   }
 
-  add_cli_input(input);
-}
-
-void parser::add_cli_input(const std::vector<std::string> &input)
-{
-  auto throwError = [](const std::string &argument) {
-    throw parserException("Argument " + argument + " found but not expected.");
-  };
+  std::vector<KeyValue> sepInput;
   for (const auto &arg : input)
   {
-    auto [argumentRaw, value] = get_key_value(arg);
-    auto argument             = to_lower(argumentRaw);
-    if (argument == "help")
-    {
-      print_help();
-    }
-    else
-    {
-
-      if (auto pos = mRequiredArguments.find(argument);
-          pos != mRequiredArguments.end())
-      {
-        pos->second.value = value;
-      }
-      else if (auto posOptional = mOptionalArguments.find(argument);
-               posOptional != mOptionalArguments.end())
-      {
-        posOptional->second.value = value;
-      }
-      else
-      {
-        throwError(argument);
-      }
-    }
+    sepInput.emplace_back(get_key_value(arg));
   }
-  SetLogger(*this);
+  add_input(sepInput);
 }
 
 std::string parser::get_value(const std::string &argument) const
@@ -221,7 +179,8 @@ bool parser::all_required_set() const
     (void)key;
     if (not value.value.has_value())
     {
-      throw parserException("The required parameter " + key + " is not set.");
+      Logger::Write(LoggingLevel::Default,
+                    "The required parameter " + key + " is not set.");
       return false;
     }
   }
@@ -266,16 +225,16 @@ void parser::add_json_input(const std::string &filename)
     throw parserException("Can not open the json file " + filename);
   }
   json data = json::parse(f);
-  std::vector<std::string> input;
+  std::vector<KeyValue> input;
   for (const auto &[key, value] : data.items())
   {
     if (StringEndsWith(key, "_comment"))
     {
       continue;
     }
-    input.emplace_back("--" + key + "=" + value.get<std::string>());
+    input.push_back({key, value.get<std::string>()});
   }
-  add_cli_input(input);
+  add_input(input);
 #else
   throw parserException("nlohmann_json is required.");
 #endif
@@ -283,6 +242,52 @@ void parser::add_json_input(const std::string &filename)
 void parser::set_help_header(const std::string &header)
 {
   mHeader = header;
+}
+
+void parser::add_input(const std::vector<KeyValue> &input)
+{
+  auto throwError = [](const std::string &argument) {
+    throw parserException("Argument " + argument + " found but not expected.");
+  };
+  for (const auto &arg : input)
+  {
+    auto argument = to_lower(arg.key);
+    if (argument == "help")
+    {
+      print_help();
+    }
+    else
+    {
+      if (auto pos = mRequiredArguments.find(argument);
+          pos != mRequiredArguments.end())
+      {
+        pos->second.value = arg.value;
+      }
+      else if (auto posOptional = mOptionalArguments.find(argument);
+               posOptional != mOptionalArguments.end())
+      {
+        posOptional->second.value = arg.value;
+      }
+      else
+      {
+        throwError(argument);
+      }
+    }
+  }
+  SetLogger(*this);
+}
+
+parser::KeyValue parser::get_key_value(const std::string &input)
+{
+  auto beginning = input.find_first_not_of("-");
+  auto seperator = input.find("=");
+  if (seperator == std::string::npos)
+  {
+    seperator = input.find(" ");
+  }
+  std::string key   = input.substr(beginning, seperator - beginning);
+  std::string value = input.substr(seperator + 1, input.size());
+  return {key, value};
 }
 
 } // namespace BSMPT
