@@ -73,7 +73,7 @@ public:
     {
       return std::stoi(value);
     }
-    else if constexpr (std::is_same<T, uint>::value)
+    else if constexpr (std::is_same<T, unsigned int>::value)
     {
       return std::stoul(value);
     }
