@@ -58,16 +58,40 @@ public:
    * @brief get_value Get the value for the required parameter.
    * @param argument The required CLI name or JSON key.
    * @return The value if the parameter was set.
-   * @throws parserException if the argument was not set.
+   * @throws parserException if the argument was not set or if the value can not
+   * be casted from a string to the type.
    */
-  std::string get_value(const std::string &argument) const;
-  /**
-   * @brief get_value Get the value for the required parameter as lower case.
-   * @param argument The required CLI name or JSON key.
-   * @return The value if the parameter was set.
-   * @throws parserException if the argument was not set.
-   */
-  std::string get_value_lower_case(const std::string &argument) const;
+  template <typename T = std::string>
+  T get_value(const std::string &argument) const
+  {
+    auto value = get_value_as_string(argument);
+    if constexpr (std::is_same<T, std::string>::value)
+    {
+      return value;
+    }
+    else if constexpr (std::is_same<T, int>::value)
+    {
+      return std::stoi(value);
+    }
+    else if constexpr (std::is_same<T, uint>::value)
+    {
+      return std::stoul(value);
+    }
+    else if constexpr (std::is_same<T, double>::value)
+    {
+      return std::stod(value);
+    }
+    else if constexpr (std::is_same<T, bool>::value)
+    {
+      auto lower = to_lower(value);
+      return lower == "true";
+    }
+    else
+    {
+      return static_cast<T>(value);
+    }
+  }
+
   /**
    * @brief all_required_set Check ifs all required parameter are set.
    * @return true/false if all required parameters are set.
@@ -107,6 +131,14 @@ private:
   std::unordered_map<std::string, Options> mRequiredArguments;
   std::unordered_map<std::string, Options> mOptionalArguments;
   /**
+   * @brief get_value Get the value for the required parameter.
+   * @param argument The required CLI name or JSON key.
+   * @return The value if the parameter was set.
+   * @throws parserException if the argument was not set or if the value can not
+   * be casted from a string to the type.
+   */
+  std::string get_value_as_string(const std::string &argument) const;
+  /**
    * @brief add_json_input Add the input parameters with a json file.
    * @param filename The file containing the json.
    */
@@ -122,6 +154,9 @@ private:
    * @param input The CLI option in the form of "--argName=foo".
    * @return Returns the matching KeyValue.
    */
+
+  std::string to_lower(const std::string &input) const;
+
   KeyValue get_key_value(const std::string &input);
   std::string mHeader;
 };

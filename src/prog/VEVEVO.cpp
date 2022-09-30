@@ -214,14 +214,14 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   Model            = BSMPT::ModelID::getModel(argparser.get_value("model"));
   InputFile        = argparser.get_value("input");
   OutputFile       = argparser.get_value("output");
-  Line             = std::stoi(argparser.get_value("line"));
-  TemperatureStart = std::stod(argparser.get_value("TemperatureStart"));
-  TemperatureEnd   = std::stod(argparser.get_value("TemperatureEnd"));
-  TemperatureStep  = std::stod(argparser.get_value("TemperatureStep"));
+  Line             = argparser.get_value<int>("line");
+  TemperatureStart = argparser.get_value<double>("TemperatureStart");
+  TemperatureEnd   = argparser.get_value<double>("TemperatureEnd");
+  TemperatureStep  = argparser.get_value<double>("TemperatureStep");
 
   try
   {
-    UseGSL = argparser.get_value_lower_case("UseGSL") == "true";
+    UseGSL = argparser.get_value<bool>("UseGSL");
   }
   catch (BSMPT::parserException &)
   {
@@ -229,7 +229,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseCMAES = argparser.get_value_lower_case("UseCMAES") == "true";
+    UseCMAES = argparser.get_value<bool>("UseCMAES");
   }
   catch (BSMPT::parserException &)
   {
@@ -237,7 +237,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseNLopt = argparser.get_value_lower_case("UseNLopt") == "true";
+    UseNLopt = argparser.get_value<bool>("UseNLopt");
   }
   catch (BSMPT::parserException &)
   {
@@ -245,8 +245,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseMultithreading =
-        argparser.get_value_lower_case("UseMultithreading") == "true";
+    UseMultithreading = argparser.get_value<bool>("UseMultithreading");
   }
   catch (BSMPT::parserException &)
   {

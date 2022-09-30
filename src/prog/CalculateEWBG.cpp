@@ -252,8 +252,8 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
   InputFile  = argparser.get_value("input");
   OutputFile = argparser.get_value("output");
-  FirstLine  = std::stoi(argparser.get_value("FirstLine"));
-  LastLine   = std::stoi(argparser.get_value("LastLine"));
+  FirstLine  = argparser.get_value<int>("FirstLine");
+  LastLine   = argparser.get_value<int>("LastLine");
   ConfigFile = argparser.get_value("config");
   try
   {
@@ -266,7 +266,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseGSL = argparser.get_value_lower_case("UseGSL") == "true";
+    UseGSL = argparser.get_value<bool>("UseGSL");
   }
   catch (BSMPT::parserException &)
   {
@@ -274,7 +274,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseCMAES = argparser.get_value_lower_case("UseCMAES") == "true";
+    UseCMAES = argparser.get_value<bool>("UseCMAES");
   }
   catch (BSMPT::parserException &)
   {
@@ -282,7 +282,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseNLopt = argparser.get_value_lower_case("UseNLopt") == "true";
+    UseNLopt = argparser.get_value<bool>("UseNLopt");
   }
   catch (BSMPT::parserException &)
   {
@@ -290,8 +290,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseMultithreading =
-        argparser.get_value_lower_case("UseMultithreading") == "true";
+    UseMultithreading = argparser.get_value<bool>("UseMultithreading");
   }
   catch (BSMPT::parserException &)
   {

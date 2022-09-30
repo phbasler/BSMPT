@@ -14,9 +14,21 @@ using Approx = Catch::Approx;
 TEST_CASE("Ask unexpected option", "[parser]")
 {
   auto parser = BSMPT::parser();
-  std::string exceptionMessage;
-  REQUIRE_THROWS_AS(parser.get_value_lower_case("non existent"),
-                    BSMPT::parserException);
+  REQUIRE_THROWS_AS(parser.get_value("non existent"), BSMPT::parserException);
+}
+
+TEST_CASE("Check bool input", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  std::string argName{"arg"}, argNameF{"arg2"};
+  parser.add_argument(argName, "foo", true);
+  parser.add_argument(argNameF, "foo", true);
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=True");
+  input.emplace_back("--" + argNameF + "=foo");
+  parser.add_input(input);
+  REQUIRE(parser.get_value<bool>(argName));
+  REQUIRE_FALSE(parser.get_value<bool>(argNameF));
 }
 
 TEST_CASE("Set unexpected input", "[parser]")

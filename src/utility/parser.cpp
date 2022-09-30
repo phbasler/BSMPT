@@ -10,19 +10,6 @@
 #include <nlohmann/json.hpp>
 #endif
 
-namespace
-{
-
-std::string to_lower(const std::string &input)
-{
-  auto arg = input;
-  std::transform(arg.begin(),
-                 arg.end(),
-                 arg.begin(),
-                 [](unsigned char c) { return std::tolower(c); });
-  return arg;
-}
-} // namespace
 namespace BSMPT
 {
 
@@ -128,50 +115,6 @@ void parser::add_input(const std::vector<std::string> &input)
   add_input(sepInput);
 }
 
-std::string parser::get_value(const std::string &argument) const
-{
-  auto throwError = [](const std::string &arg)
-  { throw parserException("Option " + arg + " is not defined."); };
-  auto arg = to_lower(argument);
-  if (auto posReq = mRequiredArguments.find(arg);
-      posReq != mRequiredArguments.end())
-  {
-    auto &optVal = posReq->second.value;
-    if (not optVal.has_value())
-    {
-      throwError(argument);
-    }
-    return optVal.value();
-  }
-  else if (auto posOpt = mOptionalArguments.find(arg);
-           posOpt != mOptionalArguments.end())
-  {
-    auto &optVal = posOpt->second.value;
-    if (not optVal.has_value())
-    {
-      throwError(argument);
-    }
-    return optVal.value();
-  }
-  else
-  {
-    throwError(argument);
-  }
-  return std::string();
-}
-
-std::string parser::get_value_lower_case(const std::string &argument) const
-{
-  try
-  {
-    auto value = get_value(argument);
-    return to_lower(value);
-  }
-  catch (BSMPT::parserException &e)
-  {
-    throw e;
-  }
-}
 bool parser::all_required_set() const
 {
   for (const auto &[key, value] : mRequiredArguments)
@@ -213,6 +156,38 @@ void parser::print_help() const
     ss << "--" << options.argument << ":\t" << options.description << std::endl;
   }
   Logger::Write(LoggingLevel::Default, ss.str());
+}
+
+std::string parser::get_value_as_string(const std::string &argument) const
+{
+  auto throwError = [](const std::string &arg)
+  { throw parserException("Option " + arg + " is not defined."); };
+  auto arg = to_lower(argument);
+  if (auto posReq = mRequiredArguments.find(arg);
+      posReq != mRequiredArguments.end())
+  {
+    auto &optVal = posReq->second.value;
+    if (not optVal.has_value())
+    {
+      throwError(argument);
+    }
+    return optVal.value();
+  }
+  else if (auto posOpt = mOptionalArguments.find(arg);
+           posOpt != mOptionalArguments.end())
+  {
+    auto &optVal = posOpt->second.value;
+    if (not optVal.has_value())
+    {
+      throwError(argument);
+    }
+    return optVal.value();
+  }
+  else
+  {
+    throwError(argument);
+  }
+  return std::string();
 }
 
 void parser::add_json_input(const std::string &filename)
@@ -288,6 +263,16 @@ parser::KeyValue parser::get_key_value(const std::string &input)
   std::string key   = input.substr(beginning, seperator - beginning);
   std::string value = input.substr(seperator + 1, input.size());
   return {key, value};
+}
+
+std::string parser::to_lower(const std::string &input) const
+{
+  auto arg = input;
+  std::transform(arg.begin(),
+                 arg.end(),
+                 arg.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  return arg;
 }
 
 } // namespace BSMPT

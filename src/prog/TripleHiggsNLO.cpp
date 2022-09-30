@@ -160,8 +160,8 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
   InputFile  = argparser.get_value("input");
   OutputFile = argparser.get_value("output");
-  FirstLine  = std::stoi(argparser.get_value("FirstLine"));
-  LastLine   = std::stoi(argparser.get_value("LastLine"));
+  FirstLine  = argparser.get_value<int>("FirstLine");
+  LastLine   = argparser.get_value<int>("LastLine");
   try
   {
     TerminalOutput = (argparser.get_value("TerminalOutput") == "y");
