@@ -1,6 +1,9 @@
 name: Run cmake-format linter
 
-on: [push]
+on: 
+  pull_request:
+    branches: [ master, develop ]
+    
 
 jobs:
   build:
