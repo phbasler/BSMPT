@@ -1,6 +1,6 @@
 {
-    "FirstLine": "2",
-    "LastLine": "2",
+    "firstLine": "2",
+    "lastLine": "2",
     "input": "./example/C2HDM_Input.dat",
     "output": "test.tsv",
     "model": "c2hdm",
