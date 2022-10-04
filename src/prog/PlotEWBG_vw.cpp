@@ -197,7 +197,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   vw_Stepsize = argparser.get_value<double>("vw_stepsize");
   try
   {
-    TerminalOutput = (argparser.get_value("TerminalOutput") == "y");
+    TerminalOutput = (argparser.get_value("terminalOutput") == "y");
   }
   catch (BSMPT::parserException &)
   {
@@ -206,7 +206,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseGSL = argparser.get_value<bool>("UseGSL");
+    UseGSL = argparser.get_value<bool>("useGSL");
   }
   catch (BSMPT::parserException &)
   {
@@ -214,7 +214,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseCMAES = argparser.get_value<bool>("UseCMAES");
+    UseCMAES = argparser.get_value<bool>("useCMAES");
   }
   catch (BSMPT::parserException &)
   {
@@ -222,7 +222,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseNLopt = argparser.get_value<bool>("UseNLopt");
+    UseNLopt = argparser.get_value<bool>("useNLopt");
   }
   catch (BSMPT::parserException &)
   {
@@ -230,7 +230,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseMultithreading = argparser.get_value<bool>("UseMultithreading");
+    UseMultithreading = argparser.get_value<bool>("useMultithreading");
   }
   catch (BSMPT::parserException &)
   {
@@ -244,17 +244,17 @@ bool CLIOptions::good() const
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
     throw std::runtime_error(
-        "You set --UseGSL=true but GSL was not found during compilation.");
+        "You set --useGSL=true but GSL was not found during compilation.");
   }
   if (UseCMAES and not Minimizer::UseLibCMAESDefault)
   {
     throw std::runtime_error(
-        "You set --UseCMAES=true but CMAES was not found during compilation.");
+        "You set --useCMAES=true but CMAES was not found during compilation.");
   }
   if (UseNLopt and not Minimizer::UseNLoptDefault)
   {
     throw std::runtime_error(
-        "You set --UseNLopt=true but NLopt was not found during compilation.");
+        "You set --useNLopt=true but NLopt was not found during compilation.");
   }
   if (WhichMinimizer == 0)
   {
@@ -310,7 +310,7 @@ BSMPT::parser prepare_parser()
       "vw_stepsize", "The stepsize to increase the wall velocity.", true);
 
   argparser.add_argument(
-      "TerminalOutput",
+      "terminalOutput",
       "y/n Turns on additional information in the terminal during "
       "the calculation.",
       false);

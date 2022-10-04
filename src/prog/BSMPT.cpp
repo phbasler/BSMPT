@@ -241,11 +241,11 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
   InputFile  = argparser.get_value("input");
   OutputFile = argparser.get_value("output");
-  FirstLine  = argparser.get_value<int>("FirstLine");
-  LastLine   = argparser.get_value<int>("LastLine");
+  FirstLine  = argparser.get_value<int>("firstLine");
+  LastLine   = argparser.get_value<int>("lastLine");
   try
   {
-    TerminalOutput = (argparser.get_value("TerminalOutput") == "y");
+    TerminalOutput = (argparser.get_value("terminalOutput") == "y");
   }
   catch (BSMPT::parserException &)
   {
@@ -254,7 +254,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseGSL = argparser.get_value<bool>("UseGSL");
+    UseGSL = argparser.get_value<bool>("useGSL");
   }
   catch (BSMPT::parserException &)
   {
@@ -262,7 +262,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseCMAES = argparser.get_value<bool>("UseCMAES");
+    UseCMAES = argparser.get_value<bool>("useCMAES");
   }
   catch (BSMPT::parserException &)
   {
@@ -270,7 +270,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseNLopt = argparser.get_value<bool>("UseNLopt");
+    UseNLopt = argparser.get_value<bool>("useNLopt");
   }
   catch (BSMPT::parserException &)
   {
@@ -278,7 +278,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseMultithreading = argparser.get_value<bool>("UseMultithreading");
+    UseMultithreading = argparser.get_value<bool>("useMultithreading");
   }
   catch (BSMPT::parserException &)
   {
@@ -292,17 +292,17 @@ bool CLIOptions::good() const
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
     throw std::runtime_error(
-        "You set --UseGSL=true but GSL was not found during compilation.");
+        "You set --useGSL=true but GSL was not found during compilation.");
   }
   if (UseCMAES and not Minimizer::UseLibCMAESDefault)
   {
     throw std::runtime_error(
-        "You set --UseCMAES=true but CMAES was not found during compilation.");
+        "You set --useCMAES=true but CMAES was not found during compilation.");
   }
   if (UseNLopt and not Minimizer::UseNLoptDefault)
   {
     throw std::runtime_error(
-        "You set --UseNLopt=true but NLopt was not found during compilation.");
+        "You set --useNLopt=true but NLopt was not found during compilation.");
   }
   if (WhichMinimizer == 0)
   {
@@ -338,16 +338,16 @@ BSMPT::parser prepare_parser()
   argparser.add_argument("model", "The model you want to investigate.", true);
   argparser.add_argument("input", "The input file in tsv format.", true);
   argparser.add_argument("output", "The output file in tsv format.", true);
-  argparser.add_argument("FirstLine",
+  argparser.add_argument("firstLine",
                          "The first line in the input file to calculate the "
                          "EWPT. Expects line 1 to be a legend.",
                          true);
   argparser.add_argument(
-      "LastLine",
+      "lastLine",
       "The last line in the input file to calculate the EWPT.",
       true);
   argparser.add_argument(
-      "TerminalOutput",
+      "terminalOutput",
       "y/n Turns on additional information in the terminal during "
       "the calculation.",
       false);
@@ -397,11 +397,11 @@ std::vector<std::string> convert_input(int argc, char *argv[])
     }
     if (argc >= 5)
     {
-      arguments.emplace_back("--FirstLine=" + std::string(argv[4]));
+      arguments.emplace_back("--firstLine=" + std::string(argv[4]));
     }
     if (argc >= 6)
     {
-      arguments.emplace_back("--LastLine=" + std::string(argv[5]));
+      arguments.emplace_back("--lastLine=" + std::string(argv[5]));
     }
   }
   return arguments;

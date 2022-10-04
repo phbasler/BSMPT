@@ -51,16 +51,16 @@ parser::parser()
 
 void parser::enable_minimizer_options()
 {
-  add_argument("UseGSL",
+  add_argument("useGSL",
                "Use the GSL library to minimize the effective potential.",
                false);
-  add_argument("UseCMAES",
+  add_argument("useCMAES",
                "Use the CMAES library to minimize the effective potential",
                false);
-  add_argument("UseNLopt",
+  add_argument("useNLopt",
                "Use the NLopt library to minimize the effective potential",
                false);
-  add_argument("UseMultithreading",
+  add_argument("useMultithreading",
                "Enables/Disables multi threading for the minimizers",
                false);
 }

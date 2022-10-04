@@ -165,17 +165,17 @@ bool CLIOptions::good() const
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
     throw std::runtime_error(
-        "You set --UseGSL=true but GSL was not found during compilation.");
+        "You set --useGSL=true but GSL was not found during compilation.");
   }
   if (UseCMAES and not Minimizer::UseLibCMAESDefault)
   {
     throw std::runtime_error(
-        "You set --UseCMAES=true but CMAES was not found during compilation.");
+        "You set --useCMAES=true but CMAES was not found during compilation.");
   }
   if (UseNLopt and not Minimizer::UseNLoptDefault)
   {
     throw std::runtime_error(
-        "You set --UseNLopt=true but NLopt was not found during compilation.");
+        "You set --useNLopt=true but NLopt was not found during compilation.");
   }
   if (WhichMinimizer == 0)
   {
@@ -215,13 +215,13 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   InputFile        = argparser.get_value("input");
   OutputFile       = argparser.get_value("output");
   Line             = argparser.get_value<int>("line");
-  TemperatureStart = argparser.get_value<double>("TemperatureStart");
-  TemperatureEnd   = argparser.get_value<double>("TemperatureEnd");
-  TemperatureStep  = argparser.get_value<double>("TemperatureStep");
+  TemperatureStart = argparser.get_value<double>("temperatureStart");
+  TemperatureEnd   = argparser.get_value<double>("temperatureEnd");
+  TemperatureStep  = argparser.get_value<double>("temperatureStep");
 
   try
   {
-    UseGSL = argparser.get_value<bool>("UseGSL");
+    UseGSL = argparser.get_value<bool>("useGSL");
   }
   catch (BSMPT::parserException &)
   {
@@ -229,7 +229,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseCMAES = argparser.get_value<bool>("UseCMAES");
+    UseCMAES = argparser.get_value<bool>("useCMAES");
   }
   catch (BSMPT::parserException &)
   {
@@ -237,7 +237,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseNLopt = argparser.get_value<bool>("UseNLopt");
+    UseNLopt = argparser.get_value<bool>("useNLopt");
   }
   catch (BSMPT::parserException &)
   {
@@ -245,7 +245,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UseMultithreading = argparser.get_value<bool>("UseMultithreading");
+    UseMultithreading = argparser.get_value<bool>("useMultithreading");
   }
   catch (BSMPT::parserException &)
   {
@@ -267,17 +267,17 @@ BSMPT::parser prepare_parser()
       true);
 
   argparser.add_argument(
-      "TemperatureStart",
+      "temperatureStart",
       "The starting temperature to calculate the global minimum.",
       true);
   argparser.add_argument(
-      "TemperatureStep", "The stepsize for the temperature.", true);
+      "temperatureStep", "The stepsize for the temperature.", true);
   argparser.add_argument(
-      "TemperatureEnd",
+      "temperatureEnd",
       "The last temperature to calculate the global minimum.",
       true);
   argparser.add_argument(
-      "TerminalOutput",
+      "terminalOutput",
       "y/n Turns on additional information in the terminal during "
       "the calculation.",
       false);
@@ -334,15 +334,15 @@ std::vector<std::string> convert_input(int argc, char *argv[])
     }
     if (argc >= 6)
     {
-      arguments.emplace_back("--TemperatureStart=" + std::string(argv[5]));
+      arguments.emplace_back("--temperatureStart=" + std::string(argv[5]));
     }
     if (argc >= 7)
     {
-      arguments.emplace_back("--TemperatureStep=" + std::string(argv[6]));
+      arguments.emplace_back("--temperatureStep=" + std::string(argv[6]));
     }
     if (argc >= 8)
     {
-      arguments.emplace_back("--TemperatureEnd=" + std::string(argv[7]));
+      arguments.emplace_back("--temperatureEnd=" + std::string(argv[7]));
     }
   }
   return arguments;
