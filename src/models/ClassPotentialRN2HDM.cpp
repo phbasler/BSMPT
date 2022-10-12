@@ -811,9 +811,9 @@ void Class_Potential_RN2HDM::TripleHiggsCouplings()
   MatrixXd HiggsRotSort(NHiggs, NHiggs);
   int posMHCS1 = 0, posMHCS2 = 0;
   int posA = 0;
-  int posN[3];
-  int countposN = 0;
-  int posG1 = 0, posG2 = 0, posG0 = 0;
+  std::vector<std::size_t> posN(3);
+  std::size_t countposN = 0;
+  std::size_t posG1 = 0, posG2 = 0, posG0 = 0;
 
   double testsum             = 0;
   const double ZeroThreshold = 1e-5;
@@ -837,7 +837,7 @@ void Class_Potential_RN2HDM::TripleHiggsCouplings()
               std::abs(HiggsRot(i, 8));
     if (testsum > ZeroThreshold)
     {
-      posN[countposN] = i;
+      posN.at(countposN) = i;
       countposN++;
     }
     testsum = std::abs(HiggsRot(i, 4)) + std::abs(HiggsRot(i, 5));
@@ -850,7 +850,7 @@ void Class_Potential_RN2HDM::TripleHiggsCouplings()
   double NeutralHiggs[3];
   for (int i = 0; i < 3; i++)
   {
-    NeutralHiggs[i] = HiggsMasses[posN[i]];
+    NeutralHiggs[i] = HiggsMasses[posN.at(i)];
   }
   for (int i = 0; i < 3; i++)
   {

@@ -103,10 +103,8 @@ try
 
   outfile << std::setprecision(16);
 
-  outfile << "T" << sep << "v";
-  for (auto x : modelPointer->addLegendVEV())
-    outfile << sep << x;
-  outfile << sep << "Veff(v,T)" << std::endl;
+  outfile << "T" << sep << "v" << sep << modelPointer->addLegendVEV() << sep
+          << "Veff(v,T)" << std::endl;
 
   for (double Temp = args.TemperatureStart; Temp <= args.TemperatureEnd;
        Temp += args.TemperatureStep)
