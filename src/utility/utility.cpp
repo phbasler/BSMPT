@@ -6,9 +6,9 @@
 
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/utility.h>
-#include <string>
 #include <ostream>
 #include <sstream>
+#include <string>
 
 /**
  * @file

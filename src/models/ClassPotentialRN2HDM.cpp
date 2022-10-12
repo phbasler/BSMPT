@@ -2937,7 +2937,6 @@ void Class_Potential_RN2HDM::SetCurvatureArrays()
   YIJSL = MatrixXcd::Zero(NLepton, NLepton);
   YIJPL = MatrixXcd::Zero(NLepton, NLepton);
 
-
   double v1 = C_vev0 * C_CosBeta;
   double v2 = C_vev0 * C_SinBeta;
   double vL = v2;

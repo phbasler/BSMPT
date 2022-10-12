@@ -1,12 +1,8 @@
-# Workflow syntax:
-# https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: cpp-linter
 
-on:
-  push:
-    paths-ignore: "docs/**"
+on
   pull_request:
-    paths-ignore: "docs/**"
+    branches: [master]
 
 jobs:
   cpp-linter:
@@ -25,4 +21,4 @@ jobs:
         run: |
           echo "Some files failed the linting checks!"
         # for actual deployment
-        # run: exit 1
+          exit 1
