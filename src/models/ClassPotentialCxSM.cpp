@@ -1091,7 +1091,6 @@ void Class_CxSM::SetCurvatureArrays()
   VC32 = std::conj(C_Vts);
   VC33 = std::conj(C_Vtb);
 
-
   Curvature_Lepton_F2H1[0][1][2] = II / vh * C_MassElectron;
   Curvature_Lepton_F2H1[0][1][3] = 0.1e1 / vh * C_MassElectron;
   Curvature_Lepton_F2H1[1][0][2] = II / vh * C_MassElectron;

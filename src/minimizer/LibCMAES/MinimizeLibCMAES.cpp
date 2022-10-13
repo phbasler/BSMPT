@@ -54,7 +54,8 @@ LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
   // cmaparams.set_noisy();
   cmaparams.set_ftolerance(ftol);
 
-  FitFunc cmafunc = [&](const double *v, const int &N) {
+  FitFunc cmafunc = [&](const double *v, const int &N)
+  {
     (void)N;
     std::vector<double> vev;
     for (std::size_t i{0}; i < dim; ++i)
@@ -109,7 +110,8 @@ CMAES_Minimize_Plane_gen_all(const struct PointerContainerMinPlane &params,
   cmaparams.set_algo(aCMAES);
   cmaparams.set_ftolerance(ftol);
 
-  FitFunc CMAES_VEFF_Minimize_Plane = [=](const double *v, const int &N) {
+  FitFunc CMAES_VEFF_Minimize_Plane = [=](const double *v, const int &N)
+  {
     (void)N;
     std::size_t nVEVs = params.modelPointer->get_nVEV();
 

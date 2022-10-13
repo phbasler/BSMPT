@@ -2081,7 +2081,6 @@ void Class_Potential_CPintheDark::SetCurvatureArrays()
   V32 = C_Vts;
   V33 = C_Vtb;
 
-
   Curvature_Quark_F2H1[0][1][4]   = 0.1e1 / v1 * C_MassUp;
   Curvature_Quark_F2H1[0][1][5]   = -II / v1 * C_MassUp;
   Curvature_Quark_F2H1[0][3][0]   = 0.1e1 / v1 * C_MassDown * V11;
