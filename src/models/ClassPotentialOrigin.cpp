@@ -304,19 +304,16 @@ double Class_Potential_Origin::fbaseTri(double MassSquaredA,
   else if (mas != 0 and mbs == 0 and mcs == 0)
   {
     C   = 2;
-    res = 1.0 / mas * (std::log(mas) - 1);
     res = 1.0 / mas * (LogA - 1);
   }
   else if (mas == 0 and mbs != 0 and mcs == 0)
   {
     C   = 3;
-    res = 1.0 / mbs * (std::log(mbs) - 1);
     res = (LogB - 1) / mbs;
   }
   else if (mas == 0 and mbs == 0 and mcs != 0)
   {
     C   = 4;
-    res = 1.0 / mcs * (std::log(mcs) - 1);
     res = (LogC - 1) / mcs;
   }
   else if (mas == mbs and mas != 0 and mas != mcs and mcs != 0)
@@ -3890,18 +3887,19 @@ double Class_Potential_Origin::CalculateRatioAlpha(
     const std::vector<double> &vev_broken,
     const double &Temp) const
 {
-  double res                          = 0;
-  double PotentialSymmetricPhaseValue = VEff(vev_symmetric, Temp, 0);
-  double PotentialSymmetricPhaseDeriv = VEff(vev_symmetric, Temp, -1);
-  double PotentialBrokenPhaseValue    = VEff(vev_broken, Temp, 0);
-  double PotentialBrokenPhaseDeriv    = VEff(vev_broken, Temp, -1);
-  res = -(PotentialBrokenPhaseValue - PotentialSymmetricPhaseValue) +
-        Temp * (PotentialBrokenPhaseDeriv - PotentialSymmetricPhaseDeriv);
+  (void)vev_symmetric;
+  (void)vev_broken;
+  (void)Temp;
+  //  double res                          = 0;
+  //  double PotentialSymmetricPhaseValue = VEff(vev_symmetric, Temp, 0);
+  //  double PotentialSymmetricPhaseDeriv = VEff(vev_symmetric, Temp, -1);
+  //  double PotentialBrokenPhaseValue    = VEff(vev_broken, Temp, 0);
+  //  double PotentialBrokenPhaseDeriv    = VEff(vev_broken, Temp, -1);
+  //  res = -(PotentialBrokenPhaseValue - PotentialSymmetricPhaseValue) +
+  //        Temp * (PotentialBrokenPhaseDeriv - PotentialSymmetricPhaseDeriv);
   // TODO:: Unfinished!
   throw std::runtime_error("The CalculateRatioAlpha function is not finished "
                            "and you should not be using it!");
-
-  return res;
 }
 
 std::vector<double> Class_Potential_Origin::MinimizeOrderVEV(

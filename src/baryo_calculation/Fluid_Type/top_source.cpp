@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -68,14 +69,14 @@ void top_source::operator()(const state_type &omega,
       theta_vec[1]; // derivative of the phase factor of the top quark
   // Calculation of kappa_t
   Calc_kappa_obj.set_class(Temp, mt);
-  double num_int = NIntegrate_kappa(Calc_kappa_obj);
-  double kappa_q = kappa_QL_0 * num_int;  // left-handed kappa
+  double num_int  = NIntegrate_kappa(Calc_kappa_obj);
+  double kappa_q  = kappa_QL_0 * num_int; // left-handed kappa
   double kappa_tR = kappa_QR_0 * num_int; // right-handed kappa
 
   // Rescaled chemical potential like in 1811.11104
   double mu_M = (omega[1] / kappa_tR - omega[0] / kappa_q);
   double bR   = -(omega[1] + omega[0]); // local baryon conservation used to
-                                      // expresse the right-handed b density
+                                        // expresse the right-handed b density
   double mu_SS = 2 * omega[0] / kappa_q - omega[1] / kappa_tR - bR / kappa_QR_0;
   double mu_Y  = omega[1] / kappa_tR - omega[0] / kappa_q -
                 omega[2] / kappa_H_0 - omega[3] / kappa_H_0;

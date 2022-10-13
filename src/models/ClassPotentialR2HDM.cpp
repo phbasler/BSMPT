@@ -783,7 +783,6 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
     if (testsum > ZeroThreshold) posMHCS2 = i;
     testsum = std::abs(HiggsRot(i, 5)) + std::abs(HiggsRot(i, 7));
     if (testsum > ZeroThreshold) posA = i;
-    testsum = 0;
     testsum = std::abs(HiggsRot(i, 4)) + std::abs(HiggsRot(i, 6));
     if (testsum > ZeroThreshold)
     {
