@@ -125,8 +125,9 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
     {
       if (UseMultithreading)
       {
-        thread_GSL =
-            std::thread([&solGSLMin, &gslMinSuc, &modelPointer, &Temp]() {
+        thread_GSL = std::thread(
+            [&solGSLMin, &gslMinSuc, &modelPointer, &Temp]()
+            {
               std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
                   *modelPointer,
                   Temp,
@@ -146,7 +147,8 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
       if (UseMultithreading)
       {
         thread_GSL = std::thread(
-            [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]() {
+            [&solGSLMin, &gslMinSuc, &modelPointer, &Temp, &MaxSol]()
+            {
               std::tie(solGSLMin, gslMinSuc) =
                   GSL_Minimize_gen_all(*modelPointer, Temp, 5, MaxSol);
             });
@@ -165,9 +167,10 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   {
     if (UseMultithreading)
     {
-      thread_CMAES = std::thread([&modelPointer, &Temp, &start, &LibCMAES]() {
-        LibCMAES = LibCMAES::min_cmaes_gen_all(*modelPointer, Temp, start);
-      });
+      thread_CMAES = std::thread(
+          [&modelPointer, &Temp, &start, &LibCMAES]() {
+            LibCMAES = LibCMAES::min_cmaes_gen_all(*modelPointer, Temp, start);
+          });
     }
     else
     {
@@ -185,9 +188,9 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   {
     if (UseMultithreading)
     {
-      thread_NLopt = std::thread([&NLOPTResult, &modelPointer, &Temp]() {
-        NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(*modelPointer, Temp);
-      });
+      thread_NLopt = std::thread(
+          [&NLOPTResult, &modelPointer, &Temp]()
+          { NLOPTResult = LibNLOPT::MinimizeUsingNLOPT(*modelPointer, Temp); });
     }
     else
     {
@@ -514,7 +517,8 @@ MinimaDevelopmentWithTemperature(
     }
   }
 
-  auto StoppingCriteria = [&](const double &Temp) {
+  auto StoppingCriteria = [&](const double &Temp)
+  {
     double epsilon = std::abs((FinalTemperature - StartingTemperature) /
                               StepsizeTemperature) *
                      1e-2; // because 1+1 = 2.0000000000000001

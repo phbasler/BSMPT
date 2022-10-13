@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -111,7 +112,7 @@ void CreateKtildeInterpolationData()
 
   outputNormalisation
       << "const std::vector<double> msquaredTsquared{"; //<<
-                                                        //msquaredTsquared.size()
+                                                        // msquaredTsquared.size()
                                                         //<< "] = {";
   for (std::size_t i = 0; i < msquaredTsquared.size(); i++)
   {
@@ -133,7 +134,7 @@ void CreateKtildeInterpolationData()
 
   outputNormalisation
       << "const std::vector<double> KtildeNormFermion_grid{"; //<<
-                                                              //KtildeNormFermion.size()
+                                                              // KtildeNormFermion.size()
                                                               //<< "] = {";
   for (std::size_t i = 0; i < KtildeNormFermion.size(); i++)
   {

@@ -200,7 +200,8 @@ GSL_Minimize_gen_all(const Class_Potential_Origin &model,
                        GSL_params &mparams,
                        std::mutex &mWriteResultLock,
                        std::queue<std::vector<double>> &mResults,
-                       bool UseLock = true) {
+                       bool UseLock = true)
+  {
     while (mFoundSolutions < mMaxSol and not mStartingPoints.empty())
     {
       std::vector<double> start;
@@ -234,14 +235,16 @@ GSL_Minimize_gen_all(const Class_Potential_Origin &model,
 
     for (std::size_t i = 0; i < Num_threads; ++i)
     {
-      MinThreads.push_back(std::thread([&]() {
-        thread_Job(FoundSolutions,
-                   MaxSol,
-                   StartingPoints,
-                   params,
-                   WriteResultLock,
-                   Results);
-      }));
+      MinThreads.push_back(std::thread(
+          [&]()
+          {
+            thread_Job(FoundSolutions,
+                       MaxSol,
+                       StartingPoints,
+                       params,
+                       WriteResultLock,
+                       Results);
+          }));
     }
 
     for (auto &thr : MinThreads)

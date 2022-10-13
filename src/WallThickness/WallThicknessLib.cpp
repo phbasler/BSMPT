@@ -78,36 +78,39 @@ double calculate_wall_thickness_plane(
          const std::vector<double> &a_vcritical,
          std::shared_ptr<Class_Potential_Origin> a_modelPointer,
          const double &a_Temp,
-         const int &a_WhichMinimizer) {
-        while (mDataIndex < a_BasePoints.size())
-        {
-          const auto data         = a_BasePoints.at(mDataIndex++);
-          auto MinimumPlaneResult = Minimizer::MinimizePlane(data.second,
-                                                             a_vevsymmetric,
-                                                             a_vcritical,
-                                                             a_modelPointer,
-                                                             a_Temp,
-                                                             a_WhichMinimizer);
-          {
-            std::unique_lock<std::mutex> lock(mWriteResultLock);
-            Data_min.at(data.first) = -MinimumPlaneResult.PotVal;
-          }
-        }
-      };
+         const int &a_WhichMinimizer)
+  {
+    while (mDataIndex < a_BasePoints.size())
+    {
+      const auto data         = a_BasePoints.at(mDataIndex++);
+      auto MinimumPlaneResult = Minimizer::MinimizePlane(data.second,
+                                                         a_vevsymmetric,
+                                                         a_vcritical,
+                                                         a_modelPointer,
+                                                         a_Temp,
+                                                         a_WhichMinimizer);
+      {
+        std::unique_lock<std::mutex> lock(mWriteResultLock);
+        Data_min.at(data.first) = -MinimumPlaneResult.PotVal;
+      }
+    }
+  };
 
   for (auto &thr : Data_min_threads)
   {
-    thr = std::thread([&]() {
-      thread_Job(DataIndex,
-                 BasePoints,
-                 Data_min_negative,
-                 WriteLock,
-                 vevsymmetric,
-                 vcritical,
-                 modelPointer,
-                 Temp,
-                 WhichMinimizer);
-    });
+    thr = std::thread(
+        [&]()
+        {
+          thread_Job(DataIndex,
+                     BasePoints,
+                     Data_min_negative,
+                     WriteLock,
+                     vevsymmetric,
+                     vcritical,
+                     modelPointer,
+                     Temp,
+                     WhichMinimizer);
+        });
   }
 
   for (auto &thr : Data_min_threads)
