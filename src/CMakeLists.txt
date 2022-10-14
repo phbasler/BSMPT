@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+# Müller
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,14 +12,11 @@ if(BSMPTCompileBaryo)
 endif(BSMPTCompileBaryo)
 add_subdirectory(ThermalFunctions)
 
-
-#==============================Utility==================================
+# ==============================Utility==================================
 
 add_subdirectory(utility)
 
-
-
-#==============================EXE======================================
+# ==============================EXE======================================
 
 add_executable(BSMPT prog/BSMPT.cpp)
 target_link_libraries(BSMPT Minimizer Models Utility)
@@ -44,37 +42,32 @@ add_executable(Test prog/Test.cpp)
 target_link_libraries(Test Minimizer Models Utility)
 target_compile_features(Test PUBLIC cxx_std_14)
 
-
-
 if(BSMPTCompileBaryo)
-add_executable(CalculateEWBG prog/CalculateEWBG.cpp)
-target_link_libraries(CalculateEWBG Minimizer Models Baryo Utility)
-target_compile_features(CalculateEWBG PUBLIC cxx_std_14)
+  add_executable(CalculateEWBG prog/CalculateEWBG.cpp)
+  target_link_libraries(CalculateEWBG Minimizer Models Baryo Utility)
+  target_compile_features(CalculateEWBG PUBLIC cxx_std_14)
 else(BSMPTCompileBaryo)
   message("CalculateEWBG will not compile as Boost is missing")
 endif(BSMPTCompileBaryo)
 
 if(BSMPTCompileBaryo)
-add_executable(PlotEWBG_vw prog/PlotEWBG_vw.cpp)
-target_link_libraries(PlotEWBG_vw Minimizer Models Baryo Utility)
-target_compile_features(PlotEWBG_vw PUBLIC cxx_std_14)
+  add_executable(PlotEWBG_vw prog/PlotEWBG_vw.cpp)
+  target_link_libraries(PlotEWBG_vw Minimizer Models Baryo Utility)
+  target_compile_features(PlotEWBG_vw PUBLIC cxx_std_14)
 else(BSMPTCompileBaryo)
   message("PlotEWBG_vw will not compile as Boost is missing")
 endif(BSMPTCompileBaryo)
 
 if(BSMPTCompileBaryo)
-add_executable(PlotEWBG_nL prog/PlotEWBG_nL.cpp)
-target_link_libraries(PlotEWBG_nL Minimizer Models Baryo Utility)
-target_compile_features(PlotEWBG_nL PUBLIC cxx_std_14)
+  add_executable(PlotEWBG_nL prog/PlotEWBG_nL.cpp)
+  target_link_libraries(PlotEWBG_nL Minimizer Models Baryo Utility)
+  target_compile_features(PlotEWBG_nL PUBLIC cxx_std_14)
 else(BSMPTCompileBaryo)
   message("PlotEWBG_nL will not compile as Boost is missing")
 endif(BSMPTCompileBaryo)
 
-
-
-
-
-#======================= Additional testing ====================================
+# ======================= Additional testing
+# ====================================
 
 if(MakeAdditionalTesting)
 
@@ -94,6 +87,4 @@ if(MakeAdditionalTesting)
     message("Kfactor_grid will not compile as Boost is missing")
   endif(BSMPTCompileBaryo)
 
-
 endif(MakeAdditionalTesting)
-
