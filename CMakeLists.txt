@@ -89,7 +89,8 @@ if(Boost_FOUND)
 endif()
 
 if(nlohmann_json_FOUND)
-  set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs} "${nlohmann_json}/*")
+  set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
+                                        "${nlohmann_json}/*")
 endif()
 
 set(EXPORT_CMAES FALSE)
@@ -220,7 +221,6 @@ endif(BSMPT_IS_TOPLEVEL)
 
 # -------------------- Testing
 # ---------------------------------------------------
-
 
 if(BSMPT_IS_TOPLEVEL AND BUILD_TESTING)
   add_subdirectory(tests)
