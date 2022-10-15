@@ -34,6 +34,9 @@ enum class LoggingLevel
   Debug
 };
 
+/**
+ * @brief The BSMPTLogger class
+ */
 class BSMPTLogger
 {
 public:
@@ -45,7 +48,15 @@ public:
   BSMPTLogger &operator=(BSMPTLogger &&)      = delete;
 
 private:
+  /**
+   * @brief SetOStream sets the output of the logger to a certain ostream
+   * @param Ostream
+   */
   void SetOStream(std::ostream &Ostream);
+  /**
+   * @brief SetOStream writes the output of the logger to a file
+   * @param file
+   */
   void SetOStream(const std::string &file);
   template <typename T>
   void
