@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -170,19 +171,19 @@ const double C_MassSMHiggs = 125.09;
  * Unit: GeV
  * https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWG
  */
-const double C_MassUp = 0.1;
+const double C_MassUp = 0.13;
 /**
  * @brief Mass of the down quark
  * Unit: GeV
  * https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWG
  */
-const double C_MassDown = 0.1;
+const double C_MassDown = 0.14;
 /**
  * @brief Mass of the strange quark
  * Unit: GeV
  * https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWG
  */
-const double C_MassStrange = 0.1;
+const double C_MassStrange = 0.15;
 /**
  * @brief Mass of the top quark in the OS Scheme
  * Unit: GeV

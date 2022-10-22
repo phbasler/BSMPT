@@ -10,6 +10,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/utility/utility.h>
 
 #include "C2HDM.h"
 #include <fstream>
@@ -258,7 +259,8 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
   modelPointer->Prepare_Triple();
   modelPointer->TripleHiggsCouplings();
 
-  auto Check = [](auto result, auto expected) {
+  auto Check = [](auto result, auto expected)
+  {
     if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
@@ -414,4 +416,16 @@ TEST_CASE("Check symmetric properties of the quark tensor in the C2HDM",
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckSymmetricTensorQuarksThird(
               modelPointer->Get_Curvature_Quark_F2H1()));
+}
+
+TEST_CASE("Check order of QuarkMasses", "[order]")
+{
+  using namespace BSMPT;
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+  modelPointer->initModel(example_point_C2HDM);
+  const auto min =
+      modelPointer->MinimizeOrderVEV(modelPointer->get_vevTreeMin());
+  const auto QuarkMasses = modelPointer->QuarkMasses(min);
+  std::cout << "Masses: " << QuarkMasses << std::endl;
 }
