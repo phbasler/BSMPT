@@ -1,0 +1,19 @@
+{
+    "firstLine": "2",
+    "lastLine": "2",
+    "input": "../example/C2HDM_Input.dat",
+    "output": "test.tsv",
+    "model": "c2hdm",
+    "config": "../example/EWBG_config.txt",
+
+    "useNLopt": "true",
+    "useCMAES": "true",
+    "useGSL": "true",
+    "useMultiThreading": "true",
+    "logginglevel::default": "true",
+    "logginglevel::minimizerdetailed": "false",
+    "logginglevel::ewbgdetailed": "false",
+    "logginglevel::debug": "false",
+    "logginglevel::progdetailed": "false",
+    "logginglevel::disabled_comment": "remove _comment from key to disable logger"
+}

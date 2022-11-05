@@ -35,4 +35,10 @@ bool StringStartsWith(const std::string &str, const std::string &prefix)
   return str.size() >= prefix.size() and str.find(prefix) == 0;
 }
 
+bool StringEndsWith(const std::string &str, const std::string &suffix)
+{
+  return str.size() >= suffix.size() and
+         str.substr(str.size() - suffix.size(), str.size()) == suffix;
+}
+
 } // namespace BSMPT

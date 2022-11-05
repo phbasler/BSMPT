@@ -48,7 +48,8 @@ ModelIDs getModel(const std::string &s)
   std::string ModelInput = s;
   std::transform(
       ModelInput.begin(), ModelInput.end(), ModelInput.begin(), ::tolower);
-  for (auto entry : ModelNames)
+
+  for (const auto &entry : ModelNames)
   {
     auto key = entry.first;
     std::transform(key.begin(), key.end(), key.begin(), ::tolower);

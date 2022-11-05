@@ -18,7 +18,7 @@ jobs:
       with:
           persist-credentials: false
     - name: installPackages
-      run: brew install eigen && brew install gsl && brew install nlopt && brew install boost && brew install libomp
+      run: brew install eigen && brew install gsl && brew install nlopt && brew install boost && brew install libomp && brew install nlohmann-json
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v1
       id: cpu-cores

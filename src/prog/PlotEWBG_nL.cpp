@@ -16,6 +16,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Pot...
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm> // for copy, max
 #include <fstream>
@@ -39,15 +40,22 @@ struct CLIOptions
   bool UseCMAES{Minimizer::UseLibCMAESDefault};
   bool UseNLopt{Minimizer::UseNLoptDefault};
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
+  bool UseMultithreading{true};
 
-  CLIOptions(int argc, char *argv[]);
+  CLIOptions(const BSMPT::parser &argparser);
   bool good() const;
 };
+
+BSMPT::parser prepare_parser();
+
+std::vector<std::string> convert_input(int argc, char *argv[]);
 
 int main(int argc, char *argv[])
 try
 {
-  const CLIOptions args(argc, argv);
+  auto argparser = prepare_parser();
+  argparser.add_input(convert_input(argc, argv));
+  const CLIOptions args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -134,8 +142,12 @@ try
     std::vector<double> vevsymmetricSolution, checksym, startpoint;
     for (std::size_t i = 0; i < modelPointer->get_nVEV(); i++)
       startpoint.push_back(0.5 * vcritical.at(i));
-    vevsymmetricSolution = Minimizer::Minimize_gen_all(
-        modelPointer, TC + 1, checksym, startpoint, args.WhichMinimizer);
+    vevsymmetricSolution = Minimizer::Minimize_gen_all(modelPointer,
+                                                       TC + 1,
+                                                       checksym,
+                                                       startpoint,
+                                                       args.WhichMinimizer,
+                                                       args.UseMultithreading);
 
     /////////////////////////////////////////////////////////////////////////////////
     std::size_t nstep = 100;
@@ -209,165 +221,22 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(int argc, char *argv[])
-{
-
-  std::vector<std::string> args;
-  for (int i{1}; i < argc; ++i)
-    args.push_back(argv[i]);
-
-  if (argc < 7 or args.at(0) == "--help")
-  {
-    std::stringstream ss;
-    int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    ss << "Calculation of the left-handed chemical potentials or "
-          "particle densities triggering the EW"
-       << " sphaleron transitions as a function of the wall distance z ."
-       << std::endl
-       << "It is called either by " << std::endl
-       << "./PlotEWBG_nL Model Inputfile Outputfile Line vw "
-          "EWBGConfigFile TerminalOutput(y/n)"
-       << std::endl
-       << "or with the following arguments" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--help"
-       << "Shows this menu" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--model="
-       << "The model you want to investigate" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--input="
-       << "The input file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--output="
-       << "The output file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--Line="
-       << "The line with the given parameter point. Expects line 1 to "
-          "be a legend."
-       << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--config="
-       << "The EWBG config file." << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
-       << "y/n Turns on additional information in the terminal during "
-          "the calculation."
-       << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--vw="
-       << "The wall velocity. Default value of 0.1." << std::endl;
-    std::string GSLhelp{"--UseGSL="};
-    GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-       << "Use the GSL library to minimize the effective potential"
-       << std::endl;
-    std::string CMAEShelp{"--UseCMAES="};
-    CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-       << "Use the CMAES library to minimize the effective potential"
-       << std::endl;
-    std::string NLoptHelp{"--UseNLopt="};
-    NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-       << "Use the NLopt library to minimize the effective potential"
-       << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    ShowLoggerHelp();
-    ShowInputError();
-  }
-
-  if (args.size() > 0 and args.at(0) == "--help")
-  {
-    throw int{0};
-  }
-  else if (argc < 7)
-  {
-    throw std::runtime_error("Too few arguments.");
-  }
-
-  const std::string prefix{"--"};
-  bool UsePrefix = StringStartsWith(args.at(0), prefix);
-  std::vector<std::string> UnusedArgs;
-  if (UsePrefix)
-  {
-    for (const auto &arg : args)
-    {
-      auto el = arg;
-      std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-      if (StringStartsWith(el, "--model="))
-      {
-        Model =
-            BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-      }
-      else if (StringStartsWith(el, "--input="))
-      {
-        InputFile = arg.substr(std::string("--input=").size());
-      }
-      else if (StringStartsWith(el, "--output="))
-      {
-        OutputFile = arg.substr(std::string("--output=").size());
-      }
-      else if (StringStartsWith(el, "--line="))
-      {
-        Line = std::stoi(el.substr(std::string("--line=").size()));
-      }
-      else if (StringStartsWith(el, "--terminaloutput="))
-      {
-        TerminalOutput =
-            el.substr(std::string("--terminaloutput=").size()) == "y";
-      }
-      else if (StringStartsWith(el, "--vw="))
-      {
-        vw = std::stod(el.substr(std::string("--vw=").size()));
-      }
-      else if (StringStartsWith(el, "--config="))
-      {
-        ConfigFile = arg.substr(std::string("--config=").size());
-      }
-      else if (StringStartsWith(el, "--usegsl="))
-      {
-        UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usecmaes="))
-      {
-        UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usenlopt="))
-      {
-        UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
-      }
-      else
-      {
-        UnusedArgs.push_back(el);
-      }
-    }
-    WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
-    SetLogger(UnusedArgs);
-  }
-  else
-  {
-    Model      = ModelID::getModel(args.at(0));
-    InputFile  = args.at(1);
-    OutputFile = args.at(2);
-    Line       = std::stoi(args.at(3));
-    vw         = std::stod(args.at(4));
-    ConfigFile = args.at(5);
-    if (argc == 8)
-    {
-      TerminalOutput = ("y" == std::string(args.at(6)));
-    }
-  }
-}
-
 bool CLIOptions::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
     throw std::runtime_error(
-        "You set --UseGSL=true but GSL was not found during compilation.");
+        "You set --useGSL=true but GSL was not found during compilation.");
   }
   if (UseCMAES and not Minimizer::UseLibCMAESDefault)
   {
     throw std::runtime_error(
-        "You set --UseCMAES=true but CMAES was not found during compilation.");
+        "You set --useCMAES=true but CMAES was not found during compilation.");
   }
   if (UseNLopt and not Minimizer::UseNLoptDefault)
   {
     throw std::runtime_error(
-        "You set --UseNLopt=true but NLopt was not found during compilation.");
+        "You set --useNLopt=true but NLopt was not found during compilation.");
   }
   if (WhichMinimizer == 0)
   {
@@ -392,4 +261,142 @@ bool CLIOptions::good() const
     return false;
   }
   return true;
+}
+
+CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+{
+  argparser.check_required_parameters();
+  Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
+  InputFile  = argparser.get_value("input");
+  OutputFile = argparser.get_value("output");
+  Line       = argparser.get_value<int>("line");
+  vw         = argparser.get_value<double>("vw");
+  ConfigFile = argparser.get_value("config");
+  try
+  {
+    TerminalOutput = (argparser.get_value("terminalOutput") == "y");
+  }
+  catch (BSMPT::parserException &)
+  {
+    TerminalOutput = false;
+  }
+
+  try
+  {
+    UseGSL = argparser.get_value<bool>("useGSL");
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseCMAES = argparser.get_value<bool>("useCMAES");
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseNLopt = argparser.get_value<bool>("useNLopt");
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseMultithreading = argparser.get_value<bool>("useMultithreading");
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
+}
+
+BSMPT::parser prepare_parser()
+{
+  BSMPT::parser argparser;
+  argparser.add_argument("model", "The model you want to investigate.", true);
+  argparser.add_argument("input", "The input file in tsv format.", true);
+  argparser.add_argument("output", "The output file in tsv format.", true);
+  argparser.add_argument(
+      "line",
+      "The line with the given parameter point. Expects line 1 to "
+      "be a legend.",
+      true);
+  argparser.add_argument(
+      "vw",
+      "Wall velocity for the EWBG calculation. Default value of 0.1.",
+      true);
+  argparser.add_argument("config", "The EWBG config file.", true);
+  argparser.add_argument(
+      "terminalOutput",
+      "y/n Turns on additional information in the terminal during "
+      "the calculation.",
+      false);
+
+  std::stringstream ss;
+  ss << "Calculation of the left-handed chemical potentials or "
+        "particle densities triggering the EW sphaleron transitions as a "
+        "function of the wall distance z ."
+     << std::endl
+     << "It is called either by " << std::endl
+     << "./PlotEWBG_nL Model Inputfile Outputfile Line vw "
+        "EWBGConfigFile"
+     << std::endl
+     << "or with the following arguments" << std::endl;
+  argparser.set_help_header(ss.str());
+
+  argparser.enable_minimizer_options();
+
+  return argparser;
+}
+
+std::vector<std::string> convert_input(int argc, char *argv[])
+{
+  std::vector<std::string> arguments;
+  if (argc == 1) return arguments;
+  auto first_arg = std::string(argv[1]);
+
+  bool UsePrefix =
+      StringStartsWith(first_arg, "--") or StringStartsWith(first_arg, "-");
+
+  if (UsePrefix)
+  {
+    for (int i{1}; i < argc; ++i)
+    {
+      arguments.emplace_back(argv[i]);
+    }
+  }
+  else
+  {
+    if (argc >= 2)
+    {
+      arguments.emplace_back("--model=" + std::string(argv[1]));
+    }
+    if (argc >= 3)
+    {
+      arguments.emplace_back("--input=" + std::string(argv[2]));
+    }
+    if (argc >= 4)
+    {
+      arguments.emplace_back("--output=" + std::string(argv[3]));
+    }
+    if (argc >= 5)
+    {
+      arguments.emplace_back("--line=" + std::string(argv[4]));
+    }
+    if (argc >= 6)
+    {
+      arguments.emplace_back("--vw=" + std::string(argv[5]));
+    }
+    if (argc >= 7)
+    {
+      arguments.emplace_back("--config=" + std::string(argv[6]));
+    }
+  }
+  return arguments;
 }

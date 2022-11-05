@@ -27,6 +27,8 @@
 #include <utility>  // for pair
 #include <vector>   // for vector
 
+#include <BSMPT/utility/parser.h>
+
 using namespace std;
 using namespace BSMPT;
 
@@ -42,9 +44,13 @@ struct CLIOptions
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
   bool UseMultithreading{true};
 
-  CLIOptions(int argc, char *argv[]);
+  CLIOptions(const BSMPT::parser &argparser);
   bool good() const;
 };
+
+BSMPT::parser prepare_parser();
+
+std::vector<std::string> convert_input(int argc, char *argv[]);
 
 int main(int argc, char *argv[])
 try
@@ -55,7 +61,10 @@ try
    */
   bool PrintErrorLines = true;
 
-  const CLIOptions args(argc, argv);
+  auto argparser = prepare_parser();
+  argparser.add_input(convert_input(argc, argv));
+  const CLIOptions args(argparser);
+
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -226,146 +235,56 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(int argc, char *argv[])
+CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 {
-
-  std::vector<std::string> args;
-  for (int i{1}; i < argc; ++i)
-    args.push_back(argv[i]);
-
-  if (argc < 6 or args.at(0) == "--help")
+  argparser.check_required_parameters();
+  Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
+  InputFile  = argparser.get_value("input");
+  OutputFile = argparser.get_value("output");
+  FirstLine  = argparser.get_value<int>("firstLine");
+  LastLine   = argparser.get_value<int>("lastLine");
+  try
   {
-    int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    std::stringstream ss;
-
-    ss << std::boolalpha
-       << "BSMPT calculates the strength of the electroweak phase transition"
-       << std::endl
-       << "It is called either by " << std::endl
-       << "./BSMPT model input output FirstLine LastLine" << std::endl
-       << "or with the following arguments" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--help"
-       << "Shows this menu" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--model="
-       << "The model you want to investigate" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--input="
-       << "The input file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--output="
-       << "The output file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
-       << "The first line in the input file to calculate the EWPT. Expects "
-          "line 1 to be a legend."
-       << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
-       << "The last line in the input file to calculate the EWPT." << std::endl;
-    std::string GSLhelp{"--UseGSL="};
-    GSLhelp += Minimizer::UseGSLDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << GSLhelp
-       << "Use the GSL library to minimize the effective potential"
-       << std::endl;
-    std::string CMAEShelp{"--UseCMAES="};
-    CMAEShelp += Minimizer::UseLibCMAESDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << CMAEShelp
-       << "Use the CMAES library to minimize the effective potential"
-       << std::endl;
-    std::string NLoptHelp{"--UseNLopt="};
-    NLoptHelp += Minimizer::UseNLoptDefault ? "true" : "false";
-    ss << std::setw(SizeOfFirstColumn) << std::left << NLoptHelp
-       << "Use the NLopt library to minimize the effective potential"
-       << std::endl;
-    ss << std::setw(SizeOfFirstColumn) << std::left
-       << "--UseMultithreading = true"
-       << "Enables/Disables multi threading for the minimizers" << std::endl;
-    ss << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
-       << "y/n Turns on additional information in the terminal during "
-          "the calculation."
-       << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    ShowLoggerHelp();
-    ShowInputError();
+    TerminalOutput = (argparser.get_value("terminalOutput") == "y");
+  }
+  catch (BSMPT::parserException &)
+  {
+    TerminalOutput = false;
   }
 
-  if (args.size() > 0 and args.at(0) == "--help")
+  try
   {
-    throw int{0};
+    UseGSL = argparser.get_value<bool>("useGSL");
   }
-  else if (argc < 6)
+  catch (BSMPT::parserException &)
   {
-    throw std::runtime_error("Too few arguments.");
   }
 
-  std::string prefix{"--"};
-  bool UsePrefix = StringStartsWith(args.at(0), prefix);
-  std::vector<std::string> UnusedArgs;
-  if (UsePrefix)
+  try
   {
-    for (const auto &arg : args)
-    {
-      auto el = arg;
-      std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-      if (StringStartsWith(el, "--model="))
-      {
-        Model =
-            BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-      }
-      else if (StringStartsWith(el, "--input="))
-      {
-        InputFile = arg.substr(std::string("--input=").size());
-      }
-      else if (StringStartsWith(el, "--output="))
-      {
-        OutputFile = arg.substr(std::string("--output=").size());
-      }
-      else if (StringStartsWith(el, "--firstline="))
-      {
-        FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
-      }
-      else if (StringStartsWith(el, "--lastline="))
-      {
-        LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
-      }
-      else if (StringStartsWith(el, "--terminaloutput="))
-      {
-        TerminalOutput =
-            el.substr(std::string("--terminaloutput=").size()) == "y";
-      }
-      else if (StringStartsWith(el, "--usegsl="))
-      {
-        UseGSL = el.substr(std::string("--usegsl=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usecmaes="))
-      {
-        UseCMAES = el.substr(std::string("--usecmaes=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usenlopt="))
-      {
-        UseNLopt = el.substr(std::string("--usenlopt=").size()) == "true";
-      }
-      else if (StringStartsWith(el, "--usemultithreading="))
-      {
-        UseMultithreading =
-            el.substr(std::string("--usemultithreading=").size()) == "true";
-      }
-      else
-      {
-        UnusedArgs.push_back(el);
-      }
-    }
-    WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
-    SetLogger(UnusedArgs);
+    UseCMAES = argparser.get_value<bool>("useCMAES");
   }
-  else
+  catch (BSMPT::parserException &)
   {
-    Model      = ModelID::getModel(args.at(0));
-    InputFile  = args.at(1);
-    OutputFile = args.at(2);
-    FirstLine  = std::stoi(args.at(3));
-    LastLine   = std::stoi(args.at(4));
-    if (argc == 7)
-    {
-      TerminalOutput = ("y" == std::string(argv[6]));
-    }
   }
+
+  try
+  {
+    UseNLopt = argparser.get_value<bool>("useNLopt");
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  try
+  {
+    UseMultithreading = argparser.get_value<bool>("useMultithreading");
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
+  WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
 }
 
 bool CLIOptions::good() const
@@ -373,17 +292,17 @@ bool CLIOptions::good() const
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
     throw std::runtime_error(
-        "You set --UseGSL=true but GSL was not found during compilation.");
+        "You set --useGSL=true but GSL was not found during compilation.");
   }
   if (UseCMAES and not Minimizer::UseLibCMAESDefault)
   {
     throw std::runtime_error(
-        "You set --UseCMAES=true but CMAES was not found during compilation.");
+        "You set --useCMAES=true but CMAES was not found during compilation.");
   }
   if (UseNLopt and not Minimizer::UseNLoptDefault)
   {
     throw std::runtime_error(
-        "You set --UseNLopt=true but NLopt was not found during compilation.");
+        "You set --useNLopt=true but NLopt was not found during compilation.");
   }
   if (WhichMinimizer == 0)
   {
@@ -411,4 +330,79 @@ bool CLIOptions::good() const
     return false;
   }
   return true;
+}
+
+BSMPT::parser prepare_parser()
+{
+  BSMPT::parser argparser;
+  argparser.add_argument("model", "The model you want to investigate.", true);
+  argparser.add_argument("input", "The input file in tsv format.", true);
+  argparser.add_argument("output", "The output file in tsv format.", true);
+  argparser.add_argument("firstLine",
+                         "The first line in the input file to calculate the "
+                         "EWPT. Expects line 1 to be a legend.",
+                         true);
+  argparser.add_argument(
+      "lastLine",
+      "The last line in the input file to calculate the EWPT.",
+      true);
+  argparser.add_argument(
+      "terminalOutput",
+      "y/n Turns on additional information in the terminal during "
+      "the calculation.",
+      false);
+
+  std::stringstream ss;
+  ss << "BSMPT calculates the strength of the electroweak phase transition"
+     << std::endl
+     << "It is called either by " << std::endl
+     << "./BSMPT model input output FirstLine LastLine" << std::endl
+     << "or with the following arguments" << std::endl;
+  argparser.set_help_header(ss.str());
+
+  argparser.enable_minimizer_options();
+
+  return argparser;
+}
+
+std::vector<std::string> convert_input(int argc, char *argv[])
+{
+  std::vector<std::string> arguments;
+  if (argc == 1) return arguments;
+  auto first_arg = std::string(argv[1]);
+
+  bool UsePrefix =
+      StringStartsWith(first_arg, "--") or StringStartsWith(first_arg, "-");
+
+  if (UsePrefix)
+  {
+    for (int i{1}; i < argc; ++i)
+    {
+      arguments.emplace_back(argv[i]);
+    }
+  }
+  else
+  {
+    if (argc >= 2)
+    {
+      arguments.emplace_back("--model=" + std::string(argv[1]));
+    }
+    if (argc >= 3)
+    {
+      arguments.emplace_back("--input=" + std::string(argv[2]));
+    }
+    if (argc >= 4)
+    {
+      arguments.emplace_back("--output=" + std::string(argv[3]));
+    }
+    if (argc >= 5)
+    {
+      arguments.emplace_back("--firstLine=" + std::string(argv[4]));
+    }
+    if (argc >= 6)
+    {
+      arguments.emplace_back("--lastLine=" + std::string(argv[5]));
+    }
+  }
+  return arguments;
 }

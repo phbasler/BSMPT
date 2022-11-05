@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(
   BSMPT
-  VERSION 2.4.0
+  VERSION 2.5.0
   LANGUAGES C CXX
   DESCRIPTION
     "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models"
@@ -37,6 +37,10 @@ if(EnableCoverage)
   set(BSMPT_USE_VECTORIZATION OFF)
 endif()
 
+if(BSMPT_IS_TOPLEVEL)
+  include(CTest)
+endif()
+
 # -------------------------------- setup cmake --------------------------------
 if(POLICY CMP0074)
   cmake_policy(SET CMP0074 NEW) # use <packagename>_ROOT as search path
@@ -62,6 +66,7 @@ find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
+find_package(nlohmann_json 3.7.3)
 
 find_package(Threads REQUIRED)
 
@@ -81,6 +86,11 @@ if(Boost_FOUND)
     set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
                                           "${Boost_ROOT_DIR}/*")
   endif()
+endif()
+
+if(nlohmann_json_FOUND)
+  set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
+                                        "${nlohmann_json}/*")
 endif()
 
 set(EXPORT_CMAES FALSE)
@@ -211,9 +221,6 @@ endif(BSMPT_IS_TOPLEVEL)
 
 # -------------------- Testing
 # ---------------------------------------------------
-if(BSMPT_IS_TOPLEVEL)
-  include(CTest)
-endif()
 
 if(BSMPT_IS_TOPLEVEL AND BUILD_TESTING)
   add_subdirectory(tests)

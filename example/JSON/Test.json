@@ -1,0 +1,14 @@
+{
+    "line": "2",
+    "input": "../example/C2HDM_Input.dat",
+    "model": "c2hdm",
+    "useNLopt": "true",
+    "useCMAES": "true",
+    "useGSL": "true",
+    "logginglevel::default": "true",
+    "logginglevel::minimizerdetailed": "false",
+    "logginglevel::ewbgdetailed": "false",
+    "logginglevel::debug": "false",
+    "logginglevel::progdetailed": "false",
+    "logginglevel::disabled_comment": "remove _comment from key to disable logger"
+}

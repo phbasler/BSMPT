@@ -13,6 +13,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
 #include <fstream>
 #include <iomanip>
@@ -27,20 +28,30 @@ using namespace BSMPT;
 
 struct CLIOptions
 {
+public:
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int FirstLine{}, LastLine{};
   std::string InputFile, OutputFile;
   bool TerminalOutput{false};
 
-  CLIOptions(int argc, char *argv[]);
+  CLIOptions(const BSMPT::parser &argparser);
   bool good() const;
+
+private:
+  BSMPT::parser mArgparser;
 };
+
+BSMPT::parser prepare_parser();
+
+std::vector<std::string> convert_input(int argc, char *argv[]);
 
 int main(int argc, char *argv[])
 try
 {
 
-  const CLIOptions args(argc, argv);
+  auto argparser = prepare_parser();
+  argparser.add_input(convert_input(argc, argv));
+  const CLIOptions args(argparser);
 
   if (not args.good())
   {
@@ -100,112 +111,27 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(int argc, char *argv[])
+CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 {
-  std::vector<std::string> args;
-  for (int i{1}; i < argc; ++i)
-    args.push_back(argv[i]);
-
-  if (argc < 6 or args.at(0) == "--help")
+  argparser.check_required_parameters();
+  Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
+  InputFile  = argparser.get_value("input");
+  OutputFile = argparser.get_value("output");
+  FirstLine  = argparser.get_value<int>("firstLine");
+  LastLine   = argparser.get_value<int>("lastLine");
+  try
   {
-    std::stringstream ss;
-    int SizeOfFirstColumn = std::string("--TerminalOutput=           ").size();
-    ss << "CalcCT calculates the counterterm parameters for the given "
-          "paramter points"
-       << std::endl
-       << "It is called either by " << std::endl
-       << "./CalcCT model input output FirstLine LastLine" << std::endl
-       << "or with the following arguments" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--help"
-       << "Shows this menu" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--model="
-       << "The model you want to investigate" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--input="
-       << "The input file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--output="
-       << "The output file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--FirstLine="
-       << "The first line in the input file to calculate the EWPT. "
-          "Expects line 1 to be a legend."
-       << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--LastLine="
-       << "The last line in the input file to calculate the EWPT." << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--TerminalOutput="
-       << "y/n Turns on additional information in the terminal during "
-          "the calculation."
-       << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    ShowLoggerHelp();
-    ShowInputError();
+    TerminalOutput = (argparser.get_value("terminalOutput") == "y");
   }
-
-  if (args.size() > 0 and args.at(0) == "--help")
+  catch (BSMPT::parserException &)
   {
-    throw int{0};
-  }
-  else if (argc < 6)
-  {
-    throw std::runtime_error("Too few arguments.");
-  }
-
-  std::string prefix{"--"};
-  bool UsePrefix = StringStartsWith(args.at(0), prefix);
-  std::vector<std::string> UnusedArgs;
-  if (UsePrefix)
-  {
-    for (const auto &arg : args)
-    {
-      auto el = arg;
-      std::transform(el.begin(), el.end(), el.begin(), ::tolower);
-      if (StringStartsWith(el, "--model="))
-      {
-        Model =
-            BSMPT::ModelID::getModel(el.substr(std::string("--model=").size()));
-      }
-      else if (StringStartsWith(el, "--input="))
-      {
-        InputFile = arg.substr(std::string("--input=").size());
-      }
-      else if (StringStartsWith(el, "--output="))
-      {
-        OutputFile = arg.substr(std::string("--output=").size());
-      }
-      else if (StringStartsWith(el, "--firstline="))
-      {
-        FirstLine = std::stoi(el.substr(std::string("--firstline=").size()));
-      }
-      else if (StringStartsWith(el, "--lastline="))
-      {
-        LastLine = std::stoi(el.substr(std::string("--lastline=").size()));
-      }
-      else if (StringStartsWith(el, "--terminaloutput="))
-      {
-        TerminalOutput =
-            el.substr(std::string("--terminaloutput=").size()) == "y";
-      }
-      else
-      {
-        UnusedArgs.push_back(el);
-      }
-    }
-    SetLogger(UnusedArgs);
-  }
-  else
-  {
-    Model      = ModelID::getModel(args.at(0));
-    InputFile  = args.at(1);
-    OutputFile = args.at(2);
-    FirstLine  = std::stoi(args.at(3));
-    LastLine   = std::stoi(args.at(4));
-    if (argc == 7)
-    {
-      TerminalOutput = ("y" == std::string(argv[6]));
-    }
+    TerminalOutput = false;
   }
 }
 
 bool CLIOptions::good() const
 {
+
   if (Model == ModelID::ModelIDs::NotSet)
   {
     Logger::Write(
@@ -225,4 +151,78 @@ bool CLIOptions::good() const
     return false;
   }
   return true;
+}
+
+BSMPT::parser prepare_parser()
+{
+  BSMPT::parser argparser;
+  argparser.add_argument("model", "The model you want to investigate.", true);
+  argparser.add_argument("input", "The input file in tsv format.", true);
+  argparser.add_argument("output", "The output file in tsv format.", true);
+  argparser.add_argument("firstLine",
+                         "The first line in the input file to calculate the "
+                         "EWPT. Expects line 1 to be a legend.",
+                         true);
+  argparser.add_argument(
+      "lastLine",
+      "The last line in the input file to calculate the EWPT.",
+      true);
+  argparser.add_argument(
+      "terminalOutput",
+      "y/n Turns on additional information in the terminal during "
+      "the calculation.",
+      false);
+
+  std::stringstream ss;
+  ss << "CalcCT calculates the counterterm parameters for the given "
+        "paramter points"
+     << std::endl
+     << "It is called either by " << std::endl
+     << "./CalcCT model input output FirstLine LastLine" << std::endl
+     << "or with the following arguments" << std::endl;
+  argparser.set_help_header(ss.str());
+
+  return argparser;
+}
+
+std::vector<std::string> convert_input(int argc, char *argv[])
+{
+  std::vector<std::string> arguments;
+  if (argc == 1) return arguments;
+  auto first_arg = std::string(argv[1]);
+
+  bool UsePrefix =
+      StringStartsWith(first_arg, "--") or StringStartsWith(first_arg, "-");
+
+  if (UsePrefix)
+  {
+    for (int i{1}; i < argc; ++i)
+    {
+      arguments.emplace_back(argv[i]);
+    }
+  }
+  else
+  {
+    if (argc >= 2)
+    {
+      arguments.emplace_back("--model=" + std::string(argv[1]));
+    }
+    if (argc >= 3)
+    {
+      arguments.emplace_back("--input=" + std::string(argv[2]));
+    }
+    if (argc >= 4)
+    {
+      arguments.emplace_back("--output=" + std::string(argv[3]));
+    }
+    if (argc >= 5)
+    {
+      arguments.emplace_back("--firstLine=" + std::string(argv[4]));
+    }
+    if (argc >= 6)
+    {
+      arguments.emplace_back("--lastLine=" + std::string(argv[5]));
+    }
+  }
+  return arguments;
 }
