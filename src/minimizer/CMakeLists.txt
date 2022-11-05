@@ -24,7 +24,10 @@ target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads
                                        Utility Models)
 
 if(libcmaes_FOUND)
-  target_link_libraries(Minimizer PRIVATE libcmaes::cmaes OpenMP::OpenMP_CXX)
+  target_link_libraries(Minimizer PRIVATE libcmaes::cmaes)
+  if(OpenMP_FOUND)
+    target_link_libraries(Minimizer PRIVATE OpenMP::OpenMP_CXX)
+  endif()
 endif()
 
 if(NLopt_FOUND)
