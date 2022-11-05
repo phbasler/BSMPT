@@ -1,6 +1,6 @@
 {
     "line": "2",
-    "input": "./example/C2HDM_Input.dat",
+    "input": "../example/C2HDM_Input.dat",
     "model": "c2hdm",
     "useNLopt": "true",
     "useCMAES": "true",
