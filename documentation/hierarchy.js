@@ -17,6 +17,9 @@ var hierarchy =
     ] ],
     [ "CLIOptions", "structCLIOptions.html", null ],
     [ "BSMPT::Minimizer::EWPTReturnType", "structBSMPT_1_1Minimizer_1_1EWPTReturnType.html", null ],
+    [ "exception", null, [
+      [ "BSMPT::parserException", "classBSMPT_1_1parserException.html", null ]
+    ] ],
     [ "BSMPT::Baryo::gen_fluid", "classBSMPT_1_1Baryo_1_1gen__fluid.html", [
       [ "BSMPT::Baryo::bot_source", "classBSMPT_1_1Baryo_1_1bot__source.html", null ],
       [ "BSMPT::Baryo::tau_source", "classBSMPT_1_1Baryo_1_1tau__source.html", null ],
@@ -25,14 +28,17 @@ var hierarchy =
     [ "BSMPT::Kfactors::GSL_integration", "structBSMPT_1_1Kfactors_1_1GSL__integration.html", null ],
     [ "BSMPT::Baryo::GSL_integration_mubl", "structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html", null ],
     [ "BSMPT::Baryo::GSL_mubl_interpolation", "structBSMPT_1_1Baryo_1_1GSL__mubl__interpolation.html", null ],
-    [ "BSMPT::Wall::GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", null ],
     [ "BSMPT::Minimizer::GSL_params", "structBSMPT_1_1Minimizer_1_1GSL__params.html", null ],
+    [ "BSMPT::Wall::GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", null ],
     [ "BSMPT::Minimizer::GSLPlaneReturn", "structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html", null ],
+    [ "BSMPT::parser::KeyValue", "structBSMPT_1_1parser_1_1KeyValue.html", null ],
     [ "BSMPT::Minimizer::LibCMAES::LibCMAESReturn", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html", null ],
     [ "BSMPT::Logger", "classBSMPT_1_1Logger.html", null ],
     [ "BSMPT::Minimizer::MinimizePlaneReturn", "structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn.html", null ],
     [ "BSMPT::Minimizer::MinimizersToUse", "structBSMPT_1_1Minimizer_1_1MinimizersToUse.html", null ],
     [ "BSMPT::Minimizer::LibNLOPT::NLOPTReturnType", "structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html", null ],
+    [ "BSMPT::parser::Options", "structBSMPT_1_1parser_1_1Options.html", null ],
+    [ "BSMPT::parser", "classBSMPT_1_1parser.html", null ],
     [ "BSMPT::Minimizer::PointerContainerMinPlane", "structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html", null ],
     [ "BSMPT::Baryo::push_back_state_and_time", "structBSMPT_1_1Baryo_1_1push__back__state__and__time.html", null ],
     [ "BSMPT::Minimizer::LibNLOPT::ShareInformationNLOPT", "structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1ShareInformationNLOPT.html", null ],

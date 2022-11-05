@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.4.0</span>
+   &#160;<span id="projectnumber">2.5.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -100,6 +100,11 @@ $(document).ready(function(){initNavTree('classBSMPT_1_1BSMPTLogger.html',''); i
 <div class="title">BSMPT::BSMPTLogger Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The <a class="el" href="classBSMPT_1_1BSMPTLogger.html" title="The BSMPTLogger class.">BSMPTLogger</a> class.  
+ <a href="classBSMPT_1_1BSMPTLogger.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Logger_8h_source.html">BSMPT/utility/Logger.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -127,11 +132,11 @@ friend&#160;</td><td class="memItemRight" valign="bottom"><b>Logger</b></td></tr
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a3a1ed14027fa3dd50799034db1a40a36"><td class="memItemLeft" align="right" valign="top"><a id="a3a1ed14027fa3dd50799034db1a40a36"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetOStream</b> (std::ostream &amp;Ostream)</td></tr>
+<tr class="memitem:a3a1ed14027fa3dd50799034db1a40a36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BSMPTLogger.html#a3a1ed14027fa3dd50799034db1a40a36">SetOStream</a> (std::ostream &amp;Ostream)</td></tr>
+<tr class="memdesc:a3a1ed14027fa3dd50799034db1a40a36"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetOStream sets the output of the logger to a certain ostream.  <a href="classBSMPT_1_1BSMPTLogger.html#a3a1ed14027fa3dd50799034db1a40a36">More...</a><br /></td></tr>
 <tr class="separator:a3a1ed14027fa3dd50799034db1a40a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67ab115f5019af93ce0f46e95376896c"><td class="memItemLeft" align="right" valign="top"><a id="a67ab115f5019af93ce0f46e95376896c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetOStream</b> (const std::string &amp;file)</td></tr>
+<tr class="memitem:a67ab115f5019af93ce0f46e95376896c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BSMPTLogger.html#a67ab115f5019af93ce0f46e95376896c">SetOStream</a> (const std::string &amp;file)</td></tr>
+<tr class="memdesc:a67ab115f5019af93ce0f46e95376896c"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetOStream writes the output of the logger to a file.  <a href="classBSMPT_1_1BSMPTLogger.html#a67ab115f5019af93ce0f46e95376896c">More...</a><br /></td></tr>
 <tr class="separator:a67ab115f5019af93ce0f46e95376896c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af30553fd242dddce50f21ff7b11e04df"><td class="memTemplParams" colspan="2"><a id="af30553fd242dddce50f21ff7b11e04df"></a>
 template&lt;typename T &gt; </td></tr>
@@ -158,6 +163,77 @@ std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><b>mfilestream<
 <tr class="memitem:a581075a8c9493daaba20411bbb8004b9"><td class="memItemLeft" align="right" valign="top">std::map&lt; LoggingLevel, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mCurrentSetup</b></td></tr>
 <tr class="separator:a581075a8c9493daaba20411bbb8004b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The <a class="el" href="classBSMPT_1_1BSMPTLogger.html" title="The BSMPTLogger class.">BSMPTLogger</a> class. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a67ab115f5019af93ce0f46e95376896c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67ab115f5019af93ce0f46e95376896c">&#9670;&nbsp;</a></span>SetOStream() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BSMPT::BSMPTLogger::SetOStream </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>SetOStream writes the output of the logger to a file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3a1ed14027fa3dd50799034db1a40a36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a1ed14027fa3dd50799034db1a40a36">&#9670;&nbsp;</a></span>SetOStream() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BSMPT::BSMPTLogger::SetOStream </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>Ostream</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>SetOStream sets the output of the logger to a certain ostream. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Ostream</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a581075a8c9493daaba20411bbb8004b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a581075a8c9493daaba20411bbb8004b9">&#9670;&nbsp;</a></span>mCurrentSetup</h2>

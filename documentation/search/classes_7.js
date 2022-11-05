@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['nloptreturntype_593',['NLOPTReturnType',['../structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html',1,'BSMPT::Minimizer::LibNLOPT']]]
+  ['minimizeplanereturn_610',['MinimizePlaneReturn',['../structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn.html',1,'BSMPT::Minimizer']]],
+  ['minimizerstouse_611',['MinimizersToUse',['../structBSMPT_1_1Minimizer_1_1MinimizersToUse.html',1,'BSMPT::Minimizer']]]
 ];

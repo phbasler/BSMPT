@@ -10,6 +10,7 @@ var Logger_8h =
       [ "EWBGDetailed", "Logger_8h.html#afbd5a73c8a0693dd74b9a29eb4c18804a083fe74f35e1b7b103d76dbaae30479a", null ],
       [ "Debug", "Logger_8h.html#afbd5a73c8a0693dd74b9a29eb4c18804aa603905470e2a5b8c13e96b579ef0dba", null ]
     ] ],
+    [ "SetLogger", "Logger_8h.html#abbe59c7547847e841bfd10af1f32e40c", null ],
     [ "SetLogger", "Logger_8h.html#a4dec9f9f006e9b948047594578298009", null ],
     [ "ShowLoggerHelp", "Logger_8h.html#ad215912cde195738a2b2809f4c243e1b", null ]
 ];

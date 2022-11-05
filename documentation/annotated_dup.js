@@ -51,7 +51,9 @@ var annotated_dup =
       ] ],
       [ "BSMPTLogger", "classBSMPT_1_1BSMPTLogger.html", "classBSMPT_1_1BSMPTLogger" ],
       [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html", "classBSMPT_1_1Class__Potential__Origin" ],
-      [ "Logger", "classBSMPT_1_1Logger.html", "classBSMPT_1_1Logger" ]
+      [ "Logger", "classBSMPT_1_1Logger.html", "classBSMPT_1_1Logger" ],
+      [ "parser", "classBSMPT_1_1parser.html", "classBSMPT_1_1parser" ],
+      [ "parserException", "classBSMPT_1_1parserException.html", "classBSMPT_1_1parserException" ]
     ] ],
     [ "CLIOptions", "structCLIOptions.html", "structCLIOptions" ]
 ];
