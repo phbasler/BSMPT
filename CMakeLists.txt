@@ -66,7 +66,7 @@ find_package(PkgConfig)
 find_package(Eigen3 3.3.0 REQUIRED)
 find_package(Boost 1.66)
 find_package(GSL 2.1 REQUIRED)
-find_package(nlohmann_json 3.10.0)
+find_package(nlohmann_json 3.7.3)
 
 find_package(Threads REQUIRED)
 
