@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1666037735584,
+  "lastUpdate": 1667642659329,
   "repoUrl": "https://github.com/phbasler/BSMPT",
   "entries": {
     "C++ Benchmark": [
@@ -3906,6 +3906,132 @@ window.BENCHMARK_DATA = {
             "value": 1267673134.1735969,
             "unit": "ns/iter",
             "extra": "iterations: 5\ncpu: 1158868350.7179084 ns\nthreads: 1"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "philippbasler@gmail.com",
+            "name": "Philipp Basler",
+            "username": "phbasler"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f24ba9775fb3cfa9b49727681b1b98e2b4064975",
+          "message": "Rework of the CLI argument parser and add the option to define inputs through a JSON file (#93)\n\n* Add first parser attempt\r\n\r\n* Use argparser\r\n\r\n* Convert all execs to use new argparser\r\n\r\n* Add json option and example files for all parameters\r\n\r\n* Include json in dependencies\r\n\r\n* Add json to readme\r\n\r\n* Bump version\r\n\r\n* Bump version\r\n\r\n* Fix missing json check and add install to workflows\r\n\r\n* Run ubuntu on 22.04\r\n\r\n* Add unit tests and documentation for parser\r\n\r\n* Fix unit test\r\n\r\n* Use template function to convert value in types\r\n\r\n* Fix windows uint problem and get catch2 through conan\r\n\r\n* Unify spelling\r\n\r\n* Unify spelling of arguments\r\n\r\n* Update cpp-linter.yml\r\n\r\n* Update cpp-linter.yml\r\n\r\n* apply cmake-format\r\n\r\n* Automated commit of cmake-format changes.\r\n\r\n* logger docu\r\n\r\n* Apply suggestions from code review\r\n\r\nCo-authored-by: Lisa Biermann <51697431+lisabiermann@users.noreply.github.com>\r\n\r\n* Remove duplicate cmakedefs\r\n\r\n* Fix missing install on mac\r\n\r\n* Only print help output once\r\n\r\n* Update CMakeLists.txt\r\n\r\nCo-authored-by: Lisa Biermann <51697431+lisabiermann@users.noreply.github.com>\r\n\r\n* Fix openmp missing on\r\n\r\n* opt openmp\r\n\r\n* link to openmp target\r\n\r\nCo-authored-by: phbasler <phbasler@users.noreply.github.com>\r\nCo-authored-by: Lisa Biermann <51697431+lisabiermann@users.noreply.github.com>",
+          "timestamp": "2022-11-05T10:56:25+01:00",
+          "tree_id": "2344bc381cd4e36dce18dbe5747303ecd10a401e",
+          "url": "https://github.com/phbasler/BSMPT/commit/f24ba9775fb3cfa9b49727681b1b98e2b4064975"
+        },
+        "date": 1667642657427,
+        "tool": "googlecpp",
+        "benches": [
+          {
+            "name": "BM_NLOVEV",
+            "value": 265513823.49999815,
+            "unit": "ns/iter",
+            "extra": "iterations: 10\ncpu: 374869.99999999936 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 5383993078.000003,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 6466799.999999994 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 5002553572.0000105,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 6442500.000000018 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 4471488580.000028,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 6461899.99999991 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 4451910322.000004,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 6529000.000000007 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 4435400515.000026,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 6472199.999999928 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_mean",
+            "value": 4749069213.400015,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 6474479.999999972 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_median",
+            "value": 4471488580.000028,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 6466799.999999994 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_stddev",
+            "value": 427529268.303995,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 32471.479793818427 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 25954702646.999977,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 17995489000 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 23655147502.000034,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 15765115999.999996 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 23633331369.00002,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 15765741399.999996 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 23472992417.99999,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 15601976700.000002 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 23647550332.00004,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 15792612399.999996 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_mean",
+            "value": 24072744853.600014,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 16184187100 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_median",
+            "value": 23647550332.00004,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 15765741399.999996 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_stddev",
+            "value": 1054719187.7291704,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 1015360977.5832809 ns\nthreads: 1"
           }
         ]
       }
