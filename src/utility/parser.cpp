@@ -141,6 +141,11 @@ void parser::check_required_parameters() const
 
 void parser::print_help() const
 {
+  if (mHelpAlreadyPrinted)
+  {
+    return;
+  }
+  mHelpAlreadyPrinted = true;
   std::stringstream ss;
   ss << mHeader << std::endl;
   ss << "The required options are:" << std::endl;
