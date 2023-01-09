@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "testcodeql" ]
   pull_request:
     branches: [ "master" ]
   schedule:
@@ -33,6 +33,12 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
+          
+      - name : installPackages
+        run : |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+        if: matrix.language == 'cpp'
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
