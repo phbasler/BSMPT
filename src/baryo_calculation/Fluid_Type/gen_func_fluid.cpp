@@ -309,13 +309,13 @@ void Calc_eta::set_class(std::vector<double> array_z_in,
   // SIMPLIFIED EXPRESSION
   // prefactor = -3*GamWS/(2*vw*s_entr);
   // exponent_prefactor = -R*GamWS/vw;
-  double t0, h;
+  double t0{0}, h{0};
   if (array_z.at(0) < array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(0);
     h  = array_z.at(1) - array_z.at(0);
   }
-  if (array_z.at(0) > array_z.at(array_z.size() - 1))
+  else if (array_z.at(0) > array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(array_z.size() - 1);
     h  = array_z.at(0) - array_z.at(1);
@@ -351,13 +351,13 @@ void Calc_eta::set_class(
   // SIMPLIFIED EXPRESSION
   // prefactor = -3*GamWS/(2*vw*s_entr);
   // exponent_prefactor = -R*GamWS/vw;
-  double t0, h;
+  double t0{0}, h{0};
   if (array_z.at(0) < array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(0);
     h  = array_z.at(1) - array_z.at(0);
   }
-  if (array_z.at(0) > array_z.at(array_z.size() - 1))
+  else if (array_z.at(0) > array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(array_z.size() - 1);
     h  = array_z.at(0) - array_z.at(1);
