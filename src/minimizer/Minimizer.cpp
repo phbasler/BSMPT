@@ -63,11 +63,11 @@ namespace Minimizer
 
 MinimizersToUse GetMinimizers(int WhichMinimizer)
 {
-  bool UseCMAES = (WhichMinimizer % 2 == 1);
+  bool UseCMAES = (WhichMinimizer % 2 != 0);
   WhichMinimizer /= 2;
-  bool UseGSL = (WhichMinimizer % 2 == 1);
+  bool UseGSL = (WhichMinimizer % 2 != 0);
   WhichMinimizer /= 2;
-  bool UseNLopt = (WhichMinimizer % 2 == 1);
+  bool UseNLopt = (WhichMinimizer % 2 != 0);
 
 #ifndef libcmaes_FOUND
   UseCMAES = false;

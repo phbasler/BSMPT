@@ -46,11 +46,13 @@ void bot_source::operator()(const state_type &omega,
   // TOP and BOT quark mass calculation
   top_func(z, quark_mass, quark_mass_prime);
   double mt = quark_mass[0];
-  double mb;
+  double mb{0};
   // BOTTOM quark mass can be set to zero to have a crosscheck
-  if (bot_mass_flag == 1) mb = quark_mass[1];
-  if (bot_mass_flag == 2) mb = 0;
-  if ((bot_mass_flag != 1) and (bot_mass_flag != 2))
+  if (bot_mass_flag == 1)
+    mb = quark_mass[1];
+  else if (bot_mass_flag == 2)
+    mb = 0;
+  else
     throw std::runtime_error("No valid option for the bottom mass @ ()");
 
   // Phase Calculation
@@ -165,7 +167,7 @@ double bot_source::Calc_nL(double z_start, double z_end) const
   mu                    = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   const double C_AbsErr = 1e-9;
   const double C_RelErr = 1e-5;
-  double stepsize_initial;
+  double stepsize_initial{0};
   if (z_start < z_end) stepsize_initial = 1e-8;
   if (z_start > z_end) stepsize_initial = -1e-8;
   double abs_err = C_AbsErr;
