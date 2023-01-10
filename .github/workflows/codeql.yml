@@ -46,7 +46,7 @@ jobs:
         id: cpu-cores
         if: matrix.language == 'cpp'
       - name: cmake
-        run: mkdir build && cd build && cmake .. 
+        run: mkdir build && cd build && cmake .. -DUseLibCMAES=OFF
         if: matrix.language == 'cpp'
       - name: make
         run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
