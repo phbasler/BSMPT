@@ -228,6 +228,11 @@ void Class_Potential_R2HDM::set_gen(const std::vector<double> &par)
   C_SinBetaSquared = TanBeta * TanBeta * C_CosBetaSquared;
   C_SinBeta        = sqrt(C_SinBetaSquared);
 
+  if (TanBeta < 0) // for beta in 4th quadrant
+  {
+    C_SinBeta *= -1;
+  }
+
   u1 = RealMMix * TanBeta -
        C_vev0 * C_vev0 * C_SinBetaSquared * (L4 + RL5 + L3) / 0.2e1 -
        C_vev0 * C_vev0 * C_CosBetaSquared * L1 / 0.2e1;
