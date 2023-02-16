@@ -10,6 +10,7 @@ using Approx = Catch::Approx;
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
+#include <BSMPT/models/ClassPotentialR2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
@@ -79,6 +80,26 @@ TEST_CASE("Checking EWPT for R2HDM", "[r2hdm]")
     {
       REQUIRE(res <= threshold);
     }
+  }
+}
+
+TEST_CASE("Checking sign of Sin and Cos of beta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM modelPoint;
+  modelPoint.set_gen(example_point_R2HDM);
+  auto tbeta = modelPoint.TanBeta;
+  auto cbeta = modelPoint.C_CosBeta;
+  auto sbeta = modelPoint.C_SinBeta;
+
+  if (tbeta >= 0)
+  {
+    REQUIRE(((cbeta >= 0) and (sbeta >= 0)));
+  }
+  else
+  {
+    REQUIRE(((cbeta > 0) and (sbeta < 0)));
   }
 }
 
@@ -242,7 +263,8 @@ TEST_CASE("Checking triple higgs NLO couplings in the R2HDM", "[r2hdm]")
   modelPointer->Prepare_Triple();
   modelPointer->TripleHiggsCouplings();
 
-  auto Check = [](auto result, auto expected) {
+  auto Check = [](auto result, auto expected)
+  {
     if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
