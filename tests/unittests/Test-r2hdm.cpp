@@ -27,6 +27,16 @@ const std::vector<double> example_point_R2HDM{/* lambda_1 = */ 2.740595,
                                               /* tan(beta) = */ 4.63286,
                                               /* Yukawa Type = */ 1};
 
+const std::vector<double> example_point_R2HDM_negTanBeta{
+    /* lambda_1 = */ 2.740595,
+    /* lambda_2 = */ 0.242356,
+    /* lambda_3 = */ 5.534491,
+    /* lambda_4 = */ -2.585467,
+    /* lambda_5 = */ -2.225991,
+    /* m_{12}^2 = */ -7738.56,
+    /* tan(beta) = */ -4.63286,
+    /* Yukawa Type = */ 1};
+
 TEST_CASE("Checking NLOVEV for R2HDM", "[r2hdm]")
 {
   using namespace BSMPT;
@@ -87,20 +97,13 @@ TEST_CASE("Checking sign of Sin and Cos of beta", "[r2hdm]")
 {
   using namespace BSMPT;
   using namespace Models;
-  Class_Potential_R2HDM modelPoint;
-  modelPoint.set_gen(example_point_R2HDM);
-  auto tbeta = modelPoint.TanBeta;
-  auto cbeta = modelPoint.C_CosBeta;
-  auto sbeta = modelPoint.C_SinBeta;
+  Class_Potential_R2HDM point1, point2;
+  point1.set_gen(example_point_R2HDM);
+  point2.set_gen(example_point_R2HDM_negTanBeta);
 
-  if (tbeta >= 0)
-  {
-    REQUIRE(((cbeta >= 0) and (sbeta >= 0)));
-  }
-  else
-  {
-    REQUIRE(((cbeta > 0) and (sbeta < 0)));
-  }
+  REQUIRE(((point1.C_CosBeta >= 0) and (point2.C_CosBeta >= 0) and
+           (point1.C_SinBeta * point1.TanBeta >= 0) and
+           (point2.C_SinBeta * point2.TanBeta >= 0)));
 }
 
 TEST_CASE("Checking number of CT parameters for R2HDM", "[r2hdm]")
