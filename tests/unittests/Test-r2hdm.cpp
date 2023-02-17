@@ -93,17 +93,40 @@ TEST_CASE("Checking EWPT for R2HDM", "[r2hdm]")
   }
 }
 
-TEST_CASE("Checking sign of Sin and Cos of beta", "[r2hdm]")
+TEST_CASE("Checking sign of SinBeta for pos. TanBeta", "[r2hdm]")
 {
   using namespace BSMPT;
   using namespace Models;
-  Class_Potential_R2HDM point1, point2;
-  point1.set_gen(example_point_R2HDM);
-  point2.set_gen(example_point_R2HDM_negTanBeta);
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM);
+  REQUIRE(point.C_SinBeta >= 0);
+}
 
-  REQUIRE(((point1.C_CosBeta >= 0) and (point2.C_CosBeta >= 0) and
-           (point1.C_SinBeta * point1.TanBeta >= 0) and
-           (point2.C_SinBeta * point2.TanBeta >= 0)));
+TEST_CASE("Checking sign of SinBeta for neg. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM_negTanBeta);
+  REQUIRE(point.C_SinBeta <= 0);
+}
+
+TEST_CASE("Checking sign of CosBeta for pos. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM);
+  REQUIRE(point.C_CosBeta >= 0);
+}
+
+TEST_CASE("Checking sign of CosBeta for neg. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM_negTanBeta);
+  REQUIRE(point.C_CosBeta >= 0);
 }
 
 TEST_CASE("Checking number of CT parameters for R2HDM", "[r2hdm]")
