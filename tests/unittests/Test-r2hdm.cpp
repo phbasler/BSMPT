@@ -10,6 +10,7 @@ using Approx = Catch::Approx;
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
+#include <BSMPT/models/ClassPotentialR2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 
@@ -25,6 +26,16 @@ const std::vector<double> example_point_R2HDM{/* lambda_1 = */ 2.740595,
                                               /* m_{12}^2 = */ 7738.56,
                                               /* tan(beta) = */ 4.63286,
                                               /* Yukawa Type = */ 1};
+
+const std::vector<double> example_point_R2HDM_negTanBeta{
+    /* lambda_1 = */ 2.740595,
+    /* lambda_2 = */ 0.242356,
+    /* lambda_3 = */ 5.534491,
+    /* lambda_4 = */ -2.585467,
+    /* lambda_5 = */ -2.225991,
+    /* m_{12}^2 = */ -7738.56,
+    /* tan(beta) = */ -4.63286,
+    /* Yukawa Type = */ 1};
 
 TEST_CASE("Checking NLOVEV for R2HDM", "[r2hdm]")
 {
@@ -80,6 +91,42 @@ TEST_CASE("Checking EWPT for R2HDM", "[r2hdm]")
       REQUIRE(res <= threshold);
     }
   }
+}
+
+TEST_CASE("Checking sign of SinBeta for pos. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM);
+  REQUIRE(point.C_SinBeta >= 0);
+}
+
+TEST_CASE("Checking sign of SinBeta for neg. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM_negTanBeta);
+  REQUIRE(point.C_SinBeta <= 0);
+}
+
+TEST_CASE("Checking sign of CosBeta for pos. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM);
+  REQUIRE(point.C_CosBeta >= 0);
+}
+
+TEST_CASE("Checking sign of CosBeta for neg. TanBeta", "[r2hdm]")
+{
+  using namespace BSMPT;
+  using namespace Models;
+  Class_Potential_R2HDM point;
+  point.set_gen(example_point_R2HDM_negTanBeta);
+  REQUIRE(point.C_CosBeta >= 0);
 }
 
 TEST_CASE("Checking number of CT parameters for R2HDM", "[r2hdm]")
@@ -242,7 +289,8 @@ TEST_CASE("Checking triple higgs NLO couplings in the R2HDM", "[r2hdm]")
   modelPointer->Prepare_Triple();
   modelPointer->TripleHiggsCouplings();
 
-  auto Check = [](auto result, auto expected) {
+  auto Check = [](auto result, auto expected)
+  {
     if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
