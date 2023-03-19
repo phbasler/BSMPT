@@ -2,7 +2,8 @@
 #define TAU_SOURCE_H
 
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,6 +33,7 @@ class tau_source : public gen_fluid
 {
 private:
 public:
+  tau_source(const ISMConstants &smConstants);
   /**
    * @brief operator () Needed for the numerical solution via boost.
    * @param omega Vector of all included (rescaled) chemical potentials

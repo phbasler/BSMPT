@@ -53,7 +53,8 @@ std::vector<std::string> convert_input(int argc, char *argv[]);
 int main(int argc, char *argv[])
 try
 {
-  auto argparser = prepare_parser();
+  const auto SMConstants = GetSMConstants();
+  auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
   const CLIOptions args(argparser);
   if (not args.good())
@@ -62,7 +63,7 @@ try
   }
 
   // Set up of BSMPT/Baryo Classes
-  Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile);
+  Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile, SMConstants);
   std::shared_ptr<Class_Potential_Origin> modelPointer =
       ModelID::FChoose(args.Model);
 
@@ -170,7 +171,7 @@ try
                     "Starting setting the class instances",
                     __FILE__,
                     __LINE__);
-    BSMPT::Baryo::tau_source C_tau;
+    BSMPT::Baryo::tau_source C_tau(SMConstants);
     EtaInterface.set_transport_method(
         TransportMethod::tau); // setting to tau class
     bool botflag     = true;

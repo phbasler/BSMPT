@@ -93,8 +93,8 @@ void CheckFileForConfig(const std::string &filename,
   std::pair<std::vector<bool>, int> config;
   try
   {
-    BSMPT::Baryo::CalculateEtaInterface etaInterface(std::vector<bool>(5, true),
-                                                     1);
+    BSMPT::Baryo::CalculateEtaInterface etaInterface(
+        std::vector<bool>(5, true), 1, BSMPT::GetSMConstants());
     config = etaInterface.ReadConfigFile(filename);
   }
   catch (std::exception &e)
@@ -132,7 +132,9 @@ const Compare_C2HDM Expected;
 
 TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
 {
+
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::C2HDM);
   modelPointer->initModel(example_point_C2HDM);
@@ -163,7 +165,7 @@ TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
 
   auto config =
       std::pair<std::vector<bool>, int>{std::vector<bool>(5, true), 1};
-  Baryo::CalculateEtaInterface EtaInterface(config);
+  Baryo::CalculateEtaInterface EtaInterface(config, SMConstants);
   const double testVW = Expected.testVW;
 
   REQUIRE(EWPT.vc > EWPT.Tc);

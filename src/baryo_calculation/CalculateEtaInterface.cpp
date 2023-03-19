@@ -95,9 +95,13 @@ CalculateEtaInterface::ReadConfigFile(const std::string &file) const
 }
 
 CalculateEtaInterface::CalculateEtaInterface(
-    const std::pair<std::vector<bool>, int> &config)
+    const std::pair<std::vector<bool>, int> &config,
+    const ISMConstants &smConstants)
     : method_transport{config.first}
+    , C_eta(smConstants)
     , bot_mass_flag{config.second}
+    , SMConstants{smConstants}
+
 {
   if (config.first.size() != 5)
   {
@@ -110,15 +114,18 @@ CalculateEtaInterface::CalculateEtaInterface(
   }
 }
 
-CalculateEtaInterface::CalculateEtaInterface(const std::string &file)
-    : CalculateEtaInterface(ReadConfigFile(file))
+CalculateEtaInterface::CalculateEtaInterface(const std::string &file,
+                                             const ISMConstants &smConstants)
+    : CalculateEtaInterface(ReadConfigFile(file), smConstants)
 {
 }
 
 CalculateEtaInterface::CalculateEtaInterface(
     const std::vector<bool> &method_input,
-    const int &bot_mass_flag_in)
-    : CalculateEtaInterface(std::make_pair(method_input, bot_mass_flag_in))
+    const int &bot_mass_flag_in,
+    const ISMConstants &smConstants)
+    : CalculateEtaInterface(std::make_pair(method_input, bot_mass_flag_in),
+                            smConstants)
 {
 }
 
@@ -235,7 +242,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
   if (method_transport.at(0))
   {
     GSL_integration_mubl_container.set_transport_method(TransportMethod::top);
-    top_source C_top;
+    top_source C_top(SMConstants);
     C_top.set_class(bot_mass_flag,
                     GSL_integration_mubl_container,
                     Calc_Gam_inp,
@@ -250,7 +257,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
   {
     GSL_integration_mubl_container.set_transport_method(
         TransportMethod::bottom);
-    bot_source C_bot;
+    bot_source C_bot(SMConstants);
     C_bot.set_class(bot_mass_flag,
                     GSL_integration_mubl_container,
                     Calc_Gam_inp,
@@ -264,7 +271,7 @@ std::vector<double> CalculateEtaInterface::CalcEta()
   if (method_transport.at(2))
   {
     GSL_integration_mubl_container.set_transport_method(TransportMethod::tau);
-    tau_source C_tau;
+    tau_source C_tau(SMConstants);
     C_tau.set_class(bot_mass_flag,
                     GSL_integration_mubl_container,
                     Calc_Gam_inp,

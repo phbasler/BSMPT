@@ -237,6 +237,7 @@ double NIntegrate_kappa(const Calc_kappa_t &C_kap);
 class Calc_eta
 {
 private:
+  ISMConstants SMConstants;
   /**
    * @brief Temp Temperature
    */
@@ -255,6 +256,7 @@ private:
 
 public:
   double prefactor;
+  Calc_eta(const ISMConstants &smConstants);
   void set_class(std::vector<double> array_z,
                  std::vector<double> array_nL,
                  double Temp,
@@ -297,7 +299,10 @@ double Nintegrate_eta(const Calc_eta &C_eta,
 class gen_fluid
 {
 private:
+  const ISMConstants SMConstants;
+
 public:
+  gen_fluid(const ISMConstants &smConstants);
   int bot_mass_flag;
   int tau_mass_flag =
       1; // Changing to zero for massless tau leptons --> might cause problems!
@@ -394,9 +399,9 @@ public:
   double gprime = 0.36;
   double alphaS = 1. / 7;
   double alphaW = 1. / 30;
-  double mtop_0 = C_MassTop;
-  double mbot_0 = C_MassBottom;
-  double mtau_0 = C_MassTau;
+  double mtop_0{0};
+  double mbot_0{0};
+  double mtau_0{0};
 
   /**
    * @brief Dq Diffusion constant of quarks.

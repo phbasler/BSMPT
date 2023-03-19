@@ -56,6 +56,8 @@ int main(int argc, char *argv[])
 try
 {
 
+  const auto SMConstants = GetSMConstants();
+
   auto argparser = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
   const CLIOptions args(argparser);
@@ -66,7 +68,7 @@ try
   }
 
   // Init: Interface Class for the different transport methods
-  Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile);
+  Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile, SMConstants);
 
   int linecounter = 1;
   std::ifstream infile(args.InputFile);

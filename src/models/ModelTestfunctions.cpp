@@ -642,7 +642,7 @@ TestResults CheckVCounterSimplified(const Class_Potential_Origin &point)
   return result;
 }
 
-TestResults CheckCKMUnitarity(const ISMConstants SMConstants)
+TestResults CheckCKMUnitarity(const ISMConstants &SMConstants)
 {
   using namespace Eigen;
   MatrixXcd VCKM(3, 3);
