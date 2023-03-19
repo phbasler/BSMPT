@@ -210,7 +210,8 @@ if(BSMPT_IS_TOPLEVEL)
       "${CMAKE_CURRENT_SOURCE_DIR}/include/"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/"
       "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
-      "${CMAKE_CURRENT_SOURCE_DIR}/Changelog.md")
+      "${CMAKE_CURRENT_SOURCE_DIR}/Changelog.md"
+      "${CMAKE_CURRENT_SOURCE_DIR}/tests/")
 
   else()
     message(
