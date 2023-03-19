@@ -24,6 +24,44 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
                                               /* Re(m_{12}^2) = */ 2706.86,
                                               /* tan(beta) = */ 4.64487,
                                               /* Yukawa Type = */ 1};
+
+} // namespace
+
+TEST_CASE("Test Calculate Debye", "[origin]")
+{
+
+  using namespace BSMPT;
+  ISMConstants SM;
+  SM.C_MassTop = 172;
+  SM.C_vev0    = 246;
+
+  const std::vector<double> example_point_CXSM{/* vh = */ SM.C_vev0,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* ms = */ 41.67,
+                                               /* lambda = */ -0.002754092582,
+                                               /* delta2 = */ 0,
+                                               /* b2 = */ 0,
+                                               /* d2 = */ 0,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SM);
+  modelPointer->initModel(example_point_CXSM);
+  modelPointer->CalculateDebye(true);
+  auto debye = modelPointer->get_DebyeHiggs();
+
+  double topCoupling = SM.C_MassTop * std::sqrt(2) / SM.C_vev0;
+  double expected    = std::pow(topCoupling, 2) / 4.0;
+
+  auto calculated = debye.at(3).at(3);
+
+  REQUIRE(calculated != 0);
+
+  REQUIRE(calculated == Approx(expected).margin(1e-3));
 }
 
 TEST_CASE("Check f_{abcd}", "[origin]")

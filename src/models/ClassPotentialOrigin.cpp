@@ -3215,12 +3215,12 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
   return res;
 }
 
-void Class_Potential_Origin::CalculateDebye()
+void Class_Potential_Origin::CalculateDebye(bool forceCalculation)
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
 
-  bool Done = CalculateDebyeSimplified();
-  if (!Done)
+  bool Calculate = forceCalculation or not CalculateDebyeSimplified();
+  if (Calculate)
   {
     for (std::size_t i = 0; i < NHiggs; i++)
     {

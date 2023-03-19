@@ -523,6 +523,16 @@ public:
    * @return ModelID of the Model
    */
   ModelID::ModelIDs get_Model() const { return Model; }
+
+  /**
+   * @brief get_DebyeHiggs get the Debye corrections to the Higgs mass matrix
+   * @return
+   */
+  const std::vector<std::vector<double>> &get_DebyeHiggs() const
+  {
+    return DebyeHiggs;
+  }
+
   /**
    * @brief set_InputLineNumber
    * @param InputLineNumber_in value to set InputLineNumber
@@ -738,8 +748,11 @@ public:
    * Calculates the Debye corrections to the Higgs mass matrix.
    * If you can provide CalculateDebyeSimplified() with the Matrix as this will
    * reduce the runtime.
+   * @param forceCalculation Forces the caclulation, even if the model
+   * implements a simplified version. The simplified calculation will be
+   * skipped.
    */
-  void CalculateDebye();
+  void CalculateDebye(bool forceCalculation = false);
   /**
    * Calculates the Debye corrections to the gauge sector. By using
    * CalculateDebyeGaugeSimplified() the runtime can be reduced.
