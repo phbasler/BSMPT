@@ -389,7 +389,7 @@ protected:
   std::vector<std::size_t> VevOrder;
 
 public:
-  Class_Potential_Origin(const ISMConstants &smConstants = GetSMConstants());
+  Class_Potential_Origin(const ISMConstants &smConstants);
   virtual ~Class_Potential_Origin();
 
   /**

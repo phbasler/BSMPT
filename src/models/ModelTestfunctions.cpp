@@ -443,6 +443,7 @@ TestResults CheckTreeLevelMin(const Class_Potential_Origin &point,
       Minimizer::Minimize_gen_all_tree_level(point.get_Model(),
                                              point.get_parStored(),
                                              point.get_parCTStored(),
+                                             point.SMConstants,
                                              CheckVector,
                                              start,
                                              WhichMinimizer);

@@ -3,7 +3,6 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-
 #include <benchmark/benchmark.h>
 
 #include <BSMPT/minimizer/Minimizer.h>
@@ -26,43 +25,41 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
                                               /* Yukawa Type = */ 1};
 }
 
-static void BM_NLOVEV(benchmark::State& state)
+static void BM_NLOVEV(benchmark::State &state)
 {
-    using namespace BSMPT;
-    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-        ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-    modelPointer->initModel(example_point_C2HDM);
-    for(auto _ : state)
-    {
-        std::vector<double> Check;
-        auto result = Minimizer::Minimize_gen_all(modelPointer,
-                                           0,
-                                           Check,
-                                           modelPointer->get_vevTreeMin(),
-                                           Minimizer::WhichMinimizerDefault);
-        (void)result;
-    }
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
+  modelPointer->initModel(example_point_C2HDM);
+  for (auto _ : state)
+  {
+    std::vector<double> Check;
+    auto result = Minimizer::Minimize_gen_all(modelPointer,
+                                              0,
+                                              Check,
+                                              modelPointer->get_vevTreeMin(),
+                                              Minimizer::WhichMinimizerDefault);
+    (void)result;
+  }
 }
 
-
-static void BM_EWPT(benchmark::State& state)
+static void BM_EWPT(benchmark::State &state)
 {
-    using namespace BSMPT;
-    std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-        ModelID::FChoose(ModelID::ModelIDs::C2HDM);
-    modelPointer->initModel(example_point_C2HDM);
-    for(auto _ : state)
-    {
-        std::vector<double> Check;
-        auto result = Minimizer::PTFinder_gen_all(
-            modelPointer, 0, 300, Minimizer::WhichMinimizerDefault);
-        (void)result;
-    }
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
+  modelPointer->initModel(example_point_C2HDM);
+  for (auto _ : state)
+  {
+    std::vector<double> Check;
+    auto result = Minimizer::PTFinder_gen_all(
+        modelPointer, 0, 300, Minimizer::WhichMinimizerDefault);
+    (void)result;
+  }
 }
-
 
 BENCHMARK(BM_NLOVEV);
 BENCHMARK(BM_EWPT)->Repetitions(5);
 BENCHMARK_MAIN();
-
-

@@ -14,7 +14,8 @@ namespace BSMPT
 namespace Models
 {
 
-Class_Potential_R2HDM::Class_Potential_R2HDM()
+Class_Potential_R2HDM::Class_Potential_R2HDM(const ISMConstants &smConstants)
+    : Class_Potential_Origin(smConstants)
 {
   // TODO Auto-generated constructor stub
   Model         = ModelID::ModelIDs::R2HDM;

@@ -87,7 +87,8 @@ try
   }
   std::string linestr;
   std::shared_ptr<Class_Potential_Origin> modelPointer = ModelID::FChoose(
-      args.Model); // Declare the model pointer with the necessary parameters
+      args.Model,
+      SMConstants); // Declare the model pointer with the necessary parameters
   std::vector<std::string> etaLegend =
       EtaInterface.legend(); // Declare the vector for the PTFinder algorithm
                              // Begin: Input Read

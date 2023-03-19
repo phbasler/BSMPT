@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -79,7 +80,7 @@ namespace Models
 class Class_Potential_RN2HDM : public Class_Potential_Origin
 {
 public:
-  Class_Potential_RN2HDM();
+  Class_Potential_RN2HDM(const ISMConstants &smConstants);
   virtual ~Class_Potential_RN2HDM();
 
   double L1 = 0, L2 = 0, L3 = 0, L4 = 0, RL5 = 0, RealMMix = 0, u1 = 0, u2 = 0;

@@ -29,8 +29,9 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
 TEST_CASE("Check f_{abcd}", "[origin]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   modelPointer->resetScale(200);
 

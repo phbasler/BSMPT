@@ -28,7 +28,9 @@ namespace BSMPT
 namespace Models
 {
 
-Class_Potential_CPintheDark::Class_Potential_CPintheDark()
+Class_Potential_CPintheDark::Class_Potential_CPintheDark(
+    const ISMConstants &smConstants)
+    : Class_Potential_Origin(smConstants)
 {
   Model         = ModelID::ModelIDs::CPINTHEDARK;
   NNeutralHiggs = 5; // number of neutral Higgs bosons at T = 0

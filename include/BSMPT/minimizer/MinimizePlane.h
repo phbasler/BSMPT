@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -119,6 +120,7 @@ struct PointerContainerMinPlane
  * @param Model Decides which model should be used through FChoose
  * @param par Inputparameters for the parameterpoint
  * @param parCT Counterterm parameters for the parameterpoint
+ * @param SMConstant The SM constants used by the parameter point
  * @param Temp Temperature at which the minimum should be calculated
  * @return MinimizePlaneReturn struct which has the minimum and the value of the
  * potential
@@ -130,6 +132,7 @@ MinimizePlane(const std::vector<double> &basepoint,
               const ModelID::ModelIDs &Model,
               const std::vector<double> &par,
               const std::vector<double> &parCT,
+              const ISMConstants &SMConstant,
               const double &Temp,
               const int &WhichMinimizer = WhichMinimizerDefault);
 /**

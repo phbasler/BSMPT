@@ -63,7 +63,7 @@ try
   // Set up of BSMPT/Baryo Classes
   Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile, SMConstants);
   std::shared_ptr<Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(args.Model);
+      ModelID::FChoose(args.Model, SMConstants);
 
   std::ifstream infile(args.InputFile);
   if (!infile.good())

@@ -85,11 +85,12 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double> &basepoint,
                                   const ModelID::ModelIDs &Model,
                                   const std::vector<double> &par,
                                   const std::vector<double> &parCT,
+                                  const ISMConstants &SMConstant,
                                   const double &Temp,
                                   const int &WhichMinimizer)
 {
   std::shared_ptr<Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(Model);
+      ModelID::FChoose(Model, SMConstant);
   modelPointer->set_All(par, parCT);
   return MinimizePlane(
       basepoint, VEVSymmetric, VEVBroken, modelPointer, Temp, WhichMinimizer);

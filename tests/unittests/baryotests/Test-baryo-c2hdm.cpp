@@ -136,7 +136,7 @@ TEST_CASE("Checking EWBG for C2HDM", "[c2hdm]")
   using namespace BSMPT;
   const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   const auto WhichMin = Minimizer::WhichMinimizerDefault;

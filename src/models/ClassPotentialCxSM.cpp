@@ -25,7 +25,8 @@ namespace Models
  * Lagrangian parameters AFTER using the tadpole conditions), nParCT (number of
  * counterterms) as well as nVEV (number of VEVs for minimization)
  */
-Class_CxSM::Class_CxSM()
+Class_CxSM::Class_CxSM(const ISMConstants &smConstants)
+    : Class_Potential_Origin(smConstants)
 {
   Model = ModelID::ModelIDs::CXSM; // global int constant which will be used to
                                    // tell the program which model is called

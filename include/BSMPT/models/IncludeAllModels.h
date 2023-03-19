@@ -20,6 +20,7 @@
  */
 namespace BSMPT
 {
+struct ISMConstants;
 class Class_Potential_Origin;
 namespace ModelID
 {
@@ -69,7 +70,8 @@ std::unordered_map<ModelIDs, std::string> InvertModelNames();
  * @throw Runtime error if an invalid model was given into choice
  */
 
-std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice);
+std::unique_ptr<Class_Potential_Origin>
+FChoose(ModelIDs choice, const ISMConstants &smConstants);
 
 /**
  *

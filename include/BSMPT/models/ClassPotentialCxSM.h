@@ -66,7 +66,7 @@ namespace Models
 class Class_CxSM : public Class_Potential_Origin
 {
 public:
-  Class_CxSM();
+  Class_CxSM(const ISMConstants &smConstants);
   virtual ~Class_CxSM();
 
   // Add here your parameters for the Lagrangian as well as for the counterterm
