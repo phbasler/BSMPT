@@ -18,6 +18,7 @@ set(header
     ${header_path}/ClassTemplate.h)
 
 set(src
+    SMParam.cpp
     ModelTestfunctions.cpp
     IncludeAllModels.cpp
     ClassPotentialOrigin.cpp
