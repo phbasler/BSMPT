@@ -55,6 +55,12 @@ const double C_CWcbHiggs = 1.5;
  */
 class Class_Potential_Origin
 {
+public:
+  /**
+   * @brief SMConstants The SM constants used by the model
+   */
+  const ISMConstants SMConstants;
+
 protected:
   /**
    * @brief UseTreeLevel Enforces VEff to only use the tree-level potential
@@ -64,7 +70,7 @@ protected:
   /**
    * MSBar renormalization scale
    */
-  double scale = C_vev0;
+  double scale;
 
   /**
    * Number of Lagrange parameters in the Higgs Tree-Level potential
@@ -383,7 +389,7 @@ protected:
   std::vector<std::size_t> VevOrder;
 
 public:
-  Class_Potential_Origin();
+  Class_Potential_Origin(const ISMConstants &smConstants = GetSMConstants());
   virtual ~Class_Potential_Origin();
 
   /**

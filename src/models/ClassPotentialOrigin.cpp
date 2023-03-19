@@ -25,7 +25,10 @@ using namespace Eigen;
 
 namespace BSMPT
 {
-Class_Potential_Origin::Class_Potential_Origin()
+Class_Potential_Origin::Class_Potential_Origin(const ISMConstants &smConstants)
+    : SMConstants{smConstants}
+    , scale{SMConstants.C_vev0}
+
 {
   // TODO Auto-generated constructor stub
 }
@@ -3510,8 +3513,8 @@ void Class_Potential_Origin::CheckImplementation(
       ModelTests::CheckNumberOfTripleCouplings(*this)));
 
   TestNames.push_back("CKM matrix unitarity");
-  TestResults.push_back(
-      ModelTests::TestResultsToString(ModelTests::CheckCKMUnitarity()));
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCKMUnitarity(SMConstants)));
 
   Logger::Write(LoggingLevel::Default,
                 "This function calculates the masses of the gauge bosons, "

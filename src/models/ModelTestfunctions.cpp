@@ -254,9 +254,9 @@ TestResults CheckGaugeBosonMasses(const Class_Potential_Origin &point)
 
   std::vector<double> gaugeMassesInput;
   gaugeMassesInput.push_back(0);
-  gaugeMassesInput.push_back(pow(C_MassW, 2));
-  gaugeMassesInput.push_back(pow(C_MassW, 2));
-  gaugeMassesInput.push_back(pow(C_MassZ, 2));
+  gaugeMassesInput.push_back(pow(point.SMConstants.C_MassW, 2));
+  gaugeMassesInput.push_back(pow(point.SMConstants.C_MassW, 2));
+  gaugeMassesInput.push_back(pow(point.SMConstants.C_MassZ, 2));
   std::sort(gaugeMassesInput.begin(), gaugeMassesInput.end());
   auto GaugeMassCalculated = point.GaugeMassesSquared(
       point.MinimizeOrderVEV(point.get_vevTreeMin()), 0, 0);
@@ -312,26 +312,26 @@ CheckFermionicMasses(const Class_Potential_Origin &point)
   leptonMassesInput.push_back(0);
   leptonMassesInput.push_back(0);
   leptonMassesInput.push_back(0);
-  leptonMassesInput.push_back(pow(C_MassElectron, 2));
-  leptonMassesInput.push_back(pow(-C_MassElectron, 2));
-  leptonMassesInput.push_back(pow(C_MassMu, 2));
-  leptonMassesInput.push_back(pow(-C_MassMu, 2));
-  leptonMassesInput.push_back(pow(C_MassTau, 2));
-  leptonMassesInput.push_back(pow(-C_MassTau, 2));
+  leptonMassesInput.push_back(pow(point.SMConstants.C_MassElectron, 2));
+  leptonMassesInput.push_back(pow(-point.SMConstants.C_MassElectron, 2));
+  leptonMassesInput.push_back(pow(point.SMConstants.C_MassMu, 2));
+  leptonMassesInput.push_back(pow(-point.SMConstants.C_MassMu, 2));
+  leptonMassesInput.push_back(pow(point.SMConstants.C_MassTau, 2));
+  leptonMassesInput.push_back(pow(-point.SMConstants.C_MassTau, 2));
 
-  quarkMassesInput.push_back(pow(C_MassUp, 2));
-  quarkMassesInput.push_back(pow(-C_MassUp, 2));
-  quarkMassesInput.push_back(pow(C_MassCharm, 2));
-  quarkMassesInput.push_back(pow(-C_MassCharm, 2));
-  quarkMassesInput.push_back(pow(C_MassTop, 2));
-  quarkMassesInput.push_back(pow(-C_MassTop, 2));
+  quarkMassesInput.push_back(pow(point.SMConstants.C_MassUp, 2));
+  quarkMassesInput.push_back(pow(-point.SMConstants.C_MassUp, 2));
+  quarkMassesInput.push_back(pow(point.SMConstants.C_MassCharm, 2));
+  quarkMassesInput.push_back(pow(-point.SMConstants.C_MassCharm, 2));
+  quarkMassesInput.push_back(pow(point.SMConstants.C_MassTop, 2));
+  quarkMassesInput.push_back(pow(-point.SMConstants.C_MassTop, 2));
 
-  quarkMassesInput.push_back(pow(C_MassDown, 2));
-  quarkMassesInput.push_back(pow(-C_MassDown, 2));
-  quarkMassesInput.push_back(pow(C_MassStrange, 2));
-  quarkMassesInput.push_back(pow(-C_MassStrange, 2));
-  quarkMassesInput.push_back(pow(C_MassBottom, 2));
-  quarkMassesInput.push_back(pow(-C_MassBottom, 2));
+  quarkMassesInput.push_back(pow(point.SMConstants.C_MassDown, 2));
+  quarkMassesInput.push_back(pow(-point.SMConstants.C_MassDown, 2));
+  quarkMassesInput.push_back(pow(point.SMConstants.C_MassStrange, 2));
+  quarkMassesInput.push_back(pow(-point.SMConstants.C_MassStrange, 2));
+  quarkMassesInput.push_back(pow(point.SMConstants.C_MassBottom, 2));
+  quarkMassesInput.push_back(pow(-point.SMConstants.C_MassBottom, 2));
 
   if (point.get_NLepton() == 0)
   {
@@ -642,19 +642,19 @@ TestResults CheckVCounterSimplified(const Class_Potential_Origin &point)
   return result;
 }
 
-TestResults CheckCKMUnitarity()
+TestResults CheckCKMUnitarity(const ISMConstants SMConstants)
 {
   using namespace Eigen;
   MatrixXcd VCKM(3, 3);
-  VCKM(0, 0) = C_Vud;
-  VCKM(0, 1) = C_Vus;
-  VCKM(0, 2) = C_Vub;
-  VCKM(1, 0) = C_Vcd;
-  VCKM(1, 1) = C_Vcs;
-  VCKM(1, 2) = C_Vcb;
-  VCKM(2, 0) = C_Vtd;
-  VCKM(2, 1) = C_Vts;
-  VCKM(2, 2) = C_Vtb;
+  VCKM(0, 0) = SMConstants.C_Vud;
+  VCKM(0, 1) = SMConstants.C_Vus;
+  VCKM(0, 2) = SMConstants.C_Vub;
+  VCKM(1, 0) = SMConstants.C_Vcd;
+  VCKM(1, 1) = SMConstants.C_Vcs;
+  VCKM(1, 2) = SMConstants.C_Vcb;
+  VCKM(2, 0) = SMConstants.C_Vtd;
+  VCKM(2, 1) = SMConstants.C_Vts;
+  VCKM(2, 2) = SMConstants.C_Vtb;
 
   double ZeroMass = std::pow(10, -5);
   auto norm       = (VCKM.adjoint() * VCKM - MatrixXcd::Identity(3, 3)).norm();

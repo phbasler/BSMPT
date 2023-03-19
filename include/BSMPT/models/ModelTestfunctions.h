@@ -43,7 +43,7 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point);
 TestResults CheckCTIdentities(const Class_Potential_Origin &point);
 TestResults CheckCTNumber(const Class_Potential_Origin &point);
 
-TestResults CheckCKMUnitarity();
+TestResults CheckCKMUnitarity(const ISMConstants SMConstants);
 TestResults CheckSymmetricTensorScalarSecond(
     const std::vector<std::vector<double>> &Tensor);
 TestResults CheckSymmetricTensorScalarThird(
