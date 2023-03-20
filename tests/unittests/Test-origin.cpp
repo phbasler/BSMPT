@@ -43,6 +43,8 @@ TEST_CASE("Test Calculate Debye", "[origin-s]")
   SM.C_MassTop = 172;
   SM.C_vev0    = 246;
 
+  // This is not a legal point but just a dummy point to only have the top
+  // coupling in the Debye Contributions
   const std::vector<double> example_point_CXSM{/* vh = */ SM.C_vev0,
                                                /* vs = */ 0,
                                                /* va = */ 0,
