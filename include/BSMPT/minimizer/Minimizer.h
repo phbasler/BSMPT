@@ -168,6 +168,30 @@ PTFinder_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
  * @param Model Which Model to minimize
  * @param par parameters of the point
  * @param parCT counterterm parameters
+ * @param Check Vector to safe the error flags during the minimization
+ * @param start Starting point for the minimization
+ * @param WhichMinimizer Which minimizers should be taken? 1 = CMAES, 2 = GSL, 4
+ * = NLOPT, to use multiple add the numbers
+ * @return the global minimum
+ */
+[[deprecated("Will call Minimize_gen_all_tree_level with GetSMConstants(). "
+             "Please use the "
+             "detailed overload "
+             "to ensure consistent SM constants through all "
+             "routines.")]] std::vector<double>
+Minimize_gen_all_tree_level(const ModelID::ModelIDs &Model,
+                            const std::vector<double> &par,
+                            const std::vector<double> &parCT,
+                            std::vector<double> &Check,
+                            const std::vector<double> &start,
+                            int WhichMinimizer     = WhichMinimizerDefault,
+                            bool UseMultithreading = true);
+
+/**
+ * @brief Minimize_gen_all_tree_level Minimizes the tree-level potential
+ * @param Model Which Model to minimize
+ * @param par parameters of the point
+ * @param parCT counterterm parameters
  * @param SMConstants The SM Constants used for the minimisation
  * @param Check Vector to safe the error flags during the minimization
  * @param start Starting point for the minimization

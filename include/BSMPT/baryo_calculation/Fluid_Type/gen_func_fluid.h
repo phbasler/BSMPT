@@ -256,6 +256,10 @@ private:
 
 public:
   double prefactor;
+  [[deprecated("Will call Calc_eta with GetSMConstants(). Please use the "
+               "detailed overload "
+               "to ensure consistent SM constants through all "
+               "routines.")]] Calc_eta();
   Calc_eta(const ISMConstants &smConstants);
   void set_class(std::vector<double> array_z,
                  std::vector<double> array_nL,
@@ -302,6 +306,10 @@ private:
   const ISMConstants SMConstants;
 
 public:
+  [[deprecated("Will call gen_fluid with GetSMConstants(). Please use the "
+               "detailed overload "
+               "to ensure consistent SM constants through all "
+               "routines.")]] gen_fluid();
   gen_fluid(const ISMConstants &smConstants);
   int bot_mass_flag;
   int tau_mass_flag =

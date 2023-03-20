@@ -95,6 +95,12 @@ CalculateEtaInterface::ReadConfigFile(const std::string &file) const
 }
 
 CalculateEtaInterface::CalculateEtaInterface(
+    const std::pair<std::vector<bool>, int> &config)
+    : CalculateEtaInterface(config, GetSMConstants())
+{
+}
+
+CalculateEtaInterface::CalculateEtaInterface(
     const std::pair<std::vector<bool>, int> &config,
     const ISMConstants &smConstants)
     : method_transport{config.first}
@@ -114,9 +120,21 @@ CalculateEtaInterface::CalculateEtaInterface(
   }
 }
 
+CalculateEtaInterface::CalculateEtaInterface(const std::string &file)
+    : CalculateEtaInterface(file, GetSMConstants())
+{
+}
+
 CalculateEtaInterface::CalculateEtaInterface(const std::string &file,
                                              const ISMConstants &smConstants)
     : CalculateEtaInterface(ReadConfigFile(file), smConstants)
+{
+}
+
+CalculateEtaInterface::CalculateEtaInterface(
+    const std::vector<bool> &method_input,
+    const int &bot_mass_flag_in)
+    : CalculateEtaInterface(method_input, bot_mass_flag_in, GetSMConstants())
 {
 }
 

@@ -389,6 +389,12 @@ protected:
   std::vector<std::size_t> VevOrder;
 
 public:
+  [[deprecated("Will call Class_Potential_Origin with GetSMConstants(). "
+               "Please use the "
+               "detailed overload "
+               "to ensure consistent SM constants through all "
+               "routines.")]] Class_Potential_Origin();
+
   Class_Potential_Origin(const ISMConstants &smConstants);
   virtual ~Class_Potential_Origin();
 

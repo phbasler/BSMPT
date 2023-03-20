@@ -24,6 +24,11 @@ namespace BSMPT
 namespace ModelID
 {
 
+std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice)
+{
+  return FChoose(choice, GetSMConstants());
+}
+
 std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice,
                                                 const ISMConstants &smConstants)
 {

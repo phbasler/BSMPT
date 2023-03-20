@@ -282,6 +282,10 @@ void Calc_eta::operator()(const state_type &eta,
                      z); // prefactor is not used here for numerical stability
 }
 
+Calc_eta::Calc_eta() : Calc_eta(GetSMConstants())
+{
+}
+
 Calc_eta::Calc_eta(const ISMConstants &smConstants) : SMConstants{smConstants}
 {
 }
@@ -389,6 +393,10 @@ double Nintegrate_eta(const Calc_eta &C_eta,
   if (std::isnan(eta[0]) or std::isnan(C_eta.prefactor))
     throw std::runtime_error("NaN in Nintegrate_eta");
   return C_eta.prefactor * eta[0];
+}
+
+gen_fluid::gen_fluid() : gen_fluid(GetSMConstants())
+{
 }
 
 gen_fluid::gen_fluid(const ISMConstants &smConstants)

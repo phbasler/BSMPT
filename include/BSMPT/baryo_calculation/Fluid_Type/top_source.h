@@ -33,6 +33,10 @@ class top_source : public gen_fluid
 {
 private:
 public:
+  [[deprecated("Will call top_source with GetSMConstants(). Please use the "
+               "detailed overload "
+               "to ensure consistent SM constants through all "
+               "routines.")]] top_source();
   top_source(const ISMConstants &smConstants);
   /**
    * @brief operator () Needed for the numerical solution via boost.

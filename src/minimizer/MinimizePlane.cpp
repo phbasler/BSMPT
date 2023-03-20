@@ -85,6 +85,26 @@ MinimizePlaneReturn MinimizePlane(const std::vector<double> &basepoint,
                                   const ModelID::ModelIDs &Model,
                                   const std::vector<double> &par,
                                   const std::vector<double> &parCT,
+                                  const double &Temp,
+                                  const int &WhichMinimizer)
+{
+  return MinimizePlane(basepoint,
+                       VEVSymmetric,
+                       VEVBroken,
+                       Model,
+                       par,
+                       parCT,
+                       GetSMConstants(),
+                       Temp,
+                       WhichMinimizer);
+}
+
+MinimizePlaneReturn MinimizePlane(const std::vector<double> &basepoint,
+                                  const std::vector<double> &VEVSymmetric,
+                                  const std::vector<double> &VEVBroken,
+                                  const ModelID::ModelIDs &Model,
+                                  const std::vector<double> &par,
+                                  const std::vector<double> &parCT,
                                   const ISMConstants &SMConstant,
                                   const double &Temp,
                                   const int &WhichMinimizer)

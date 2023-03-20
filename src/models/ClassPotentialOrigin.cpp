@@ -25,6 +25,11 @@ using namespace Eigen;
 
 namespace BSMPT
 {
+Class_Potential_Origin::Class_Potential_Origin()
+    : Class_Potential_Origin(GetSMConstants())
+{
+}
+
 Class_Potential_Origin::Class_Potential_Origin(const ISMConstants &smConstants)
     : SMConstants{smConstants}
     , scale{SMConstants.C_vev0}
