@@ -35,7 +35,7 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
  * @test Check if the automatic Debye corrections match the SM one in the SM
  * case. This should be y_t^2/4.
  */
-TEST_CASE("Test Calculate Debye", "[origin-s]")
+TEST_CASE("Test Calculate Debye", "[origin]")
 {
 
   using namespace BSMPT;
