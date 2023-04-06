@@ -1,4 +1,5 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -123,6 +124,36 @@ struct PointerContainerMinPlane
  * @return MinimizePlaneReturn struct which has the minimum and the value of the
  * potential
  */
+[[deprecated("Will call MinimizePlane with GetSMConstants(). Please use the "
+             "detailed overload "
+             "to ensure consistent SM constants through all "
+             "routines.")]] MinimizePlaneReturn
+MinimizePlane(const std::vector<double> &basepoint,
+              const std::vector<double> &VEVSymmetric,
+              const std::vector<double> &VEVBroken,
+              const ModelID::ModelIDs &Model,
+              const std::vector<double> &par,
+              const std::vector<double> &parCT,
+              const double &Temp,
+              const int &WhichMinimizer = WhichMinimizerDefault);
+
+/**
+ * Calculates the minimum of a potential on a plane. For this the normal vector
+ * of the plane is calculated as the connection vector between the symmetric and
+ * the broken phase. At a given point the plane normal to the connection vector
+ * is then calculated and the potential is minimised along this plane.
+ * @param basepoint Parameter point at which the plane and the connection
+ * between the symmetric and the broken minimum should be calculated
+ * @param VEVSymmetric Symmetric minimum
+ * @param VEVBroken Broken minimum
+ * @param Model Decides which model should be used through FChoose
+ * @param par Inputparameters for the parameterpoint
+ * @param parCT Counterterm parameters for the parameterpoint
+ * @param SMConstant The SM constants used by the parameter point
+ * @param Temp Temperature at which the minimum should be calculated
+ * @return MinimizePlaneReturn struct which has the minimum and the value of the
+ * potential
+ */
 MinimizePlaneReturn
 MinimizePlane(const std::vector<double> &basepoint,
               const std::vector<double> &VEVSymmetric,
@@ -130,6 +161,7 @@ MinimizePlane(const std::vector<double> &basepoint,
               const ModelID::ModelIDs &Model,
               const std::vector<double> &par,
               const std::vector<double> &parCT,
+              const ISMConstants &SMConstant,
               const double &Temp,
               const int &WhichMinimizer = WhichMinimizerDefault);
 /**

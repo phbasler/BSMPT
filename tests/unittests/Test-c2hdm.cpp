@@ -31,8 +31,9 @@ using Approx = Catch::Approx;
 TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   std::vector<double> Check;
   auto sol = Minimizer::Minimize_gen_all(modelPointer,
@@ -51,8 +52,9 @@ TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
 TEST_CASE("Checking EWPT for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   std::vector<double> Check;
   auto EWPT = Minimizer::PTFinder_gen_all(
@@ -90,8 +92,9 @@ TEST_CASE("Checking EWPT for C2HDM", "[c2hdm]")
 TEST_CASE("Checking number of CT parameters for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckNumberOfCTParameters(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -100,8 +103,9 @@ TEST_CASE("Checking number of CT parameters for C2HDM", "[c2hdm]")
 TEST_CASE("Checking number of VEV labels for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckNumberOfVEVLabels(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -112,8 +116,9 @@ TEST_CASE(
     "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckLegendTemp(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -122,8 +127,9 @@ TEST_CASE(
 TEST_CASE("Checking number of triple Higgs couplings for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckNumberOfTripleCouplings(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -132,8 +138,9 @@ TEST_CASE("Checking number of triple Higgs couplings for C2HDM", "[c2hdm]")
 TEST_CASE("Checking Gauge Boson masses for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckGaugeBosonMasses(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -142,8 +149,9 @@ TEST_CASE("Checking Gauge Boson masses for C2HDM", "[c2hdm]")
 TEST_CASE("Checking fermion and quark masses masses for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckFermionicMasses(*modelPointer);
   REQUIRE(result.first == ModelTests::TestResults::Pass);
@@ -153,8 +161,9 @@ TEST_CASE("Checking fermion and quark masses masses for C2HDM", "[c2hdm]")
 TEST_CASE("Checking tree level minimum for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckTreeLevelMin(*modelPointer,
                                               Minimizer::WhichMinimizerDefault);
@@ -164,8 +173,9 @@ TEST_CASE("Checking tree level minimum for C2HDM", "[c2hdm]")
 TEST_CASE("Checking tree level tadpoles for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckTadpoleRelations(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -174,8 +184,9 @@ TEST_CASE("Checking tree level tadpoles for C2HDM", "[c2hdm]")
 TEST_CASE("Checking NLO masses matching tree level masses for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckNLOMasses(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -184,8 +195,9 @@ TEST_CASE("Checking NLO masses matching tree level masses for C2HDM", "[c2hdm]")
 TEST_CASE("Checking VTreeSimplified for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   if (modelPointer->UseVTreeSimplified)
   {
     modelPointer->initModel(example_point_C2HDM);
@@ -201,8 +213,9 @@ TEST_CASE("Checking VTreeSimplified for C2HDM", "[c2hdm]")
 TEST_CASE("Checking VCounterSimplified for C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   if (modelPointer->UseVCounterSimplified)
   {
     modelPointer->initModel(example_point_C2HDM);
@@ -219,8 +232,9 @@ TEST_CASE("Checking first derivative of the sum of CT and CW in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckCTConditionsFirstDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -230,8 +244,9 @@ TEST_CASE("Checking second derivative of the sum of CT and CW in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -241,8 +256,9 @@ TEST_CASE("Checking the identities required to vanish for the CT in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   auto result = ModelTests::CheckCTIdentities(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -252,13 +268,15 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
 {
 
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   modelPointer->Prepare_Triple();
   modelPointer->TripleHiggsCouplings();
 
-  auto Check = [](auto result, auto expected) {
+  auto Check = [](auto result, auto expected)
+  {
     if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
@@ -305,8 +323,9 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
 TEST_CASE("Check number of calculated CT parameters in the C2HDM", "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckCTNumber(*modelPointer));
@@ -316,8 +335,9 @@ TEST_CASE("Check symmetric properties of the scalar tensor Lij in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -329,8 +349,9 @@ TEST_CASE("Check symmetric properties of the scalar tensor Lijk in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -342,8 +363,9 @@ TEST_CASE("Check symmetric properties of the scalar tensor Lijkl in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -355,8 +377,9 @@ TEST_CASE("Check symmetric properties of the gauge tensor in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -368,8 +391,9 @@ TEST_CASE("Check symmetric properties of the Lepton tensor in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -381,8 +405,9 @@ TEST_CASE("Check symmetric properties of the mass Lepton tensor in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -394,8 +419,9 @@ TEST_CASE("Check symmetric properties of the mass quark tensor in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -407,8 +433,9 @@ TEST_CASE("Check symmetric properties of the quark tensor in the C2HDM",
           "[c2hdm]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM);
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
   modelPointer->initModel(example_point_C2HDM);
 
   REQUIRE(ModelTests::TestResults::Pass ==

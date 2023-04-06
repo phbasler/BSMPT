@@ -20,6 +20,7 @@
  */
 namespace BSMPT
 {
+struct ISMConstants;
 class Class_Potential_Origin;
 namespace ModelID
 {
@@ -68,8 +69,22 @@ std::unordered_map<ModelIDs, std::string> InvertModelNames();
  * choice. If choice == NotSet the function throws an runtime error
  * @throw Runtime error if an invalid model was given into choice
  */
+[[deprecated(
+    "Will call FChoose with GetSMConstants(). Please use the detailed overload "
+    "to ensure consistent SM constants through all routines.")]] std::
+    unique_ptr<Class_Potential_Origin>
+    FChoose(ModelIDs choice);
 
-std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice);
+/**
+ * @param choice ModelIDs for the Model under investigation
+ * @return smart pointer to the instance of the class matching the ModelIDs
+ * choice. If choice == NotSet the function throws an runtime error
+ * @param smConstants The SM Constants to use for the parameter
+ * @throw Runtime error if an invalid model was given into choice
+ */
+
+std::unique_ptr<Class_Potential_Origin>
+FChoose(ModelIDs choice, const ISMConstants &smConstants);
 
 /**
  *

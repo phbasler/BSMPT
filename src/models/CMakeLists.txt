@@ -18,6 +18,7 @@ set(header
     ${header_path}/ClassTemplate.h)
 
 set(src
+    SMParam.cpp
     ModelTestfunctions.cpp
     IncludeAllModels.cpp
     ClassPotentialOrigin.cpp
@@ -34,7 +35,7 @@ add_library(Models ${header} ${src})
 target_link_libraries(Models PUBLIC GSL::gsl Eigen3::Eigen Minimizer
                                     ThermalFunctions Utility)
 target_include_directories(Models PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(Models PUBLIC cxx_std_14)
+target_compile_features(Models PUBLIC cxx_std_17)
 
 # Include code-coverage settings: target_link_libraries(Models PUBLIC
 # coverage_config)

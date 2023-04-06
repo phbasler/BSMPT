@@ -51,7 +51,8 @@ int main(int argc, char *argv[])
 try
 {
 
-  auto argparser = prepare_parser();
+  const auto SMConstants = GetSMConstants();
+  auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
   const CLIOptions args(argparser);
   if (not args.good())
@@ -60,9 +61,9 @@ try
   }
 
   // Set up of BSMPT/Baryo Classes
-  Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile);
+  Baryo::CalculateEtaInterface EtaInterface(args.ConfigFile, SMConstants);
   std::shared_ptr<Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(args.Model);
+      ModelID::FChoose(args.Model, SMConstants);
 
   std::ifstream infile(args.InputFile);
   if (!infile.good())

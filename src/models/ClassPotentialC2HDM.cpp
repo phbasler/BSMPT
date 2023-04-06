@@ -14,7 +14,8 @@ namespace BSMPT
 {
 namespace Models
 {
-Class_Potential_C2HDM::Class_Potential_C2HDM()
+Class_Potential_C2HDM::Class_Potential_C2HDM(const ISMConstants &smConstants)
+    : Class_Potential_Origin(smConstants)
 {
   // TODO Auto-generated constructor stub
   Model         = ModelID::ModelIDs::C2HDM;
@@ -218,7 +219,7 @@ void Class_Potential_C2HDM::set_gen(const std::vector<double> &p)
 {
 
   //	double *p = (double *)par;
-  scale            = C_vev0;
+  scale            = SMConstants.C_vev0;
   L1               = p[0];
   L2               = p[1];
   L3               = p[2];
@@ -235,28 +236,38 @@ void Class_Potential_C2HDM::set_gen(const std::vector<double> &p)
   C_SinBeta        = sqrt(C_SinBetaSquared);
 
   u1 = RealMMix * TanBeta -
-       C_vev0 * C_vev0 * C_SinBetaSquared * (L4 + RL5 + L3) / 0.2e1 -
-       C_vev0 * C_vev0 * C_CosBetaSquared * L1 / 0.2e1;
+       SMConstants.C_vev0 * SMConstants.C_vev0 * C_SinBetaSquared *
+           (L4 + RL5 + L3) / 0.2e1 -
+       SMConstants.C_vev0 * SMConstants.C_vev0 * C_CosBetaSquared * L1 / 0.2e1;
   u2 = RealMMix * 1.0 / TanBeta -
-       C_vev0 * C_vev0 * C_CosBetaSquared * (L4 + RL5 + L3) / 0.2e1 -
-       C_vev0 * C_vev0 * C_SinBetaSquared * L2 / 0.2e1;
-  Iu3 = C_vev0 * C_vev0 * TanBeta * C_CosBetaSquared * IL5 * 0.5;
+       SMConstants.C_vev0 * SMConstants.C_vev0 * C_CosBetaSquared *
+           (L4 + RL5 + L3) / 0.2e1 -
+       SMConstants.C_vev0 * SMConstants.C_vev0 * C_SinBetaSquared * L2 / 0.2e1;
+  Iu3 = SMConstants.C_vev0 * SMConstants.C_vev0 * TanBeta * C_CosBetaSquared *
+        IL5 * 0.5;
 
   double cb = 0;
 
   if (Type == 1 or Type == 3) // Type I 2HDM or Lepton Specific
   {
-    cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_SinBeta);
+    cb = std::sqrt(2) * SMConstants.C_MassBottom /
+         (SMConstants.C_vev0 * C_SinBeta);
   }
   if (Type == 2 or Type == 4) // Type II 2HDM or Flipped
   {
-    cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_CosBeta);
+    cb = std::sqrt(2) * SMConstants.C_MassBottom /
+         (SMConstants.C_vev0 * C_CosBeta);
   }
   CTempC1 = 1.0 / 48 *
-            (12 * L1 + 8 * L3 + 4 * L4 + 3 * (3 * C_g * C_g + C_gs * C_gs));
-  double ct = std::sqrt(2) * C_MassTop / (C_vev0 * C_SinBeta);
-  CTempC2   = 1.0 / 48 *
-            (12 * L2 + 8 * L3 + 4 * L4 + 3 * (3 * C_g * C_g + C_gs * C_gs) +
+            (12 * L1 + 8 * L3 + 4 * L4 +
+             3 * (3 * SMConstants.C_g * SMConstants.C_g +
+                  SMConstants.C_gs * SMConstants.C_gs));
+  double ct =
+      std::sqrt(2) * SMConstants.C_MassTop / (SMConstants.C_vev0 * C_SinBeta);
+  CTempC2 = 1.0 / 48 *
+            (12 * L2 + 8 * L3 + 4 * L4 +
+             3 * (3 * SMConstants.C_g * SMConstants.C_g +
+                  SMConstants.C_gs * SMConstants.C_gs) +
              12 * ct * ct);
 
   if (Type == 1 or Type == 3)
@@ -271,14 +282,14 @@ void Class_Potential_C2HDM::set_gen(const std::vector<double> &p)
   if (IncludeChargeBreakingVEV)
   {
     vevTreeMin[0] = 0;
-    vevTreeMin[1] = C_vev0 * C_CosBeta;
-    vevTreeMin[2] = C_vev0 * C_SinBeta;
+    vevTreeMin[1] = SMConstants.C_vev0 * C_CosBeta;
+    vevTreeMin[2] = SMConstants.C_vev0 * C_SinBeta;
     vevTreeMin[3] = 0;
   }
   else
   {
-    vevTreeMin[0] = C_vev0 * C_CosBeta;
-    vevTreeMin[1] = C_vev0 * C_SinBeta;
+    vevTreeMin[0] = SMConstants.C_vev0 * C_CosBeta;
+    vevTreeMin[1] = SMConstants.C_vev0 * C_SinBeta;
     vevTreeMin[2] = 0;
   }
   vevTree.resize(NHiggs);
@@ -2083,8 +2094,8 @@ void Class_Potential_C2HDM::write() const
 
   ss << "The parameters are :  \n";
   ss << "Model = " << Model << "\n";
-  ss << "v1 = " << C_vev0 * C_CosBeta << "\n";
-  ss << "v2 = " << C_vev0 * C_SinBeta << "\n";
+  ss << "v1 = " << SMConstants.C_vev0 * C_CosBeta << "\n";
+  ss << "v2 = " << SMConstants.C_vev0 * C_SinBeta << "\n";
   ss << "Type = " << Type << "\n";
 
   ss << "beta = " << beta << std::endl;
@@ -2293,8 +2304,8 @@ std::vector<double> Class_Potential_C2HDM::calc_CT() const
   WeinbergNabla = WeinbergFirstDerivative();
   WeinbergHesse = WeinbergSecondDerivative();
 
-  double v1 = C_vev0 * C_CosBeta;
-  double v2 = C_vev0 * C_SinBeta;
+  double v1 = SMConstants.C_vev0 * C_CosBeta;
+  double v2 = SMConstants.C_vev0 * C_SinBeta;
 
   VectorXd NablaWeinberg(8);
   MatrixXd HesseWeinberg(8, 8), HiggsRot(8, 8);
@@ -2577,8 +2588,8 @@ void Class_Potential_C2HDM::SetCurvatureArrays()
     }
   }
 
-  HiggsVev[4] = C_vev0 * C_CosBeta;
-  HiggsVev[6] = C_vev0 * C_SinBeta;
+  HiggsVev[4] = SMConstants.C_vev0 * C_CosBeta;
+  HiggsVev[6] = SMConstants.C_vev0 * C_SinBeta;
 
   Curvature_Higgs_L2[0][0] = u1;
   Curvature_Higgs_L2[0][1] = 0;
@@ -2779,103 +2790,127 @@ void Class_Potential_C2HDM::SetCurvatureArrays()
     }
   }
 
-  Curvature_Gauge_G2H2[0][0][0][0] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][1][1] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][2][2] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][3][3] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][4][4] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][5][5] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][6][6] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[0][0][7][7] = C_g * C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][0][0] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][1][1] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][2][2] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][3][3] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][4][4] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][5][5] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][6][6] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[0][0][7][7] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
 
-  Curvature_Gauge_G2H2[0][3][0][4] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][1][5] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][2][6] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][3][7] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][4][0] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][5][1] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][6][2] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[0][3][7][3] = C_g * C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][0][4] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][1][5] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][2][6] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][3][7] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][4][0] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][5][1] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][6][2] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[0][3][7][3] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
 
-  Curvature_Gauge_G2H2[1][1][0][0] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][1][1] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][2][2] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][3][3] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][4][4] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][5][5] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][6][6] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[1][1][7][7] = C_g * C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][0][0] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][1][1] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][2][2] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][3][3] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][4][4] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][5][5] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][6][6] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[1][1][7][7] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
 
-  Curvature_Gauge_G2H2[1][3][0][5] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][1][4] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][2][7] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][3][6] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][4][1] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][5][0] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][6][3] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[1][3][7][2] = C_g * C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][0][5] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][1][4] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][2][7] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][3][6] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][4][1] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][5][0] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][6][3] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[1][3][7][2] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
 
-  Curvature_Gauge_G2H2[2][2][0][0] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][1][1] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][2][2] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][3][3] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][4][4] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][5][5] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][6][6] = C_g * C_g / 0.2e1;
-  Curvature_Gauge_G2H2[2][2][7][7] = C_g * C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][0][0] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][1][1] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][2][2] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][3][3] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][4][4] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][5][5] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][6][6] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
+  Curvature_Gauge_G2H2[2][2][7][7] = SMConstants.C_g * SMConstants.C_g / 0.2e1;
 
-  Curvature_Gauge_G2H2[2][3][0][0] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][1][1] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][2][2] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][3][3] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][4][4] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][5][5] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][6][6] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[2][3][7][7] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][0][4] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][1][5] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][2][6] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][3][7] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][4][0] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][5][1] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][6][2] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][0][7][3] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][0][5] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][1][4] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][2][7] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][3][6] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][4][1] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][5][0] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][6][3] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][1][7][2] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][0][0] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][1][1] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][2][2] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][3][3] = C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][4][4] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][5][5] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][6][6] = -C_g * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][2][7][7] = -C_g * C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][0][0] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][1][1] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][2][2] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][3][3] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][4][4] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][5][5] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][6][6] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[2][3][7][7] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][0][4] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][1][5] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][2][6] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][3][7] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][4][0] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][5][1] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][6][2] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][0][7][3] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][0][5] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][1][4] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][2][7] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][3][6] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][4][1] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][5][0] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][6][3] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][1][7][2] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][0][0] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][1][1] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][2][2] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][3][3] = SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][4][4] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][5][5] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][6][6] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][2][7][7] =
+      -SMConstants.C_g * SMConstants.C_gs / 0.2e1;
 
-  Curvature_Gauge_G2H2[3][3][0][0] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][1][1] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][2][2] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][3][3] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][4][4] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][5][5] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][6][6] = C_gs * C_gs / 0.2e1;
-  Curvature_Gauge_G2H2[3][3][7][7] = C_gs * C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][0][0] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][1][1] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][2][2] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][3][3] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][4][4] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][5][5] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][6][6] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
+  Curvature_Gauge_G2H2[3][3][7][7] =
+      SMConstants.C_gs * SMConstants.C_gs / 0.2e1;
 
   std::complex<double> V11, V12, V13, V21, V22, V23, V31, V32, V33;
-  V11 = C_Vud;
-  V12 = C_Vus;
-  V13 = C_Vub;
-  V21 = C_Vcd;
-  V22 = C_Vcs;
-  V23 = C_Vcb;
-  V31 = C_Vtd;
-  V32 = C_Vts;
-  V33 = C_Vtb;
+  V11 = SMConstants.C_Vud;
+  V12 = SMConstants.C_Vus;
+  V13 = SMConstants.C_Vub;
+  V21 = SMConstants.C_Vcd;
+  V22 = SMConstants.C_Vcs;
+  V23 = SMConstants.C_Vcb;
+  V31 = SMConstants.C_Vtd;
+  V32 = SMConstants.C_Vts;
+  V33 = SMConstants.C_Vtb;
 
   MatrixXcd YIJR2(NQuarks, NQuarks), YIJE2(NQuarks, NQuarks),
       YIJS2(NQuarks, NQuarks), YIJP2(NQuarks, NQuarks), YIJRD(NQuarks, NQuarks),
@@ -2895,8 +2930,8 @@ void Class_Potential_C2HDM::SetCurvatureArrays()
   YIJSL = MatrixXcd::Zero(NLepton, NLepton);
   YIJPL = MatrixXcd::Zero(NLepton, NLepton);
 
-  double v1 = C_vev0 * C_CosBeta;
-  double v2 = C_vev0 * C_SinBeta;
+  double v1 = SMConstants.C_vev0 * C_CosBeta;
+  double v2 = SMConstants.C_vev0 * C_SinBeta;
   double vL = v2;
   double vD = v2;
   if (Type == 2)
@@ -2909,43 +2944,43 @@ void Class_Potential_C2HDM::SetCurvatureArrays()
   else if (Type == 4)
     vD = v1;
 
-  YIJR2(0, 9)  = -std::conj(V11) * C_MassUp / v2;
-  YIJR2(0, 10) = -std::conj(V12) * C_MassUp / v2;
-  YIJR2(0, 11) = -std::conj(V13) * C_MassUp / v2;
+  YIJR2(0, 9)  = -std::conj(V11) * SMConstants.C_MassUp / v2;
+  YIJR2(0, 10) = -std::conj(V12) * SMConstants.C_MassUp / v2;
+  YIJR2(0, 11) = -std::conj(V13) * SMConstants.C_MassUp / v2;
 
-  YIJR2(1, 9)  = -std::conj(V21) * C_MassCharm / v2;
-  YIJR2(1, 10) = -std::conj(V22) * C_MassCharm / v2;
-  YIJR2(1, 11) = -std::conj(V23) * C_MassCharm / v2;
+  YIJR2(1, 9)  = -std::conj(V21) * SMConstants.C_MassCharm / v2;
+  YIJR2(1, 10) = -std::conj(V22) * SMConstants.C_MassCharm / v2;
+  YIJR2(1, 11) = -std::conj(V23) * SMConstants.C_MassCharm / v2;
 
-  YIJR2(2, 9)  = -std::conj(V31) * C_MassTop / v2;
-  YIJR2(2, 10) = -std::conj(V32) * C_MassTop / v2;
-  YIJR2(2, 11) = -std::conj(V33) * C_MassTop / v2;
+  YIJR2(2, 9)  = -std::conj(V31) * SMConstants.C_MassTop / v2;
+  YIJR2(2, 10) = -std::conj(V32) * SMConstants.C_MassTop / v2;
+  YIJR2(2, 11) = -std::conj(V33) * SMConstants.C_MassTop / v2;
 
-  YIJS2(0, 6) = C_MassUp / v2;
-  YIJS2(1, 7) = C_MassCharm / v2;
-  YIJS2(2, 8) = C_MassTop / v2;
+  YIJS2(0, 6) = SMConstants.C_MassUp / v2;
+  YIJS2(1, 7) = SMConstants.C_MassCharm / v2;
+  YIJS2(2, 8) = SMConstants.C_MassTop / v2;
 
-  YIJSD(3, 9)  = C_MassDown / vD;
-  YIJSD(4, 10) = C_MassStrange / vD;
-  YIJSD(5, 11) = C_MassBottom / vD;
+  YIJSD(3, 9)  = SMConstants.C_MassDown / vD;
+  YIJSD(4, 10) = SMConstants.C_MassStrange / vD;
+  YIJSD(5, 11) = SMConstants.C_MassBottom / vD;
 
-  YIJRD(3, 6) = V11 * C_MassDown / vD;
-  YIJRD(3, 7) = V21 * C_MassDown / vD;
-  YIJRD(3, 8) = V31 * C_MassDown / vD;
-  YIJRD(4, 6) = V12 * C_MassStrange / vD;
-  YIJRD(4, 7) = V22 * C_MassStrange / vD;
-  YIJRD(4, 8) = V32 * C_MassStrange / vD;
-  YIJRD(5, 6) = V13 * C_MassBottom / vD;
-  YIJRD(5, 7) = V23 * C_MassBottom / vD;
-  YIJRD(5, 8) = V33 * C_MassBottom / vD;
+  YIJRD(3, 6) = V11 * SMConstants.C_MassDown / vD;
+  YIJRD(3, 7) = V21 * SMConstants.C_MassDown / vD;
+  YIJRD(3, 8) = V31 * SMConstants.C_MassDown / vD;
+  YIJRD(4, 6) = V12 * SMConstants.C_MassStrange / vD;
+  YIJRD(4, 7) = V22 * SMConstants.C_MassStrange / vD;
+  YIJRD(4, 8) = V32 * SMConstants.C_MassStrange / vD;
+  YIJRD(5, 6) = V13 * SMConstants.C_MassBottom / vD;
+  YIJRD(5, 7) = V23 * SMConstants.C_MassBottom / vD;
+  YIJRD(5, 8) = V33 * SMConstants.C_MassBottom / vD;
 
-  YIJRL(1, 6) = C_MassElectron / vL;
-  YIJRL(3, 7) = C_MassMu / vL;
-  YIJRL(5, 8) = C_MassTau / vL;
+  YIJRL(1, 6) = SMConstants.C_MassElectron / vL;
+  YIJRL(3, 7) = SMConstants.C_MassMu / vL;
+  YIJRL(5, 8) = SMConstants.C_MassTau / vL;
 
-  YIJSL(0, 1) = C_MassElectron / vL;
-  YIJSL(2, 3) = C_MassMu / vL;
-  YIJSL(4, 5) = C_MassTau / vL;
+  YIJSL(0, 1) = SMConstants.C_MassElectron / vL;
+  YIJSL(2, 3) = SMConstants.C_MassMu / vL;
+  YIJSL(4, 5) = SMConstants.C_MassTau / vL;
 
   for (std::size_t i = 0; i < NQuarks; i++)
   {
@@ -3043,17 +3078,24 @@ bool Class_Potential_C2HDM::CalculateDebyeSimplified()
 
   if (Type == 1 or Type == 3) // Type I 2HDM oder Lepton Specific
   {
-    cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_SinBeta);
+    cb = std::sqrt(2) * SMConstants.C_MassBottom /
+         (SMConstants.C_vev0 * C_SinBeta);
   }
   if (Type == 2 or Type == 4) // Type II 2HDM oder Flipped
   {
-    cb = std::sqrt(2) * C_MassBottom / (C_vev0 * C_CosBeta);
+    cb = std::sqrt(2) * SMConstants.C_MassBottom /
+         (SMConstants.C_vev0 * C_CosBeta);
   }
   CTempC1 = 1.0 / 48 *
-            (12 * L1 + 8 * L3 + 4 * L4 + 3 * (3 * C_g * C_g + C_gs * C_gs));
-  double ct = std::sqrt(2) * C_MassTop / (C_vev0 * C_SinBeta);
-  CTempC2   = 1.0 / 48 *
-            (12 * L2 + 8 * L3 + 4 * L4 + 3 * (3 * C_g * C_g + C_gs * C_gs) +
+            (12 * L1 + 8 * L3 + 4 * L4 +
+             3 * (3 * SMConstants.C_g * SMConstants.C_g +
+                  SMConstants.C_gs * SMConstants.C_gs));
+  double ct =
+      std::sqrt(2) * SMConstants.C_MassTop / (SMConstants.C_vev0 * C_SinBeta);
+  CTempC2 = 1.0 / 48 *
+            (12 * L2 + 8 * L3 + 4 * L4 +
+             3 * (3 * SMConstants.C_g * SMConstants.C_g +
+                  SMConstants.C_gs * SMConstants.C_gs) +
              12 * ct * ct);
 
   if (Type == 1 or Type == 3)
@@ -3079,10 +3121,10 @@ bool Class_Potential_C2HDM::CalculateDebyeSimplified()
 
 bool Class_Potential_C2HDM::CalculateDebyeGaugeSimplified()
 {
-  DebyeGauge[0][0] = 2 * C_g * C_g;
-  DebyeGauge[1][1] = 2 * C_g * C_g;
-  DebyeGauge[2][2] = 2 * C_g * C_g;
-  DebyeGauge[3][3] = 2 * C_gs * C_gs;
+  DebyeGauge[0][0] = 2 * SMConstants.C_g * SMConstants.C_g;
+  DebyeGauge[1][1] = 2 * SMConstants.C_g * SMConstants.C_g;
+  DebyeGauge[2][2] = 2 * SMConstants.C_g * SMConstants.C_g;
+  DebyeGauge[3][3] = 2 * SMConstants.C_gs * SMConstants.C_gs;
 
   return true;
 }

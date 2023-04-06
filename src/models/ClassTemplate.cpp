@@ -33,7 +33,8 @@ namespace Models
  * Lagrangian parameters AFTER using the tadpole conditions), nParCT (number of
  * counterterms) as well as nVEV (number of VEVs for minimization)
  */
-Class_Template::Class_Template()
+Class_Template::Class_Template(const ISMConstants &smConstants)
+    : Class_Potential_Origin(smConstants)
 {
   Model =
       ModelID::ModelIDs::TEMPLATE; // global int constant which will be used to
@@ -179,14 +180,15 @@ void Class_Template::set_gen(const std::vector<double> &par)
 {
   ms     = par[0]; // Class member is set accordingly to the input parameters
   lambda = par[1]; // Class member is set accordingly to the input parameters
-  g      = C_g;    // SM SU (2) gauge coupling --> SMparam .h
-  yt = std::sqrt(2) / C_vev0 * C_MassTop; // Top Yukawa coupling --> SMparam .h
-  scale = C_vev0; // Renormalisation scale is set to the SM VEV
+  g      = SMConstants.C_g; // SM SU (2) gauge coupling --> SMparam .h
+  yt     = std::sqrt(2) / SMConstants.C_vev0 *
+       SMConstants.C_MassTop; // Top Yukawa coupling --> SMparam .h
+  scale = SMConstants.C_vev0; // Renormalisation scale is set to the SM VEV
   vevTreeMin.resize(nVEV);
   vevTree.resize(NHiggs);
   // Here you have to set the vector vevTreeMin. The vector vevTree will then be
   // set by the function MinimizeOrderVEV
-  vevTreeMin[0] = C_vev0;
+  vevTreeMin[0] = SMConstants.C_vev0;
   vevTree       = MinimizeOrderVEV(vevTreeMin);
   if (!SetCurvatureDone) SetCurvatureArrays();
 }
@@ -266,12 +268,13 @@ std::vector<double> Class_Template::calc_CT() const
   // Here you have to use your formulae for the counterterm scheme
   double t = 0;
   parCT.push_back(t); // dT
-  parCT.push_back(3.0 * t / std::pow(C_vev0, 3) +
-                  3.0 / std::pow(C_vev0, 3) * NablaWeinberg(0) -
-                  3.0 / std::pow(C_vev0, 2) * HesseWeinberg(0, 0)); // dlambda
-  parCT.push_back(-3.0 / (2 * C_vev0) * NablaWeinberg(0) +
+  parCT.push_back(3.0 * t / std::pow(SMConstants.C_vev0, 3) +
+                  3.0 / std::pow(SMConstants.C_vev0, 3) * NablaWeinberg(0) -
+                  3.0 / std::pow(SMConstants.C_vev0, 2) *
+                      HesseWeinberg(0, 0)); // dlambda
+  parCT.push_back(-3.0 / (2 * SMConstants.C_vev0) * NablaWeinberg(0) +
                   1.0 / 2.0 * HesseWeinberg(0, 0) -
-                  3.0 * t / (2 * C_vev0)); // dms
+                  3.0 * t / (2 * SMConstants.C_vev0)); // dms
 
   return parCT;
 }

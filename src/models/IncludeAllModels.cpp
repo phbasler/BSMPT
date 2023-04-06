@@ -26,19 +26,31 @@ namespace ModelID
 
 std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice)
 {
+  return FChoose(choice, GetSMConstants());
+}
+
+std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice,
+                                                const ISMConstants &smConstants)
+{
   using namespace Models;
   switch (choice)
   {
-  case ModelIDs::R2HDM: return std::make_unique<Class_Potential_R2HDM>(); break;
-  case ModelIDs::C2HDM: return std::make_unique<Class_Potential_C2HDM>(); break;
+  case ModelIDs::R2HDM:
+    return std::make_unique<Class_Potential_R2HDM>(smConstants);
+    break;
+  case ModelIDs::C2HDM:
+    return std::make_unique<Class_Potential_C2HDM>(smConstants);
+    break;
   case ModelIDs::RN2HDM:
-    return std::make_unique<Class_Potential_RN2HDM>();
+    return std::make_unique<Class_Potential_RN2HDM>(smConstants);
     break;
-  case ModelIDs::CXSM: return std::make_unique<Class_CxSM>(); break;
+  case ModelIDs::CXSM: return std::make_unique<Class_CxSM>(smConstants); break;
   case ModelIDs::CPINTHEDARK:
-    return std::make_unique<Class_Potential_CPintheDark>();
+    return std::make_unique<Class_Potential_CPintheDark>(smConstants);
     break;
-  case ModelIDs::TEMPLATE: return std::make_unique<Class_Template>(); break;
+  case ModelIDs::TEMPLATE:
+    return std::make_unique<Class_Template>(smConstants);
+    break;
   default: throw std::runtime_error("Invalid model");
   }
 }

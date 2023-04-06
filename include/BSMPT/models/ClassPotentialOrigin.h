@@ -55,6 +55,12 @@ const double C_CWcbHiggs = 1.5;
  */
 class Class_Potential_Origin
 {
+public:
+  /**
+   * @brief SMConstants The SM constants used by the model
+   */
+  const ISMConstants SMConstants;
+
 protected:
   /**
    * @brief UseTreeLevel Enforces VEff to only use the tree-level potential
@@ -64,7 +70,7 @@ protected:
   /**
    * MSBar renormalization scale
    */
-  double scale = C_vev0;
+  double scale;
 
   /**
    * Number of Lagrange parameters in the Higgs Tree-Level potential
@@ -383,7 +389,13 @@ protected:
   std::vector<std::size_t> VevOrder;
 
 public:
-  Class_Potential_Origin();
+  [[deprecated("Will call Class_Potential_Origin with GetSMConstants(). "
+               "Please use the "
+               "detailed overload "
+               "to ensure consistent SM constants through all "
+               "routines.")]] Class_Potential_Origin();
+
+  Class_Potential_Origin(const ISMConstants &smConstants);
   virtual ~Class_Potential_Origin();
 
   /**
@@ -517,6 +529,16 @@ public:
    * @return ModelID of the Model
    */
   ModelID::ModelIDs get_Model() const { return Model; }
+
+  /**
+   * @brief get_DebyeHiggs get the Debye corrections to the Higgs mass matrix
+   * @return
+   */
+  const std::vector<std::vector<double>> &get_DebyeHiggs() const
+  {
+    return DebyeHiggs;
+  }
+
   /**
    * @brief set_InputLineNumber
    * @param InputLineNumber_in value to set InputLineNumber
@@ -732,8 +754,11 @@ public:
    * Calculates the Debye corrections to the Higgs mass matrix.
    * If you can provide CalculateDebyeSimplified() with the Matrix as this will
    * reduce the runtime.
+   * @param forceCalculation Forces the caclulation, even if the model
+   * implements a simplified version. The simplified calculation will be
+   * skipped.
    */
-  void CalculateDebye();
+  void CalculateDebye(bool forceCalculation = false);
   /**
    * Calculates the Debye corrections to the gauge sector. By using
    * CalculateDebyeGaugeSimplified() the runtime can be reduced.

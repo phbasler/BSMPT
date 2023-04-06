@@ -83,7 +83,7 @@ namespace Models
 class Class_Potential_CPintheDark : public Class_Potential_Origin
 {
 public:
-  Class_Potential_CPintheDark();
+  Class_Potential_CPintheDark(const ISMConstants &smConstants);
   virtual ~Class_Potential_CPintheDark();
 
   // parameters of scalar potential

@@ -19,6 +19,14 @@ namespace Baryo
 typedef runge_kutta_cash_karp54<state_type> error_stepper_type;
 typedef controlled_runge_kutta<error_stepper_type> controlled_stepper_type;
 
+tau_source::tau_source() : tau_source(GetSMConstants())
+{
+}
+
+tau_source::tau_source(const ISMConstants &smConstants) : gen_fluid(smConstants)
+{
+}
+
 void tau_source::operator()(const state_type &omega,
                             state_type &domega,
                             const double z)

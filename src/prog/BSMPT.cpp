@@ -55,6 +55,7 @@ std::vector<std::string> convert_input(int argc, char *argv[]);
 int main(int argc, char *argv[])
 try
 {
+  const auto SMConstants = GetSMConstants();
   /**
    * PrintErrorLines decides if parameter points with no valid EWPT (no NLO
    * stability or T=300 vanishing VEV) are printed in the output file
@@ -88,7 +89,7 @@ try
   }
   std::string linestr;
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(args.Model);
+      ModelID::FChoose(args.Model, SMConstants);
   while (getline(infile, linestr))
   {
     if (linecounter > args.LastLine) break;

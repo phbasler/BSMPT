@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -65,7 +66,7 @@ namespace Models
 class Class_CxSM : public Class_Potential_Origin
 {
 public:
-  Class_CxSM();
+  Class_CxSM(const ISMConstants &smConstants);
   virtual ~Class_CxSM();
 
   // Add here your parameters for the Lagrangian as well as for the counterterm
@@ -77,8 +78,8 @@ public:
   double dmsq, dlambda, ddelta2, db2, dd2, dReb1, dImb1, dRea1, dIma1, dT1, dT2,
       dT3, dT4, dT5, dT6;
 
-  double g1 = C_gs;
-  double g2 = C_g;
+  double g1 = SMConstants.C_gs;
+  double g2 = SMConstants.C_g;
 
   double vh, vs, va;
 

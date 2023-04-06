@@ -420,8 +420,28 @@ Minimize_gen_all_tree_level(const ModelID::ModelIDs &Model,
                             int WhichMinimizer,
                             bool UseMultithreading)
 {
+  return Minimize_gen_all_tree_level(Model,
+                                     par,
+                                     parCT,
+                                     GetSMConstants(),
+                                     Check,
+                                     start,
+                                     WhichMinimizer,
+                                     UseMultithreading);
+}
+
+std::vector<double>
+Minimize_gen_all_tree_level(const ModelID::ModelIDs &Model,
+                            const std::vector<double> &par,
+                            const std::vector<double> &parCT,
+                            const ISMConstants &SMConstants,
+                            std::vector<double> &Check,
+                            const std::vector<double> &start,
+                            int WhichMinimizer,
+                            bool UseMultithreading)
+{
   std::shared_ptr<Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(Model);
+      ModelID::FChoose(Model, SMConstants);
   modelPointer->set_All(par, parCT);
   modelPointer->SetUseTreeLevel(true);
   auto sol = Minimize_gen_all(

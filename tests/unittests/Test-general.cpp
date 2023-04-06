@@ -10,11 +10,13 @@ using Approx = Catch::Approx;
 
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/SMparam.h>
 
 TEST_CASE("Checking CKM Unitarity", "[general]")
 {
   using namespace BSMPT;
-  REQUIRE(ModelTests::CheckCKMUnitarity() == ModelTests::TestResults::Pass);
+  REQUIRE(ModelTests::CheckCKMUnitarity(GetSMConstants()) ==
+          ModelTests::TestResults::Pass);
 }
 
 TEST_CASE("Check get model", "[general]")
