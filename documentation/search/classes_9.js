@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['options_613',['Options',['../structBSMPT_1_1parser_1_1Options.html',1,'BSMPT::parser']]]
+  ['nloptreturntype_632',['NLOPTReturnType',['../structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html',1,'BSMPT::Minimizer::LibNLOPT']]]
 ];

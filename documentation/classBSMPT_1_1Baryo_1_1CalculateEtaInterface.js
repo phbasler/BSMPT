@@ -1,8 +1,11 @@
 var classBSMPT_1_1Baryo_1_1CalculateEtaInterface =
 [
     [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a2f322a7429c2d8600953049075547393", null ],
+    [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ab67f5e6e6bd14c5ebad49c90fd9946f0", null ],
     [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a095c513f1da0971e215412ae2a5f8b76", null ],
+    [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a22bc4500db378c031966cac2526258f2", null ],
     [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ad46d7de7fe21d65cf45bcfaa1759c82f", null ],
+    [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a4e9215792cc91a511dff258030dfa747", null ],
     [ "~CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a3fe2e0ef1bf487569c24e902abe98f3e", null ],
     [ "CalcEta", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a9aa2044e6872930cfeac61e8215d2d61", null ],
     [ "CalcEta", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a71ff819dc1ab67fc34b405b7863af3b1", null ],
@@ -33,6 +36,7 @@ var classBSMPT_1_1Baryo_1_1CalculateEtaInterface =
     [ "method_transport", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ab4f4e5ad6687e42ab992b4b1390e16ba", null ],
     [ "modelPointer", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a5a7ec13a89df4867837fbb5c783c94af", null ],
     [ "n_step", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a2920b41b4ed289a19ebedc25a2b3dded", null ],
+    [ "SMConstants", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ad7911b4505bffa3200bdb278ba7a7d30", null ],
     [ "TC", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a8e93c0361c8bd1f4b7daacfa619c94e1", null ],
     [ "vev_critical", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a71e31741180469b05a1b247fdff1a355", null ],
     [ "vev_symmetric", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a804fb7d96295401dc359d3025ef5a76c", null ],

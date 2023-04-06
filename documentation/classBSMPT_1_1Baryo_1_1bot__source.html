@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.5.1</span>
+   &#160;<span id="projectnumber">2.6.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -114,6 +114,9 @@ Inheritance diagram for BSMPT::Baryo::bot_source:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a7e53f2a633ba56f4ce57d0616d1f8bce"><td class="memItemLeft" align="right" valign="top"><a id="a7e53f2a633ba56f4ce57d0616d1f8bce"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>bot_source</b> (const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;smConstants)</td></tr>
+<tr class="separator:a7e53f2a633ba56f4ce57d0616d1f8bce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17d9939e00f30a31a1f4559b081e09c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Baryo_1_1bot__source.html#a17d9939e00f30a31a1f4559b081e09c3">operator()</a> (const state_type &amp;omega, state_type &amp;domega, const double z)</td></tr>
 <tr class="memdesc:a17d9939e00f30a31a1f4559b081e09c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator () Needed for the numerical solution via boost.  <a href="classBSMPT_1_1Baryo_1_1bot__source.html#a17d9939e00f30a31a1f4559b081e09c3">More...</a><br /></td></tr>
 <tr class="separator:a17d9939e00f30a31a1f4559b081e09c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,6 +124,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a332f709a9b26ec2e3eb55c55222dfa28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calc_nL Calculates the sum of all left-handed fermions in front of the bubble wall contributing to the SU(2) sphaleron transition.  <a href="classBSMPT_1_1Baryo_1_1bot__source.html#a332f709a9b26ec2e3eb55c55222dfa28">More...</a><br /></td></tr>
 <tr class="separator:a332f709a9b26ec2e3eb55c55222dfa28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html">BSMPT::Baryo::gen_fluid</a></td></tr>
+<tr class="memitem:a2db8edd4b523d70d09d42642e1d6ad32 inherit pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memItemLeft" align="right" valign="top"><a id="a2db8edd4b523d70d09d42642e1d6ad32"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gen_fluid</b> (const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;smConstants)</td></tr>
+<tr class="separator:a2db8edd4b523d70d09d42642e1d6ad32 inherit pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f2e9a346da08fccfbdee1dfd27d3761 inherit pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html#a3f2e9a346da08fccfbdee1dfd27d3761">set_class</a> (const int bottom_mass_inp, struct <a class="el" href="structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html">GSL_integration_mubl</a> &amp;container, const <a class="el" href="classBSMPT_1_1Baryo_1_1Calc__Gam__M.html">Calc_Gam_M</a> &amp;calc_Gam_obj, const <a class="el" href="classBSMPT_1_1Baryo_1_1Calc__Scp.html">Calc_Scp</a> &amp;Calc_Scp_obj, const <a class="el" href="classBSMPT_1_1Baryo_1_1Calc__kappa__t.html">Calc_kappa_t</a> &amp;Calc_kappa_inp)</td></tr>
 <tr class="memdesc:a3f2e9a346da08fccfbdee1dfd27d3761 inherit pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="mdescLeft">&#160;</td><td class="mdescRight">set_class Set-up of all class parameters with given input values.  <a href="classBSMPT_1_1Baryo_1_1gen__fluid.html#a3f2e9a346da08fccfbdee1dfd27d3761">More...</a><br /></td></tr>
 <tr class="separator:a3f2e9a346da08fccfbdee1dfd27d3761 inherit pub_methods_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -246,13 +252,13 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alphaS</b> = 1. / 7
 double&#160;</td><td class="memItemRight" valign="bottom"><b>alphaW</b> = 1. / 30</td></tr>
 <tr class="separator:af7c434f45d4c56c14aaf43f56fa09eee inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58a3c1d76ef57fcce1824b093443b82f inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memItemLeft" align="right" valign="top"><a id="a58a3c1d76ef57fcce1824b093443b82f"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mtop_0</b> = C_MassTop</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mtop_0</b> {0}</td></tr>
 <tr class="separator:a58a3c1d76ef57fcce1824b093443b82f inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba3faaf923f35bb431eced4243f37e3e inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memItemLeft" align="right" valign="top"><a id="aba3faaf923f35bb431eced4243f37e3e"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mbot_0</b> = C_MassBottom</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mbot_0</b> {0}</td></tr>
 <tr class="separator:aba3faaf923f35bb431eced4243f37e3e inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f2147f342ce3b3649d8e08f7c23d81 inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memItemLeft" align="right" valign="top"><a id="a19f2147f342ce3b3649d8e08f7c23d81"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mtau_0</b> = C_MassTau</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mtau_0</b> {0}</td></tr>
 <tr class="separator:a19f2147f342ce3b3649d8e08f7c23d81 inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20b06ac65425be710ba550013809140 inherit pub_attribs_classBSMPT_1_1Baryo_1_1gen__fluid"><td class="memItemLeft" align="right" valign="top"><a id="ab20b06ac65425be710ba550013809140"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html#ab20b06ac65425be710ba550013809140">Dq</a></td></tr>

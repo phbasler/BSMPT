@@ -16,6 +16,14 @@ var hierarchy =
       [ "BSMPT::Models::Class_Template", "classBSMPT_1_1Models_1_1Class__Template.html", null ]
     ] ],
     [ "CLIOptions", "structCLIOptions.html", null ],
+    [ "Compare_C2HDM", "classCompare__C2HDM.html", null ],
+    [ "Compare_CPINTHEDARK", "classCompare__CPINTHEDARK.html", null ],
+    [ "Compare_CXSM", "classCompare__CXSM.html", null ],
+    [ "Compare_R2HDM", "classCompare__R2HDM.html", null ],
+    [ "Compare_RN2HDM", "classCompare__RN2HDM.html", null ],
+    [ "EventListenerBase", null, [
+      [ "MyListener", "structMyListener.html", null ]
+    ] ],
     [ "BSMPT::Minimizer::EWPTReturnType", "structBSMPT_1_1Minimizer_1_1EWPTReturnType.html", null ],
     [ "exception", null, [
       [ "BSMPT::parserException", "classBSMPT_1_1parserException.html", null ]
@@ -31,6 +39,7 @@ var hierarchy =
     [ "BSMPT::Minimizer::GSL_params", "structBSMPT_1_1Minimizer_1_1GSL__params.html", null ],
     [ "BSMPT::Wall::GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", null ],
     [ "BSMPT::Minimizer::GSLPlaneReturn", "structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html", null ],
+    [ "BSMPT::ISMConstants", "structBSMPT_1_1ISMConstants.html", null ],
     [ "BSMPT::parser::KeyValue", "structBSMPT_1_1parser_1_1KeyValue.html", null ],
     [ "BSMPT::Minimizer::LibCMAES::LibCMAESReturn", "structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html", null ],
     [ "BSMPT::Logger", "classBSMPT_1_1Logger.html", null ],

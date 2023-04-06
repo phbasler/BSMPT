@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.5.1</span>
+   &#160;<span id="projectnumber">2.6.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classBSMPT_1_1Baryo_1_1gen__fluid.html
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBSMPT_1_1Baryo_1_1gen__fluid-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">BSMPT::Baryo::gen_fluid Class Reference</div>  </div>
@@ -117,6 +118,9 @@ Inheritance diagram for BSMPT::Baryo::gen_fluid:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a2db8edd4b523d70d09d42642e1d6ad32"><td class="memItemLeft" align="right" valign="top"><a id="a2db8edd4b523d70d09d42642e1d6ad32"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gen_fluid</b> (const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;smConstants)</td></tr>
+<tr class="separator:a2db8edd4b523d70d09d42642e1d6ad32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f2e9a346da08fccfbdee1dfd27d3761"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html#a3f2e9a346da08fccfbdee1dfd27d3761">set_class</a> (const int bottom_mass_inp, struct <a class="el" href="structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html">GSL_integration_mubl</a> &amp;container, const <a class="el" href="classBSMPT_1_1Baryo_1_1Calc__Gam__M.html">Calc_Gam_M</a> &amp;calc_Gam_obj, const <a class="el" href="classBSMPT_1_1Baryo_1_1Calc__Scp.html">Calc_Scp</a> &amp;Calc_Scp_obj, const <a class="el" href="classBSMPT_1_1Baryo_1_1Calc__kappa__t.html">Calc_kappa_t</a> &amp;Calc_kappa_inp)</td></tr>
 <tr class="memdesc:a3f2e9a346da08fccfbdee1dfd27d3761"><td class="mdescLeft">&#160;</td><td class="mdescRight">set_class Set-up of all class parameters with given input values.  <a href="classBSMPT_1_1Baryo_1_1gen__fluid.html#a3f2e9a346da08fccfbdee1dfd27d3761">More...</a><br /></td></tr>
 <tr class="separator:a3f2e9a346da08fccfbdee1dfd27d3761"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -241,13 +245,13 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alphaS</b> = 1. / 7
 double&#160;</td><td class="memItemRight" valign="bottom"><b>alphaW</b> = 1. / 30</td></tr>
 <tr class="separator:af7c434f45d4c56c14aaf43f56fa09eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58a3c1d76ef57fcce1824b093443b82f"><td class="memItemLeft" align="right" valign="top"><a id="a58a3c1d76ef57fcce1824b093443b82f"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mtop_0</b> = C_MassTop</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mtop_0</b> {0}</td></tr>
 <tr class="separator:a58a3c1d76ef57fcce1824b093443b82f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba3faaf923f35bb431eced4243f37e3e"><td class="memItemLeft" align="right" valign="top"><a id="aba3faaf923f35bb431eced4243f37e3e"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mbot_0</b> = C_MassBottom</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mbot_0</b> {0}</td></tr>
 <tr class="separator:aba3faaf923f35bb431eced4243f37e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f2147f342ce3b3649d8e08f7c23d81"><td class="memItemLeft" align="right" valign="top"><a id="a19f2147f342ce3b3649d8e08f7c23d81"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mtau_0</b> = C_MassTau</td></tr>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>mtau_0</b> {0}</td></tr>
 <tr class="separator:a19f2147f342ce3b3649d8e08f7c23d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20b06ac65425be710ba550013809140"><td class="memItemLeft" align="right" valign="top"><a id="ab20b06ac65425be710ba550013809140"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html#ab20b06ac65425be710ba550013809140">Dq</a></td></tr>
@@ -334,6 +338,12 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>kappa_RL_0</b> = 1<
 <tr class="memitem:a12935834539e0429a876562248522e78"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html#a12935834539e0429a876562248522e78">dmsqrt_thermal_tau</a></td></tr>
 <tr class="memdesc:a12935834539e0429a876562248522e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">The difference of the right-handed thermal tau lepton mass minus the left-handed lepton mass defined as in Eq(97,98) in 1910.11794.  <a href="classBSMPT_1_1Baryo_1_1gen__fluid.html#a12935834539e0429a876562248522e78">More...</a><br /></td></tr>
 <tr class="separator:a12935834539e0429a876562248522e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:adc17bfdbb25e375009bbd3fdef4ea1e8"><td class="memItemLeft" align="right" valign="top"><a id="adc17bfdbb25e375009bbd3fdef4ea1e8"></a>
+const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a>&#160;</td><td class="memItemRight" valign="bottom"><b>SMConstants</b></td></tr>
+<tr class="separator:adc17bfdbb25e375009bbd3fdef4ea1e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classBSMPT_1_1Baryo_1_1gen__fluid.html" title="The gen_fluid class Class instance overhead for all transport classes. Including all common functions...">gen_fluid</a> class Class instance overhead for all transport classes. Including all common functions and parameters. </p>

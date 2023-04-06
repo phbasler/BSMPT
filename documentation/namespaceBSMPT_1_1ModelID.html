@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.5.1</span>
+   &#160;<span id="projectnumber">2.6.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -126,6 +126,8 @@ Functions</h2></td></tr>
 <tr class="separator:afb726c44374beb9ef62018b4d84dd872"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c0e4a151de955f3cddeb1eaf0b0324f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a9c0e4a151de955f3cddeb1eaf0b0324f">FChoose</a> (<a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a> choice)</td></tr>
 <tr class="separator:a9c0e4a151de955f3cddeb1eaf0b0324f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5493feda6e5ee05acba5916c1728b57d"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a5493feda6e5ee05acba5916c1728b57d">FChoose</a> (<a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a> choice, const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;smConstants)</td></tr>
+<tr class="separator:a5493feda6e5ee05acba5916c1728b57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed5df8b1a3e3690f96116edadafa7614"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#aed5df8b1a3e3690f96116edadafa7614">getModel</a> (const std::string &amp;s)</td></tr>
 <tr class="separator:aed5df8b1a3e3690f96116edadafa7614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -139,7 +141,7 @@ Variables</h2></td></tr>
 <div class="textblock"><p>operator &lt;&lt; overload for the model parameter </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a9c0e4a151de955f3cddeb1eaf0b0324f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c0e4a151de955f3cddeb1eaf0b0324f">&#9670;&nbsp;</a></span>FChoose()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c0e4a151de955f3cddeb1eaf0b0324f">&#9670;&nbsp;</a></span>FChoose() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,6 +162,53 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>smart pointer to the instance of the class matching the ModelIDs choice. If choice == NotSet the function throws an runtime error </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Runtime</td><td>error if an invalid model was given into choice </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5493feda6e5ee05acba5916c1728b57d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5493feda6e5ee05acba5916c1728b57d">&#9670;&nbsp;</a></span>FChoose() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; BSMPT::ModelID::FChoose </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a>&#160;</td>
+          <td class="paramname"><em>choice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;&#160;</td>
+          <td class="paramname"><em>smConstants</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">choice</td><td>ModelIDs for the Model under investigation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>smart pointer to the instance of the class matching the ModelIDs choice. If choice == NotSet the function throws an runtime error </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">smConstants</td><td>The SM Constants to use for the parameter </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">Runtime</td><td>error if an invalid model was given into choice </td></tr>

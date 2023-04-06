@@ -79,6 +79,7 @@ var NAVTREE =
       [ "2018/03/30", "md_Changelog.html#autotoc_md49", null ],
       [ "2018/03/07: v1.0", "md_Changelog.html#autotoc_md50", null ]
     ] ],
+    [ "Test List", "test.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -95,7 +96,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ]
+        [ "Variables", "functions_vars.html", "functions_vars" ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -112,11 +113,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"Minimizer_8cpp.html#a21ca763ce1943f7345b2869ed58bb4ef",
-"classBSMPT_1_1Baryo_1_1gen__fluid.html#a9f897e49015422bd3ccc87a8b3079394",
-"classBSMPT_1_1Models_1_1Class__CxSM.html#ac85d85cf98117bf709ad68074fa5f367",
-"classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#ac3c5f3db4b49f4b0e0788a0b1cc457e8",
-"namespacemembers_vars.html"
+"MinimizePlane_8h.html#adb24ccdd5ec82d99908a7fe208852c1b",
+"classBSMPT_1_1Baryo_1_1gen__fluid.html#a390b6deddc3980ce4ec71cb9c0d0c0e8",
+"classBSMPT_1_1Models_1_1Class__CxSM.html#a29420bca0e27bd6e70b6a4b37b1984af",
+"classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a6c9c6bb55c04ff89a1ff78d62196a8cf",
+"globals_func.html",
+"structCLIOptions.html#a720ca6aa9e863b1c87d34bf3c5118f75"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

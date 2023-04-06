@@ -1,6 +1,6 @@
 var classBSMPT_1_1Models_1_1Class__Potential__CPintheDark =
 [
-    [ "Class_Potential_CPintheDark", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#a602d006d3a6c611771a3076a38b6e0e4", null ],
+    [ "Class_Potential_CPintheDark", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#af1cfc1933f2c1377d3a60c2a4e6f404d", null ],
     [ "~Class_Potential_CPintheDark", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#a2a0e970f092f9f30ec7eb70a78f3c028", null ],
     [ "addLegendCT", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#acdfc1beeed9dcc5c4881c72acd78d990", null ],
     [ "addLegendTemp", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#aa13e32d42584765c9ecaad1a26be0910", null ],

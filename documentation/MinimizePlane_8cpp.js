@@ -6,6 +6,7 @@ var MinimizePlane_8cpp =
     [ "GSL_Minimize_Plane_gen_all", "MinimizePlane_8cpp.html#a072b75dfbe0b7b1d690640053e36af78", null ],
     [ "GSL_VEFF_Minimize_Plane", "MinimizePlane_8cpp.html#a6418e74721f3bb7d0ad8f4cd1886ece7", null ],
     [ "MinimizePlane", "MinimizePlane_8cpp.html#ad91bae42b8bf050237ace44f55cca41f", null ],
+    [ "MinimizePlane", "MinimizePlane_8cpp.html#a8c219019c296ba01888129d40bbf1a45", null ],
     [ "MinimizePlane", "MinimizePlane_8cpp.html#ab5e2b799f4b7adbcc657af73c178baf9", null ],
     [ "TransformCoordinates", "MinimizePlane_8cpp.html#ae9334b91fcbc0706fc4f9f626c25cffe", null ]
 ];

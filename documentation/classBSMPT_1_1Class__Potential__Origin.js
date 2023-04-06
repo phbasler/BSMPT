@@ -1,6 +1,7 @@
 var classBSMPT_1_1Class__Potential__Origin =
 [
     [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html#ad701bd1d5078d90c20a467874238e5a2", null ],
+    [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html#aee745013692e7ae819dd9bd48d69cbf3", null ],
     [ "~Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html#aa9c8975ae4d224e5f453b0311abec2b5", null ],
     [ "addLegendCT", "classBSMPT_1_1Class__Potential__Origin.html#ae19434d8b085ab97ebb56836d4838ec7", null ],
     [ "addLegendTemp", "classBSMPT_1_1Class__Potential__Origin.html#a6a753baa68b06c069060bb7390927007", null ],
@@ -9,7 +10,7 @@ var classBSMPT_1_1Class__Potential__Origin =
     [ "boson", "classBSMPT_1_1Class__Potential__Origin.html#ab9bd1684036e1dc81d1d1321b5da7f06", null ],
     [ "boson_legacy", "classBSMPT_1_1Class__Potential__Origin.html#a6585f83a82f61626f6da599a3b00baa6", null ],
     [ "calc_CT", "classBSMPT_1_1Class__Potential__Origin.html#a7c58d7eb86c2c7a5379930ad988cac52", null ],
-    [ "CalculateDebye", "classBSMPT_1_1Class__Potential__Origin.html#ad59a8446581b3d7c4cafda0a7c3cafbf", null ],
+    [ "CalculateDebye", "classBSMPT_1_1Class__Potential__Origin.html#a486d212719bb64309efd0035923ddd3b", null ],
     [ "CalculateDebyeGauge", "classBSMPT_1_1Class__Potential__Origin.html#a455973537914024e14258a96d7e6ce52", null ],
     [ "CalculateDebyeGaugeSimplified", "classBSMPT_1_1Class__Potential__Origin.html#ae1b28afaa15b51768ba96ff79892ed0c", null ],
     [ "CalculateDebyeSimplified", "classBSMPT_1_1Class__Potential__Origin.html#a33a01c8aa22a0d83a5446982a67e4b5b", null ],
@@ -38,6 +39,7 @@ var classBSMPT_1_1Class__Potential__Origin =
     [ "Get_Curvature_Lepton_F2H1", "classBSMPT_1_1Class__Potential__Origin.html#a8a901e2136666344d45ec1af90d4faea", null ],
     [ "Get_Curvature_Quark_F2", "classBSMPT_1_1Class__Potential__Origin.html#a51dd6d5615be12ac3ac554146b1fd0f3", null ],
     [ "Get_Curvature_Quark_F2H1", "classBSMPT_1_1Class__Potential__Origin.html#a2932727b098023288eb52b99a5808e2a", null ],
+    [ "get_DebyeHiggs", "classBSMPT_1_1Class__Potential__Origin.html#a060fccae289b27f1e60b0be72e52a097", null ],
     [ "get_Model", "classBSMPT_1_1Class__Potential__Origin.html#a0207feb67f6f45d985ce80575fe4dcac", null ],
     [ "get_NGauge", "classBSMPT_1_1Class__Potential__Origin.html#aedc97aaec6a71ce63ed32daa47e70c88", null ],
     [ "get_NHiggs", "classBSMPT_1_1Class__Potential__Origin.html#ae44ac7e21c63e53af6b853ec2036fcfe", null ],
@@ -153,6 +155,7 @@ var classBSMPT_1_1Class__Potential__Origin =
     [ "scale", "classBSMPT_1_1Class__Potential__Origin.html#a73f59d475aa10163979c34a5bb935b22", null ],
     [ "SetCurvatureDone", "classBSMPT_1_1Class__Potential__Origin.html#a8d42c3286c5bbfd816c325f47aa0aa67", null ],
     [ "SignSymmetries", "classBSMPT_1_1Class__Potential__Origin.html#a105701013dedcfb38d44c4dda3c0f1e0", null ],
+    [ "SMConstants", "classBSMPT_1_1Class__Potential__Origin.html#a392cca20cc3964bd4dddcc48e25baacb", null ],
     [ "TripleHiggsCorrectionsCTPhysical", "classBSMPT_1_1Class__Potential__Origin.html#a281e675c723114e08e0d915e0219577c", null ],
     [ "TripleHiggsCorrectionsCW", "classBSMPT_1_1Class__Potential__Origin.html#af82fb46341a22c76727083fd48a2cc19", null ],
     [ "TripleHiggsCorrectionsCWPhysical", "classBSMPT_1_1Class__Potential__Origin.html#a4483ec2b71612d3343213674c105e540", null ],

@@ -1,6 +1,6 @@
 var classBSMPT_1_1Models_1_1Class__Potential__R2HDM =
 [
-    [ "Class_Potential_R2HDM", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a4bb3aaffc0a4d9953db7b3eebaafd119", null ],
+    [ "Class_Potential_R2HDM", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a7416527a135b6727574cd99bba1ecb77", null ],
     [ "~Class_Potential_R2HDM", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#ac5d47d623fd945ca61dbc545f547f9c1", null ],
     [ "addLegendCT", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a60562a072a0f2073ac5be42b141ed6f4", null ],
     [ "addLegendTemp", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a9754e9a7e34379bbbdfeb0cf4387711f", null ],

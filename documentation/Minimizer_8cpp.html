@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.5.1</span>
+   &#160;<span id="projectnumber">2.6.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -127,6 +127,9 @@ std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a4c2e16cbb0844539d8304dbc6ea500ef">BSMPT::Minimizer::Minimize_gen_all_tree_level</a> (const ModelID::ModelIDs &amp;Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, int WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>
 <tr class="memdesc:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimize_gen_all_tree_level Minimizes the tree-level potential.  <a href="Minimizer_8h.html#a4c2e16cbb0844539d8304dbc6ea500ef">More...</a><br /></td></tr>
 <tr class="separator:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4e182600693538434c6814e2ed38102"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#aa4e182600693538434c6814e2ed38102">BSMPT::Minimizer::Minimize_gen_all_tree_level</a> (const ModelID::ModelIDs &amp;Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, const ISMConstants &amp;SMConstants, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, int WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>
+<tr class="memdesc:aa4e182600693538434c6814e2ed38102"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimize_gen_all_tree_level Minimizes the tree-level potential.  <a href="Minimizer_8h.html#aa4e182600693538434c6814e2ed38102">More...</a><br /></td></tr>
+<tr class="separator:aa4e182600693538434c6814e2ed38102"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21ca763ce1943f7345b2869ed58bb4ef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a21ca763ce1943f7345b2869ed58bb4ef">BSMPT::Minimizer::FindNextLocalMinima</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;model, const std::vector&lt; double &gt; &amp;StartingPoint, const double &amp;temperature, int WhichMinimizer=WhichMinimizerDefault)</td></tr>
 <tr class="memdesc:a21ca763ce1943f7345b2869ed58bb4ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">FindNextLocalMinima finds the local minima from the given starting point at the given temperature.  <a href="Minimizer_8h.html#a21ca763ce1943f7345b2869ed58bb4ef">More...</a><br /></td></tr>
 <tr class="separator:a21ca763ce1943f7345b2869ed58bb4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -314,8 +317,87 @@ std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 
 </div>
 </div>
+<a id="aa4e182600693538434c6814e2ed38102"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4e182600693538434c6814e2ed38102">&#9670;&nbsp;</a></span>Minimize_gen_all_tree_level() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; BSMPT::Minimizer::Minimize_gen_all_tree_level </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;&#160;</td>
+          <td class="paramname"><em>Model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>parCT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;&#160;</td>
+          <td class="paramname"><em>SMConstants</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Check</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>WhichMinimizer</em> = <code>WhichMinimizerDefault</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>UseMultithreading</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Minimize_gen_all_tree_level Minimizes the tree-level potential. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Model</td><td>Which Model to minimize </td></tr>
+    <tr><td class="paramname">par</td><td>parameters of the point </td></tr>
+    <tr><td class="paramname">parCT</td><td>counterterm parameters </td></tr>
+    <tr><td class="paramname">SMConstants</td><td>The SM Constants used for the minimisation </td></tr>
+    <tr><td class="paramname">Check</td><td>Vector to safe the error flags during the minimization </td></tr>
+    <tr><td class="paramname">start</td><td>Starting point for the minimization </td></tr>
+    <tr><td class="paramname">WhichMinimizer</td><td>Which minimizers should be taken? 1 = CMAES, 2 = GSL, 4 = NLOPT, to use multiple add the numbers </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the global minimum </dd></dl>
+
+</div>
+</div>
 <a id="a4c2e16cbb0844539d8304dbc6ea500ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c2e16cbb0844539d8304dbc6ea500ef">&#9670;&nbsp;</a></span>Minimize_gen_all_tree_level()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c2e16cbb0844539d8304dbc6ea500ef">&#9670;&nbsp;</a></span>Minimize_gen_all_tree_level() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
