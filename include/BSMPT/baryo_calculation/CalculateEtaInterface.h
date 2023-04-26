@@ -16,6 +16,7 @@
 #include <BSMPT/baryo_calculation/transport_equations.h>
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/models/SMparam.h>
 #include <string>
 #include <vector>
 
@@ -105,13 +106,33 @@ protected:
    */
   GSL_integration_mubl GSL_integration_mubl_container;
 
+  /**
+   * @brief SMConstants The SM Constants used during the EWBG calculation
+   */
+  const ISMConstants SMConstants;
+
 public:
   /**
    * @brief CalculateEtaInterface Initialises the class with a config pair
    * @param config config.first sets the CalculateEtaInterface::method_transport
    * and second CalculateEtaInterface::bot_mass_flag
    */
-  CalculateEtaInterface(const std::pair<std::vector<bool>, int> &config);
+  [[deprecated(
+      "Will call CalculateEtaInterface with GetSMConstants(). Please use the "
+      "detailed overload "
+      "to ensure consistent SM constants through all "
+      "routines.")]] CalculateEtaInterface(const std::pair<std::vector<bool>,
+                                                           int> &config);
+
+  /**
+   * @brief CalculateEtaInterface Initialises the class with a config pair
+   * @param config config.first sets the CalculateEtaInterface::method_transport
+   * and second CalculateEtaInterface::bot_mass_flag
+   * @param smConstants The SM Constants. This should be the same as used by the
+   * parameter point used to calculate the SFOEWPT
+   */
+  CalculateEtaInterface(const std::pair<std::vector<bool>, int> &config,
+                        const ISMConstants &smConstants);
 
   /**
    * Initialises the class member and sets the
@@ -121,8 +142,27 @@ public:
    * @param bot_mass_flag_in Sets the CalculateEtaInterface::bot_mass_flag
    * member
    */
+  [[deprecated(
+      "Will call CalculateEtaInterface with GetSMConstants(). Please use the "
+      "detailed overload "
+      "to ensure consistent SM constants through all "
+      "routines.")]] CalculateEtaInterface(const std::vector<bool>
+                                               &method_input,
+                                           const int &bot_mass_flag_in);
+
+  /**
+   * Initialises the class member and sets the
+   * CalculateEtaInterface::method_transport and
+   * CalculateEtaInterface::bot_mass_flag
+   * @param method_input Sets the CalculateEtaInterface::method_transport member
+   * @param bot_mass_flag_in Sets the CalculateEtaInterface::bot_mass_flag
+   * member
+   * @param smConstants The SM Constants. This should be the same as used by the
+   * parameter point used to calculate the SFOEWPT
+   */
   CalculateEtaInterface(const std::vector<bool> &method_input,
-                        const int &bot_mass_flag_in);
+                        const int &bot_mass_flag_in,
+                        const ISMConstants &smConstants);
 
   /**
    * Initialises the class member and sets the
@@ -130,7 +170,22 @@ public:
    * CalculateEtaInterface::bot_mass_flag with the input given in the input file
    * @param file input file to get the settings
    */
-  CalculateEtaInterface(const std::string &file);
+  [[deprecated(
+      "Will call CalculateEtaInterface with GetSMConstants(). Please use the "
+      "detailed overload "
+      "to ensure consistent SM constants through all "
+      "routines.")]] CalculateEtaInterface(const std::string &file);
+
+  /**
+   * Initialises the class member and sets the
+   * CalculateEtaInterface::method_transport and
+   * CalculateEtaInterface::bot_mass_flag with the input given in the input file
+   * @param file input file to get the settings
+   * @param smConstants The SM Constants. This should be the same as used by the
+   * parameter point used to calculate the SFOEWPT
+   */
+  CalculateEtaInterface(const std::string &file,
+                        const ISMConstants &smConstants);
 
   virtual ~CalculateEtaInterface();
 

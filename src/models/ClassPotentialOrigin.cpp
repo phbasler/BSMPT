@@ -26,6 +26,14 @@ using namespace Eigen;
 namespace BSMPT
 {
 Class_Potential_Origin::Class_Potential_Origin()
+    : Class_Potential_Origin(GetSMConstants())
+{
+}
+
+Class_Potential_Origin::Class_Potential_Origin(const ISMConstants &smConstants)
+    : SMConstants{smConstants}
+    , scale{SMConstants.C_vev0}
+
 {
   // TODO Auto-generated constructor stub
 }
@@ -3212,12 +3220,12 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
   return res;
 }
 
-void Class_Potential_Origin::CalculateDebye()
+void Class_Potential_Origin::CalculateDebye(bool forceCalculation)
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
 
-  bool Done = CalculateDebyeSimplified();
-  if (!Done)
+  bool Calculate = forceCalculation or not CalculateDebyeSimplified();
+  if (Calculate)
   {
     for (std::size_t i = 0; i < NHiggs; i++)
     {
@@ -3510,8 +3518,8 @@ void Class_Potential_Origin::CheckImplementation(
       ModelTests::CheckNumberOfTripleCouplings(*this)));
 
   TestNames.push_back("CKM matrix unitarity");
-  TestResults.push_back(
-      ModelTests::TestResultsToString(ModelTests::CheckCKMUnitarity()));
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCKMUnitarity(SMConstants)));
 
   Logger::Write(LoggingLevel::Default,
                 "This function calculates the masses of the gauge bosons, "

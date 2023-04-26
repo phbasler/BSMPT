@@ -36,8 +36,9 @@ const Compare_CPINTHEDARK Expected;
 TEST_CASE("Checking NLOVEV for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   std::vector<double> Check;
   auto sol = Minimizer::Minimize_gen_all(modelPointer,
@@ -56,8 +57,9 @@ TEST_CASE("Checking NLOVEV for CPINTHEDARK", "[cpinthedark]")
 TEST_CASE("Checking EWPT for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   std::vector<double> Check;
   auto EWPT = Minimizer::PTFinder_gen_all(
@@ -95,8 +97,9 @@ TEST_CASE("Checking EWPT for CPINTHEDARK", "[cpinthedark]")
 TEST_CASE("Checking number of CT parameters for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNumberOfCTParameters(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -105,8 +108,9 @@ TEST_CASE("Checking number of CT parameters for CPINTHEDARK", "[cpinthedark]")
 TEST_CASE("Checking number of VEV labels for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNumberOfVEVLabels(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -117,8 +121,9 @@ TEST_CASE("Checking number of labels for temperature dependend results for "
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckLegendTemp(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -128,8 +133,9 @@ TEST_CASE("Checking number of triple Higgs couplings for CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNumberOfTripleCouplings(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -138,8 +144,9 @@ TEST_CASE("Checking number of triple Higgs couplings for CPINTHEDARK",
 TEST_CASE("Checking Gauge Boson masses for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckGaugeBosonMasses(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -149,8 +156,9 @@ TEST_CASE("Checking fermion and quark masses masses for CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckFermionicMasses(*modelPointer);
   REQUIRE(result.first == ModelTests::TestResults::Pass);
@@ -160,8 +168,9 @@ TEST_CASE("Checking fermion and quark masses masses for CPINTHEDARK",
 TEST_CASE("Checking tree level minimum for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckTreeLevelMin(*modelPointer,
                                               Minimizer::WhichMinimizerDefault);
@@ -171,8 +180,9 @@ TEST_CASE("Checking tree level minimum for CPINTHEDARK", "[cpinthedark]")
 TEST_CASE("Checking tree level tadpoles for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckTadpoleRelations(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -182,8 +192,9 @@ TEST_CASE("Checking NLO masses matching tree level masses for CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckNLOMasses(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -192,8 +203,9 @@ TEST_CASE("Checking NLO masses matching tree level masses for CPINTHEDARK",
 TEST_CASE("Checking VTreeSimplified for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   if (modelPointer->UseVTreeSimplified)
   {
     modelPointer->initModel(example_point_CPINTHEDARK);
@@ -209,8 +221,9 @@ TEST_CASE("Checking VTreeSimplified for CPINTHEDARK", "[cpinthedark]")
 TEST_CASE("Checking VCounterSimplified for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   if (modelPointer->UseVCounterSimplified)
   {
     modelPointer->initModel(example_point_CPINTHEDARK);
@@ -228,8 +241,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckCTConditionsFirstDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -240,8 +254,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckCTConditionsSecondDerivative(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -252,8 +267,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   auto result = ModelTests::CheckCTIdentities(*modelPointer);
   REQUIRE(result == ModelTests::TestResults::Pass);
@@ -264,13 +280,15 @@ TEST_CASE("Checking triple higgs NLO couplings in the CPINTHEDARK",
 {
 
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   modelPointer->Prepare_Triple();
   modelPointer->TripleHiggsCouplings();
 
-  auto Check = [](auto result, auto expected) {
+  auto Check = [](auto result, auto expected)
+  {
     if (std::abs(expected) > 1e-4)
     {
       REQUIRE(result == Approx(expected).epsilon(1e-4));
@@ -318,8 +336,9 @@ TEST_CASE("Check number of calculated CT parameters in the CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
   REQUIRE(ModelTests::TestResults::Pass ==
           ModelTests::CheckCTNumber(*modelPointer));
@@ -330,8 +349,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -344,8 +364,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -358,8 +379,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -371,8 +393,9 @@ TEST_CASE("Check symmetric properties of the gauge tensor in the CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -384,8 +407,9 @@ TEST_CASE("Check symmetric properties of the Lepton tensor in the CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -398,8 +422,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -412,8 +437,9 @@ TEST_CASE(
     "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==
@@ -425,8 +451,9 @@ TEST_CASE("Check symmetric properties of the quark tensor in the CPINTHEDARK",
           "[cpinthedark]")
 {
   using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK);
+      ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
   modelPointer->initModel(example_point_CPINTHEDARK);
 
   REQUIRE(ModelTests::TestResults::Pass ==

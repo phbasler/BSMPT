@@ -16,6 +16,8 @@ add_library(Kfactors ${header} ${src})
 
 target_link_libraries(Kfactors PUBLIC Eigen3::Eigen GSL::gsl Boost::boost
                                       Minimizer Utility)
-target_compile_options(Kfactors PUBLIC ${OpenMP_CXX_FLAGS})
+if(OpenMP_FOUND)
+  target_link_libraries(Kfactors PUBLIC OpenMP::OpenMP_CXX)
+endif()
 target_include_directories(Kfactors PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Kfactors PUBLIC cxx_std_14)

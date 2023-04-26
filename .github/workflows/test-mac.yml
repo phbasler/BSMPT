@@ -22,7 +22,7 @@ jobs:
       with:
           persist-credentials: false
     - name : installPackages
-      run : brew install eigen gsl nlopt boost libomp
+      run : brew install eigen gsl nlopt boost libomp nlohmann-json
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v1
       id: cpu-cores
@@ -42,7 +42,7 @@ jobs:
       with:
           persist-credentials: false
     - name : installPackages
-      run : brew install eigen gsl boost libomp
+      run : brew install eigen gsl boost libomp nlohmann-json
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v1
       id: cpu-cores

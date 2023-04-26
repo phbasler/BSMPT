@@ -1,6 +1,10 @@
 {
     "line": "2",
+<<<<<<< HEAD
     "input": "./example/C2HDM_Input.dat",
+=======
+    "input": "../example/C2HDM_Input.dat",
+>>>>>>> master
     "model": "c2hdm",
     "useNLopt": "true",
     "useCMAES": "true",

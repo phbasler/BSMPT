@@ -19,6 +19,14 @@ namespace Baryo
 typedef runge_kutta_cash_karp54<state_type> error_stepper_type;
 typedef controlled_runge_kutta<error_stepper_type> controlled_stepper_type;
 
+tau_source::tau_source() : tau_source(GetSMConstants())
+{
+}
+
+tau_source::tau_source(const ISMConstants &smConstants) : gen_fluid(smConstants)
+{
+}
+
 void tau_source::operator()(const state_type &omega,
                             state_type &domega,
                             const double z)
@@ -52,19 +60,23 @@ void tau_source::operator()(const state_type &omega,
   // TOP and BOT quark mass calculation
   top_func(z, quark_mass, quark_mass_prime);
   double mt = quark_mass[0];
-  double mb;
-  if (bot_mass_flag == 1) mb = quark_mass[1];
-  if (bot_mass_flag == 2) mb = 0;
-  if ((bot_mass_flag != 1) and (bot_mass_flag != 2))
+  double mb{0};
+  if (bot_mass_flag == 1)
+    mb = quark_mass[1];
+  else if (bot_mass_flag == 2)
+    mb = 0;
+  else
     throw std::runtime_error("No valid mbot mass flag is chosen. Please make "
                              "sure to chose a proper value");
   // TAU mass calculation
   std::vector<double> tau_mass, tau_mass_prime;
   tau_func(z, tau_mass, tau_mass_prime);
-  double mtau;
-  if (tau_mass_flag == 1) mtau = tau_mass[0];
-  if (tau_mass_flag == 2) mtau = 0;
-  if ((tau_mass_flag != 1) and (tau_mass_flag != 2))
+  double mtau{0};
+  if (tau_mass_flag == 1)
+    mtau = tau_mass[0];
+  else if (tau_mass_flag == 2)
+    mtau = 0;
+  else
     throw std::runtime_error("No valid mtau mass flag is chosen. Please make "
                              "sure to chose a proper value");
 
@@ -222,9 +234,11 @@ double tau_source::Calc_nL(double z_start, double z_end) const
   mu = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   const double C_AbsErr = 1e-9;
   const double C_RelErr = 1e-5;
-  double stepsize_initial;
-  if (z_start < z_end) stepsize_initial = 1e-8;
-  if (z_start > z_end) stepsize_initial = -1e-8;
+  double stepsize_initial{0};
+  if (z_start < z_end)
+    stepsize_initial = 1e-8;
+  else
+    stepsize_initial = -1e-8;
   double abs_err = C_AbsErr;
   double rel_err = C_RelErr;
   integrate_adaptive(make_controlled(abs_err, rel_err, error_stepper_type()),

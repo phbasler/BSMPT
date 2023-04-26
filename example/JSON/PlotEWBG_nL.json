@@ -1,9 +1,16 @@
 {
     "line": "2",
+<<<<<<< HEAD
     "input": "./example/C2HDM_Input.dat",
     "output": "test.tsv",
     "model": "c2hdm",
     "config": "./example/EWBG_config.txt",
+=======
+    "input": "../example/C2HDM_Input.dat",
+    "output": "test.tsv",
+    "model": "c2hdm",
+    "config": "../example/EWBG_config.txt",
+>>>>>>> master
     "vw": "0.1",
 
     "useNLopt": "true",

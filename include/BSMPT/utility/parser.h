@@ -159,6 +159,11 @@ private:
 
   KeyValue get_key_value(const std::string &input);
   std::string mHeader;
+
+  /**
+   * @brief Helper to avoid multiple prints of the help output
+   */
+  mutable bool mHelpAlreadyPrinted{false};
 };
 } // namespace BSMPT
 #endif // PARSER_H

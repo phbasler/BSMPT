@@ -1,0 +1,62 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  schedule:
+    - cron: "14 17 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ python, cpp ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-and-quality
+          config-file: ./.github/codeql/codeql-config.yml
+          
+      - name : installPackages
+        run : |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+        if: matrix.language == 'cpp'
+        
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
+        if: matrix.language == 'cpp'
+      - name: cmake
+        run: mkdir build && cd build && cmake .. -DUseLibCMAES=OFF
+        if: matrix.language == 'cpp'
+      - name: make
+        run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
+        if: matrix.language == 'cpp'
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+        if: matrix.language != 'cpp'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{ matrix.language }}"

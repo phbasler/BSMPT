@@ -18,6 +18,14 @@ namespace Baryo
 typedef runge_kutta_cash_karp54<state_type> error_stepper_type;
 typedef controlled_runge_kutta<error_stepper_type> controlled_stepper_type;
 
+top_source::top_source() : top_source(GetSMConstants())
+{
+}
+
+top_source::top_source(const ISMConstants &smConstants) : gen_fluid(smConstants)
+{
+}
+
 double top_source::Calc_nL(double z_start, double z_end) const
 {
   /*
@@ -34,9 +42,11 @@ double top_source::Calc_nL(double z_start, double z_end) const
   mu                    = {0, 0, 0, 0, 0, 0, 0, 0};
   const double C_AbsErr = 1e-9;
   const double C_RelErr = 1e-5;
-  double stepsize_initial;
-  if (z_start < z_end) stepsize_initial = 1e-8;
-  if (z_start > z_end) stepsize_initial = -1e-8;
+  double stepsize_initial{0};
+  if (z_start < z_end)
+    stepsize_initial = 1e-8;
+  else
+    stepsize_initial = -1e-8;
   double abs_err = C_AbsErr;
   double rel_err = C_RelErr;
   integrate_adaptive(make_controlled(abs_err, rel_err, error_stepper_type()),

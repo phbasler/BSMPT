@@ -1,5 +1,6 @@
 // Copyright (C) 2018  Philipp Basler and Margarete Mühlleitner
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,7 +26,7 @@ namespace Models
 class Class_Template : public Class_Potential_Origin
 {
 public:
-  Class_Template();
+  Class_Template(const ISMConstants &smConstants);
   virtual ~Class_Template();
 
   // Add here your parameters for the Lagrangian as well as for the counterterm

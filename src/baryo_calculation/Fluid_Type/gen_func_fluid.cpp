@@ -281,11 +281,21 @@ void Calc_eta::operator()(const state_type &eta,
             std::exp(exponent_prefactor *
                      z); // prefactor is not used here for numerical stability
 }
+
+Calc_eta::Calc_eta() : Calc_eta(GetSMConstants())
+{
+}
+
+Calc_eta::Calc_eta(const ISMConstants &smConstants) : SMConstants{smConstants}
+{
+}
+
 void Calc_eta::set_class(std::vector<double> array_z_in,
                          std::vector<double> array_nL_in,
                          double Temp_in,
                          double vw_in)
 {
+
   Calc_eta::array_z  = array_z_in;
   Calc_eta::array_nL = array_nL_in;
   Calc_eta::Temp     = Temp_in;
@@ -309,13 +319,13 @@ void Calc_eta::set_class(std::vector<double> array_z_in,
   // SIMPLIFIED EXPRESSION
   // prefactor = -3*GamWS/(2*vw*s_entr);
   // exponent_prefactor = -R*GamWS/vw;
-  double t0, h;
+  double t0{0}, h{0};
   if (array_z.at(0) < array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(0);
     h  = array_z.at(1) - array_z.at(0);
   }
-  if (array_z.at(0) > array_z.at(array_z.size() - 1))
+  else if (array_z.at(0) > array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(array_z.size() - 1);
     h  = array_z.at(0) - array_z.at(1);
@@ -351,13 +361,13 @@ void Calc_eta::set_class(
   // SIMPLIFIED EXPRESSION
   // prefactor = -3*GamWS/(2*vw*s_entr);
   // exponent_prefactor = -R*GamWS/vw;
-  double t0, h;
+  double t0{0}, h{0};
   if (array_z.at(0) < array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(0);
     h  = array_z.at(1) - array_z.at(0);
   }
-  if (array_z.at(0) > array_z.at(array_z.size() - 1))
+  else if (array_z.at(0) > array_z.at(array_z.size() - 1))
   {
     t0 = array_z.at(array_z.size() - 1);
     h  = array_z.at(0) - array_z.at(1);
@@ -383,6 +393,18 @@ double Nintegrate_eta(const Calc_eta &C_eta,
   if (std::isnan(eta[0]) or std::isnan(C_eta.prefactor))
     throw std::runtime_error("NaN in Nintegrate_eta");
   return C_eta.prefactor * eta[0];
+}
+
+gen_fluid::gen_fluid() : gen_fluid(GetSMConstants())
+{
+}
+
+gen_fluid::gen_fluid(const ISMConstants &smConstants)
+    : SMConstants{smConstants}
+    , mtop_0{smConstants.C_MassTop}
+    , mbot_0{smConstants.C_MassBottom}
+    , mtau_0{smConstants.C_MassTau}
+{
 }
 
 void gen_fluid::top_func(double z,
@@ -588,12 +610,12 @@ void gen_fluid::set_class(const int bottom_mass_inp,
   gen_fluid::Dtau   = 100. / Temp;
   double sinbeta    = std::sin(std::atan(tanbeta));
   double cosbeta    = std::cos(std::atan(tanbeta));
-  gen_fluid::yuk_q  = std::sqrt(2) * mtop_0 / (C_vev0 * sinbeta);
+  gen_fluid::yuk_q  = std::sqrt(2) * mtop_0 / (SMConstants.C_vev0 * sinbeta);
   gen_fluid::Gam_SS = 14 * std::pow(alphaS, 4) * Temp;
 
   double yuk_t = 0, yuk_b = 0, yuk_tau = 0;
   // top thermal mass
-  yuk_t              = std::sqrt(2) * mtop_0 / (C_vev0 * sinbeta);
+  yuk_t              = std::sqrt(2) * mtop_0 / (SMConstants.C_vev0 * sinbeta);
   auto top_thermal   = Calc_ThermalMass_q(yuk_t, Temp);
   msqrt_thermal_top  = top_thermal.first;
   dmsqrt_thermal_top = top_thermal.second;
@@ -601,24 +623,24 @@ void gen_fluid::set_class(const int bottom_mass_inp,
   if (Yuk_Type == 1)
   {
     // bot&tau thermal mass
-    yuk_b              = std::sqrt(2) * mbot_0 / (C_vev0 * sinbeta);
+    yuk_b              = std::sqrt(2) * mbot_0 / (SMConstants.C_vev0 * sinbeta);
     auto bot_thermal   = Calc_ThermalMass_q(yuk_b, Temp);
     msqrt_thermal_bot  = bot_thermal.first;
     dmsqrt_thermal_bot = bot_thermal.second;
 
-    yuk_tau            = std::sqrt(2) * mtau_0 / (C_vev0 * sinbeta);
+    yuk_tau            = std::sqrt(2) * mtau_0 / (SMConstants.C_vev0 * sinbeta);
     auto tau_thermal   = Calc_ThermalMass_l(yuk_tau, Temp);
     msqrt_thermal_tau  = tau_thermal.first;
     dmsqrt_thermal_tau = tau_thermal.second;
   }
   if (Yuk_Type == 2)
   {
-    yuk_b              = std::sqrt(2) * mbot_0 / (C_vev0 * cosbeta);
+    yuk_b              = std::sqrt(2) * mbot_0 / (SMConstants.C_vev0 * cosbeta);
     auto bot_thermal   = Calc_ThermalMass_q(yuk_b, Temp);
     msqrt_thermal_bot  = bot_thermal.first;
     dmsqrt_thermal_bot = bot_thermal.second;
 
-    yuk_tau            = std::sqrt(2) * mtau_0 / (C_vev0 * cosbeta);
+    yuk_tau            = std::sqrt(2) * mtau_0 / (SMConstants.C_vev0 * cosbeta);
     auto tau_thermal   = Calc_ThermalMass_l(yuk_tau, Temp);
     msqrt_thermal_tau  = tau_thermal.first;
     dmsqrt_thermal_tau = tau_thermal.second;

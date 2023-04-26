@@ -52,8 +52,8 @@ std::vector<std::string> convert_input(int argc, char *argv[]);
 int main(int argc, char *argv[])
 try
 {
-
-  auto argparser = prepare_parser();
+  const auto SMConstants = GetSMConstants();
+  auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
   const CLIOptions args(argparser);
   if (not args.good())
@@ -73,7 +73,7 @@ try
 
   std::string linestr;
   std::unique_ptr<Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(args.Model);
+      ModelID::FChoose(args.Model, SMConstants);
 
   Logger::Write(LoggingLevel::ProgDetailed, "Created modelpointer ");
 

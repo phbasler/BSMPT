@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include <BSMPT/models/SMparam.h>
+
 namespace BSMPT
 {
 class Class_Potential_Origin;
@@ -43,7 +45,7 @@ CheckCTConditionsSecondDerivative(const Class_Potential_Origin &point);
 TestResults CheckCTIdentities(const Class_Potential_Origin &point);
 TestResults CheckCTNumber(const Class_Potential_Origin &point);
 
-TestResults CheckCKMUnitarity();
+TestResults CheckCKMUnitarity(const ISMConstants &SMConstants);
 TestResults CheckSymmetricTensorScalarSecond(
     const std::vector<std::vector<double>> &Tensor);
 TestResults CheckSymmetricTensorScalarThird(
