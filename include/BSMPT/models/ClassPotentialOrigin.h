@@ -839,6 +839,27 @@ public:
                                   int diff    = 0) const;
 
   /**
+   * @brief HiggsMassMatrixTreeLevelSimplified should calculate the Higgs mass
+   * matrix at tree level in a simplified way.
+   * @param v The VEV at which to calculate the matrix
+   * @return The matrix or nullopt if not implemented
+   * @remark This should be defined by each model to reduce the runtime.
+   * Otherwise the generic approach iterating through the tensors is used.
+   */
+  virtual std::optional<Eigen::MatrixXd>
+  HiggsMassMatrixTreeLevelSimplified(const std::vector<double> &v) const;
+
+  /**
+   * @brief HiggsMassMatrixTreeLevelGeneric calculates the Higgs mass matrix
+   * using \f$\Lambda_{ij} = L_{ij} + L_{ijk} v_k + \frac{1}{2} L_{ijkl} v_k
+   * v_l\f$.
+   * @param v
+   * @return
+   */
+  Eigen::MatrixXd
+  HiggsMassMatrixTreeLevelGeneric(const std::vector<double> &v) const;
+
+  /**
    * Calculates the gauge mass matrix and saves all eigenvalues
    * @param v the configuration of all VEVs at which the eigenvalues should be
    * evaluated

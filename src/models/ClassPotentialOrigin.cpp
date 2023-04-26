@@ -2361,31 +2361,17 @@ MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
 
   if (diff == 0)
   {
-    for (std::size_t i = 0; i < NHiggs; i++)
-    {
-      for (std::size_t j = i; j < NHiggs; j++)
-      {
-        res(i, j) = Curvature_Higgs_L2[i][j];
-        for (std::size_t k = 0; k < NHiggs; k++)
-        {
-          res(i, j) += Curvature_Higgs_L3[i][j][k] * v[k];
-          for (std::size_t l = 0; l < NHiggs; l++)
-          {
-            res(i, j) += 0.5 * Curvature_Higgs_L4[i][j][k][l] * v[k] * v[l];
-          }
-        }
+    res = HiggsMassMatrixTreeLevelSimplified(v).value_or(
+        HiggsMassMatrixTreeLevelGeneric(v));
 
-        if (Temp != 0)
+    if (Temp != 0)
+    {
+      for (std::size_t i = 0; i < NHiggs; i++)
+      {
+        for (std::size_t j = 0; j < NHiggs; j++)
         {
           res(i, j) += DebyeHiggs[i][j] * std::pow(Temp, 2);
         }
-      }
-    }
-    for (std::size_t i{1}; i < NHiggs; ++i)
-    {
-      for (std::size_t j{0}; j < i; ++j)
-      {
-        res(i, j) = res(j, i);
       }
     }
   }
@@ -2415,6 +2401,45 @@ MatrixXd Class_Potential_Origin::HiggsMassMatrix(const std::vector<double> &v,
     }
   }
   return res;
+}
+
+std::optional<Eigen::MatrixXd>
+Class_Potential_Origin::HiggsMassMatrixTreeLevelSimplified(
+    const std::vector<double> &v) const
+{
+  (void)v;
+  return std::nullopt;
+}
+
+Eigen::MatrixXd Class_Potential_Origin::HiggsMassMatrixTreeLevelGeneric(
+    const std::vector<double> &v) const
+{
+  Eigen::MatrixXd MassHiggs = Eigen::MatrixXd::Zero(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = i; j < NHiggs; j++)
+    {
+      MassHiggs(i, j) = Curvature_Higgs_L2[i][j];
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        MassHiggs(i, j) += Curvature_Higgs_L3[i][j][k] * v[k];
+        for (std::size_t l = 0; l < NHiggs; l++)
+        {
+          MassHiggs(i, j) += 0.5 * Curvature_Higgs_L4[i][j][k][l] * v[k] * v[l];
+        }
+      }
+    }
+  }
+
+  for (std::size_t i{1}; i < NHiggs; ++i)
+  {
+    for (std::size_t j{0}; j < i; ++j)
+    {
+      MassHiggs(i, j) = MassHiggs(j, i);
+    }
+  }
+
+  return MassHiggs;
 }
 
 std::vector<double>
