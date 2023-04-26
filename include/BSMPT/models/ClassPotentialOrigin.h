@@ -854,8 +854,8 @@ public:
    * @brief HiggsMassMatrixTreeLevelGeneric calculates the Higgs mass matrix
    * using \f$\Lambda_{ij} = L_{ij} + L_{ijk} v_k + \frac{1}{2} L_{ijkl} v_k
    * v_l\f$.
-   * @param v
-   * @return
+   * @param v The VEV at which to calculate the Higgs masses
+   * @return The mass matrix
    */
   Eigen::MatrixXd
   HiggsMassMatrixTreeLevelGeneric(const std::vector<double> &v) const;
