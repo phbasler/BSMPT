@@ -357,22 +357,6 @@ class ModelGenerator:
         print("//End of Quark interaction tensors")
         print("")
 
-    def printMassMatrixSimplified(self):
-        fieldsZero = [(x,0) for x in self._HiggsFields]
-
-        for i in range(self._nHiggs):
-            for j in range(self._nHiggs):
-                base = 0
-                for k in range(self._nHiggs):
-                    for l in range(self._nHiggs):
-                        val = diff(self._VHiggs,self._HiggsFields[i],self._HiggsFields[j],self._HiggsFields[k],self._HiggsFields[l])
-                        val = val.subs(fieldsZero)
-                        val = simplify(val)
-                        base = base + val*self._VEVAtFiniteTemp[k][1] * self._VEVAtFiniteTemp[l][1]
-                if base != 0:
-                    print("MassHiggs(" + str(i) + "," + str(j) + ") = " + self.convertToCPP(base) + ";")
-
-
     def printTreeSimplified(self):
         vevCounter=0
         for i in range(self._nHiggs):

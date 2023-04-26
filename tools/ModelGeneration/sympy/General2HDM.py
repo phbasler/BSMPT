@@ -47,11 +47,17 @@ lambda3 = symbols('lambda3',real=True)
 lambda4 = symbols('lambda4',real=True)
 Relambda5 = symbols('Relambda5',real=True)
 Imlambda5 = symbols('Imlambda5',real=True)
+Relambda6 = symbols('Relambda6',real=True)
+Imlambda6 = symbols('Imlambda6',real=True)
+Relambda7 = symbols('Relambda7',real=True)
+Imlambda7 = symbols('Imlambda7',real=True)
 
 m12sq = Rem12sq + I *Imm12sq
 lambda5 = Relambda5 + I*Imlambda5
+lambda6 = Relambda6 + I*Imlambda6
+lambda7 = Relambda7 + I*Imlambda7
 
-params=[lambda1,lambda2,lambda3,lambda4,Relambda5,Imlambda5,m11sq,m22sq,Rem12sq,Imm12sq]
+params=[lambda1,lambda2,lambda3,lambda4,Relambda5,Imlambda5,Relambda6,Imlambda6,Relambda7,Imlambda7,m11sq,m22sq,Rem12sq,Imm12sq]
 
 #CT params
 dm11sq, dm22sq, dRem12sq, dImm12sq = symbols('dm11sq dm22sq dRem12sq dImm12sq',real=True)
@@ -61,7 +67,11 @@ dlambda3 = symbols('dlambda3',real=True)
 dlambda4 = symbols('dlambda4',real=True)
 dRelambda5 = symbols('dRelambda5',real=True)
 dImlambda5 = symbols('dImlambda5',real=True)
-dparams=[dlambda1,dlambda2,dlambda3,dlambda4,dRelambda5,dImlambda5,dm11sq,dm22sq,dRem12sq,dImm12sq]
+dRelambda6 = symbols('dRelambda6',real=True)
+dImlambda6 = symbols('dImlambda6',real=True)
+dRelambda7 = symbols('dRelambda7',real=True)
+dImlambda7 = symbols('dImlambda7',real=True)
+dparams=[dlambda1,dlambda2,dlambda3,dlambda4,dRelambda5,dImlambda5,dRelambda6,dImlambda6,dRelambda7,dImlambda7,dm11sq,dm22sq,dRem12sq,dImm12sq]
 
 #VEVs
 v1 = symbols('v1', real=True)
@@ -98,7 +108,7 @@ phi21Sq = simplify(phi21**2)
 
 VHiggsNC = m11sq*phi1Sq+  m22sq * phi2Sq +  lambda1/2 * phi1Sq**2 +lambda2/2 * phi2Sq**2 + lambda3*phi1Sq*phi2Sq + lambda4*phi12*phi21
 # We need to expand here otherwise simplify cant handle the simplification well enough
-VHiggsHC = expand(-m12sq*phi12 + lambda5/2 *phi12**2)
+VHiggsHC = expand(-m12sq*phi12 + lambda5/2 *phi12**2 + lambda6*phi1Sq*phi12 + lambda7*phi2Sq*phi12)
 VHiggs = simplify(VHiggsNC + VHiggsHC + conjugate(VHiggsHC))
 
 if im(VHiggs) != 0:
@@ -265,9 +275,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-s','--show',choices=['ct','tensor','treeSimpl','CTSimpl'],required=True,help='The part of the model to be printed')
 
 if __name__ == "__main__":
-
-    G2HDM.printMassMatrixSimplified()
-
     args = parser.parse_args()
     method = args.show
 
