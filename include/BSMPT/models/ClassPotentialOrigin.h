@@ -16,6 +16,7 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/SMparam.h>
 #include <iostream>
+#include <optional>
 #include <vector>
 
 namespace BSMPT

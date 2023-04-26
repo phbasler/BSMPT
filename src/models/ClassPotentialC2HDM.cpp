@@ -167,6 +167,100 @@ std::vector<std::string> Class_Potential_C2HDM::addLegendVEV() const
   return labels;
 }
 
+std::optional<Eigen::MatrixXd>
+Class_Potential_C2HDM::HiggsMassMatrixTreeLevelSimplified(
+    const std::vector<double> &v) const
+{
+  Eigen::MatrixXd HiggsMass = Eigen::MatrixXd::Zero(NHiggs, NHiggs);
+  double wCB                = v.at(2);
+  double w1                 = v.at(4);
+  double w2                 = v.at(6);
+  double wCP                = v.at(7);
+
+  HiggsMass(0, 0) = 0.5 * L1 * std::pow(w1, 2) + 0.5 * L3 * std::pow(w2, 2) +
+                    0.5 * L3 * std::pow(wCP, 2) + u1 +
+                    0.5 * std::pow(wCB, 2) * (RL5 + L3 + L4);
+  HiggsMass(0, 1) = 0.5 * IL5 * std::pow(wCB, 2);
+  HiggsMass(0, 2) =
+      -0.5 * IL5 * w1 * wCP - RealMMix + 0.5 * w1 * w2 * (RL5 + L4);
+  HiggsMass(0, 3) = -0.5 * IL5 * w1 * w2 + Iu3 + 0.5 * w1 * wCP * (-RL5 + L4);
+  HiggsMass(0, 4) = -0.5 * IL5 * wCB * wCP + 0.5 * w2 * wCB * (RL5 + L4);
+  HiggsMass(0, 5) = 0.5 * IL5 * w2 * wCB + 0.5 * wCB * wCP * (RL5 + L4);
+  HiggsMass(0, 6) = 0.5 * w1 * wCB * (RL5 + L4);
+  HiggsMass(0, 7) = -0.5 * IL5 * w1 * wCB;
+  HiggsMass(1, 0) = 0.5 * IL5 * std::pow(wCB, 2);
+  HiggsMass(1, 1) = 0.5 * L1 * std::pow(w1, 2) + 0.5 * L3 * std::pow(w2, 2) +
+                    0.5 * L3 * std::pow(wCP, 2) + u1 +
+                    0.5 * std::pow(wCB, 2) * (-RL5 + L3 + L4);
+  HiggsMass(1, 2) = 0.5 * IL5 * w1 * w2 - Iu3 + 0.5 * w1 * wCP * (RL5 - L4);
+  HiggsMass(1, 3) =
+      -0.5 * IL5 * w1 * wCP - RealMMix + 0.5 * w1 * w2 * (RL5 + L4);
+  HiggsMass(1, 4) = 0.5 * IL5 * w2 * wCB + 0.5 * wCB * wCP * (RL5 - L4);
+  HiggsMass(1, 5) = 0.5 * IL5 * wCB * wCP + 0.5 * w2 * wCB * (-RL5 + L4);
+  HiggsMass(1, 6) = 0.5 * IL5 * w1 * wCB;
+  HiggsMass(1, 7) = 0.5 * w1 * wCB * (RL5 - L4);
+  HiggsMass(2, 0) =
+      -0.5 * IL5 * w1 * wCP - RealMMix + 0.5 * w1 * w2 * (RL5 + L4);
+  HiggsMass(2, 1) = 0.5 * IL5 * w1 * w2 - Iu3 + 0.5 * w1 * wCP * (RL5 - L4);
+  HiggsMass(2, 2) = 0.5 * L2 * std::pow(w2, 2) + 1.5 * L2 * std::pow(wCB, 2) +
+                    0.5 * L2 * std::pow(wCP, 2) + 0.5 * L3 * std::pow(w1, 2) +
+                    u2;
+  HiggsMass(2, 4) = 1.0 * L3 * w1 * wCB;
+  HiggsMass(2, 6) = 1.0 * L2 * w2 * wCB;
+  HiggsMass(2, 7) = 1.0 * L2 * wCB * wCP;
+  HiggsMass(3, 0) = -0.5 * IL5 * w1 * w2 + Iu3 + 0.5 * w1 * wCP * (-RL5 + L4);
+  HiggsMass(3, 1) =
+      -0.5 * IL5 * w1 * wCP - RealMMix + 0.5 * w1 * w2 * (RL5 + L4);
+  HiggsMass(3, 3) = 0.5 * L2 * std::pow(w2, 2) + 0.5 * L2 * std::pow(wCB, 2) +
+                    0.5 * L2 * std::pow(wCP, 2) + 0.5 * L3 * std::pow(w1, 2) +
+                    u2;
+  HiggsMass(4, 0) = -0.5 * IL5 * wCB * wCP + 0.5 * w2 * wCB * (RL5 + L4);
+  HiggsMass(4, 1) = 0.5 * IL5 * w2 * wCB + 0.5 * wCB * wCP * (RL5 - L4);
+  HiggsMass(4, 2) = 1.0 * L3 * w1 * wCB;
+  HiggsMass(4, 4) = -1.0 * IL5 * w2 * wCP + 1.5 * L1 * std::pow(w1, 2) +
+                    0.5 * L3 * std::pow(wCB, 2) + u1 +
+                    0.5 * std::pow(w2, 2) * (RL5 + L3 + L4) +
+                    0.5 * std::pow(wCP, 2) * (-RL5 + L3 + L4);
+  HiggsMass(4, 5) = 0.5 * IL5 * std::pow(w2, 2) - 0.5 * IL5 * std::pow(wCP, 2) +
+                    1.0 * RL5 * w2 * wCP;
+  HiggsMass(4, 6) =
+      -1.0 * IL5 * w1 * wCP - RealMMix + 1.0 * w1 * w2 * (RL5 + L3 + L4);
+  HiggsMass(4, 7) =
+      -1.0 * IL5 * w1 * w2 + Iu3 + 1.0 * w1 * wCP * (-RL5 + L3 + L4);
+  HiggsMass(5, 0) = 0.5 * IL5 * w2 * wCB + 0.5 * wCB * wCP * (RL5 + L4);
+  HiggsMass(5, 1) = 0.5 * IL5 * wCB * wCP + 0.5 * w2 * wCB * (-RL5 + L4);
+  HiggsMass(5, 4) = 0.5 * IL5 * std::pow(w2, 2) - 0.5 * IL5 * std::pow(wCP, 2) +
+                    1.0 * RL5 * w2 * wCP;
+  HiggsMass(5, 5) = 1.0 * IL5 * w2 * wCP + 0.5 * L1 * std::pow(w1, 2) +
+                    0.5 * L3 * std::pow(wCB, 2) + u1 +
+                    0.5 * std::pow(w2, 2) * (-RL5 + L3 + L4) +
+                    0.5 * std::pow(wCP, 2) * (RL5 + L3 + L4);
+  HiggsMass(5, 6) = 1.0 * IL5 * w1 * w2 - Iu3 + 1.0 * RL5 * w1 * wCP;
+  HiggsMass(5, 7) = -1.0 * IL5 * w1 * wCP + 1.0 * RL5 * w1 * w2 - RealMMix;
+  HiggsMass(6, 0) = 0.5 * w1 * wCB * (RL5 + L4);
+  HiggsMass(6, 1) = 0.5 * IL5 * w1 * wCB;
+  HiggsMass(6, 2) = 1.0 * L2 * w2 * wCB;
+  HiggsMass(6, 4) =
+      -1.0 * IL5 * w1 * wCP - RealMMix + 1.0 * w1 * w2 * (RL5 + L3 + L4);
+  HiggsMass(6, 5) = 1.0 * IL5 * w1 * w2 - Iu3 + 1.0 * RL5 * w1 * wCP;
+  HiggsMass(6, 6) = 1.5 * L2 * std::pow(w2, 2) + 0.5 * L2 * std::pow(wCB, 2) +
+                    0.5 * L2 * std::pow(wCP, 2) + u2 +
+                    0.5 * std::pow(w1, 2) * (RL5 + L3 + L4);
+  HiggsMass(6, 7) = -0.5 * IL5 * std::pow(w1, 2) + 1.0 * L2 * w2 * wCP;
+  HiggsMass(7, 0) = -0.5 * IL5 * w1 * wCB;
+  HiggsMass(7, 1) = 0.5 * w1 * wCB * (RL5 - L4);
+  HiggsMass(7, 2) = 1.0 * L2 * wCB * wCP;
+  HiggsMass(7, 4) =
+      -1.0 * IL5 * w1 * w2 + Iu3 + 1.0 * w1 * wCP * (-RL5 + L3 + L4);
+  HiggsMass(7, 5) = -1.0 * IL5 * w1 * wCP + 1.0 * RL5 * w1 * w2 - RealMMix;
+  HiggsMass(7, 6) = -0.5 * IL5 * std::pow(w1, 2) + 1.0 * L2 * w2 * wCP;
+  HiggsMass(7, 7) = 0.5 * L2 * std::pow(w2, 2) + 0.5 * L2 * std::pow(wCB, 2) +
+                    1.5 * L2 * std::pow(wCP, 2) + u2 +
+                    0.5 * std::pow(w1, 2) * (-RL5 + L3 + L4);
+
+  return HiggsMass;
+}
+
 void Class_Potential_C2HDM::ReadAndSet(const std::string &linestr,
                                        std::vector<double> &par)
 {
