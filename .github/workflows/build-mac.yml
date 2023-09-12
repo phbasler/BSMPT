@@ -20,7 +20,7 @@ jobs:
     - name: installPackages
       run: brew install eigen && brew install gsl && brew install nlopt && brew install boost && brew install libomp && brew install nlohmann-json
     - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v1
+      uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake ..
