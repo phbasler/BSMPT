@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1694552004634,
+  "lastUpdate": 1694557698183,
   "repoUrl": "https://github.com/phbasler/BSMPT",
   "entries": {
     "C++ Benchmark": [
@@ -7482,6 +7482,144 @@ window.BENCHMARK_DATA = {
             "value": 0.040013579004998794,
             "unit": "ns/iter",
             "extra": "iterations: 5\ncpu: 0.05813800368285657 ns\nthreads: 1"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "28863303+phbasler@users.noreply.github.com",
+            "name": "Philipp Basler",
+            "username": "phbasler"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cf3eaad161ec3b41fe9b06352a254d92b4c8606a",
+          "message": "Merge pull request #113 from phbasler/dependabot/github_actions/JamesIves/github-pages-deploy-action-4.4.3\n\nBump JamesIves/github-pages-deploy-action from 4.4.2 to 4.4.3",
+          "timestamp": "2023-09-12T22:24:29+02:00",
+          "tree_id": "92a505cc0f5e0eff9a14f65a4ce7f1aaa313930c",
+          "url": "https://github.com/phbasler/BSMPT/commit/cf3eaad161ec3b41fe9b06352a254d92b4c8606a"
+        },
+        "date": 1694557695750,
+        "tool": "googlecpp",
+        "benches": [
+          {
+            "name": "BM_NLOVEV",
+            "value": 523502924.4999965,
+            "unit": "ns/iter",
+            "extra": "iterations: 10\ncpu: 540030.0000000024 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 8282864105.999977,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 9611600.000000054 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 7097089104.00002,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 9166500.000000078 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 6988446345,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 10695499.999999747 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 7181685778.0000305,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 9300399.999999875 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5",
+            "value": 7191856761.999987,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 9545099.999999974 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_mean",
+            "value": 7348388419.000003,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 9663819.999999946 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_median",
+            "value": 7181685778.0000305,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 9545099.999999974 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_stddev",
+            "value": 528735846.6447307,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 604273.5862172507 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWPT/repeats:5_cv",
+            "value": 0.07195262641229343,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 0.06252947449530868 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 41109619576.99999,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 28549925400 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 38357389918.000084,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 25694545100.000004 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 38416133124,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 25692909400.000004 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 38659546637.99994,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 26000367499.999996 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5",
+            "value": 38872953829.00004,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 26173907500 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_mean",
+            "value": 39083128617.200005,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 26422330980.000004 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_median",
+            "value": 38659546637.99994,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 26000367499.999992 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_stddev",
+            "value": 1151286279.8099694,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 1207078451.093831 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_EWBG/repeats:5_cv",
+            "value": 0.029457372542670557,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 0.045684025834341085 ns\nthreads: 1"
           }
         ]
       }
