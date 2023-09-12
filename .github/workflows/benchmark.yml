@@ -17,7 +17,7 @@ jobs:
     - name : installPackages
       run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev libbenchmark-dev
     - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v1
+      uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release
