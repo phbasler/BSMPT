@@ -18,13 +18,13 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
           persist-credentials: false
     - name : installPackages
       run : brew install eigen gsl nlopt boost libomp nlohmann-json
     - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v1
+      uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name: cmake
       run: mkdir build && cd build && cmake .. 
@@ -38,13 +38,13 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
           persist-credentials: false
     - name : installPackages
       run : brew install eigen gsl boost libomp nlohmann-json
     - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v1
+      uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name: cmake
       run: mkdir buildNoNLOPT && cd buildNoNLOPT && cmake .. 
