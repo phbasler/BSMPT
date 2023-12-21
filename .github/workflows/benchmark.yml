@@ -26,7 +26,7 @@ jobs:
     - name: run benchmarks
       run: cd build && ./bin/benchmarks --benchmark_format=json --benchmark_out=benchmark_result.json
     - name: Archive benchmark results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: benchmark_result
         path: build/benchmark_result.json
