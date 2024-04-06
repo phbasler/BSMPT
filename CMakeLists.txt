@@ -100,7 +100,7 @@ if(UseLibCMAES AND NOT WIN32)
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
-  find_package(NLopt QUIET)
+  find_package(NLopt CONFIG QUIET)
   if(NLopt_FOUND)
     if(NOT "${NLopt_ROOT_DIR}" STREQUAL "")
       set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}

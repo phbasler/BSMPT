@@ -17,6 +17,7 @@ class BSMPT(ConanFile):
 
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
+        self.test_requires("catch2/3.5.3")
 
     def layout(self):
         cmake_layout(self)
