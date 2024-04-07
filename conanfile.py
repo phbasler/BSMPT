@@ -1,5 +1,6 @@
 from conan import ConanFile
 from conan.tools.cmake import cmake_layout, CMakeToolchain
+from conan.tools.system.package_manager import Apt
 
 
 class BSMPT(ConanFile):
@@ -38,6 +39,13 @@ class BSMPT(ConanFile):
         if self.options.enable_tests:
             self.test_requires("catch2/3.5.3")
             self.test_requires("benchmark/1.6.1")
+
+    def system_requirements(self):
+        if self.options.EnableCoverage:
+            apt = Apt(self)
+            apt.install(["lcov"], update=True, check=True)
+
+
 
     def layout(self):
         cmake_layout(self)
