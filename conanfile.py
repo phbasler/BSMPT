@@ -20,7 +20,7 @@ class BSMPT(ConanFile):
         "UseNLopt": True,
         "MakeAdditionalTesting": False,
         "BSMPTCompileBaryo": True,
-        "EnableCoverage": True,
+        "EnableCoverage": False,
     }
 
     def requirements(self):
