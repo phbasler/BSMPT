@@ -6,7 +6,7 @@ name: Ubuntu unit tests
 
 on:
   push:
-    branches: [ master, feature/conan ]
+    branches: [ master ]
   pull_request:
     branches: [ master, develop ]
   workflow_dispatch:
