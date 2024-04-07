@@ -13,8 +13,11 @@ on:
     
 
 jobs:
-  ubuntu-tests-fullSetup:
-    runs-on: ubuntu-latest
+  tests-fullSetup:
+    strategy:
+      matrix:
+        setup: [ {os: ubuntu-latest, profile: conan-linux-x86_64-release}] 
+    runs-on: ${{matrix.setup.os}}
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
@@ -32,11 +35,11 @@ jobs:
       id: cpu-cores
     - run: python3 Setup.py
     - name: cmake
-      run: cmake --preset conan-linux-x86_64-release
+      run: cmake --preset ${{matrix.setup.profile}}
     - name: build
-      run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }}
+      run: cmake --build --preset ${{matrix.setup.profile}} -j${{ steps.cpu-cores.outputs.count }}
     - name: run tests
-      run: ctest --preset conan-linux-x86_64-release -j --output-on-failure 
+      run: ctest --preset ${{matrix.setup.profile}} -j --output-on-failure 
     
       
 
