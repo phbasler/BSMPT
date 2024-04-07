@@ -12,6 +12,10 @@ on:
       - '**.h'
       - '**.hpp'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} 
+  cancel-in-progress: true
+
 jobs:
   PRbenchmark:
     runs-on: ubuntu-latest
