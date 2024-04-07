@@ -44,7 +44,7 @@ jobs:
     - name: Generate Coverage
       run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         flags: unittests # optional
         name: codecov-umbrella # optional
