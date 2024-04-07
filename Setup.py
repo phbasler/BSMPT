@@ -3,8 +3,7 @@ import sys
 import os
 import shutil
 from enum import Enum
-import argparse
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentTypeError
 
 
 class ArgTypeEnum(Enum):
@@ -13,7 +12,7 @@ class ArgTypeEnum(Enum):
         try:
             return cls[s]
         except KeyError:
-            raise argparse.ArgumentTypeError(f"{s!r} is not a valid {cls.__name__}")
+            raise ArgumentTypeError(f"{s!r} is not a valid {cls.__name__}")
 
     def __str__(self):
         return self.name
@@ -38,11 +37,10 @@ def setup_profiles():
     conan_home = subprocess.check_output("conan config home".split(), encoding="UTF-8")
     profile_dir = os.path.join(str(conan_home.split()[0]), "profiles", "BSMPT")
     print(profile_dir)
-    try:
-        shutil.copytree("profiles/BSMPT", profile_dir)
-    except:
-        pass
-
+    if os.path.exists(profile_dir):
+        shutil.rmtree(profile_dir)
+    shutil.copytree("profiles/BSMPT", profile_dir)
+    
 
 def conan_install(profile, additional_options=[]):
     config_settings = [
