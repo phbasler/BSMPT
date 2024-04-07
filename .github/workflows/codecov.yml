@@ -23,7 +23,7 @@ on:
   
 jobs:  
   coverage:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
     
     steps:
@@ -31,16 +31,16 @@ jobs:
       with:
           persist-credentials: false
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev lcov
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
-    - name: cmake
-      run: mkdir build && cd build && cmake .. -DEnableCoverage=On
+    - run: python3 Setup.py --option EnableCoverage True
+    - run: cmake --preset conan-linux-x86_64-release
     - name: compile
-      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
+      run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }}
     - name: Generate Coverage
-      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }} -t coverage
+      run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:

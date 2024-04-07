@@ -62,12 +62,12 @@ def conan_install(profile, additional_options=[]):
     subprocess.check_call(cmd)
 
 
-def conan_install_all(mode: BuildMode):
+def conan_install_all(mode: BuildMode, options=[]):
     profiles = target_profiles[sys.platform]
     if mode == BuildMode.all or mode == BuildMode.release:
-        conan_install(profiles["release"])
+        conan_install(profiles["release"],options)
     if mode == BuildMode.all or mode == BuildMode.debug:
-        conan_install(profiles["debug"])
+        conan_install(profiles["debug"],options)
 
 
 class ArgTypeEnum(Enum):
@@ -88,8 +88,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mode", default=BuildMode.release, type=BuildMode.argtype, choices=BuildMode
     )
+    parser.add_argument("--options", nargs='+')
 
     opts = parser.parse_args()
-
     setup_profiles()
-    conan_install_all(opts.mode)
+    conan_install_all(opts.mode, opts.options)
