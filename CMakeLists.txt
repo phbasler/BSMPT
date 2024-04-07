@@ -19,7 +19,6 @@ option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing"
        OFF)
 option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
-option(UseConan "Use conan to get dependencies" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
 
 set(BSMPT_IS_TOPLEVEL NO)
@@ -58,9 +57,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 include(LTO)
 
-if(UseConan)
-  include(ConanDependencies)
-endif(UseConan)
 
 find_package(PkgConfig)
 find_package(Eigen3 CONFIG REQUIRED)
