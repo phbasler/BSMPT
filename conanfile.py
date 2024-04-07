@@ -4,7 +4,7 @@ from conan.tools.cmake import cmake_layout, CMakeToolchain
 
 class BSMPT(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeToolchain", "CMakeDeps"
+    generators = "CMakeDeps"
 
     options = {
         "enable_tests": [True, False],
