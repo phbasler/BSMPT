@@ -28,18 +28,22 @@ class BSMPT(ConanFile):
         self.requires("boost/1.84.0")
         self.requires("gsl/2.7.1")
         self.requires("nlohmann_json/3.11.3")
-        self.requires("nlopt/2.7.1")
+
+        if self.options.UseNLopt:
+            self.requires("nlopt/2.7.1")
 
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
-        self.test_requires("catch2/3.5.3")
-        self.test_requires("benchmark/1.6.1")
+        
+        if self.options.enable_tests:
+            self.test_requires("catch2/3.5.3")
+            self.test_requires("benchmark/1.6.1")
 
     def layout(self):
         cmake_layout(self)
 
     def generate(self):
-        tc = CMakeToolchain()
+        tc = CMakeToolchain(self)
 
         tc.variables["BUILD_TESTING"] = self.options.enable_tests
         tc.variables["UseLibCMAES"] = self.options.UseLibCMAES

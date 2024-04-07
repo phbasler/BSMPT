@@ -2,12 +2,34 @@ import subprocess
 import sys
 import os
 import shutil
+from enum import Enum
+import argparse
+from argparse import ArgumentParser
+
+
+class ArgTypeEnum(Enum):
+    @classmethod
+    def argtype(cls, s: str) -> Enum:
+        try:
+            return cls[s]
+        except KeyError:
+            raise argparse.ArgumentTypeError(f"{s!r} is not a valid {cls.__name__}")
+
+    def __str__(self):
+        return self.name
+
+
+class BuildMode(ArgTypeEnum, Enum):
+    all = (0,)
+    release = (1,)
+    debug = 2
+
 
 build_profiles = {"win32": "windows-release", "linux": "linux-release"}
 
 target_profiles = {
-    "win32": ["windows-release", "windows-debug"],
-    "linux": ["linux-release", "linux-debug"],
+    "win32": {"release": "windows-release", "debug": "windows-debug"},
+    "linux": {"release": "linux-release", "debug": "linux-debug"},
 }
 
 
@@ -39,11 +61,34 @@ def conan_install(profile, additional_options=[]):
     subprocess.check_call(cmd)
 
 
-def conan_install_all():
-    for profile in target_profiles[sys.platform]:
-        conan_install(profile)
+def conan_install_all(mode: BuildMode):
+    profiles = target_profiles[sys.platform]
+    if mode == BuildMode.all or mode == BuildMode.release:
+        conan_install(profiles["release"])
+    if mode == BuildMode.all or mode == BuildMode.debug:
+        conan_install(profiles["debug"])
+
+
+class ArgTypeEnum(Enum):
+    @classmethod
+    def argtype(cls, s: str) -> Enum:
+        try:
+            return cls[s]
+        except KeyError:
+            raise argparse.ArgumentTypeError(f"{s!r} is not a valid {cls.__name__}")
+
+    def __str__(self):
+        return self.name
 
 
 if __name__ == "__main__":
+
+    parser = ArgumentParser()
+    parser.add_argument(
+        "--mode", default=BuildMode.release, type=BuildMode.argtype, choices=BuildMode
+    )
+
+    opts = parser.parse_args()
+
     setup_profiles()
-    conan_install_all()
+    conan_install_all(opts.mode)
