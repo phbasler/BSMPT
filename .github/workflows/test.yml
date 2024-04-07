@@ -16,7 +16,7 @@ jobs:
   tests-fullSetup:
     strategy:
       matrix:
-        setup: [ {os: ubuntu-latest, profile: conan-linux-x86_64-release}, {os: windows-latest, profile: conan-windows-x86_64-release}, {os: macos-latest, profile: macos-release}] 
+        setup: [ {os: ubuntu-latest, profile: conan-linux-x86_64-release}, {os: windows-latest, profile: conan-windows-x86_64-release}, {os: macos-latest, profile: conan-macos-x86_64-release}] 
     runs-on: ${{matrix.setup.os}}
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
