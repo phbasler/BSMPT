@@ -34,7 +34,9 @@ jobs:
     - name: cmake
       run: cmake --preset conan-linux-x86_64-release
     - name: build
-      run: 
+      run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }}
+    - name: run tests
+      run: ctest --preset conan-linux-x86_64-release -j --output-on-failure 
     
       
 
