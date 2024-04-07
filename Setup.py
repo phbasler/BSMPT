@@ -25,11 +25,12 @@ class BuildMode(ArgTypeEnum, Enum):
     debug = 2
 
 
-build_profiles = {"win32": "windows-release", "linux": "linux-release"}
+build_profiles = {"win32": "windows-release", "linux": "linux-release", "darwin": "macos-release"}
 
 target_profiles = {
     "win32": {"release": "windows-release", "debug": "windows-debug"},
     "linux": {"release": "linux-release", "debug": "linux-debug"},
+    "darwin": {"release": "macos-release", "debug": "macos-debug"}
 }
 
 
