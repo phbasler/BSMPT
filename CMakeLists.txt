@@ -57,7 +57,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 include(LTO)
 
-
 find_package(PkgConfig)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(Boost CONFIG)
