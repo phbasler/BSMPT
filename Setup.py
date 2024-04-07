@@ -92,7 +92,4 @@ if __name__ == "__main__":
 
     opts = parser.parse_args()
     setup_profiles()
-    options=opts.options
-    if options is None:
-        options = []
-    conan_install_all(opts.mode, opts.options)
+    conan_install_all(opts.mode, opts.options if opts.options is not None else [])
