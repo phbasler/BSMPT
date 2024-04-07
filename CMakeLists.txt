@@ -66,7 +66,7 @@ find_package(nlohmann_json CONFIG)
 
 find_package(Threads REQUIRED)
 
-if(NOT BOOST_FOUND)
+if(NOT Boost_FOUND)
   set(BSMPTCompileBaryo OFF)
 endif()
 

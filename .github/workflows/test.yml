@@ -32,7 +32,9 @@ jobs:
       id: cpu-cores
     - run: python3 Setup.py
     - name: cmake
-      run: cmake --list-presets 
+      run: cmake --preset conan-linux-x86_64-release
+    - name: build
+      run: 
     
       
 
