@@ -12,6 +12,8 @@ on:
       - '**.c'
       - '**.h'
       - '**.hpp'
+      - '**CMakeLists.txt'
+      - 'conanfile.py'
   pull_request:
     branches: [ master, develop ]
     paths:
@@ -19,6 +21,8 @@ on:
       - '**.c'
       - '**.h'
       - '**.hpp'
+      - '**CMakeLists.txt'
+      - 'conanfile.py'
   workflow_dispatch:
 
 concurrency:
