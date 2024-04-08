@@ -72,35 +72,41 @@ If you use this program for your work, please cite
 ## Installation:
 
 ### Dependencies
-BSMPT uses cmake which will try to find the following libraries. If they are not found automatically, you can use the -DpackageName_ROOT option of cmake to tell it where to look for the package.
+BSMPT uses cmake and [conan 2](https://conan.io/) for dependencies. The used dependencies are:
 
 1. [GSL library](https://www.gnu.org/software/gsl/). 
 2. [Eigen3](https://eigen.tuxfamily.org/index.php?title=Main_Page)  
-3. [libcmaes](https://github.com/CMA-ES/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically, otherwise you can point it to the install direction with
-    `-Dlibcmaes_ROOT=/path/to/cmaes`  
+3. [libcmaes](https://github.com/CMA-ES/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically.
     
-    If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `-DUseLibCMAES=OFF` 
+    If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `--options UseLibCMAES=False` 
     
-4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `-DUseNLopt=OFF`
+4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `--options UseNLopt=False` for the conanfile
 5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. If it is not found then these parts are not available.
 
-### Alternative Install method 
-If you have [conan](https://conan.io/) installed, then you can set the `-DUseConan=ON` flag for cmake and it will download boost, gsl, eigen3 and NLopt (if UseNLopt was not turned off) through [conancenter](https://conan.io/center/).
+### Install conan
+You can install conan through pip with `pip3 install conan>2`.
 
 ### build
-With the dependencies and options you can build the programm with
+We provide the script `Setup.py` which installes conan profiles for your operating system and run `conan install` to download the dependencies. If you want to use other profiles feel free to execute `conan install` with your profile manually or add it to the script.
+
+You can build the code with
   
-        mkdir build && cd build  
-        cmake (OPTIONS from Dependencies) ..  
-        cmake --build . -j  
-        cmake --build . -j -t doc
+        python3 Setup.py  
+        cmake --preset ${profile}  
+        cmake --build --preset ${profile} -j  
+        cmake --build --preset ${profile} -j -t doc
     
 
 The `-t doc` will use doxygen to create the online help in build/html which can be opened locally.
+The ${profile} parameter depends on your operating system. After running the `Setup` script you can call `cmake --list-presets` to show the found presets.
 
 
 ### Unit tests
-After compiling the code call `ctest -j` in the build folder to run some checks. Here the NLO VEV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
+After compiling the code call `ctest --preset ${profile} -j` in the root folder to run some checks. Here the NLO VEV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results. 
+
+
+### Development
+Most modern IDEs support cmake profiles. After running the `Setup.py` script you can open the root folder in an IDE of your choice (e.g. VSCode with cmake extension) and it will recognise the cmake profile.
 
 ---
 
