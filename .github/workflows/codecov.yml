@@ -41,7 +41,7 @@ jobs:
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
-    - run: python3 Setup.py --option EnableCoverage=True
+    - run: python3 Setup.py --options EnableCoverage=True
     - run: cmake --preset conan-linux-x86_64-release
     - name: compile
       run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }}
