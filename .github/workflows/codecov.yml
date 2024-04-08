@@ -41,6 +41,9 @@ jobs:
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
+    - name : installPackages
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov
+   
     - uses: actions/setup-python@v5
       with:
         python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
