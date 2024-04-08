@@ -59,6 +59,7 @@ jobs:
     - name: Upload coverage
       uses: codecov/codecov-action@v4
       with:
+        token: ${{  secrets.BSMPT_CODECOV_UPLOAD_TOKEN  }}
         flags: unittests # optional
         name: codecov-umbrella # optional
         fail_ci_if_error: true # optional (default = false)
