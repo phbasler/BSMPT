@@ -71,11 +71,11 @@ endif()
 
 set(CodeCoverageExcludesFromOtherPkgs "")
 if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")
-list(APPEND CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*")
+  list(APPEND CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*")
 endif()
 
 if(NOT "${GSL_ROOT_DIR}" STREQUAL "")
-list(APPEND CodeCoverageExcludesFromOtherPkgs "${GSL_ROOT_DIR}/*")
+  list(APPEND CodeCoverageExcludesFromOtherPkgs "${GSL_ROOT_DIR}/*")
 endif()
 
 if(Boost_FOUND)
@@ -83,14 +83,14 @@ if(Boost_FOUND)
     list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_DIR}/*")
   endif()
   if(NOT "${Boost_ROOT_DIR}" STREQUAL "")
-    list(APPEND CodeCoverageExcludesFromOtherPkgs  "${Boost_ROOT_DIR}/*")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_ROOT_DIR}/*")
   endif()
 endif()
 
 if(nlohmann_json_FOUND)
-if(NOT "${nlohmann_json}" STREQUAL "")
-  list(APPEND CodeCoverageExcludesFromOtherPkgs "${nlohmann_json}/*")
-endif(  )
+  if(NOT "${nlohmann_json}" STREQUAL "")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs "${nlohmann_json}/*")
+  endif()
 endif()
 
 set(EXPORT_CMAES FALSE)
@@ -149,7 +149,8 @@ if(EnableCoverage)
     ${n_cores} # Executable in PROJECT_BINARY_DIR
     BASE_DIRECTORY
     "${PROJECT_SOURCE_DIR}"
-    DEPENDS GenericTests)
+    DEPENDS
+    GenericTests)
 endif(EnableCoverage)
 
 find_lto(CXX)
