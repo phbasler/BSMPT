@@ -69,23 +69,28 @@ if(NOT Boost_FOUND)
   set(BSMPTCompileBaryo OFF)
 endif()
 
-set(CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*"
-                                      "${GSL_ROOT_DIR}/*")
+set(CodeCoverageExcludesFromOtherPkgs "")
+if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")
+list(APPEND CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*")
+endif()
+
+if(NOT "${GSL_ROOT_DIR}" STREQUAL "")
+list(APPEND CodeCoverageExcludesFromOtherPkgs "${GSL_ROOT_DIR}/*")
+endif()
 
 if(Boost_FOUND)
   if(NOT "${Boost_DIR}" STREQUAL "")
-    set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
-                                          "${Boost_DIR}/*")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_DIR}/*")
   endif()
   if(NOT "${Boost_ROOT_DIR}" STREQUAL "")
-    set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
-                                          "${Boost_ROOT_DIR}/*")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs  "${Boost_ROOT_DIR}/*")
   endif()
 endif()
 
 if(nlohmann_json_FOUND)
-  set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
-                                        "${nlohmann_json}/*")
+if(NOT "${nlohmann_json}" STREQUAL "")
+  list(APPEND CodeCoverageExcludesFromOtherPkgs "${nlohmann_json}/*")
+endif(  )
 endif()
 
 set(EXPORT_CMAES FALSE)
@@ -143,7 +148,8 @@ if(EnableCoverage)
     -j
     ${n_cores} # Executable in PROJECT_BINARY_DIR
     BASE_DIRECTORY
-    "${PROJECT_SOURCE_DIR}")
+    "${PROJECT_SOURCE_DIR}"
+    DEPENDS GenericTests)
 endif(EnableCoverage)
 
 find_lto(CXX)
