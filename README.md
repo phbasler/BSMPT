@@ -87,7 +87,7 @@ BSMPT uses cmake and [conan 2](https://conan.io/) for dependencies. The used dep
 You can install conan through pip with `pip3 install conan>2`.
 
 ### build
-We provide the script `Setup.py` which installes conan profiles for your operating system and run `conan install` to download the dependencies. If you want to use other profiles feel free to execute `conan install` with your profile manually or add it to the script.
+We provide the script `Setup.py` which installs conan profiles for your operating system and runs `conan install` to download the dependencies. If you want to use other profiles feel free to execute `conan install` with your profile manually or add it to the script.
 
 You can build the code with
   
