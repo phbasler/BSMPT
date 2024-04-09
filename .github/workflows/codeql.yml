@@ -52,7 +52,7 @@ jobs:
         id: cpu-cores
         if: matrix.language == 'cpp'
       - name: Setup
-        run: python3 Setup.py
+        run: python3 Setup.py --options BSMPTCompileBaryo=True
         if: matrix.language == 'cpp'
       - name: Preset cmake
         run: cmake --preset conan-linux-x86_64-release
