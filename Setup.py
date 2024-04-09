@@ -24,12 +24,16 @@ class BuildMode(ArgTypeEnum, Enum):
     debug = 2
 
 
-build_profiles = {"win32": "windows-release", "linux": "linux-release", "darwin": "macos-release"}
+build_profiles = {
+    "win32": "windows-release",
+    "linux": "linux-release",
+    "darwin": "macos-release",
+}
 
 target_profiles = {
     "win32": {"release": "windows-release", "debug": "windows-debug"},
     "linux": {"release": "linux-release", "debug": "linux-debug"},
-    "darwin": {"release": "macos-release", "debug": "macos-debug"}
+    "darwin": {"release": "macos-release", "debug": "macos-debug"},
 }
 
 
@@ -40,9 +44,9 @@ def setup_profiles():
     if os.path.exists(profile_dir):
         shutil.rmtree(profile_dir)
     shutil.copytree("profiles/BSMPT", profile_dir)
-    
 
-def conan_install(profile, additional_options=[], build_missing = False):
+
+def conan_install(profile, additional_options=[], build_missing=False):
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
@@ -63,12 +67,12 @@ def conan_install(profile, additional_options=[], build_missing = False):
     subprocess.check_call(cmd)
 
 
-def conan_install_all(mode: BuildMode, options=[], build_missing = False):
+def conan_install_all(mode: BuildMode, options=[], build_missing=False):
     profiles = target_profiles[sys.platform]
     if mode == BuildMode.all or mode == BuildMode.release:
-        conan_install(profiles["release"],options, build_missing)
+        conan_install(profiles["release"], options, build_missing)
     if mode == BuildMode.all or mode == BuildMode.debug:
-        conan_install(profiles["debug"],options, build_missing)
+        conan_install(profiles["debug"], options, build_missing)
 
 
 class ArgTypeEnum(Enum):
@@ -87,11 +91,22 @@ if __name__ == "__main__":
 
     parser = ArgumentParser()
     parser.add_argument(
-        "--mode", default=BuildMode.release, type=BuildMode.argtype, choices=BuildMode
+        "--mode",
+        "-m",
+        default=BuildMode.release,
+        type=BuildMode.argtype,
+        choices=BuildMode,
+        help="Should BSMPT be build in Debug, Release or both?",
     )
-    parser.add_argument("--options", nargs='+')
-    parser.add_argument("--build-missing","-b",action='store_true')
+    parser.add_argument(
+        "--options", "-o", nargs="+", help="Options to pass through to conan."
+    )
+    parser.add_argument(
+        "--build-missing", "-b", action="store_true", help="Build missing dependencies."
+    )
 
     opts = parser.parse_args()
     setup_profiles()
-    conan_install_all(opts.mode, opts.options if opts.options is not None else [], opts.build_missing)
+    conan_install_all(
+        opts.mode, opts.options if opts.options is not None else [], opts.build_missing
+    )
