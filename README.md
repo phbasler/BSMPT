@@ -84,7 +84,7 @@ BSMPT uses cmake and [conan 2](https://conan.io/) for dependencies. The used dep
 5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. In order to compile the Baryogenesis calculation, set `--options BSMPTCompileBaryo=True` when calling `Setup.py` as described below.
 
 ### Install conan
-You can install conan through pip with `pip3 install conan>2`.
+You can install conan through pip with `pip3 install conan`.
 
 ### build - simple
 We provide the script `Build.py` which installs the necessary conan profiles for your operating system, handles the dependencies and compiles `BSMPT` with its default settings in release mode. You can execute it with

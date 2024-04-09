@@ -2,10 +2,13 @@ from conan import ConanFile
 from conan.tools.cmake import cmake_layout, CMakeToolchain
 from conan.tools.system.package_manager import Apt
 
+required_conan_version=">=2.0.0 <3"
 
 class BSMPT(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
+
+    
 
     options = {
         "enable_tests": [True, False],
