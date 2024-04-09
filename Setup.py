@@ -42,7 +42,7 @@ def setup_profiles():
     shutil.copytree("profiles/BSMPT", profile_dir)
     
 
-def conan_install(profile, additional_options=[]):
+def conan_install(profile, additional_options=[], build_missing = False):
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
@@ -57,15 +57,18 @@ def conan_install(profile, additional_options=[]):
     for conf in config_settings:
         cmd += ["-c", conf]
 
+    if build_missing:
+        cmd += ["--build=missing"]
+
     subprocess.check_call(cmd)
 
 
-def conan_install_all(mode: BuildMode, options=[]):
+def conan_install_all(mode: BuildMode, options=[], build_missing = False):
     profiles = target_profiles[sys.platform]
     if mode == BuildMode.all or mode == BuildMode.release:
-        conan_install(profiles["release"],options)
+        conan_install(profiles["release"],options, build_missing)
     if mode == BuildMode.all or mode == BuildMode.debug:
-        conan_install(profiles["debug"],options)
+        conan_install(profiles["debug"],options, build_missing)
 
 
 class ArgTypeEnum(Enum):
@@ -87,7 +90,8 @@ if __name__ == "__main__":
         "--mode", default=BuildMode.release, type=BuildMode.argtype, choices=BuildMode
     )
     parser.add_argument("--options", nargs='+')
+    parser.add_argument("--build-missing","-b",action='store_true')
 
     opts = parser.parse_args()
     setup_profiles()
-    conan_install_all(opts.mode, opts.options if opts.options is not None else [])
+    conan_install_all(opts.mode, opts.options if opts.options is not None else [], opts.build_missing)
