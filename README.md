@@ -81,7 +81,7 @@ BSMPT uses cmake and [conan 2](https://conan.io/) for dependencies. The used dep
     If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `--options UseLibCMAES=False` 
     
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `--options UseNLopt=False` for the conanfile
-5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. If it is not found then these parts are not available.
+5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. In order to compile the Baryogenesis calculation, set `--options BSMPTCompileBaryo=True` when calling `Setup.py` as described below.
 
 ### Install conan
 You can install conan through pip with `pip3 install conan>2`.
