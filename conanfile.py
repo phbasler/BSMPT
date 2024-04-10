@@ -8,7 +8,7 @@ class BSMPT(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
 
-    
+
 
     options = {
         "enable_tests": [True, False],
@@ -17,6 +17,7 @@ class BSMPT(ConanFile):
         "MakeAdditionalTesting": [True, False],
         "BSMPTCompileBaryo": [True, False],
         "EnableCoverage": [True, False],
+        "BSMPTUseVectorization": [True, False],
     }
     default_options = {
         "enable_tests": True,
@@ -25,6 +26,7 @@ class BSMPT(ConanFile):
         "MakeAdditionalTesting": False,
         "BSMPTCompileBaryo": False,
         "EnableCoverage": False,
+        "BSMPTUseVectorization": True,
     }
 
     def requirements(self):
@@ -63,5 +65,6 @@ class BSMPT(ConanFile):
         tc.variables["MakeAdditionalTesting"] = self.options.MakeAdditionalTesting
         tc.variables["BSMPTCompileBaryo"] = self.options.BSMPTCompileBaryo
         tc.variables["EnableCoverage"] = self.options.EnableCoverage
+        tc.variables["BSMPTUseVectorization"] = self.options.BSMPTUseVectorization
 
         tc.generate()

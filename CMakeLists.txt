@@ -18,8 +18,9 @@ option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing"
        OFF)
-option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
+option(BSMPTCompileBaryo "Compile Baryogenesis" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
+option(BSMPTUseVectorization "Disable vectorization" ON)
 
 set(BSMPT_IS_TOPLEVEL NO)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -30,10 +31,9 @@ if(NOT BSMPT_IS_TOPLEVEL)
   set(EnableCoverage OFF)
 endif()
 
-set(BSMPT_USE_VECTORIZATION ON)
 if(EnableCoverage)
   # The compiler flags don't mix well, so we turn it off in this scenario
-  set(BSMPT_USE_VECTORIZATION OFF)
+  set(BSMPTUseVectorization OFF)
 endif()
 
 if(BSMPT_IS_TOPLEVEL)

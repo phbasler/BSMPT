@@ -14,7 +14,7 @@ add_compile_options(
   $<$<AND:$<CONFIG:RELEASE>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-O3>
 )
 
-if(BSMPT_USE_VECTORIZATION)
+if(BSMPTUseVectorization)
   include(CheckCXXCompilerFlag)
 
   check_cxx_compiler_flag("-march=native" _march_native_works)
@@ -33,7 +33,7 @@ if(BSMPT_USE_VECTORIZATION)
   else()
     message(STATUS "No suitable compiler flag found for vectorization")
   endif()
-endif(BSMPT_USE_VECTORIZATION)
+endif(BSMPTUseVectorization)
 
 add_compile_options(
   $<$<CXX_COMPILER_ID:MSVC>:/permissive->
