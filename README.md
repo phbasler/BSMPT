@@ -70,28 +70,26 @@ If you use this program for your work, please cite
   - [2007.01725](https://arxiv.org/abs/2007.01725)
 
 ## Installation:
+BSMPT uses cmake and [conan 2](https://conan.io/) for its installation which can be installed through pip with `pip3 install cmake conan`.
+In addition, you need a `C` and `C++` compiler installed.
+
+### build - simple
+If you want the default installation of BSMPT, you can then use the `Build.py` script.
+The script `Build.py` installs the necessary conan profiles for your operating system, handles the dependencies and compiles `BSMPT` with its default settings in release mode. You can execute it with
+
+```bash
+python3 Build.py
+```
 
 ### Dependencies
 BSMPT uses cmake and [conan 2](https://conan.io/) for dependencies. The used dependencies are:
 
 1. [GSL library](https://www.gnu.org/software/gsl/). 
 2. [Eigen3](https://eigen.tuxfamily.org/index.php?title=Main_Page)  
-3. [libcmaes](https://github.com/CMA-ES/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. If libcmaes is installed through cmake BSMPT should find it automatically.
-    
-    If cmaes is not installed then it will be installed in your build directory. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `--options UseLibCMAES=False` 
-    
-4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `--options UseNLopt=False` for the conanfile
-5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. In order to compile the Baryogenesis calculation, set `--options BSMPTCompileBaryo=True` when calling `Setup.py` as described below.
+3. [libcmaes](https://github.com/CMA-ES/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `--options UseLibCMAES=False` when using the detailed build, as described below.
+4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `--options UseNLopt=False` when using the detailed build, as described below.
+5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. In order to compile the Baryogenesis calculation, set `--options BSMPTCompileBaryo=True` when using the detailed build, as described below.
 
-### Install conan
-You can install conan through pip with `pip3 install conan`.
-
-### build - simple
-We provide the script `Build.py` which installs the necessary conan profiles for your operating system, handles the dependencies and compiles `BSMPT` with its default settings in release mode. You can execute it with
-
-```bash
-python3 Build.py
-```
 
 ### build - detailed
 We provide the script `Setup.py` which installs conan profiles for your operating system and runs `conan install` to download the dependencies. If you want to use other profiles feel free to execute `conan install` with your profile manually or add it to the script.
@@ -107,7 +105,20 @@ cmake --build --preset ${profile} -j -t doc
     
 
 The `-t doc` will use doxygen to create the online help in build/html which can be opened locally.
-The ${profile} parameter depends on your operating system. After running the `Setup` script you can call `cmake --list-presets` to show the found presets.
+The `${profile}` parameter depends on your operating system. After running the `Setup` script you can call `cmake --list-presets` to show the found presets.
+
+The script `Setup.py` can take several optional arguments, run `python3 Setup.py -h` or `python3 Setup.py --help` to display them.
+The optional arguments are the following:
+- `--mode` or `-m` with options `{all,release,debug}` to specify the level of optimization in the compilation
+- `--options` or `-o` with the following options and their default values:
+	- `enable_tests=True`: whether unit tests are build
+	- `UseLibCMAES=True`: whether libcmaes is installed and enabled for minimization
+	- `UseNLopt=True`: whether NLopt is installed and enabled for minimization
+	- `MakeAdditionalTesting=False`: whether additional test-executables are build
+	- `BSMPTCompileBaryo=False`: whether the electroweak baryogenesis calculation for the C2HDM is compiled
+ 	- `EnableCoverage=False`: whether code coverage is enabled
+	- `BSMPTUseVectorization=True`: whether vectorization is enabled, this e.g. sets the `march=native` compiler flag (if available)
+- `--build-missing` or `-b`: fetch and install missing packages during build
 
 
 ### Unit tests
