@@ -1,6 +1,7 @@
 from conan import ConanFile
 from conan.tools.cmake import cmake_layout, CMakeToolchain
 from conan.tools.system.package_manager import Apt
+from conan.errors import ConanInvalidConfiguration
 
 required_conan_version=">=2.0.0 <3"
 
@@ -15,18 +16,18 @@ class BSMPT(ConanFile):
         "UseLibCMAES": [True, False],
         "UseNLopt": [True, False],
         "MakeAdditionalTesting": [True, False],
-        "BSMPTCompileBaryo": [True, False],
+        "CompileBaryo": [True, False],
         "EnableCoverage": [True, False],
-        "BSMPTUseVectorization": [True, False],
+        "UseVectorization": [True, False],
     }
     default_options = {
         "enable_tests": True,
         "UseLibCMAES": True,
         "UseNLopt": True,
         "MakeAdditionalTesting": False,
-        "BSMPTCompileBaryo": False,
+        "CompileBaryo": False,
         "EnableCoverage": False,
-        "BSMPTUseVectorization": True,
+        "UseVectorization": True,
     }
 
     def requirements(self):
@@ -34,7 +35,7 @@ class BSMPT(ConanFile):
         self.requires("gsl/2.7.1")
         self.requires("nlohmann_json/3.11.3")
 
-        if self.options.BSMPTCompileBaryo:
+        if self.options.CompileBaryo:
             self.requires("boost/1.84.0")
 
         if self.options.UseNLopt:
@@ -63,8 +64,15 @@ class BSMPT(ConanFile):
         tc.variables["UseLibCMAES"] = self.options.UseLibCMAES
         tc.variables["UseNLopt"] = self.options.UseNLopt
         tc.variables["MakeAdditionalTesting"] = self.options.MakeAdditionalTesting
-        tc.variables["BSMPTCompileBaryo"] = self.options.BSMPTCompileBaryo
+        tc.variables["BSMPTCompileBaryo"] = self.options.CompileBaryo
         tc.variables["EnableCoverage"] = self.options.EnableCoverage
-        tc.variables["BSMPTUseVectorization"] = self.options.BSMPTUseVectorization
+        tc.variables["BSMPTUseVectorization"] = self.options.UseVectorization
 
         tc.generate()
+
+    def validate(self):
+        if self.options.UseVectorization and self.options.EnableCoverage:
+            raise ConanInvalidConfiguration("Vectorization and coverage are not supported simultaneously.")
+    
+        if self.settings.os != "Linux" and self.options.EnableCoverage:
+            raise ConanInvalidConfiguration("We depend on lcov for coverage.")

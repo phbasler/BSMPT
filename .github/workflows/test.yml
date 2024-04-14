@@ -38,7 +38,7 @@ jobs:
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
-    - run: python3 Setup.py --options BSMPTCompileBaryo=True
+    - run: python3 Setup.py --options CompileBaryo=True
     - name: cmake
       run: cmake --preset ${{matrix.setup.profile}}
     - name: build
