@@ -108,17 +108,6 @@ The `-t doc` will use doxygen to create the online help in build/html which can 
 The `${profile}` parameter depends on your operating system. After running the `Setup` script you can call `cmake --list-presets` to show the found presets.
 
 The script `Setup.py` can take several optional arguments, run `python3 Setup.py -h` or `python3 Setup.py --help` to display them.
-The optional arguments are the following:
-- `--mode` or `-m` with options `{all,release,debug}` to specify the level of optimization in the compilation
-- `--options` or `-o` with the following options and their default values:
-	- `enable_tests=True`: whether unit tests are build
-	- `UseLibCMAES=True`: whether libcmaes is installed and enabled for minimization
-	- `UseNLopt=True`: whether NLopt is installed and enabled for minimization
-	- `MakeAdditionalTesting=False`: whether additional test-executables are build
-	- `BSMPTCompileBaryo=False`: whether the electroweak baryogenesis calculation for the C2HDM is compiled
- 	- `EnableCoverage=False`: whether code coverage is enabled
-	- `BSMPTUseVectorization=True`: whether vectorization is enabled, this e.g. sets the `march=native` compiler flag (if available)
-- `--build-missing` or `-b`: fetch and install missing packages during build
 
 
 ### Unit tests
