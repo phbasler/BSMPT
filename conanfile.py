@@ -3,22 +3,27 @@ from conan.tools.cmake import cmake_layout, CMakeToolchain
 from conan.tools.system.package_manager import Apt
 from conan.errors import ConanInvalidConfiguration
 
-required_conan_version=">=2.0.0 <3"
+required_conan_version = ">=2.0.0 <3"
+
 
 class BSMPT(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
 
-
-
     options = {
-        "enable_tests": [True, False],
-        "UseLibCMAES": [True, False],
-        "UseNLopt": [True, False],
-        "MakeAdditionalTesting": [True, False],
-        "CompileBaryo": [True, False],
-        "EnableCoverage": [True, False],
-        "UseVectorization": [True, False],
+        "enable_tests": [True, False],  # enables the unit tests
+        "UseLibCMAES": [
+            True,
+            False,
+        ],  # Use CMAES. Fetches it through cmake_fetch if not installed
+        "UseNLopt": [True, False],  # Use NLopt for minimization
+        "MakeAdditionalTesting": [True, False],  # build additional test executables
+        "CompileBaryo": [
+            True,
+            False,
+        ],  # compile the electroweak baryogenesis for the C2HDM
+        "EnableCoverage": [True, False],  # enable code coverage
+        "UseVectorization": [True, False],  # use vectorization for the build
     }
     default_options = {
         "enable_tests": True,
@@ -53,7 +58,6 @@ class BSMPT(ConanFile):
             apt = Apt(self)
             apt.install(["lcov"], update=True, check=True)
 
-
     def layout(self):
         cmake_layout(self)
 
@@ -72,7 +76,9 @@ class BSMPT(ConanFile):
 
     def validate(self):
         if self.options.UseVectorization and self.options.EnableCoverage:
-            raise ConanInvalidConfiguration("Vectorization and coverage are not supported simultaneously.")
-    
+            raise ConanInvalidConfiguration(
+                "Vectorization and coverage are not supported simultaneously."
+            )
+
         if self.settings.os != "Linux" and self.options.EnableCoverage:
             raise ConanInvalidConfiguration("We depend on lcov for coverage.")

@@ -99,7 +99,10 @@ if __name__ == "__main__":
         help="Should BSMPT be build in Debug, Release or both?",
     )
     parser.add_argument(
-        "--options", "-o", nargs="+", help="Options to pass through to conan."
+        "--options",
+        "-o",
+        nargs="+",
+        help="Options to pass through to conan. For the available options please look into the conanfile.",
     )
     parser.add_argument(
         "--build-missing", "-b", action="store_true", help="Build missing dependencies."
