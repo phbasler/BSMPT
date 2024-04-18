@@ -11,7 +11,7 @@ class BSMPT(ConanFile):
     generators = "CMakeDeps"
 
     options = {
-        "enable_tests": [True, False],  # enables the unit tests
+        "EnableTests": [True, False],  # enables the unit tests
         "UseLibCMAES": [
             True,
             False,
@@ -26,7 +26,7 @@ class BSMPT(ConanFile):
         "UseVectorization": [True, False],  # use vectorization for the build
     }
     default_options = {
-        "enable_tests": True,
+        "EnableTests": True,
         "UseLibCMAES": True,
         "UseNLopt": True,
         "MakeAdditionalTesting": False,
@@ -49,7 +49,7 @@ class BSMPT(ConanFile):
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
 
-        if self.options.enable_tests:
+        if self.options.EnableTests:
             self.test_requires("catch2/3.5.3")
             self.test_requires("benchmark/1.6.1")
 
@@ -64,7 +64,7 @@ class BSMPT(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
 
-        tc.variables["BUILD_TESTING"] = self.options.enable_tests
+        tc.variables["BUILD_TESTING"] = self.options.EnableTests
         tc.variables["UseLibCMAES"] = self.options.UseLibCMAES
         tc.variables["UseNLopt"] = self.options.UseNLopt
         tc.variables["MakeAdditionalTesting"] = self.options.MakeAdditionalTesting
