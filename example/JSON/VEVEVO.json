@@ -1,6 +1,6 @@
 {
     "line": "2",
-    "input": "../example/C2HDM_Input.dat",
+    "input": "../../example/C2HDM_Input.dat",
     "output": "test.tsv",
     "model": "c2hdm",
     "temperatureStart": "0",

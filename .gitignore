@@ -11,3 +11,5 @@ build
 *.log
 *.out
 *.synctex.gz
+
+CMakeUserPresets.json

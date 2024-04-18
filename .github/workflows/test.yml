@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-name: Ubuntu unit tests
+name: Unit tests
 
 on:
   push:
@@ -12,46 +12,40 @@ on:
   workflow_dispatch:
     
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} 
+  cancel-in-progress: true
+
 jobs:
-  ubuntu-tests-fullSetup:
-    runs-on: ubuntu-20.04
+  tests-fullSetup:
+    strategy:
+      matrix:
+        setup: [ {os: ubuntu-latest, profile: conan-linux-x86_64-release}, {os: windows-latest, profile: conan-windows-x86_64-release}, {os: macos-latest, profile: conan-macos-x86_64-release}] 
+    runs-on: ${{matrix.setup.os}}
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
     - uses: actions/checkout@v4
       with:
           persist-credentials: false
-    - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+    - name: Install conan
+      run: pip install conan>2
+
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
+    - run: python3 Setup.py --options CompileBaryo=True
     - name: cmake
-      run: mkdir build && cd build && cmake .. 
-    - name: make
-      run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
-    - name: Test
-      run: cd build && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
+      run: cmake --preset ${{matrix.setup.profile}}
+    - name: build
+      run: cmake --build --preset ${{matrix.setup.profile}} -j${{ steps.cpu-cores.outputs.count }}
+    - name: run tests
+      run: ctest --preset ${{matrix.setup.profile}} -j --output-on-failure 
+    
       
-  ubuntu-tests-NoNLopt:
-    runs-on: ubuntu-20.04
-    if: "!contains(github.event.head_commit.message, 'skip-ci')"
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-          persist-credentials: false
-    - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libboost-all-dev
-    - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v2
-      id: cpu-cores
-    - name: cmake
-      run: mkdir buildNoNLOPT && cd buildNoNLOPT && cmake .. 
-    - name: make
-      run: cd buildNoNLOPT && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
-    - name: Test
-      run: cd buildNoNLOPT && ctest -j${{ steps.cpu-cores.outputs.count }} --output-on-failure
-
 
 

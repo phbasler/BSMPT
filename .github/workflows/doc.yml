@@ -8,25 +8,35 @@ on:
   push:
     branches: [ master ]
   
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} 
+  cancel-in-progress: true
     
     
 jobs:
   Deploy:
-     runs-on: ubuntu-20.04
+     runs-on: ubuntu-latest
      steps:
      - uses: actions/checkout@v4
        with:
           persist-credentials: false
      - name: installPackages
-       run: sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-cxx-dev libboost-all-dev doxygen
+       run: sudo apt-get install --no-install-recommends --yes doxygen
+     - uses: actions/setup-python@v5
+       with:
+         python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+     - name: Install conan
+       run: pip install conan>2
      - name: Get number of CPU cores
        uses: SimenB/github-actions-cpu-cores@v2
        id: cpu-cores
-     - name: cmake
-       run: mkdir build && cd build && cmake .. && cmake --build . -j${{ steps.cpu-cores.outputs.count }} -t doc
+     - run: python3 Setup.py
+     - run: cmake --preset conan-linux-x86_64-release
+     - run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} -t doc
      - name: Deploy
        uses: JamesIves/github-pages-deploy-action@v4.5.0
        with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: build/html # The folder the action should deploy.
+          folder: build/linux-x86_64-release/html # The folder the action should deploy.
           target-folder: documentation

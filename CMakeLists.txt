@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.23)
 project(
   BSMPT
   VERSION 2.6.0
@@ -18,9 +18,9 @@ option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing"
        OFF)
-option(BSMPTCompileBaryo "Compile Baryogenesis" ON)
-option(UseConan "Use conan to get dependencies" OFF)
+option(BSMPTCompileBaryo "Compile Baryogenesis" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
+option(BSMPTUseVectorization "Disable vectorization" ON)
 
 set(BSMPT_IS_TOPLEVEL NO)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -31,10 +31,9 @@ if(NOT BSMPT_IS_TOPLEVEL)
   set(EnableCoverage OFF)
 endif()
 
-set(BSMPT_USE_VECTORIZATION ON)
 if(EnableCoverage)
   # The compiler flags don't mix well, so we turn it off in this scenario
-  set(BSMPT_USE_VECTORIZATION OFF)
+  set(BSMPTUseVectorization OFF)
 endif()
 
 if(BSMPT_IS_TOPLEVEL)
@@ -58,39 +57,40 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 include(LTO)
 
-if(UseConan)
-  include(ConanDependencies)
-endif(UseConan)
-
 find_package(PkgConfig)
-find_package(Eigen3 3.3.0 REQUIRED)
-find_package(Boost 1.66)
-find_package(GSL 2.1 REQUIRED)
-find_package(nlohmann_json 3.7.3)
+find_package(Eigen3 CONFIG REQUIRED)
+find_package(Boost CONFIG)
+find_package(GSL CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG)
 
 find_package(Threads REQUIRED)
 
-if(NOT BOOST_FOUND)
+if(NOT Boost_FOUND)
   set(BSMPTCompileBaryo OFF)
 endif()
 
-set(CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*"
-                                      "${GSL_ROOT_DIR}/*")
+set(CodeCoverageExcludesFromOtherPkgs "")
+if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")
+  list(APPEND CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*")
+endif()
+
+if(NOT "${GSL_ROOT_DIR}" STREQUAL "")
+  list(APPEND CodeCoverageExcludesFromOtherPkgs "${GSL_ROOT_DIR}/*")
+endif()
 
 if(Boost_FOUND)
   if(NOT "${Boost_DIR}" STREQUAL "")
-    set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
-                                          "${Boost_DIR}/*")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_DIR}/*")
   endif()
   if(NOT "${Boost_ROOT_DIR}" STREQUAL "")
-    set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
-                                          "${Boost_ROOT_DIR}/*")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_ROOT_DIR}/*")
   endif()
 endif()
 
 if(nlohmann_json_FOUND)
-  set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
-                                        "${nlohmann_json}/*")
+  if(NOT "${nlohmann_json}" STREQUAL "")
+    list(APPEND CodeCoverageExcludesFromOtherPkgs "${nlohmann_json}/*")
+  endif()
 endif()
 
 set(EXPORT_CMAES FALSE)
@@ -100,7 +100,7 @@ if(UseLibCMAES AND NOT WIN32)
 endif(UseLibCMAES AND NOT WIN32)
 
 if(UseNLopt)
-  find_package(NLopt QUIET)
+  find_package(NLopt CONFIG QUIET)
   if(NLopt_FOUND)
     if(NOT "${NLopt_ROOT_DIR}" STREQUAL "")
       set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
@@ -148,7 +148,9 @@ if(EnableCoverage)
     -j
     ${n_cores} # Executable in PROJECT_BINARY_DIR
     BASE_DIRECTORY
-    "${PROJECT_SOURCE_DIR}")
+    "${PROJECT_SOURCE_DIR}"
+    DEPENDS
+    GenericTests)
 endif(EnableCoverage)
 
 find_lto(CXX)
@@ -223,6 +225,7 @@ endif(BSMPT_IS_TOPLEVEL)
 # -------------------- Testing
 # ---------------------------------------------------
 
+include(CTest)
 if(BSMPT_IS_TOPLEVEL AND BUILD_TESTING)
   add_subdirectory(tests)
 endif()

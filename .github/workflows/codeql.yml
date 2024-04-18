@@ -8,6 +8,10 @@ on:
   schedule:
     - cron: "14 17 * * 1"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} 
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze
@@ -35,21 +39,26 @@ jobs:
           queries: +security-and-quality
           config-file: ./.github/codeql/codeql-config.yml
           
-      - name : installPackages
-        run : |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends --yes libgsl-dev libeigen3-dev libnlopt-dev libnlopt-cxx-dev libboost-all-dev
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+      - name: Install conan
+        run: pip install conan>2
         if: matrix.language == 'cpp'
         
       - name: Get number of CPU cores
         uses: SimenB/github-actions-cpu-cores@v2
         id: cpu-cores
         if: matrix.language == 'cpp'
-      - name: cmake
-        run: mkdir build && cd build && cmake .. -DUseLibCMAES=OFF
+      - name: Setup
+        run: python3 Setup.py --options CompileBaryo=True
         if: matrix.language == 'cpp'
-      - name: make
-        run: cd build && cmake --build . -j${{ steps.cpu-cores.outputs.count }}
+      - name: Preset cmake
+        run: cmake --preset conan-linux-x86_64-release
+        if: matrix.language == 'cpp'
+      - name: build
+        run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} 
         if: matrix.language == 'cpp'
 
       - name: Autobuild

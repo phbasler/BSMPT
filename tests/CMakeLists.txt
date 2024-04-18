@@ -3,21 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-find_package(Catch2 3 QUIET)
-if(NOT Catch2_FOUND)
-  message("Fetching Catch2")
-  include(FetchContent)
-  FetchContent_Declare(
-    Catch2
-    GIT_SHALLOW TRUE
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v3.3.2)
-  FetchContent_MakeAvailable(Catch2)
-
-  set(CodeCoverageExcludesFromOtherPkgs
-      "${CodeCoverageExcludesFromOtherPkgs} ${Catch2_SOURCE_DIR}/*")
-
-endif()
+find_package(Catch2 3 CONFIG QUIET)
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
 
