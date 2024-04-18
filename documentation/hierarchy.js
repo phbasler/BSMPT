@@ -21,11 +21,11 @@ var hierarchy =
     [ "Compare_CXSM", "classCompare__CXSM.html", null ],
     [ "Compare_R2HDM", "classCompare__R2HDM.html", null ],
     [ "Compare_RN2HDM", "classCompare__RN2HDM.html", null ],
-    [ "EventListenerBase", null, [
+    [ "Catch::EventListenerBase", null, [
       [ "MyListener", "structMyListener.html", null ]
     ] ],
     [ "BSMPT::Minimizer::EWPTReturnType", "structBSMPT_1_1Minimizer_1_1EWPTReturnType.html", null ],
-    [ "exception", null, [
+    [ "std::exception", null, [
       [ "BSMPT::parserException", "classBSMPT_1_1parserException.html", null ]
     ] ],
     [ "BSMPT::Baryo::gen_fluid", "classBSMPT_1_1Baryo_1_1gen__fluid.html", [

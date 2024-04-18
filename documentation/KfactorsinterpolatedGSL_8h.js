@@ -2,6 +2,16 @@ var KfactorsinterpolatedGSL_8h =
 [
     [ "CalculateNorm1", "KfactorsinterpolatedGSL_8h.html#a826869923d9b912d55bef29767dead03", null ],
     [ "CalculateNorm2", "KfactorsinterpolatedGSL_8h.html#a34b92e53dcd8d05bebed310968dc6614", null ],
+    [ "initializeK1bosonGrid", "KfactorsinterpolatedGSL_8h.html#ac089c4eee50d85c1e9dcabf297941686", null ],
+    [ "initializeK1fermionGrid", "KfactorsinterpolatedGSL_8h.html#aee5721b4751aa0c8d6b58b791bad6215", null ],
+    [ "initializeK2fermionGrid", "KfactorsinterpolatedGSL_8h.html#adacc9c5eabf153415b047ffbddaa71aa", null ],
+    [ "initializeK4bosonGrid", "KfactorsinterpolatedGSL_8h.html#a89d9f48476ccf4efdc79e5f44fa47d93", null ],
+    [ "initializeK4fermionGrid", "KfactorsinterpolatedGSL_8h.html#a72801aecde0fd134bbb4e17e2c1c454b", null ],
+    [ "initializeK5bosonGrid", "KfactorsinterpolatedGSL_8h.html#a357e84eee7f177659ba1193f69fe72e0", null ],
+    [ "initializeK5fermionGrid", "KfactorsinterpolatedGSL_8h.html#a1b8904da8b8de3ce233a8c8b98c9a904", null ],
+    [ "initializeK6fermionGrid", "KfactorsinterpolatedGSL_8h.html#a2ea3c826233359b690de9fa97b7a06f6", null ],
+    [ "initializeK8fermionGrid", "KfactorsinterpolatedGSL_8h.html#a912cf90cf68d131f391e628afae2f971", null ],
+    [ "initializeK9fermionGrid", "KfactorsinterpolatedGSL_8h.html#a258fdb170bf089d40ac47ef97ba83ede", null ],
     [ "K1boson", "KfactorsinterpolatedGSL_8h.html#aedbc87193c072bd61f26a30ccb7e943d", null ],
     [ "K1boson_normalized", "KfactorsinterpolatedGSL_8h.html#a6fb11b181a32903dd7f7aae0bb35d0b8", null ],
     [ "K1fermion", "KfactorsinterpolatedGSL_8h.html#a474c3e3d176fa2f97071ccdfe21d3ebe", null ],
@@ -21,15 +31,5 @@ var KfactorsinterpolatedGSL_8h =
     [ "K8fermion", "KfactorsinterpolatedGSL_8h.html#a409fb9f63e40c08daa65b25ae9fa9250", null ],
     [ "K8fermion_normalized", "KfactorsinterpolatedGSL_8h.html#a1c3bc132582eec713768ca2d846b15b0", null ],
     [ "K9fermion", "KfactorsinterpolatedGSL_8h.html#a1aeb46f0dd1c147544d63a4a3b517af3", null ],
-    [ "K9fermion_normalized", "KfactorsinterpolatedGSL_8h.html#a228d052190828ec00ab54de7f2062a7d", null ],
-    [ "initializeK1bosonGrid", "KfactorsinterpolatedGSL_8h.html#ac089c4eee50d85c1e9dcabf297941686", null ],
-    [ "initializeK1fermionGrid", "KfactorsinterpolatedGSL_8h.html#aee5721b4751aa0c8d6b58b791bad6215", null ],
-    [ "initializeK2fermionGrid", "KfactorsinterpolatedGSL_8h.html#adacc9c5eabf153415b047ffbddaa71aa", null ],
-    [ "initializeK4bosonGrid", "KfactorsinterpolatedGSL_8h.html#a89d9f48476ccf4efdc79e5f44fa47d93", null ],
-    [ "initializeK4fermionGrid", "KfactorsinterpolatedGSL_8h.html#a72801aecde0fd134bbb4e17e2c1c454b", null ],
-    [ "initializeK5bosonGrid", "KfactorsinterpolatedGSL_8h.html#a357e84eee7f177659ba1193f69fe72e0", null ],
-    [ "initializeK5fermionGrid", "KfactorsinterpolatedGSL_8h.html#a1b8904da8b8de3ce233a8c8b98c9a904", null ],
-    [ "initializeK6fermionGrid", "KfactorsinterpolatedGSL_8h.html#a2ea3c826233359b690de9fa97b7a06f6", null ],
-    [ "initializeK8fermionGrid", "KfactorsinterpolatedGSL_8h.html#a912cf90cf68d131f391e628afae2f971", null ],
-    [ "initializeK9fermionGrid", "KfactorsinterpolatedGSL_8h.html#a258fdb170bf089d40ac47ef97ba83ede", null ]
+    [ "K9fermion_normalized", "KfactorsinterpolatedGSL_8h.html#a228d052190828ec00ab54de7f2062a7d", null ]
 ];

@@ -14,7 +14,7 @@ var searchData=
   ['initializek6fermiongrid_290',['initializeK6fermionGrid',['../KfactorsinterpolatedGSL_8h.html#a2ea3c826233359b690de9fa97b7a06f6',1,'BSMPT::Kfactors']]],
   ['initializek8fermiongrid_291',['initializeK8fermionGrid',['../KfactorsinterpolatedGSL_8h.html#a912cf90cf68d131f391e628afae2f971',1,'BSMPT::Kfactors']]],
   ['initializek9fermiongrid_292',['initializeK9fermionGrid',['../KfactorsinterpolatedGSL_8h.html#a258fdb170bf089d40ac47ef97ba83ede',1,'BSMPT::Kfactors']]],
-  ['initmodel_293',['initModel',['../classBSMPT_1_1Class__Potential__Origin.html#ae68f6352df1661e94331c17e156896f0',1,'BSMPT::Class_Potential_Origin::initModel(std::string linestr)'],['../classBSMPT_1_1Class__Potential__Origin.html#a15c0f9b10a492e2aa859a70a8dcb26fc',1,'BSMPT::Class_Potential_Origin::initModel(const std::vector&lt; double &gt; &amp;par)']]],
+  ['initmodel_293',['initModel',['../classBSMPT_1_1Class__Potential__Origin.html#a15c0f9b10a492e2aa859a70a8dcb26fc',1,'BSMPT::Class_Potential_Origin::initModel(const std::vector&lt; double &gt; &amp;par)'],['../classBSMPT_1_1Class__Potential__Origin.html#ae68f6352df1661e94331c17e156896f0',1,'BSMPT::Class_Potential_Origin::initModel(std::string linestr)']]],
   ['initvectors_294',['initVectors',['../classBSMPT_1_1Class__Potential__Origin.html#a87be49303f2caf58b5dcf89cc934a30a',1,'BSMPT::Class_Potential_Origin']]],
   ['inputlinenumber_295',['InputLineNumber',['../classBSMPT_1_1Class__Potential__Origin.html#a912dcfa9c4853acb5f4e77296bf3b578',1,'BSMPT::Class_Potential_Origin']]],
   ['integrate_5fmubl_296',['Integrate_mubl',['../transport__equations_8h.html#a608185628c16ac3b2726c66fcc34b254',1,'BSMPT::Baryo']]],
