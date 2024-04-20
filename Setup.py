@@ -4,6 +4,7 @@ import os
 import shutil
 from enum import Enum
 from argparse import ArgumentParser, ArgumentTypeError
+import platform
 
 
 class ArgTypeEnum(Enum):
