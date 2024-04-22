@@ -35,7 +35,7 @@ jobs:
      - run: cmake --preset conan-linux-x86_64-release
      - run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} -t doc
      - name: Deploy
-       uses: JamesIves/github-pages-deploy-action@v4.5.0
+       uses: JamesIves/github-pages-deploy-action@v4.6.0
        with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build/linux-x86_64-release/html # The folder the action should deploy.
