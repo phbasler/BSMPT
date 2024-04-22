@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: 2024 Lisa Biermann, Margarete Mühlleitner, Rui Santos, João Viana
+# SPDX-FileCopyrightText: 2024 Lisa Biermann, Margarete Mühlleitner, Rui Santos,
+# João Viana
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -20,10 +21,9 @@ foreach(file_path ${SOURCE_FILES})
             BounceSolution
             TransitionTracer
             GW)
-  set_target_properties("${filename}"
-      PROPERTIES
-      RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/standalone"
-  )
+  set_target_properties(
+    "${filename}" PROPERTIES RUNTIME_OUTPUT_DIRECTORY
+                             "${CMAKE_BINARY_DIR}/bin/standalone")
 
   target_compile_features("${filename}" PUBLIC cxx_std_14)
 endforeach()

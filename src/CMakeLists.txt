@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+# Müller
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,11 +17,11 @@ add_subdirectory(transition_tracer)
 add_subdirectory(bounce_solution)
 add_subdirectory(gravitational_waves)
 
-#==============================Utility==================================
+# ==============================Utility==================================
 
 add_subdirectory(utility)
 
-#==============================EXE======================================
+# ==============================EXE======================================
 
 add_executable(BSMPT prog/BSMPT.cpp)
 target_link_libraries(BSMPT Minimizer Models Utility)
@@ -55,7 +56,8 @@ target_link_libraries(CalcTemps Utility GW MinimumTracer TransitionTracer)
 target_compile_features(CalcTemps PUBLIC cxx_std_14)
 
 add_executable(MinimaTracer prog/MinimaTracer.cpp)
-target_link_libraries(MinimaTracer Minimizer Models Utility MinimumTracer TransitionTracer)
+target_link_libraries(MinimaTracer Minimizer Models Utility MinimumTracer
+                      TransitionTracer)
 target_compile_features(MinimaTracer PUBLIC cxx_std_14)
 
 add_executable(PotPlotter prog/PotPlotter.cpp)
@@ -63,9 +65,9 @@ target_link_libraries(PotPlotter Models Utility Minimizer MinimumTracer)
 target_compile_features(PotPlotter PUBLIC cxx_std_14)
 
 if(BSMPTCompileBaryo)
-add_executable(CalculateEWBG prog/CalculateEWBG.cpp)
-target_link_libraries(CalculateEWBG Minimizer Models Baryo Utility)
-target_compile_features(CalculateEWBG PUBLIC cxx_std_14)
+  add_executable(CalculateEWBG prog/CalculateEWBG.cpp)
+  target_link_libraries(CalculateEWBG Minimizer Models Baryo Utility)
+  target_compile_features(CalculateEWBG PUBLIC cxx_std_14)
 else(BSMPTCompileBaryo)
   message("CalculateEWBG will not compile as Boost is missing")
 endif(BSMPTCompileBaryo)
@@ -86,9 +88,8 @@ else(BSMPTCompileBaryo)
   message("PlotEWBG_nL will not compile as Boost is missing")
 endif(BSMPTCompileBaryo)
 
-
-
-#======================= Additional testing ====================================
+# ======================= Additional testing
+# ====================================
 
 if(MakeAdditionalTesting)
 
