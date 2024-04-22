@@ -1,0 +1,16 @@
+{
+    "model": "r2hdm",
+    "input": "../../example/example_v3_BP1.tsv",
+    "output": "test",
+    "firstline": "2",
+    "lastline": "2",
+    "thigh": "400",
+    "multistepmode": "default",
+    "num_pts": "10",
+    "checkewsr": "on",
+    "usenlopt": "true",
+    "usecmaes": "true",
+    "usegsl": "true",
+    "usemultithreading": "true",
+    "logginglevel::complete": "enable complete logging output"
+}

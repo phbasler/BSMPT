@@ -4,8 +4,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef SRC_CLASSPOTENTIALRN2HDM_H_
-#define SRC_CLASSPOTENTIALRN2HDM_H_
+#ifndef SRC_CLASSPOTENTIALN2HDM_H_
+#define SRC_CLASSPOTENTIALN2HDM_H_
 
 #include <BSMPT/models/ClassPotentialOrigin.h>
 
@@ -19,7 +19,7 @@ namespace Models
 {
 
 /**
- * @brief The Class_Potential_RN2HDM class
+ * @brief The Class_Potential_N2HDM class
  * Implementation of the real N2HDM, as shown in the manual
  *
  * * \f$ -L_S = u1 \Phi_1^\dagger \Phi_1 + u2 \Phi_2^\dagger \Phi_2 +
@@ -77,11 +77,11 @@ namespace Models
  * * Type FL(=4): \f$ \Phi_d = \Phi_1 \,,\Phi_l = \Phi_2 \f$
  *
  */
-class Class_Potential_RN2HDM : public Class_Potential_Origin
+class Class_Potential_N2HDM : public Class_Potential_Origin
 {
 public:
-  Class_Potential_RN2HDM(const ISMConstants &smConstants);
-  virtual ~Class_Potential_RN2HDM();
+  Class_Potential_N2HDM(const ISMConstants &smConstants);
+  virtual ~Class_Potential_N2HDM();
 
   double L1 = 0, L2 = 0, L3 = 0, L4 = 0, RL5 = 0, RealMMix = 0, u1 = 0, u2 = 0;
   double DL1CT = 0, DL2CT = 0, DL3CT = 0, DL4CT = 0, DRL5CT = 0, Du2CT = 0,
@@ -139,4 +139,4 @@ public:
 
 } // namespace Models
 } // namespace BSMPT
-#endif /* SRC_CLASSPOTENTIALRN2HDM_H_ */
+#endif /* SRC_CLASSPOTENTIALN2HDM_H_ */

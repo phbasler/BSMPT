@@ -264,7 +264,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   auto sol   = Minima.at(minIndex);
   auto EWVEV = modelPointer->EWSBVEV(modelPointer->MinimizeOrderVEV(sol));
-  if (EWVEV <= 0.5) sol = std::vector<double>(modelPointer->get_nVEV(), 0);
+  if (EWVEV <= 0.5) modelPointer->SetEWVEVZero(sol);
 
   solGSLMin.clear();
   if (UseMinimizer.UseGSL and gslMinSuc)

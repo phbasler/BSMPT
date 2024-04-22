@@ -131,7 +131,6 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
 bool CLIOptions::good() const
 {
-
   if (Model == ModelID::ModelIDs::NotSet)
   {
     Logger::Write(

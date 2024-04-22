@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(
   BSMPT
-  VERSION 2.6.0
+  VERSION 3.0.0
   LANGUAGES C CXX
   DESCRIPTION
     "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models"
@@ -156,6 +156,7 @@ endif(EnableCoverage)
 find_lto(CXX)
 
 add_subdirectory(src)
+add_subdirectory(standalone)
 
 # -------------------------- export as cmake package --------------------------
 if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)

@@ -256,7 +256,7 @@ double JbosonInterpolatedLow(const double &x, const int &n, int diff)
   }
   else if (diff == 1)
   {
-    res = pow(M_PI, 2);
+    res = pow(M_PI, 2) / 12.0;
     res += x * (6 * cb - 3) / 96.0;
     res += -x * log(x) / 16.0;
     res += -M_PI * sqrt(x) / 4.0;
@@ -325,42 +325,66 @@ double JbosonInterpolated(const double &x, int diff)
   if (x >= C_BosonTheta)
   {
     res = JInterpolatedHigh(x, 3, diff);
+    if (diff == 0) res -= C_BosonShift;
   }
   else if (x >= 0)
   {
     res = JbosonInterpolatedLow(x, 3, diff);
-    if (diff == 0) res += C_BosonShift;
   }
-  else if (x < 0 and diff == 0)
+  else if (x < 0)
   {
-    res = JbosonInterpolatedNegative(x);
+    res = JbosonInterpolatedNegative(x, diff);
   }
   return res;
 }
 
-double JbosonInterpolatedNegative(const double &x)
+tk::spline JbosonNegativeSpline(NegLinearIntTransposed[0],
+                                NegLinearIntTransposed[1],
+                                tk::spline::cspline,
+                                false,
+                                tk::spline::first_deriv,
+                                -pow(M_PI, 2) / 12,
+                                tk::spline::first_deriv,
+                                3.816357189);
+
+double JbosonInterpolatedNegative(const double &x, int diff)
 {
   if (x >= 0) return 0;
   double PotVal = 0;
-  double xprev, fprev, xnext, fnext;
-  if (-x >= C_NegLine - 2)
+
+  if (diff == 0)
   {
-    xprev = NegLinearInt[C_NegLine - 2][0];
-    xnext = NegLinearInt[C_NegLine - 1][0];
-    fprev = NegLinearInt[C_NegLine - 2][1];
-    fnext = NegLinearInt[C_NegLine - 1][1];
+    // TODO: This may be removed
+    /*
+    double xprev, fprev, xnext, fnext;
+    if (-x >= C_NegLine - 2)
+    {
+      xprev = NegLinearInt[C_NegLine - 2][0];
+      xnext = NegLinearInt[C_NegLine - 1][0];
+      fprev = NegLinearInt[C_NegLine - 2][1];
+      fnext = NegLinearInt[C_NegLine - 1][1];
+    }
+    else
+    {
+      std::size_t pos = (std::size_t(-x));
+      xprev           = NegLinearInt[pos][0];
+      fprev           = NegLinearInt[pos][1];
+      xnext           = NegLinearInt[pos + 1][0];
+      fnext           = NegLinearInt[pos + 1][1];
+    }
+
+    PotVal = (fnext - fprev) / (xnext - xprev) * (x - xprev) + fprev;
+    // PotVal += C_BosonShift;
+    */
+    // return PotVal;
+
+    PotVal = JbosonNegativeSpline(-x) + 3.533375127e-06;
   }
-  else
+  else if (diff == 1)
   {
-    std::size_t pos = (std::size_t(-x));
-    xprev           = NegLinearInt[pos][0];
-    fprev           = NegLinearInt[pos][1];
-    xnext           = NegLinearInt[pos + 1][0];
-    fnext           = NegLinearInt[pos + 1][1];
+    PotVal = -JbosonNegativeSpline.deriv(1, -x);
   }
 
-  PotVal = (fnext - fprev) / (xnext - xprev) * (x - xprev) + fprev;
-  PotVal += C_BosonShift;
   return PotVal;
 }
 

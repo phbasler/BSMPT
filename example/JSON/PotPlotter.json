@@ -1,0 +1,15 @@
+{
+    "model": "r2hdm",
+    "input": "../example/example_v3_BP1.tsv",
+    "output": "test.tsv",
+    "line": "2",
+    "temperature": "0",
+    "point": "0,0,0,0",
+    "npoints2": "50",
+    "npoints3": "50",
+    "low2": "-300",
+    "low3": "-300",
+    "high2": "300",
+    "high3": "300",
+    "logginglevel::complete": "enable complete logging output"
+}

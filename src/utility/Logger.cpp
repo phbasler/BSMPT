@@ -20,14 +20,15 @@ namespace BSMPT
 {
 
 static std::map<std::string, LoggingLevel> LoggingPrefixes{
-    {
-        "logginglevel::default",
-        LoggingLevel::Default,
-    },
-    {"logginglevel::debug", LoggingLevel::Debug},
-    {"logginglevel::ewbgdetailed", LoggingLevel::EWBGDetailed},
-    {"logginglevel::progdetailed", LoggingLevel::ProgDetailed},
-    {"logginglevel::minimizerdetailed", LoggingLevel::MinimizerDetailed}};
+    {"--logginglevel::default=", LoggingLevel::Default},
+    {"--logginglevel::debug=", LoggingLevel::Debug},
+    {"--logginglevel::ewbgdetailed=", LoggingLevel::EWBGDetailed},
+    {"--logginglevel::progdetailed=", LoggingLevel::ProgDetailed},
+    {"--logginglevel::minimizerdetailed=", LoggingLevel::MinimizerDetailed},
+    {"--logginglevel::transitiondetailed=", LoggingLevel::TransitionDetailed},
+    {"--logginglevel::mintracerdetailed=", LoggingLevel::MinTracerDetailed},
+    {"--logginglevel::bouncedetailed=", LoggingLevel::BounceDetailed},
+    {"--logginglevel::gwdetailed=", LoggingLevel::GWDetailed}};
 
 void ShowLoggerHelp()
 {
@@ -43,6 +44,10 @@ void ShowLoggerHelp()
     ss << std::setw(SizeOfFirstColumn) << std::left << el.first
        << "\t true/false" << std::endl;
   }
+  ss << std::setw(SizeOfFirstColumn) << std::left
+     << "--logginglevel::complete to enable all logginglevels except "
+        "minimizerdetailed."
+     << std::endl;
   Logger::Write(LoggingLevel::Default, ss.str());
 }
 
@@ -58,11 +63,27 @@ void SetLogger(const BSMPT::parser &argparser)
   {
   }
 
+  try
+  {
+    argparser.get_value("logginglevel::complete");
+    for (const auto &[prefix, enumValue] : LoggingPrefixes)
+      Logger::SetLevel(enumValue, "true");
+    Logger::SetLevel(LoggingLevel::MinimizerDetailed, false);
+    return;
+  }
+  catch (BSMPT::parserException &)
+  {
+  }
+
   for (const auto &[prefix, enumValue] : LoggingPrefixes)
   {
+    auto beginning  = prefix.find_first_not_of("-");
+    auto seperator  = prefix.find("=");
+    std::string key = prefix.substr(beginning, seperator - beginning);
+
     try
     {
-      auto value = argparser.get_value(prefix);
+      auto value = argparser.get_value(key);
       Logger::SetLevel(enumValue, value == "true");
     }
     catch (BSMPT::parserException &)
@@ -78,6 +99,15 @@ void SetLogger(const std::vector<std::string> &args)
   if (posDisable != args.end())
   {
     Logger::Disable();
+    return;
+  }
+  auto posComplete =
+      std::find(args.begin(), args.end(), "--logginglevel::complete");
+  if (posComplete != args.end())
+  {
+    for (const auto &[prefix, enumValue] : LoggingPrefixes)
+      Logger::SetLevel(enumValue, "true");
+    Logger::SetLevel(LoggingLevel::MinimizerDetailed, false);
     return;
   }
 

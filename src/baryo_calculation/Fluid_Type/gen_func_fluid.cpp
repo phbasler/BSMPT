@@ -295,7 +295,6 @@ void Calc_eta::set_class(std::vector<double> array_z_in,
                          double Temp_in,
                          double vw_in)
 {
-
   Calc_eta::array_z  = array_z_in;
   Calc_eta::array_nL = array_nL_in;
   Calc_eta::Temp     = Temp_in;

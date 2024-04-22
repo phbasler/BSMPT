@@ -12,10 +12,14 @@ target_link_libraries(
   PRIVATE Catch2::Catch2WithMain
           CatchEventListener
           Minimizer
+          MinimumTracer
           Models
           Utility
           TestCompares
-          ThermalFunctions)
+          ThermalFunctions
+          BounceSolution
+          TransitionTracer
+          GW)
 target_compile_features(GenericTests PUBLIC cxx_std_14)
 
 include(Catch)

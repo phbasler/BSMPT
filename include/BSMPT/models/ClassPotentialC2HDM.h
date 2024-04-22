@@ -98,7 +98,6 @@ public:
   double CTempC1 = 0, CTempC2 = 0, CTempCS = 0;
   double R_Hh_1 = 0, R_Hh_2 = 0, R_Hh_3 = 0, R_Hl_1 = 0, R_Hl_2 = 0, R_Hl_3 = 0,
          R_Hsm_1 = 0, R_Hsm_2 = 0, R_Hsm_3 = 0;
-
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;

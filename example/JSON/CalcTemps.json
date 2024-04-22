@@ -1,0 +1,21 @@
+{
+    "model": "r2hdm",
+    "input": "../../example/example_v3_BP1.tsv",
+    "output": "test.tsv",
+    "firstline": "2",
+    "lastline": "2",
+    "thigh": "400",
+    "multistepmode": "default",
+    "num_pts": "10",
+    "vwall": "0.95",
+    "perc_prbl": "0.71",
+    "compl_prbl": "0.01",
+    "checknlo": "on",
+    "checkewsr": "on",
+    "maxpathintegrations": "7",
+    "usenlopt": "true",
+    "usecmaes": "true",
+    "usegsl": "true",
+    "usemultithreading": "true",
+    "logginglevel::complete": "enable complete logging output"
+}

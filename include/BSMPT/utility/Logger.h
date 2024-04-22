@@ -29,6 +29,10 @@ enum class LoggingLevel
   None,
   Default,
   MinimizerDetailed,
+  MinTracerDetailed,
+  TransitionDetailed,
+  GWDetailed,
+  BounceDetailed,
   ProgDetailed,
   EWBGDetailed,
   Debug
@@ -88,6 +92,10 @@ private:
       {LoggingLevel::EWBGDetailed, false},
       {LoggingLevel::ProgDetailed, false},
       {LoggingLevel::MinimizerDetailed, false},
+      {LoggingLevel::MinTracerDetailed, false},
+      {LoggingLevel::TransitionDetailed, false},
+      {LoggingLevel::BounceDetailed, false},
+      {LoggingLevel::GWDetailed, false},
       {LoggingLevel::Debug, false}};
 };
 

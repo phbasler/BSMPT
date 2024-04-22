@@ -8,7 +8,7 @@
   @file
  */
 
-#include <BSMPT/models/ClassPotentialRN2HDM.h>
+#include <BSMPT/models/ClassPotentialN2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
@@ -20,11 +20,11 @@ namespace BSMPT
 namespace Models
 {
 
-Class_Potential_RN2HDM::Class_Potential_RN2HDM(const ISMConstants &smConstants)
+Class_Potential_N2HDM::Class_Potential_N2HDM(const ISMConstants &smConstants)
     : Class_Potential_Origin(smConstants)
 {
   // TODO Auto-generated constructor stub
-  Model         = ModelID::ModelIDs::RN2HDM;
+  Model         = ModelID::ModelIDs::N2HDM;
   NNeutralHiggs = 5;
   NChargedHiggs = 4;
 
@@ -54,7 +54,7 @@ Class_Potential_RN2HDM::Class_Potential_RN2HDM(const ISMConstants &smConstants)
   UseVCounterSimplified = false;
 }
 
-Class_Potential_RN2HDM::~Class_Potential_RN2HDM()
+Class_Potential_N2HDM::~Class_Potential_N2HDM()
 {
   // TODO Auto-generated destructor stub
 }
@@ -63,7 +63,7 @@ Class_Potential_RN2HDM::~Class_Potential_RN2HDM()
  * returns a string which tells the user the chronological order of the
  * counterterms. Use this to complement the legend of the given inputfile
  */
-std::vector<std::string> Class_Potential_RN2HDM::addLegendCT() const
+std::vector<std::string> Class_Potential_N2HDM::addLegendCT() const
 {
   std::vector<std::string> labels;
   labels.push_back("Du11sq");
@@ -89,7 +89,7 @@ std::vector<std::string> Class_Potential_RN2HDM::addLegendCT() const
  * the critical temperature. Use this to complement the legend of the given
  * inputfile
  */
-std::vector<std::string> Class_Potential_RN2HDM::addLegendTemp() const
+std::vector<std::string> Class_Potential_N2HDM::addLegendTemp() const
 {
   std::vector<std::string> labels;
   labels.push_back("T_c");
@@ -111,7 +111,7 @@ std::vector<std::string> Class_Potential_RN2HDM::addLegendTemp() const
  * Beware, this is not implemented yet!
  */
 std::vector<std::string>
-Class_Potential_RN2HDM::addLegendTripleCouplings() const
+Class_Potential_N2HDM::addLegendTripleCouplings() const
 {
   std::vector<std::string> particles;
   std::vector<std::string> labels;
@@ -149,7 +149,7 @@ Class_Potential_RN2HDM::addLegendTripleCouplings() const
  * returns a string which tells the user the chronological order of the VEVs.
  * Use this to complement the legend of the given inputfile
  */
-std::vector<std::string> Class_Potential_RN2HDM::addLegendVEV() const
+std::vector<std::string> Class_Potential_N2HDM::addLegendVEV() const
 {
   std::vector<std::string> labels;
   labels.push_back("omega_{CB}");
@@ -160,7 +160,7 @@ std::vector<std::string> Class_Potential_RN2HDM::addLegendVEV() const
   return labels;
 }
 
-void Class_Potential_RN2HDM::ReadAndSet(const std::string &linestr,
+void Class_Potential_N2HDM::ReadAndSet(const std::string &linestr,
                                         std::vector<double> &par)
 {
   std::stringstream ss(linestr);
@@ -219,7 +219,7 @@ void Class_Potential_RN2HDM::ReadAndSet(const std::string &linestr,
   return;
 }
 
-void Class_Potential_RN2HDM::set_gen(const std::vector<double> &p)
+void Class_Potential_N2HDM::set_gen(const std::vector<double> &p)
 {
 
   L1       = p[0];
@@ -266,7 +266,7 @@ void Class_Potential_RN2HDM::set_gen(const std::vector<double> &p)
  *
  *
  */
-void Class_Potential_RN2HDM::set_CT_Pot_Par(const std::vector<double> &p)
+void Class_Potential_N2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 {
   //	double *p = (double *)par;
 
@@ -432,7 +432,7 @@ void Class_Potential_RN2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 /**
  * Console-Output of all Parameters
  */
-void Class_Potential_RN2HDM::write() const
+void Class_Potential_N2HDM::write() const
 {
   std::stringstream ss;
   typedef std::numeric_limits<double> dbl;
@@ -619,7 +619,7 @@ void Class_Potential_RN2HDM::write() const
   Logger::Write(LoggingLevel::Default, ss.str());
 }
 
-std::vector<double> Class_Potential_RN2HDM::calc_CT() const
+std::vector<double> Class_Potential_N2HDM::calc_CT() const
 {
   std::vector<double> parCT;
 
@@ -778,7 +778,7 @@ std::vector<double> Class_Potential_RN2HDM::calc_CT() const
   return parCT;
 }
 
-void Class_Potential_RN2HDM::TripleHiggsCouplings()
+void Class_Potential_N2HDM::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
@@ -945,7 +945,7 @@ void Class_Potential_RN2HDM::TripleHiggsCouplings()
   }
 }
 
-void Class_Potential_RN2HDM::SetCurvatureArrays()
+void Class_Potential_N2HDM::SetCurvatureArrays()
 {
   initVectors();
 
@@ -3108,7 +3108,7 @@ void Class_Potential_RN2HDM::SetCurvatureArrays()
   SetCurvatureDone = true;
 }
 
-bool Class_Potential_RN2HDM::CalculateDebyeSimplified()
+bool Class_Potential_N2HDM::CalculateDebyeSimplified()
 {
   double cb = 0;
 
@@ -3160,7 +3160,7 @@ bool Class_Potential_RN2HDM::CalculateDebyeSimplified()
   return true;
 }
 
-bool Class_Potential_RN2HDM::CalculateDebyeGaugeSimplified()
+bool Class_Potential_N2HDM::CalculateDebyeGaugeSimplified()
 {
   DebyeGauge[0][0] = 2 * SMConstants.C_g * SMConstants.C_g;
   DebyeGauge[1][1] = 2 * SMConstants.C_g * SMConstants.C_g;
@@ -3171,7 +3171,7 @@ bool Class_Potential_RN2HDM::CalculateDebyeGaugeSimplified()
 }
 
 double
-Class_Potential_RN2HDM::VTreeSimplified(const std::vector<double> &v) const
+Class_Potential_N2HDM::VTreeSimplified(const std::vector<double> &v) const
 {
   (void)v;
   double res = 0;
@@ -3180,7 +3180,7 @@ Class_Potential_RN2HDM::VTreeSimplified(const std::vector<double> &v) const
 }
 
 double
-Class_Potential_RN2HDM::VCounterSimplified(const std::vector<double> &v) const
+Class_Potential_N2HDM::VCounterSimplified(const std::vector<double> &v) const
 {
   (void)v;
   if (not UseVCounterSimplified) return 0;
@@ -3188,7 +3188,7 @@ Class_Potential_RN2HDM::VCounterSimplified(const std::vector<double> &v) const
   return res;
 }
 
-void Class_Potential_RN2HDM::Debugging(const std::vector<double> &input,
+void Class_Potential_N2HDM::Debugging(const std::vector<double> &input,
                                        std::vector<double> &output) const
 {
   (void)input;

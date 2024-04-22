@@ -4,8 +4,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//#ifndef INCLUDEALLMODELS_H_
-//#define INCLUDEALLMODELS_H_
+// #ifndef INCLUDEALLMODELS_H_
+// #define INCLUDEALLMODELS_H_
 
 #pragma once
 
@@ -33,9 +33,10 @@ enum class ModelIDs
   NotSet,
   C2HDM,
   R2HDM,
-  RN2HDM,
+  N2HDM,
   CXSM,
   CPINTHEDARK,
+  SM,
 
   // Here you start adding your models
   TEMPLATE,
@@ -51,8 +52,9 @@ enum class ModelIDs
 const std::unordered_map<std::string, ModelIDs> ModelNames{
     {"c2hdm", ModelIDs::C2HDM},
     {"r2hdm", ModelIDs::R2HDM},
-    {"n2hdm", ModelIDs::RN2HDM},
+    {"n2hdm", ModelIDs::N2HDM},
     {"cxsm", ModelIDs::CXSM},
+    {"sm", ModelIDs::SM},
     {"cpinthedark", ModelIDs::CPINTHEDARK},
     {"template", ModelIDs::TEMPLATE},
 };
@@ -103,4 +105,4 @@ void ShowInputError();
 
 } // namespace BSMPT
 
-//#endif /* INCLUDEALLMODELS_H_ */
+// #endif /* INCLUDEALLMODELS_H_ */

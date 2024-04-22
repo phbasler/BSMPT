@@ -1293,7 +1293,7 @@ void Class_CxSM::Debugging(const std::vector<double> &input,
   (void)output;
   Logger::Write(LoggingLevel::Debug, std::string("Start ") + __func__);
 
-  bool Debug = true;
+  bool Debug = false;
 
   if (not Debug) return;
 

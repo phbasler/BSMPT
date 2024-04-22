@@ -23,6 +23,19 @@ std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
   return os;
 }
 
+std::vector<std::string> split(std::string str, char delimiter)
+{
+  // Using str in a string stream
+  std::stringstream ss(str);
+  std::vector<std::string> res;
+  std::string token;
+  while (getline(ss, token, delimiter))
+  {
+    res.push_back(token);
+  }
+  return res;
+}
+
 std::string ModelIDToString(const ModelID::ModelIDs &Model)
 {
   std::stringstream ss;
@@ -33,6 +46,22 @@ std::string ModelIDToString(const ModelID::ModelIDs &Model)
 bool StringStartsWith(const std::string &str, const std::string &prefix)
 {
   return str.size() >= prefix.size() and str.find(prefix) == 0;
+}
+
+int factorial(const int &a)
+{
+  return (a == 1 || a == 0) ? 1 : factorial(a - 1) * a;
+}
+
+double L2NormVector(const std::vector<double> &vec)
+{
+  double r = 0.0;
+  int dim  = vec.size();
+  for (int i = 0; i < dim; i++)
+  {
+    r += vec[i] * vec[i];
+  }
+  return std::sqrt(r);
 }
 
 bool StringEndsWith(const std::string &str, const std::string &suffix)
