@@ -48,7 +48,7 @@ target_profiles = {
 
 def get_arch():
     arch = "x86_64"
-    if platform.machine() == "aarch64":
+    if platform.machine() == "arm64":
         arch = "armv8"
     return arch
 
