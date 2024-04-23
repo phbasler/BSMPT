@@ -128,7 +128,7 @@ std::vector<double> BounceActionInt::NablaNumerical(
     const double &eps,
     const int &dim)
 {
-  // Numerical gradient of the potencial up to second order
+  // Numerical gradient of the potential up to second order
   std::vector<double> result(dim);
 
   for (int i = 0; i < dim; i++)
@@ -811,10 +811,10 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
   //  more than 0.01% and no less than 0.009%
   // Solves, at most, 1% of the complete path
   // This step is important for thin walled equation since numerical error
-  // might accumulate at low rho Computing the derivative of the potencial
+  // might accumulate at low rho Computing the derivative of the potential
   // beforehand
   double dVdl = Calc_dVdl(l0);
-  // Computing the second derivative of the potencial beforehand
+  // Computing the second derivative of the potential beforehand
   double d2Vdl2 = Calc_d2Vdl2(l0);
   // Spline length
   double L = spline.L;
@@ -1076,7 +1076,7 @@ void BounceActionInt::Solve1DBounce(
   while (j < resolution)
   {
     // This procedure is done such that the allowed search intervals goes
-    // from true VEV up to the point where potencial becomes lower than
+    // from true VEV up to the point where potential becomes lower than
     // Vfalse. This method does not focus on speed. This method allows for
     // only one solution to the bounce equation in this interval.
     j++;

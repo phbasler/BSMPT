@@ -203,14 +203,14 @@ public:
    *
    */
 
-  std::function<double(std::vector<double>)> V; // Potencial
+  std::function<double(std::vector<double>)> V; // Potential
   /**
    * @brief Potential gradient of the class, can be either numerical or
    * analytical
    *
    */
   std::function<std::vector<double>(std::vector<double>)>
-      dV; // Potencial gradient
+      dV; // Potential gradient
   /**
    * @brief Potential hessian of the class, completly numerical
    *
