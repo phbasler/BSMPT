@@ -16,6 +16,7 @@
 
 #include <BSMPT/bounce_solution/action_calculation.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
+#include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/spline.h>
 #include <Eigen/Dense>
 #include <algorithm>             // std::max
@@ -541,16 +542,6 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj);
  * @return Numerical value of derivative and absolute error
  */
 struct resultErrorPair Nderive_BounceRatio(BounceSolution &obj);
-
-/**
- * @brief speed of sound
- */
-const double Csound = 0.5773502691896258; // 1/sqrt(3)
-
-/**
- * @brief reduced Planck mass = MPl / (8 Pi)
- */
-const double MPl = 2.4e18;
 
 } // namespace BSMPT
 
