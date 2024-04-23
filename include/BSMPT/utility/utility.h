@@ -114,7 +114,8 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
 template <typename T>
 std::vector<T> operator+(const std::vector<T> &a, const std::vector<T> &b)
 {
-  assert(a.size() == b.size());
+  if (a.size() != b.size())
+    throw("Vector cannot be added. Must have the same size.");
   std::vector<T> result;
   result.reserve(a.size());
 
