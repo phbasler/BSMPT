@@ -154,6 +154,12 @@ double Rfunc(const double f);
  */
 double powspec_density(const double f);
 
+/**
+ * @brief return the value of LISA mission nominal sensitivity
+ *
+ * @param f frequency
+ * @return value of LISA's nominal sensitivity for a given frequency
+ */
 double h2OmSens(const double f);
 
 /**
