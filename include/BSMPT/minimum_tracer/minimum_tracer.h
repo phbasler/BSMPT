@@ -319,7 +319,7 @@ public:
    * @param F2
    * @return wraped path
    */
-  std::vector<std::vector<double>>
+  const std::vector<std::vector<double>>
   WarpPath(const std::vector<std::vector<double>> &path,
            const std::vector<double> &T1,
            const std::vector<double> &F1,

@@ -1092,7 +1092,7 @@ void MinimumTracer::ReduceVEV(Minimum &min)
  * @param F2
  * @return wraped path
  */
-std::vector<std::vector<double>>
+const std::vector<std::vector<double>>
 MinimumTracer::WarpPath(const std::vector<std::vector<double>> &path,
                         const std::vector<double> &T1,
                         const std::vector<double> &F1,
