@@ -102,7 +102,24 @@ public:
    * * = -9 if the solution does not have enough points to populate the \f$
    * l(\rho) \f$ spline
    */
-  double action = -1;
+  enum action_status
+  {
+    not_calculated                     = -1,
+    integration_1d_failed              = -2,
+    path_deformation_not_converged     = -3,
+    path_deformation_crashed           = -4,
+    false_vacuum_not_a_minimum         = -5,
+    backwards_propagation_failed       = -6,
+    never_undershoot_overshoot         = -7,
+    undershoot_overshoot_negative_grad = -8,
+    not_enough_points_for_spline       = -9
+  };
+
+  /**
+   * @brief either returns a action_status or the value of the action
+   *
+   */
+  double action = not_calculated;
 
   /**
    * @brief Factor produced by the spherical symmetry of the potential.

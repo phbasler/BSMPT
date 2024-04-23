@@ -831,7 +831,7 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
     ss << " dVdl = " << dVdl << std::endl;
     ss << " d2Vd2l = " << d2Vdl2 << std::endl;
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-    action = -8;
+    action = undershoot_overshoot_negative_grad;
     return {};
   }
 
@@ -1067,7 +1067,7 @@ void BounceActionInt::Solve1DBounce(
   {
     ss << "Backwards propagation produced V(lmin) > V(L). Abort.";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-    action = -6;
+    action = backwards_propagation_failed;
     return;
   }
   TrueVacuumHessian = Calc_d2Vdl2(lmin);
@@ -1140,7 +1140,7 @@ void BounceActionInt::Solve1DBounce(
         PrintVector(d2l_drho2);
         ss << "\n Overshoot/Undershoot method failed!\t";
         convS3 = -1; // A solution was found
-        action = -2;
+        action = integration_1d_failed;
         break;
       }
       if (conv == 0) // Solved!
@@ -1204,7 +1204,7 @@ void BounceActionInt::Solve1DBounce(
         ss << "\n Overshoot/Undershoot method failed!\t";
 
         convS3 = -1; // A solution was found
-        action = -2;
+        action = integration_1d_failed;
         break;
       }
       if (conv == 0) // Solved!
@@ -1691,7 +1691,7 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
   if (best_path.size() == 0)
   {
     convPathDeformation = -2;
-    action              = -4;
+    action              = path_deformation_crashed;
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                          "Path deformation exploded");
     return;
@@ -1788,7 +1788,7 @@ void BounceActionInt::CalculateAction(
   std::stringstream ss;
   if (Calc_d2Vdl2(spline.L) < 0)
   {
-    action = -5;
+    action = false_vacuum_not_a_minimum;
     ss << "False vacuum is not a minimum!\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
@@ -1832,7 +1832,7 @@ void BounceActionInt::CalculateAction(
 
     if (action < -1 or rho.size() < 4)
     {
-      if (rho.size() < 4) action = -9;
+      if (rho.size() < 4) action = not_enough_points_for_spline;
       // actions is less than 1 in case of an error. Abort
       // calculation
       spline.print_path();
@@ -1857,13 +1857,13 @@ void BounceActionInt::CalculateAction(
       {
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                              "Method never undershot. Terrible news!");
-        action = -7;
+        action = never_undershoot_overshoot;
       }
       if (overshot_once == false and action >= -1)
       {
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                              "Method never overshot. Terrible news!");
-        action = -7;
+        action = never_undershoot_overshoot;
       }
 
       if (action < -1)
@@ -1877,7 +1877,7 @@ void BounceActionInt::CalculateAction(
       if (rho.size() < 4)
       {
         // Not enough point to populate the spline
-        action = -9;
+        action = not_enough_points_for_spline;
         spline.print_path();
         return;
       }
@@ -1977,7 +1977,8 @@ void BounceActionInt::CalculateAction(
 
       if (convS3 == -1)
       {
-        action = -2; // Undershoot/overshoot failed. Return -2.
+        action =
+            integration_1d_failed; // Undershoot/overshoot failed. Return -2.
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       }
 
@@ -1991,8 +1992,8 @@ void BounceActionInt::CalculateAction(
     }
     if (convPathDeformation == -1)
     {
-      action = -3; // Path deformation did not converged in time.
-                   // Return -3.
+      action = path_deformation_not_converged; // Path deformation did not
+                                               // converged in time. Return -3.
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       return;
     }
@@ -2009,7 +2010,7 @@ void BounceActionInt::CalculateAction(
 
   if (convS3 == -1)
   {
-    action = -2; // No solution was found. Return -2.
+    action = integration_1d_failed; // No solution was found. Return -2.
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     return;
   }
