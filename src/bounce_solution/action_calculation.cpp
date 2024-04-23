@@ -1814,16 +1814,6 @@ void BounceActionInt::CalculateAction(
   if (dim > 1) // If dim = 0 then we only need the solution for the 1D
                // bounce equation
   {
-    // This deletes all saved path, forces and profile from past runs
-
-    if (SaveOutput == 1)
-    {
-      ClearFolder("./paths/");
-      ClearFolder("./splinned_paths/");
-      ClearFolder("./forces/");
-      ClearFolder("./profile/");
-      ClearFolder("./knotted_path/");
-    }
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                          "--------------------------------\t1\t----------------"
                          "-----------------");
@@ -1886,53 +1876,6 @@ void BounceActionInt::CalculateAction(
       dl_drho_spl.set_points(rho, dl_drho);
       d2l_drho2_spl.set_points(rho, d2l_drho2);
       dl_drho_l_spl.set_points(l, dl_drho);
-
-      if (SaveOutput == 1)
-      {
-        std::vector<double> gradient;
-        std::vector<double> phi;
-
-        std::ofstream force_output("forces/force_" + to_format(i) + ".dat");
-        std::ofstream splinned("splinned_paths/splinned_" + to_format(i) +
-                               ".dat");
-        std::ofstream profile("profile/profile_" + to_format(i) + ".dat");
-        std::ofstream knotted_path("knotted_path/knotted_path_" + to_format(i) +
-                                   ".dat");
-
-        for (int m = 0; m <= 100.0; m++)
-        {
-          splinned << spline(m / 100.0)[0] << "\t" << spline(m / 100.0)[1]
-                   << "\t" << spline(m / 100.0)[2] << "\t"
-                   << spline(m / 100.0)[3] << "\t" << spline.dl(m / 100.0)[0]
-                   << "\t" << spline.dl(m / 100.0)[1] << "\t"
-                   << spline.d2l(m / 100.0)[0] << "\t"
-                   << spline.d2l(m / 100.0)[1] << "\t" << m / 100.0 << "\t"
-                   << dl_drho_l_spl(m / 100.0) << std::endl;
-        }
-
-        for (std::size_t m = 0; m < rho.size(); m++)
-        {
-          profile << rho[m] << "\t" << l[m] << "\t" << dl_drho[m] << "\t"
-                  << spline(l[m])[0] << "\t" << spline(l[m])[1] << "\t"
-                  << spline(l[m])[2] << "\t" << spline(l[m])[3] << "\t"
-                  << -V(spline(l[m])) << std::endl;
-        }
-
-        for (int m = 0; m < spline.num_points; m++)
-        {
-          knotted_path << spline.lin_lengths[m] << "\t"
-                       << spline.vev_position[m] << "\t" << spline.phipath[m][0]
-                       << "\t" << spline.phipath[m][1] << std::endl;
-        }
-
-        splinned.close();
-        profile.close();
-        force_output.close();
-        knotted_path.close();
-
-        // Save paths into a file
-        spline.save_path("paths/ou_" + to_format(i) + ".dat", false);
-      }
 
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                            "--------------------------------\t" +
