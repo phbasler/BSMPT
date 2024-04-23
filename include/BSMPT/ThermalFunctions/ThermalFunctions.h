@@ -36,7 +36,7 @@ const double C_FermionShift = -0.01560316619;
 const double C_BosonTheta = 9.469230596;
 /**
  * constant shift to the polynomial to make the expansions continuous, see
- * delta_- in Eq. (2.43) in the manual TODO: Rewrite this
+ * delta_- in Eq. (2.43) in the manual
  */
 const double C_BosonShift = 0.0063108787;
 
