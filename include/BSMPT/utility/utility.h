@@ -133,7 +133,8 @@ std::vector<T> operator+(const std::vector<T> &a, const std::vector<T> &b)
 template <typename T>
 std::vector<T> operator-(const std::vector<T> &a, const std::vector<T> &b)
 {
-  assert(a.size() == b.size());
+  if (a.size() != b.size())
+    throw("Vector cannot be subtracted. Must have the same size.");
 
   std::vector<T> result;
   result.reserve(a.size());
@@ -184,7 +185,9 @@ std::vector<T> operator/(const std::vector<T> &a, const T2 &b)
 template <typename T>
 T operator*(const std::vector<T> &a, const std::vector<T> &b)
 {
-  assert(a.size() == b.size());
+  if (a.size() != b.size())
+    throw(
+        "Dot product between vectors cannot be done. Must have the same size.");
 
   std::vector<T> result;
   result.reserve(a.size());
@@ -207,7 +210,9 @@ template <typename T>
 std::vector<T> operator*(const std::vector<std::vector<T>> &a,
                          const std::vector<T> &b)
 {
-  assert(a.size() == b.size());
+  if (a.size() != b.size())
+    throw("Multiplication of matrix with vector cannot be done. Must have the "
+          "same size.");
 
   std::vector<T> result;
   result.reserve(a.size());
