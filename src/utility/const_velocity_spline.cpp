@@ -21,7 +21,7 @@
 
 namespace cvspline
 {
-double length_vector(std::vector<double> x0, int dim)
+double length_vector(const std::vector<double> &x0, const int &dim)
 {
   double r = 0.0;
   for (int i = 0; i < dim; i++)

@@ -7,8 +7,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
-#ifndef INCLUDE_BSMPT_GW_H_
-#define INCLUDE_BSMPT_GW_H_
 
 /**
  * @file gravitational wave calculation
@@ -193,5 +191,3 @@ double GetK_turb(const double alpha, const double kappa);
 bool IsFluidTurnoverApproxOne(const double HR, const double K);
 
 } // namespace BSMPT
-
-#endif /* INCLUDE_BSMPT_GW_H_ */

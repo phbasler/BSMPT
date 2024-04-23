@@ -7,8 +7,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
-#ifndef INCLUDE_BSMPT_TRANSITION_TRACER_H_
-#define INCLUDE_BSMPT_TRANSITION_TRACER_H_
 
 /**
  * @file transition history evaluator
@@ -79,7 +77,7 @@ struct status_codes
   std::string status_nlo_stability = "not_set";
   std::string status_ewsr          = "not_set";
   std::string status_tracing       = "not_set";
-  std::string status_coex_pairs  = "not_set";
+  std::string status_coex_pairs    = "not_set";
   // index of vectors is coex_phase_id
   std::vector<std::string> status_crit;
   std::vector<std::string> status_bounce_sol;
@@ -191,5 +189,3 @@ public:
 };
 
 } // namespace BSMPT
-
-#endif /* INCLUDE_BSMPT_TRANSITION_TRACER_H_ */

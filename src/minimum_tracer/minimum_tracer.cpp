@@ -37,7 +37,7 @@ namespace BSMPT
  * phi
  */
 std::vector<double>
-NablaNumerical(std::vector<double> phi,
+NablaNumerical(const std::vector<double> &phi,
                const std::function<double(std::vector<double>)> &f,
                const double &eps,
                const int &dim)
@@ -80,7 +80,7 @@ NablaNumerical(std::vector<double> phi,
  *  hessian matrix of f taken at phi
  */
 std::vector<std::vector<double>>
-HessianNumerical(std::vector<double> phi,
+HessianNumerical(const std::vector<double> &phi,
                  const std::function<double(std::vector<double>)> &f,
                  const double &eps,
                  const int &dim)
@@ -215,8 +215,8 @@ std::vector<double> MinimumTracer::LocateMinimum(
  * @return smallest Eigenvalue of Hessian
  */
 double MinimumTracer::SmallestEigenvalue(
-    std::vector<double> &point,
-    std::function<std::vector<std::vector<double>>(std::vector<double>)>
+    const std::vector<double> &point,
+    const std::function<std::vector<std::vector<double>>(std::vector<double>)>
         &Hessian)
 {
   std::size_t dim                                  = point.size();
@@ -411,8 +411,8 @@ std::vector<Minimum> MinimumTracer::trackPhase(double &globMinEndT,
                                                double currentT,
                                                double finalT,
                                                double dT,
-                                               bool output,
-                                               bool unprotected)
+                                               const bool &output,
+                                               const bool &unprotected)
 {
   // Test phase tracker
   int dim         = this->modelPointer->get_nVEV();
@@ -692,8 +692,8 @@ std::vector<Minimum> MinimumTracer::trackPhase(std::vector<double> point,
                                                double currentT,
                                                double finalT,
                                                double dT,
-                                               bool output,
-                                               bool unprotected)
+                                               const bool &output,
+                                               const bool &unprotected)
 {
   // Test phase tracker
   int dim         = this->modelPointer->get_nVEV();
@@ -913,7 +913,8 @@ std::vector<Minimum> MinimumTracer::trackPhase(std::vector<double> point,
  * @param point where grad is zero and hessian is not positive definite
  * @param T is the temperature.
  */
-void MinimumTracer::CalculateVEVSplittings(std::vector<double> point, double T)
+void MinimumTracer::CalculateVEVSplittings(const std::vector<double> &point,
+                                           const double &T)
 {
   double eps = 0.1;
   int dim    = this->modelPointer->get_nVEV();
@@ -1092,11 +1093,11 @@ void MinimumTracer::ReduceVEV(Minimum &min)
  * @return wraped path
  */
 std::vector<std::vector<double>>
-MinimumTracer::WarpPath(std::vector<std::vector<double>> path,
-                        std::vector<double> T1,
-                        std::vector<double> F1,
-                        std::vector<double> T2,
-                        std::vector<double> F2)
+MinimumTracer::WarpPath(const std::vector<std::vector<double>> &path,
+                        const std::vector<double> &T1,
+                        const std::vector<double> &F1,
+                        const std::vector<double> &T2,
+                        const std::vector<double> &F2)
 {
   std::vector<std::vector<double>> r;
 
@@ -1484,7 +1485,7 @@ std::vector<double> MinimumTracer::GetGlobalMinimum(const double &Temp)
 /**
  * @brief IsGlobMin checks whether current minimum is the global minimum
  * @param min Minimum to check, sets is_glob_min to true if min is global
- * minimum, to false if min is local minimum
+ * minimum
  */
 void MinimumTracer::IsGlobMin(Minimum &min)
 {
@@ -2289,9 +2290,12 @@ void Phase::Add(Minimum min)
   return;
 }
 
-void Vacuum::MultiStepPTMode0(const std::vector<double> LowTempPoint,
-                              const std::vector<double> HighTempPoint)
+void Vacuum::MultiStepPTMode0(const std::vector<double> &LowTempPoint_in,
+                              const std::vector<double> &HighTempPoint_in)
 {
+  auto LowTempPoint  = LowTempPoint_in;
+  auto HighTempPoint = HighTempPoint_in;
+
   Logger::Write(LoggingLevel::MinTracerDetailed,
                 "Low-temperature phase starts at " +
                     vec_to_string(LowTempPoint) + "\n");
@@ -2432,8 +2436,8 @@ bool Vacuum::DoGlobMinOverlap(const Phase &new_phase, const Phase &old_phase)
   return global_minimum_overlap;
 }
 
-void Vacuum::MultiStepPTMode1(std::vector<double> LowTempPoint_in,
-                              std::vector<double> HighTempPoint_in)
+void Vacuum::MultiStepPTMode1(const std::vector<double> &LowTempPoint_in,
+                              const std::vector<double> &HighTempPoint_in)
 {
   auto LowTempPoint  = LowTempPoint_in;
   auto HighTempPoint = HighTempPoint_in;
@@ -2606,8 +2610,8 @@ void Vacuum::MultiStepPTMode1(std::vector<double> LowTempPoint_in,
   return;
 }
 
-void Vacuum::MultiStepPTMode2(std::vector<double> LowTempPoint_in,
-                              std::vector<double> HighTempPoint_in)
+void Vacuum::MultiStepPTMode2(const std::vector<double> &LowTempPoint_in,
+                              const std::vector<double> &HighTempPoint_in)
 {
   auto LowTempPoint  = LowTempPoint_in;
   auto HighTempPoint = HighTempPoint_in;

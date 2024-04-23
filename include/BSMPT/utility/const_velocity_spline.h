@@ -12,6 +12,8 @@
  *
  */
 
+#pragma once
+
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <BSMPT/utility/spline.h>
 #include <fstream>
@@ -19,12 +21,9 @@
 #include <iostream>
 #include <sstream>
 
-#ifndef INCLUDE_BSMPT_GravitationalWaves_GWUtils_ConstantVelocitySpline_H_
-#define INCLUDE_BSMPT_GravitationalWaves_GWUtils_ConstantVelocitySpline_H_
-
 namespace cvspline
 {
-double length_vector(std::vector<double> x0, int dim);
+double length_vector(const std::vector<double> &x0, const int &dim);
 
 std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> &A);
 
@@ -81,4 +80,3 @@ public:
   void save_path(std::string file_name, bool header = true);
 };
 } // namespace cvspline
-#endif

@@ -123,7 +123,7 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
 }
 
 std::vector<double>
-BounceSolution::TransformIntoOptimalDiscreteSymmetry(std::vector<double> vev)
+BounceSolution::TransformIntoOptimalDiscreteSymmetry(const std::vector<double> &vev)
 {
   std::vector<double> result(vev.size(), 0);
   // Transform the vector
@@ -469,7 +469,7 @@ void BounceSolution::SetBounceSol()
  * @brief Get the bubble wall velocity
  * @return vb
  */
-double BounceSolution::GetWallVelocity()
+double BounceSolution::GetWallVelocity() const
 {
   return vwall;
 }
@@ -478,7 +478,7 @@ double BounceSolution::GetWallVelocity()
  * @brief Get epsturb
  * @return epsturb
  */
-double BounceSolution::GetEpsTurb()
+double BounceSolution::GetEpsTurb() const
 {
   return epsturb;
 }
@@ -493,7 +493,7 @@ void BounceSolution::SetGstar(const double &gstar_in)
 /**
  * @brief GetGstar Get gstar
  */
-double BounceSolution::GetGstar()
+double BounceSolution::GetGstar() const
 {
   return gstar;
 }
@@ -507,7 +507,7 @@ void BounceSolution::SetCriticalTemp(const double &T_in)
 /**
  * @brief GetCriticalTemp Get critical temperature
  */
-double BounceSolution::GetCriticalTemp()
+double BounceSolution::GetCriticalTemp() const
 {
   return Tc;
 }
@@ -522,7 +522,7 @@ void BounceSolution::SetStoredTemp(const double &T_in)
 /**
  * @brief GetStoredTemp Get stored temperature
  */
-double BounceSolution::GetStoredTemp()
+double BounceSolution::GetStoredTemp() const
 {
   return store_Temp;
 }
@@ -530,7 +530,7 @@ double BounceSolution::GetStoredTemp()
 /**
  * @brief GetNucleationTemp Get nucleation temperature via exact method
  */
-double BounceSolution::GetNucleationTemp()
+double BounceSolution::GetNucleationTemp() const
 {
   return Tnucl;
 }
@@ -539,7 +539,7 @@ double BounceSolution::GetNucleationTemp()
  * @brief GetNucleationTempApprox Get nucleation temperature via approximate
  * method
  */
-double BounceSolution::GetNucleationTempApprox()
+double BounceSolution::GetNucleationTempApprox() const
 {
   return Tnucl_approx;
 }
@@ -547,7 +547,7 @@ double BounceSolution::GetNucleationTempApprox()
 /**
  * @brief GetPercolationTemp Get percolation temperature
  */
-double BounceSolution::GetPercolationTemp()
+double BounceSolution::GetPercolationTemp() const
 {
   return Tperc;
 }
@@ -555,15 +555,15 @@ double BounceSolution::GetPercolationTemp()
 /**
  * @brief GetCompletionTemp Get completion temperature
  */
-double BounceSolution::GetCompletionTemp()
+double BounceSolution::GetCompletionTemp() const
 {
   return Tcompl;
 }
 
 /**
- * @brief GetTransitionTemp Get transition temperature from int
+ * @brief CalcTransitionTemp Get transition temperature from int
  */
-double BounceSolution::GetTransitionTemp(const int &which_transition_temp)
+double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
 {
   double trans_temp = -1;
   if (status_nucl_approx == "success" and which_transition_temp == 1)
@@ -601,7 +601,7 @@ double BounceSolution::GetTransitionTemp(const int &which_transition_temp)
 /**
  * @brief GetPTStrength Get PT strength alpha
  */
-double BounceSolution::GetPTStrength()
+double BounceSolution::GetPTStrength() const
 {
   return alpha;
 }
@@ -1191,7 +1191,7 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
   }
 }
 
-double BounceSolution::GetBounceSol(const double &Temp)
+double BounceSolution::GetBounceSol(const double &Temp) const
 {
   return S3ofT_spline(Temp);
 }

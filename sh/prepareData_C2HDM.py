@@ -4,8 +4,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import pandas as pd
-import numpy as np
 import sys
+
+####### The parameters Type, Lambda1 to Lambda4, re_Lambda5, im_Lambda5, tanbeta and re_m12squared should have the label
+####### of the corresponding parameter. With Seperator you have to tell which seperator your data file 
+####### is using (e.g. , \t or space). Your InputFILE will then be saved to OutputFILE.
 
 def convert(InputFile, OutputFile):
     print(f'Reading {InputFile}.')

@@ -7,8 +7,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
-#ifndef INCLUDE_BSMPT_BOUNCE_SOLUTION_H_
-#define INCLUDE_BSMPT_BOUNCE_SOLUTION_H_
 
 /**
  * @file bounce solution calculation
@@ -35,6 +33,10 @@ struct resultErrorPair
   double error;
 };
 
+/**
+ * @brief BounceSolution class that handles the calculation of the bounce
+ * solution as well as the calculation of the charateristic temperature scales
+ */
 class BounceSolution
 {
 protected:
@@ -162,7 +164,7 @@ public:
    * @return std::vector<double> transformed vev
    */
   std::vector<double>
-  TransformIntoOptimalDiscreteSymmetry(std::vector<double> vev);
+  TransformIntoOptimalDiscreteSymmetry(const std::vector<double> &vev);
 
   /**
    * @brief Calculates which is the optimal symmetry from the group of
@@ -195,8 +197,10 @@ public:
    */
   friend double outer_integrand(double var, void *params);
 
-  /** Calculate euclidian action at temperature T*/
-  double GetBounceSol(const double &Temp);
+  /**
+   * @brief Calculate euclidian action at temperature T
+   */
+  double GetBounceSol(const double &Temp) const;
 
   /**
    * @brief action_ratio friend to define input of numerical derivative in
@@ -371,13 +375,13 @@ public:
    * @brief Get the bubble wall velocity
    * @return vb
    */
-  double GetWallVelocity();
+  double GetWallVelocity() const;
 
   /**
    * @brief Get epsturb
    * @return epsturb
    */
-  double GetEpsTurb();
+  double GetEpsTurb() const;
 
   /**
    * @brief SetGstar Set gstar
@@ -387,7 +391,7 @@ public:
   /**
    * @brief GetGstar Get gstar
    */
-  double GetGstar();
+  double GetGstar() const;
 
   /**
    * @brief SetCriticalTemp Set critical temperature
@@ -397,7 +401,7 @@ public:
   /**
    * @brief GetCriticalTemp Get critical temperature
    */
-  double GetCriticalTemp();
+  double GetCriticalTemp() const;
 
   /**
    * @brief SetStoredTemp Set stored temperature
@@ -406,38 +410,38 @@ public:
   /**
    * @brief GetStoredTemp Get stored temperature
    */
-  double GetStoredTemp();
+  double GetStoredTemp() const;
 
   /**
    * @brief GetNucleationTemp Get nucleation temperature via exact method
    */
-  double GetNucleationTemp();
+  double GetNucleationTemp() const;
 
   /**
    * @brief GetNucleationTempApprox Get nucleation temperature via approximate
    * method
    */
-  double GetNucleationTempApprox();
+  double GetNucleationTempApprox() const;
 
   /**
    * @brief GetPercolationTemp Get percolation temperature
    */
-  double GetPercolationTemp();
+  double GetPercolationTemp() const;
 
   /**
    * @brief GetCompletionTemp Get percolation temperature
    */
-  double GetCompletionTemp();
+  double GetCompletionTemp() const;
 
   /**
-   * @brief GetTransitionTemp Get transition temperature from int
+   * @brief CalcTransitionTemp Get transition temperature from int
    */
-  double GetTransitionTemp(const int &which_transition_temp);
+  double CalcTransitionTemp(const int &which_transition_temp);
 
   /**
    * @brief GetPTStrength Get PT strength alpha
    */
-  double GetPTStrength();
+  double GetPTStrength() const;
 
   /**
    * @brief CalcGstar Calculate the number of effective degrees of freedom as a
@@ -544,5 +548,3 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj);
 struct resultErrorPair Nderive_BounceRatio(BounceSolution &obj);
 
 } // namespace BSMPT
-
-#endif /* INCLUDE_BSMPT_BOUNCE_SOLUTION_H_ */

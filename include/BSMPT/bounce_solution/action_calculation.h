@@ -6,6 +6,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#pragma once
+
 /**
  * @file
  */
@@ -22,9 +24,6 @@
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
-
-#ifndef INCLUDE_BSMPT_GravitationalWaves_GWUtils_ActionCalculation_H_
-#define INCLUDE_BSMPT_GravitationalWaves_GWUtils_ActionCalculation_H_
 
 /**
  * @brief This classes calculates the Bounce action of the potential with a set
@@ -817,5 +816,3 @@ public:
   void CalculateAction(double error = 1e-6);
 };
 } // namespace BSMPT
-
-#endif

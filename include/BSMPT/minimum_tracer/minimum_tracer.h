@@ -7,8 +7,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
-#ifndef INCLUDE_BSMPT_MINIMUM_TRACER_H_
-#define INCLUDE_BSMPT_MINIMUM_TRACER_H_
 
 /**
  * @file minimum tracer class
@@ -148,7 +146,7 @@ public:
   /**
    * @brief IsGlobMin checks whether current minimum is the global minimum
    * @param min Minimum to check, sets is_glob_min to true if min is global
-   * minimum, to false if min is local minimum
+   * minimum
    */
   void IsGlobMin(Minimum &min);
 
@@ -185,8 +183,8 @@ public:
    * @return smallest Eigenvalue of Hessian
    */
   double SmallestEigenvalue(
-      std::vector<double> &point,
-      std::function<std::vector<std::vector<double>>(std::vector<double>)>
+      const std::vector<double> &point,
+      const std::function<std::vector<std::vector<double>>(std::vector<double>)>
           &Hessian);
 
   /**
@@ -237,9 +235,9 @@ public:
                                   std::vector<double> point,
                                   double currentT,
                                   double finalT,
-                                  double dT        = 3,
-                                  bool output      = true,
-                                  bool unprotected = false);
+                                  double dT               = 3,
+                                  const bool &output      = true,
+                                  const bool &unprotected = false);
 
   /**
    * @brief trackPhase
@@ -253,9 +251,9 @@ public:
   std::vector<Minimum> trackPhase(std::vector<double> point,
                                   double currentT,
                                   double finalT,
-                                  double dT        = 3,
-                                  bool output      = true,
-                                  bool unprotected = false);
+                                  double dT               = 3,
+                                  const bool &output      = true,
+                                  const bool &unprotected = false);
 
   /**
    * @brief Calculates the VEV splitting when Hessian matrix gets a single
@@ -264,7 +262,8 @@ public:
    * @param point where grad is zero and hessian is not positive definite
    * @param T is the temperature.
    */
-  void CalculateVEVSplittings(std::vector<double> point, double T);
+  void CalculateVEVSplittings(const std::vector<double> &point,
+                              const double &T);
 
   /**
    * @brief bool to store whether flat directions are found
@@ -321,11 +320,11 @@ public:
    * @return wraped path
    */
   std::vector<std::vector<double>>
-  WarpPath(std::vector<std::vector<double>> path,
-           std::vector<double> T1,
-           std::vector<double> F1,
-           std::vector<double> T2,
-           std::vector<double> F2);
+  WarpPath(const std::vector<std::vector<double>> &path,
+           const std::vector<double> &T1,
+           const std::vector<double> &F1,
+           const std::vector<double> &T2,
+           const std::vector<double> &F2);
 
   /**
    * @brief Finds stationary points of a function (not only minimas).
@@ -383,7 +382,7 @@ public:
  * phi
  */
 std::vector<double>
-NablaNumerical(std::vector<double> phi,
+NablaNumerical(const std::vector<double> &phi,
                const std::function<double(std::vector<double>)> &f,
                const double &eps,
                const int &dim);
@@ -409,7 +408,7 @@ NablaNumerical(std::vector<double> phi,
  *  hessian matrix of f taken at phi
  */
 std::vector<std::vector<double>>
-HessianNumerical(std::vector<double> phi,
+HessianNumerical(const std::vector<double> &phi,
                  const std::function<double(std::vector<double>)> &f,
                  const double &eps,
                  const int &dim);
@@ -787,16 +786,16 @@ struct Vacuum
    * @param LowTempPoint tracing starting point at T_low
    * @param HighTempPoint tracing starting point at T_high
    */
-  void MultiStepPTMode0(const std::vector<double> LowTempPoint,
-                        const std::vector<double> HighTempPoint);
+  void MultiStepPTMode0(const std::vector<double> &LowTempPoint,
+                        const std::vector<double> &HighTempPoint);
 
   /**
    * @brief MultiStepPTMode1 multi-step coverage PT mode
    * @param LowTempPoint tracing starting point at T_low
    * @param HighTempPoint tracing starting point at T_high
    */
-  void MultiStepPTMode1(const std::vector<double> LowTempPoint,
-                        const std::vector<double> HighTempPoint);
+  void MultiStepPTMode1(const std::vector<double> &LowTempPoint,
+                        const std::vector<double> &HighTempPoint);
 
   /**
    * @brief DoPhasesOverlap checks if two phases overlap
@@ -814,8 +813,8 @@ struct Vacuum
    * @param LowTempPoint tracing starting point at T_low
    * @param HighTempPoint tracing starting point at T_high
    */
-  void MultiStepPTMode2(const std::vector<double> LowTempPoint,
-                        const std::vector<double> HighTempPoint);
+  void MultiStepPTMode2(const std::vector<double> &LowTempPoint,
+                        const std::vector<double> &HighTempPoint);
 
   /**
    * @brief prints the phases from T_low up to T_high on the terminal
@@ -826,5 +825,3 @@ struct Vacuum
 };
 
 } // namespace BSMPT
-
-#endif /* INCLUDE_BSMPT_MINIMUM_TRACER_H_ */

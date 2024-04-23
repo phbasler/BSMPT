@@ -15,7 +15,7 @@ namespace BSMPT
 GravitationalWave::GravitationalWave(BounceSolution &BACalc,
                                      const int &which_transition_temp)
 {
-  data.transitionTemp = BACalc.GetTransitionTemp(which_transition_temp);
+  data.transitionTemp = BACalc.CalcTransitionTemp(which_transition_temp);
   data.PTStrength     = BACalc.GetPTStrength();
   data.InvTimeScale   = BACalc.GetInvTimeScale();
   data.vb             = BACalc.GetWallVelocity();
