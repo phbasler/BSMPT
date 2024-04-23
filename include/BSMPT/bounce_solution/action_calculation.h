@@ -150,15 +150,6 @@ public:
   int MaxSinglePathDeformations = 200;
 
   /**
-   * @brief Do you want to save the solution path in a folder?
-   * * Yes = 1
-   * * No = 0
-   * (Currently not working)
-   *
-   */
-  int SaveOutput = 0;
-
-  /**
    * @brief list of \f$ \rho \f$ of the solution
    */
   std::vector<double> rho_sol;
@@ -669,14 +660,6 @@ public:
                      std::vector<double> &d2l_drho2,
                      double error = 1e-7,
                      int maxiter  = 100);
-  /**
-   * @brief Formats a number to be written always with 3 characters, e.g. 1 ->
-   * 001, 19 -> 019
-   *
-   * @param number
-   * @return std::string
-   */
-  std::string to_format(const int number);
 
   /**
    * @brief Calculates the normalization of the force \f$ \vec{\phi} \rightarrow

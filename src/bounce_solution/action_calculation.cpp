@@ -1235,14 +1235,6 @@ void BounceActionInt::Solve1DBounce(
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
 }
 
-std::string BounceActionInt::to_format(const int number)
-{
-  std::stringstream ss;
-  ss << std::setw(3) << std::setfill('0') << number;
-  return ss.str();
-  // BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-}
-
 double BounceActionInt::Bernstein(int n, int nu, double x)
 {
   std::stringstream ss;
