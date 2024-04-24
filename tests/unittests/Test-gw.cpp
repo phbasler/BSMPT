@@ -345,7 +345,40 @@ TEST_CASE("Checking phase tracking for BP3", "[gw]")
 
   std::shared_ptr<MinimumTracer> MinTracer(
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
-  Vacuum vac(0, 300, MinTracer, modelPointer, -1, 10, true);
 
-  REQUIRE(vac.PhasesList.size() == 2);
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+
+  auto output = trans.output_store;
+
+  REQUIRE(126.0223716 ==
+          Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
+  REQUIRE(121.0869527 ==
+          Approx(output.vec_trans_data.at(0).nucl_approx_temp).epsilon(1e-2));
+  REQUIRE(121.212833 ==
+          Approx(output.vec_trans_data.at(0).nucl_temp).epsilon(1e-2));
+  REQUIRE(120.7670659 ==
+          Approx(output.vec_trans_data.at(0).perc_temp).epsilon(1e-2));
+  REQUIRE(120.7267244 ==
+          Approx(output.vec_trans_data.at(0).compl_temp).epsilon(1e-2));
+
+  REQUIRE(0.00537281 == Approx(output.vec_gw_data.at(0).alpha).epsilon(1e-2));
+  REQUIRE(7697.16 ==
+          Approx(output.vec_gw_data.at(0).beta_over_H).epsilon(1e-2));
+  REQUIRE(4.40964e-05 == Approx(output.vec_gw_data.at(0).K_sw).epsilon(1e-2));
+  REQUIRE(4.40964e-06 == Approx(output.vec_gw_data.at(0).K_turb).epsilon(1e-2));
+  REQUIRE(0.0884755 == Approx(output.vec_gw_data.at(0).fpeak_sw).epsilon(1e-2));
+  REQUIRE(0.269136 ==
+          Approx(output.vec_gw_data.at(0).fpeak_turb).epsilon(1e-2));
+  REQUIRE(1.70812e-20 ==
+          Approx(output.vec_gw_data.at(0).h2Omega_sw).epsilon(1e-2));
+  REQUIRE(3.69052e-16 ==
+          Approx(output.vec_gw_data.at(0).h2Omega_turb).epsilon(1e-2));
+
+  REQUIRE(2.4646e-09 == Approx(output.vec_gw_data.at(0).SNR_sw).epsilon(1e-2));
+  REQUIRE(2.56709e-20 ==
+          Approx(output.vec_gw_data.at(0).SNR_turb).epsilon(1e-2));
+  REQUIRE(2.4646e-09 == Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
 }
