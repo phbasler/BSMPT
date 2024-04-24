@@ -8,6 +8,7 @@
 
 #include <BSMPT/config.h>
 #include <iostream>
+#include <numeric>
 #include <random>
 #include <string>
 #include <vector>
@@ -115,7 +116,8 @@ template <typename T>
 std::vector<T> operator+(const std::vector<T> &a, const std::vector<T> &b)
 {
   if (a.size() != b.size())
-    throw std::runtime_error("Vector cannot be added. Must have the same size.");
+    throw std::runtime_error(
+        "Vector cannot be added. Must have the same size.");
   std::vector<T> result;
   result.reserve(a.size());
 
