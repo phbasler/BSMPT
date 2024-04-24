@@ -41,7 +41,7 @@ struct CLIOptions
   double low1{-1}, low2{-1}, low3{-1}, low4{-1}, low5{-1}, low6{-1}, high1{-1},
       high2{-1}, high3{-1}, high4{-1}, high5{-1}, high6{-1};
   bool use_slice_plotter = false;
-  std::vector<double> min_false, min_true;
+  std::vector<double> min_start, min_end;
   std::vector<double> point;
 
   CLIOptions(const BSMPT::parser &argparser);
@@ -119,8 +119,8 @@ try
 
   if (args.use_slice_plotter)
   {
-    if ((args.min_true.size() == args.min_false.size()) and
-        (args.min_true.size() == modelPointer->get_nVEV()))
+    if ((args.min_end.size() == args.min_start.size()) and
+        (args.min_end.size() == modelPointer->get_nVEV()))
     {
       for (auto x : modelPointer->addLegendVEV())
         outfile << std::setprecision(16) << x << sep;
@@ -128,15 +128,14 @@ try
       outfile << "Veff(v,T)" << sep << "T" << std::endl;
 
       Logger::Write(LoggingLevel::ProgDetailed,
-                    "Evaluating slice between false minimum at (" +
-                        vec_to_string(args.min_false) +
-                        ") and true minimum at (" +
-                        vec_to_string(args.min_true) + ") with " +
-                        std::to_string(args.npoints) +
+                    "Evaluating slice between start minimum at (" +
+                        vec_to_string(args.min_start) +
+                        ") and end minimum at (" + vec_to_string(args.min_end) +
+                        ") with " + std::to_string(args.npoints) +
                         " points at T = " + std::to_string(temp) + " GeV.");
 
       auto grid_points =
-          Create1DimGrid(args.min_false, args.min_true, args.npoints);
+          Create1DimGrid(args.min_start, args.min_end, args.npoints);
       for (auto point : grid_points)
       {
         outfile << point << sep
@@ -390,7 +389,7 @@ bool CLIOptions::good() const
       Logger::Write(LoggingLevel::Default, "Invalid input for temperature.");
     return false;
   }
-  if (use_slice_plotter and ((min_false.size() == 0 or min_true.size() == 0)))
+  if (use_slice_plotter and ((min_start.size() == 0 or min_end.size() == 0)))
   {
     Logger::Write(
         LoggingLevel::Default,
@@ -610,28 +609,28 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    auto vec_str = split(argparser.get_value("min_false"), ',');
+    auto vec_str = split(argparser.get_value("min_start"), ',');
     for (std::size_t i = 0; i < vec_str.size(); i++)
     {
-      min_false.push_back(std::stod(vec_str.at(i)));
+      min_start.push_back(std::stod(vec_str.at(i)));
     }
   }
   catch (BSMPT::parserException &)
   {
-    ss << "--min_false not set\n";
+    ss << "--min_start not set\n";
   }
 
   try
   {
-    auto vec_str = split(argparser.get_value("min_true"), ',');
+    auto vec_str = split(argparser.get_value("min_end"), ',');
     for (std::size_t i = 0; i < vec_str.size(); i++)
     {
-      min_true.push_back(std::stod(vec_str.at(i)));
+      min_end.push_back(std::stod(vec_str.at(i)));
     }
   }
   catch (BSMPT::parserException &)
   {
-    ss << "--min_true not set\n";
+    ss << "--min_end not set\n";
   }
 
   try
@@ -683,8 +682,8 @@ BSMPT::parser prepare_parser()
   argparser.add_argument("high5", false);
   argparser.add_argument("high6", false);
   argparser.add_argument("slice", "enable slice mode", "false", false);
-  argparser.add_argument("min_false", "[* in slice mode] false minimum", false);
-  argparser.add_argument("min_true", "[* in slice mode] true minimum", false);
+  argparser.add_argument("min_start", "[* in slice mode] start minimum", false);
+  argparser.add_argument("min_end", "[* in slice mode] end minimum", false);
   argparser.add_argument("npoints", "grid size in slice mode", "100", false);
   argparser.add_argument(
       "json", "use a json file instead of cli parameters", "", false);

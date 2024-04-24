@@ -431,15 +431,15 @@ Create1DimGrid(const std::vector<double> &point,
 
 /**
  * @brief Create1DimGrid creates a 1-dim grid of given size between two points
- * @param min_false
- * @param min_true
+ * @param min_start
+ * @param min_end
  * @param npoints
- * @return npoints long vector of steps on connecting line between min_false and
- * min_true
+ * @return npoints long vector of steps on connecting line between min_start and
+ * min_end
  */
 std::vector<std::vector<double>>
-Create1DimGrid(const std::vector<double> &min_false,
-               const std::vector<double> &min_true,
+Create1DimGrid(const std::vector<double> &min_start,
+               const std::vector<double> &min_end,
                const int npoints = 100);
 
 /**
