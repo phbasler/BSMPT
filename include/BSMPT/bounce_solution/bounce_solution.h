@@ -39,13 +39,12 @@ struct resultErrorPair
  */
 class BounceSolution
 {
-protected:
+public:
   /**
    * @brief modelPointer for the used parameter point
    */
   std::shared_ptr<Class_Potential_Origin> modelPointer;
 
-public:
   /**
    * @brief MinTracer object
    */

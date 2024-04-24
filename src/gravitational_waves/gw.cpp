@@ -19,13 +19,16 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.PTStrength     = BACalc.GetPTStrength();
   data.InvTimeScale   = BACalc.GetInvTimeScale();
   data.vb             = BACalc.GetWallVelocity();
-  data.kappa_sw       = Getkappa_sw(data.PTStrength, data.vb);
-  data.K_sw           = GetK_sw(data.PTStrength, data.vb);
-  data.HR             = GetHR(data.InvTimeScale, data.vb);
-  data.kappa_turb     = CalcEpsTurb(BACalc.GetEpsTurb()) * data.kappa_sw;
-  data.K_turb         = GetK_turb(data.PTStrength, data.kappa_turb);
-  data.gstar          = BACalc.GetGstar();
-  data.Hstar          = BACalc.HubbleRate(data.transitionTemp);
+  data.kappa_sw       = Getkappa_sw(
+      data.PTStrength, data.vb, BACalc.modelPointer->SMConstants.Csound);
+  data.K_sw = GetK_sw(
+      data.PTStrength, data.vb, BACalc.modelPointer->SMConstants.Csound);
+  data.HR = GetHR(
+      data.InvTimeScale, data.vb, BACalc.modelPointer->SMConstants.Csound);
+  data.kappa_turb = CalcEpsTurb(BACalc.GetEpsTurb()) * data.kappa_sw;
+  data.K_turb     = GetK_turb(data.PTStrength, data.kappa_turb);
+  data.gstar      = BACalc.GetGstar();
+  data.Hstar      = BACalc.HubbleRate(data.transitionTemp);
 
   if (data.InvTimeScale < 1)
   {
@@ -281,7 +284,8 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
 /**
  * @brief Get efficiency factor kappa_sw for sound waves
  */
-double Getkappa_sw(const double alpha, const double vwall)
+double
+Getkappa_sw(const double &alpha, const double &vwall, const double &Csound)
 {
   double kappa;
   double kappaA = std::pow(vwall, 6.0 / 5.0) * 6.9 * alpha /
@@ -316,25 +320,26 @@ double Getkappa_sw(const double alpha, const double vwall)
 /**
  * @brief Get K for sound waves
  */
-double GetK_sw(const double alpha, const double vwall)
+double GetK_sw(const double &alpha, const double &vwall, const double &Csound)
 {
-  double kappa = Getkappa_sw(alpha, vwall);
+  double kappa = Getkappa_sw(alpha, vwall, Csound);
   return kappa * alpha / (1. + alpha);
 }
 
 /**
  * @brief Get HR
  */
-double GetHR(const double invTimeScale, const double vb)
+double
+GetHR(const double &invTimeScale, const double &vwall, const double &Csound)
 {
-  double max_velo = std::max(vb, Csound);
+  double max_velo = std::max(vwall, Csound);
   return 1. / invTimeScale * std::pow(8 * M_PI, 1. / 3) * max_velo;
 }
 
 /**
  * @brief Get K for turbulence
  */
-double GetK_turb(const double alpha, const double kappa)
+double GetK_turb(const double &alpha, const double &kappa)
 {
   return kappa * alpha / (1. + alpha);
 }
@@ -343,7 +348,7 @@ double GetK_turb(const double alpha, const double kappa)
  * @brief Determine fluid turnover time regime
  * @return true if H*tauSH approx. 1, false if smaller than 1
  */
-bool IsFluidTurnoverApproxOne(const double HR, const double K)
+bool IsFluidTurnoverApproxOne(const double &HR, const double &K)
 {
   double ratio = 2 * HR / std::sqrt(3 * K);
   return (ratio < 1) ? false : true;

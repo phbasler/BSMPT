@@ -213,6 +213,16 @@ struct ISMConstants
    * third derivative of the SM Higgs Potential Unit: GeV
    */
   double C_SMTriHiggs{0};
+
+  /**
+   * @brief speed of sound
+   */
+  const double Csound = 0.5773502691896258; // 1/sqrt(3)
+
+  /**
+   * @brief reduced Planck mass = MPl / (8 Pi)
+   */
+  const double MPl = 2.4e18;
 };
 
 /**
@@ -226,17 +236,6 @@ const std::complex<double> II(0, 1);
  * @return The SM Constants used by default in BSMPT
  */
 const ISMConstants GetSMConstants();
-
-/**
- * @brief speed of sound
- */
-const double Csound = 0.5773502691896258; // 1/sqrt(3)
-
-/**
- * @brief reduced Planck mass = MPl / (8 Pi)
- */
-const double MPl = 2.4e18;
-
 } // namespace BSMPT
 
 #endif /* SMPARAM_H_ */

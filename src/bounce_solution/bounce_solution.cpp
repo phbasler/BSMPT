@@ -636,7 +636,8 @@ double BounceSolution::TunnelingRate(const double &Temp)
 double BounceSolution::HubbleRate(const double &Temp)
 {
   return M_PI * std::sqrt(this->GetGstar()) / std::sqrt(90.) *
-         std::pow(Temp, 2) / MPl; // radiation dominated universe
+         std::pow(Temp, 2) /
+         modelPointer->SMConstants.MPl; // radiation dominated universe
 }
 
 /**
@@ -1151,9 +1152,9 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     double rho_gam =
         this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
 
-    double v_ChapmanJouget =
-        1. / (1 + alpha) *
-        (Csound + std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+    double v_ChapmanJouget = 1. / (1 + alpha) *
+                             (modelPointer->SMConstants.Csound +
+                              std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
 
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
@@ -1163,9 +1164,9 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
   if (UserDefined_vwall == -2)
   {
     // Upper bound implementation https://arxiv.org/abs/2305.02357
-    double v_ChapmanJouget =
-        1. / (1 + alpha) *
-        (Csound + std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+    double v_ChapmanJouget = 1. / (1 + alpha) *
+                             (modelPointer->SMConstants.Csound +
+                              std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
 
     double dTVi = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(false_min.point),

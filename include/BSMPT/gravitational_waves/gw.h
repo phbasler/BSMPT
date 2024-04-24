@@ -172,28 +172,52 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax);
 
 /**
  * @brief Get efficiency factor kappa_sw for sound waves
+ *
+ * @param alpha strength of the phase transition
+ * @param vwall bubble wall velocity
+ * @param Csound speed of sound
+ * @return double
  */
-double Getkappa_sw(const double alpha, const double vwall);
+double
+Getkappa_sw(const double &alpha, const double &vwall, const double &Csound);
 
 /**
  * @brief Get K for sound waves
+ *
+ * @param alpha strength of the phase transition
+ * @param vwall bubble wall velocity
+ * @param Csound speed of sound
+ * @return double
  */
-double GetK_sw(const double alpha, const double vwall);
+double GetK_sw(const double &alpha, const double &vwall, const double &Csound);
 
 /**
  * @brief Get HR for sound waves
+ *
+ * @param invTimeScale beta/H, inverse time scale
+ * @param vwall bubble wall velocity
+ * @param Csound speed of sound
+ * @return double
  */
-double GetHR(const double invTimeScale, const double vb);
+double
+GetHR(const double &invTimeScale, const double &vwall, const double &Csound);
 
 /**
  * @brief Get K for turbulence
+ *
+ * @param alpha strength of the phase transition
+ * @param kappa turbulence efficiency factor
+ * @return double
  */
-double GetK_turb(const double alpha, const double kappa);
+double GetK_turb(const double &alpha, const double &kappa);
 
 /**
  * @brief Determine fluid turnover time regime
+ *
+ * @param HR mean bubble separation
+ * @param K fraction of the kinetic energy in the fluid
  * @return true if H*tauSH approx. 1, false if smaller than 1
  */
-bool IsFluidTurnoverApproxOne(const double HR, const double K);
+bool IsFluidTurnoverApproxOne(const double &HR, const double &K);
 
 } // namespace BSMPT
