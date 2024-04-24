@@ -220,7 +220,7 @@ public:
       const std::function<std::vector<double>(std::vector<double>)> &dV);
 
   /**
-   * @brief trackPhase with enforced global minimum tracing (= phase is checked
+   * @brief TrackPhase with enforced global minimum tracing (= phase is checked
    * if it is still the global minimum until it is no longer, then the current
    * temperature is stored in globMinEndT)
    * @param globMinEndT temperature at which phase is no longer global minimum
@@ -231,7 +231,7 @@ public:
    * @param output if true tracking output is printed on the screen
    * @param unprotected if true we dont check the hessian
    */
-  std::vector<Minimum> trackPhase(double &globMinEndT,
+  std::vector<Minimum> TrackPhase(double &globMinEndT,
                                   std::vector<double> point,
                                   double currentT,
                                   double finalT,
@@ -240,7 +240,7 @@ public:
                                   const bool &unprotected = false);
 
   /**
-   * @brief trackPhase
+   * @brief TrackPhase
    * @param point start point for tracking
    * @param currentT start point temperature for phase tracking
    * @param finalT end point temperature
@@ -248,7 +248,7 @@ public:
    * @param output if true tracking output is printed on the screen
    * @param unprotected if true we dont check the hessian
    */
-  std::vector<Minimum> trackPhase(std::vector<double> point,
+  std::vector<Minimum> TrackPhase(std::vector<double> point,
                                   double currentT,
                                   double finalT,
                                   double dT               = 3,

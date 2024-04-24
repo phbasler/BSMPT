@@ -395,7 +395,7 @@ bool MinimumTracer::GradientIncreases(
 }
 
 /**
- * @brief trackPhase with enforced global minimum tracing (= phase is checked if
+ * @brief TrackPhase with enforced global minimum tracing (= phase is checked if
  * it is still the global minimum until it is no longer, then the current
  * temperature is stored in globMinEndT)
  * @param globMinEndT temperature at which phase is no longer global minimum
@@ -406,7 +406,7 @@ bool MinimumTracer::GradientIncreases(
  * @param output if true tracking output is printed on the screen
  * @param unprotected if true we dont check the hessian
  */
-std::vector<Minimum> MinimumTracer::trackPhase(double &globMinEndT,
+std::vector<Minimum> MinimumTracer::TrackPhase(double &globMinEndT,
                                                std::vector<double> point,
                                                double currentT,
                                                double finalT,
@@ -680,7 +680,7 @@ std::vector<Minimum> MinimumTracer::trackPhase(double &globMinEndT,
 }
 
 /**
- * @brief trackPhase
+ * @brief TrackPhase
  * @param point start point for tracking
  * @param currentT start point temperature for phase tracking
  * @param finalT end point temperature
@@ -688,7 +688,7 @@ std::vector<Minimum> MinimumTracer::trackPhase(double &globMinEndT,
  * @param output if true tracking output is printed on the screen
  * @param unprotected if true we dont check the hessian
  */
-std::vector<Minimum> MinimumTracer::trackPhase(std::vector<double> point,
+std::vector<Minimum> MinimumTracer::TrackPhase(std::vector<double> point,
                                                double currentT,
                                                double finalT,
                                                double dT,
@@ -1983,7 +1983,7 @@ Phase::Phase(std::vector<double> phase_start,
   // Remove flat directions
   MinTracer->ConvertToNonFlatDirections(phase_start);
   std::vector<Minimum> MinimumList =
-      MinTracer->trackPhase(globMinEndT, phase_start, initialT, finalT);
+      MinTracer->TrackPhase(globMinEndT, phase_start, initialT, finalT);
 
   if (MinimumList.size() == 0) return; // Minimum tracker failed
 
@@ -2021,9 +2021,9 @@ Phase::Phase(double initialT,
   MinTracer->ConvertToNonFlatDirections(phase_start);
 
   std::vector<Minimum> MinimumListHigh =
-      MinTracer->trackPhase(globMinEndT, phase_start, initialT, HighT);
+      MinTracer->TrackPhase(globMinEndT, phase_start, initialT, HighT);
   std::vector<Minimum> MinimumListLow =
-      MinTracer->trackPhase(globMinEndT, phase_start, initialT, LowT);
+      MinTracer->TrackPhase(globMinEndT, phase_start, initialT, LowT);
 
   for (auto Min : MinimumListHigh)
   {
@@ -2062,7 +2062,7 @@ Phase::Phase(std::vector<double> phase_start,
   MinTracer->ConvertToNonFlatDirections(phase_start);
 
   std::vector<Minimum> MinimumList =
-      MinTracer->trackPhase(phase_start, initialT, finalT);
+      MinTracer->TrackPhase(phase_start, initialT, finalT);
 
   if (MinimumList.size() == 0) return; // Minimum tracker failed
 
@@ -2097,9 +2097,9 @@ Phase::Phase(double initialT,
   MinTracer->ConvertToNonFlatDirections(phase_start);
 
   std::vector<Minimum> MinimumListHigh =
-      MinTracer->trackPhase(phase_start, initialT, HighT);
+      MinTracer->TrackPhase(phase_start, initialT, HighT);
   std::vector<Minimum> MinimumListLow =
-      MinTracer->trackPhase(phase_start, initialT, LowT);
+      MinTracer->TrackPhase(phase_start, initialT, LowT);
 
   for (auto Min : MinimumListHigh)
   {
@@ -2141,7 +2141,7 @@ Phase::Phase(const double &initialT,
   if (initialT == LowT)
   {
     std::vector<Minimum> MinimumList =
-        MinTracer->trackPhase(phase_start, initialT, HighT);
+        MinTracer->TrackPhase(phase_start, initialT, HighT);
 
     if (MinimumList.size() == 0) return; // Minimum tracker failed
 
@@ -2153,7 +2153,7 @@ Phase::Phase(const double &initialT,
   else if (initialT == HighT)
   {
     std::vector<Minimum> MinimumList =
-        MinTracer->trackPhase(phase_start, initialT, LowT);
+        MinTracer->TrackPhase(phase_start, initialT, LowT);
 
     if (MinimumList.size() == 0) return; // Minimum tracker failed
 
@@ -2166,9 +2166,9 @@ Phase::Phase(const double &initialT,
            (initialT < LowT and initialT > HighT))
   {
     std::vector<Minimum> MinimumListHigh =
-        MinTracer->trackPhase(phase_start, initialT, HighT);
+        MinTracer->TrackPhase(phase_start, initialT, HighT);
     std::vector<Minimum> MinimumListLow =
-        MinTracer->trackPhase(phase_start, initialT, LowT);
+        MinTracer->TrackPhase(phase_start, initialT, LowT);
 
     for (auto Min : MinimumListHigh)
     {
@@ -2216,9 +2216,9 @@ Minimum Phase::Get(double T)
     // Minimum already in the list
     return bestGuess;
   }
-  std::vector<Minimum> MinimumList = MinTracer->trackPhase(
+  std::vector<Minimum> MinimumList = MinTracer->TrackPhase(
       bestGuess.point, bestGuess.temp, T, (T - bestGuess.temp), false, true);
-  // Check if the trackPhase fails
+  // Check if the TrackPhase fails
   if (MinimumList.size() > 0)
   {
     // Add new knots to the list so that Phase keeps track of the
@@ -3369,14 +3369,14 @@ void Vacuum::addPhase(Phase &phase)
   if (phase.MinimumPhaseVector.size() == 2)
   {
     // If only two minima were found look for more.
-    std::vector<Minimum> MinimumList = MinTracer->trackPhase(
+    std::vector<Minimum> MinimumList = MinTracer->TrackPhase(
         phase.MinimumPhaseVector[0].point,
         phase.MinimumPhaseVector[0].temp,
         phase.MinimumPhaseVector[1].temp,
         (phase.MinimumPhaseVector[1].temp - phase.MinimumPhaseVector[0].temp) /
             3,
         false);
-    // Check if the trackPhase fails
+    // Check if the TrackPhase fails
     if (MinimumList.size() > 0)
     {
       // Add new knots to the list so that Phase keeps track of the
