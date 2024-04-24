@@ -26,6 +26,8 @@
 #ifndef TK_SPLINE_H
 #define TK_SPLINE_H
 
+#define _USE_MATH_DEFINES
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>

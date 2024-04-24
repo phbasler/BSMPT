@@ -658,14 +658,14 @@ struct Vacuum
    * exist
    *
    */
-  double T_low_highTempPhase;
+  double T_low_highTempPhase = -1;
 
   /**
    * @brief Highest temperature at which low-temperature phase is found to
    * exist
    *
    */
-  double T_high_lowTempPhase;
+  double T_high_lowTempPhase = -1;
 
   /**
    * @brief number of equally-spaced intermediate points to check for new
