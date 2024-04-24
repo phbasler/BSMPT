@@ -901,19 +901,6 @@ void MinimumTracer::CalculateVEVSplittings(const std::vector<double> &point,
   MatrixXd eigenvalueMatrix = eigenValueSolver.eigenvalues().real();
   // the eigenvectors are stored column wise
   MatrixXd eigenvectorMatrix = eigenValueSolver.eigenvectors().real();
-  // print the hessian
-  /*std::cout << std::endl
-            << "Computed hessian:" << std::endl
-            << mat << std::endl;
-  // print the eigenvalues
-  std::cout << std::endl
-            << "Computed eigenvalues:" << std::endl
-            << eigenvalueMatrix << std::endl;
-  // print the eigenvectors
-  std::cout << std::endl
-            << "Computed eigenvectors:" << std::endl
-            << eigenvectorMatrix << std::endl;*/
-
   // Determine the eigenvector with the smallest eigenvalue
   double SEV = 1e100;
   VectorXd EigenVector;
