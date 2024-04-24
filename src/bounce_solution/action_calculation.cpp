@@ -77,8 +77,8 @@ void BounceActionInt::SetPath(std::vector<std::vector<double>> InitPath_In)
     std::stringstream ss;
     ss << "-----------------------------------------------\n";
     ss << "Error with new path with length\t" << Spline.L << "\n";
-    ss << "V(TrueVacuum) = " << V(InitPath_In.front()) << std::endl;
-    ss << "V(FalseVacuum) = " << V(InitPath_In.back()) << std::endl;
+    ss << "V(TrueVacuum) = " << V(InitPath_In.front()) << "\n";
+    ss << "V(FalseVacuum) = " << V(InitPath_In.back()) << "\n";
     ss << "V(TrueVacuum) > V(FalseVacuum) < ----  This cannot be! Path might "
           "be backwards\n";
     ss << "-----------------------------------------------\n";
