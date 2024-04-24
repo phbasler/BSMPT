@@ -77,7 +77,7 @@ int main()
     bounce.CalculatePercolationTemp();
     if (bounce.GetPercolationTemp() == -1) continue;
     double errorTtoTp = 1e100;
-    BounceActionInt closestBounceActionInt;
+    BounceActionInt *ClosestBounceActionInt;
     std::cout << "Found a transitions with Tp =\t"
               << bounce.GetPercolationTemp() << " GeV.\n";
     for (auto BAInt : bounce.SolutionList)
@@ -85,31 +85,31 @@ int main()
       if (abs(BAInt.T - bounce.GetPercolationTemp()) < errorTtoTp)
       {
         errorTtoTp             = abs(BAInt.T - bounce.GetPercolationTemp());
-        closestBounceActionInt = BAInt;
+        ClosestBounceActionInt = &BAInt;
       }
     }
     std::cout << "The closest solution is at a distance of " << errorTtoTp
               << " GeV from Tp.\n The tunnenling path is\n";
-    closestBounceActionInt.spline.print_path();
+    ClosestBounceActionInt->spline.print_path();
     std::cout << "\n ------ The tunneling profile in Mathematica format ------ "
                  "\n {rho, l, point}\n\n";
 
     // Save the path and VEV profile into, e.g, Mathematica
-    for (size_t i = 0; i < closestBounceActionInt.rho_sol.size(); i++)
-      std::cout << "{" << closestBounceActionInt.rho_sol[i] << ", "
-                << closestBounceActionInt.l_sol[i] << ", "
-                << join(closestBounceActionInt.spline(
-                            closestBounceActionInt.l_sol[i]),
+    for (size_t i = 0; i < ClosestBounceActionInt->rho_sol.size(); i++)
+      std::cout << "{" << ClosestBounceActionInt->rho_sol[i] << ", "
+                << ClosestBounceActionInt->l_sol[i] << ", "
+                << join(ClosestBounceActionInt->spline(
+                            ClosestBounceActionInt->l_sol[i]),
                         ", ")
                 << "},\n";
     std::cout << "\n ------ The tunneling profile in python format ------ "
                  "\n {rho, l, point}\n\n";
     // Save the path and VEV profile into, e.g, python
-    for (size_t i = 0; i < closestBounceActionInt.rho_sol.size(); i++)
-      std::cout << "[" << closestBounceActionInt.rho_sol[i] << ", "
-                << closestBounceActionInt.l_sol[i] << ", "
-                << join(closestBounceActionInt.spline(
-                            closestBounceActionInt.l_sol[i]),
+    for (size_t i = 0; i < ClosestBounceActionInt->rho_sol.size(); i++)
+      std::cout << "[" << ClosestBounceActionInt->rho_sol[i] << ", "
+                << ClosestBounceActionInt->l_sol[i] << ", "
+                << join(ClosestBounceActionInt->spline(
+                            ClosestBounceActionInt->l_sol[i]),
                         ", ")
                 << "],\n";
   }

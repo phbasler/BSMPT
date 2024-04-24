@@ -245,11 +245,6 @@ public:
   tk::spline rasterizedVdl; // RasterizeddVdl
 
   /**
-   * @brief Default constructor
-   */
-  BounceActionInt();
-
-  /**
    * @brief Construct a new Bounce Action Int object
    *
    * @param init_path is the initial path guess
