@@ -51,13 +51,6 @@ GravitationalWave::~GravitationalWave()
 {
 }
 
-/**
- * @brief CalcEpsTurb calculate epsilon for turbulence contribution
- * @param epsturb_in is the input value for epsturb. If [0..1] set
- * to value, for -1 we use the upper bound from
- * https://arxiv.org/abs/1704.05871
- * @return value for epsturb
- */
 double GravitationalWave::CalcEpsTurb(double epsturb_in)
 {
   if (epsturb_in == -1)
@@ -71,9 +64,6 @@ double GravitationalWave::CalcEpsTurb(double epsturb_in)
   }
 }
 
-/**
- * @brief Calculate peak frequency of GW signal for sound waves
- */
 void GravitationalWave::CalcPeakFrequencySoundWave()
 {
   double res = 26e-6 * (1. / this->data.HR) *
@@ -82,9 +72,6 @@ void GravitationalWave::CalcPeakFrequencySoundWave()
   this->data.fPeakSoundWave = res;
 }
 
-/**
- * @brief Calculate peak amplitude of GW signal for sound waves
- */
 void GravitationalWave::CalcPeakAmplitudeSoundWave()
 {
   double ratio = 0;
@@ -104,9 +91,6 @@ void GravitationalWave::CalcPeakAmplitudeSoundWave()
                                     ratio;
 }
 
-/**
- * @brief Calculate peak frequency of GW signal from turbulence
- */
 void GravitationalWave::CalcPeakFrequencyTurbulence()
 {
   double res = 7.909e-5 * (1. / this->data.HR) *
@@ -115,9 +99,6 @@ void GravitationalWave::CalcPeakFrequencyTurbulence()
   this->data.fPeakTurbulence = res;
 }
 
-/**
- * @brief Calculate peak amplitude of GW signal from turbulence
- */
 void GravitationalWave::CalcPeakAmplitudeTurbulence()
 {
   double res = 1.144e-4 * std::pow(100. / this->data.gstar, 1. / 3.) *
@@ -125,15 +106,6 @@ void GravitationalWave::CalcPeakAmplitudeTurbulence()
   this->data.h2OmegaPeakTurbulence = res;
 }
 
-/**
- * @brief Amplitude of GW signal as a function of
- * @param f frequency
- * @param swON true (default) = contribution from sound waves switched on,
- * false = switched off
- * @param turbON true (default) = contribution from turbulence switched on,
- * false = switched off
- * @return h2OmegaGW
- */
 double GravitationalWave::CalcGWAmplitude(double f, bool swON, bool turbON)
 {
   double res = 0;
@@ -173,13 +145,6 @@ double GravitationalWave::CalcGWAmplitude(double f, bool swON, bool turbON)
   return res;
 }
 
-/**
- * @brief GetSNR
- * @param fmin minimal frequency
- * @param fmax maximal frequency
- * @param T duration of exp. data acquisition, default value: 3 years
- * @return signal-to-noise (SNR) ratio at LISA
- */
 double
 GravitationalWave::GetSNR(const double fmin, const double fmax, const double T)
 {
@@ -189,36 +154,18 @@ GravitationalWave::GetSNR(const double fmin, const double fmax, const double T)
   return res;
 }
 
-/**
- * @brief SIfunc
- * @param f frequency
- * @return value of SI-function from LISA mission performance requirement for
- * power spectral density
- */
 double SIfunc(const double f)
 {
   double f1 = 0.4e-3;
   return 5.76e-48 * (1 + std::pow(f1 / f, 2));
 }
 
-/**
- * @brief Rfunc
- * @param f frequency
- * @return value of R-function from LISA mission performance requirement for
- * power spectral density
- */
 double Rfunc(const double f)
 {
   double f2 = 25e-3;
   return 1. + std::pow(f / f2, 2);
 }
 
-/**
- * @brief powspec_density
- * @param f frequency
- * @return value of power spectral density-function from LISA mission
- * performance requirement
- */
 double powspec_density(const double f)
 {
   double SIIfunc = 3.6e-41;
@@ -233,9 +180,6 @@ double h2OmSens(const double f)
          powspec_density(f);
 }
 
-/**
- * @brief snr_integrand friend to define inner integrand of SNR integral
- */
 double snr_integrand(double f, void *params)
 {
   class GravitationalWave &obj = *static_cast<GravitationalWave *>(params);
@@ -246,11 +190,6 @@ double snr_integrand(double f, void *params)
   return func;
 }
 
-/**
- * @brief Nintegrate_SNR Numerical integration of SNR integral
- * @param obj Class reference to pass all needed parameters
- * @return Numerical value of integral and absolute error
- */
 struct resultErrorPair
 Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
 {
@@ -281,9 +220,6 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
   return res;
 }
 
-/**
- * @brief Get efficiency factor kappa_sw for sound waves
- */
 double
 Getkappa_sw(const double &alpha, const double &vwall, const double &Csound)
 {
@@ -317,18 +253,12 @@ Getkappa_sw(const double &alpha, const double &vwall, const double &Csound)
   return kappa;
 }
 
-/**
- * @brief Get K for sound waves
- */
 double GetK_sw(const double &alpha, const double &vwall, const double &Csound)
 {
   double kappa = Getkappa_sw(alpha, vwall, Csound);
   return kappa * alpha / (1. + alpha);
 }
 
-/**
- * @brief Get HR
- */
 double
 GetHR(const double &invTimeScale, const double &vwall, const double &Csound)
 {
@@ -336,18 +266,11 @@ GetHR(const double &invTimeScale, const double &vwall, const double &Csound)
   return 1. / invTimeScale * std::pow(8 * M_PI, 1. / 3) * max_velo;
 }
 
-/**
- * @brief Get K for turbulence
- */
 double GetK_turb(const double &alpha, const double &kappa)
 {
   return kappa * alpha / (1. + alpha);
 }
 
-/**
- * @brief Determine fluid turnover time regime
- * @return true if H*tauSH approx. 1, false if smaller than 1
- */
 bool IsFluidTurnoverApproxOne(const double &HR, const double &K)
 {
   double ratio = 2 * HR / std::sqrt(3 * K);

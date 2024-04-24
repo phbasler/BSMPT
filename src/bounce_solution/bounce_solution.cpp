@@ -12,26 +12,16 @@
 namespace BSMPT
 {
 
-/**
- * @brief Default constructor
- *
- */
 BounceSolution::BounceSolution()
 {
 }
 
-/**
- * @brief Constructor used for testing
- */
 BounceSolution::BounceSolution(
     std::shared_ptr<Class_Potential_Origin> &pointer_in)
 {
   modelPointer = pointer_in;
 }
 
-/**
- * @brief Constructor of bounce solution for one pair of coexisiting phases
- */
 BounceSolution::BounceSolution(
     std::shared_ptr<Class_Potential_Origin> &pointer_in,
     std::shared_ptr<MinimumTracer> &MinTracer_in,
@@ -63,10 +53,6 @@ BounceSolution::BounceSolution(
   }
 }
 
-/**
- * @brief Constructor delegation to constructor for pair of coexisiting
- phases
- */
 BounceSolution::BounceSolution(
     std::shared_ptr<Class_Potential_Origin> &pointer_in,
     std::shared_ptr<MinimumTracer> &MinTracer_in,
@@ -465,104 +451,66 @@ void BounceSolution::SetBounceSol()
   status_bounce_sol = "success";
 }
 
-/**
- * @brief Get the bubble wall velocity
- * @return vb
- */
 double BounceSolution::GetWallVelocity() const
 {
   return vwall;
 }
 
-/**
- * @brief Get epsturb
- * @return epsturb
- */
 double BounceSolution::GetEpsTurb() const
 {
   return epsturb;
 }
 
-/**
- * @brief SetGstar Set gstar
- */
 void BounceSolution::SetGstar(const double &gstar_in)
 {
   gstar = gstar_in;
 }
-/**
- * @brief GetGstar Get gstar
- */
+
 double BounceSolution::GetGstar() const
 {
   return gstar;
 }
-/**
- * @brief SetCriticalTemp Set critical temperature
- */
+
 void BounceSolution::SetCriticalTemp(const double &T_in)
 {
   Tc = T_in;
 }
-/**
- * @brief GetCriticalTemp Get critical temperature
- */
+
 double BounceSolution::GetCriticalTemp() const
 {
   return Tc;
 }
 
-/**
- * @brief SetStoredTemp Set stored temperature
- */
 void BounceSolution::SetStoredTemp(const double &T_in)
 {
   store_Temp = T_in;
 }
-/**
- * @brief GetStoredTemp Get stored temperature
- */
+
 double BounceSolution::GetStoredTemp() const
 {
   return store_Temp;
 }
 
-/**
- * @brief GetNucleationTemp Get nucleation temperature via exact method
- */
 double BounceSolution::GetNucleationTemp() const
 {
   return Tnucl;
 }
 
-/**
- * @brief GetNucleationTempApprox Get nucleation temperature via approximate
- * method
- */
 double BounceSolution::GetNucleationTempApprox() const
 {
   return Tnucl_approx;
 }
 
-/**
- * @brief GetPercolationTemp Get percolation temperature
- */
 double BounceSolution::GetPercolationTemp() const
 {
   return Tperc;
 }
 
-/**
- * @brief GetCompletionTemp Get completion temperature
- */
 double BounceSolution::GetCompletionTemp() const
 {
   return Tcompl;
 }
 
-/**
- * @brief CalcTransitionTemp Get transition temperature from int
- */
 double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
 {
   double trans_temp = -1;
@@ -598,19 +546,11 @@ double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
   return trans_temp;
 }
 
-/**
- * @brief GetPTStrength Get PT strength alpha
- */
 double BounceSolution::GetPTStrength() const
 {
   return alpha;
 }
 
-/**
- * @brief Storage of the tunneling rate per volume of the transition from
- * false to true vacuum
- * @param Temp temperature
- */
 double BounceSolution::TunnelingRate(const double &Temp)
 {
   if (Temp < SolutionList.front().T or Temp > SolutionList.back().T)
@@ -629,10 +569,7 @@ double BounceSolution::TunnelingRate(const double &Temp)
       std::pow(Temp, 4) * std::pow((Shat3 / (2 * M_PI * Temp)), 3. / 2);
   return amp * std::exp(-Shat3 / Temp);
 }
-/**
- * @brief Storage of the temperature-dependent Hubble rate
- * @param Temp temperature
- */
+
 double BounceSolution::HubbleRate(const double &Temp)
 {
   return M_PI * std::sqrt(this->GetGstar()) / std::sqrt(90.) *
@@ -640,11 +577,6 @@ double BounceSolution::HubbleRate(const double &Temp)
          modelPointer->SMConstants.MPl; // radiation dominated universe
 }
 
-/**
- * @brief CalcGstar Calculate the number of effective degrees of freedom as a
- * function of temperature, higgs masses are evaluated at global minimum
- * @param Temp temperature
- */
 void BounceSolution::CalcGstar(const double &Temp)
 {
   std::size_t NHiggs = this->modelPointer->get_NHiggs();
@@ -674,10 +606,6 @@ void BounceSolution::CalcGstar(const double &Temp)
   this->SetGstar(geff);
 }
 
-/**
- * @brief CalcGstarPureRad Calculate the number of effective degrees of
- * freedom assuming a purely radiative universe
- */
 void BounceSolution::CalcGstarPureRad()
 {
   std::size_t NHiggs = this->modelPointer->get_NHiggs();
@@ -689,9 +617,6 @@ void BounceSolution::CalcGstarPureRad()
   this->SetGstar(geff);
 }
 
-/**
- * @brief Calculation of nucleation temperature
- */
 void BounceSolution::CalculateNucleationTemp()
 {
   if (status_bounce_sol == "success")
@@ -753,9 +678,6 @@ void BounceSolution::CalculateNucleationTemp()
   return;
 }
 
-/**
- * @brief Approximate calculation of nucleation temperature
- */
 void BounceSolution::CalculateNucleationTempApprox()
 {
   if (status_bounce_sol == "success")
@@ -811,12 +733,6 @@ void BounceSolution::CalculateNucleationTempApprox()
   return;
 }
 
-/**
- * @brief CalcFalseVacFraction calculates false vacuum fraction as function of
- * temperature
- * @param temp temperature
- * @return false vacuum fraction
- */
 double BounceSolution::CalcFalseVacFraction(const double &temp)
 {
   double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
@@ -824,12 +740,6 @@ double BounceSolution::CalcFalseVacFraction(const double &temp)
   return std::exp(-prefac * Nintegrate_Outer(*this).result);
 }
 
-/**
- * @brief CalcTempAtFalseVacFraction calculates the temperature at which the
- * false vacuum fraction drops below val
- * @param false_vac_frac desired false vacuum fraction value
- * @return temperature at which false vacuum fraction drops below val
- */
 double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
 {
   double res_Temp = -1;
@@ -899,12 +809,6 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
   return res_Temp;
 }
 
-/**
- * @brief CalculatePercolationTemp calculation of the temperature when the false
- * vacuum fraction drops below 71 % (default)
- * @param false_vac_frac false vacuum fraction at percolation temperature, by
- * default set to 71 %
- */
 void BounceSolution::CalculatePercolationTemp(const double &false_vac_frac)
 {
   if (status_bounce_sol == "success")
@@ -936,12 +840,6 @@ void BounceSolution::CalculatePercolationTemp(const double &false_vac_frac)
   return;
 }
 
-/**
- * @brief CalculateCompletionTemp calculation of the temperature when the false
- * vacuum fraction drops below 1 % (default)
- * @param false_vac_frac false vacuum fraction at completion temperature, by
- * default set to 1 %
- */
 void BounceSolution::CalculateCompletionTemp(const double &false_vac_frac)
 {
   if (status_bounce_sol == "success")
@@ -987,13 +885,6 @@ double outer_integrand(double Temp, void *params)
   return func;
 }
 
-/**
- * @brief Nintegrate_Inner Numerical integration of inner integral over
- * inverse Hubble rate for the percolation temperature calculation
- * @param obj Class reference to pass all needed parameters
- * @param T upper integration boundary
- * @return Numerical value of integral and absolute error
- */
 struct resultErrorPair Nintegrate_Inner(BounceSolution &obj,
                                         const double &Tprime)
 {
@@ -1024,13 +915,6 @@ struct resultErrorPair Nintegrate_Inner(BounceSolution &obj,
   return res;
 }
 
-/**
- * @brief Nintegrate_Outer Numerical integration of outer integral for the
- * percolation temperature calculation
- * @param obj Class reference to pass all needed parameters
- * @param T lower integration boundary
- * @return Numerical value of integral and absolute error
- */
 struct resultErrorPair Nintegrate_Outer(BounceSolution &obj)
 {
   double abs_err = obj.AbsErr;
@@ -1060,12 +944,6 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj)
   return res;
 }
 
-/**
- * @brief Calculate phase transition strength alpha at percolation temperature
- * and vwall
- * @param false_min initial, false minimum
- * @param true_min final, true minimum
- */
 void BounceSolution::CalculatePTStrength()
 {
   if (not percolation_temp_set)
@@ -1124,11 +1002,6 @@ void BounceSolution::CalculatePTStrength()
   return;
 }
 
-/**
- * @brief Calculate wall velocity
- * @param false_min initial, false minimum
- * @param true_min final, true minimum
- */
 void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
                                            const Minimum &true_min)
 {
@@ -1197,10 +1070,6 @@ double BounceSolution::GetBounceSol(const double &Temp) const
   return S3ofT_spline(Temp);
 }
 
-/**
- * @brief action_ratio friend to define input of numerical derivative in
- * calculation of inverse time scale
- */
 double action_ratio(double Temp, void *params)
 {
   class BounceSolution &obj = *static_cast<BounceSolution *>(params);
@@ -1208,12 +1077,6 @@ double action_ratio(double Temp, void *params)
   return func;
 }
 
-/**
- * @brief Nderive_BounceRatio Numerical derivative for the inverse time scale
- * calculation
- * @param obj Class reference to pass all needed parameters
- * @return Numerical value of derivative and absolute error
- */
 struct resultErrorPair Nderive_BounceRatio(BounceSolution &obj)
 {
   double step_size = 1e-8;
@@ -1230,9 +1093,6 @@ struct resultErrorPair Nderive_BounceRatio(BounceSolution &obj)
   return res;
 }
 
-/**
- * @brief Get inverse time scale of phase transition
- */
 void BounceSolution::CalculateInvTimeScale()
 {
   if (not percolation_temp_set)
@@ -1245,9 +1105,6 @@ void BounceSolution::CalculateInvTimeScale()
   this->betaH                = this->GetPercolationTemp() * res.result;
 }
 
-/**
- * @brief Get inverse time scale of phase transition
- */
 double BounceSolution::GetInvTimeScale()
 {
   if (this->betaH == -1) CalculateInvTimeScale();

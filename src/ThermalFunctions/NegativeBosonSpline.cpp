@@ -11,15 +11,8 @@
 #include <BSMPT/ThermalFunctions/NegativeBosonSpline.h>
 #include <vector>
 
-/**
- * @brief C_NegLine Number of data points used for the interpolation of J_(m^2 <
- * 0)
- */
 const int C_NegLine = 3001;
 
-/**
- * @brief NegLinearInt 2D Array containing the pairs (m^2 , J_(m^2)) for m^2 < 0
- */
 const double NegLinearInt[3001][2] = {
     {-0, -2.164646465},     {-1, -2.818445251},     {-2, -3.222851734},
     {-3, -3.428922383},     {-4, -3.46485227},      {-5, -3.351032801},

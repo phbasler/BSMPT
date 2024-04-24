@@ -14,28 +14,6 @@ using namespace Eigen;
 namespace BSMPT
 {
 
-/**
- * @brief Numerical method to calculate the
- * gradient of a function f using finite differences method.
- *
- * This method is used while BSMPT is not able to
- * calculate the potential derivative analytically. We used the 4th order
- * methods
- *
- * \f$\frac{\partial f}{\partial \phi_i} = \frac{1}{12
- * \epsilon}\left(-f(\dots ,\vec{\phi}_i + 2  \epsilon ) + 8 f(\dots
- * ,\vec{\phi}_i + \epsilon )- 8 f(\dots ,\vec{\phi}_i - \epsilon ) +
- * f(\dots ,\vec{\phi}_i - 2  \epsilon )\right)\f$
- *
- * where \f$ \epsilon \f$ is a small step.
- *
- * @param phi Where we want to calculate the gradient
- * @param f function
- * @param eps Size of finite differences step
- * @param dim Dimensions of the VEV space (or dimensions of V argument)
- * @return std::vector<double> The \f$ dim \times 1 \f$ gradient of V taken at
- * phi
- */
 std::vector<double>
 NablaNumerical(const std::vector<double> &phi,
                const std::function<double(std::vector<double>)> &f,
@@ -59,26 +37,6 @@ NablaNumerical(const std::vector<double> &phi,
   return result;
 }
 
-/**
- * @brief Numerical method to calculate the
- * hessian matrix of a function f using finite differences method.
- *
- * \f$\frac{\partial^2 f}{\partial \phi_i \phi_j} = \frac{1}{4
- * \epsilon^2}\left(V(\dots, \vec{\phi}_i + \epsilon , \vec{\phi}_j +
- * \epsilon) - f(\dots, \vec{\phi}_i - \epsilon , \vec{\phi}_j +
- * \epsilon) - f(\dots, \vec{\phi}_i + \epsilon , \vec{\phi}_j -
- * \epsilon) + f(\dots, \vec{\phi}_i - \epsilon , \vec{\phi}_j -
- * \epsilon) \right)\f$
- *
- * where \f$ \epsilon \f$ is a small step.
- *
- * @param phi Where we want to calculate the Hessian matrix
- * @param f Potential (or other function)
- * @param eps Size of finite differences step
- * @param dim Dimensions of the VEV space (or dimensions of f argument)
- * @return std::vector<std::vector<double>> The \f$ dim \times \dim \f$
- *  hessian matrix of f taken at phi
- */
 std::vector<std::vector<double>>
 HessianNumerical(const std::vector<double> &phi,
                  const std::function<double(std::vector<double>)> &f,
@@ -120,20 +78,6 @@ HessianNumerical(const std::vector<double> &phi,
   return result;
 }
 
-/**
- * @brief Finds stationary points of a function (not only minimas).
- *
- * @param guess is the initial guess for the minimum
- * @param df gradient of the function to be minimized
- * @param Hessian hessian of the function
- * @param error Maximum size of \f$ | \vec{df} | \f$ that is considered a
- * minimum
- * @param const_multiplier If \f$ \det{Hessian} = 0\f$ this method does not
- * work. In that case we move the guess as \f$ \vec{p} \rightarrow \vec{p} -
- * const\_multiplier * \vec{df}\f$
- * @param maxiter Maximum iteration exiting function
- * @return std::vector<double>
- */
 std::vector<double> MinimumTracer::LocateMinimum(
     std::vector<double> guess,
     std::function<std::vector<double>(std::vector<double>)> &df,
@@ -205,13 +149,6 @@ std::vector<double> MinimumTracer::LocateMinimum(
   return (new_guess);
 }
 
-/**
- * @brief SmallestEigenvalue calculate Eigenvalues of Hessian and returns
- * smallest
- * @param point point where to evaluate the Hessian
- * @param Hessian Hessian function
- * @return smallest Eigenvalue of Hessian
- */
 double MinimumTracer::SmallestEigenvalue(
     const std::vector<double> &point,
     const std::function<std::vector<std::vector<double>>(std::vector<double>)>
@@ -233,14 +170,6 @@ double MinimumTracer::SmallestEigenvalue(
   return current_min + 1e-7;
 }
 
-/**
- * @brief FindZeroSmallestEigenvalue
- * @param point_1 first point
- * @param T_1 temperature of first point
- * @param point_2 second point
- * @param T_2 temperature of second point
- * @return stationary point found in between point_1 and point_2
- */
 std::vector<double>
 MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
                                           double T_1,
@@ -351,18 +280,6 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
   return CandidatePoint;
 }
 
-/**
- * @brief TrackPhase with enforced global minimum tracing (= phase is checked if
- * it is still the global minimum until it is no longer, then the current
- * temperature is stored in globMinEndT)
- * @param globMinEndT temperature at which phase is no longer global minimum
- * @param point start point for tracking
- * @param currentT start point temperature for phase tracking
- * @param finalT end point temperature
- * @param dT initial temperature step size
- * @param output if true tracking output is printed on the screen
- * @param unprotected if true we dont check the hessian
- */
 std::vector<Minimum> MinimumTracer::TrackPhase(double &globMinEndT,
                                                std::vector<double> point,
                                                double currentT,
@@ -636,15 +553,6 @@ std::vector<Minimum> MinimumTracer::TrackPhase(double &globMinEndT,
   return MinimumList;
 }
 
-/**
- * @brief TrackPhase
- * @param point start point for tracking
- * @param currentT start point temperature for phase tracking
- * @param finalT end point temperature
- * @param dT initial temperature step size
- * @param output if true tracking output is printed on the screen
- * @param unprotected if true we dont check the hessian
- */
 std::vector<Minimum> MinimumTracer::TrackPhase(std::vector<double> point,
                                                double currentT,
                                                double finalT,
@@ -863,13 +771,6 @@ std::vector<Minimum> MinimumTracer::TrackPhase(std::vector<double> point,
   return MinimumList;
 }
 
-/**
- * @brief Calculates the VEV splitting when Hessian matrix gets a single
- * negative eigenvalue.
- *
- * @param point where grad is zero and hessian is not positive definite
- * @param T is the temperature.
- */
 void MinimumTracer::CalculateVEVSplittings(const std::vector<double> &point,
                                            const double &T)
 {
@@ -1027,15 +928,6 @@ void MinimumTracer::ReduceVEV(Minimum &min)
   ReduceVEV(min.point);
 }
 
-/**
- * @brief WarpPath
- * @param path
- * @param T1
- * @param F1
- * @param T2
- * @param F2
- * @return wraped path
- */
 const std::vector<std::vector<double>>
 MinimumTracer::WarpPath(const std::vector<std::vector<double>> &path,
                         const std::vector<double> &T1,
@@ -1063,19 +955,10 @@ MinimumTracer::WarpPath(const std::vector<std::vector<double>> &path,
   return r;
 }
 
-/**
- * @brief default constructor
- */
 MinimumTracer::MinimumTracer()
 {
 }
 
-/**
- * @brief constructor
- * @param pointer_in this->modelPointer for used parameter point
- * @param WhichMinimizer_in which minimizers are used
- * @param UseMultithreading_in whether or not multithreading is used
- */
 MinimumTracer::MinimumTracer(
     std::shared_ptr<Class_Potential_Origin> &pointer_in,
     const int &WhichMinimizer_in,
@@ -1361,11 +1244,6 @@ void MinimumTracer::FindDiscreteSymmetries()
   this->GroupElements = StoreGroupElements;
 }
 
-/**
- * @brief ConvertToVEVDim converts point from full to reduced (VEV) dimension
- * @param point point in full field dimension
- * @return point in reduced VEV dimension
- */
 std::vector<double>
 MinimumTracer::ConvertToVEVDim(const std::vector<double> &point)
 {
@@ -1380,13 +1258,6 @@ MinimumTracer::ConvertToVEVDim(const std::vector<double> &point)
   return point_out;
 }
 
-/**
- * @brief get global minimum of effective potential
- * @param Temp temperature
- * @param check storage for minimization debugging options
- * @param start start value for CMA-ES minimization
- * @return global minimum at temperature Temp
- */
 std::vector<double>
 MinimumTracer::GetGlobalMinimum(const double &Temp,
                                 std::vector<double> &check,
@@ -1401,12 +1272,6 @@ MinimumTracer::GetGlobalMinimum(const double &Temp,
                                   this->UseMultithreading));
 }
 
-/**
- * @brief get global minimum of effective potential
- * @param Temp temperature
- * @param start start value for CMA-ES minimization
- * @return global minimum at temperature Temp
- */
 std::vector<double>
 MinimumTracer::GetGlobalMinimum(const double &Temp,
                                 const std::vector<double> &start)
@@ -1415,22 +1280,12 @@ MinimumTracer::GetGlobalMinimum(const double &Temp,
   return this->GetGlobalMinimum(Temp, check, start);
 }
 
-/**
- * @brief get global minimum of effective potential
- * @param Temp temperature
- * @return global minimum at temperature Temp
- */
 std::vector<double> MinimumTracer::GetGlobalMinimum(const double &Temp)
 {
   return this->GetGlobalMinimum(
       Temp, std::vector<double>(modelPointer->get_NHiggs(), 0));
 }
 
-/**
- * @brief IsGlobMin checks whether current minimum is the global minimum
- * @param min Minimum to check, sets is_glob_min to true if min is global
- * minimum
- */
 void MinimumTracer::IsGlobMin(Minimum &min)
 {
   double num_error = 1;
@@ -1462,12 +1317,6 @@ void MinimumTracer::IsGlobMin(Minimum &min)
   return;
 }
 
-/**
- * @brief GetStatusNLOVEV convert bool output of CheckNLOVEV to
- * status string
- * @param out bool output of CheckNLOVEV
- * @return status string for output
- */
 std::string MinimumTracer::GetStatusNLOVEV(const bool &out)
 {
   std::string status;
@@ -1482,12 +1331,6 @@ std::string MinimumTracer::GetStatusNLOVEV(const bool &out)
   return status;
 }
 
-/**
- * @brief GetStatusEWSR convert double output of IsThereEWSymmetryRestoration to
- * status string
- * @param out int output of IsThereEWSymmetryRestoration
- * @return status string for output
- */
 std::string MinimumTracer::GetStatusEWSR(const int &out)
 {
   std::string status;
@@ -1524,13 +1367,6 @@ std::string MinimumTracer::GetStatusEWSR(const int &out)
   return status;
 }
 
-/**
- * @brief IsThereEWSymmetryRestoration checks if there is EW symmetry
- * restoration at high temperatures
- * @return status; if status < -1: no minimum if status = 0: calculation
- * failed, if status = 1: flat region with minimum, if status = 2: there is a
- * minimum but no symmetry restoration, if status = 3: symmetry restoration
- */
 int MinimumTracer::IsThereEWSymmetryRestoration()
 {
   double T;
@@ -1571,12 +1407,6 @@ int MinimumTracer::IsThereEWSymmetryRestoration()
     { return HessianNumerical(arg, V, eps, dim); };
 
     ActualSmallestEigenvalue = SmallestEigenvalue(point, Hessian);
-
-    // std::cout << "T = " << T << " | " << EvenOlderSmallestEigenvalue << " | "
-    //           << OldSmallestEigenvalue << " | " << ActualSmallestEigenvalue
-    //           << " | "
-    //           << abs(ActualSmallestEigenvalue / OldSmallestEigenvalue - 1)
-    //           << "\n";
 
     if (abs(ActualSmallestEigenvalue / OldSmallestEigenvalue - 1) < treshold and
         abs(ActualSmallestEigenvalue / EvenOlderSmallestEigenvalue - 1) <
@@ -1636,16 +1466,10 @@ int MinimumTracer::IsThereEWSymmetryRestoration()
   }
 }
 
-/**
- * @brief empty constructor
- */
 CoexPhases::CoexPhases()
 {
 }
 
-/**
- * @brief constructor
- */
 CoexPhases::CoexPhases(const int &pair_id_in,
                        const Phase &false_phase_in,
                        const Phase &true_phase_in,
@@ -1661,9 +1485,6 @@ CoexPhases::CoexPhases(const int &pair_id_in,
   CalculateTc();
 }
 
-/**
- * @brief CalculateTc critical temperature for coexising phase pair
- */
 void CoexPhases::CalculateTc()
 {
   Logger::Write(LoggingLevel::MinTracerDetailed,
@@ -1753,16 +1574,6 @@ void CoexPhases::CalculateTc()
   return;
 }
 
-/**
- * @brief Create1DimGrid creates a 1-dim grid of given size in
- * index-direction
- * @param point
- * @param k index direction in which to create grid
- * @param low_value
- * @param high_value
- * @param nsteps
- * @return gridsize-dim vector of vectors
- */
 std::vector<std::vector<double>>
 Create1DimGrid(const std::vector<double> &point,
                const int k,
@@ -1792,14 +1603,6 @@ Create1DimGrid(const std::vector<double> &point,
   }
 }
 
-/**
- * @brief Create1DimGrid creates a 1-dim grid of given size between two points
- * @param min_start
- * @param min_end
- * @param npoints
- * @return npoints long vector of steps on connecting line between min_start and
- * min_end
- */
 std::vector<std::vector<double>>
 Create1DimGrid(const std::vector<double> &min_start,
                const std::vector<double> &min_end,
@@ -1819,9 +1622,6 @@ Create1DimGrid(const std::vector<double> &min_start,
   return res_vec;
 }
 
-/**
- * Returns true if two values are the same given some relative precision
- */
 bool almost_the_same(const double &a,
                      const double &b,
                      const double &rel_precision,
@@ -1834,10 +1634,6 @@ bool almost_the_same(const double &a,
   return std::abs(a - b) < std::abs(a + b) / 2 * rel_precision;
 }
 
-/**
- * Returns true if two vectors are the element-wise the same given some
- * relative precision
- */
 bool almost_the_same(const std::vector<double> &a,
                      const std::vector<double> &b,
                      const bool &allow_for_sign_flip,
@@ -1872,20 +1668,12 @@ bool almost_the_same(const std::vector<double> &a,
   }
 }
 
-/**
- * @brief NoSignFlip project Minimum to positive quadrant in vev space
- * @param a Minimum
- */
 void NoSignFlip(Minimum &a)
 {
   NoSignFlip(a.point);
   return;
 }
 
-/**
- * @brief NoSignFlip project Minimum to positive quadrant in vev space
- * @param v std::vector<double>
- */
 void NoSignFlip(std::vector<double> &v)
 {
   for (std::size_t i = 0; i < v.size(); i++)
@@ -1898,23 +1686,10 @@ void NoSignFlip(std::vector<double> &v)
   return;
 }
 
-/**
- * @brief empty constructor
- */
 Phase::Phase()
 {
 }
 
-/**
- * @brief Construct a new Phase object
- *
- * @param phase_start Initial starting point for the phase
- * @param initialT Initial temperature
- * @param finalT Final temperature
- * @param globMinEndT Temperature where phase is first detected to no longer
- * be global minimum
- * @param MinTracerIn MinTracer pointer
- */
 Phase::Phase(std::vector<double> phase_start,
              double initialT,
              double finalT,
@@ -1940,17 +1715,6 @@ Phase::Phase(std::vector<double> phase_start,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-/**
- * @brief Construct a new Phase:: Phase object
- *
- * @param phase_start Initial starting point for the phase
- * @param initialT Temperature of the phase given as input
- * @param LowT Lowest temperature
- * @param HighT Highest temperature
- * @param globMinEndT Temperature where phase is first detected to no longer
- * be global minimum
- * @param MinTracerIn MinTracer pointer
- */
 Phase::Phase(double initialT,
              std::vector<double> phase_start,
              double LowT,
@@ -1984,16 +1748,6 @@ Phase::Phase(double initialT,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-/**
- * @brief Construct a new Phase object
- *
- * @param phase_start Initial starting point for the phase
- * @param initialT Initial temperature
- * @param finalT Final temperature
- * @param globMinEndT Temperature where phase is first detected to no longer
- * be global minimum
- * @param MinTracerIn MinTracer pointer
- */
 Phase::Phase(std::vector<double> phase_start,
              double initialT,
              double finalT,
@@ -2019,15 +1773,6 @@ Phase::Phase(std::vector<double> phase_start,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-/**
- * @brief Construct a new Phase:: Phase object
- *
- * @param phase_start Initial starting point for the phase
- * @param initialT Temperature of the phase given as input
- * @param LowT Lowest temperature
- * @param HighT Highest temperature
- * @param MinTracerIn MinTracer pointer
- */
 Phase::Phase(double initialT,
              std::vector<double> phase_start,
              double LowT,
@@ -2060,14 +1805,6 @@ Phase::Phase(double initialT,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-/**
- * @brief Construct a new Phase:: Phase object
- *
- * @param initialT Temperature of the phase given as input
- * @param LowT Lowest temperature
- * @param HighT Highest temperature
- * @param MinTracerIn MinTracer pointer
- */
 Phase::Phase(const double &initialT,
              const double &LowT,
              const double &HighT,
@@ -2315,9 +2052,6 @@ void Vacuum::MultiStepPTMode0(const std::vector<double> &LowTempPoint_in,
   return;
 }
 
-/**
- * @brief DoPhasesOverlap checks if two phases overlap
- */
 bool Vacuum::DoPhasesOverlap(Phase &new_phase, Phase &old_phase)
 {
   bool whole_region_covered = false;
@@ -2333,10 +2067,6 @@ bool Vacuum::DoPhasesOverlap(Phase &new_phase, Phase &old_phase)
   return whole_region_covered;
 }
 
-/**
- * @brief DoGlobMinOverlap check for global minimum at left-/rightmost
- * overlap and choose endpoint of previous phase if new phase does not overlap
- */
 bool Vacuum::DoGlobMinOverlap(const Phase &new_phase, const Phase &old_phase)
 {
   bool global_minimum_overlap = false;
@@ -3006,13 +2736,6 @@ Vacuum::Vacuum(const double &T_lowIn,
   return;
 }
 
-/**
- * @brief MultiStepPTTracer traces all phases between T_high and T_low
- * assuming that we start and end in a global minimum (absolute stability)
- * @param Temp temperature at which to evaluate phase
- * @param deltaT temperature step to take if already traced phase is found
- * again
- */
 void Vacuum::MultiStepPTTracer(const double &Temp, const double &deltaT)
 {
   if (Temp <= T_low)
@@ -3106,10 +2829,6 @@ void Vacuum::MultiStepPTTracer(const double &Temp, const double &deltaT)
   return;
 }
 
-/**
- * @brief print info on phase
- * @param phase Phase object
- */
 void Vacuum::print(const Phase &phase)
 {
   if (phase.MinimumPhaseVector.size() > 1)
@@ -3121,16 +2840,6 @@ void Vacuum::print(const Phase &phase)
   return;
 }
 
-/**
- * @brief setCoexPhases Calculates all coexisting phase pairs irrespective of
- * borders of coexisiting phase regions, this way we take into account the full
- * region of coexistance for coexisting phases and do not split at the border of
- * coexisting regions which are split as soon as the number of coexisting phases
- * changes which excludes transitions that have a critical temperature in the
- * first region but only complete in the second region (in case the critical
- * temperature is close to the region border or the temperature difference is
- * large enough)
- */
 void Vacuum::setCoexPhases()
 {
   std::stringstream ss1, ss2;
@@ -3168,12 +2877,6 @@ void Vacuum::setCoexPhases()
   Logger::Write(LoggingLevel::MinTracerDetailed, ss2.str());
 }
 
-/**
- * @brief setCoexRegion Calculates all coexisting phase regions with phase pairs
- * included from the phase vector
- * @param UseMultiStepPTMode int to distinguish multistep PT mode, for all
- * modes except mode 0 we try to patch up holes in tracing
- */
 void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
 {
   std::vector<Minimum> edgesList, edgesListResult;
@@ -3410,12 +3113,6 @@ int Vacuum::MinimumFoundAlready(const Minimum &minimum)
   return -1;
 }
 
-/**
- * @brief GetLegend derive legend
- * @param num_coex_phases number of coexisting phase regions
- * @param do_gw_calc bool that determines whether gw calculation is performed
- * @return vector of column label strings
- */
 std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
                                                   const bool &do_gw_calc)
 {

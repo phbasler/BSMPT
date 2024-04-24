@@ -11,10 +11,7 @@
 
 namespace BSMPT
 {
-/**
- * @brief TransitionTracer constructor
- * @param input user input
- */
+
 TransitionTracer::TransitionTracer(user_input &input)
 {
   num_vev = input.modelPointer->get_nVEV();
@@ -452,9 +449,6 @@ TransitionTracer::TransitionTracer(user_input &input)
   return;
 }
 
-/**
- * @brief TransitionTracer deconstructor
- */
 TransitionTracer::~TransitionTracer()
 {
 }
