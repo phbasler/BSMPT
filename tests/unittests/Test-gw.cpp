@@ -382,3 +382,74 @@ TEST_CASE("Checking phase tracking for BP3", "[gw]")
           Approx(output.vec_gw_data.at(0).SNR_turb).epsilon(1e-2));
   REQUIRE(2.4646e-09 == Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
 }
+
+TEST_CASE("Test for EW symmetry restoration BP1", "[gw]")
+{
+  const std::vector<double> example_point_R2HDM{
+      /* lambda_1 = */ 6.9309437685026,
+      /* lambda_2 = */ 0.26305141403285998,
+      /* lambda_3 = */ 1.2865950045595,
+      /* lambda_4 = */ 4.7721306931875001,
+      /* lambda_5 = */ 4.7275722046239004,
+      /* m_{12}^2 = */ 18933.440789693999,
+      /* tan(beta) = */ 16.577896825227999,
+      /* Yukawa Type = */ 1};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM, SMConstants);
+  modelPointer->initModel(example_point_R2HDM);
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+  REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == -1);
+}
+
+TEST_CASE("Test for EW symmetry restoration BP2", "[gw]")
+{
+  const std::vector<double> example_point_R2HDM{
+      /* lambda_1 = */ 6.8467197321288999,
+      /* lambda_2 = */ 0.25889890874393001,
+      /* lambda_3 = */ 1.4661775278406,
+      /* lambda_4 = */ 4.4975594646125998,
+      /* lambda_5 = */ 4.4503516057569996,
+      /* m_{12}^2 = */ 6629.9728323804002,
+      /* tan(beta) = */ 45.319927369307997,
+      /* Yukawa Type = */ 1};
+  using namespace BSMPT;
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM, SMConstants);
+  modelPointer->initModel(example_point_R2HDM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+  REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == -1);
+}
+
+TEST_CASE("Test for EW symmetry restoration BP3", "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* msq = */ -15650,
+                                               /* lambda = */ 0.52,
+                                               /* delta2 = */ 0.55,
+                                               /* b2 = */ -8859,
+                                               /* d2 = */ 0.5,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+  REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == 3);
+}
