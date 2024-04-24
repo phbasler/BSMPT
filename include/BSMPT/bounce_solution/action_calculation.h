@@ -250,13 +250,14 @@ public:
    * @param V is the class potential
    * @param dV is the class gradient
    */
-  BounceActionInt(std::vector<std::vector<double>> init_path_In,
-                  std::vector<double> TrueVacuum_In,
-                  std::vector<double> FalseVacuum_In,
-                  std::function<double(std::vector<double>)> V_In,
-                  std::function<std::vector<double>(std::vector<double>)> dV_In,
-                  double T_In,
-                  int MaxPathIntegrations_in);
+  BounceActionInt(
+      std::vector<std::vector<double>> init_path_In,
+      std::vector<double> TrueVacuum_In,
+      std::vector<double> FalseVacuum_In,
+      std::function<double(std::vector<double>)> &V_In,
+      std::function<std::vector<double>(std::vector<double>)> &dV_In,
+      double T_In,
+      int MaxPathIntegrations_in);
 
   /**
    * @brief Construct a new Bounce Action Int object
