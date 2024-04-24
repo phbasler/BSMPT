@@ -23,7 +23,7 @@ std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
   return os;
 }
 
-std::vector<std::string> split(std::string str, char delimiter)
+std::vector<std::string> split(const std::string &str, char delimiter)
 {
   // Using str in a string stream
   std::stringstream ss(str);

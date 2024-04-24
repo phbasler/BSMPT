@@ -86,7 +86,7 @@ template <typename T> std::string vec_to_string(const std::vector<T> &vec)
 /**
  * @brief split string separated by delimiter into substrings
  */
-std::vector<std::string> split(std::string str, char delimiter);
+std::vector<std::string> split(const std::string &str, char delimiter);
 
 /**
  * @brief Overload to print out vectors with the << operator
