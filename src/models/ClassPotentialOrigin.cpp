@@ -3287,12 +3287,6 @@ void Class_Potential_Origin::CalculateDebye(bool forceCalculation)
       }
     }
   }
-
-  std::size_t nHiggsGauge = 0;
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    if (Curvature_Gauge_G2H2[0][0][i][i] != 0) nHiggsGauge++;
-  }
 }
 
 void Class_Potential_Origin::CalculateDebyeGauge()
