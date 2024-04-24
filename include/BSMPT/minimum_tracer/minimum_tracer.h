@@ -201,25 +201,6 @@ public:
                                                  double T_2);
 
   /**
-   * @brief This function check if the gradient increses from point_1 to
-   * point_2. Not used at the moment.
-   *
-   * @param T is the temperature.
-   * @param point_1 initial point.
-   * @param point_2 final point.
-   * @param V is the potential.
-   * @param dV is the potential gradient.
-   * @return true if there is a barrier between the minima.
-   * @return false if there is no barrier between the minima.
-   */
-  bool GradientIncreases(
-      const double &T,
-      const std::vector<double> &point_1,
-      const std::vector<double> &point_2,
-      const std::function<double(std::vector<double>)> &V,
-      const std::function<std::vector<double>(std::vector<double>)> &dV);
-
-  /**
    * @brief TrackPhase with enforced global minimum tracing (= phase is checked
    * if it is still the global minimum until it is no longer, then the current
    * temperature is stored in globMinEndT)
