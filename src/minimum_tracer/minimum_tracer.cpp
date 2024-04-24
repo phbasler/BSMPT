@@ -3280,7 +3280,6 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
               [](auto a, auto b) { return a.temp > b.temp; });
 
     int numPhases = 0;
-    int count     = 0;
 
     bool no_gap_found = true;
 
@@ -3290,7 +3289,6 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
       if (numPhases > 1)
       {
         status_coex_pairs = "success";
-        count++;
       }
       else if (numPhases <= 0) // found a non-traced gap in temperature
       {
