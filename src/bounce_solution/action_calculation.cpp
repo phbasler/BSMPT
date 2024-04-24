@@ -439,15 +439,14 @@ double BounceActionInt::BesselJ(double x, int terms)
 {
   // This implementation seems to converge quite quicly
   // https://en.wikipedia.org/wiki/Bessel_function#:~:text=Modified%20Bessel%20functions%3A%20I%CE%B1%2C%20K%CE%B1%5B,first%20and%20second%20kind%20and%20are%20defined%20as%5B19%5D
-  double r0    = 1e100;
-  double Alpha = 1.;
-  double r     = 0;
-  int m        = 0;
+  double r0 = 1e100;
+  double r  = 0;
+  int m     = 0;
   while ((m < terms) && (abs((r - r0) / r) > 1e-15))
   {
     r0 = r; // Save step
-    r += 1 / (tgamma(m + Alpha + 1) * tgamma(m + 1)) * std::pow(-1, m) *
-         std::pow(x / 2.0, 2.0 * m + Alpha); // One more term
+    r += 1 / (tgamma(m + 2.) * tgamma(m + 1)) * std::pow(-1, m) *
+         std::pow(x / 2.0, 2.0 * m + 1.); // One more term
     m++; // Update later to not mess up summation
   }
   return r;
