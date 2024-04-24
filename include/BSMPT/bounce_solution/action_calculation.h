@@ -12,9 +12,6 @@
  * @file
  */
 
-// Remove warning from <experimental/filesystem>
-#define _LIBCPP_NO_EXPERIMENTAL_DEPRECATION_WARNING_FILESYSTEM
-
 // M_PI in Windows
 #define _USE_MATH_DEFINES
 #include <cmath>
