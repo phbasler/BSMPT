@@ -26,7 +26,7 @@ BounceActionInt::BounceActionInt(
   this->Vfalse = V_In(FalseVacuum_In);
   this->V  = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   this->dV = dV_In;
-  this->Hessian = [=](auto const &arg) // TODO: Calculate Hessian from grad
+  this->Hessian = [=](auto const &arg)
   { return HessianNumerical(arg, V_In, this->eps, this->dim); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
