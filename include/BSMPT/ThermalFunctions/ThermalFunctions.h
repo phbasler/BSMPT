@@ -8,11 +8,10 @@
  * @file
  */
 
-#include <BSMPT/utility/spline.h>
-
 #ifndef INCLUDE_BSMPT_THERMALFUNCTIONS_THERMALFUNCTIONS_H_
 #define INCLUDE_BSMPT_THERMALFUNCTIONS_THERMALFUNCTIONS_H_
 
+#include <BSMPT/utility/spline.h>
 namespace BSMPT
 {
 namespace ThermalFunctions
