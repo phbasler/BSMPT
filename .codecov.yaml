@@ -12,3 +12,4 @@ ignore:
   - "src/models/ClassPotentialOrigin_deprecated.cpp"
   - "src/models/ClassTemplate.cpp"
   - "src/WallThickness/WallThickness1D.cpp"
+  - "standalone/*"
