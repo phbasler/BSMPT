@@ -768,8 +768,6 @@ public:
                        std::vector<double> &dphidl,
                        std::vector<double> &d2phidl2);
 
-  static void ClearFolder(const char *path_in);
-
   /**
    * @brief Calculates \f$ \frac{d^2l}{d\rho^2} \f$
    *

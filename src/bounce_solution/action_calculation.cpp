@@ -1718,23 +1718,6 @@ unsigned BounceActionInt::nChoosek(unsigned n, unsigned k)
   return result;
 }
 
-void BounceActionInt::ClearFolder(const char *path_in)
-{
-  std::stringstream ss;
-  ss << path_in;
-
-  /*
-  if (std::experimental::filesystem::exists(path_in))
-  {
-    // Remove everything
-    for (const auto &entry :
-         std::experimental::filesystem::directory_iterator(path_in))
-      std::experimental::filesystem::remove_all(entry.path());
-  }
-  std::experimental::filesystem::create_directory(path_in);
-  */
-}
-
 double BounceActionInt::CalculateKineticTermAction(std::vector<double> &rho,
                                                    tk::spline &dl_drho_spl)
 {
