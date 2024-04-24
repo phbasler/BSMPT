@@ -1341,13 +1341,13 @@ void MinimumTracer::FindDiscreteSymmetries()
   };
 
   // Generate random VEV
-  srandom(time(NULL));
+  srand(time(NULL));
   const long max_rand                                = 1000000L;
   std::function<Eigen::VectorXd()> GenerateRandomVEV = [&]()
   {
     Eigen::VectorXd res(dim);
     for (auto &m : res)
-      m = 1. + 299. * (random() % max_rand) / max_rand;
+      m = 1. + 299. * (rand() % max_rand) / max_rand;
     return res;
   };
 
