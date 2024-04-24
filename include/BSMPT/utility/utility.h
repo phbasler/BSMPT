@@ -7,6 +7,7 @@
 #pragma once
 
 #include <BSMPT/config.h>
+#include <algorithm>
 #include <iostream>
 #include <numeric>
 #include <random>
