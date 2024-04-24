@@ -122,8 +122,8 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
   Logger::Write(LoggingLevel::BounceDetailed, ss.str());
 }
 
-std::vector<double>
-BounceSolution::TransformIntoOptimalDiscreteSymmetry(const std::vector<double> &vev)
+std::vector<double> BounceSolution::TransformIntoOptimalDiscreteSymmetry(
+    const std::vector<double> &vev)
 {
   std::vector<double> result(vev.size(), 0);
   // Transform the vector
@@ -180,13 +180,13 @@ void BounceSolution::GWInitialScan()
         path, TrueVacuum, FalseVacuum, V, T, MaxPathIntegrations);
     bc.CalculateAction();
 
-    last_path        = bc.path;
+    last_path        = bc.Path;
     last_TrueVacuum  = bc.TrueVacuum;
     last_FalseVacuum = bc.FalseVacuum;
 
     // Comment this is you want dumb paths!!
-    last_action = bc.action;
-    if (bc.action / T > 0)
+    last_action = bc.Action;
+    if (bc.Action / T > 0)
     {
       SolutionList.insert(
           std::upper_bound(SolutionList.begin(),
@@ -198,7 +198,7 @@ void BounceSolution::GWInitialScan()
       // SolutionList.push_back(bc);
     }
 
-    if (bc.action / T < 40 and bc.action > 0) break;
+    if (bc.Action / T < 40 and bc.Action > 0) break;
   }
   GWSecondaryScan();
 }
@@ -236,7 +236,7 @@ void BounceSolution::CalculateActionAt(double T, bool smart)
     std::vector<std::vector<double>> path;
 
     if (smart)
-      path = MinTracer->WarpPath(Nearest_bc.path,
+      path = MinTracer->WarpPath(Nearest_bc.Path,
                                  Nearest_bc.TrueVacuum,
                                  Nearest_bc.FalseVacuum,
                                  TrueVacuum,
@@ -247,7 +247,7 @@ void BounceSolution::CalculateActionAt(double T, bool smart)
     BounceActionInt bc(
         path, TrueVacuum, FalseVacuum, V, T, MaxPathIntegrations);
     bc.CalculateAction();
-    if (bc.action / T > 0)
+    if (bc.Action / T > 0)
     {
       SolutionList.insert(
           std::upper_bound(SolutionList.begin(),
@@ -273,7 +273,7 @@ void BounceSolution::CalculateActionAt(double T, bool smart)
     BounceActionInt bc(
         path, TrueVacuum, FalseVacuum, V, T, MaxPathIntegrations);
     bc.CalculateAction();
-    if (bc.action / T > 0)
+    if (bc.Action / T > 0)
     {
       SolutionList.push_back(bc);
     }
@@ -315,12 +315,12 @@ void BounceSolution::GWSecondaryScan()
 
     for (std::size_t sol = 0; sol < SolutionList.size() - 1; sol++)
     {
-      if (SolutionList[sol].action / SolutionList[sol].T > 200) continue;
-      if (SolutionList[sol + 1].action / SolutionList[sol + 1].T < 50) continue;
+      if (SolutionList[sol].Action / SolutionList[sol].T > 200) continue;
+      if (SolutionList[sol + 1].Action / SolutionList[sol + 1].T < 50) continue;
 
       double NumOfT =
-          ceil((SolutionList[sol + 1].action / SolutionList[sol + 1].T -
-                SolutionList[sol].action / SolutionList[sol].T) /
+          ceil((SolutionList[sol + 1].Action / SolutionList[sol + 1].T -
+                SolutionList[sol].Action / SolutionList[sol].T) /
                20);
 
       double dT = (SolutionList[sol + 1].T - SolutionList[sol].T) / NumOfT;
@@ -347,16 +347,16 @@ void BounceSolution::GWScanTowardsHighAction()
 {
   for (int i = 0;
        i <=
-       1. + (200 - SolutionList.back().action / SolutionList.back().T) / 5.;
+       1. + (200 - SolutionList.back().Action / SolutionList.back().T) / 5.;
        i++)
   {
-    if (SolutionList.back().action / SolutionList.back().T > 200) break;
+    if (SolutionList.back().Action / SolutionList.back().T > 200) break;
 
     // Try to calculate until s3/T = 200
     double t1            = SolutionList[SolutionList.size() - 2].T;
     double t2            = SolutionList[SolutionList.size() - 1].T;
-    double s1            = SolutionList[SolutionList.size() - 2].action / t1;
-    double s2            = SolutionList[SolutionList.size() - 1].action / t2;
+    double s1            = SolutionList[SolutionList.size() - 2].Action / t1;
+    double s2            = SolutionList[SolutionList.size() - 1].Action / t2;
     double goal          = s2 + 5;
     std::size_t NumOfSol = SolutionList.size();
 
@@ -386,15 +386,15 @@ void BounceSolution::GWScanTowardsLowAction()
 {
   for (int i = 0;
        i <=
-       1. + (SolutionList.front().action / SolutionList.front().T - 50) / 10.;
+       1. + (SolutionList.front().Action / SolutionList.front().T - 50) / 10.;
        i++)
   {
-    if (SolutionList.front().action / SolutionList.front().T < 50) break;
+    if (SolutionList.front().Action / SolutionList.front().T < 50) break;
     // Try to calculate it at s3/T = 300
     double t1            = SolutionList[0].T;
     double t2            = SolutionList[1].T;
-    double s1            = SolutionList[0].action / t1;
-    double s2            = SolutionList[1].action / t2;
+    double s1            = SolutionList[0].Action / t1;
+    double s2            = SolutionList[1].Action / t2;
     double goal          = s1 - 10;
     std::size_t NumOfSol = SolutionList.size();
 
@@ -427,11 +427,11 @@ void BounceSolution::SetBounceSol()
   ss << "------------ Solution list ------------\n";
   for (auto sol : SolutionList)
   {
-    ss << std::setprecision(10) << "{" << sol.T << ",\t" << sol.action << ",\t"
-       << sol.action / sol.T << "},\n";
+    ss << std::setprecision(10) << "{" << sol.T << ",\t" << sol.Action << ",\t"
+       << sol.Action / sol.T << "},\n";
     list_T.push_back(sol.T);
-    list_S3.push_back(sol.action);
-    list_S3_T.push_back(abs(log(sol.action / sol.T)));
+    list_S3.push_back(sol.Action);
+    list_S3_T.push_back(abs(log(sol.Action / sol.T)));
     list_140.push_back(log(140));
   }
   ss << "---------------------------------------\n";
@@ -611,7 +611,7 @@ double BounceSolution::GetPTStrength() const
  * false to true vacuum
  * @param Temp temperature
  */
-double BounceSolution::Tunneling_Rate(const double &Temp)
+double BounceSolution::TunnelingRate(const double &Temp)
 {
   if (Temp < SolutionList.front().T or Temp > SolutionList.back().T)
     return 0; // Never extrapolate
@@ -633,7 +633,7 @@ double BounceSolution::Tunneling_Rate(const double &Temp)
  * @brief Storage of the temperature-dependent Hubble rate
  * @param Temp temperature
  */
-double BounceSolution::Hubble_Rate(const double &Temp)
+double BounceSolution::HubbleRate(const double &Temp)
 {
   return M_PI * std::sqrt(this->GetGstar()) / std::sqrt(90.) *
          std::pow(Temp, 2) / MPl; // radiation dominated universe
@@ -703,11 +703,11 @@ void BounceSolution::CalculateNucleationTemp()
     {
       // Catches the first interval with the nucleation temperature
       if (T_up == -1 and
-          Tunneling_Rate(sol->T) / std::pow(Hubble_Rate(sol->T), 4) < 1)
+          TunnelingRate(sol->T) / std::pow(HubbleRate(sol->T), 4) < 1)
         T_up = sol->T;
 
       if (T_down == -1 and
-          Tunneling_Rate(sol->T) / std::pow(Hubble_Rate(sol->T), 4) > 1)
+          TunnelingRate(sol->T) / std::pow(HubbleRate(sol->T), 4) > 1)
         T_down = sol->T;
 
       if (T_up > 0 and T_down > 0) break;
@@ -720,7 +720,7 @@ void BounceSolution::CalculateNucleationTemp()
       {
         T_middle = (T_up + T_down) / 2;
 
-        if (Tunneling_Rate(T_middle) / std::pow(Hubble_Rate(T_middle), 4) < 1)
+        if (TunnelingRate(T_middle) / std::pow(HubbleRate(T_middle), 4) < 1)
         {
           T_up = T_middle;
         }
@@ -972,7 +972,7 @@ void BounceSolution::CalculateCompletionTemp(const double &false_vac_frac)
 double inner_integrand(double Temp, void *params)
 {
   class BounceSolution &obj = *static_cast<BounceSolution *>(params);
-  double func               = 1. / obj.Hubble_Rate(Temp);
+  double func               = 1. / obj.HubbleRate(Temp);
   return func;
 }
 
@@ -980,8 +980,8 @@ double outer_integrand(double Temp, void *params)
 {
   class BounceSolution &obj = *static_cast<BounceSolution *>(params);
 
-  double func = obj.Tunneling_Rate(Temp) /
-                (std::pow(Temp, 4) * obj.Hubble_Rate(Temp)) *
+  double func = obj.TunnelingRate(Temp) /
+                (std::pow(Temp, 4) * obj.HubbleRate(Temp)) *
                 std::pow(Nintegrate_Inner(obj, Temp).result, 3);
   return func;
 }

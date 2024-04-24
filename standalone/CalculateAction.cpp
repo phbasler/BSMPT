@@ -65,10 +65,10 @@ int main()
   BounceActionInt bcdV(path, TrueVacuum, FalseVacuum, V, dV, 0, 6);
   bcdV.CalculateAction();
 
-  std::cout << "Action calculated using numerical derivatives is " << bc.action
+  std::cout << "Action calculated using numerical derivatives is " << bc.Action
             << "\n";
   std::cout << "Action calculated using analytical derivatives is "
-            << bcdV.action << "\n";
+            << bcdV.Action << "\n";
 
   return 0;
 }

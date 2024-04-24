@@ -44,11 +44,11 @@ private:
   /**
    * @brief Records if overshoot/undershoot method undershots at least once
    */
-  bool undershot_once = false;
+  bool UndershotOnce = false;
   /**
    * @brief Records if overshoot/undershoot method overshots at least once
    */
-  bool overshot_once = false;
+  bool OvershotOnce = false;
 
   /**
    * @brief Value of d2Vdl^2 near the true vacuum
@@ -73,7 +73,7 @@ private:
    * @brief l0 - Initial_lmin for solutions starting very near the true vacuum
    *
    */
-  double l0_Initial_lmin;
+  double l0Initiallmin;
 
   /**
    * @brief True if path deformation reached the desired results without solving
@@ -104,7 +104,7 @@ public:
    * * = -9 if the solution does not have enough points to populate the \f$
    * l(\rho) \f$ spline
    */
-  enum action_status
+  enum ActionStatus
   {
     not_calculated                     = -1,
     integration_1d_failed              = -2,
@@ -121,7 +121,7 @@ public:
    * @brief either returns a action_status or the value of the action
    *
    */
-  double action = not_calculated;
+  double Action = not_calculated;
 
   /**
    * @brief Factor produced by the spherical symmetry of the potential.
@@ -131,7 +131,7 @@ public:
    * Default value is \f$ 2 \f$ since most of our calculation are done at finite
    * temperature.
    */
-  double alpha = 2; // alpha = 2 if T > 0 | alpha = 3 if T = 0
+  double Alpha = 2; // alpha = 2 if T > 0 | alpha = 3 if T = 0
 
   /**
    * @brief Temperature of the potential. Irrelevant but helpful
@@ -173,12 +173,12 @@ public:
    * @brief Records if 1D profile converged or not
    *
    */
-  int convS3 = -1; // Did 1D profile converged or not?
+  int ConvS3 = -1; // Did 1D profile converged or not?
   /**
    * @brief Records if path deformation converged or not
    *
    */
-  int convPathDeformation = -1;
+  int ConvPathDeformation = -1;
   /**
    * @brief  Number of basis function that are used + 1
    *
@@ -223,23 +223,23 @@ public:
    * @brief First path given to class
    *
    */
-  std::vector<std::vector<double>> init_path; // Initial path given to class
+  std::vector<std::vector<double>> InitPath; // Initial path given to class
   /**
    * @brief Current class path, can be changed by @ref PathDeformation
    *
    */
-  std::vector<std::vector<double>> path; // Initial path given to class
+  std::vector<std::vector<double>> Path; // Initial path given to class
   /**
    * @brief We describe the tunneling path using a cubid spline.
    *  The parameterization is the length along the spline.
    *
    */
-  cvspline::cvspline spline; // Constant velocity spline object
+  cvspline::cvspline Spline; // Constant velocity spline object
   /**
    * @brief Spline used to save \f$ \frac{dV}{dl} \f$
    *
    */
-  tk::spline rasterizedVdl; // RasterizeddVdl
+  tk::spline RasterizeddVdl; // RasterizeddVdl
 
   /**
    * @brief Construct a new Bounce Action Int object
@@ -251,7 +251,7 @@ public:
    * @param dV is the class gradient
    */
   BounceActionInt(
-      std::vector<std::vector<double>> init_path_In,
+      std::vector<std::vector<double>> InitPath_In,
       std::vector<double> TrueVacuum_In,
       std::vector<double> FalseVacuum_In,
       std::function<double(std::vector<double>)> &V_In,
@@ -267,7 +267,7 @@ public:
    * @param FalseVacuumIn is the false vacuum
    * @param V is the class potential
    */
-  BounceActionInt(std::vector<std::vector<double>> init_path_In,
+  BounceActionInt(std::vector<std::vector<double>> InitPath_In,
                   std::vector<double> TrueVacuum_In,
                   std::vector<double> FalseVacuum_In,
                   std::function<double(std::vector<double>)> &V_In,
@@ -279,7 +279,7 @@ public:
    *
    * @param init_path Knots that are used to describe the path
    */
-  void setPath(std::vector<std::vector<double>> init_path_In);
+  void SetPath(std::vector<std::vector<double>> InitPath_In);
 
   /**
    * @brief Precalculates dVdl and creates a spline with the result.
@@ -288,7 +288,7 @@ public:
    *  * @param l_start is the starting position produced in the
    * backwardspropagation part
    */
-  void rasterize_dVdl(double l_start = 0);
+  void RasterizedVdl(double l_start = 0);
 
   /**
    * @brief Prints a vector
@@ -421,27 +421,6 @@ public:
   static int IndexMaximumAbsolute(std::vector<double> x);
 
   /**
-   * @brief Calculates the classic BSMPT tunneling path
-   *
-   * Start with a straight line between @ref TrueVacuum and @ref FalseVacuum and
-   * divide it into \f$ n \f$ base points \f$ \vec{b}_i \f$.
-   *
-   * At each basepoint \f$ \vec{b}_i \f$ draw a plane perpendicular to the
-   * straight line path, i.e. the normal is TrueVacuum - FalseVacuum, and find
-   * the potential minimum on that plane.
-   *
-   * @return std::vector<std::vector<double>> the classic BSMPT tunneling path
-   */
-  std::vector<std::vector<double>> BSMPTApproximateTunnelingPath();
-
-  /**
-   * @brief Calculates the classic BSMPT tunneling path using @ref
-   * BSMPTApproximateTunnelingPath and sets the spline @ref path to it.
-   *
-   */
-  void setBSMPTApproximateTunnelingPath();
-
-  /**
    * @brief Auxiliary finction to compute the transpose of a matrix
    *
    * @param A is the \f$ n \times m \f$ matrix to be tranposed.
@@ -449,7 +428,7 @@ public:
    * matrix.
    */
   std::vector<std::vector<double>>
-  transpose(std::vector<std::vector<double>> &A);
+  Transpose(std::vector<std::vector<double>> &A);
 
   /**
    * @brief Calculated the normal force \f$ \vec{N} \f$ on a @ref spline point.
@@ -668,7 +647,7 @@ public:
    * @param MaximumGradient
    * @return double
    */
-  double reductorCalculator(const double &MaximumGradient);
+  double ReductorCalculator(const double &MaximumGradient);
 
   /**
    * @brief Check if the force in each point is sufficient small compared to the

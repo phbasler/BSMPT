@@ -90,7 +90,7 @@ int main()
     }
     std::cout << "The closest solution is at a distance of " << errorTtoTp
               << " GeV from Tp.\n The tunnenling path is\n";
-    ClosestBounceActionInt->spline.print_path();
+    ClosestBounceActionInt->Spline.print_path();
     std::cout << "\n ------ The tunneling profile in Mathematica format ------ "
                  "\n {rho, l, point}\n\n";
 
@@ -98,7 +98,7 @@ int main()
     for (size_t i = 0; i < ClosestBounceActionInt->rho_sol.size(); i++)
       std::cout << "{" << ClosestBounceActionInt->rho_sol[i] << ", "
                 << ClosestBounceActionInt->l_sol[i] << ", "
-                << join(ClosestBounceActionInt->spline(
+                << join(ClosestBounceActionInt->Spline(
                             ClosestBounceActionInt->l_sol[i]),
                         ", ")
                 << "},\n";
@@ -108,7 +108,7 @@ int main()
     for (size_t i = 0; i < ClosestBounceActionInt->rho_sol.size(); i++)
       std::cout << "[" << ClosestBounceActionInt->rho_sol[i] << ", "
                 << ClosestBounceActionInt->l_sol[i] << ", "
-                << join(ClosestBounceActionInt->spline(
+                << join(ClosestBounceActionInt->Spline(
                             ClosestBounceActionInt->l_sol[i]),
                         ", ")
                 << "],\n";

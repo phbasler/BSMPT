@@ -58,7 +58,7 @@ TEST_CASE("Solve bounce equation with analytical derivative", "[gw]")
   BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, dV, 0, 6);
   bc.CalculateAction();
 
-  REQUIRE(bc.action == Approx(4.5011952256).epsilon(5e-2));
+  REQUIRE(bc.Action == Approx(4.5011952256).epsilon(5e-2));
 }
 
 TEST_CASE("Solve bounce equation with numerical derivative", "[gw]")
@@ -88,7 +88,7 @@ TEST_CASE("Solve bounce equation with numerical derivative", "[gw]")
   BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
   bc.CalculateAction();
 
-  REQUIRE(bc.action == Approx(4.5011952256).epsilon(5e-2));
+  REQUIRE(bc.Action == Approx(4.5011952256).epsilon(5e-2));
 }
 
 TEST_CASE("Solve bounce equation with numerical derivative and displaced "
@@ -134,7 +134,7 @@ TEST_CASE("Solve bounce equation with numerical derivative and displaced "
 
   bc.CalculateAction();
 
-  REQUIRE(bc.action == Approx(4.5011952256).epsilon(5e-2));
+  REQUIRE(bc.Action == Approx(4.5011952256).epsilon(5e-2));
 }
 
 TEST_CASE("Solve bounce equation with numerical derivative and displaced "
@@ -170,7 +170,7 @@ TEST_CASE("Solve bounce equation with numerical derivative and displaced "
 
   bc.CalculateAction();
 
-  REQUIRE(bc.action == Approx(4.5011952256).epsilon(5e-2));
+  REQUIRE(bc.Action == Approx(4.5011952256).epsilon(5e-2));
 }
 
 TEST_CASE("Solve bounce equation with numerical derivative and displaced "
@@ -217,7 +217,7 @@ TEST_CASE("Solve bounce equation with numerical derivative and displaced "
 
   bc.CalculateAction();
 
-  REQUIRE(bc.action == Approx(4.5011952256).epsilon(5e-2));
+  REQUIRE(bc.Action == Approx(4.5011952256).epsilon(5e-2));
 }
 
 ////////////////////
@@ -250,7 +250,7 @@ TEST_CASE("Solve bounce equation with numerical derivative thin walled", "[gw]")
 
   bc.CalculateAction();
 
-  REQUIRE(bc.action == Approx(1946.3823079011).epsilon(5e-2));
+  REQUIRE(bc.Action == Approx(1946.3823079011).epsilon(5e-2));
 }
 
 TEST_CASE("Checking phase tracking for SM", "[gw]")

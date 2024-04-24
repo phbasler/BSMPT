@@ -25,7 +25,7 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.kappa_turb     = CalcEpsTurb(BACalc.GetEpsTurb()) * data.kappa_sw;
   data.K_turb         = GetK_turb(data.PTStrength, data.kappa_turb);
   data.gstar          = BACalc.GetGstar();
-  data.Hstar          = BACalc.Hubble_Rate(data.transitionTemp);
+  data.Hstar          = BACalc.HubbleRate(data.transitionTemp);
 
   if (data.InvTimeScale < 1)
   {

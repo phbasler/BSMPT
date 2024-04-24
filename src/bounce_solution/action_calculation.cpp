@@ -13,16 +13,16 @@ namespace BSMPT
 {
 
 BounceActionInt::BounceActionInt(
-    std::vector<std::vector<double>> init_path_In,
+    std::vector<std::vector<double>> InitPath_In,
     std::vector<double> TrueVacuum_In,
     std::vector<double> FalseVacuum_In,
     std::function<double(std::vector<double>)> &V_In,
     std::function<std::vector<double>(std::vector<double>)> &dV_In,
     double T_In,
-    int MaxPathIntegrations_in)
+    int MaxPathIntegrations_In)
 {
   // Initialization of the class when the derivative is provided
-  this->dim    = init_path_In[0].size();
+  this->dim    = InitPath_In.at(0).size();
   this->Vfalse = V_In(FalseVacuum_In);
   this->V  = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   this->dV = dV_In;
@@ -30,23 +30,23 @@ BounceActionInt::BounceActionInt(
   { return HessianNumerical(arg, V_In, this->eps, this->dim); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
-  this->init_path           = init_path_In;
+  this->InitPath            = InitPath_In;
   this->T                   = T_In;
-  this->MaxPathIntegrations = MaxPathIntegrations_in;
-  // Set spline path
-  setPath(init_path_In);
+  this->MaxPathIntegrations = MaxPathIntegrations_In;
+  // Set Spline path
+  SetPath(InitPath_In);
 }
 
 BounceActionInt::BounceActionInt(
-    std::vector<std::vector<double>> init_path_In,
+    std::vector<std::vector<double>> InitPath_In,
     std::vector<double> TrueVacuum_In,
     std::vector<double> FalseVacuum_In,
     std::function<double(std::vector<double>)> &V_In,
     double T_In,
-    int MaxPathIntegrations_in)
+    int MaxPathIntegrations_In)
 {
   // Initialization of the class when the derivative is not provided
-  this->dim    = init_path_In[0].size();
+  this->dim    = InitPath_In.at(0).size();
   this->Vfalse = V_In(FalseVacuum_In);
   this->V = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   // Use numerical derivative
@@ -56,31 +56,29 @@ BounceActionInt::BounceActionInt(
   { return HessianNumerical(arg, V_In, this->eps, this->dim); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
-  this->init_path           = init_path_In;
+  this->InitPath            = InitPath_In;
   this->T                   = T_In;
-  this->MaxPathIntegrations = MaxPathIntegrations_in;
-  // Set spline path
-  setPath(init_path_In);
+  this->MaxPathIntegrations = MaxPathIntegrations_In;
+  // Set Spline path
+  SetPath(InitPath_In);
 }
 
-void BounceActionInt::setPath(std::vector<std::vector<double>> init_path_In)
+void BounceActionInt::SetPath(std::vector<std::vector<double>> InitPath_In)
 {
   // Method to be called when the path is changed manually
-  this->path = init_path_In;
+  this->Path = InitPath_In;
   // Find minimums near the initial and last position
-  // this->path[0] = this->locate_mininum(this->path[0]);
-  // this->path[1] = this->locate_mininum(this->path[1]);
 
-  this->spline = cvspline::cvspline(this->path);
-  this->path   = spline.phipath;
+  this->Spline = cvspline::cvspline(this->Path);
+  this->Path   = Spline.phipath;
 
-  if (V(init_path_In.front()) > V(init_path_In.back()))
+  if (V(InitPath_In.front()) > V(InitPath_In.back()))
   {
     std::stringstream ss;
     ss << "-----------------------------------------------\n";
-    ss << "Error with new path with length\t" << spline.L << "\n";
-    ss << "V(TrueVacuum) = " << V(init_path_In.front()) << std::endl;
-    ss << "V(FalseVacuum) = " << V(init_path_In.back()) << std::endl;
+    ss << "Error with new path with length\t" << Spline.L << "\n";
+    ss << "V(TrueVacuum) = " << V(InitPath_In.front()) << std::endl;
+    ss << "V(FalseVacuum) = " << V(InitPath_In.back()) << std::endl;
     ss << "V(TrueVacuum) > V(FalseVacuum) < ----  This cannot be! Path might "
           "be backwards\n";
     ss << "-----------------------------------------------\n";
@@ -88,10 +86,10 @@ void BounceActionInt::setPath(std::vector<std::vector<double>> init_path_In)
   }
 
   // Rasterize dVdl
-  rasterize_dVdl();
+  RasterizedVdl();
 }
 
-void BounceActionInt::rasterize_dVdl(double l_start)
+void BounceActionInt::RasterizedVdl(double l_start)
 {
   // This method is used to calculate all dVdl before hand. Otherwise the code
   // will probably slow down
@@ -99,13 +97,13 @@ void BounceActionInt::rasterize_dVdl(double l_start)
 
   for (int it = 0; it <= 1000; it++)
   {
-    l_temp.push_back(l_start + it / 1000.0 * (spline.L - l_start));
+    l_temp.push_back(l_start + it / 1000.0 * (Spline.L - l_start));
     dVdl_temp.push_back(Calc_dVdl(l_temp.back()));
   }
   // Set the not-a-knot boundary conditions
-  rasterizedVdl.set_boundary(
+  RasterizeddVdl.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
-  rasterizedVdl.set_points(l_temp, dVdl_temp);
+  RasterizeddVdl.set_points(l_temp, dVdl_temp);
 }
 
 void BounceActionInt::PrintVector(std::vector<double> vec)
@@ -240,12 +238,12 @@ std::vector<double> BounceActionInt::LocateMinimum(
             Eigen::Map<Eigen::VectorXd, Eigen::Unaligned>(gradient.data(),
                                                           gradient.size());
 
-        // Calculates the n - th step : x(n + 1) = x(n) + alpha(n)
+        // Calculates the n - th step : x(n + 1) = x(n) + Alpha(n)
         Eigen::VectorXd delta =
             HessMatrix.colPivHouseholderQr().solve(-1 * EigenGradient);
 
         // HessMatrix.colPivHouseholderQr().solve(EigenGradient);
-        // alpha = -const_multiplier * HessMatrix.inverse() * gradient;
+        // Alpha = -const_multiplier * HessMatrix.inverse() * gradient;
         for (int j = 0; j < dim; j++)
         {
           new_guess[j] += delta(j); // Updates guess
@@ -296,92 +294,8 @@ int BounceActionInt::IndexMaximumAbsolute(std::vector<double> x)
   return r;
 }
 
-void BounceActionInt::setBSMPTApproximateTunnelingPath()
-{
-  std::stringstream ss;
-  ss << "BSMPT approximate tunneling path approximation calculating\n ";
-  std::vector<std::vector<double>> r = BSMPTApproximateTunnelingPath();
-  ss << "BSMPT approximate tunneling path approximation done\n";
-  setPath(r);
-  return;
-}
-
-// BSMPT approximate tunneling path
 std::vector<std::vector<double>>
-BounceActionInt::BSMPTApproximateTunnelingPath()
-{
-  // (x - baseline) . n = 0 => xn = s - x_(1, ..., n-1) . n_(1, ..., n-1)
-  // (we can set n_n = 1) This assumes that path given goes from false
-  // vacuum to true vacuum TODO assert dV = 0 Result
-  std::vector<std::vector<double>> r;
-  // Last element of basepoint - BSMPT name
-  double planeConstant;
-  // "Basepoint" - BSMPT name
-  std::vector<double> basepoint;
-  // Initial knot
-  std::vector<double> phii = TrueVacuum;
-  // Final knot
-  std::vector<double> phif = FalseVacuum;
-  // Normal vector. Perpendicular to the planes
-  std::vector<double> normal = (phii - phif);
-  // Index that is going to become dependent due to plane constraints.
-  // Maximum normal component = least variation
-  int IndexPlane = IndexMaximumAbsolute(normal);
-  normal         = normal / normal[IndexPlane];
-  normal.erase(normal.begin() + IndexPlane);
-  //  Potential constrained on a plane
-  std::function<double(std::vector<double>)> VonPlane;
-  std::function<std::vector<double>(std::vector<double>)> dVonPlane;
-  std::function<std::vector<std::vector<double>>(std::vector<double>)>
-      HessianonPlane;
-
-  // Current guess
-  std::vector<double> current_phi = phii;
-  current_phi.erase(current_phi.begin() + IndexPlane);
-
-  for (double eta = 0; eta <= 1 - 0.000001; eta += 0.02)
-  {
-
-    // Calculates basepoint
-    basepoint = (1 - eta) * phii + eta * phif;
-    // Calculates plane constant
-    normal.insert(normal.begin() + IndexPlane, 1);
-    planeConstant = basepoint * normal;
-    // Removes dependent indices
-    normal.erase(normal.begin() + IndexPlane);
-    basepoint.erase(basepoint.begin() + IndexPlane);
-
-    // Normal plane potential
-    VonPlane = [=](std::vector<double> vevV)
-    {
-      vevV.insert(vevV.begin() + IndexPlane, planeConstant - vevV * normal);
-      return V(vevV);
-    };
-    // Normal plane potential gradient
-    dVonPlane = [=](std::vector<double> vevdV)
-    { return NablaNumerical(vevdV, VonPlane, eps, this->dim - 1); };
-
-    // Normal plane potential gradient
-    HessianonPlane = [=](std::vector<double> vevdV)
-    { return HessianNumerical(vevdV, VonPlane, eps, this->dim - 1); };
-
-    // Minimizes point on plane
-    current_phi = LocateMinimum(current_phi, dVonPlane, HessianonPlane);
-    // Adds missing component
-    current_phi.insert(current_phi.begin() + IndexPlane,
-                       planeConstant - current_phi * normal);
-    // Adds new point to result list
-    r.push_back(current_phi);
-    // Removes dependent component and goes to the top of the loop
-    current_phi.erase(current_phi.begin() + IndexPlane);
-  }
-  // Forces last point to be at the false vacuum (more numerical accuracy)
-  r.push_back(phif);
-  return r;
-}
-
-std::vector<std::vector<double>>
-BounceActionInt::transpose(std::vector<std::vector<double>> &A)
+BounceActionInt::Transpose(std::vector<std::vector<double>> &A)
 {
   int rows = A.size();
   if (rows == 0) return {{}};
@@ -402,9 +316,9 @@ std::vector<double> BounceActionInt::NormalForce(double l,
                                                  std::vector<double> gradient)
 {
   std::vector<double> r;                        // Result
-  std::vector<double> d2phidl2 = spline.d2l(l); // d2Phi/dl2
+  std::vector<double> d2phidl2 = Spline.d2l(l); // d2Phi/dl2
   std::vector<double> dphidl =
-      spline.dl(l); // dPhi/dl which norm is 1 (needed to calculate the
+      Spline.dl(l); // dPhi/dl which norm is 1 (needed to calculate the
                     // perpendicular component)
   r = std::pow(dldrho, 2) * d2phidl2 -
       (gradient - (gradient * dphidl) * dphidl);
@@ -429,9 +343,9 @@ double BounceActionInt::d2ldrho2(double l, double rho, double dldrho)
 {
   if (dldrho == 0) // This is stupid, we should take a manual Runge-Kutta step
   {
-    return (rasterizedVdl(l));
+    return (RasterizeddVdl(l));
   }
-  return (rasterizedVdl(l) - alpha * dldrho / rho);
+  return (RasterizeddVdl(l) - Alpha * dldrho / rho);
 }
 
 void BounceActionInt::AuxFunctionDev(double rho,
@@ -504,7 +418,7 @@ void BounceActionInt::RK5_step(std::vector<double> y,
   return;
 }
 
-double BounceActionInt::BesselI(double alpha, double x, int terms)
+double BounceActionInt::BesselI(double Alpha, double x, int terms)
 {
   // This implementation seems to converge quite quicly
   // https://en.wikipedia.org/wiki/Bessel_function#:~:text=Modified%20Bessel%20functions%3A%20I%CE%B1%2C%20K%CE%B1%5B,first%20and%20second%20kind%20and%20are%20defined%20as%5B19%5D
@@ -514,8 +428,8 @@ double BounceActionInt::BesselI(double alpha, double x, int terms)
   while ((m < terms) && (abs((r - r0) / r) > 1e-15))
   {
     r0 = r; // Save step
-    r += 1 / (tgamma(m + alpha + 1) * tgamma(m + 1)) *
-         std::pow(x / 2.0, 2.0 * m + alpha); // One more term
+    r += 1 / (tgamma(m + Alpha + 1) * tgamma(m + 1)) *
+         std::pow(x / 2.0, 2.0 * m + Alpha); // One more term
     m++; // Update later to not mess up summation
   }
   return r;
@@ -526,14 +440,14 @@ double BounceActionInt::BesselJ(double x, int terms)
   // This implementation seems to converge quite quicly
   // https://en.wikipedia.org/wiki/Bessel_function#:~:text=Modified%20Bessel%20functions%3A%20I%CE%B1%2C%20K%CE%B1%5B,first%20and%20second%20kind%20and%20are%20defined%20as%5B19%5D
   double r0    = 1e100;
-  double alpha = 1.;
+  double Alpha = 1.;
   double r     = 0;
   int m        = 0;
   while ((m < terms) && (abs((r - r0) / r) > 1e-15))
   {
     r0 = r; // Save step
-    r += 1 / (tgamma(m + alpha + 1) * tgamma(m + 1)) * std::pow(-1, m) *
-         std::pow(x / 2.0, 2.0 * m + alpha); // One more term
+    r += 1 / (tgamma(m + Alpha + 1) * tgamma(m + 1)) * std::pow(-1, m) *
+         std::pow(x / 2.0, 2.0 * m + Alpha); // One more term
     m++; // Update later to not mess up summation
   }
   return r;
@@ -543,12 +457,12 @@ std::vector<double>
 BounceActionInt::ExactSolutionCons(double l0, double l, double dVdl)
 {
   // Exact solution of equation of motion with V'(phi) = dVdl
-  double rho = std::sqrt(abs((l - l0) * (2.0 + 2.0 * alpha) /
+  double rho = std::sqrt(abs((l - l0) * (2.0 + 2.0 * Alpha) /
                              dVdl)); // Initial guess using V'(phi) = dVdL
 
   // Return the analytical solution, as well as the derivative
-  if (alpha == 2) return {rho, l, dVdl * rho / 3};
-  if (alpha == 3) return {rho, l, dVdl * rho / 4};
+  if (Alpha == 2) return {rho, l, dVdl * rho / 3};
+  if (Alpha == 3) return {rho, l, dVdl * rho / 4};
   return {};
 }
 
@@ -562,19 +476,19 @@ std::vector<double> BounceActionInt::ExactSolutionFromMinimum(double l0,
   std::function<double(double)> LinearSolution, LinearSolutionDerivative;
 
   TrueVacuumHessian = Calc_d2Vdl2(Initial_lmin); // Sanity check
-  if (alpha == 2)
+  if (Alpha == 2)
   {
     LinearSolution = [=](const double rho_in)
     {
-      return l - (Initial_lmin + l0_Initial_lmin *
+      return l - (Initial_lmin + l0Initiallmin *
                                      sinh(sqrt(TrueVacuumHessian) * rho_in) /
                                      (sqrt(TrueVacuumHessian) * rho_in));
     };
     LinearSolutionDerivative = [=](const double rho_in)
     {
-      return ((l0_Initial_lmin * cosh(rho_in * std::sqrt(TrueVacuumHessian))) /
+      return ((l0Initiallmin * cosh(rho_in * std::sqrt(TrueVacuumHessian))) /
               rho_in) -
-             (l0_Initial_lmin * sinh(rho_in * std::sqrt(TrueVacuumHessian))) /
+             (l0Initiallmin * sinh(rho_in * std::sqrt(TrueVacuumHessian))) /
                  (pow(rho_in, 2) * std::sqrt(TrueVacuumHessian));
     };
   }
@@ -615,7 +529,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   // Numerical solution of equation of motion with V'(phi) = dVdl + (phi -
   // phi0) * d2Vdl2
   std::stringstream ss;
-  double nu          = (alpha - 1.0) / 2.0; // To keep things tidy
+  double nu          = (Alpha - 1.0) / 2.0; // To keep things tidy
   double Abs_d2Vdl2  = abs(d2Vdl2);
   double Sign_d2Vdl2 = (d2Vdl2 > 0) - (d2Vdl2 < 0); // Sign(d2Vdl2)
   double rho_down    = 1e-100;
@@ -629,21 +543,21 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   }
 
   // Set maximum values that rho can have
-  if (alpha == 2 and d2Vdl2 > 0)
+  if (Alpha == 2 and d2Vdl2 > 0)
   {
     rho_up = 1;
   }
-  else if (alpha == 2 and d2Vdl2 < 0)
+  else if (Alpha == 2 and d2Vdl2 < 0)
   {
     // Maximum value in oscillatory behaviour 4.493409457909 is the solution of
     // tan(x) = x
     rho_up = 4.493409457909 / std::sqrt(Abs_d2Vdl2);
   }
-  else if (alpha == 3 and d2Vdl2 > 0)
+  else if (Alpha == 3 and d2Vdl2 > 0)
   {
     rho_up = 1;
   }
-  else if (alpha == 3 and d2Vdl2 < 0)
+  else if (Alpha == 3 and d2Vdl2 < 0)
   {
     // Maximum value in oscillatory behaviour 5.13562230184068 is the solution
     // for BesselJ[0, x] - (2 BesselJ[1, x])/x - BesselJ[2, x]
@@ -651,7 +565,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   }
   // Write difference of l(rho) - l0
   // Goal is to find zero of this function
-  if (alpha == 2 and d2Vdl2 > 0)
+  if (Alpha == 2 and d2Vdl2 > 0)
   {
     LinearSolution = [=](const double rho_in)
     {
@@ -666,7 +580,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
                  (pow(d2Vdl2, 1.5) * std::pow(rho_in, 2));
     };
   }
-  else if (alpha == 2 and d2Vdl2 < 0)
+  else if (Alpha == 2 and d2Vdl2 < 0)
   {
     LinearSolution = [=](const double rho_in)
     {
@@ -683,7 +597,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
                  (pow(Abs_d2Vdl2, 1.5) * std::pow(rho_in, 2));
     };
   }
-  else if (alpha == 3 and d2Vdl2 > 0)
+  else if (Alpha == 3 and d2Vdl2 > 0)
   {
     LinearSolution = [=](const double rho_in)
     {
@@ -700,7 +614,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
                  (d2Vdl2 * rho_in);
     };
   }
-  else if (alpha == 3 and d2Vdl2 < 0)
+  else if (Alpha == 3 and d2Vdl2 < 0)
   {
     LinearSolution = [=](const double rho_in)
     {
@@ -720,9 +634,9 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   else
   {
 
-    ss << "An error occured, alpha must be 2 or 3 (alpha = D - 1), instead "
-          "alpha is \t"
-       << alpha << "\n";
+    ss << "An error occured, Alpha must be 2 or 3 (Alpha = D - 1), instead "
+          "Alpha is \t"
+       << Alpha << "\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
     double small_step = 1e-5;
@@ -789,14 +703,14 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
 double BounceActionInt::Calc_dVdl(double l)
 {
   // Function to calculate dV/dl
-  return dV(spline(l)) * spline.dl(l);
+  return dV(Spline(l)) * Spline.dl(l);
 }
 
 double BounceActionInt::Calc_d2Vdl2(double l)
 {
   // Function to calculate d2V/dl2
-  return (dV(spline(l)) * spline.d2l(l)) +
-         ((Hessian(spline(l)) * spline.dl(l)) * spline.dl(l));
+  return (dV(Spline(l)) * Spline.d2l(l)) +
+         ((Hessian(Spline(l)) * Spline.dl(l)) * Spline.dl(l));
 }
 
 std::vector<double> BounceActionInt::ExactSolution(double l0)
@@ -813,7 +727,7 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
   // Computing the second derivative of the potential beforehand
   double d2Vdl2 = Calc_d2Vdl2(l0);
   // Spline length
-  double L = spline.L;
+  double L = Spline.L;
 
   std::stringstream ss;
 
@@ -827,7 +741,7 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
     ss << " dVdl = " << dVdl << std::endl;
     ss << " d2Vd2l = " << d2Vdl2 << std::endl;
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-    action = undershoot_overshoot_negative_grad;
+    Action = undershoot_overshoot_negative_grad;
     return {};
   }
 
@@ -896,18 +810,15 @@ void BounceActionInt::IntegrateBounce(double l0,
   // Integrate the bounce equation with x(rho) = "x0" until dx/drho < 0
   // (undershoot) (conv = -1) or x(rho) > L (overshoot) (conv = +1) or
   // converges (conv = 0)
-  double L = spline.L;
+  double L = Spline.L;
   double step; // Integration step
   std::vector<double> ExactSol = ExactSolution(l0);
 
-  if (action < -1) return;
-  // ss << "Exact solutions\t" << ExactSol[0] << "\t" <<
-  // ExactSol[1]
-  // <<
-  // "\t" << ExactSol[2] << "\n";
-  rho       = {0, ExactSol[0]};  // Initial integration value for abcissas
-  l         = {l0, ExactSol[1]}; // Guess for the bounce solution
-  dl_drho   = {0, ExactSol[2]};  // Initial derivative = 0
+  if (Action < -1) return;
+
+  rho       = {0, ExactSol.at(0)};  // Initial integration value for abcissas
+  l         = {l0, ExactSol.at(1)}; // Guess for the bounce solution
+  dl_drho   = {0, ExactSol.at(2)};  // Initial derivative = 0
   d2l_drho2 = {d2ldrho2(l0, 0, 0)};
   d2l_drho2.push_back(d2ldrho2(l.back(), rho.back(), dl_drho.back()));
   step = rho.back() / 100;
@@ -970,15 +881,15 @@ void BounceActionInt::IntegrateBounce(double l0,
     l.pop_back();
     dl_drho.pop_back();
     d2l_drho2.pop_back();
-    undershot_once = true;
-    conv           = -1;
+    UndershotOnce = true;
+    conv          = -1;
   }
   else if ((l.back() - L) / L >= error)
   {
     ss << "Overshoot\t" << it << "\t" << l0 << "\t" << rho.back() << "\t"
        << l.back() << "\t" << dl_drho.back();
-    conv          = 1;
-    overshot_once = true;
+    conv         = 1;
+    OvershotOnce = true;
   }
   else
   {
@@ -999,9 +910,9 @@ double BounceActionInt::BackwardsPropagation()
   {
     l00 = l0;
     l0 -= Calc_dVdl(l0) / Calc_d2Vdl2(l0);
-    if (abs((l0 - l00) / spline.L) < 1e-8 && Calc_dVdl(l0) >= 0)
+    if (abs((l0 - l00) / Spline.L) < 1e-8 && Calc_dVdl(l0) >= 0)
     {
-      if (l0 <= spline.L / 100)
+      if (l0 <= Spline.L / 100)
       {
         return l0;
       }
@@ -1018,22 +929,22 @@ double BounceActionInt::BackwardsPropagation()
         l00 = l0;
         l0 -= Calc_dVdl(l0) / 100;
       }
-      if (l0 <= spline.L / 100)
+      if (l0 <= Spline.L / 100)
       {
         return l0;
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       }
       ss << "Backwards propagation converged to the other minimum...\t" << l0
-         << "\t using minus 0.1% spline length as backwards propagation\n";
-      return (-1 * spline.L / 100.0);
+         << "\t using minus 0.1% Spline length as backwards propagation\n";
+      return (-1 * Spline.L / 100.0);
     }
   }
   ss << "Backwards propagation not converging\t" << l0
-     << "\t using minus 0.1% spline length as backwards propagation\n";
+     << "\t using minus 0.1% Spline length as backwards propagation\n";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
   // TODO improve this!
 
-  return (-1 * spline.L / 1000.0);
+  return (-1 * Spline.L / 1000.0);
 }
 
 void BounceActionInt::Solve1DBounce(
@@ -1042,28 +953,28 @@ void BounceActionInt::Solve1DBounce(
     std::vector<double> &dl_drho,
     std::vector<double> &d2l_drho2,
     double error,
-    int maxiter) // alpha = 2 at T > 0 and alpha = 3 at T = 0
+    int maxiter) // Alpha = 2 at T > 0 and Alpha = 3 at T = 0
 {
 
   std::stringstream ss;
   // Method to solve the bounce ODE
   double lmin, l0, lmax, L;
   int conv; // Converged?
-  L = spline.L;
+  L = Spline.L;
 
   Initial_lmin = BackwardsPropagation();
-  rasterize_dVdl(Initial_lmin); // Update rasterized dVdl
+  RasterizedVdl(Initial_lmin); // Update rasterized dVdl
 
   lmin = this->Initial_lmin; // Lower interval
   lmax = L;                  // Uppter interval
   ss << "Backwards propagation : \t" << lmin << "\t" << Calc_dVdl(lmin) << "\t"
      << Calc_d2Vdl2(lmin) << "\n";
 
-  if (V(spline(lmin)) > V(spline(lmax)))
+  if (V(Spline(lmin)) > V(Spline(lmax)))
   {
     ss << "Backwards propagation produced V(lmin) > V(L). Abort.";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-    action = backwards_propagation_failed;
+    Action = backwards_propagation_failed;
     return;
   }
   TrueVacuumHessian = Calc_d2Vdl2(lmin);
@@ -1076,7 +987,7 @@ void BounceActionInt::Solve1DBounce(
     // Vfalse. This method does not focus on speed. This method allows for
     // only one solution to the bounce equation in this interval.
     j++;
-    if (V(spline(lmin + (L - lmin) * double(j) / double(resolution))) > 0)
+    if (V(Spline(lmin + (L - lmin) * double(j) / double(resolution))) > 0)
     {
       lmax = lmin + (L - lmin) * double(j) / double(resolution);
       break;
@@ -1089,15 +1000,15 @@ void BounceActionInt::Solve1DBounce(
   }
 
   ss << "Upper limit : l = \t" << lmax
-     << "\t | V(l = 0) - V(TrueVacuum) = " << V(spline(lmax)) - V(TrueVacuum)
+     << "\t | V(l = 0) - V(TrueVacuum) = " << V(Spline(lmax)) - V(TrueVacuum)
      << "\n";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
   ss.str(std::string());
 
-  convS3 = -1;
+  ConvS3 = -1;
 
-  undershot_once = false;
-  overshot_once  = false;
+  UndershotOnce = false;
+  OvershotOnce  = false;
 
   l0 = (lmax + lmin) / 2.0; // Perform binary search
 
@@ -1111,11 +1022,11 @@ void BounceActionInt::Solve1DBounce(
   {
     if (mode == 0)
     {
-      l0              = (lmax + lmin) / 2.0; // Perform binary search
-      l0_Initial_lmin = l0 - Initial_lmin;
+      l0            = (lmax + lmin) / 2.0; // Perform binary search
+      l0Initiallmin = l0 - Initial_lmin;
       IntegrateBounce(
           l0, conv, rho, l, dl_drho, d2l_drho2, 100000, error, error * 0.0015);
-      if (action < -1) return;
+      if (Action < -1) return;
       if (rho.size() <= 7)
       {
         ss << "rho\t = ";
@@ -1135,26 +1046,26 @@ void BounceActionInt::Solve1DBounce(
         ss.str(std::string());
         PrintVector(d2l_drho2);
         ss << "\n Overshoot/Undershoot method failed!\t";
-        convS3 = -1; // A solution was found
-        action = integration_1d_failed;
+        ConvS3 = -1; // A solution was found
+        Action = integration_1d_failed;
         break;
       }
       if (conv == 0) // Solved!
       {
         ss << "\nFound Solution!\t" << l0 << " in\t" << i << "\titerations.";
-        convS3 = 1; // A solution was found
+        ConvS3 = 1; // A solution was found
         break;
       }
       if ((lmax - lmin) / L < error * 0.0000001)
       {
         // A solution was found
-        if (overshot_once == true)
+        if (OvershotOnce == true)
         {
           ss << "\nConverged due to proximity!\t" << l0 << "\t"
              << " in\t" << i << "\titerations.\t"
              << "\t" << (abs(dl_drho.back())) << "\t"
              << "\t" << (abs(l.back() - L) / L);
-          convS3 = 1;
+          ConvS3 = 1;
           break;
         }
         // Method never overshot. Switch to log scale
@@ -1172,13 +1083,13 @@ void BounceActionInt::Solve1DBounce(
     }
     if (mode == 1)
     {
-      mu_middle       = (mu_min + mu_max) / 2;
-      l0_Initial_lmin = exp(mu_middle);
-      l0 = Initial_lmin + l0_Initial_lmin; // Perform binary search in log space
+      mu_middle     = (mu_min + mu_max) / 2;
+      l0Initiallmin = exp(mu_middle);
+      l0 = Initial_lmin + l0Initiallmin; // Perform binary search in log space
 
       IntegrateBounce(
           l0, conv, rho, l, dl_drho, d2l_drho2, 100000, error, error * 0.0015);
-      if (action < -1) return;
+      if (Action < -1) return;
       if (rho.size() <= 7)
       {
         ss << "rho\t = ";
@@ -1199,14 +1110,14 @@ void BounceActionInt::Solve1DBounce(
         PrintVector(d2l_drho2);
         ss << "\n Overshoot/Undershoot method failed!\t";
 
-        convS3 = -1; // A solution was found
-        action = integration_1d_failed;
+        ConvS3 = -1; // A solution was found
+        Action = integration_1d_failed;
         break;
       }
       if (conv == 0) // Solved!
       {
         ss << "\nFound Solution!\t" << l0 << " in\t" << i << "\titerations.";
-        convS3 = 1; // A solution was found
+        ConvS3 = 1; // A solution was found
         break;
       }
       if (abs(mu_max - mu_min) < 0.0000001)
@@ -1215,7 +1126,7 @@ void BounceActionInt::Solve1DBounce(
            << " in\t" << i << "\titerations.\t"
            << "\t" << (abs(dl_drho.back())) << "\t"
            << "\t" << (abs(l.back() - L) / L);
-        convS3 = 1; // A solution was found
+        ConvS3 = 1; // A solution was found
         break;
       }
       if (conv == -1) // Undershoot!
@@ -1248,10 +1159,10 @@ double BounceActionInt::Bernstein(int n, int nu, double x)
   return (nChoosek(n, nu) * pow(x, nu) * pow(1 - x, n - nu));
 }
 
-double BounceActionInt::reductorCalculator(const double &MaximumGradient)
+double BounceActionInt::ReductorCalculator(const double &MaximumGradient)
 {
   {
-    return MaximumGradient / (spline.L);
+    return MaximumGradient / (Spline.L);
   };
 }
 
@@ -1278,11 +1189,11 @@ bool BounceActionInt::PathDeformationCheck(std::vector<double> &l,
   double Maximum_dldrho        = 0; // Save maximum dl/drho
   std::vector<double> phi;          // Temporary variables for calculating force
 
-  // Creates new list of knots for the new spline, that then are going to
+  // Creates new list of knots for the new Spline, that then are going to
   // be moved with a force
   for (np = l.front() + delta; np <= l.back() - delta / 10.0; np += delta)
   {
-    phi      = spline(np); // New knot on the splind
+    phi      = Spline(np); // New knot on the splind
     gradient = dV(phi);    // Grandient of knot
     force    = NormalForce(np,
                         1 / rho_l_spl.deriv(1, np),
@@ -1307,7 +1218,7 @@ bool BounceActionInt::PathDeformationCheck(std::vector<double> &l,
 
   ss << "----------------\t Path deformation check\t----------------\n";
 
-  double reductor = reductorCalculator(MaximumGradient);
+  double reductor = ReductorCalculator(MaximumGradient);
 
   ss << "\nMaximmum dl/drho\t" << Maximum_dldrho << "\n";
   ss << "Maximmum gradient\t" << MaximumGradient << "\n";
@@ -1315,9 +1226,9 @@ bool BounceActionInt::PathDeformationCheck(std::vector<double> &l,
   ss << "Maximmum force\t" << MaximumForce << "\n";
   ss << "Maximmum relative error\t" << MaximumRelativeError << "\n";
   ss << "Reductor is\t" << reductor << "\n";
-  ss << "Spline length is\t" << spline.L << "\n";
+  ss << "Spline length is\t" << Spline.L << "\n";
   // ss << "{" << Maximum_dldrho << ", " << PerpendicularGradient << ", "
-  //    << MaximumGradient << ", " << spline.L << ", " << reductor << "}\n";
+  //    << MaximumGradient << ", " << Spline.L << ", " << reductor << "}\n";
 
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
   ss.str(std::string());
@@ -1327,7 +1238,7 @@ bool BounceActionInt::PathDeformationCheck(std::vector<double> &l,
   if (MaximumRelativeError < 0.05)
   {
     // It converged!
-    convPathDeformation = 1;
+    ConvPathDeformation = 1;
     ss << "Everything went well. Path deformation converged!\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
@@ -1372,12 +1283,12 @@ void BounceActionInt::SinglePathDeformation(
   // Difference between to knots to calculate Bernstein kernel
   // Transposes the path of differences
   double delta                                          = (lf - l0) / 300;
-  std::vector<std::vector<double>> transposed_next_path = transpose(next_path);
+  std::vector<std::vector<double>> transposed_next_path = Transpose(next_path);
   std::vector<std::vector<double>> last_forces          = forces;
 
   for (int d = 0; d < dim; d++)
   {
-    // Calculation of the Bernstein spline coefficient
+    // Calculation of the Bernstein Spline coefficient
     tk::spline next_path_spline(l_fornextpath, transposed_next_path[d]);
     std::vector<double> IntegralVector(BernsteinDegree, 0);
     for (int b_it = 0; b_it < BernsteinDegree; b_it++)
@@ -1601,11 +1512,11 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
   }
   MatrixXd inverseK = K.inverse();
 
-  // Creates new list of knots for the new spline, that then are going to
+  // Creates new list of knots for the new Spline, that then are going to
   // be moved with a force
   for (double np = l.front(); np <= l.back() - delta / 10.0; np += delta)
   {
-    phi = spline(np);                       // New knot on the splind
+    phi = Spline(np);                       // New knot on the splind
     best_path.push_back(phi - FalseVacuum); // Add point to list
     l_fornextpath.push_back(np);            // Save the parameter for each point
     gradient = dV(phi);                     // Grandient of knot
@@ -1632,7 +1543,7 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
 
   phi = FalseVacuum;                      // Last point
   best_path.push_back(phi - FalseVacuum); // Add last point to list
-  l_fornextpath.push_back(spline.L);      // Save the parameter for each point
+  l_fornextpath.push_back(Spline.L);      // Save the parameter for each point
   old_path  = best_path; // Save path in the case "oh no" happens
   next_path = best_path; // Starting path if the last iteration
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
@@ -1640,7 +1551,7 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
   for (int it_maxpath = 0; it_maxpath < MaxSinglePathDeformations; it_maxpath++)
   {
     NoBestPathCounter++;
-    reductor = reductorCalculator(MaximumGradient) / stepsize;
+    reductor = ReductorCalculator(MaximumGradient) / stepsize;
 
     oldMaximumRelativeError = MaximumRelativeError;
 
@@ -1678,8 +1589,8 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
   // Reshift all point to their correct locations
   if (best_path.size() == 0)
   {
-    convPathDeformation = -2;
-    action              = path_deformation_crashed;
+    ConvPathDeformation = -2;
+    Action              = path_deformation_crashed;
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                          "Path deformation exploded");
     return;
@@ -1697,7 +1608,7 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
     best_path[it_path] = FalseVacuum + best_path[it_path];
   }
   // Change the class path into the new path
-  setPath(best_path);
+  SetPath(best_path);
 
   return;
 }
@@ -1744,9 +1655,9 @@ double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
   for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
   {
     // Simpson Integration (1 + 4 + 1)/ 6 * step
-    integral += r * r * (V(spline(l_rho_spl(r))));
-    integral += 4 * r * r * (V(spline(l_rho_spl(r + int_delta / 2.0))));
-    integral += r * r * (V(spline(l_rho_spl(r + int_delta))));
+    integral += r * r * (V(Spline(l_rho_spl(r))));
+    integral += 4 * r * r * (V(Spline(l_rho_spl(r + int_delta / 2.0))));
+    integral += r * r * (V(Spline(l_rho_spl(r + int_delta))));
   }
   integral = integral * 4 * M_PI * int_delta /
              6.0; // Angular integration and Simpson step
@@ -1754,12 +1665,12 @@ double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
 }
 
 void BounceActionInt::CalculateAction(
-    double error) // alpha = 2 at T > 0 and alpha = 3 at T = 0
+    double error) // Alpha = 2 at T > 0 and Alpha = 3 at T = 0
 {
   std::stringstream ss;
-  if (Calc_d2Vdl2(spline.L) < 0)
+  if (Calc_d2Vdl2(Spline.L) < 0)
   {
-    action = false_vacuum_not_a_minimum;
+    Action = false_vacuum_not_a_minimum;
     ss << "False vacuum is not a minimum!\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
@@ -1779,8 +1690,8 @@ void BounceActionInt::CalculateAction(
 
   std::vector<double> force, originalforce;
 
-  convS3              = -1; // Know if a solution was found
-  convPathDeformation = -1; // To record if path deformation converged or not
+  ConvS3              = -1; // Know if a solution was found
+  ConvPathDeformation = -1; // To record if path deformation converged or not
 
   if (dim > 1) // If dim = 0 then we only need the solution for the 1D
                // bounce equation
@@ -1791,12 +1702,12 @@ void BounceActionInt::CalculateAction(
     // Solves 1D bounce equation
     Solve1DBounce(rho, l, dl_drho, d2l_drho2, error);
 
-    if (action < -1 or rho.size() < 4)
+    if (Action < -1 or rho.size() < 4)
     {
-      if (rho.size() < 4) action = not_enough_points_for_spline;
+      if (rho.size() < 4) Action = not_enough_points_for_spline;
       // actions is less than 1 in case of an error. Abort
       // calculation
-      spline.print_path();
+      Spline.print_path();
       return;
     }
     // Checks if convergence was met
@@ -1810,36 +1721,36 @@ void BounceActionInt::CalculateAction(
     dldrho_sol = dl_drho;
     // Checks if convergence was met
 
-    for (int i = 2; i <= MaxPathIntegrations and convPathDeformation == -1; i++)
+    for (int i = 2; i <= MaxPathIntegrations and ConvPathDeformation == -1; i++)
     {
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       ss.str(std::string());
-      if (undershot_once == false and action >= -1)
+      if (UndershotOnce == false and Action >= -1)
       {
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                              "Method never undershot. Terrible news!");
-        action = never_undershoot_overshoot;
+        Action = never_undershoot_overshoot;
       }
-      if (overshot_once == false and action >= -1)
+      if (OvershotOnce == false and Action >= -1)
       {
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                              "Method never overshot. Terrible news!");
-        action = never_undershoot_overshoot;
+        Action = never_undershoot_overshoot;
       }
 
-      if (action < -1)
+      if (Action < -1)
       {
         // actions is less than 1 in case of an error. Abort
         // calculation
-        spline.print_path();
+        Spline.print_path();
         return;
       }
 
       if (rho.size() < 4)
       {
-        // Not enough point to populate the spline
-        action = not_enough_points_for_spline;
-        spline.print_path();
+        // Not enough point to populate the Spline
+        Action = not_enough_points_for_spline;
+        Spline.print_path();
         return;
       }
       rho_l_spl.set_points(l, rho);
@@ -1866,7 +1777,7 @@ void BounceActionInt::CalculateAction(
       if (PathDeformationConvergedWithout1D)
       {
         // Save solution
-        convPathDeformation = 1;
+        ConvPathDeformation = 1;
         rho_sol             = rho;
         l_sol               = l;
         dldrho_sol          = dl_drho;
@@ -1883,30 +1794,30 @@ void BounceActionInt::CalculateAction(
         break;
       }
 
-      if (convPathDeformation == 1)
+      if (ConvPathDeformation == 1)
       {
         // PathDeformation Converged!
         break;
       }
 
-      if (convS3 == -1)
+      if (ConvS3 == -1)
       {
-        action =
+        Action =
             integration_1d_failed; // Undershoot/overshoot failed. Return -2.
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       }
 
-      if (action < -1)
+      if (Action < -1)
       {
         // actions is less than 1 in case of an error. Abort
         // calculation
-        spline.print_path();
+        Spline.print_path();
         return;
       }
     }
-    if (convPathDeformation == -1)
+    if (ConvPathDeformation == -1)
     {
-      action = path_deformation_not_converged; // Path deformation did not
+      Action = path_deformation_not_converged; // Path deformation did not
                                                // converged in time. Return -3.
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       return;
@@ -1922,9 +1833,9 @@ void BounceActionInt::CalculateAction(
                   error); // Solves bounce equation once
   }
 
-  if (convS3 == -1)
+  if (ConvS3 == -1)
   {
-    action = integration_1d_failed; // No solution was found. Return -2.
+    Action = integration_1d_failed; // No solution was found. Return -2.
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     return;
   }
@@ -1937,30 +1848,30 @@ void BounceActionInt::CalculateAction(
   double KineticAction =
       2 * KineticPart /
       (1 +
-       alpha); // Calculate the action using only the kinetical contributions
+       Alpha); // Calculate the Action using only the kinetical contributions
   double PotentialPart = CalculatePotentialTermAction(rho, l_rho_spl);
   double PotentialAction =
       2 * PotentialPart /
       (1 -
-       alpha); // Calculate the action using only the potential contributions
+       Alpha); // Calculate the Action using only the potential contributions
 
-  action = KineticPart + PotentialPart;
+  Action = KineticPart + PotentialPart;
 
   // Print warning the actions dffer by 10%
-  if (abs(action / KineticAction - 1) > 0.1)
+  if (abs(Action / KineticAction - 1) > 0.1)
   {
-    ss << "Warning! Mismatch between action and action calculated using "
+    ss << "Warning! Mismatch between Action and Action calculated using "
           "only kinetic term : "
-       << action << " and " << KineticAction
-       << ". Relative error = " << abs(action / KineticAction - 1) << "\n";
+       << Action << " and " << KineticAction
+       << ". Relative error = " << abs(Action / KineticAction - 1) << "\n";
   }
   // Print warning the actions dffer by 10%
-  if (abs(action / PotentialAction - 1) > 0.1)
+  if (abs(Action / PotentialAction - 1) > 0.1)
   {
-    ss << "Warning! Mismatch between action and action calculated using "
+    ss << "Warning! Mismatch between Action and Action calculated using "
           "only potential term : "
-       << action << "  and " << PotentialAction
-       << ". Relative error = " << abs(action / PotentialAction - 1) << "\n";
+       << Action << "  and " << PotentialAction
+       << ". Relative error = " << abs(Action / PotentialAction - 1) << "\n";
   }
 
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());

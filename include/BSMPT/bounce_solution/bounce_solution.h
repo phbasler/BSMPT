@@ -178,12 +178,12 @@ public:
    * false to true vacuum
    * @param Temp temperature
    */
-  double Tunneling_Rate(const double &Temp);
+  double TunnelingRate(const double &Temp);
   /**
    * @brief Storage of the temperature-dependent Hubble rate
    * @param Temp temperature
    */
-  double Hubble_Rate(const double &Temp);
+  double HubbleRate(const double &Temp);
 
   /**
    * @brief inner_integrand friend to define inner integrand of percolation
