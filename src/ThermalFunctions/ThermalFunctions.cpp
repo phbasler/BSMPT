@@ -354,30 +354,6 @@ double JbosonInterpolatedNegative(const double &x, int diff)
 
   if (diff == 0)
   {
-    // TODO: This may be removed
-    /*
-    double xprev, fprev, xnext, fnext;
-    if (-x >= C_NegLine - 2)
-    {
-      xprev = NegLinearInt[C_NegLine - 2][0];
-      xnext = NegLinearInt[C_NegLine - 1][0];
-      fprev = NegLinearInt[C_NegLine - 2][1];
-      fnext = NegLinearInt[C_NegLine - 1][1];
-    }
-    else
-    {
-      std::size_t pos = (std::size_t(-x));
-      xprev           = NegLinearInt[pos][0];
-      fprev           = NegLinearInt[pos][1];
-      xnext           = NegLinearInt[pos + 1][0];
-      fnext           = NegLinearInt[pos + 1][1];
-    }
-
-    PotVal = (fnext - fprev) / (xnext - xprev) * (x - xprev) + fprev;
-    // PotVal += C_BosonShift;
-    */
-    // return PotVal;
-
     PotVal = JbosonNegativeSpline(-x) + 3.533375127e-06;
   }
   else if (diff == 1)
