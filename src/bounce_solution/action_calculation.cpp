@@ -741,7 +741,7 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
     ss << " dVdl = " << dVdl << std::endl;
     ss << " d2Vd2l = " << d2Vdl2 << std::endl;
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-    Action = undershoot_overshoot_negative_grad;
+    StateOfBounceActionInt = ActionStatus::UndershootOvershootNegativeGrad;
     return {};
   }
 
@@ -796,7 +796,7 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
 }
 
 void BounceActionInt::IntegrateBounce(double l0,
-                                      int &conv,
+                                      UndershootOvershootStatus &conv,
                                       std::vector<double> &rho,
                                       std::vector<double> &l,
                                       std::vector<double> &dl_drho,
@@ -808,13 +808,13 @@ void BounceActionInt::IntegrateBounce(double l0,
 {
   std::stringstream ss;
   // Integrate the bounce equation with x(rho) = "x0" until dx/drho < 0
-  // (undershoot) (conv = -1) or x(rho) > L (overshoot) (conv = +1) or
-  // converges (conv = 0)
+  // (undershoot) or x(rho) > L (overshoot) or
+  // converges
   double L = Spline.L;
   double step; // Integration step
   std::vector<double> ExactSol = ExactSolution(l0);
 
-  if (Action < -1) return;
+  if (StateOfBounceActionInt != ActionStatus::NotCalculated) return;
 
   rho       = {0, ExactSol.at(0)};  // Initial integration value for abcissas
   l         = {l0, ExactSol.at(1)}; // Guess for the bounce solution
@@ -870,7 +870,7 @@ void BounceActionInt::IntegrateBounce(double l0,
   {
     ss << "Converged\t" << it << "\t" << l0 << "\t" << rho.back() << "\t"
        << l.back() << "\t" << dl_drho.back();
-    conv = 0;
+    conv = UndershootOvershootStatus::Converged;
   }
   else if (dl_drho.back() <= error)
   {
@@ -881,20 +881,20 @@ void BounceActionInt::IntegrateBounce(double l0,
     l.pop_back();
     dl_drho.pop_back();
     d2l_drho2.pop_back();
+    conv          = UndershootOvershootStatus::Undershoot;
     UndershotOnce = true;
-    conv          = -1;
   }
   else if ((l.back() - L) / L >= error)
   {
     ss << "Overshoot\t" << it << "\t" << l0 << "\t" << rho.back() << "\t"
        << l.back() << "\t" << dl_drho.back();
-    conv         = 1;
+    conv         = UndershootOvershootStatus::Overshoot;
     OvershotOnce = true;
   }
   else
   {
     // This shouldnt happen
-    conv = 1;
+    conv = UndershootOvershootStatus::Overshoot;
   }
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
 }
@@ -959,7 +959,7 @@ void BounceActionInt::Solve1DBounce(
   std::stringstream ss;
   // Method to solve the bounce ODE
   double lmin, l0, lmax, L;
-  int conv; // Converged?
+  UndershootOvershootStatus conv; // Converged?
   L = Spline.L;
 
   Initial_lmin = BackwardsPropagation();
@@ -974,7 +974,7 @@ void BounceActionInt::Solve1DBounce(
   {
     ss << "Backwards propagation produced V(lmin) > V(L). Abort.";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-    Action = backwards_propagation_failed;
+    StateOfBounceActionInt = ActionStatus::BackwardsPropagationFailed;
     return;
   }
   TrueVacuumHessian = Calc_d2Vdl2(lmin);
@@ -1005,7 +1005,7 @@ void BounceActionInt::Solve1DBounce(
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
   ss.str(std::string());
 
-  ConvS3 = -1;
+  StateOf1DIntegration = Integration1DStatus::NotConverged;
 
   UndershotOnce = false;
   OvershotOnce  = false;
@@ -1026,7 +1026,7 @@ void BounceActionInt::Solve1DBounce(
       l0Initiallmin = l0 - Initial_lmin;
       IntegrateBounce(
           l0, conv, rho, l, dl_drho, d2l_drho2, 100000, error, error * 0.0015);
-      if (Action < -1) return;
+      if (StateOfBounceActionInt != ActionStatus::NotCalculated) return;
       if (rho.size() <= 7)
       {
         ss << "rho\t = ";
@@ -1046,14 +1046,14 @@ void BounceActionInt::Solve1DBounce(
         ss.str(std::string());
         PrintVector(d2l_drho2);
         ss << "\n Overshoot/Undershoot method failed!\t";
-        ConvS3 = -1; // A solution was found
-        Action = integration_1d_failed;
+        StateOf1DIntegration   = Integration1DStatus::NotConverged;
+        StateOfBounceActionInt = ActionStatus::Integration1DFailed;
         break;
       }
-      if (conv == 0) // Solved!
+      if (conv == UndershootOvershootStatus::Converged) // Solved!
       {
         ss << "\nFound Solution!\t" << l0 << " in\t" << i << "\titerations.";
-        ConvS3 = 1; // A solution was found
+        StateOf1DIntegration = Integration1DStatus::Converged;
         break;
       }
       if ((lmax - lmin) / L < error * 0.0000001)
@@ -1065,18 +1065,18 @@ void BounceActionInt::Solve1DBounce(
              << " in\t" << i << "\titerations.\t"
              << "\t" << (abs(dl_drho.back())) << "\t"
              << "\t" << (abs(l.back() - L) / L);
-          ConvS3 = 1;
+          StateOf1DIntegration = Integration1DStatus::Converged;
           break;
         }
         // Method never overshot. Switch to log scale
         mode   = 1;
         mu_max = log(lmax - lmin) + 2; // Give some margin for the binary search
       }
-      if (conv == -1) // Undershoot!
+      if (conv == UndershootOvershootStatus::Undershoot) // Undershoot!
       {
         lmax = double(l0);
       }
-      if (conv == 1) // Overshoot!
+      if (conv == UndershootOvershootStatus::Overshoot) // Overshoot!
       {
         lmin = double(l0);
       }
@@ -1089,7 +1089,7 @@ void BounceActionInt::Solve1DBounce(
 
       IntegrateBounce(
           l0, conv, rho, l, dl_drho, d2l_drho2, 100000, error, error * 0.0015);
-      if (Action < -1) return;
+      if (StateOfBounceActionInt != ActionStatus::NotCalculated) return;
       if (rho.size() <= 7)
       {
         ss << "rho\t = ";
@@ -1110,14 +1110,14 @@ void BounceActionInt::Solve1DBounce(
         PrintVector(d2l_drho2);
         ss << "\n Overshoot/Undershoot method failed!\t";
 
-        ConvS3 = -1; // A solution was found
-        Action = integration_1d_failed;
+        StateOf1DIntegration   = Integration1DStatus::NotConverged;
+        StateOfBounceActionInt = ActionStatus::Integration1DFailed;
         break;
       }
-      if (conv == 0) // Solved!
+      if (conv == UndershootOvershootStatus::Converged) // Solved!
       {
         ss << "\nFound Solution!\t" << l0 << " in\t" << i << "\titerations.";
-        ConvS3 = 1; // A solution was found
+        StateOf1DIntegration = Integration1DStatus::Converged;
         break;
       }
       if (abs(mu_max - mu_min) < 0.0000001)
@@ -1126,14 +1126,14 @@ void BounceActionInt::Solve1DBounce(
            << " in\t" << i << "\titerations.\t"
            << "\t" << (abs(dl_drho.back())) << "\t"
            << "\t" << (abs(l.back() - L) / L);
-        ConvS3 = 1; // A solution was found
+        StateOf1DIntegration = Integration1DStatus::Converged;
         break;
       }
-      if (conv == -1) // Undershoot!
+      if (conv == UndershootOvershootStatus::Undershoot) // Undershoot!
       {
         mu_max = mu_middle;
       }
-      if (conv == 1) // Overshoot!
+      if (conv == UndershootOvershootStatus::Overshoot) // Overshoot!
       {
         mu_min = mu_middle;
       }
@@ -1238,7 +1238,7 @@ bool BounceActionInt::PathDeformationCheck(std::vector<double> &l,
   if (MaximumRelativeError < 0.05)
   {
     // It converged!
-    ConvPathDeformation = 1;
+    StateOfPathDeformation = PathDeformationStatus::Converged;
     ss << "Everything went well. Path deformation converged!\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
@@ -1589,8 +1589,7 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
   // Reshift all point to their correct locations
   if (best_path.size() == 0)
   {
-    ConvPathDeformation = -2;
-    Action              = path_deformation_crashed;
+    StateOfBounceActionInt = ActionStatus::PathDeformationCrashed;
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                          "Path deformation exploded");
     return;
@@ -1670,7 +1669,7 @@ void BounceActionInt::CalculateAction(
   std::stringstream ss;
   if (Calc_d2Vdl2(Spline.L) < 0)
   {
-    Action = false_vacuum_not_a_minimum;
+    StateOfBounceActionInt = ActionStatus::FalseVacuumNotMinimum;
     ss << "False vacuum is not a minimum!\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
@@ -1690,8 +1689,11 @@ void BounceActionInt::CalculateAction(
 
   std::vector<double> force, originalforce;
 
-  ConvS3              = -1; // Know if a solution was found
-  ConvPathDeformation = -1; // To record if path deformation converged or not
+  StateOf1DIntegration =
+      Integration1DStatus ::NotConverged; // Know if a solution was found
+  StateOfPathDeformation =
+      PathDeformationStatus::NotConverged; // To record if path deformation
+                                           // converged or not
 
   if (dim > 1) // If dim = 0 then we only need the solution for the 1D
                // bounce equation
@@ -1702,9 +1704,11 @@ void BounceActionInt::CalculateAction(
     // Solves 1D bounce equation
     Solve1DBounce(rho, l, dl_drho, d2l_drho2, error);
 
-    if (Action < -1 or rho.size() < 4)
+    if ((StateOfBounceActionInt != ActionStatus::NotCalculated) or
+        rho.size() < 4)
     {
-      if (rho.size() < 4) Action = not_enough_points_for_spline;
+      if (rho.size() < 4)
+        StateOfBounceActionInt = ActionStatus::NotEnoughPointsForSpline;
       // actions is less than 1 in case of an error. Abort
       // calculation
       Spline.print_path();
@@ -1721,7 +1725,10 @@ void BounceActionInt::CalculateAction(
     dldrho_sol = dl_drho;
     // Checks if convergence was met
 
-    for (int i = 2; i <= MaxPathIntegrations and ConvPathDeformation == -1; i++)
+    for (int i = 2;
+         i <= MaxPathIntegrations and
+         StateOfPathDeformation == PathDeformationStatus::NotConverged;
+         i++)
     {
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       ss.str(std::string());
@@ -1729,16 +1736,16 @@ void BounceActionInt::CalculateAction(
       {
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                              "Method never undershot. Terrible news!");
-        Action = never_undershoot_overshoot;
+        StateOfBounceActionInt = ActionStatus::NeverUndershootOvershoot;
       }
       if (OvershotOnce == false and Action >= -1)
       {
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
                              "Method never overshot. Terrible news!");
-        Action = never_undershoot_overshoot;
+        StateOfBounceActionInt = ActionStatus::NeverUndershootOvershoot;
       }
 
-      if (Action < -1)
+      if (StateOfBounceActionInt != ActionStatus::NotCalculated)
       {
         // actions is less than 1 in case of an error. Abort
         // calculation
@@ -1749,7 +1756,7 @@ void BounceActionInt::CalculateAction(
       if (rho.size() < 4)
       {
         // Not enough point to populate the Spline
-        Action = not_enough_points_for_spline;
+        StateOfBounceActionInt = ActionStatus::NotEnoughPointsForSpline;
         Spline.print_path();
         return;
       }
@@ -1777,10 +1784,10 @@ void BounceActionInt::CalculateAction(
       if (PathDeformationConvergedWithout1D)
       {
         // Save solution
-        ConvPathDeformation = 1;
-        rho_sol             = rho;
-        l_sol               = l;
-        dldrho_sol          = dl_drho;
+        StateOfPathDeformation = PathDeformationStatus::Converged;
+        rho_sol                = rho;
+        l_sol                  = l;
+        dldrho_sol             = dl_drho;
         break;
       }
 
@@ -1794,20 +1801,20 @@ void BounceActionInt::CalculateAction(
         break;
       }
 
-      if (ConvPathDeformation == 1)
+      if (StateOfPathDeformation == PathDeformationStatus::Converged)
       {
         // PathDeformation Converged!
         break;
       }
 
-      if (ConvS3 == -1)
+      if (StateOf1DIntegration == Integration1DStatus ::NotConverged)
       {
-        Action =
-            integration_1d_failed; // Undershoot/overshoot failed. Return -2.
+        StateOfBounceActionInt =
+            ActionStatus::Integration1DFailed; // Undershoot/overshoot failed.
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       }
 
-      if (Action < -1)
+      if (StateOfBounceActionInt != ActionStatus::NotCalculated)
       {
         // actions is less than 1 in case of an error. Abort
         // calculation
@@ -1815,10 +1822,11 @@ void BounceActionInt::CalculateAction(
         return;
       }
     }
-    if (ConvPathDeformation == -1)
+    if (StateOfPathDeformation == PathDeformationStatus::NotConverged)
     {
-      Action = path_deformation_not_converged; // Path deformation did not
-                                               // converged in time. Return -3.
+      StateOfBounceActionInt =
+          ActionStatus::PathDeformationNotConverged; // Path deformation did not
+                                                     // converged in time.
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       return;
     }
@@ -1833,9 +1841,10 @@ void BounceActionInt::CalculateAction(
                   error); // Solves bounce equation once
   }
 
-  if (ConvS3 == -1)
+  if (StateOf1DIntegration == Integration1DStatus::NotConverged)
   {
-    Action = integration_1d_failed; // No solution was found. Return -2.
+    StateOfBounceActionInt =
+        ActionStatus::Integration1DFailed; // No solution was found.
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     return;
   }

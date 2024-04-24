@@ -90,38 +90,78 @@ public:
   int dim = -1;
 
   /**
-   * @brief Action calculated by the class
+   * @brief Possible status of the Action calculation
    *
-   * * = -1 if not yet calculated.
-   * * = -2 if 1D integration did not work.
-   * * = -3 if the path deformation did not converged in time.
-   * * = -4 if the path deformation crashed.
-   * * = -5 if the false vacuum in not a minimum.
-   * * = -6 path deformation created a path with V(True) > V(False) (even with
-   * backwards propagation).
-   * * = -7 1D integration never overshot/undershot
-   * * = -8 overshooting/undershooting found a negative gradient point
-   * * = -9 if the solution does not have enough points to populate the \f$
-   * l(\rho) \f$ spline
    */
-  enum ActionStatus
+  enum class ActionStatus
   {
-    not_calculated                     = -1,
-    integration_1d_failed              = -2,
-    path_deformation_not_converged     = -3,
-    path_deformation_crashed           = -4,
-    false_vacuum_not_a_minimum         = -5,
-    backwards_propagation_failed       = -6,
-    never_undershoot_overshoot         = -7,
-    undershoot_overshoot_negative_grad = -8,
-    not_enough_points_for_spline       = -9
+    Success,
+    NotCalculated,
+    Integration1DFailed,
+    PathDeformationNotConverged,
+    PathDeformationCrashed,
+    FalseVacuumNotMinimum,
+    BackwardsPropagationFailed,
+    NeverUndershootOvershoot,
+    UndershootOvershootNegativeGrad,
+    NotEnoughPointsForSpline
+  };
+
+  /**
+   * @brief Possible results of the undershoot/overshoot algorithm
+   *
+   */
+  enum class UndershootOvershootStatus
+  {
+    Converged,
+    Undershoot,
+    Overshoot
+  };
+
+  /**
+   * @brief Possible status of the 1D bounce solver
+   *
+   */
+  enum class Integration1DStatus
+  {
+    Converged,
+    NotConverged,
+  };
+
+  /**
+   * @brief Possible status of the path deformation algorithm
+   *
+   */
+  enum class PathDeformationStatus
+  {
+    Converged,
+    NotConverged,
   };
 
   /**
    * @brief either returns a action_status or the value of the action
    *
    */
-  double Action = not_calculated;
+  double Action;
+
+  /**
+   * @brief Status of the Action calculation
+   *
+   */
+  ActionStatus StateOfBounceActionInt = ActionStatus::NotCalculated;
+
+  /**
+   * @brief Status of the 1D bounce solver
+   *
+   */
+  Integration1DStatus StateOf1DIntegration = Integration1DStatus::NotConverged;
+
+  /**
+   * @brief Status of the path deformation algorithm
+   *
+   */
+  PathDeformationStatus StateOfPathDeformation =
+      PathDeformationStatus::NotConverged;
 
   /**
    * @brief Factor produced by the spherical symmetry of the potential.
@@ -168,17 +208,12 @@ public:
    */
   std::vector<double> dldrho_sol;
 
-  double eps = 0.01; // Step for the numerical derivative
   /**
-   * @brief Records if 1D profile converged or not
+   * @brief Step for the numerical derivative
    *
    */
-  int ConvS3 = -1; // Did 1D profile converged or not?
-  /**
-   * @brief Records if path deformation converged or not
-   *
-   */
-  int ConvPathDeformation = -1;
+  double eps = 0.01;
+
   /**
    * @brief  Number of basis function that are used + 1
    *
@@ -595,8 +630,7 @@ public:
    * @brief Integrates 1D bounce equation once
    *
    * @param l0 is the starting value.
-   * @param conv checks type of convergence. 0 = converged. -1 = undershot. +1 =
-   * overshot.
+   * @param conv checks type of convergence. Converged. Undershoot. Overshoot.
    * @param rho vector of integration variable \f$ \rho \f$ steps.
    * @param l vector of variable \f$ l \f$ steps.
    * @param dl_drho vector of variable \f$ \frac{dl}{d\rho} \f$ steps.
@@ -608,7 +642,7 @@ public:
    * \f$.
    */
   void IntegrateBounce(double l0,
-                       int &conv,
+                       UndershootOvershootStatus &conv,
                        std::vector<double> &rho,
                        std::vector<double> &l,
                        std::vector<double> &dl_drho,
