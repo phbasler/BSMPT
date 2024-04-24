@@ -115,8 +115,6 @@ HessianNumerical(const std::vector<double> &phi,
       r += f(xp);
 
       result[i][j] = r / (4 * eps * eps);
-      // std::cout << "HessianNumerical \n";
-      // std::cout << i << "\t" << j << "\t" << result[i][j] << "\n";
     }
   }
   return result;
