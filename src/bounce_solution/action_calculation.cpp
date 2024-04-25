@@ -555,7 +555,6 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   // Check if lower limit is viable
   if (LinearSolution(rho_down) < 0)
   {
-    // TODO : Print error
     ss << "Error in\t(LinearSolution(rho_down) < 0)\n";
     BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
     ss.str(std::string());
