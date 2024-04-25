@@ -392,7 +392,7 @@ TEST_CASE("Checking phase tracking for BP2", "[gw]")
   REQUIRE(vac.PhasesList.size() == 2);
 }
 
-TEST_CASE("Checking phase tracking for BP3", "[gw]")
+TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
                                                /* vs = */ 0,
@@ -419,6 +419,81 @@ TEST_CASE("Checking phase tracking for BP3", "[gw]")
   user_input input;
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
+
+  auto output = trans.output_store;
+
+  REQUIRE(126.0223716 ==
+          Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
+  REQUIRE(121.0869527 ==
+          Approx(output.vec_trans_data.at(0).nucl_approx_temp).epsilon(1e-2));
+  REQUIRE(121.212833 ==
+          Approx(output.vec_trans_data.at(0).nucl_temp).epsilon(1e-2));
+  REQUIRE(120.7670659 ==
+          Approx(output.vec_trans_data.at(0).perc_temp).epsilon(1e-2));
+  REQUIRE(120.7267244 ==
+          Approx(output.vec_trans_data.at(0).compl_temp).epsilon(1e-2));
+
+  REQUIRE(0.00537281 == Approx(output.vec_gw_data.at(0).alpha).epsilon(1e-2));
+  REQUIRE(7658.8931 ==
+          Approx(output.vec_gw_data.at(0).beta_over_H).epsilon(1e-2));
+  REQUIRE(4.40964e-05 == Approx(output.vec_gw_data.at(0).K_sw).epsilon(1e-2));
+  REQUIRE(4.40964e-06 == Approx(output.vec_gw_data.at(0).K_turb).epsilon(1e-2));
+  REQUIRE(0.0884755 == Approx(output.vec_gw_data.at(0).fpeak_sw).epsilon(1e-2));
+  REQUIRE(0.269136 ==
+          Approx(output.vec_gw_data.at(0).fpeak_turb).epsilon(1e-2));
+  REQUIRE(1.70812e-20 ==
+          Approx(output.vec_gw_data.at(0).h2Omega_sw).epsilon(1e-2));
+  REQUIRE(3.69052e-16 ==
+          Approx(output.vec_gw_data.at(0).h2Omega_turb).epsilon(1e-2));
+  REQUIRE(2.483231907e-09 ==
+          Approx(output.vec_gw_data.at(0).SNR_sw).epsilon(1e-2));
+  REQUIRE(2.582886247e-20 ==
+          Approx(output.vec_gw_data.at(0).SNR_turb).epsilon(1e-2));
+  REQUIRE(2.483231907e-09 ==
+          Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
+
+  // Check different vwalls
+  trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
+  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  REQUIRE(0.374931042806113 ==
+          Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
+
+  trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
+  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  REQUIRE(0.303761086384691 ==
+          Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
+}
+
+TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* msq = */ -15650,
+                                               /* lambda = */ 0.52,
+                                               /* delta2 = */ 0.55,
+                                               /* b2 = */ -8859,
+                                               /* d2 = */ 0.5,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+
+  user_input input;
+  input.modelPointer        = modelPointer;
+  input.maxpathintegrations = 2;
+  input.gw_calculation      = true;
   TransitionTracer trans(input);
   trans.ListBounceSolution.at(0).CalculatePercolationTemp();
 
