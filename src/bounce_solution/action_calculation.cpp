@@ -894,7 +894,6 @@ void BounceActionInt::IntegrateBounce(double l0,
   {
     ss << "Undershoot\t" << it << "\t" << l0 << "\t" << rho.back() << "\t"
        << l.back() << "\t" << dl_drho.back();
-    //  TODO Rethink this!
     rho.pop_back();
     l.pop_back();
     dl_drho.pop_back();
