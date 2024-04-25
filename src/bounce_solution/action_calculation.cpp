@@ -1722,6 +1722,26 @@ void BounceActionInt::CalculateAction(
                     d2l_drho2,
                     error); // Solves bounce equation
 
+      if (UndershotOnce == false and Action >= -1)
+      {
+        BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
+                             "Method never undershot. Terrible news!");
+        StateOfBounceActionInt = ActionStatus::NeverUndershootOvershoot;
+      }
+      if (OvershotOnce == false and Action >= -1)
+      {
+        BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
+                             "Method never overshot. Terrible news!");
+        StateOfBounceActionInt = ActionStatus::NeverUndershootOvershoot;
+      }
+      if (StateOfBounceActionInt != ActionStatus::NotCalculated)
+      {
+        // actions is less than 1 in case of an error. Abort
+        // calculation
+        Spline.print_path();
+        return;
+      }
+
       // Path deformation converged
       if (PathDeformationConvergedWithout1D)
       {
