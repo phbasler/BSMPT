@@ -78,14 +78,16 @@ HessianNumerical(const std::vector<double> &phi,
 }
 
 std::vector<double> MinimumTracer::LocateMinimum(
-    std::vector<double> guess,
+    const std::vector<double> &guess_In,
     std::function<std::vector<double>(std::vector<double>)> &df,
     std::function<std::vector<std::vector<double>>(std::vector<double>)>
         &Hessian,
-    double error,
-    double const_multiplier,
-    int maxiter)
+    const double &error,
+    const double &const_multiplier,
+    const int &maxiter)
 {
+  // Save initial guess
+  std::vector<double> guess = guess_In;
   // Checks if guess is close enough
   if (L2NormVector(df(guess)) < error) return guess;
 

@@ -310,7 +310,7 @@ public:
   /**
    * @brief Finds stationary points of a function (not only minimas).
    *
-   * @param guess is the initial guess for the minimum
+   * @param guess_In is the initial guess for the minimum
    * @param df gradient of the function to be minimized
    * @param Hessian hessian of the function
    * @param error Maximum size of \f$ | \vec{df} | \f$ that is considered a
@@ -322,13 +322,13 @@ public:
    * @return std::vector<double>
    */
   std::vector<double> LocateMinimum(
-      std::vector<double> guess,
+      const std::vector<double> &guess_In,
       std::function<std::vector<double>(std::vector<double>)> &df,
       std::function<std::vector<std::vector<double>>(std::vector<double>)>
           &Hessian,
-      double error            = 1e-4,
-      double const_multiplier = 1e-2,
-      int maxiter             = 100);
+      const double &error            = 1e-4,
+      const double &const_multiplier = 1e-2,
+      const int &maxiter             = 100);
 
   /**
    * @brief GetLegend derive legend
