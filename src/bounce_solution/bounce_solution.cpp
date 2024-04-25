@@ -285,7 +285,8 @@ void BounceSolution::GWSecondaryScan()
     Logger::Write(
         LoggingLevel::BounceDetailed,
         "Only one solution was found. Searching near what was found\n");
-    CalculateActionAt(SolutionList[0].T - 0.01);
+    CalculateActionAt(SolutionList[0].T -
+                      (SolutionList[0].T - phase_pair.T_low) / 10.);
     if (SolutionList.size() == 1)
     {
       // Failed to find the solution
