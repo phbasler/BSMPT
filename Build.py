@@ -2,11 +2,22 @@ import Setup
 import subprocess
 import sys
 
-presets={
-    "linux": "conan-linux-x86_64-release",
-    "win32": "conan-windows-x86_64-release",
-    "darwin": "conan-macos-x86_64-release"
-}
+def get_preset():
+    preset = "conan-"
+    os = sys.platform
+    if os == "win32":
+        preset += "windows"
+    elif os == "linux":
+        preset += "linux"
+    elif os == "darwin":
+        preset += "macos"
+    
+    preset += "-"
+    preset += Setup.get_arch()
+
+    preset += "-release"
+
+    return preset
 
 def build(preset):
     cmd=f"cmake --preset {preset}".split()
@@ -17,8 +28,9 @@ def build(preset):
 
 
 def main():
+    Setup.setup_profiles()
     Setup.conan_install_all(Setup.BuildMode.release)
-    build(presets[sys.platform])
+    build(get_preset())
 
 if __name__ == "__main__":
     main()

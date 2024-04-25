@@ -24,27 +24,27 @@ class BuildMode(ArgTypeEnum, Enum):
     release = (1,)
     debug = 2
 
+def get_profile(os: str, arch: str, build_type: BuildMode):
+    profile = ""
+    if os == "win32":
+        profile += "windows"
+    elif os == "linux":
+        profile += "linux"
+    elif os == "darwin":
+        profile += "macos"
 
-build_profiles = {
-    "win32": {"x86_64": "windows-release"},
-    "linux": {"x86_64": "linux-release", "armv8": "linux-release-arm"},
-    "darwin": {"x86_64": "macos-release", "armv8": "macos-release-arm"},
-}
+    profile += "-"
 
-target_profiles = {
-    "win32": {
-        "release": {"x86_64": "windows-release"},
-        "debug": {"x86_64": "windows-debug"},
-    },
-    "linux": {
-        "release": {"x86_64": "linux-release", "armv8": "linux-release-arm"},
-        "debug": {"x86_64": "linux-debug", "armv8": "linux-debug-arm"},
-    },
-    "darwin": {
-        "release": {"x86_64": "macos-release", "armv8": "macos-release-arm"},
-        "debug": {"x86_64": "macos-debug", "armv8": "macos-debug-arm"},
-    },
-}
+    if build_type == BuildMode.release:
+        profile += "release"
+    elif build_type == BuildMode.debug:
+        profile += "debug"
+
+    profile += "-"
+    profile += arch
+
+    return profile
+
 
 def get_arch():
     arch = "x86_64"
@@ -68,8 +68,7 @@ def conan_install(profile, additional_options=[], build_missing=False):
     ]
 
     
-
-    build_profile = build_profiles[sys.platform][get_arch()]
+    build_profile = get_profile(sys.platform, get_arch(), BuildMode.release)
 
     cmd = f"conan install . -pr:h BSMPT/{profile} -pr:b BSMPT/{build_profile} ".split()
 
@@ -86,11 +85,10 @@ def conan_install(profile, additional_options=[], build_missing=False):
 
 
 def conan_install_all(mode: BuildMode, options=[], build_missing=False):
-    profiles = target_profiles[sys.platform]
     if mode == BuildMode.all or mode == BuildMode.release:
-        conan_install(profiles["release"][get_arch()], options, build_missing)
+        conan_install( get_profile(sys.platform, get_arch(), BuildMode.release) , options, build_missing)
     if mode == BuildMode.all or mode == BuildMode.debug:
-        conan_install(profiles["debug"][get_arch()], options, build_missing)
+        conan_install(get_profile(sys.platform, get_arch(), BuildMode.debug), options, build_missing)
 
 
 class ArgTypeEnum(Enum):
