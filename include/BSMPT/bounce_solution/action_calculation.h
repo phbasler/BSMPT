@@ -139,10 +139,10 @@ public:
   };
 
   /**
-   * @brief either returns a action_status or the value of the action
+   * @brief either returns a -1 (if failed) or the value of the action
    *
    */
-  double Action;
+  double Action = -1;
 
   /**
    * @brief Status of the Action calculation
