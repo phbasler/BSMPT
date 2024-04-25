@@ -11,4 +11,4 @@ if __name__ == "__main__":
 
     env_file = os.getenv('GITHUB_ENV')
     with open(env_file, "a") as myfile:
-        myfile.write(f"profile={Build.get_preset()}")
+        myfile.write(f"generated_cmake_preset={Build.get_preset()}")
