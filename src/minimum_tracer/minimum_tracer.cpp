@@ -47,7 +47,6 @@ HessianNumerical(const std::vector<double> &phi,
   for (int i = 0; i < dim; i++)
   {
     // https://en.wikipedia.org/wiki/Finite_difference
-    // #TODO This could be improved!
     for (int j = 0; j < dim; j++)
     {
       double r = 0;

@@ -152,7 +152,6 @@ std::vector<std::vector<double>> BounceActionInt::HessianNumerical(
   for (int i = 0; i < dim; i++)
   {
     // https://en.wikipedia.org/wiki/Finite_difference
-    // #TODO This could be improved!
     for (int j = i; j < dim; j++)
     {
       double r = 0;
