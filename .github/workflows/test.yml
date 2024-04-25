@@ -40,7 +40,7 @@ jobs:
       id: cpu-cores
     - run: python3 Setup.py --options CompileBaryo=True
 
-    - name: Get Preset
+    - name: Set cmake preset name
       run: python3 .github/GetProfile.py
 
     - name: cmake
