@@ -139,7 +139,10 @@ if(EnableCoverage)
       "${PROJECT_SOURCE_DIR}/src/Kfactors/Kfactors.cpp"
       "${PROJECT_SOURCE_DIR}/src/models/ClassPotentialOrigin_deprecated.cpp"
       "${PROJECT_SOURCE_DIR}/src/models/ClassTemplate.cpp"
-      "${PROJECT_SOURCE_DIR}/src/WallThickness/WallThickness1D.cpp")
+      "${PROJECT_SOURCE_DIR}/src/WallThickness/WallThickness1D.cpp"
+      "${PROJECT_SOURCE_DIR}/src/standalone/*"
+      "${PROJECT_SOURCE_DIR}/src/utility/spline.cpp"
+      "${PROJECT_SOURCE_DIR}/src/utility/asciiplotter.cpp")
   setup_target_for_coverage_lcov(
     NAME
     coverage # New target name
