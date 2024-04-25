@@ -29,6 +29,15 @@ typedef std::vector<double> state_type;
 const double C_smallcut = 1e-20;
 
 /**
+ * @brief C_AbsErr Absolute tolerance for boost::integrate_adaptive
+ */
+const double C_AbsErr = 1e-6;
+/**
+ * @brief C_RelErr Relative tolerance for boost::integrate_adaptive
+ */
+const double C_RelErr = 1e-9;
+
+/**
  * @brief The Calc_Gam_M class Class instance for the numerical evaluation of
  * the relaxation rate at given temperature and quark mass.
  */

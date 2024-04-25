@@ -110,8 +110,7 @@ std::vector<std::string> Class_Potential_N2HDM::addLegendTemp() const
  *
  * Beware, this is not implemented yet!
  */
-std::vector<std::string>
-Class_Potential_N2HDM::addLegendTripleCouplings() const
+std::vector<std::string> Class_Potential_N2HDM::addLegendTripleCouplings() const
 {
   std::vector<std::string> particles;
   std::vector<std::string> labels;
@@ -161,7 +160,7 @@ std::vector<std::string> Class_Potential_N2HDM::addLegendVEV() const
 }
 
 void Class_Potential_N2HDM::ReadAndSet(const std::string &linestr,
-                                        std::vector<double> &par)
+                                       std::vector<double> &par)
 {
   std::stringstream ss(linestr);
   double tmp;
@@ -261,11 +260,6 @@ void Class_Potential_N2HDM::set_gen(const std::vector<double> &p)
   vevTree = MinimizeOrderVEV(vevTreeMin);
 }
 
-/**
- *@brief Set Counterterm-Parameters from Inputarray with 11 Arguments
- *
- *
- */
 void Class_Potential_N2HDM::set_CT_Pot_Par(const std::vector<double> &p)
 {
   //	double *p = (double *)par;
@@ -3189,7 +3183,7 @@ Class_Potential_N2HDM::VCounterSimplified(const std::vector<double> &v) const
 }
 
 void Class_Potential_N2HDM::Debugging(const std::vector<double> &input,
-                                       std::vector<double> &output) const
+                                      std::vector<double> &output) const
 {
   (void)input;
   (void)output;

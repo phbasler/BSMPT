@@ -1680,6 +1680,7 @@ double BounceActionInt::CalculateKineticTermAction(std::vector<double> &rho,
                6.0; // Angular integration and Simpson step
     return integral;
   }
+  return -1;
 }
 
 double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
@@ -1713,6 +1714,7 @@ double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
                6.0; // Angular integration and Simpson step
     return integral;
   }
+  return -1;
 }
 
 void BounceActionInt::CalculateAction(

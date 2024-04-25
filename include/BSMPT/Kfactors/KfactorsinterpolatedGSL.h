@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,6 +26,12 @@ namespace BSMPT
 {
 namespace Kfactors
 {
+
+/**
+ * @brief GSLAcclType Type used by the interpolations of the Kfunctions
+ */
+using GSLAcclType =
+    std::unique_ptr<gsl_interp_accel, decltype(&gsl_interp_accel_free)>;
 
 /**
  * Calculates the norm for < > Integrals

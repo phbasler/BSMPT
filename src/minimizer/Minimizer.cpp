@@ -80,13 +80,6 @@ MinimizersToUse GetMinimizers(int WhichMinimizer)
   return MinimizersToUse(UseCMAES, UseGSL, UseNLopt);
 }
 
-/**
- * @brief Minimization of the Model
- * Minimizes the given Potential with parameters par and CT-parameters parCT at
- * a given Temperature Temp and writes the solution in the std::vector sol. The
- * Minimization Debugging Options are written in the std::vector Check. The
- * std::vector Start gives the start value for the CMA-ES Minimization.
- */
 std::vector<double>
 Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &Temp,
