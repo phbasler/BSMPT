@@ -420,7 +420,6 @@ MinimumTracer::TrackPhase(double &globMinEndT,
         {
           zeroTemp = FindZeroSmallestEigenvalue(
               point, currentT - dT, new_point, currentT);
-          // CalculateVEVSplittings(new_point, currentT);
           if (zeroTemp.back() > 0)
           {
             currentT = zeroTemp.back();
@@ -694,7 +693,6 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
         {
           zeroTemp = FindZeroSmallestEigenvalue(
               point, currentT - dT, new_point, currentT);
-          // CalculateVEVSplittings(new_point, currentT);
           if (zeroTemp.back() > 0)
           {
             currentT = zeroTemp.back();
@@ -778,129 +776,6 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "T = " + std::to_string(currentT) + " GeV");
   return MinimumList;
-}
-
-void MinimumTracer::CalculateVEVSplittings(const std::vector<double> &point,
-                                           const double &T)
-{
-  double eps = 0.1;
-  int dim    = this->modelPointer->get_nVEV();
-  std::function<double(std::vector<double>)> V;
-  std::function<std::vector<double>(std::vector<double>)> dV;
-  std::function<std::vector<std::vector<double>>(std::vector<double>)> Hessian;
-  // Define potential 1
-  V = [&](std::vector<double> vev)
-  {
-    // Potential wrapper
-    std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
-    return this->modelPointer->VEff(res, T) / (1 + T * T);
-  };
-
-  dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-  Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps, dim); };
-  std::vector<std::vector<double>> current_hessian = Hessian(point);
-  // Calculate smallest EV
-  Eigen::MatrixXd mat(dim, dim);
-  for (int i = 0; i < dim; i++)
-  {
-    mat.col(i) = Eigen::Map<Eigen::VectorXd>(current_hessian[i].data(), dim);
-  }
-
-  // Eigensolver
-  EigenSolver<MatrixXd> eigenValueSolver(mat);
-  MatrixXd eigenvalueMatrix = eigenValueSolver.eigenvalues().real();
-  // the eigenvectors are stored column wise
-  MatrixXd eigenvectorMatrix = eigenValueSolver.eigenvectors().real();
-  // Determine the eigenvector with the smallest eigenvalue
-  double SEV = 1e100;
-  VectorXd EigenVector;
-  for (int it = 0; it < dim; it++)
-  {
-    if (eigenvalueMatrix(it) < SEV)
-    {
-      SEV         = eigenvalueMatrix(it);
-      EigenVector = eigenvectorMatrix.col(it);
-    }
-  }
-
-  // Typecast to std::vector
-  std::vector<double> NegativeDirection(
-      EigenVector.data(),
-      EigenVector.data() + EigenVector.rows() * EigenVector.cols());
-
-  std::function<std::vector<double>(double)> LineFromSaddlePoint = [&](double l)
-  { return point + l * NegativeDirection; };
-
-  std::function<double(double)> V_l = [&](double l)
-  { return V(LineFromSaddlePoint(l)); };
-
-  // Search roughly in one direction
-
-  double Candidate_l, Best_l = 0;
-  double V_of_candidate = 1e100;
-  for (double m = -1; m <= 1; m += 0.1)
-  {
-    Candidate_l = dim * exp(m);
-    if (V_l(Candidate_l) < V_of_candidate)
-    {
-      Best_l         = Candidate_l;
-      V_of_candidate = V_l(Candidate_l);
-    }
-  }
-  if (Candidate_l > 0)
-  {
-    std::vector<double> Candidate =
-        LocateMinimum(LineFromSaddlePoint(Best_l),
-                      dV,
-                      Hessian,
-                      1e-4 * GradientThreshold * dim);
-
-    if (L2NormVector(dV(Candidate) / dim) < GradientThreshold and
-        SmallestEigenvalue(Candidate, Hessian) > 0)
-    {
-      Minimum NewMinimumFound;
-      ReduceVEV(Candidate);
-      ConvertToNonFlatDirections(Candidate);
-      NewMinimumFound.point     = Candidate;
-      NewMinimumFound.temp      = T;
-      NewMinimumFound.potential = V(NewMinimumFound.point) * (1 + T * T);
-      SavedMinimaFromVEVSplitting.push_back(NewMinimumFound);
-    }
-  }
-
-  // Other direction
-
-  V_of_candidate = 1e100;
-  for (double m = -10.; m <= 1; m += 0.1)
-  {
-    Candidate_l = -dim * exp(m);
-    if (V_l(Candidate_l) < V_of_candidate)
-    {
-      Best_l         = Candidate_l;
-      V_of_candidate = V_l(Candidate_l);
-    }
-  }
-
-  if (Candidate_l < 0)
-  {
-    std::vector<double> Candidate =
-        LocateMinimum(LineFromSaddlePoint(Best_l),
-                      dV,
-                      Hessian,
-                      1e-4 * GradientThreshold * dim);
-
-    if (L2NormVector(dV(Candidate) / dim) < GradientThreshold and
-        SmallestEigenvalue(Candidate, Hessian) > 0)
-    {
-      Minimum NewMinimumFound;
-      ReduceVEV(Candidate);
-      ConvertToNonFlatDirections(Candidate);
-      NewMinimumFound.point     = Candidate;
-      NewMinimumFound.temp      = T;
-      NewMinimumFound.potential = V(NewMinimumFound.point) * (1 + T * T);
-      SavedMinimaFromVEVSplitting.push_back(NewMinimumFound);
-    }
-  }
 }
 
 void MinimumTracer::ReduceVEV(std::vector<double> &vev)

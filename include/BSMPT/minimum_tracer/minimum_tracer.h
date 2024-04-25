@@ -237,16 +237,6 @@ public:
                                   const bool &unprotected = false);
 
   /**
-   * @brief Calculates the VEV splitting when Hessian matrix gets a single
-   * negative eigenvalue.
-   *
-   * @param point where grad is zero and hessian is not positive definite
-   * @param T is the temperature.
-   */
-  void CalculateVEVSplittings(const std::vector<double> &point,
-                              const double &T);
-
-  /**
    * @brief bool to store whether flat directions are found
    */
   bool flat_dirs_found = false;
