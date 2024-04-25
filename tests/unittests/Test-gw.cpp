@@ -26,9 +26,21 @@ TEST_CASE("Test I_\alpha", "[gw]")
 
   BounceActionInt BACalc;
 
-  REQUIRE(BACalc.BesselI(3, 1) == Approx(0.0221684249).epsilon(5e-2));
-  REQUIRE(BACalc.BesselI(1, 3) == Approx(3.953370217).epsilon(5e-2));
-  REQUIRE(BACalc.BesselI(1, 1.5) == Approx(0.9816664).epsilon(5e-2));
+  REQUIRE(BACalc.BesselI(3, 1) == Approx(0.0221684249).epsilon(1e-8));
+  REQUIRE(BACalc.BesselI(1, 3) == Approx(3.953370217).epsilon(1e-8));
+  REQUIRE(BACalc.BesselI(1, 1.5) == Approx(0.9816664285779).epsilon(1e-8));
+}
+
+TEST_CASE("Test J_1", "[gw]")
+{
+  // Tests bounce solver with analytical derivative
+  using namespace BSMPT;
+
+  BounceActionInt BACalc;
+
+  REQUIRE(BACalc.BesselJ(1) == Approx(0.440050585744).epsilon(1e-8));
+  REQUIRE(BACalc.BesselJ(3) == Approx(0.3390589585259).epsilon(1e-8));
+  REQUIRE(BACalc.BesselJ(1.5) == Approx(0.5579365079).epsilon(1e-8));
 }
 
 TEST_CASE("Solve bounce equation with analytical derivative", "[gw]")
