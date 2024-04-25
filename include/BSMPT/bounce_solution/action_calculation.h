@@ -417,42 +417,6 @@ public:
    */
   double Calc_d2Vdl2(double l);
 
-  //
-  /**
-   * @brief Finds stationary points of a function (not only minimas).
-   *
-   * @param guess is the initial guess for the minimum
-   * @param dV gradient of the function to be minimized
-   * @param Hessian hessian of the function
-   * @param error Maximum size of \f$ | \vec{dV} | \f$ that is considered a
-   * minimum
-   * @param const_multiplier If \f$ \det{Hessian} = 0\f$ this method does not
-   * work. In that case we move the guess as \f$ \vec{p} \rightarrow \vec{p} -
-   * const\_multiplier * \vec{dV}\f$
-   * @param maxiter Maximum iteration exiting function
-   * @return std::vector<double>
-   */
-  static std::vector<double> LocateMinimum(
-      std::vector<double> guess,
-      std::function<std::vector<double>(std::vector<double>)> &dV,
-      std::function<std::vector<std::vector<double>>(std::vector<double>)>
-          &Hessian,
-      double error            = 1e-4,
-      double const_multiplier = 0.01,
-      int maxiter             = 1000);
-
-  /**
-   * @brief This functions uses @ref LocateMinimum to locate a minimum in the
-   * potential
-   *
-   * @param guess of the minimum location.
-   * @return std::vector<double>
-   */
-  std::vector<double> LocateMinimumPotential(std::vector<double> guess);
-
-  // param x
-  // return int
-
   /**
    * @brief Auxiliary function to locate the maximum absolute value of a vector.
    *
