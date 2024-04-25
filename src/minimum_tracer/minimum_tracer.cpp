@@ -1147,7 +1147,7 @@ void MinimumTracer::ConvertToNonFlatDirections(std::vector<double> &point)
 {
   if (flat_dirs_found) // flat directions in point
   {
-    for (auto pair : flat_2D_dirs)
+    for (const auto &pair : flat_2D_dirs)
     {
       auto a               = point.at(pair.at(0));
       auto b               = point.at(pair.at(1));
