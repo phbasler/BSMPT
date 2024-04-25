@@ -43,15 +43,25 @@ jobs:
     - name: Get Preset
       run: python3 .github/GetProfile.py
 
-    - run: cmake --version
-    - run: cmake --list-presets
-
     - name: cmake
       run: cmake --preset $GeneratedCMakeProfile
+      if: runner.os != 'Windows'
     - name: build
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+      if: runner.os != 'Windows'
     - name: run tests
       run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
+      if: runner.os != 'Windows'
+
+    - name: cmake
+      run: cmake --preset $env:GeneratedCMakeProfile
+      if: runner.os == 'Windows'
+    - name: build
+      run: cmake --build --preset $env:GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+      if: runner.os == 'Windows'
+    - name: run tests
+      run: ctest --preset $env:GeneratedCMakeProfile -j --output-on-failure 
+      if: runner.os == 'Windows'
     
       
 
