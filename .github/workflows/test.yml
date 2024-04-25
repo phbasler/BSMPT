@@ -44,11 +44,11 @@ jobs:
       run: python3 .github/GetProfile.py
 
     - name: cmake
-      run: cmake --preset $generated_cmake_preset
+      run: cmake --preset $GeneratedCMakeProfile
     - name: build
-      run: cmake --build --preset $generated_cmake_preset -j${{ steps.cpu-cores.outputs.count }}
+      run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
     - name: run tests
-      run: ctest --preset $generated_cmake_preset -j --output-on-failure 
+      run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
     
       
 
