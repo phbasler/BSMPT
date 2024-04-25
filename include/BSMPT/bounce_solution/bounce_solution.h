@@ -443,13 +443,6 @@ public:
   double GetPTStrength() const;
 
   /**
-   * @brief CalcGstar Calculate the number of effective degrees of freedom as a
-   * function of temperature, higgs masses are evaluated at global minimum
-   * @param Temp temperature
-   */
-  void CalcGstar(const double &Temp);
-
-  /**
    * @brief CalcGstarPureRad Calculate the number of effective degrees of
    * freedom assuming a purely radiative universe
    */

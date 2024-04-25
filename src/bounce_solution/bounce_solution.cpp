@@ -577,35 +577,6 @@ double BounceSolution::HubbleRate(const double &Temp)
          modelPointer->SMConstants.MPl; // radiation dominated universe
 }
 
-void BounceSolution::CalcGstar(const double &Temp)
-{
-  std::size_t NHiggs = this->modelPointer->get_NHiggs();
-
-  const std::vector<double> HiggsMassesSquared =
-      this->modelPointer->HiggsMassesSquared(
-          this->modelPointer->MinimizeOrderVEV(
-              this->modelPointer->get_vevTreeMin()),
-          Temp); // todo: calculate HiggsMassesSquared not in global, but in
-                 // minimum in which we are still in (e.g. local one until
-                 // T < Tperc)
-
-  std::size_t HiggsAboveThreshold = 0;
-
-  for (double mass : HiggsMassesSquared)
-  {
-    if (mass > Temp)
-    {
-      HiggsAboveThreshold++;
-    }
-  }
-
-  double gb   = 8 * 2 + 3 * 3 + 2 + NHiggs - HiggsAboveThreshold;
-  double gf   = 6 * 3 * 2 * 2 + 3 * 2 * 2 + 3 * 2;
-  double geff = gb + 7. / 8 * gf;
-
-  this->SetGstar(geff);
-}
-
 void BounceSolution::CalcGstarPureRad()
 {
   std::size_t NHiggs = this->modelPointer->get_NHiggs();
