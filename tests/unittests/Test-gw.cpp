@@ -420,6 +420,7 @@ TEST_CASE("Checking phase tracking for BP3", "[gw]")
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
   TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
 
   auto output = trans.output_store;
 
@@ -435,7 +436,7 @@ TEST_CASE("Checking phase tracking for BP3", "[gw]")
           Approx(output.vec_trans_data.at(0).compl_temp).epsilon(1e-2));
 
   REQUIRE(0.00537281 == Approx(output.vec_gw_data.at(0).alpha).epsilon(1e-2));
-  REQUIRE(7697.16 ==
+  REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H).epsilon(1e-2));
   REQUIRE(4.40964e-05 == Approx(output.vec_gw_data.at(0).K_sw).epsilon(1e-2));
   REQUIRE(4.40964e-06 == Approx(output.vec_gw_data.at(0).K_turb).epsilon(1e-2));
@@ -446,11 +447,23 @@ TEST_CASE("Checking phase tracking for BP3", "[gw]")
           Approx(output.vec_gw_data.at(0).h2Omega_sw).epsilon(1e-2));
   REQUIRE(3.69052e-16 ==
           Approx(output.vec_gw_data.at(0).h2Omega_turb).epsilon(1e-2));
-
-  REQUIRE(2.4646e-09 == Approx(output.vec_gw_data.at(0).SNR_sw).epsilon(1e-2));
-  REQUIRE(2.56709e-20 ==
+  REQUIRE(2.483231907e-09 ==
+          Approx(output.vec_gw_data.at(0).SNR_sw).epsilon(1e-2));
+  REQUIRE(2.582886247e-20 ==
           Approx(output.vec_gw_data.at(0).SNR_turb).epsilon(1e-2));
-  REQUIRE(2.4646e-09 == Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
+  REQUIRE(2.483231907e-09 ==
+          Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
+
+  // Check different vwalls
+  trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
+  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  REQUIRE(0.374931042806113 ==
+          Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
+
+  trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
+  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  REQUIRE(0.303761086384691 ==
+          Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 
 TEST_CASE("Test for EW symmetry restoration BP1", "[gw]")

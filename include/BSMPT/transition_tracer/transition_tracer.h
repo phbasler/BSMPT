@@ -163,12 +163,12 @@ private:
    */
   std::size_t num_vev;
 
+public:
   /**
    * @brief vector of all found coexisting phase regions
    */
   std::vector<CoexPhases> vec_coex;
 
-public:
   /**
    * @brief TransitionTracer constructor
    * @param input user input
