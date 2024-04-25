@@ -29,7 +29,7 @@ def build(preset):
 
 def main():
     Setup.setup_profiles()
-    Setup.conan_install_all(Setup.BuildMode.release)
+    Setup.conan_install_all(Setup.BuildMode.release,build_missing=True)
     build(get_preset())
 
 if __name__ == "__main__":
