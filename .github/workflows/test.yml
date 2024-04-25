@@ -41,7 +41,7 @@ jobs:
     - run: python3 Setup.py --options CompileBaryo=True
 
     - name: Get Preset
-      run: echo "profile=`python3 .github/GetProfile.py`" >> $GITHUB_ENV
+      run: python3 .github/GetProfile.py
 
     - name: cmake
       run: cmake --preset $profile
