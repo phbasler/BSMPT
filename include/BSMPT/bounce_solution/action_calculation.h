@@ -418,14 +418,6 @@ public:
   double Calc_d2Vdl2(double l);
 
   /**
-   * @brief Auxiliary function to locate the maximum absolute value of a vector.
-   *
-   * @param x is the vector.
-   * @return int is the index of the maximum absolute value.
-   */
-  static int IndexMaximumAbsolute(std::vector<double> x);
-
-  /**
    * @brief Auxiliary finction to compute the transpose of a matrix
    *
    * @param A is the \f$ n \times m \f$ matrix to be tranposed.

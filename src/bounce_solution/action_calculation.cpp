@@ -187,25 +187,6 @@ std::vector<std::vector<double>> BounceActionInt::HessianNumerical(
   return result;
 }
 
-int BounceActionInt::IndexMaximumAbsolute(std::vector<double> x)
-{
-  if (x.size() == 1)
-  {
-    return 0;
-  }
-  int r                 = 0;
-  double currentmaximum = abs(x[0]);
-  for (std::size_t i = 1; i < x.size(); i++)
-  {
-    if (abs(x[i]) > currentmaximum)
-    {
-      r              = i;
-      currentmaximum = abs(x[i]);
-    }
-  }
-  return r;
-}
-
 std::vector<std::vector<double>>
 BounceActionInt::Transpose(std::vector<std::vector<double>> &A)
 {
@@ -373,8 +354,7 @@ BounceActionInt::ExactSolutionCons(double l0, double l, double dVdl)
 
   // Return the analytical solution, as well as the derivative
   if (Alpha == 2) return {rho, l, dVdl * rho / 3};
-  if (Alpha == 3) return {rho, l, dVdl * rho / 4};
-  return {};
+  return {rho, l, dVdl * rho / 4}; // Then Alpha == 3
 }
 
 std::vector<double> BounceActionInt::ExactSolutionFromMinimum(double l0,
@@ -562,7 +542,6 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   }
   else
   {
-
     ss << "An error occured, Alpha must be 2 or 3 (Alpha = D - 1), instead "
           "Alpha is \t"
        << Alpha << "\n";
