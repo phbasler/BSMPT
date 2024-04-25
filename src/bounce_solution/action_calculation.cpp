@@ -1645,8 +1645,9 @@ void BounceActionInt::CalculateAction(
     // Solves 1D bounce equation
     Solve1DBounce(rho, l, dl_drho, d2l_drho2, error);
 
-    if ((StateOfBounceActionInt != ActionStatus::NotCalculated) or
-        rho.size() < 4)
+    if (StateOfBounceActionInt != ActionStatus::NotCalculated) return;
+
+    if (rho.size() < 4)
     {
       if (rho.size() < 4)
         StateOfBounceActionInt = ActionStatus::NotEnoughPointsForSpline;
