@@ -2405,6 +2405,10 @@ void Vacuum::MultiStepPTMode2(const std::vector<double> &LowTempPoint_in,
 
 void Vacuum::PrintPhasesDiagram(int size)
 {
+  // If logger is disabled no need to calculate this
+  if (not Logger::GetLoggingLevelStatus(LoggingLevel::MinTracerDetailed))
+    return;
+
   std::stringstream ss;
   std::vector<double> T_list;
   std::vector<std::vector<double>> PhaseListPlot;

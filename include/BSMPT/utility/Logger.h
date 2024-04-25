@@ -133,6 +133,11 @@ public:
     Instance().Write(level, toWrite, file, line);
   }
 
+  static bool GetLoggingLevelStatus(LoggingLevel level)
+  {
+    return Instance().mCurrentSetup[level];
+  }
+
   static void Disable() { Instance().Disable(); }
 
 private:
