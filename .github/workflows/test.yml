@@ -43,6 +43,9 @@ jobs:
     - name: Get Preset
       run: python3 .github/GetProfile.py
 
+    - run: cmake --version
+    - run: cmake --list-presets
+
     - name: cmake
       run: cmake --preset $GeneratedCMakeProfile
     - name: build
