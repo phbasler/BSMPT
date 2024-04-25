@@ -1826,6 +1826,9 @@ void BounceActionInt::CalculateAction(
   }
 
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
+  BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed,
+                       "\nAction =\t" + std::to_string(Action) + "\tat T =\t" +
+                           std::to_string(T) + "\n");
   return;
 }
 } // namespace BSMPT
