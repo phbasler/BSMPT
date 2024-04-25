@@ -205,34 +205,34 @@ public:
    * if it is still the global minimum until it is no longer, then the current
    * temperature is stored in globMinEndT)
    * @param globMinEndT temperature at which phase is no longer global minimum
-   * @param point start point for tracking
-   * @param currentT start point temperature for phase tracking
+   * @param point_In start point for tracking
+   * @param currentT_In start point temperature for phase tracking
    * @param finalT end point temperature
-   * @param dT initial temperature step size
+   * @param dT_In initial temperature step size
    * @param output if true tracking output is printed on the screen
    * @param unprotected if true we dont check the hessian
    */
   std::vector<Minimum> TrackPhase(double &globMinEndT,
-                                  std::vector<double> point,
-                                  double currentT,
-                                  double finalT,
-                                  double dT               = 3,
+                                  const std::vector<double> &point_In,
+                                  const double &currentT_In,
+                                  const double &finalT,
+                                  const double &dT_In     = 1,
                                   const bool &output      = true,
                                   const bool &unprotected = false);
 
   /**
    * @brief TrackPhase
-   * @param point start point for tracking
-   * @param currentT start point temperature for phase tracking
+   * @param point_In start point for tracking
+   * @param currentT_In start point temperature for phase tracking
    * @param finalT end point temperature
-   * @param dT initial temperature step size
+   * @param dT_In initial temperature step size
    * @param output if true tracking output is printed on the screen
    * @param unprotected if true we dont check the hessian
    */
-  std::vector<Minimum> TrackPhase(std::vector<double> point,
-                                  double currentT,
-                                  double finalT,
-                                  double dT               = 3,
+  std::vector<Minimum> TrackPhase(const std::vector<double> &point_In,
+                                  const double &currentT_In,
+                                  const double &finalT,
+                                  const double &dT_In     = 1,
                                   const bool &output      = true,
                                   const bool &unprotected = false);
 

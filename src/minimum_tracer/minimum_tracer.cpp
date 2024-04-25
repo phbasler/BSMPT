@@ -279,24 +279,28 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
   return CandidatePoint;
 }
 
-std::vector<Minimum> MinimumTracer::TrackPhase(double &globMinEndT,
-                                               std::vector<double> point,
-                                               double currentT,
-                                               double finalT,
-                                               double dT,
-                                               const bool &output,
-                                               const bool &unprotected)
+std::vector<Minimum>
+MinimumTracer::TrackPhase(double &globMinEndT,
+                          const std::vector<double> &point_In,
+                          const double &currentT_In,
+                          const double &finalT,
+                          const double &dT_In,
+                          const bool &output,
+                          const bool &unprotected)
 {
   // Test phase tracker
   int dim         = this->modelPointer->get_nVEV();
   int IsInMin     = 0;
-  double initialT = currentT;
+  double initialT = currentT_In;
+  double currentT = currentT_In;
+  double dT       = dT_In;
   double initialdT;
   double eps = 0.1;
   double LengthGradient, PotentialDifference, Distance;
   std::function<std::vector<double>(std::vector<double>)> dV;
   std::function<std::vector<std::vector<double>>(std::vector<double>)> Hessian;
-  std::vector<double> new_point = point;
+  std::vector<double> point     = point_In;
+  std::vector<double> new_point = point_In;
   std::vector<double> zeroTemp;
   std::stringstream ss;
   std::vector<Minimum> MinimumList;
@@ -552,22 +556,26 @@ std::vector<Minimum> MinimumTracer::TrackPhase(double &globMinEndT,
   return MinimumList;
 }
 
-std::vector<Minimum> MinimumTracer::TrackPhase(std::vector<double> point,
-                                               double currentT,
-                                               double finalT,
-                                               double dT,
-                                               const bool &output,
-                                               const bool &unprotected)
+std::vector<Minimum>
+MinimumTracer::TrackPhase(const std::vector<double> &point_In,
+                          const double &currentT_In,
+                          const double &finalT,
+                          const double &dT_In,
+                          const bool &output,
+                          const bool &unprotected)
 {
   // Test phase tracker
   int dim         = this->modelPointer->get_nVEV();
   int IsInMin     = 0;
-  double initialT = currentT;
+  double initialT = currentT_In;
+  double currentT = currentT_In;
+  double dT       = dT_In;
   double initialdT;
   double eps = 0.1;
   double LengthGradient, PotentialDifference, Distance;
   std::function<std::vector<double>(std::vector<double>)> dV;
   std::function<std::vector<std::vector<double>>(std::vector<double>)> Hessian;
+  std::vector<double> point     = point_In;
   std::vector<double> new_point = point;
   std::vector<double> zeroTemp;
   std::stringstream ss;
