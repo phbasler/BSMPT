@@ -295,8 +295,6 @@ TEST_CASE("Solve bounce equation with numerical derivative thin walled", "[gw]")
 {
   // Tests bounce solver with numerical derivative
   using namespace BSMPT;
-  SetLogger({"--logginglevel::complete"});
-
   std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
   {
     double c  = 5;
