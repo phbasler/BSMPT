@@ -514,9 +514,9 @@ struct Phase
    * be global minimum
    * @param MinTracerIn MinTracer pointer
    */
-  Phase(std::vector<double> phase_start,
-        double initialT,
-        double finalT,
+  Phase(const std::vector<double> &phase_start,
+        const double &initialT,
+        const double &finalT,
         double &globMinEndT,
         std::shared_ptr<MinimumTracer> &MinTracerIn);
 
@@ -531,10 +531,10 @@ struct Phase
    * be global minimum
    * @param MinTracerIn MinTracer pointer
    */
-  Phase(double initialT,
-        std::vector<double> phase_start,
-        double LowT,
-        double HighT,
+  Phase(const double &initialT,
+        const std::vector<double> &phase_start,
+        const double &LowT,
+        const double &HighT,
         double &globMinEndT,
         std::shared_ptr<MinimumTracer> &MinTracerIn);
 
@@ -548,9 +548,9 @@ struct Phase
    * be global minimum
    * @param MinTracerIn MinTracer pointer
    */
-  Phase(std::vector<double> phase_start,
-        double initialT,
-        double finalT,
+  Phase(const std::vector<double> &phase_start,
+        const double &initialT,
+        const double &finalT,
         std::shared_ptr<MinimumTracer> &MinTracerIn);
 
   /**
@@ -562,10 +562,10 @@ struct Phase
    * @param HighT Highest temperature
    * @param MinTracerIn MinTracer pointer
    */
-  Phase(double initialT,
-        std::vector<double> phase_start,
-        double LowT,
-        double HighT,
+  Phase(const double &initialT,
+        const std::vector<double> &phase_start,
+        const double &LowT,
+        const double &HighT,
         std::shared_ptr<MinimumTracer> &MinTracerIn);
 
   /**

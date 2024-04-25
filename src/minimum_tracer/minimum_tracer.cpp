@@ -1697,19 +1697,21 @@ Phase::Phase()
 {
 }
 
-Phase::Phase(std::vector<double> phase_start,
-             double initialT,
-             double finalT,
+Phase::Phase(const std::vector<double> &phase_start,
+             const double &initialT,
+             const double &finalT,
              double &globMinEndT,
              std::shared_ptr<MinimumTracer> &MinTracerIn)
 {
   MinTracer = MinTracerIn;
+  // Save point
+  std::vector<double> phase = phase_start;
   // Reduce the VEV into the same sector
-  MinTracer->ReduceVEV(phase_start);
+  MinTracer->ReduceVEV(phase);
   // Remove flat directions
-  MinTracer->ConvertToNonFlatDirections(phase_start);
+  MinTracer->ConvertToNonFlatDirections(phase);
   std::vector<Minimum> MinimumList =
-      MinTracer->TrackPhase(globMinEndT, phase_start, initialT, finalT);
+      MinTracer->TrackPhase(globMinEndT, phase, initialT, finalT);
 
   if (MinimumList.size() == 0) return; // Minimum tracker failed
 
@@ -1722,23 +1724,25 @@ Phase::Phase(std::vector<double> phase_start,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-Phase::Phase(double initialT,
-             std::vector<double> phase_start,
-             double LowT,
-             double HighT,
+Phase::Phase(const double &initialT,
+             const std::vector<double> &phase_start,
+             const double &LowT,
+             const double &HighT,
              double &globMinEndT,
              std::shared_ptr<MinimumTracer> &MinTracerIn)
 {
   MinTracer = MinTracerIn;
+  // Save point
+  std::vector<double> phase = phase_start;
   // Reduce the VEV into the same sector
-  MinTracer->ReduceVEV(phase_start);
+  MinTracer->ReduceVEV(phase);
   // Remove flat directions
-  MinTracer->ConvertToNonFlatDirections(phase_start);
+  MinTracer->ConvertToNonFlatDirections(phase);
 
   std::vector<Minimum> MinimumListHigh =
-      MinTracer->TrackPhase(globMinEndT, phase_start, initialT, HighT);
+      MinTracer->TrackPhase(globMinEndT, phase, initialT, HighT);
   std::vector<Minimum> MinimumListLow =
-      MinTracer->TrackPhase(globMinEndT, phase_start, initialT, LowT);
+      MinTracer->TrackPhase(globMinEndT, phase, initialT, LowT);
 
   for (auto Min : MinimumListHigh)
   {
@@ -1755,19 +1759,21 @@ Phase::Phase(double initialT,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-Phase::Phase(std::vector<double> phase_start,
-             double initialT,
-             double finalT,
+Phase::Phase(const std::vector<double> &phase_start,
+             const double &initialT,
+             const double &finalT,
              std::shared_ptr<MinimumTracer> &MinTracerIn)
 {
   MinTracer = MinTracerIn;
+  // Save point
+  std::vector<double> phase = phase_start;
   // Reduce the VEV into the same sector
-  MinTracer->ReduceVEV(phase_start);
+  MinTracer->ReduceVEV(phase);
   // Remove flat directions
-  MinTracer->ConvertToNonFlatDirections(phase_start);
+  MinTracer->ConvertToNonFlatDirections(phase);
 
   std::vector<Minimum> MinimumList =
-      MinTracer->TrackPhase(phase_start, initialT, finalT);
+      MinTracer->TrackPhase(phase, initialT, finalT);
 
   if (MinimumList.size() == 0) return; // Minimum tracker failed
 
@@ -1780,22 +1786,24 @@ Phase::Phase(std::vector<double> phase_start,
   T_high = MinimumPhaseVector.back().temp;
 }
 
-Phase::Phase(double initialT,
-             std::vector<double> phase_start,
-             double LowT,
-             double HighT,
+Phase::Phase(const double &initialT,
+             const std::vector<double> &phase_start,
+             const double &LowT,
+             const double &HighT,
              std::shared_ptr<MinimumTracer> &MinTracerIn)
 {
   MinTracer = MinTracerIn;
+  // Save point
+  std::vector<double> phase = phase_start;
   // Reduce the VEV into the same sector
-  MinTracer->ReduceVEV(phase_start);
+  MinTracer->ReduceVEV(phase);
   // Remove flat directions
-  MinTracer->ConvertToNonFlatDirections(phase_start);
+  MinTracer->ConvertToNonFlatDirections(phase);
 
   std::vector<Minimum> MinimumListHigh =
-      MinTracer->TrackPhase(phase_start, initialT, HighT);
+      MinTracer->TrackPhase(phase, initialT, HighT);
   std::vector<Minimum> MinimumListLow =
-      MinTracer->TrackPhase(phase_start, initialT, LowT);
+      MinTracer->TrackPhase(phase, initialT, LowT);
 
   for (auto Min : MinimumListHigh)
   {
