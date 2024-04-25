@@ -422,8 +422,9 @@ TEST_CASE("Checking phase tracking for BP3 with Mode 0", "[gw]")
 
 TEST_CASE("Checking phase tracking for SM with Mode 1", "[gw]")
 {
-  const std::vector<double> example_point_SM{/* v = */ 245.34120667410863,
-                                             /* vs = */ 0};
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
 
   using namespace BSMPT;
   const auto SMConstants = GetSMConstants();
@@ -440,8 +441,9 @@ TEST_CASE("Checking phase tracking for SM with Mode 1", "[gw]")
 
 TEST_CASE("Checking phase tracking for SM with Mode 2", "[gw]")
 {
-  const std::vector<double> example_point_SM{/* v = */ 245.34120667410863,
-                                             /* vs = */ 0};
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
 
   using namespace BSMPT;
   const auto SMConstants = GetSMConstants();

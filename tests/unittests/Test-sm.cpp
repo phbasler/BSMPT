@@ -17,18 +17,8 @@ using Approx = Catch::Approx;
 #include "SM.h"
 #include <fstream>
 
-const std::vector<double> example_point_SM{/* vh = */ 246.219651,
-                                           /* vs = */ 540.51152,
-                                           /* va = */ 0,
-                                           /* ms = */ -10201.707997,
-                                           /* lambda = */ 0.516782,
-                                           /* delta2 = */ -0.037398,
-                                           /* b2 = */ -370585.40704,
-                                           /* d2 = */ 2.570175,
-                                           /* Reb1 = */ -3722.817741,
-                                           /* Imb1 = */ 0,
-                                           /* Rea1 = */ 0,
-                                           /* Ima1 = */ 0};
+const std::vector<double> example_point_SM{/* muSq = */ -7823.7540500000005,
+                                           /* lambda = */ 0.12905349405143487};
 
 const Compare_SM Expected;
 
