@@ -302,60 +302,7 @@ std::vector<double> cvspline::d2l(double l)
     rr.push_back((gammaPPx[i] - gammaPl[i] * d2ld2x) / dldxSqrd);
   }
 
-  // Numerical version
-
-  double hh = 0.0001;
-
-  std::vector<double> r, dlf2, dlf, dli, dli2;
-  dlf2 = dl(l + 2 * hh); // l + 2 * h value
-  dlf  = dl(l + hh);     // l +  h value
-  dli  = dl(l - hh);     // l -  h value
-  dli2 = dl(l - 2 * hh); // l - 2 * h value
-
-  for (int i = 0; i < dim; i++)
-  {
-    // r.push_back((dlf[i] - dli[i]) / (hh));
-    r.push_back((-dlf2[i] + 8 * dlf[i] - 8 * dli[i] + dli2[i]) / (12 * hh));
-  }
-
-  /*
-  std::vector<double> rrr, v1, v2, v3, v4, v5;
-
-  hh = 0.001;
-
-  v1 = operator()(l + 2 * hh);
-  v2 = operator()(l + 1 * hh);
-  v3 = operator()(l);
-  v4 = operator()(l - 1 * hh);
-  v5 = operator()(l - 2 * hh);
-
-  for (int i = 0; i < dim; i++)
-  {
-    rrr.push_back((-1.0 / 12.0 * v1[i] + 4.0 / 3.0 * v2[i] +
-                   -5.0 / 2.0 * v3[i] + 4.0 / 3.0 * v4[i] -
-                   1.0 / 12.0 * v5[i]) /
-                  (hh * hh));
-  }
-
-
-
-  double sr, srr, srrr;
-
-  for (int i = 0; i < dim; i++)
-  {
-      sr += r[i] * gammaPl[i];
-      srr += rr[i] * gammaPl[i];
-      srrr += rrr[i] * gammaPl[i];
-  }
-  std::cout << gammaPl[0] << "\t" << gammaPl[1] << std::endl;
-  std::cout
-      << sr << "\t" << r[0] << "\t" << r[1] << "\n"
-      << srr << "\t" << rr[0] << "\t" << rr[1] << "\n"
-      << srrr << "\t" << rrr[0] << "\t" << rrr[1] << std::endl;
-
-  */
-
-  return r;
+  return rr;
 }
 std::vector<double> cvspline::operator()(double l)
 {
