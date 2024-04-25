@@ -634,6 +634,59 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 
+TEST_CASE(
+    "Checking phase tracking and GW for BP3 (low sample) (suposed to fail)",
+    "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* msq = */ -15650,
+                                               /* lambda = */ 0.52,
+                                               /* delta2 = */ 0.55,
+                                               /* b2 = */ -8859,
+                                               /* d2 = */ 0.5,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+
+  input.maxpathintegrations = 1;
+  TransitionTracer trans(input);
+  auto output = trans.output_store;
+  REQUIRE(trans.ListBounceSolution.at(0).status_bounce_sol == "failure");
+  REQUIRE(126.0223716 ==
+          Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
+  REQUIRE(isnan(output.vec_trans_data.at(0).nucl_approx_temp));
+  REQUIRE(isnan(output.vec_trans_data.at(0).nucl_temp));
+  REQUIRE(isnan(output.vec_trans_data.at(0).perc_temp));
+  REQUIRE(isnan(output.vec_trans_data.at(0).compl_temp));
+  REQUIRE(isnan(output.vec_gw_data.at(0).alpha));
+  REQUIRE(isnan(output.vec_gw_data.at(0).beta_over_H));
+  REQUIRE(isnan(output.vec_gw_data.at(0).K_sw));
+  REQUIRE(isnan(output.vec_gw_data.at(0).K_turb));
+  REQUIRE(isnan(output.vec_gw_data.at(0).fpeak_sw));
+  REQUIRE(isnan(output.vec_gw_data.at(0).fpeak_turb));
+  REQUIRE(isnan(output.vec_gw_data.at(0).h2Omega_sw));
+  REQUIRE(isnan(output.vec_gw_data.at(0).h2Omega_turb));
+  REQUIRE(isnan(output.vec_gw_data.at(0).SNR_sw));
+  REQUIRE(isnan(output.vec_gw_data.at(0).SNR_turb));
+  REQUIRE(isnan(output.vec_gw_data.at(0).SNR));
+}
+
 TEST_CASE("Test for EW symmetry restoration BP1", "[gw]")
 {
   const std::vector<double> example_point_R2HDM{
