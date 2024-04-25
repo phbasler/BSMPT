@@ -12,6 +12,8 @@
 namespace BSMPT
 {
 
+BounceActionInt::BounceActionInt(){};
+
 BounceActionInt::BounceActionInt(
     std::vector<std::vector<double>> InitPath_In,
     std::vector<double> TrueVacuum_In,
@@ -418,7 +420,7 @@ void BounceActionInt::RK5_step(std::vector<double> y,
   return;
 }
 
-double BounceActionInt::BesselI(double Alpha, double x, int terms)
+double BounceActionInt::BesselI(double alpha, double x, int terms)
 {
   // This implementation seems to converge quite quicly
   // https://en.wikipedia.org/wiki/Bessel_function#:~:text=Modified%20Bessel%20functions%3A%20I%CE%B1%2C%20K%CE%B1%5B,first%20and%20second%20kind%20and%20are%20defined%20as%5B19%5D
@@ -428,8 +430,8 @@ double BounceActionInt::BesselI(double Alpha, double x, int terms)
   while ((m < terms) && (abs((r - r0) / r) > 1e-15))
   {
     r0 = r; // Save step
-    r += 1 / (tgamma(m + Alpha + 1) * tgamma(m + 1)) *
-         std::pow(x / 2.0, 2.0 * m + Alpha); // One more term
+    r += 1 / (tgamma(m + alpha + 1) * tgamma(m + 1)) *
+         std::pow(x / 2.0, 2.0 * m + alpha); // One more term
     m++; // Update later to not mess up summation
   }
   return r;
@@ -479,16 +481,34 @@ std::vector<double> BounceActionInt::ExactSolutionFromMinimum(double l0,
   {
     LinearSolution = [=](const double rho_in)
     {
-      return l - (Initial_lmin + l0Initiallmin *
+      return l - (Initial_lmin + l0_minus_lmin *
                                      sinh(sqrt(TrueVacuumHessian) * rho_in) /
                                      (sqrt(TrueVacuumHessian) * rho_in));
     };
     LinearSolutionDerivative = [=](const double rho_in)
     {
-      return ((l0Initiallmin * cosh(rho_in * std::sqrt(TrueVacuumHessian))) /
+      return ((l0_minus_lmin * cosh(rho_in * std::sqrt(TrueVacuumHessian))) /
               rho_in) -
-             (l0Initiallmin * sinh(rho_in * std::sqrt(TrueVacuumHessian))) /
+             (l0_minus_lmin * sinh(rho_in * std::sqrt(TrueVacuumHessian))) /
                  (pow(rho_in, 2) * std::sqrt(TrueVacuumHessian));
+    };
+  }
+
+  // T = 0
+  if (Alpha == 3)
+  {
+    LinearSolution = [=](const double rho_in)
+    {
+      return l -
+             (Initial_lmin + 2 * l0_minus_lmin *
+                                 BesselI(1, sqrt(TrueVacuumHessian) * rho_in) /
+                                 (sqrt(TrueVacuumHessian) * rho_in));
+    };
+    LinearSolutionDerivative = [=](const double rho_in)
+    {
+      return (
+          (2 * l0_minus_lmin * BesselI(2, rho_in * sqrt(TrueVacuumHessian))) /
+          rho_in);
     };
   }
 
@@ -1022,7 +1042,7 @@ void BounceActionInt::Solve1DBounce(
     if (mode == 0)
     {
       l0            = (lmax + lmin) / 2.0; // Perform binary search
-      l0Initiallmin = l0 - Initial_lmin;
+      l0_minus_lmin = l0 - Initial_lmin;
       IntegrateBounce(
           l0, conv, rho, l, dl_drho, d2l_drho2, 100000, error, error * 0.0015);
       if (StateOfBounceActionInt != ActionStatus::NotCalculated) return;
@@ -1083,8 +1103,8 @@ void BounceActionInt::Solve1DBounce(
     if (mode == 1)
     {
       mu_middle     = (mu_min + mu_max) / 2;
-      l0Initiallmin = exp(mu_middle);
-      l0 = Initial_lmin + l0Initiallmin; // Perform binary search in log space
+      l0_minus_lmin = exp(mu_middle);
+      l0 = Initial_lmin + l0_minus_lmin; // Perform binary search in log space
 
       IntegrateBounce(
           l0, conv, rho, l, dl_drho, d2l_drho2, 100000, error, error * 0.0015);
@@ -1632,17 +1652,34 @@ double BounceActionInt::CalculateKineticTermAction(std::vector<double> &rho,
 {
   double integral  = 0;
   double int_delta = rho[rho.size() - 1] / 2000;
-  for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
+  if (Alpha == 2)
   {
-    // Simpson Integration (1 + 4 + 1)/ 6 * step
-    integral += r * r * (0.5 * std::pow(dl_drho_spl(r), 2));
-    integral +=
-        4 * r * r * (0.5 * std::pow(dl_drho_spl(r + int_delta / 2.0), 2));
-    integral += r * r * (0.5 * std::pow(dl_drho_spl(r + int_delta), 2));
+    for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
+    {
+      // Simpson Integration (1 + 4 + 1)/ 6 * step
+      integral += r * r * (0.5 * std::pow(dl_drho_spl(r), 2));
+      integral +=
+          4 * r * r * (0.5 * std::pow(dl_drho_spl(r + int_delta / 2.0), 2));
+      integral += r * r * (0.5 * std::pow(dl_drho_spl(r + int_delta), 2));
+    }
+    integral = integral * 4 * M_PI * int_delta /
+               6.0; // Angular integration and Simpson step
+    return integral;
   }
-  integral = integral * 4 * M_PI * int_delta /
-             6.0; // Angular integration and Simpson step
-  return integral;
+  else if (Alpha == 3)
+  {
+    for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
+    {
+      // Simpson Integration (1 + 4 + 1)/ 6 * step
+      integral += r * r * r * (0.5 * std::pow(dl_drho_spl(r), 2));
+      integral +=
+          4 * r * r * r * (0.5 * std::pow(dl_drho_spl(r + int_delta / 2.0), 2));
+      integral += r * r * r * (0.5 * std::pow(dl_drho_spl(r + int_delta), 2));
+    }
+    integral = integral * 2 * M_PI * M_PI * int_delta /
+               6.0; // Angular integration and Simpson step
+    return integral;
+  }
 }
 
 double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
@@ -1650,16 +1687,32 @@ double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
 {
   double integral  = 0;
   double int_delta = rho[rho.size() - 1] / 2000;
-  for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
+  if (Alpha == 2)
   {
-    // Simpson Integration (1 + 4 + 1)/ 6 * step
-    integral += r * r * (V(Spline(l_rho_spl(r))));
-    integral += 4 * r * r * (V(Spline(l_rho_spl(r + int_delta / 2.0))));
-    integral += r * r * (V(Spline(l_rho_spl(r + int_delta))));
+    for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
+    {
+      // Simpson Integration (1 + 4 + 1)/ 6 * step
+      integral += r * r * (V(Spline(l_rho_spl(r))));
+      integral += 4 * r * r * (V(Spline(l_rho_spl(r + int_delta / 2.0))));
+      integral += r * r * (V(Spline(l_rho_spl(r + int_delta))));
+    }
+    integral = integral * 4 * M_PI * int_delta /
+               6.0; // Angular integration and Simpson step
+    return integral;
   }
-  integral = integral * 4 * M_PI * int_delta /
-             6.0; // Angular integration and Simpson step
-  return integral;
+  else if (Alpha == 3)
+  {
+    for (double r = 0.0; r <= rho[rho.size() - 1]; r += int_delta)
+    {
+      // Simpson Integration (1 + 4 + 1)/ 6 * step
+      integral += r * r * r * (V(Spline(l_rho_spl(r))));
+      integral += 4 * r * r * r * (V(Spline(l_rho_spl(r + int_delta / 2.0))));
+      integral += r * r * r * (V(Spline(l_rho_spl(r + int_delta))));
+    }
+    integral = integral * 2 * M_PI * M_PI * int_delta /
+               6.0; // Angular integration and Simpson step
+    return integral;
+  }
 }
 
 void BounceActionInt::CalculateAction(

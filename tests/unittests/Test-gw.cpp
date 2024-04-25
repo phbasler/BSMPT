@@ -19,6 +19,18 @@ using Approx = Catch::Approx;
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
 
+TEST_CASE("Test I_\alpha", "[gw]")
+{
+  // Tests bounce solver with analytical derivative
+  using namespace BSMPT;
+
+  BounceActionInt BACalc;
+
+  REQUIRE(BACalc.BesselI(3, 1) == Approx(0.0221684249).epsilon(5e-2));
+  REQUIRE(BACalc.BesselI(1, 3) == Approx(3.953370217).epsilon(5e-2));
+  REQUIRE(BACalc.BesselI(1, 1.5) == Approx(0.9816664).epsilon(5e-2));
+}
+
 TEST_CASE("Solve bounce equation with analytical derivative", "[gw]")
 {
   // Tests bounce solver with analytical derivative
@@ -59,6 +71,51 @@ TEST_CASE("Solve bounce equation with analytical derivative", "[gw]")
   bc.CalculateAction();
 
   REQUIRE(bc.Action == Approx(4.5011952256).epsilon(5e-2));
+}
+
+TEST_CASE(
+    "Solve bounce equation with analytical derivative and Alpha = 3 (T = 0)",
+    "[gw]")
+{
+  // Tests bounce solver with analytical derivative
+  using namespace BSMPT;
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    double c  = 5;
+    double fx = 0;
+    double fy = 80;
+
+    double r1 = x[0] * x[0] + c * x[1] * x[1];
+    double r2 = c * pow(x[0] - 1, 2) + pow(x[1] - 1, 2);
+    double r3 = fx * (0.25 * pow(x[0], 4) - pow(x[0], 3) / 3.);
+    r3 += fy * (0.25 * pow(x[1], 4) - pow(x[1], 3) / 3.);
+
+    return (r1 * r2 + r3);
+  };
+
+  std::function<std::vector<double>(std::vector<double>)> dV =
+      [&](std::vector<double> l0)
+  {
+    int dim = 2;
+    std::vector<double> result(dim);
+    result = {2 * l0[0] * (5 * pow(-1 + l0[0], 2) + pow(-1 + l0[1], 2)) +
+                  10 * (-1 + l0[0]) * (pow(l0[0], 2) + 5 * pow(l0[1], 2)),
+              10 * (5 * pow(-1 + l0[0], 2) + pow(-1 + l0[1], 2)) * l0[1] +
+                  2 * (-1 + l0[1]) * (pow(l0[0], 2) + 5 * pow(l0[1], 2)) +
+                  80 * (-1. * pow(l0[1], 2) + 1. * pow(l0[1], 3))};
+    return result;
+  };
+
+  std::vector<double> FalseVacuum = {0, 0};
+  std::vector<double> TrueVacuum  = {1, 1};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action == Approx(13.3129767888).epsilon(5e-2));
 }
 
 TEST_CASE("Solve bounce equation with numerical derivative", "[gw]")
@@ -226,6 +283,7 @@ TEST_CASE("Solve bounce equation with numerical derivative thin walled", "[gw]")
 {
   // Tests bounce solver with numerical derivative
   using namespace BSMPT;
+  SetLogger({"--logginglevel::complete"});
 
   std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
   {

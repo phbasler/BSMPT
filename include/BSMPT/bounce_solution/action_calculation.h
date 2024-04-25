@@ -73,7 +73,7 @@ private:
    * @brief l0 - Initial_lmin for solutions starting very near the true vacuum
    *
    */
-  double l0Initiallmin;
+  double l0_minus_lmin;
 
   /**
    * @brief True if path deformation reached the desired results without solving
@@ -275,6 +275,12 @@ public:
    *
    */
   tk::spline RasterizeddVdl; // RasterizeddVdl
+
+  /**
+   * @brief Default constructor (unit tests)
+   *
+   */
+  BounceActionInt();
 
   /**
    * @brief Construct a new Bounce Action Int object
