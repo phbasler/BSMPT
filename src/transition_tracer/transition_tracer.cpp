@@ -140,7 +140,8 @@ TransitionTracer::TransitionTracer(user_input &input)
                                   pair,
                                   input.vwall,
                                   input.epsturb,
-                                  input.maxpathintegrations);
+                                  input.maxpathintegrations,
+                                  input.number_of_initial_scan_temperatures);
 
             ListBounceSolution.push_back(bounce);
 

@@ -54,10 +54,17 @@ public:
    * @brief epsilon of turbulence efficiency factor
    */
   double epsturb = 0.1;
+
   /**
    * @brief wall velocity
    */
   double vwall = 0.95;
+
+  /**
+   * @brief number of temperature steps in the initial scan of the bounce solver
+   *
+   */
+  size_t NumberOfInitialScanTemperatures;
 
   /**
    * @brief set to true if nucleation temperature is set
@@ -296,13 +303,16 @@ public:
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
    * @param MaxPathIntegrations_in max number of path integrations
+   * @param NumberOfInitialScanTemperatures_in number of temperature steps in
+   * the initial scan of the bounce solver
    */
   BounceSolution(std::shared_ptr<Class_Potential_Origin> &pointer_in,
                  std::shared_ptr<MinimumTracer> &MinTracer_in,
                  CoexPhases &phase_pair_in,
-                 double UserDefined_vwall_in,
-                 double UserDefined_epsturb_in,
-                 int MaxPathIntegrations_in);
+                 const double &UserDefined_vwall_in,
+                 const double &UserDefined_epsturb_in,
+                 const int &MaxPathIntegrations_in,
+                 const size_t &NumberOfInitialScanTemperatures_in);
 
   /**
    * @brief Construct a new Bounce Sol Calc object. This class takes as input a
@@ -319,13 +329,16 @@ public:
    * https://arxiv.org/abs/1704.05871
    * @param MaxPathIntegrations_in max number of path integrations
    * @param GroupElements_In List of allowed potential symmetries
+   * @param NumberOfInitialScanTemperatures_in number of temperature steps in
+   * the initial scan of the bounce solver
    */
   BounceSolution(std::shared_ptr<Class_Potential_Origin> &pointer_in,
                  std::shared_ptr<MinimumTracer> &MinTracer_in,
                  CoexPhases &phase_pair_in,
-                 double UserDefined_vwall_in,
-                 double UserDefined_epsturb_in,
-                 int MaxPathIntegrations_in,
+                 const double &UserDefined_vwall_in,
+                 const double &UserDefined_epsturb_in,
+                 const int &MaxPathIntegrations_in,
+                 const size_t &NumberOfInitialScanTemperatures_in,
                  std::vector<Eigen::MatrixXd> GroupElements_in);
 
   /**

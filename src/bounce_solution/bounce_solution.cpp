@@ -26,9 +26,10 @@ BounceSolution::BounceSolution(
     std::shared_ptr<Class_Potential_Origin> &pointer_in,
     std::shared_ptr<MinimumTracer> &MinTracer_in,
     CoexPhases &phase_pair_in,
-    double UserDefined_vwall_in,
-    double UserDefined_epsturb_in,
-    int MaxPathIntegrations_in,
+    const double &UserDefined_vwall_in,
+    const double &UserDefined_epsturb_in,
+    const int &MaxPathIntegrations_in,
+    const size_t &NumberOfInitialScanTemperatures_in,
     std::vector<Eigen::MatrixXd> GroupElements_in)
 {
   modelPointer = pointer_in;
@@ -38,9 +39,10 @@ BounceSolution::BounceSolution(
   Tc         = phase_pair.crit_temp;
   Tm         = phase_pair.T_low;
 
-  UserDefined_vwall   = UserDefined_vwall_in;
-  epsturb             = UserDefined_epsturb_in;
-  MaxPathIntegrations = MaxPathIntegrations_in;
+  UserDefined_vwall               = UserDefined_vwall_in;
+  epsturb                         = UserDefined_epsturb_in;
+  MaxPathIntegrations             = MaxPathIntegrations_in;
+  NumberOfInitialScanTemperatures = NumberOfInitialScanTemperatures_in;
   this->CalcGstarPureRad(); // initialize degrees of freedom for purely
                             // radiative universe
   GroupElements = GroupElements_in;
@@ -57,15 +59,17 @@ BounceSolution::BounceSolution(
     std::shared_ptr<Class_Potential_Origin> &pointer_in,
     std::shared_ptr<MinimumTracer> &MinTracer_in,
     CoexPhases &phase_pair_in,
-    double UserDefined_vwall_in,
-    double UserDefined_epsturb_in,
-    int MaxPathIntegrations_in)
+    const double &UserDefined_vwall_in,
+    const double &UserDefined_epsturb_in,
+    const int &MaxPathIntegrations_in,
+    const size_t &NumberOfInitialScanTemperatures_in)
     : BounceSolution(pointer_in,
                      MinTracer_in,
                      phase_pair_in,
                      UserDefined_vwall_in,
                      UserDefined_epsturb_in,
                      MaxPathIntegrations_in,
+                     NumberOfInitialScanTemperatures_in,
                      {Eigen::MatrixXd::Identity(pointer_in->get_nVEV(),
                                                 pointer_in->get_nVEV())})
 {
@@ -128,7 +132,7 @@ void BounceSolution::GWInitialScan()
   }
 
   double last_action = -1;
-  double dT          = (Tc - phase_pair.T_low) / 25.;
+  double dT = (Tc - phase_pair.T_low) / NumberOfInitialScanTemperatures;
   std::vector<double> TrueVacuum, FalseVacuum, last_TrueVacuum,
       last_FalseVacuum;
   std::vector<std::vector<double>> last_path, path;
