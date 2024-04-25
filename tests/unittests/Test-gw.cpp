@@ -584,9 +584,9 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
 
   user_input input;
-  input.modelPointer        = modelPointer;
-  input.maxpathintegrations = 2;
-  input.gw_calculation      = true;
+  input.modelPointer                        = modelPointer;
+  input.gw_calculation                      = true;
+  input.number_of_initial_scan_temperatures = 6;
   TransitionTracer trans(input);
   trans.ListBounceSolution.at(0).CalculatePercolationTemp();
 
