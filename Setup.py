@@ -63,7 +63,9 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
 
 def get_gcc_version():
     version_response = subprocess.check_output('gcc --version'.split(), encoding="UTF-8").partition("\n")[0]
-    return "11"
+    semver_string=version_response[version_response.rfind(' ')+1:]
+    major = semver_string.partition('.')[0]
+    return major
 
 def get_arch():
     arch = "x86_64"
