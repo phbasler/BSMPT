@@ -225,8 +225,8 @@ double BounceActionInt::d2ldrho2(double l, double rho, double dldrho)
   return (RasterizeddVdl(l) - Alpha * dldrho / rho);
 }
 
-void BounceActionInt::AuxFunctionDev(double rho,
-                                     std::vector<double> dvs,
+void BounceActionInt::AuxFunctionDev(const double &rho,
+                                     const std::vector<double> &dvs,
                                      std::vector<double> &aks)
 {
   // Array of the derivatives

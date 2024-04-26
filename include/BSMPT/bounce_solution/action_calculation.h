@@ -433,8 +433,9 @@ public:
    * @param dvs are the functions values.
    * @param aks are used to return the function derivatives.
    */
-  void
-  AuxFunctionDev(double rho, std::vector<double> dvs, std::vector<double> &aks);
+  void AuxFunctionDev(const double &rho,
+                      const std::vector<double> &dvs,
+                      std::vector<double> &aks);
 
   /**
    * @brief Runge-Kutta 5th order step.
