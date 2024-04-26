@@ -747,7 +747,6 @@ double BounceActionInt::BackwardsPropagation()
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       ss.str(std::string());
 
-      // TODO improve this!
       l0  = 0;
       l00 = 1e100;
       for (i = 0; i < 1000; i++)
@@ -768,7 +767,6 @@ double BounceActionInt::BackwardsPropagation()
   ss << "Backwards propagation not converging\t" << l0
      << "\t using minus 0.1% Spline length as backwards propagation\n";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-  // TODO improve this!
 
   return (-1 * Spline.L / 1000.0);
 }
