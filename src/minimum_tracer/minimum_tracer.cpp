@@ -169,9 +169,9 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
     return this->modelPointer->VEff(res, T_1) / (1 + T_1 * T_1);
   };
-  dV_1 = [=](auto const &arg) { return NablaNumerical(arg, V_1, eps, dim); };
-  Hessian_1 = [=](auto const &arg)
-  { return HessianNumerical(arg, V_1, eps, dim); };
+  dV_1 = [&](auto const &arg) { return NablaNumerical(arg, V_1, eps, dim); };
+  Hessian_1 = [&](auto const &arg)
+  { return HessianNumerical_MT(arg, V_1, eps, dim); };
 
   // Define potential 2
   V_2 = [&](std::vector<double> vev)
@@ -182,7 +182,7 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
   };
   dV_2 = [=](auto const &arg) { return NablaNumerical(arg, V_2, eps, dim); };
   Hessian_2 = [=](auto const &arg)
-  { return HessianNumerical(arg, V_2, eps, dim); };
+  { return HessianNumerical_MT(arg, V_2, eps, dim); };
 
   // Initial guess for middle point
   point_m = point_1;
@@ -220,7 +220,7 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
     };
     dV_m = [=](auto const &arg) { return NablaNumerical(arg, V_m, eps, dim); };
     Hessian_m = [=](auto const &arg)
-    { return HessianNumerical(arg, V_m, eps, dim); };
+    { return HessianNumerical_MT(arg, V_m, eps, dim); };
     point_m =
         LocateMinimum(point_m, dV_m, Hessian_m, 1e-3 * dim / (1 + T_m * T_m));
     ev_m = SmallestEigenvalue(point_m, Hessian_m);
@@ -313,7 +313,7 @@ MinimumTracer::TrackPhase(double &globMinEndT,
     };
     dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
     Hessian = [=](auto const &arg)
-    { return HessianNumerical(arg, V, eps, dim); };
+    { return HessianNumerical_MT(arg, V, eps, dim); };
 
     // Locate the minimum
     new_point =
@@ -586,7 +586,7 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
     };
     dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
     Hessian = [=](auto const &arg)
-    { return HessianNumerical(arg, V, eps, dim); };
+    { return HessianNumerical_MT(arg, V, eps, dim); };
 
     // Locate the minimum
     new_point =
@@ -1259,7 +1259,7 @@ int MinimumTracer::IsThereEWSymmetryRestoration()
     };
     dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
     Hessian = [=](auto const &arg)
-    { return HessianNumerical(arg, V, eps, dim); };
+    { return HessianNumerical_MT(arg, V, eps, dim); };
 
     ActualSmallestEigenvalue = SmallestEigenvalue(point, Hessian);
 
