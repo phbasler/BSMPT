@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 /*
- * vev_spline.cpp
+ * spline.cpp
  *
  * cubic spline interpolation for path in VEV space using constant speed (in
  * particular = 1)
@@ -18,34 +18,6 @@
  */
 
 #include <BSMPT/utility/const_velocity_spline.h>
-
-namespace cvspline
-{
-double length_vector(const std::vector<double> &x0, const int &dim)
-{
-  double r = 0.0;
-  for (int i = 0; i < dim; i++)
-  {
-    r += x0[i] * x0[i];
-  }
-  return std::sqrt(r);
-}
-std::vector<std::vector<double>> transpose(
-    std::vector<std::vector<double>> &A) // Function to transpose vector list
-{
-  int rows = A.size();
-  if (rows == 0) return {{}};
-  int cols = A[0].size();
-  std::vector<std::vector<double>> r(cols, std::vector<double>(rows));
-  for (int i = 0; i < rows; ++i)
-  {
-    for (int j = 0; j < cols; ++j)
-    {
-      r[j][i] = A[i][j];
-    }
-  }
-  return r;
-}
 
 double cvspline::lin_abs_deriv(
     double x) // Length of vector speed of non constant velocity spline
@@ -142,14 +114,14 @@ void cvspline::initialize() // Initalizes the class
     {
       direction[j] -= phipath[i - 1][j];
     }
-    lin_lengths.push_back(lin_lengths.back() + length_vector(direction, dim));
+    lin_lengths.push_back(lin_lengths.back() + BSMPT::L2NormVector(direction));
   }
 
   linL =
       lin_lengths
           .back(); // Linear Length is the last element of the list of lengths
 
-  transposed_phi = transpose(
+  transposed_phi = BSMPT::Transpose(
       phipath); // Transposes the path, helpfull when computing the spline
   splines = {}; // Reset splines list
   for (int i = 0; i < dim; i++)
@@ -374,4 +346,3 @@ void cvspline::save_path(std::string file_name, bool header)
 
   myfile.close();
 }
-} // namespace cvspline

@@ -64,6 +64,23 @@ double L2NormVector(const std::vector<double> &vec)
   return std::sqrt(r);
 }
 
+std::vector<std::vector<double>>
+Transpose(const std::vector<std::vector<double>> &A)
+{
+  int rows = A.size();
+  if (rows == 0) return {{}};
+  int cols = A[0].size();
+  std::vector<std::vector<double>> r(cols, std::vector<double>(rows));
+  for (int i = 0; i < rows; ++i)
+  {
+    for (int j = 0; j < cols; ++j)
+    {
+      r[j][i] = A[i][j];
+    }
+  }
+  return r;
+}
+
 bool StringEndsWith(const std::string &str, const std::string &suffix)
 {
   return str.size() >= suffix.size() and

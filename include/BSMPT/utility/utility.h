@@ -250,6 +250,14 @@ std::vector<T> flatten(std::vector<std::vector<T>> const &vec)
 double L2NormVector(const std::vector<double> &vec);
 
 /**
+ * @brief Calculates the tranpose of a matrix
+ * @param A matrix to be transposed
+ * @return std::vector<std::vector<double>> transposed matrix
+ */
+std::vector<std::vector<double>>
+Transpose(const std::vector<std::vector<double>> &A);
+
+/**
  * @brief operator << overload for the model parameter
  */
 namespace ModelID

@@ -71,7 +71,7 @@ void BounceActionInt::SetPath(std::vector<std::vector<double>> InitPath_In)
   this->Path = InitPath_In;
   // Find minimums near the initial and last position
 
-  this->Spline = cvspline::cvspline(this->Path);
+  this->Spline = cvspline(this->Path);
   this->Path   = Spline.phipath;
 
   if (V(InitPath_In.front()) > V(InitPath_In.back()))
@@ -185,23 +185,6 @@ std::vector<std::vector<double>> BounceActionInt::HessianNumerical(
     }
   }
   return result;
-}
-
-std::vector<std::vector<double>>
-BounceActionInt::Transpose(std::vector<std::vector<double>> &A)
-{
-  int rows = A.size();
-  if (rows == 0) return {{}};
-  int cols = A[0].size();
-  std::vector<std::vector<double>> r(cols, std::vector<double>(rows));
-  for (int i = 0; i < rows; ++i)
-  {
-    for (int j = 0; j < cols; ++j)
-    {
-      r[j][i] = A[i][j];
-    }
-  }
-  return r;
 }
 
 std::vector<double> BounceActionInt::NormalForce(double l,
@@ -1188,9 +1171,10 @@ void BounceActionInt::SinglePathDeformation(
   double lf = l.back();
   // Difference between to knots to calculate Bernstein kernel
   // Transposes the path of differences
-  double delta                                          = (lf - l0) / 300;
-  std::vector<std::vector<double>> transposed_next_path = Transpose(next_path);
-  std::vector<std::vector<double>> last_forces          = forces;
+  double delta = (lf - l0) / 300;
+  std::vector<std::vector<double>> transposed_next_path =
+      BSMPT::Transpose(next_path);
+  std::vector<std::vector<double>> last_forces = forces;
 
   for (int d = 0; d < dim; d++)
   {

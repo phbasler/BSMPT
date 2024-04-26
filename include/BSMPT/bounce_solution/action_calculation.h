@@ -265,7 +265,7 @@ public:
    *  The parameterization is the length along the spline.
    *
    */
-  cvspline::cvspline Spline; // Constant velocity spline object
+  cvspline Spline; // Constant velocity spline object
   /**
    * @brief Spline used to save \f$ \frac{dV}{dl} \f$
    *
@@ -412,16 +412,6 @@ public:
    * @return double Returns \f$ \frac{d^2V}{dl^2}  \f$
    */
   double Calc_d2Vdl2(double l);
-
-  /**
-   * @brief Auxiliary finction to compute the transpose of a matrix
-   *
-   * @param A is the \f$ n \times m \f$ matrix to be tranposed.
-   * @return std::vector<std::vector<double>> \f$ m \times n \f$ transposed
-   * matrix.
-   */
-  std::vector<std::vector<double>>
-  Transpose(std::vector<std::vector<double>> &A);
 
   /**
    * @brief Calculated the normal force \f$ \vec{N} \f$ on a @ref spline point.
