@@ -281,7 +281,7 @@ public:
    * @brief Construct a new Bounce Sol Calc object. Used for testing
    * @param pointer_in model pointer
    */
-  BounceSolution(std::shared_ptr<Class_Potential_Origin> &pointer_in);
+  BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in);
 
   /**
    * @brief Construct a new Bounce Sol Calc object. This class takes as input a
@@ -301,8 +301,8 @@ public:
    * @param NumberOfInitialScanTemperatures_in number of temperature steps in
    * the initial scan of the bounce solver
    */
-  BounceSolution(std::shared_ptr<Class_Potential_Origin> &pointer_in,
-                 std::shared_ptr<MinimumTracer> &MinTracer_in,
+  BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
+                 const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
                  const double &UserDefined_epsturb_in,
@@ -327,8 +327,8 @@ public:
    * @param NumberOfInitialScanTemperatures_in number of temperature steps in
    * the initial scan of the bounce solver
    */
-  BounceSolution(std::shared_ptr<Class_Potential_Origin> &pointer_in,
-                 std::shared_ptr<MinimumTracer> &MinTracer_in,
+  BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
+                 const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
                  const double &UserDefined_epsturb_in,
