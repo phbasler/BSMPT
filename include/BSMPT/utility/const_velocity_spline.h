@@ -136,7 +136,7 @@ public:
    *
    * @param phipath_in knots of the path
    */
-  cvspline(std::vector<std::vector<double>> phipath_in);
+  cvspline(const std::vector<std::vector<double>> &phipath_in);
   /**
    * @brief Construct a new cvspline object
    *
@@ -144,7 +144,8 @@ public:
    * @param input_num_inter number of interpolations between \f$ x \f$ and \f$ l
    * \f$
    */
-  cvspline(std::vector<std::vector<double>> phipath_in, int input_num_inter);
+  cvspline(const std::vector<std::vector<double>> &phipath_in,
+           int input_num_inter);
   /**
    * @brief initialize the constant velocity spline using the given path
    *
@@ -157,7 +158,9 @@ public:
    * @param new_vev value of the knot
    * @param compile initialize after point is added?
    */
-  void add_point(double p, std::vector<double> new_vev, bool compile = true);
+  void add_point(const double &p,
+                 const std::vector<double> &new_vev,
+                 const bool &compile = true);
   /**
    * @brief derivative of the constant velocity spline in \f$ x \f$
    *
@@ -198,5 +201,5 @@ public:
    * @param file_name name of the file
    * @param header print the names of the VEVs in the first column?
    */
-  void save_path(std::string file_name, bool header = true);
+  void save_path(const std::string &file_name, const bool &header = true);
 };

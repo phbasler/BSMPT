@@ -53,7 +53,7 @@ double cvspline::Simpson_step(
 
 cvspline::cvspline() = default; // Default constructor
 
-cvspline::cvspline(std::vector<std::vector<double>> phipath_in)
+cvspline::cvspline(const std::vector<std::vector<double>> &phipath_in)
     : num_inter(10000) // Constructor
 {
   this->phipath = phipath_in;
@@ -61,7 +61,7 @@ cvspline::cvspline(std::vector<std::vector<double>> phipath_in)
 }
 
 cvspline::cvspline(
-    std::vector<std::vector<double>> phipath_in,
+    const std::vector<std::vector<double>> &phipath_in,
     int input_num_inter) // Constructor with specified num of interpolations
 {
   this->phipath = phipath_in;
@@ -163,7 +163,9 @@ void cvspline::initialize() // Initalizes the class
     vev_position.push_back(x_to_l(lin_lengths[i]));
   }
 }
-void cvspline::add_point(double p, std::vector<double> new_vev, bool compile)
+void cvspline::add_point(const double &p,
+                         const std::vector<double> &new_vev,
+                         const bool &compile)
 {
   // Function to add a new vev "new_vev" at the position "p"
   // We allow for p < 0 as an easy way to add a new true vacuum
@@ -322,7 +324,7 @@ void cvspline::print_path()
 
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
 }
-void cvspline::save_path(std::string file_name, bool header)
+void cvspline::save_path(const std::string &file_name, const bool &header)
 {
   std::ofstream myfile;
   myfile.open(file_name);
