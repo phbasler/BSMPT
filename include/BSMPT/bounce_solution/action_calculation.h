@@ -357,7 +357,7 @@ public:
    * phi
    */
   static std::vector<double>
-  NablaNumerical(const std::vector<double> &phi0,
+  NablaNumerical(const std::vector<double> &phi,
                  const std::function<double(std::vector<double>)> &V,
                  const double &eps,
                  const int &dim);
