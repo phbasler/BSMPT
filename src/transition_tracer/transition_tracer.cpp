@@ -163,18 +163,22 @@ TransitionTracer::TransitionTracer(user_input &input)
                 new_transition_data.nucl_approx_temp =
                     bounce.GetNucleationTempApprox();
                 new_transition_data.nucl_approx_true_vev =
-                    pair.true_phase.Get(new_transition_data.nucl_approx_temp)
+                    pair.true_phase
+                        .Get(new_transition_data.nucl_approx_temp.value_or(
+                            EmptyValue))
                         .point;
                 new_transition_data.nucl_approx_false_vev =
-                    pair.false_phase.Get(new_transition_data.nucl_approx_temp)
+                    pair.false_phase
+                        .Get(new_transition_data.nucl_approx_temp.value_or(
+                            EmptyValue))
                         .point;
               }
               else
               {
                 new_transition_data.nucl_approx_true_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
                 new_transition_data.nucl_approx_false_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
               }
 
               bounce.CalculateNucleationTemp();
@@ -184,16 +188,20 @@ TransitionTracer::TransitionTracer(user_input &input)
               {
                 new_transition_data.nucl_temp = bounce.GetNucleationTemp();
                 new_transition_data.nucl_true_vev =
-                    pair.true_phase.Get(new_transition_data.nucl_temp).point;
+                    pair.true_phase
+                        .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
+                        .point;
                 new_transition_data.nucl_false_vev =
-                    pair.false_phase.Get(new_transition_data.nucl_temp).point;
+                    pair.false_phase
+                        .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
+                        .point;
               }
               else
               {
                 new_transition_data.nucl_true_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
                 new_transition_data.nucl_false_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
               }
 
               bounce.CalculatePercolationTemp();
@@ -203,16 +211,20 @@ TransitionTracer::TransitionTracer(user_input &input)
               {
                 new_transition_data.perc_temp = bounce.GetPercolationTemp();
                 new_transition_data.perc_true_vev =
-                    pair.true_phase.Get(new_transition_data.perc_temp).point;
+                    pair.true_phase
+                        .Get(new_transition_data.perc_temp.value_or(EmptyValue))
+                        .point;
                 new_transition_data.perc_false_vev =
-                    pair.false_phase.Get(new_transition_data.perc_temp).point;
+                    pair.false_phase
+                        .Get(new_transition_data.perc_temp.value_or(EmptyValue))
+                        .point;
               }
               else
               {
                 new_transition_data.perc_true_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
                 new_transition_data.perc_false_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
               }
 
               bounce.CalculateCompletionTemp();
@@ -222,16 +234,22 @@ TransitionTracer::TransitionTracer(user_input &input)
               {
                 new_transition_data.compl_temp = bounce.GetCompletionTemp();
                 new_transition_data.compl_true_vev =
-                    pair.true_phase.Get(new_transition_data.compl_temp).point;
+                    pair.true_phase
+                        .Get(
+                            new_transition_data.compl_temp.value_or(EmptyValue))
+                        .point;
                 new_transition_data.compl_false_vev =
-                    pair.false_phase.Get(new_transition_data.compl_temp).point;
+                    pair.false_phase
+                        .Get(
+                            new_transition_data.compl_temp.value_or(EmptyValue))
+                        .point;
               }
               else
               {
                 new_transition_data.compl_true_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
                 new_transition_data.compl_false_vev =
-                    std::vector<double>(num_vev, NAN);
+                    std::vector<double>(num_vev, EmptyValue);
               }
 
               BSMPT::StatusTemperature trans_status =
@@ -321,29 +339,29 @@ TransitionTracer::TransitionTracer(user_input &input)
                   BSMPT::StatusTemperature::NaN);
 
               new_transition_data.nucl_approx_true_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.nucl_approx_false_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.nucl_true_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.nucl_false_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.perc_true_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.perc_false_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.compl_true_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
               new_transition_data.compl_false_vev =
-                  std::vector<double>(num_vev, NAN);
+                  std::vector<double>(num_vev, EmptyValue);
             }
           }
           else
           {
             new_transition_data.crit_true_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.crit_false_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
 
             output_store.status.status_bounce_sol.push_back(StatusGW::NotSet);
 
@@ -357,21 +375,21 @@ TransitionTracer::TransitionTracer(user_input &input)
                 BSMPT::StatusTemperature::NaN);
 
             new_transition_data.nucl_approx_true_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.nucl_approx_false_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.nucl_true_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.nucl_false_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.perc_true_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.perc_false_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.compl_true_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
             new_transition_data.compl_false_vev =
-                std::vector<double>(num_vev, NAN);
+                std::vector<double>(num_vev, EmptyValue);
           }
 
           new_transition_data.crit_temp = pair.crit_temp;
@@ -402,7 +420,8 @@ TransitionTracer::TransitionTracer(user_input &input)
             if (pair.false_phase.id == tmp_phase_id)
             {
               pair_compl_temp =
-                  output_store.vec_trans_data.at(pair.coex_pair_id).compl_temp;
+                  output_store.vec_trans_data.at(pair.coex_pair_id)
+                      .compl_temp.value_or(EmptyValue);
 
               if (std::isnan(pair_compl_temp)) // completion temperature not
                                                // reached in pair

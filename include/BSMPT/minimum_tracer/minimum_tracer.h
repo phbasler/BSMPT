@@ -27,6 +27,11 @@ namespace BSMPT
 {
 
 /**
+ * @brief Value to be store in the columns without any values
+ *
+ */
+const double EmptyValue = NAN;
+/**
  * @brief Possible NLO stability status
  *
  */

@@ -518,34 +518,39 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   auto output = trans.output_store;
 
   REQUIRE(126.0223716 ==
-          Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).crit_temp.value()).epsilon(1e-2));
   REQUIRE(121.0869527 ==
-          Approx(output.vec_trans_data.at(0).nucl_approx_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).nucl_approx_temp.value())
+              .epsilon(1e-2));
   REQUIRE(121.212833 ==
-          Approx(output.vec_trans_data.at(0).nucl_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).nucl_temp.value()).epsilon(1e-2));
   REQUIRE(120.7670659 ==
-          Approx(output.vec_trans_data.at(0).perc_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).perc_temp.value()).epsilon(1e-2));
   REQUIRE(120.7267244 ==
-          Approx(output.vec_trans_data.at(0).compl_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).compl_temp.value()).epsilon(1e-2));
 
-  REQUIRE(0.00537281 == Approx(output.vec_gw_data.at(0).alpha).epsilon(1e-2));
+  REQUIRE(0.00537281 ==
+          Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
-          Approx(output.vec_gw_data.at(0).beta_over_H).epsilon(1e-2));
-  REQUIRE(4.40964e-05 == Approx(output.vec_gw_data.at(0).K_sw).epsilon(1e-2));
-  REQUIRE(4.40964e-06 == Approx(output.vec_gw_data.at(0).K_turb).epsilon(1e-2));
-  REQUIRE(0.0884755 == Approx(output.vec_gw_data.at(0).fpeak_sw).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
+  REQUIRE(4.40964e-05 ==
+          Approx(output.vec_gw_data.at(0).K_sw.value()).epsilon(1e-2));
+  REQUIRE(4.40964e-06 ==
+          Approx(output.vec_gw_data.at(0).K_turb.value()).epsilon(1e-2));
+  REQUIRE(0.0884755 ==
+          Approx(output.vec_gw_data.at(0).fpeak_sw.value()).epsilon(1e-2));
   REQUIRE(0.269136 ==
-          Approx(output.vec_gw_data.at(0).fpeak_turb).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).fpeak_turb.value()).epsilon(1e-2));
   REQUIRE(1.70812e-20 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_sw).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).h2Omega_sw.value()).epsilon(1e-2));
   REQUIRE(3.69052e-16 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_turb).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).h2Omega_turb.value()).epsilon(1e-2));
   REQUIRE(2.483231907e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR_sw).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(1e-2));
   REQUIRE(2.582886247e-20 ==
-          Approx(output.vec_gw_data.at(0).SNR_turb).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(1e-2));
   REQUIRE(2.483231907e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(1e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
@@ -593,34 +598,39 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   auto output = trans.output_store;
 
   REQUIRE(126.0223716 ==
-          Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).crit_temp.value()).epsilon(1e-2));
   REQUIRE(121.0869527 ==
-          Approx(output.vec_trans_data.at(0).nucl_approx_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).nucl_approx_temp.value())
+              .epsilon(1e-2));
   REQUIRE(121.212833 ==
-          Approx(output.vec_trans_data.at(0).nucl_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).nucl_temp.value()).epsilon(1e-2));
   REQUIRE(120.7670659 ==
-          Approx(output.vec_trans_data.at(0).perc_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).perc_temp.value()).epsilon(1e-2));
   REQUIRE(120.7267244 ==
-          Approx(output.vec_trans_data.at(0).compl_temp).epsilon(1e-2));
+          Approx(output.vec_trans_data.at(0).compl_temp.value()).epsilon(1e-2));
 
-  REQUIRE(0.00537281 == Approx(output.vec_gw_data.at(0).alpha).epsilon(1e-2));
+  REQUIRE(0.00537281 ==
+          Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
-          Approx(output.vec_gw_data.at(0).beta_over_H).epsilon(1e-2));
-  REQUIRE(4.40964e-05 == Approx(output.vec_gw_data.at(0).K_sw).epsilon(1e-2));
-  REQUIRE(4.40964e-06 == Approx(output.vec_gw_data.at(0).K_turb).epsilon(1e-2));
-  REQUIRE(0.0884755 == Approx(output.vec_gw_data.at(0).fpeak_sw).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
+  REQUIRE(4.40964e-05 ==
+          Approx(output.vec_gw_data.at(0).K_sw.value()).epsilon(1e-2));
+  REQUIRE(4.40964e-06 ==
+          Approx(output.vec_gw_data.at(0).K_turb.value()).epsilon(1e-2));
+  REQUIRE(0.0884755 ==
+          Approx(output.vec_gw_data.at(0).fpeak_sw.value()).epsilon(1e-2));
   REQUIRE(0.269136 ==
-          Approx(output.vec_gw_data.at(0).fpeak_turb).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).fpeak_turb.value()).epsilon(1e-2));
   REQUIRE(1.70812e-20 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_sw).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).h2Omega_sw.value()).epsilon(1e-2));
   REQUIRE(3.69052e-16 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_turb).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).h2Omega_turb.value()).epsilon(1e-2));
   REQUIRE(2.483231907e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR_sw).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(1e-2));
   REQUIRE(2.582886247e-20 ==
-          Approx(output.vec_gw_data.at(0).SNR_turb).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(1e-2));
   REQUIRE(2.483231907e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(1e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
@@ -670,22 +680,22 @@ TEST_CASE(
   REQUIRE(trans.ListBounceSolution.at(0).status_bounce_sol ==
           StatusGW::Failure);
   REQUIRE(126.0223716 ==
-          Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
-  REQUIRE(isnan(output.vec_trans_data.at(0).nucl_approx_temp));
-  REQUIRE(isnan(output.vec_trans_data.at(0).nucl_temp));
-  REQUIRE(isnan(output.vec_trans_data.at(0).perc_temp));
-  REQUIRE(isnan(output.vec_trans_data.at(0).compl_temp));
-  REQUIRE(isnan(output.vec_gw_data.at(0).alpha));
-  REQUIRE(isnan(output.vec_gw_data.at(0).beta_over_H));
-  REQUIRE(isnan(output.vec_gw_data.at(0).K_sw));
-  REQUIRE(isnan(output.vec_gw_data.at(0).K_turb));
-  REQUIRE(isnan(output.vec_gw_data.at(0).fpeak_sw));
-  REQUIRE(isnan(output.vec_gw_data.at(0).fpeak_turb));
-  REQUIRE(isnan(output.vec_gw_data.at(0).h2Omega_sw));
-  REQUIRE(isnan(output.vec_gw_data.at(0).h2Omega_turb));
-  REQUIRE(isnan(output.vec_gw_data.at(0).SNR_sw));
-  REQUIRE(isnan(output.vec_gw_data.at(0).SNR_turb));
-  REQUIRE(isnan(output.vec_gw_data.at(0).SNR));
+          Approx(output.vec_trans_data.at(0).crit_temp.value()).epsilon(1e-2));
+  REQUIRE(not output.vec_trans_data.at(0).nucl_approx_temp.has_value());
+  REQUIRE(not output.vec_trans_data.at(0).nucl_temp.has_value());
+  REQUIRE(not output.vec_trans_data.at(0).perc_temp.has_value());
+  REQUIRE(not output.vec_trans_data.at(0).compl_temp.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).alpha.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).beta_over_H.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).K_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).K_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).fpeak_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).fpeak_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).h2Omega_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).h2Omega_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).SNR_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).SNR_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).SNR.has_value());
 }
 
 TEST_CASE("Test for EW symmetry restoration BP1", "[gw]")

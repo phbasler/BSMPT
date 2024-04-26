@@ -167,40 +167,43 @@ try
         {
           output_contents.at(count - 1)
               << output.status.status_crit.at(i) << sep
-              << output.vec_trans_data.at(i).crit_temp << sep
-              << output.vec_trans_data.at(i).crit_false_vev << sep
+              << output.vec_trans_data.at(i).crit_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).crit_false_vev << sep
               << output.vec_trans_data.at(i).crit_true_vev << sep
               << output.status.status_bounce_sol.at(i) << sep
               << output.status.status_nucl_approx.at(i) << sep
-              << output.vec_trans_data.at(i).nucl_approx_temp << sep
-              << output.vec_trans_data.at(i).nucl_approx_false_vev << sep
+              << output.vec_trans_data.at(i).nucl_approx_temp.value_or(
+                     EmptyValue)
+              << sep << output.vec_trans_data.at(i).nucl_approx_false_vev << sep
               << output.vec_trans_data.at(i).nucl_approx_true_vev << sep
               << output.status.status_nucl.at(i) << sep
-              << output.vec_trans_data.at(i).nucl_temp << sep
-              << output.vec_trans_data.at(i).nucl_false_vev << sep
+              << output.vec_trans_data.at(i).nucl_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).nucl_false_vev << sep
               << output.vec_trans_data.at(i).nucl_true_vev << sep
               << output.status.status_perc.at(i) << sep
-              << output.vec_trans_data.at(i).perc_temp << sep
-              << output.vec_trans_data.at(i).perc_false_vev << sep
+              << output.vec_trans_data.at(i).perc_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).perc_false_vev << sep
               << output.vec_trans_data.at(i).perc_true_vev << sep
               << output.status.status_compl.at(i) << sep
-              << output.vec_trans_data.at(i).compl_temp << sep
-              << output.vec_trans_data.at(i).compl_false_vev << sep
+              << output.vec_trans_data.at(i).compl_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).compl_false_vev << sep
               << output.vec_trans_data.at(i).compl_true_vev << sep
               << output.vec_gw_data.at(i).status_gw << sep
-              << output.vec_gw_data.at(i).trans_temp << sep
-              << output.vec_gw_data.at(i).vwall << sep
-              << output.vec_gw_data.at(i).alpha << sep
-              << output.vec_gw_data.at(i).beta_over_H << sep
-              << output.vec_gw_data.at(i).K_sw << sep
-              << output.vec_gw_data.at(i).fpeak_sw << sep
-              << output.vec_gw_data.at(i).h2Omega_sw << sep
-              << output.vec_gw_data.at(i).SNR_sw << sep
-              << output.vec_gw_data.at(i).K_turb << sep
-              << output.vec_gw_data.at(i).fpeak_turb << sep
-              << output.vec_gw_data.at(i).h2Omega_turb << sep
-              << output.vec_gw_data.at(i).SNR_turb << sep
-              << output.vec_gw_data.at(i).SNR << sep;
+              << output.vec_gw_data.at(i).trans_temp.value_or(EmptyValue) << sep
+              << output.vec_gw_data.at(i).vwall.value_or(EmptyValue) << sep
+              << output.vec_gw_data.at(i).alpha.value_or(EmptyValue) << sep
+              << output.vec_gw_data.at(i).beta_over_H.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).K_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).fpeak_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).h2Omega_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).K_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).fpeak_turb.value_or(EmptyValue)
+              << sep
+              << output.vec_gw_data.at(i).h2Omega_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR.value_or(EmptyValue)
+              << sep;
         }
       }
 

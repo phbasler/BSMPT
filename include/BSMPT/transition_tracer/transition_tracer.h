@@ -95,11 +95,11 @@ struct status_codes
  */
 struct transition_data
 {
-  double crit_temp        = NAN;
-  double nucl_approx_temp = NAN;
-  double nucl_temp        = NAN;
-  double perc_temp        = NAN;
-  double compl_temp       = NAN;
+  std::optional<double> crit_temp;
+  std::optional<double> nucl_approx_temp;
+  std::optional<double> nucl_temp;
+  std::optional<double> perc_temp;
+  std::optional<double> compl_temp;
 
   std::vector<double> crit_true_vev;
   std::vector<double> crit_false_vev;
@@ -118,25 +118,25 @@ struct transition_data
  */
 struct gw_data
 {
-  double vwall = NAN;
+  std::optional<double> vwall;
 
-  double alpha       = NAN;
-  double beta_over_H = NAN;
+  std::optional<double> alpha;
+  std::optional<double> beta_over_H;
 
-  double K_sw   = NAN;
-  double K_turb = NAN;
+  std::optional<double> K_sw;
+  std::optional<double> K_turb;
 
-  double fpeak_sw     = NAN;
-  double fpeak_turb   = NAN;
-  double h2Omega_sw   = NAN;
-  double h2Omega_turb = NAN;
+  std::optional<double> fpeak_sw;
+  std::optional<double> fpeak_turb;
+  std::optional<double> h2Omega_sw;
+  std::optional<double> h2Omega_turb;
 
-  double SNR_sw   = NAN;
-  double SNR_turb = NAN;
-  double SNR      = NAN;
+  std::optional<double> SNR_sw;
+  std::optional<double> SNR_turb;
+  std::optional<double> SNR;
 
   StatusGW status_gw = StatusGW::NotSet;
-  double trans_temp  = NAN;
+  std::optional<double> trans_temp;
 };
 
 struct output

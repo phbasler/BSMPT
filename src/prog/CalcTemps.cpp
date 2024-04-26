@@ -163,25 +163,26 @@ try
         {
           output_contents.at(count - 1)
               << output.status.status_crit.at(i) << sep
-              << output.vec_trans_data.at(i).crit_temp << sep
-              << output.vec_trans_data.at(i).crit_false_vev << sep
+              << output.vec_trans_data.at(i).crit_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).crit_false_vev << sep
               << output.vec_trans_data.at(i).crit_true_vev << sep
               << output.status.status_bounce_sol.at(i) << sep
               << output.status.status_nucl_approx.at(i) << sep
-              << output.vec_trans_data.at(i).nucl_approx_temp << sep
-              << output.vec_trans_data.at(i).nucl_approx_false_vev << sep
+              << output.vec_trans_data.at(i).nucl_approx_temp.value_or(
+                     EmptyValue)
+              << sep << output.vec_trans_data.at(i).nucl_approx_false_vev << sep
               << output.vec_trans_data.at(i).nucl_approx_true_vev << sep
               << output.status.status_nucl.at(i) << sep
-              << output.vec_trans_data.at(i).nucl_temp << sep
-              << output.vec_trans_data.at(i).nucl_false_vev << sep
+              << output.vec_trans_data.at(i).nucl_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).nucl_false_vev << sep
               << output.vec_trans_data.at(i).nucl_true_vev << sep
               << output.status.status_perc.at(i) << sep
-              << output.vec_trans_data.at(i).perc_temp << sep
-              << output.vec_trans_data.at(i).perc_false_vev << sep
+              << output.vec_trans_data.at(i).perc_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).perc_false_vev << sep
               << output.vec_trans_data.at(i).perc_true_vev << sep
               << output.status.status_compl.at(i) << sep
-              << output.vec_trans_data.at(i).compl_temp << sep
-              << output.vec_trans_data.at(i).compl_false_vev << sep
+              << output.vec_trans_data.at(i).compl_temp.value_or(EmptyValue)
+              << sep << output.vec_trans_data.at(i).compl_false_vev << sep
               << output.vec_trans_data.at(i).compl_true_vev << sep;
         }
       }
