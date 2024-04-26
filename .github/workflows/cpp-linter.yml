@@ -56,5 +56,3 @@ jobs:
           git commit -am "Automatically applied linter"
           git push
 
-
-          exit 1
