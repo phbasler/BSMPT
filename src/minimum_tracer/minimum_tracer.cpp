@@ -204,6 +204,8 @@ double MinimumTracer::SmallestEigenvalue(
   double current_min = 1e100;
   for (auto element : mat.eigenvalues())
     current_min = std::min(element.real(), current_min);
+  // If the "SmallestEigenvalue" is zero, it can become negative due to
+  // numerical errors. To prevent unstable behaviour we add a small constant.
   return current_min + 1e-7;
 }
 
