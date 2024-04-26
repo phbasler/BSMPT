@@ -7,9 +7,9 @@
 #include <BSMPT/models/ClassPotentialC2HDM.h>
 #include <BSMPT/models/ClassPotentialCPintheDark.h>
 #include <BSMPT/models/ClassPotentialCxSM.h>
+#include <BSMPT/models/ClassPotentialN2HDM.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/ClassPotentialR2HDM.h>
-#include <BSMPT/models/ClassPotentialN2HDM.h>
 #include <BSMPT/models/ClassPotentialSM.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <ctype.h>   // for isdigit, tolower

@@ -17,17 +17,17 @@ using Approx = Catch::Approx;
 #include "N2HDM.h"
 
 const std::vector<double> example_point_N2HDM{/* lambda_1 = */ 0.300812,
-                                               /* lambda_2 = */ 0.321809,
-                                               /* lambda_3 = */ -0.133425,
-                                               /* lambda_4 = */ 4.11105,
-                                               /* lambda_5 = */ -3.84178,
-                                               /* lambda_6 = */ 9.46329,
-                                               /* lambda_7 = */ -0.750455,
-                                               /* lambda_8 = */ 0.743982,
-                                               /* tan(beta) = */ 5.91129,
-                                               /* v_s = */ 293.035,
-                                               /* m_{12}^2 = */ 4842.28,
-                                               /* Yukawa Type = */ 1};
+                                              /* lambda_2 = */ 0.321809,
+                                              /* lambda_3 = */ -0.133425,
+                                              /* lambda_4 = */ 4.11105,
+                                              /* lambda_5 = */ -3.84178,
+                                              /* lambda_6 = */ 9.46329,
+                                              /* lambda_7 = */ -0.750455,
+                                              /* lambda_8 = */ 0.743982,
+                                              /* tan(beta) = */ 5.91129,
+                                              /* v_s = */ 293.035,
+                                              /* m_{12}^2 = */ 4842.28,
+                                              /* Yukawa Type = */ 1};
 
 constexpr auto Model = BSMPT::ModelID::ModelIDs::N2HDM;
 const Compare_N2HDM Expected;
