@@ -51,3 +51,31 @@ TEST_CASE("Check vector . matrix . vector", "[utility]")
 
   REQUIRE(v1 * (H * v2) == Approx(-1149.174865593).margin(1e-10));
 }
+
+TEST_CASE("Check Transpose", "[utility]")
+{
+  using namespace BSMPT;
+  std::vector<std::vector<double>> H = {
+      {-7.697, 3.259, -2.48, 9.655, -2.463},
+      {1.17, -1.936, -0.053, 9.129, 4.828},
+      {-4.173, -1.695, -8.372, -8.434, -7.375},
+      {-1.807, -3.037, 4.649, 5.487, -5.915},
+      {-2.805, -8.22, 3.369, -4.824, -7.272}};
+
+  std::vector<std::vector<double>> H_Transpose = {
+      {{-7.697, 1.17, -4.173, -1.807, -2.805},
+       {3.259, -1.936, -1.695, -3.037, -8.22},
+       {-2.48, -0.053, -8.372, 4.649, 3.369},
+       {9.655, 9.129, -8.434, 5.487, -4.824},
+       {-2.463, 4.828, -7.375, -5.915, -7.272}}};
+
+  REQUIRE(H_Transpose == BSMPT::Transpose(H));
+}
+
+TEST_CASE("Check L2NormVector", "[utility]")
+{
+  using namespace BSMPT;
+  std::vector<double> v1 = {0.856, 8.936, -5.996, 4.987, 9.301};
+
+  REQUIRE(BSMPT::L2NormVector(v1) == Approx(15.096874).margin(1e-10));
+}
