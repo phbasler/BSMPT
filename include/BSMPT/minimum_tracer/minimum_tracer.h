@@ -21,6 +21,7 @@
 #include <chrono>
 #include <cmath>    // std::pow
 #include <memory>   // for shared_ptr
+#include <optional> // std::optional
 #include <stdlib.h> // std::strtol
 
 namespace BSMPT
