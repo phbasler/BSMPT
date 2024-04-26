@@ -84,12 +84,12 @@ public:
   /**
    * @brief critical temperature/highest temperature when transition can occur
    */
-  double Tc;
+  double Tc = -1;
 
   /**
    * @brief lowest temperature when a transition can occur
    */
-  double Tm;
+  double Tm = -1;
 
   /**
    * @brief nucleation temperature
