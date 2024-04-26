@@ -506,20 +506,6 @@ public:
 
   /**
    * @brief Integrates the 1D profile assuming \f$ \frac{dV}{dl} \f$ is a
-   * constant. The solution is
-   *
-   * \f$ l(\rho) = l_0 + \left(\frac{1}{2(1 + \alpha)}
-   * \frac{dV}{dl}\Big|_{l_0}\right) \rho^2 \f$
-   *
-   * @param l0 is the integration starting point
-   * @param l  is the integration final point
-   * @param dVdl \f$ \frac{dV}{dl} \f$ at \f$ l_0 \f$
-   * @return std::vector<double>
-   */
-  std::vector<double> ExactSolutionCons(double l0, double l, double dVdl);
-
-  /**
-   * @brief Integrates the 1D profile assuming \f$ \frac{dV}{dl} \f$ is a
    * linear in l, i.e. \f$ \frac{dV}{dl} \approx dV + H (l - l_0) \f$. The
    * solution is for \f$ \alpha = 2 \f$ is
    *

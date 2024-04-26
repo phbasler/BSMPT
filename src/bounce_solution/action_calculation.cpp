@@ -328,18 +328,6 @@ double BounceActionInt::BesselJ(double x, int terms)
   return r;
 }
 
-std::vector<double>
-BounceActionInt::ExactSolutionCons(double l0, double l, double dVdl)
-{
-  // Exact solution of equation of motion with V'(phi) = dVdl
-  double rho = std::sqrt(abs((l - l0) * (2.0 + 2.0 * Alpha) /
-                             dVdl)); // Initial guess using V'(phi) = dVdL
-
-  // Return the analytical solution, as well as the derivative
-  if (Alpha == 2) return {rho, l, dVdl * rho / 3};
-  return {rho, l, dVdl * rho / 4}; // Then Alpha == 3
-}
-
 std::vector<double> BounceActionInt::ExactSolutionFromMinimum(double l0,
                                                               double l)
 {
@@ -605,14 +593,6 @@ double BounceActionInt::Calc_d2Vdl2(double l)
 
 std::vector<double> BounceActionInt::ExactSolution(double l0)
 {
-  // This function computes the analytical solution to the equation of
-  // motion with a constant potential grandiant and linear potential
-  //  We compare the two solutions and impose that they must not differ by
-  //  more than 0.01% and no less than 0.009%
-  // Solves, at most, 1% of the complete path
-  // This step is important for thin walled equation since numerical error
-  // might accumulate at low rho Computing the derivative of the potential
-  // beforehand
   double dVdl = Calc_dVdl(l0);
   // Computing the second derivative of the potential beforehand
   double d2Vdl2 = Calc_d2Vdl2(l0);
@@ -635,53 +615,9 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
     return {};
   }
 
-  std::vector<double> consS =
-      ExactSolutionCons(l0, lmiddle, dVdl); // Constant Solution
   std::vector<double> linS =
       ExactSolutionLin(l0, lmiddle, dVdl, d2Vdl2); // Linear Solution
 
-  // PrintVector(consS);
-  // PrintVector(linS);
-
-  l_sup = l0 + L / 200.0; // Solving, at most, 1% of the path
-  return linS;
-
-  if (consS[0] == linS[0])
-  {
-    // TODO Linear solution returns "nan" at d2x/drho2
-    ss << "Constant and linear solution are the same !\t" << consS[2] << "\t"
-       << linS[2] << "\t" << dVdl << "\t" << d2Vdl2 << std::endl;
-    //  Constant solution and linear solution match
-    return consS;
-  }
-
-  int count = 0;
-
-  while (!((abs(consS[0] - linS[0]) / linS[0] < 0.0001) &&
-           (abs(consS[0] - linS[0]) / linS[0] > 0.00009)) &&
-         count < 100)
-  {
-    count++;
-    ss << consS[0] << "\t" << linS[0] << "\t" << abs(consS[0] - linS[0])
-       << "--------------------------------------\n";
-    ss << abs(consS[0] - linS[0]) / linS[0] << "\n";
-    if (abs(consS[0] - linS[0]) / linS[0] >= 0.0001)
-    {
-      // Error is too large
-      l_sup   = lmiddle;
-      lmiddle = (l_inf + l_sup) / 2;
-      consS   = ExactSolutionCons(l0, lmiddle, dVdl);
-      linS    = ExactSolutionLin(l0, lmiddle, dVdl, d2Vdl2);
-    }
-    else
-    {
-      // Error is too small
-      l_inf   = lmiddle;
-      lmiddle = (l_inf + l_sup) / 2;
-      consS   = ExactSolutionCons(l0, lmiddle, dVdl);
-      linS    = ExactSolutionLin(l0, lmiddle, dVdl, d2Vdl2);
-    }
-  }
   return linS;
 }
 
