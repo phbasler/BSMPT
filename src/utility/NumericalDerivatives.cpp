@@ -5,7 +5,7 @@ namespace BSMPT
 
 std::vector<double>
 NablaNumerical(const std::vector<double> &phi,
-               const std::function<double(std::vector<double>)> &f,
+               const std::function<double(const std::vector<double>&)> &f,
                const double &eps,
                const int &dim)
 {
@@ -29,7 +29,7 @@ NablaNumerical(const std::vector<double> &phi,
 
 std::vector<std::vector<double>> HessianNumerical(
     const std::vector<double> &phi,
-    const std::function<double(std::vector<double>)> &V,
+    const std::function<double(const std::vector<double>&)> &V,
     double eps,
     const int &dim)
 {
