@@ -30,7 +30,7 @@ BounceActionInt::BounceActionInt(
   this->V  = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   this->dV = dV_In;
   this->Hessian = [=](auto const &arg)
-  { return HessianNumerical_BI(arg, V_In, this->eps, this->dim); };
+  { return HessianNumerical(arg, V_In, this->eps); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
   this->InitPath            = InitPath_In;
@@ -54,9 +54,9 @@ BounceActionInt::BounceActionInt(
   this->V = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   // Use numerical derivative
   this->dV = [=](auto const &arg)
-  { return NablaNumerical(arg, this->V, this->eps, this->dim); };
+  { return NablaNumerical(arg, this->V, this->eps); };
   this->Hessian = [=](auto const &arg)
-  { return HessianNumerical_BI(arg, V_In, this->eps, this->dim); };
+  { return HessianNumerical(arg, V_In, this->eps); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
   this->InitPath            = InitPath_In;
@@ -118,7 +118,6 @@ void BounceActionInt::PrintVector(std::vector<double> vec)
   ss << "]";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
 }
-
 
 std::vector<double>
 BounceActionInt::NormalForce(const double &l,

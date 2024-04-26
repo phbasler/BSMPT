@@ -169,9 +169,8 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
     return this->modelPointer->VEff(res, T_1) / (1 + T_1 * T_1);
   };
-  dV_1 = [&](auto const &arg) { return NablaNumerical(arg, V_1, eps, dim); };
-  Hessian_1 = [&](auto const &arg)
-  { return HessianNumerical_MT(arg, V_1, eps, dim); };
+  dV_1      = [&](auto const &arg) { return NablaNumerical(arg, V_1, eps); };
+  Hessian_1 = [&](auto const &arg) { return HessianNumerical(arg, V_1, eps); };
 
   // Define potential 2
   V_2 = [&](std::vector<double> vev)
@@ -180,9 +179,8 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
     return this->modelPointer->VEff(res, T_2) / (1 + T_2 * T_2);
   };
-  dV_2 = [=](auto const &arg) { return NablaNumerical(arg, V_2, eps, dim); };
-  Hessian_2 = [=](auto const &arg)
-  { return HessianNumerical_MT(arg, V_2, eps, dim); };
+  dV_2      = [=](auto const &arg) { return NablaNumerical(arg, V_2, eps); };
+  Hessian_2 = [=](auto const &arg) { return HessianNumerical(arg, V_2, eps); };
 
   // Initial guess for middle point
   point_m = point_1;
@@ -218,9 +216,9 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
       std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
       return this->modelPointer->VEff(res, T_m) / (1 + T_m * T_m);
     };
-    dV_m = [=](auto const &arg) { return NablaNumerical(arg, V_m, eps, dim); };
+    dV_m      = [=](auto const &arg) { return NablaNumerical(arg, V_m, eps); };
     Hessian_m = [=](auto const &arg)
-    { return HessianNumerical_MT(arg, V_m, eps, dim); };
+    { return HessianNumerical(arg, V_m, eps); };
     point_m =
         LocateMinimum(point_m, dV_m, Hessian_m, 1e-3 * dim / (1 + T_m * T_m));
     ev_m = SmallestEigenvalue(point_m, Hessian_m);
@@ -311,9 +309,8 @@ MinimumTracer::TrackPhase(double &globMinEndT,
       return this->modelPointer->VEff(res, currentT) /
              (1 + currentT * currentT);
     };
-    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-    Hessian = [=](auto const &arg)
-    { return HessianNumerical_MT(arg, V, eps, dim); };
+    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps); };
+    Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps); };
 
     // Locate the minimum
     new_point =
@@ -584,9 +581,8 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
       return this->modelPointer->VEff(res, currentT) /
              (1 + currentT * currentT);
     };
-    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-    Hessian = [=](auto const &arg)
-    { return HessianNumerical_MT(arg, V, eps, dim); };
+    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps); };
+    Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps); };
 
     // Locate the minimum
     new_point =
@@ -1257,9 +1253,8 @@ int MinimumTracer::IsThereEWSymmetryRestoration()
         return this->modelPointer->VEff(res, T) / (1 + T * T * log(T * T));
       return this->modelPointer->VEff(res, T) / (1 + T * T);
     };
-    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-    Hessian = [=](auto const &arg)
-    { return HessianNumerical_MT(arg, V, eps, dim); };
+    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps); };
+    Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps); };
 
     ActualSmallestEigenvalue = SmallestEigenvalue(point, Hessian);
 
@@ -2362,9 +2357,9 @@ void Vacuum::PrintPhasesDiagram(int size)
         return this->modelPointer->VEff(res, TT) / (1 + TT * TT);
       };
       dV_1 = [=](auto const &arg)
-      { return NablaNumerical(arg, V_1, eps, dim); };
+      { return NablaNumerical(arg, V_1, eps); };
       Hessian_1 = [=](auto const &arg)
-      { return HessianNumerical(arg, V_1, eps, dim); };
+      { return HessianNumerical(arg, V_1, eps); };
 
       std::vector<double> temp = PhasesList[it].Get(TT).point;
 

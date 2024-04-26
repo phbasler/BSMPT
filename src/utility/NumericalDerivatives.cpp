@@ -6,12 +6,11 @@ namespace BSMPT
 std::vector<double>
 NablaNumerical(const std::vector<double> &phi,
                const std::function<double(std::vector<double>)> &f,
-               const double &eps,
-               const int &dim)
+               const double &eps)
 {
-  std::vector<double> result(dim);
+  std::vector<double> result(phi.size());
 
-  for (int i = 0; i < dim; i++)
+  for (size_t i = 0; i < phi.size(); i++)
   {
     std::vector<double> lp2 = phi;
     lp2[i] += 2 * eps;
@@ -26,22 +25,19 @@ NablaNumerical(const std::vector<double> &phi,
   return result;
 }
 
-
-std::vector<std::vector<double>> HessianNumerical_BI(
-    const std::vector<double> &phi,
-    const std::function<double(std::vector<double>)> &V,
-    double eps,
-    const int &dim)
+std::vector<std::vector<double>>
+HessianNumerical(const std::vector<double> &phi,
+                 const std::function<double(std::vector<double>)> &V,
+                 double eps)
 {
-  std::vector<std::vector<double>> result(dim, std::vector<double>(dim));
-  for (int i = 0; i < dim; i++)
+  std::vector<std::vector<double>> result(phi.size(),
+                                          std::vector<double>(phi.size()));
+  for (size_t i = 0; i < phi.size(); i++)
   {
     // https://en.wikipedia.org/wiki/Finite_difference
-    for (int j = i; j < dim; j++)
+    for (size_t j = i; j < phi.size(); j++)
     {
       double r = 0;
-
-      if (i == j) eps /= 2;
 
       std::vector<double> xp = phi; // F(x+h, y+h)
       xp[i] += eps;
@@ -65,51 +61,9 @@ std::vector<std::vector<double>> HessianNumerical_BI(
 
       result[i][j] = r / (4 * eps * eps);
       result[j][i] = r / (4 * eps * eps);
-
-      if (i == j) eps *= 2;
     }
   }
+
   return result;
 }
-
-std::vector<std::vector<double>>
-HessianNumerical_MT(
-    const std::vector<double> &phi,
-                 const std::function<double(std::vector<double>)> &f,
-                 const double &eps,
-                 const int &dim)
-{
-  std::vector<std::vector<double>> result(dim, std::vector<double>(dim));
-  for (int i = 0; i < dim; i++)
-  {
-    // https://en.wikipedia.org/wiki/Finite_difference
-    for (int j = 0; j < dim; j++)
-    {
-      double r = 0;
-
-      std::vector<double> xp = phi; // F(x+h, y+h)
-      xp[i] += eps;
-      xp[j] += eps;
-      r += f(xp);
-
-      xp = phi; //-F(x+h, y-h)
-      xp[i] += eps;
-      xp[j] -= eps;
-      r -= f(xp);
-
-      xp = phi; //-F(x-h, y+h)
-      xp[i] -= eps;
-      xp[j] += eps;
-      r -= f(xp);
-
-      xp = phi; // F(x-h, y-h)
-      xp[i] -= eps;
-      xp[j] -= eps;
-      r += f(xp);
-
-      result[i][j] = r / (4 * eps * eps);
-    }
-  }
-  return result;
-}
-}
+} // namespace BSMPT

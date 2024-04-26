@@ -334,8 +334,6 @@ public:
    */
   void PrintVector(std::vector<double> vec);
 
-  
-
   /**
    * @brief Calculates \f$ \frac{dV}{dl} \f$ using the spline and potential
    * derivatives
