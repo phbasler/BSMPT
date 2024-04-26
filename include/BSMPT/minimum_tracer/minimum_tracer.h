@@ -15,7 +15,7 @@
 #include <BSMPT/minimizer/Minimizer.h>         // for Minimizer
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/utility/Logger.h>              // for Logger Class
-#include <BSMPT/utility/asciiplotter.h>
+#include <BSMPT/utility/asciiplotter/asciiplotter.h>
 #include <BSMPT/utility/utility.h>
 #include <Eigen/Dense> // Eigenvalues matrix
 #include <chrono>

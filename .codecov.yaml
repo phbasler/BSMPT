@@ -13,5 +13,5 @@ ignore:
   - "src/models/ClassTemplate.cpp"
   - "src/WallThickness/WallThickness1D.cpp"
   - "standalone/*"
-  - "src/utility/spline.cpp"
-  - "src/utility/asciiplotter.cpp"
+  - "src/utility/spline/spline.cpp"
+  - "src/utility/asciiplotter/asciiplotter.cpp"

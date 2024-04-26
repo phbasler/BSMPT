@@ -23,7 +23,7 @@
  *
  */
 
-#include <BSMPT/utility/spline.h>
+#include <BSMPT/utility/spline/spline.h>
 
 namespace tk
 {

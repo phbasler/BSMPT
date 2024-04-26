@@ -15,7 +15,7 @@
 #pragma once
 
 #include <BSMPT/utility/Logger.h> // for Logger Class
-#include <BSMPT/utility/spline.h>
+#include <BSMPT/utility/spline/spline.h>
 #include <BSMPT/utility/utility.h>
 #include <fstream>
 #include <iomanip>
