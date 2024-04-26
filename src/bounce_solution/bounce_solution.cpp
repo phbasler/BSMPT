@@ -178,13 +178,13 @@ void BounceSolution::GWInitialScan()
     last_action = bc.Action;
     if (bc.Action / T > 0)
     {
-      SolutionList.insert(
-          std::upper_bound(SolutionList.begin(),
-                           SolutionList.end(),
-                           bc,
-                           [](BounceActionInt a, BounceActionInt b)
-                           { return a.T < b.T; }),
-          bc);
+      SolutionList.insert(std::upper_bound(SolutionList.begin(),
+                                           SolutionList.end(),
+                                           bc,
+                                           [](const BounceActionInt &a,
+                                              const BounceActionInt &b)
+                                           { return a.T < b.T; }),
+                          bc);
       // SolutionList.push_back(bc);
     }
 
@@ -201,11 +201,11 @@ void BounceSolution::CalculateActionAt(double T, bool smart)
   // Find the closest solution to our goal temperature
   if (SolutionList.size() > 0)
   {
-    auto it                    = std::min_element(SolutionList.begin(),
-                               SolutionList.end(),
-                               [T](BounceActionInt a, BounceActionInt b) {
-                                 return std::abs(T - a.T) < std::abs(T - b.T);
-                               });
+    auto it =
+        std::min_element(SolutionList.begin(),
+                         SolutionList.end(),
+                         [T](const BounceActionInt &a, const BounceActionInt &b)
+                         { return std::abs(T - a.T) < std::abs(T - b.T); });
     BounceActionInt Nearest_bc = *it;
 
     if (abs(Nearest_bc.T - T) < 0.001) return;
@@ -239,13 +239,13 @@ void BounceSolution::CalculateActionAt(double T, bool smart)
     bc.CalculateAction();
     if (bc.Action / T > 0)
     {
-      SolutionList.insert(
-          std::upper_bound(SolutionList.begin(),
-                           SolutionList.end(),
-                           bc,
-                           [](BounceActionInt a, BounceActionInt b)
-                           { return a.T < b.T; }),
-          bc);
+      SolutionList.insert(std::upper_bound(SolutionList.begin(),
+                                           SolutionList.end(),
+                                           bc,
+                                           [](const BounceActionInt &a,
+                                              const BounceActionInt &b)
+                                           { return a.T < b.T; }),
+                          bc);
     }
   }
   else
