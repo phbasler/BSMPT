@@ -421,8 +421,9 @@ public:
    * @param gradient is the gradient evaluated at spline parameter l.
    * @return std::vector<double> is the \f$ \vec{N} \f$ at spline parameter l.
    */
-  std::vector<double>
-  NormalForce(double l, double dldrho, std::vector<double> gradient);
+  std::vector<double> NormalForce(const double &l,
+                                  const double &dldrho,
+                                  const std::vector<double> &gradient);
 
   /**
    * @brief Auxiliary function used in the Runge-Kutta 5th order
@@ -710,10 +711,10 @@ public:
    * to each path knot.
    */
   static std::vector<double>
-  NormalForceBernstein(double dldrho,
-                       std::vector<double> &gradient,
-                       std::vector<double> &dphidl,
-                       std::vector<double> &d2phidl2);
+  NormalForceBernstein(const double &dldrho,
+                       const std::vector<double> &gradient,
+                       const std::vector<double> &dphidl,
+                       const std::vector<double> &d2phidl2);
 
   /**
    * @brief Calculates \f$ \frac{d^2l}{d\rho^2} \f$

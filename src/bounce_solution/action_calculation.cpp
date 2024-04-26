@@ -187,9 +187,10 @@ std::vector<std::vector<double>> BounceActionInt::HessianNumerical(
   return result;
 }
 
-std::vector<double> BounceActionInt::NormalForce(double l,
-                                                 double dldrho,
-                                                 std::vector<double> gradient)
+std::vector<double>
+BounceActionInt::NormalForce(const double &l,
+                             const double &dldrho,
+                             const std::vector<double> &gradient)
 {
   std::vector<double> r;                        // Result
   std::vector<double> d2phidl2 = Spline.d2l(l); // d2Phi/dl2
@@ -203,10 +204,10 @@ std::vector<double> BounceActionInt::NormalForce(double l,
 }
 
 std::vector<double>
-BounceActionInt::NormalForceBernstein(double dldrho,
-                                      std::vector<double> &gradient,
-                                      std::vector<double> &dphidl,
-                                      std::vector<double> &d2phidl2)
+BounceActionInt::NormalForceBernstein(const double &dldrho,
+                                      const std::vector<double> &gradient,
+                                      const std::vector<double> &dphidl,
+                                      const std::vector<double> &d2phidl2)
 {
   std::vector<double> r; // Result
   r = std::pow(dldrho, 2) * d2phidl2 -
