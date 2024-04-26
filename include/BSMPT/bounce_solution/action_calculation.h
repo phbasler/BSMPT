@@ -332,7 +332,7 @@ public:
    *
    * @param vec Vector to be printed
    */
-  static void PrintVector(std::vector<double> vec);
+  void PrintVector(std::vector<double> vec);
 
   /**
    * @brief Numerical method to calculate the potential's (or other functions's)
@@ -487,7 +487,7 @@ public:
    * @param terms are the maximum number of terms allowed in the calculation.
    * @return double returns \f$I_\alpha (x) \f$
    */
-  static double BesselI(double alpha, double x, int terms = 100);
+  double BesselI(double alpha, double x, int terms = 100);
 
   /**
    * @brief Modified Bessel function i \f$J_1 (i x) \f$ of the first kind
@@ -504,7 +504,7 @@ public:
    * @param terms are the maximum number of terms allowed in the calculation.
    * @return double returns \f$I_\alpha (x) \f$
    */
-  static double BesselJ(double x, int terms = 100);
+  double BesselJ(double x, int terms = 100);
 
   /**
    * @brief Integrates the 1D profile assuming \f$ \frac{dV}{dl} \f$ is a
@@ -681,7 +681,7 @@ public:
    * @param k
    * @return unsigned
    */
-  static unsigned nChoosek(unsigned n, unsigned k);
+  unsigned nChoosek(unsigned n, unsigned k);
 
   /**
    * @brief Calculates the \f$ k^{th}\f$ Bernstein polynomial of degree \f$ n
@@ -694,7 +694,7 @@ public:
    * @param x is the independent parameter.
    * @return double \f$ B_{\nu,n}(x) \f$.
    */
-  static double Bernstein(int n, int nu, double x);
+  double Bernstein(int n, int nu, double x);
 
   /**
    * @brief Calculates the force vector \f$ \vec{N} \f$ of multiple path knots
@@ -711,11 +711,10 @@ public:
    * @return std::vector<double> list of force vectors \f$ \vec{N} \f$ applied
    * to each path knot.
    */
-  static std::vector<double>
-  NormalForceBernstein(const double &dldrho,
-                       const std::vector<double> &gradient,
-                       const std::vector<double> &dphidl,
-                       const std::vector<double> &d2phidl2);
+  std::vector<double> NormalForceBernstein(const double &dldrho,
+                                           const std::vector<double> &gradient,
+                                           const std::vector<double> &dphidl,
+                                           const std::vector<double> &d2phidl2);
 
   /**
    * @brief Calculates \f$ \frac{d^2l}{d\rho^2} \f$
