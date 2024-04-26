@@ -462,8 +462,8 @@ public:
    * @param yerr is the difference between the 4th order and 5th order
    * Runge-Kutta result.
    */
-  void RK5_step(std::vector<double> y,
-                std::vector<double> dydx,
+  void RK5_step(const std::vector<double> &y,
+                const std::vector<double> &dydx,
                 int n,
                 float rho,
                 float h,

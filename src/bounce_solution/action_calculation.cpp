@@ -234,8 +234,8 @@ void BounceActionInt::AuxFunctionDev(double rho,
   return;
 }
 
-void BounceActionInt::RK5_step(std::vector<double> y,
-                               std::vector<double> dydx,
+void BounceActionInt::RK5_step(const std::vector<double> &y,
+                               const std::vector<double> &dydx,
                                int n,
                                float rho,
                                float h,
