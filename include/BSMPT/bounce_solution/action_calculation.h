@@ -12,17 +12,13 @@
  * @file
  */
 
-// M_PI in Windows
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <iostream>
-
 #include <BSMPT/utility/const_velocity_spline.h>
 #include <BSMPT/utility/utility.h>
 #include <Eigen/Dense>
 #include <numeric>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <gsl/gsl_math.h>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
