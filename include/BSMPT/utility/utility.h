@@ -72,7 +72,7 @@ template <typename T> std::string vec_to_string(const std::vector<T> &vec)
   {
     if (not first)
     {
-      res += " " + std::to_string(el);
+      res += sep + std::to_string(el);
     }
     else
     {
