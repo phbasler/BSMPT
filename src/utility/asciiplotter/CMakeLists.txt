@@ -4,12 +4,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/utility/asciiplotter")
-set(header
-    ${header_path}/asciiplotter.h)
+set(header ${header_path}/asciiplotter.h)
 set(src asciiplotter.cpp)
 add_library(ASCIIPlotter ${header} ${src})
 target_include_directories(ASCIIPlotter PUBLIC ${BSMPT_SOURCE_DIR}/include
-                                          ${BSMPT_BINARY_DIR}/include)
+                                               ${BSMPT_BINARY_DIR}/include)
 if(Boost_FOUND)
   target_link_libraries(ASCIIPlotter PUBLIC Boost::boost)
 endif()

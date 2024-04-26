@@ -4,12 +4,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/utility/spline")
-set(header
-    ${header_path}/spline.h)
+set(header ${header_path}/spline.h)
 set(src spline.cpp)
 add_library(Spline ${header} ${src})
 target_include_directories(Spline PUBLIC ${BSMPT_SOURCE_DIR}/include
-                                          ${BSMPT_BINARY_DIR}/include)
+                                         ${BSMPT_BINARY_DIR}/include)
 if(Boost_FOUND)
   target_link_libraries(Spline PUBLIC Boost::boost)
 endif()
