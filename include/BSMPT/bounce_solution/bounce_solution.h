@@ -278,12 +278,6 @@ public:
   int MaxPathIntegrations = 7;
 
   /**
-   * @brief Default constructor
-   *
-   */
-  BounceSolution();
-
-  /**
    * @brief Construct a new Bounce Sol Calc object. Used for testing
    * @param pointer_in model pointer
    */

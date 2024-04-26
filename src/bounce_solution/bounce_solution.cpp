@@ -12,10 +12,6 @@
 namespace BSMPT
 {
 
-BounceSolution::BounceSolution()
-{
-}
-
 BounceSolution::BounceSolution(
     std::shared_ptr<Class_Potential_Origin> &pointer_in)
 {
