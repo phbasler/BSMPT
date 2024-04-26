@@ -119,7 +119,7 @@ void BounceActionInt::PrintVector(std::vector<double> vec)
 }
 
 std::vector<double> BounceActionInt::NablaNumerical(
-    std::vector<double> phi,
+    const std::vector<double> &phi,
     const std::function<double(std::vector<double>)> &V,
     const double &eps,
     const int &dim)
@@ -143,7 +143,7 @@ std::vector<double> BounceActionInt::NablaNumerical(
 }
 
 std::vector<std::vector<double>> BounceActionInt::HessianNumerical(
-    std::vector<double> phi,
+    const std::vector<double> &phi,
     const std::function<double(std::vector<double>)> &V,
     double eps,
     const int &dim)

@@ -357,7 +357,7 @@ public:
    * phi
    */
   static std::vector<double>
-  NablaNumerical(std::vector<double> phi0,
+  NablaNumerical(const std::vector<double> &phi0,
                  const std::function<double(std::vector<double>)> &V,
                  const double &eps,
                  const int &dim);
@@ -382,7 +382,7 @@ public:
    *  hessian matrix of V taken at phi
    */
   static std::vector<std::vector<double>>
-  HessianNumerical(std::vector<double> phi,
+  HessianNumerical(const std::vector<double> &phi,
                    const std::function<double(std::vector<double>)> &V,
                    double eps,
                    const int &dim);
