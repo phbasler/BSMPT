@@ -880,7 +880,7 @@ MinimumTracer::MinimumTracer()
 }
 
 MinimumTracer::MinimumTracer(
-    std::shared_ptr<Class_Potential_Origin> &pointer_in,
+    const std::shared_ptr<Class_Potential_Origin> &pointer_in,
     const int &WhichMinimizer_in,
     const bool &UseMultithreading_in)
 {

@@ -302,7 +302,7 @@ public:
    * @param WhichMinimizer_in which minimizers are used
    * @param UseMultithreading_in whether or not multithreading is used
    */
-  MinimumTracer(std::shared_ptr<Class_Potential_Origin> &pointer_in,
+  MinimumTracer(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
                 const int &WhichMinimizer_in,
                 const bool &UseMultithreading_in);
 
