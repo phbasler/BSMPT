@@ -126,13 +126,15 @@ try
       // NLO stability check
       bool nlostable = modelPointer->CheckNLOVEV(
           MinTracer->ConvertToVEVDim(MinTracer->GetGlobalMinimum(0)));
-      std::string status_nlostable = MinTracer->GetStatusNLOVEV(nlostable);
+      StatusNLOStability status_nlostable =
+          MinTracer->GetStatusNLOVEV(nlostable);
       Logger::Write(LoggingLevel::ProgDetailed,
-                    "Status of NLO stability check is: " + status_nlostable);
+                    "Status of NLO stability check is: " +
+                        StatusNLOStabilityToString.at(status_nlostable));
 
       // EWSR check
       double EWSymmetryRestoration_status = 0;
-      std::string status_ewsr             = "off";
+      StatusEWSR status_ewsr              = StatusEWSR::Off;
 
       if (args.CheckEWSymmetryRestoration > 0)
       {
@@ -165,7 +167,8 @@ try
       Logger::Write(LoggingLevel::ProgDetailed,
                     "Found and traced " +
                         std::to_string(vac.PhasesList.size()) +
-                        " minima with status = " + vac.status_vacuum +
+                        " minima with status = " +
+                        StatusTracingToString.at(vac.status_vacuum) +
                         ".\n-------------------------------");
 
       // prepare legend

@@ -234,31 +234,32 @@ public:
    * @brief status of bounce solver
    *
    */
-  std::string status_bounce_sol = "not_set";
+  StatusGW status_bounce_sol = StatusGW::NotSet;
 
   /**
    * @brief status of approximate nucleation temperature calculation
    *
    */
-  std::string status_nucl_approx = "not_set";
+  BSMPT::StatusTemperature status_nucl_approx =
+      BSMPT::StatusTemperature::NotSet;
 
   /**
    * @brief status of nucleation temperature calculation
    *
    */
-  std::string status_nucl = "not_set";
+  BSMPT::StatusTemperature status_nucl = BSMPT::StatusTemperature::NotSet;
 
   /**
    * @brief status of percolation temperature calculation
    *
    */
-  std::string status_perc = "not_set";
+  BSMPT::StatusTemperature status_perc = BSMPT::StatusTemperature::NotSet;
 
   /**
    * @brief status of completion temperature calculation
    *
    */
-  std::string status_compl = "not_set";
+  BSMPT::StatusTemperature status_compl = BSMPT::StatusTemperature::NotSet;
 
   /**
    * @brief \f$ v_{\text{wall}}\f$ defined by the user as an input parameter.

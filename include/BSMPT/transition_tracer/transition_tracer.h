@@ -77,17 +77,17 @@ struct user_input
  */
 struct status_codes
 {
-  std::string status_nlo_stability = "not_set";
-  std::string status_ewsr          = "not_set";
-  std::string status_tracing       = "not_set";
-  std::string status_coex_pairs    = "not_set";
+  StatusNLOStability status_nlo_stability = StatusNLOStability::NotSet;
+  StatusEWSR status_ewsr                  = StatusEWSR::NotSet;
+  StatusTracing status_tracing            = StatusTracing::NotSet;
+  StatusCoexPair status_coex_pairs        = StatusCoexPair::NotSet;
   // index of vectors is coex_phase_id
-  std::vector<std::string> status_crit;
-  std::vector<std::string> status_bounce_sol;
-  std::vector<std::string> status_nucl_approx;
-  std::vector<std::string> status_nucl;
-  std::vector<std::string> status_perc;
-  std::vector<std::string> status_compl;
+  std::vector<StatusCrit> status_crit;
+  std::vector<StatusGW> status_bounce_sol;
+  std::vector<StatusTemperature> status_nucl_approx;
+  std::vector<StatusTemperature> status_nucl;
+  std::vector<StatusTemperature> status_perc;
+  std::vector<StatusTemperature> status_compl;
 };
 
 /**
@@ -135,8 +135,8 @@ struct gw_data
   double SNR_turb = NAN;
   double SNR      = NAN;
 
-  std::string status_gw = "not_set";
-  double trans_temp     = NAN;
+  StatusGW status_gw = StatusGW::NotSet;
+  double trans_temp  = NAN;
 };
 
 struct output

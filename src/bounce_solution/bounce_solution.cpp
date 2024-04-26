@@ -277,7 +277,7 @@ void BounceSolution::GWSecondaryScan()
     Logger::Write(LoggingLevel::BounceDetailed,
                   "No solution was found during the initial scan.\n Abort!\n");
     // Failed to find the solution
-    status_bounce_sol = "failure";
+    status_bounce_sol = StatusGW::Failure;
     return;
   }
   else if (SolutionList.size() == 1)
@@ -443,7 +443,7 @@ void BounceSolution::SetBounceSol()
 
   if (SolutionList.size() < 4)
   {
-    status_bounce_sol = "failure";
+    status_bounce_sol = StatusGW::Failure;
     Logger::Write(
         LoggingLevel::BounceDetailed,
         "There are not enough points to calculate the path. Abort.\n");
@@ -453,7 +453,7 @@ void BounceSolution::SetBounceSol()
   S3ofT_spline.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
   S3ofT_spline.set_points(list_T, list_S3);
-  status_bounce_sol = "success";
+  status_bounce_sol = StatusGW::Success;
 }
 
 double BounceSolution::GetWallVelocity() const
@@ -519,7 +519,8 @@ double BounceSolution::GetCompletionTemp() const
 double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
 {
   double trans_temp = -1;
-  if (status_nucl_approx == "success" and which_transition_temp == 1)
+  if (status_nucl_approx == BSMPT::StatusTemperature::Success and
+      which_transition_temp == 1)
   {
     trans_temp = GetNucleationTempApprox();
     Logger::Write(
@@ -527,21 +528,24 @@ double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
         "Approximate nucleation temperature T = " + std::to_string(trans_temp) +
             " chosen as transition temperature.");
   }
-  else if (status_nucl == "success" and which_transition_temp == 2)
+  else if (status_nucl == BSMPT::StatusTemperature::Success and
+           which_transition_temp == 2)
   {
     trans_temp = GetNucleationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
                   "Nucleation temperature T = " + std::to_string(trans_temp) +
                       " chosen as transition temperature.");
   }
-  else if (status_perc == "success" and which_transition_temp == 3)
+  else if (status_perc == BSMPT::StatusTemperature::Success and
+           which_transition_temp == 3)
   {
     trans_temp = GetPercolationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
                   "Percolation temperature T = " + std::to_string(trans_temp) +
                       " chosen as transition temperature.");
   }
-  else if (status_compl == "success" and which_transition_temp == 4)
+  else if (status_compl == BSMPT::StatusTemperature::Success and
+           which_transition_temp == 4)
   {
     trans_temp = GetCompletionTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
@@ -595,7 +599,7 @@ void BounceSolution::CalcGstarPureRad()
 
 void BounceSolution::CalculateNucleationTemp()
 {
-  if (status_bounce_sol == "success")
+  if (status_bounce_sol == StatusGW::Success)
   {
     double T_up   = -1;
     double T_down = -1;
@@ -634,7 +638,7 @@ void BounceSolution::CalculateNucleationTemp()
         {
           Tnucl               = T_middle;
           nucleation_temp_set = true;
-          status_nucl         = "success";
+          status_nucl         = BSMPT::StatusTemperature::Success;
           return;
         }
       }
@@ -647,7 +651,7 @@ void BounceSolution::CalculateNucleationTemp()
 
     Logger::Write(LoggingLevel::TransitionDetailed, ss.str());
 
-    status_nucl = "not_met";
+    status_nucl = BSMPT::StatusTemperature::NotMet;
     return;
   }
 
@@ -656,7 +660,7 @@ void BounceSolution::CalculateNucleationTemp()
 
 void BounceSolution::CalculateNucleationTempApprox()
 {
-  if (status_bounce_sol == "success")
+  if (status_bounce_sol == StatusGW::Success)
   {
     double T_up   = -1;
     double T_down = -1;
@@ -690,7 +694,7 @@ void BounceSolution::CalculateNucleationTempApprox()
         if (std::abs(T_up / T_down - 1) < 1e-10)
         {
           Tnucl_approx       = T_middle;
-          status_nucl_approx = "success";
+          status_nucl_approx = BSMPT::StatusTemperature::Success;
           return;
         }
       }
@@ -703,7 +707,7 @@ void BounceSolution::CalculateNucleationTempApprox()
 
     Logger::Write(LoggingLevel::TransitionDetailed, ss.str());
 
-    status_nucl_approx = "not_met";
+    status_nucl_approx = BSMPT::StatusTemperature::NotMet;
     return;
   }
   return;
@@ -787,7 +791,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
 
 void BounceSolution::CalculatePercolationTemp(const double &false_vac_frac)
 {
-  if (status_bounce_sol == "success")
+  if (status_bounce_sol == StatusGW::Success)
   {
     Tperc = CalcTempAtFalseVacFraction(false_vac_frac);
 
@@ -803,13 +807,13 @@ void BounceSolution::CalculatePercolationTemp(const double &false_vac_frac)
       percolation_temp_set = true;
       SetBounceSol();
       Tperc       = CalcTempAtFalseVacFraction(false_vac_frac);
-      status_perc = "success";
+      status_perc = BSMPT::StatusTemperature::Success;
     }
     else if (Tperc < 0)
     {
       Logger::Write(LoggingLevel::TransitionDetailed,
                     "Calculation of the percolation temperature failed.");
-      status_perc = "not_met";
+      status_perc = BSMPT::StatusTemperature::NotMet;
     }
     return;
   }
@@ -818,7 +822,7 @@ void BounceSolution::CalculatePercolationTemp(const double &false_vac_frac)
 
 void BounceSolution::CalculateCompletionTemp(const double &false_vac_frac)
 {
-  if (status_bounce_sol == "success")
+  if (status_bounce_sol == StatusGW::Success)
   {
     Tcompl = CalcTempAtFalseVacFraction(false_vac_frac);
 
@@ -831,13 +835,13 @@ void BounceSolution::CalculateCompletionTemp(const double &false_vac_frac)
       }
       completion_temp_set = true;
       Tcompl              = CalcTempAtFalseVacFraction(false_vac_frac);
-      status_compl        = "success";
+      status_compl        = BSMPT::StatusTemperature::Success;
     }
     else if (Tcompl < 0)
     {
       Logger::Write(LoggingLevel::TransitionDetailed,
                     "Calculation of the completion temperature failed.");
-      status_compl = "not_met";
+      status_compl = BSMPT::StatusTemperature::NotMet;
     }
     return;
   }

@@ -159,8 +159,8 @@ try
           << output.status.status_ewsr << sep << output.status.status_tracing
           << sep << output.status.status_coex_pairs << sep << time << sep;
 
-      if ((output.status.status_tracing == "success") &&
-          (output.status.status_coex_pairs == "success"))
+      if ((output.status.status_tracing == StatusTracing::Success) &&
+          (output.status.status_coex_pairs == StatusCoexPair::Success))
       {
         for (std::size_t i = 0; i < trans.output_store.num_coex_phase_pairs;
              i++)

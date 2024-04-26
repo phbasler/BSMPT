@@ -14,6 +14,42 @@ using namespace Eigen;
 namespace BSMPT
 {
 
+std::ostream &operator<<(std::ostream &os, const StatusNLOStability &status)
+{
+  os << StatusNLOStabilityToString.at(status);
+  return os;
+}
+std::ostream &operator<<(std::ostream &os, const StatusEWSR &status)
+{
+  os << StatusEWSRToString.at(status);
+  return os;
+}
+std::ostream &operator<<(std::ostream &os, const StatusTracing &status)
+{
+  os << StatusTracingToString.at(status);
+  return os;
+}
+std::ostream &operator<<(std::ostream &os, const StatusCoexPair &status)
+{
+  os << StatusCoexPairToString.at(status);
+  return os;
+}
+std::ostream &operator<<(std::ostream &os, const StatusCrit &status)
+{
+  os << StatusCritToString.at(status);
+  return os;
+}
+std::ostream &operator<<(std::ostream &os, const StatusGW &status)
+{
+  os << StatusGWToString.at(status);
+  return os;
+}
+std::ostream &operator<<(std::ostream &os, const StatusTemperature &status)
+{
+  os << StatusTemperatureToString.at(status);
+  return os;
+}
+
 std::vector<double>
 NablaNumerical(const std::vector<double> &phi,
                const std::function<double(std::vector<double>)> &f,
@@ -1201,54 +1237,49 @@ void MinimumTracer::IsGlobMin(Minimum &min)
   return;
 }
 
-std::string MinimumTracer::GetStatusNLOVEV(const bool &out)
+StatusNLOStability MinimumTracer::GetStatusNLOVEV(const bool &out)
 {
   std::string status;
   if (out)
   {
-    status = "success";
-  }
-  else
-  {
-    status = "no_nlo_stability";
-  }
-  return status;
+    return StatusNLOStability::Success;
+  };
+  return StatusNLOStability::NoNLOStability;
 }
 
-std::string MinimumTracer::GetStatusEWSR(const int &out)
+StatusEWSR MinimumTracer::GetStatusEWSR(const int &out)
 {
-  std::string status;
   switch (out)
   {
   case 3:
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "There is EW symmetry restoration.");
-    status = "ew_sym_res";
+    return StatusEWSR::EWSymRes;
     break;
   case 2:
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "There is no EW symmetry restoration.");
-    status = "ew_sym_non_res";
+    return StatusEWSR::EWSymNonRes;
     break;
   case 1:
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "There is a flat region at high temperature. More orders are "
                   "needed to lift degeneracy.");
-    status = "flat_region";
+    return StatusEWSR::FlatRegion;
     break;
   case 0:
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "High temperature symmetry restoration calculation not "
                   "found. Check is inconclusive.");
-    status = "failure";
+    return StatusEWSR::Failure;
     break;
   case -1:
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "Potential not bounded from below at high temperature.");
-    status = "non_bfb";
+    return StatusEWSR::NotBFB;
     break;
   }
-  return status;
+  return StatusEWSR::Failure;
 }
 
 int MinimumTracer::IsThereEWSymmetryRestoration()
@@ -1407,7 +1438,7 @@ void CoexPhases::CalculateTc()
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "True vacuum candidate is never energetically viable.");
 
-    crit_status = "false_lower";
+    crit_status = BSMPT::StatusCrit::FalseLower;
     crit_temp   = -1;
   }
   else if (deltaV(T_high) < 0 and deltaV(T_low) < 0)
@@ -1417,7 +1448,7 @@ void CoexPhases::CalculateTc()
                   "viable.\nCritical temperature identified at Tc = " +
                       std::to_string(T_high) + " GeV");
 
-    crit_status = "true_lower";
+    crit_status = BSMPT::StatusCrit::TrueLower;
     crit_temp   = T_high;
   }
   else if (deltaV(T_high) > 0 and deltaV(T_low) < 0)
@@ -1443,7 +1474,7 @@ void CoexPhases::CalculateTc()
                   "Critical temperature identified at Tc = " +
                       std::to_string(binaryMiddleT) + " GeV");
 
-    crit_status = "success";
+    crit_status = BSMPT::StatusCrit::Success;
     crit_temp   = binaryMiddleT;
   }
   else
@@ -1452,7 +1483,7 @@ void CoexPhases::CalculateTc()
         LoggingLevel::MinTracerDetailed,
         "False vacuum phase ends as the global minimum. New phase scan is "
         "needed!");
-    crit_status = "failure";
+    crit_status = BSMPT::StatusCrit::Failure;
     crit_temp   = -2;
   }
   return;
@@ -1921,7 +1952,7 @@ void Vacuum::MultiStepPTMode0(const std::vector<double> &LowTempPoint_in,
                 "Tracing misses the global minimum in some areas "
                 "of temperature space. Try to re-run with "
                 "multi-step PT mode 2 enabled.");
-        status_vacuum = "no_glob_min_coverage";
+        status_vacuum = StatusTracing::NoGlobMinCoverage;
       }
     }
     else
@@ -1931,7 +1962,7 @@ void Vacuum::MultiStepPTMode0(const std::vector<double> &LowTempPoint_in,
           "High- and low-temperature phase do not coexist in "
           "temperature range. Possible multi-step PT detected. Try to re-run "
           "with multi-step PT mode 1 enabled.");
-      status_vacuum = "no_coverage";
+      status_vacuum = StatusTracing::NoCoverage;
     }
   }
   else
@@ -1939,7 +1970,7 @@ void Vacuum::MultiStepPTMode0(const std::vector<double> &LowTempPoint_in,
     Logger::Write(LoggingLevel::MinTracerDetailed,
                   "No traceable global-minimum phases found at the outer "
                   "boundaries. Abort.");
-    status_vacuum = "no_mins_at_boundaries";
+    status_vacuum = StatusTracing::NoMinsAtBoundaries;
   }
   return;
 }
@@ -2058,7 +2089,7 @@ void Vacuum::MultiStepPTMode1(const std::vector<double> &LowTempPoint_in,
                     "Tracing misses the global minimum in some areas "
                     "of temperature space. Try to re-run with "
                     "multi-step PT mode 2 enabled.");
-      status_vacuum = "no_glob_min_coverage";
+      status_vacuum = StatusTracing::NoGlobMinCoverage;
     }
   }
   else // check for phases in between
@@ -2105,7 +2136,7 @@ void Vacuum::MultiStepPTMode1(const std::vector<double> &LowTempPoint_in,
         Logger::Write(LoggingLevel::MinTracerDetailed,
                       "Numerical instability at phase overlap detected, no "
                       "coverage achieved.");
-        status_vacuum  = "no_coverage";
+        status_vacuum  = StatusTracing::NoCoverage;
         error_detected = true;
       }
       else
@@ -2149,7 +2180,7 @@ void Vacuum::MultiStepPTMode1(const std::vector<double> &LowTempPoint_in,
                   "Tracing misses the global minimum in some areas "
                   "of temperature space. Try to re-run with "
                   "multi-step PT mode 2 enabled.");
-              status_vacuum  = "no_glob_min_coverage";
+              status_vacuum  = StatusTracing::NoGlobMinCoverage;
               error_detected = true;
             }
           }
@@ -2159,7 +2190,7 @@ void Vacuum::MultiStepPTMode1(const std::vector<double> &LowTempPoint_in,
                           "Tracing misses the global minimum in some areas "
                           "of temperature space. Try to re-run with "
                           "multi-step PT mode 2 enabled.");
-            status_vacuum  = "no_glob_min_coverage";
+            status_vacuum  = StatusTracing::NoGlobMinCoverage;
             error_detected = true;
           }
         }
@@ -2493,9 +2524,10 @@ Vacuum::Vacuum(const double &T_lowIn,
   modelPointer = modelPointerIn;
   num_points   = num_pointsIn;
 
-  status_vacuum = "success"; // flipped to error code if error encountered
-  status_coex_pairs =
-      "no_coex_pairs"; // flipped to success if coex phase pairs found
+  status_vacuum =
+      StatusTracing::Success; // flipped to error code if error encountered
+  status_coex_pairs = StatusCoexPair::NoCoexPairs; // flipped to success if coex
+                                                   // phase pairs found
 
   if (UseMultiStepPTMode == -1) // default
   {
@@ -2518,7 +2550,7 @@ Vacuum::Vacuum(const double &T_lowIn,
     {
       Logger::Write(LoggingLevel::MinTracerDetailed,
                     "Potential non-BFB at T = 0.");
-      status_vacuum = "failure";
+      status_vacuum = StatusTracing::Failure;
       return;
     }
 
@@ -2556,9 +2588,9 @@ Vacuum::Vacuum(const double &T_lowIn,
       Logger::Write(LoggingLevel::MinTracerDetailed,
                     "Running multi-step PT mode auto.");
       MultiStepPTMode1(LowTempPoint, HighTempPoint);
-      if (status_vacuum == "no_glob_min_coverage")
+      if (status_vacuum == StatusTracing::NoGlobMinCoverage)
       {
-        status_vacuum = "success";
+        status_vacuum = StatusTracing::Success;
         MultiStepPTMode2(LowTempPoint, HighTempPoint);
       }
     }
@@ -2595,13 +2627,13 @@ Vacuum::Vacuum(const double &T_lowIn,
 
   if (PhasesList.size() == 0) // no phases could be found
   {
-    status_vacuum = "failure";
+    status_vacuum = StatusTracing::Failure;
   }
 
-  if (status_vacuum == "success" or
+  if (status_vacuum == StatusTracing::Success or
       (UseMultiStepPTMode != 0 and
-       status_vacuum ==
-           "no_coverage")) // no_coverage can get fixed in setCoexRegion
+       status_vacuum == StatusTracing::NoCoverage)) // no_coverage can get fixed
+                                                    // in setCoexRegion
   {
     // sort phases in decending T_high
     std::sort(PhasesList.begin(),
@@ -2622,7 +2654,8 @@ Vacuum::Vacuum(const double &T_lowIn,
       PrintPhasesDiagram();
     }
 
-    if ((status_coex_pairs == "success") and (not do_only_tracing))
+    if ((status_coex_pairs == StatusCoexPair::Success) and
+        (not do_only_tracing))
     {
       // identify coexisting phase pairs
       setCoexPhases();
@@ -2641,7 +2674,7 @@ void Vacuum::MultiStepPTTracer(const double &Temp, const double &deltaT)
     {
       Logger::Write(LoggingLevel::MinTracerDetailed,
                     "Potential non-BFB at T = 0.");
-      status_vacuum = "failure";
+      status_vacuum = StatusTracing::Failure;
     }
     else
     {
@@ -2762,7 +2795,7 @@ void Vacuum::setCoexPhases()
         ss2 << "Pair " << pair_id << " (" << false_phase.id << ", "
             << true_phase.id << ") with T = [" << T_low_overlap << ", "
             << T_high_overlap << "] GeV and Tc = " << phase_pair.crit_temp
-            << " (" << phase_pair.crit_status << ")\n";
+            << " (" << StatusCritToString.at(phase_pair.crit_status) << ")\n";
 
         pair_id += 1;
       }
@@ -2831,7 +2864,7 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
       numPhases = edgesListResult[i].EdgeOfPhase;
       if (numPhases > 1)
       {
-        status_coex_pairs = "success";
+        status_coex_pairs = StatusCoexPair::Success;
       }
       else if (numPhases <= 0) // found a non-traced gap in temperature
       {
@@ -2845,7 +2878,7 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
                         "\nThere are phases missing between " +
                             std::to_string(T_low_hole) + " GeV and " +
                             std::to_string(T_high_hole) + " GeV!");
-          status_vacuum = "no_coverage";
+          status_vacuum = StatusTracing::NoCoverage;
 
           if (not(UseMultiStepPTMode == 0))
           {
@@ -2868,14 +2901,14 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
             if (inter_phase.MinimumPhaseVector.size() >
                 2) // more than just endpoints found
             {
-              status_vacuum = "success";
+              status_vacuum = StatusTracing::Success;
               setCoexRegion(UseMultiStepPTMode);
             }
           }
         }
         else
         {
-          status_vacuum = "no_coverage";
+          status_vacuum = StatusTracing::NoCoverage;
         }
       }
     }
@@ -2883,9 +2916,9 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
     if (no_gap_found) // correct status code in case local EW minimum covers up
                       // range
     {
-      if (status_vacuum == "no_coverage")
+      if (status_vacuum == StatusTracing::NoCoverage)
       {
-        status_vacuum = "no_glob_min_coverage";
+        status_vacuum = StatusTracing::NoGlobMinCoverage;
       }
     }
   }

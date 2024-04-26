@@ -667,7 +667,8 @@ TEST_CASE(
   input.maxpathintegrations = 1;
   TransitionTracer trans(input);
   auto output = trans.output_store;
-  REQUIRE(trans.ListBounceSolution.at(0).status_bounce_sol == "failure");
+  REQUIRE(trans.ListBounceSolution.at(0).status_bounce_sol ==
+          StatusGW::Failure);
   REQUIRE(126.0223716 ==
           Approx(output.vec_trans_data.at(0).crit_temp).epsilon(1e-2));
   REQUIRE(isnan(output.vec_trans_data.at(0).nucl_approx_temp));

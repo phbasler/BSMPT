@@ -36,11 +36,13 @@ TransitionTracer::TransitionTracer(user_input &input)
   {
     Logger::Write(LoggingLevel::TransitionDetailed,
                   "Check for NLO stability is disabled.");
-    output_store.status.status_nlo_stability = "off";
+    output_store.status.status_nlo_stability = BSMPT::StatusNLOStability::Off;
   }
 
-  if (output_store.status.status_nlo_stability == "success" or
-      output_store.status.status_nlo_stability == "off")
+  if (output_store.status.status_nlo_stability ==
+          BSMPT::StatusNLOStability::Success or
+      output_store.status.status_nlo_stability ==
+          BSMPT::StatusNLOStability::Off)
   {
     // Electroweak Symmetry Restoration check
     bool point_filtered_out_due_to_snr = false;
@@ -73,7 +75,7 @@ TransitionTracer::TransitionTracer(user_input &input)
     {
       Logger::Write(LoggingLevel::TransitionDetailed,
                     "Check for EW symmetry restoration is disabled.");
-      output_store.status.status_ewsr = "off";
+      output_store.status.status_ewsr = StatusEWSR::Off;
     }
 
     if (not point_filtered_out_due_to_snr)
@@ -102,8 +104,8 @@ TransitionTracer::TransitionTracer(user_input &input)
       output_store.status.status_tracing    = vac.status_vacuum;
       output_store.status.status_coex_pairs = vac.status_coex_pairs;
 
-      if ((output_store.status.status_tracing == "success") &&
-          (output_store.status.status_coex_pairs == "success"))
+      if ((output_store.status.status_tracing == StatusTracing::Success) &&
+          (output_store.status.status_coex_pairs == StatusCoexPair::Success))
       {
         output_store.legend = mintracer->GetLegend(
             output_store.num_coex_phase_pairs, input.gw_calculation);
@@ -118,11 +120,12 @@ TransitionTracer::TransitionTracer(user_input &input)
                             " (phase " + std::to_string(pair.false_phase.id) +
                             " -> phase " + std::to_string(pair.true_phase.id) +
                             ") with Tc = " + std::to_string(pair.crit_temp) +
-                            " (" + pair.crit_status + ")");
+                            " (" + StatusCritToString.at(pair.crit_status) +
+                            ")");
 
           output_store.status.status_crit.push_back(pair.crit_status);
-          if ((pair.crit_status == "success") ||
-              (pair.crit_status == "true_lower"))
+          if ((pair.crit_status == BSMPT::StatusCrit::Success) ||
+              (pair.crit_status == BSMPT::StatusCrit::TrueLower))
           {
 
             Logger::Write(LoggingLevel::TransitionDetailed,
@@ -148,13 +151,14 @@ TransitionTracer::TransitionTracer(user_input &input)
             output_store.status.status_bounce_sol.push_back(
                 bounce.status_bounce_sol);
 
-            if (bounce.status_bounce_sol == "success")
+            if (bounce.status_bounce_sol == StatusGW::Success)
             {
               bounce.CalculateNucleationTempApprox();
 
               output_store.status.status_nucl_approx.push_back(
                   bounce.status_nucl_approx);
-              if (bounce.status_nucl_approx == "success")
+              if (bounce.status_nucl_approx ==
+                  BSMPT::StatusTemperature::Success)
               {
                 new_transition_data.nucl_approx_temp =
                     bounce.GetNucleationTempApprox();
@@ -176,7 +180,7 @@ TransitionTracer::TransitionTracer(user_input &input)
               bounce.CalculateNucleationTemp();
 
               output_store.status.status_nucl.push_back(bounce.status_nucl);
-              if (bounce.status_nucl == "success")
+              if (bounce.status_nucl == BSMPT::StatusTemperature::Success)
               {
                 new_transition_data.nucl_temp = bounce.GetNucleationTemp();
                 new_transition_data.nucl_true_vev =
@@ -195,7 +199,7 @@ TransitionTracer::TransitionTracer(user_input &input)
               bounce.CalculatePercolationTemp();
 
               output_store.status.status_perc.push_back(bounce.status_perc);
-              if (bounce.status_perc == "success")
+              if (bounce.status_perc == BSMPT::StatusTemperature::Success)
               {
                 new_transition_data.perc_temp = bounce.GetPercolationTemp();
                 new_transition_data.perc_true_vev =
@@ -214,7 +218,7 @@ TransitionTracer::TransitionTracer(user_input &input)
               bounce.CalculateCompletionTemp();
 
               output_store.status.status_compl.push_back(bounce.status_compl);
-              if (bounce.status_compl == "success")
+              if (bounce.status_compl == BSMPT::StatusTemperature::Success)
               {
                 new_transition_data.compl_temp = bounce.GetCompletionTemp();
                 new_transition_data.compl_true_vev =
@@ -230,7 +234,8 @@ TransitionTracer::TransitionTracer(user_input &input)
                     std::vector<double>(num_vev, NAN);
               }
 
-              std::string trans_status;
+              BSMPT::StatusTemperature trans_status =
+                  BSMPT::StatusTemperature::NotSet;
               if (input.which_transition_temp == 1)
               {
                 trans_status = bounce.status_nucl_approx;
@@ -248,7 +253,8 @@ TransitionTracer::TransitionTracer(user_input &input)
                 trans_status = bounce.status_compl;
               }
 
-              if (trans_status == "success" && input.gw_calculation)
+              if (trans_status == BSMPT::StatusTemperature::Success &&
+                  input.gw_calculation)
               {
                 Logger::Write(LoggingLevel::TransitionDetailed,
                               "Start GW parameters calculation.");
@@ -264,7 +270,7 @@ TransitionTracer::TransitionTracer(user_input &input)
                 new_gw_data.status_gw  = gw.data.status;
                 new_gw_data.trans_temp = gw.data.transitionTemp;
 
-                if (new_gw_data.status_gw != "failure")
+                if (new_gw_data.status_gw != StatusGW::Failure)
                 {
                   gw.CalcPeakFrequencySoundWave();
                   gw.CalcPeakAmplitudeSoundWave();
@@ -295,7 +301,8 @@ TransitionTracer::TransitionTracer(user_input &input)
                   new_gw_data.status_gw = gw.data.status;
                 }
               }
-              else if (input.gw_calculation && trans_status != "success")
+              else if (input.gw_calculation &&
+                       trans_status != BSMPT::StatusTemperature::Success)
               {
                 Logger::Write(LoggingLevel::TransitionDetailed,
                               "Requested transition temperature could not be "
@@ -304,10 +311,14 @@ TransitionTracer::TransitionTracer(user_input &input)
             }
             else
             {
-              output_store.status.status_nucl_approx.push_back("nan");
-              output_store.status.status_nucl.push_back("nan");
-              output_store.status.status_perc.push_back("nan");
-              output_store.status.status_compl.push_back("nan");
+              output_store.status.status_nucl_approx.push_back(
+                  BSMPT::StatusTemperature::NaN);
+              output_store.status.status_nucl.push_back(
+                  BSMPT::StatusTemperature::NaN);
+              output_store.status.status_perc.push_back(
+                  BSMPT::StatusTemperature::NaN);
+              output_store.status.status_compl.push_back(
+                  BSMPT::StatusTemperature::NaN);
 
               new_transition_data.nucl_approx_true_vev =
                   std::vector<double>(num_vev, NAN);
@@ -334,12 +345,16 @@ TransitionTracer::TransitionTracer(user_input &input)
             new_transition_data.crit_false_vev =
                 std::vector<double>(num_vev, NAN);
 
-            output_store.status.status_bounce_sol.push_back("not_set");
+            output_store.status.status_bounce_sol.push_back(StatusGW::NotSet);
 
-            output_store.status.status_nucl_approx.push_back("nan");
-            output_store.status.status_nucl.push_back("nan");
-            output_store.status.status_perc.push_back("nan");
-            output_store.status.status_compl.push_back("nan");
+            output_store.status.status_nucl_approx.push_back(
+                BSMPT::StatusTemperature::NaN);
+            output_store.status.status_nucl.push_back(
+                BSMPT::StatusTemperature::NaN);
+            output_store.status.status_perc.push_back(
+                BSMPT::StatusTemperature::NaN);
+            output_store.status.status_compl.push_back(
+                BSMPT::StatusTemperature::NaN);
 
             new_transition_data.nucl_approx_true_vev =
                 std::vector<double>(num_vev, NAN);

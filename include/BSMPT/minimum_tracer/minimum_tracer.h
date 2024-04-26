@@ -27,6 +27,214 @@ namespace BSMPT
 {
 
 /**
+ * @brief Possible NLO stability status
+ *
+ */
+enum class StatusNLOStability
+{
+  NotSet,
+  Off,
+  Success,
+  NoNLOStability
+};
+/**
+ * @brief Map to convert StatusNLOStability to strins
+ *
+ */
+const std::unordered_map<StatusNLOStability, std::string>
+    StatusNLOStabilityToString{
+        {StatusNLOStability::NotSet, "not_set"},
+        {StatusNLOStability::Off, "off"},
+        {StatusNLOStability::Success, "success"},
+        {StatusNLOStability::NoNLOStability, "no_nlo_stability"}};
+/**
+ * @brief Possible electroweak symmetry restoration status
+ *
+ */
+enum class StatusEWSR
+{
+  NotSet,
+  Off,
+  Failure,
+  NotBFB,
+  FlatRegion,
+  EWSymNonRes,
+  EWSymRes
+};
+/**
+ * @brief Map to convert StatusEWSRToString to strins
+ *
+ */
+const std::unordered_map<StatusEWSR, std::string> StatusEWSRToString{
+    {StatusEWSR::NotSet, "not_set"},
+    {StatusEWSR::Off, "off"},
+    {StatusEWSR::Failure, "failure"},
+    {StatusEWSR::NotBFB, "non_bfb"},
+    {StatusEWSR::FlatRegion, "flat_region"},
+    {StatusEWSR::EWSymNonRes, "ew_syum_non_res"},
+    {StatusEWSR::EWSymRes, "ew_sym_res"}};
+/**
+ * @brief Possible tracing results
+ *
+ */
+enum class StatusTracing
+{
+  NotSet,
+  Success,
+  NoCoverage,
+  NoMinsAtBoundaries,
+  NoGlobMinCoverage,
+  Failure
+};
+/**
+ * @brief Map to convert StatusTracingToString to strins
+ *
+ */
+const std::unordered_map<StatusTracing, std::string> StatusTracingToString{
+    {StatusTracing::NotSet, "not_set"},
+    {StatusTracing::Success, "success"},
+    {StatusTracing::NoCoverage, "no_coverage"},
+    {StatusTracing::NoMinsAtBoundaries, "no_mins_at_boundaries"},
+    {StatusTracing::NoGlobMinCoverage, "no_glob_min_coverage"},
+    {StatusTracing::Failure, "failure"}};
+/**
+ * @brief Possible status for the coex phase
+ *
+ */
+enum class StatusCoexPair
+{
+  NotSet,
+  Success,
+  NoCoexPairs
+};
+/**
+ * @brief Map to convert StatusCoexPairToString to strins
+ *
+ */
+const std::unordered_map<StatusCoexPair, std::string> StatusCoexPairToString{
+    {StatusCoexPair::NotSet, "not_set"},
+    {StatusCoexPair::Success, "success"},
+    {StatusCoexPair::NoCoexPairs, "no_coex_pair"}};
+/**
+ * @brief Possible status for the critical temperature
+ *
+ */
+enum class StatusCrit
+{
+  NotSet,
+  Success,
+  FalseLower,
+  TrueLower,
+  Failure
+};
+/**
+ * @brief Map to convert StatusCritToString to strins
+ *
+ */
+const std::unordered_map<StatusCrit, std::string> StatusCritToString{
+    {StatusCrit::NotSet, "not_set"},
+    {StatusCrit::Success, "success"},
+    {StatusCrit::FalseLower, "false_lower"},
+    {StatusCrit::TrueLower, "true_lower"},
+    {StatusCrit::Failure, "failure"}};
+/**
+ * @brief Possible status for the approximated nucleation, exact nucleation,
+ * percolation and completion temperature
+ *
+ */
+enum class StatusTemperature
+{
+  NotSet,
+  Success,
+  NotMet,
+  NaN
+};
+/**
+ * @brief Map to convert StatusTemperature to strins
+ *
+ */
+const std::unordered_map<StatusTemperature, std::string>
+    StatusTemperatureToString{{StatusTemperature::NotSet, "not_set"},
+                              {StatusTemperature::Success, "success"},
+                              {StatusTemperature::NotMet, "not_met"},
+                              {StatusTemperature::NaN, "nan"}};
+/**
+ * @brief Possible results for the GW and bounce_sol class.
+ *
+ */
+enum class StatusGW
+{
+  NotSet,
+  Success,
+  Failure
+};
+/**
+ * @brief Map to convert StatusGWToString to strins
+ *
+ */
+const std::unordered_map<StatusGW, std::string> StatusGWToString{
+    {StatusGW::NotSet, "not_set"},
+    {StatusGW::Success, "success"},
+    {StatusGW::Failure, "failure"}};
+
+/**
+ * @brief Override << operator to handle StatusNLOStability
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusNLOStability &status);
+/**
+ * @brief Override << operator to handle StatusEWSR
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusEWSR &status);
+/**
+ * @brief Override << operator to handle StatusTracing
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusTracing &status);
+/**
+ * @brief Override << operator to handle StatusCoexPair
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusCoexPair &status);
+/**
+ * @brief Override << operator to handle StatusCrit
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusCrit &status);
+/**
+ * @brief Override << operator to handle StatusGW
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusGW &status);
+/**
+ * @brief Override << operator to handle StatusTemperature
+ *
+ * @param os ostream buffer
+ * @param status status to be printed
+ * @return std::ostream& buffer
+ */
+std::ostream &operator<<(std::ostream &os, const StatusTemperature &status);
+
+/**
  * @brief struct to store minimum and temperature
  * @param point coordinates in field space
  * @param temp temperature
@@ -156,7 +364,7 @@ public:
    * @param out bool output of CheckNLOVEV
    * @return status string for output
    */
-  std::string GetStatusNLOVEV(const bool &out);
+  StatusNLOStability GetStatusNLOVEV(const bool &out);
 
   /**
    * @brief GetStatusEWSR convert double output of IsThereEWSymmetryRestoration
@@ -164,7 +372,7 @@ public:
    * @param out int output of IsThereEWSymmetryRestoration
    * @return status string for output
    */
-  std::string GetStatusEWSR(const int &out);
+  StatusEWSR GetStatusEWSR(const int &out);
 
   /**
    * @brief IsThereEWSymmetryRestoration checks if there is EW symmetry
@@ -583,8 +791,8 @@ struct CoexPhases
   double T_low;
   Phase false_phase;
   Phase true_phase;
-  double crit_temp        = -1;
-  std::string crit_status = "not_set";
+  double crit_temp       = -1;
+  StatusCrit crit_status = StatusCrit::NotSet;
 
   /**
    * @brief empty constructor
@@ -647,12 +855,12 @@ struct Vacuum
   /**
    * @brief vacuum status code = success, no_coverage, no_glob_min_coverage
    */
-  std::string status_vacuum = "not_set";
+  StatusTracing status_vacuum = StatusTracing::NotSet;
 
   /**
    * @brief coexisting phases status code = success, no_coex_pairs
    */
-  std::string status_coex_pairs = "not_set";
+  StatusCoexPair status_coex_pairs = StatusCoexPair::NotSet;
 
   /**
    * @brief MinTracer object

@@ -32,7 +32,7 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
 
   if (data.InvTimeScale < 1)
   {
-    data.status = "failure";
+    data.status = StatusGW::Failure;
     Logger::Write(
         LoggingLevel::GWDetailed,
         "beta/H < 1 detected, with beta/H = " +
@@ -41,7 +41,7 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   }
   else if (data.transitionTemp == -1)
   {
-    data.status = "failure";
+    data.status = StatusGW::Failure;
     Logger::Write(LoggingLevel::GWDetailed,
                   "Requested transition temperature could not be calculated.");
   }
@@ -150,7 +150,7 @@ GravitationalWave::GetSNR(const double fmin, const double fmax, const double T)
 {
   auto integral     = Nintegrate_SNR(*this, fmin, fmax);
   double res        = std::sqrt(86400 * 365.25 * T * integral.result);
-  this->data.status = "success";
+  this->data.status = StatusGW::Success;
   return res;
 }
 

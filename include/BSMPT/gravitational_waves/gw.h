@@ -47,7 +47,7 @@ struct GravitationalWaveData
   double fPeakTurbulence       = false; // peak frequency for turbulence
   double h2OmegaPeakTurbulence = false; // peak amplitude for turbulence
 
-  std::string status = "not_set"; // gw calculation status
+  StatusGW status = StatusGW::NotSet; // gw calculation status
 };
 
 class GravitationalWave
