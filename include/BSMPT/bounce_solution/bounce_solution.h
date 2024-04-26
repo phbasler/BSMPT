@@ -15,7 +15,7 @@
 #include <BSMPT/bounce_solution/action_calculation.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
 #include <BSMPT/models/SMparam.h>
-#include <BSMPT/utility/spline.h>
+#include <BSMPT/utility/spline/spline.h>
 #include <Eigen/Dense>
 #include <algorithm>             // std::max
 #include <gsl/gsl_deriv.h>       // numerical derivative

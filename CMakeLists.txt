@@ -141,8 +141,8 @@ if(EnableCoverage)
       "${PROJECT_SOURCE_DIR}/src/models/ClassTemplate.cpp"
       "${PROJECT_SOURCE_DIR}/src/WallThickness/WallThickness1D.cpp"
       "${PROJECT_SOURCE_DIR}/src/standalone/*"
-      "${PROJECT_SOURCE_DIR}/src/utility/spline.cpp"
-      "${PROJECT_SOURCE_DIR}/src/utility/asciiplotter.cpp")
+      "${PROJECT_SOURCE_DIR}/src/utility/spline/spline.cpp"
+      "${PROJECT_SOURCE_DIR}/src/utility/asciiplotter/asciiplotter.cpp")
   setup_target_for_coverage_lcov(
     NAME
     coverage # New target name
@@ -169,7 +169,7 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
-  set(ExportList Models Minimizer ThermalFunctions Utility)
+  set(ExportList Models Minimizer ThermalFunctions Utility Spline ASCIIPlotter)
 
   if(BSMPTCompileBaryo)
     set(ExportList ${ExportList} Baryo LibWallThickness Kfactors)

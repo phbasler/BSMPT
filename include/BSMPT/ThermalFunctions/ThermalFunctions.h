@@ -11,7 +11,7 @@
 #ifndef INCLUDE_BSMPT_THERMALFUNCTIONS_THERMALFUNCTIONS_H_
 #define INCLUDE_BSMPT_THERMALFUNCTIONS_THERMALFUNCTIONS_H_
 
-#include <BSMPT/utility/spline.h>
+#include <BSMPT/utility/spline/spline.h>
 namespace BSMPT
 {
 namespace ThermalFunctions

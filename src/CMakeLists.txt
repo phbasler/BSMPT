@@ -20,6 +20,8 @@ add_subdirectory(gravitational_waves)
 # ==============================Utility==================================
 
 add_subdirectory(utility)
+add_subdirectory(utility/asciiplotter)
+add_subdirectory(utility/spline)
 
 # ==============================EXE======================================
 
