@@ -749,8 +749,8 @@ public:
    * @param dl_drho_spl Spline of \f$\frac{dl(\rho)}{d\rho}\f$
    * @return double kinetic part of the action
    */
-  double CalculateKineticTermAction(std::vector<double> &rho,
-                                    tk::spline &dl_drho_spl);
+  double CalculateKineticTermAction(const std::vector<double> &rho,
+                                    const tk::spline &dl_drho_spl);
 
   /**
    * @brief Calculate potential term of the action
@@ -759,8 +759,8 @@ public:
    * @param l_rho_spl Spline of \f$l(\rho)\f$
    * @return double potential part of the action
    */
-  double CalculatePotentialTermAction(std::vector<double> &rho,
-                                      tk::spline &l_rho_spl);
+  double CalculatePotentialTermAction(const std::vector<double> &rho,
+                                      const tk::spline &l_rho_spl);
 
   /**
    * @brief Calculates the action of the bounce equation by deforming the

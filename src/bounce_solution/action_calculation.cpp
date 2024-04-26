@@ -1518,8 +1518,9 @@ unsigned BounceActionInt::nChoosek(unsigned n, unsigned k)
   return result;
 }
 
-double BounceActionInt::CalculateKineticTermAction(std::vector<double> &rho,
-                                                   tk::spline &dl_drho_spl)
+double
+BounceActionInt::CalculateKineticTermAction(const std::vector<double> &rho,
+                                            const tk::spline &dl_drho_spl)
 {
   double integral  = 0;
   double int_delta = rho[rho.size() - 1] / 2000;
@@ -1554,8 +1555,9 @@ double BounceActionInt::CalculateKineticTermAction(std::vector<double> &rho,
   return -1;
 }
 
-double BounceActionInt::CalculatePotentialTermAction(std::vector<double> &rho,
-                                                     tk::spline &l_rho_spl)
+double
+BounceActionInt::CalculatePotentialTermAction(const std::vector<double> &rho,
+                                              const tk::spline &l_rho_spl)
 {
   double integral  = 0;
   double int_delta = rho[rho.size() - 1] / 2000;
