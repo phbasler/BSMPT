@@ -303,7 +303,7 @@ public:
    */
   BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
-                 CoexPhases &phase_pair_in,
+                 const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
@@ -329,7 +329,7 @@ public:
    */
   BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
-                 CoexPhases &phase_pair_in,
+                 const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
