@@ -24,6 +24,19 @@ class BuildMode(ArgTypeEnum, Enum):
     release = (1,)
     debug = 2
 
+def get_compiler():
+    compiler=""
+
+    if sys.platform != "linux":
+        return compiler
+    
+    compiler += "-gcc-"
+    compiler += get_gcc_version()
+
+
+    
+    return compiler
+
 def get_profile(os: str, arch: str, build_type: BuildMode):
     profile = ""
     if os == "win32":
@@ -43,8 +56,16 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
     profile += "-"
     profile += arch
 
+    profile += get_compiler()
+
+
     return profile
 
+def get_gcc_version():
+    version_response = subprocess.check_output('gcc --version'.split(), encoding="UTF-8").partition("\n")[0]
+    semver_string=version_response[version_response.rfind(' ')+1:]
+    major = semver_string.partition('.')[0]
+    return major
 
 def get_arch():
     arch = "x86_64"
