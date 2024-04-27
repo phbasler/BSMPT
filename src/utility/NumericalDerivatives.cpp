@@ -34,8 +34,21 @@ HessianNumerical(const std::vector<double> &phi,
                                           std::vector<double>(phi.size()));
   for (size_t i = 0; i < phi.size(); i++)
   {
+    double val = 0;
+    auto xp = phi;
+    xp[i]+= 2*eps;
+    val += V(xp);
+
+    val -= 2*V(phi);
+
+    xp = phi;
+    xp[i] -= 2*eps;
+    val += V(xp);
+
+    result[i][i] = val/(4*eps*eps);
+
     // https://en.wikipedia.org/wiki/Finite_difference
-    for (size_t j = i; j < phi.size(); j++)
+    for (size_t j = i+1; j < phi.size(); j++)
     {
       double r = 0;
 
