@@ -280,6 +280,13 @@ public:
   double GradientThreshold = 1e-3;
 
   /**
+   * @brief Add a constant to the diagonals of the hessian matrix in the
+   * LocateMinimum function. Helps with convergence.
+   *
+   */
+  double HessianDiagonalShift = 1e-2;
+
+  /**
    * @brief Minimum found in IsThereEWSymmetryRestoration()
    *
    */
@@ -543,7 +550,6 @@ public:
   std::vector<std::string> GetLegend(const int &num_coex_phases,
                                      const bool &do_gw_calc);
 };
-
 
 /**
  * @brief Create1DimGrid creates a 1-dim grid of given size in index-direction

@@ -90,7 +90,9 @@ std::vector<double> MinimumTracer::LocateMinimum(
       {
         HessMatrix(m, n) = Hess[m][n];
       }
-      HessMatrix(m, m) += 1e-3;
+      // Add a small constant to protect us againt numerically unstable negative
+      // eigenvalues
+      HessMatrix(m, m) += HessianDiagonalShift;
     }
 
     if (HessMatrix.determinant() != 0) // If HessianNumerical is
