@@ -13,4 +13,4 @@ target_link_libraries(
   LibWallThickness PUBLIC Eigen3::Eigen GSL::gsl Minimizer Utility Boost::boost
                           Threads::Threads)
 target_include_directories(LibWallThickness PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(LibWallThickness PUBLIC cxx_std_14)
+target_compile_features(LibWallThickness PUBLIC cxx_std_17)

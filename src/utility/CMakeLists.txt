@@ -18,6 +18,5 @@ target_compile_features(Utility PUBLIC cxx_std_17)
 if(nlohmann_json_FOUND)
   target_link_libraries(Utility PRIVATE nlohmann_json::nlohmann_json)
 endif()
-target_compile_features(Utility PUBLIC cxx_std_14)
 
 target_link_libraries(Utility PUBLIC ASCIIPlotter Spline)

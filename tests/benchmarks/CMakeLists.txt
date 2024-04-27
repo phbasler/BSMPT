@@ -17,7 +17,7 @@ if(benchmark_FOUND)
   target_link_libraries(benchmarks Minimizer Models Utility TestCompares
                         ThermalFunctions)
   target_link_libraries(benchmarks benchmark::benchmark)
-  target_compile_features(benchmarks PUBLIC cxx_std_14)
+  target_compile_features(benchmarks PUBLIC cxx_std_17)
 
   if(BSMPTCompileBaryo)
     target_link_libraries(benchmarks Baryo)

@@ -14,4 +14,4 @@ add_library(ThermalFunctions ${header} ${src})
 
 target_link_libraries(ThermalFunctions PUBLIC GSL::gsl Utility)
 target_include_directories(ThermalFunctions PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(ThermalFunctions PUBLIC cxx_std_14)
+target_compile_features(ThermalFunctions PUBLIC cxx_std_17)

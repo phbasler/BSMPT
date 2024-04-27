@@ -41,4 +41,4 @@ endif()
 target_include_directories(Minimizer PUBLIC ${BSMPT_SOURCE_DIR}/include
                                             ${BSMPT_BINARY_DIR}/include)
 target_include_directories(Minimizer PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(Minimizer PUBLIC cxx_std_14)
+target_compile_features(Minimizer PUBLIC cxx_std_17)
