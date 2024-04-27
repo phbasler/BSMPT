@@ -8,6 +8,7 @@
  */
 
 #include <BSMPT/minimum_tracer/minimum_tracer.h>
+#include <BSMPT/utility/NumericalDerivatives.h>
 
 using namespace Eigen;
 
@@ -50,69 +51,6 @@ std::ostream &operator<<(std::ostream &os, const StatusTemperature &status)
   return os;
 }
 
-std::vector<double>
-NablaNumerical(const std::vector<double> &phi,
-               const std::function<double(std::vector<double>)> &f,
-               const double &eps,
-               const int &dim)
-{
-  std::vector<double> result(dim);
-
-  for (int i = 0; i < dim; i++)
-  {
-    std::vector<double> lp2 = phi;
-    lp2[i] += 2 * eps;
-    std::vector<double> lp1 = phi;
-    lp1[i] += eps;
-    std::vector<double> lm1 = phi;
-    lm1[i] -= eps;
-    std::vector<double> lm2 = phi;
-    lm2[i] -= 2 * eps;
-    result[i] = (-f(lp2) + 8 * f(lp1) - 8 * f(lm1) + f(lm2)) / (12 * eps);
-  }
-  return result;
-}
-
-std::vector<std::vector<double>>
-HessianNumerical(const std::vector<double> &phi,
-                 const std::function<double(std::vector<double>)> &f,
-                 const double &eps,
-                 const int &dim)
-{
-  std::vector<std::vector<double>> result(dim, std::vector<double>(dim));
-  for (int i = 0; i < dim; i++)
-  {
-    // https://en.wikipedia.org/wiki/Finite_difference
-    for (int j = 0; j < dim; j++)
-    {
-      double r = 0;
-
-      std::vector<double> xp = phi; // F(x+h, y+h)
-      xp[i] += eps;
-      xp[j] += eps;
-      r += f(xp);
-
-      xp = phi; //-F(x+h, y-h)
-      xp[i] += eps;
-      xp[j] -= eps;
-      r -= f(xp);
-
-      xp = phi; //-F(x-h, y+h)
-      xp[i] -= eps;
-      xp[j] += eps;
-      r -= f(xp);
-
-      xp = phi; // F(x-h, y-h)
-      xp[i] -= eps;
-      xp[j] -= eps;
-      r += f(xp);
-
-      result[i][j] = r / (4 * eps * eps);
-    }
-  }
-  return result;
-}
-
 std::vector<double> MinimumTracer::LocateMinimum(
     const std::vector<double> &guess_In,
     std::function<std::vector<double>(std::vector<double>)> &df,
@@ -152,7 +90,9 @@ std::vector<double> MinimumTracer::LocateMinimum(
       {
         HessMatrix(m, n) = Hess[m][n];
       }
-      HessMatrix(m, m) += 1e-3;
+      // Add a small constant to protect us againt numerically unstable negative
+      // eigenvalues
+      HessMatrix(m, m) += HessianDiagonalShift;
     }
 
     if (HessMatrix.determinant() != 0) // If HessianNumerical is
@@ -231,9 +171,8 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
     return this->modelPointer->VEff(res, T_1) / (1 + T_1 * T_1);
   };
-  dV_1 = [=](auto const &arg) { return NablaNumerical(arg, V_1, eps, dim); };
-  Hessian_1 = [=](auto const &arg)
-  { return HessianNumerical(arg, V_1, eps, dim); };
+  dV_1      = [&](auto const &arg) { return NablaNumerical(arg, V_1, eps); };
+  Hessian_1 = [&](auto const &arg) { return HessianNumerical(arg, V_1, eps); };
 
   // Define potential 2
   V_2 = [&](std::vector<double> vev)
@@ -242,9 +181,8 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
     return this->modelPointer->VEff(res, T_2) / (1 + T_2 * T_2);
   };
-  dV_2 = [=](auto const &arg) { return NablaNumerical(arg, V_2, eps, dim); };
-  Hessian_2 = [=](auto const &arg)
-  { return HessianNumerical(arg, V_2, eps, dim); };
+  dV_2      = [=](auto const &arg) { return NablaNumerical(arg, V_2, eps); };
+  Hessian_2 = [=](auto const &arg) { return HessianNumerical(arg, V_2, eps); };
 
   // Initial guess for middle point
   point_m = point_1;
@@ -280,9 +218,9 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
       std::vector<double> res = this->modelPointer->MinimizeOrderVEV(vev);
       return this->modelPointer->VEff(res, T_m) / (1 + T_m * T_m);
     };
-    dV_m = [=](auto const &arg) { return NablaNumerical(arg, V_m, eps, dim); };
+    dV_m      = [=](auto const &arg) { return NablaNumerical(arg, V_m, eps); };
     Hessian_m = [=](auto const &arg)
-    { return HessianNumerical(arg, V_m, eps, dim); };
+    { return HessianNumerical(arg, V_m, eps); };
     point_m =
         LocateMinimum(point_m, dV_m, Hessian_m, 1e-3 * dim / (1 + T_m * T_m));
     ev_m = SmallestEigenvalue(point_m, Hessian_m);
@@ -373,9 +311,8 @@ MinimumTracer::TrackPhase(double &globMinEndT,
       return this->modelPointer->VEff(res, currentT) /
              (1 + currentT * currentT);
     };
-    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-    Hessian = [=](auto const &arg)
-    { return HessianNumerical(arg, V, eps, dim); };
+    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps); };
+    Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps); };
 
     // Locate the minimum
     new_point =
@@ -646,9 +583,8 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
       return this->modelPointer->VEff(res, currentT) /
              (1 + currentT * currentT);
     };
-    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-    Hessian = [=](auto const &arg)
-    { return HessianNumerical(arg, V, eps, dim); };
+    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps); };
+    Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps); };
 
     // Locate the minimum
     new_point =
@@ -1319,9 +1255,8 @@ int MinimumTracer::IsThereEWSymmetryRestoration()
         return this->modelPointer->VEff(res, T) / (1 + T * T * log(T * T));
       return this->modelPointer->VEff(res, T) / (1 + T * T);
     };
-    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps, dim); };
-    Hessian = [=](auto const &arg)
-    { return HessianNumerical(arg, V, eps, dim); };
+    dV      = [=](auto const &arg) { return NablaNumerical(arg, V, eps); };
+    Hessian = [=](auto const &arg) { return HessianNumerical(arg, V, eps); };
 
     ActualSmallestEigenvalue = SmallestEigenvalue(point, Hessian);
 
@@ -2424,9 +2359,9 @@ void Vacuum::PrintPhasesDiagram(int size)
         return this->modelPointer->VEff(res, TT) / (1 + TT * TT);
       };
       dV_1 = [=](auto const &arg)
-      { return NablaNumerical(arg, V_1, eps, dim); };
+      { return NablaNumerical(arg, V_1, eps); };
       Hessian_1 = [=](auto const &arg)
-      { return HessianNumerical(arg, V_1, eps, dim); };
+      { return HessianNumerical(arg, V_1, eps); };
 
       std::vector<double> temp = PhasesList[it].Get(TT).point;
 

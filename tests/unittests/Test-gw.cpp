@@ -19,7 +19,7 @@ using Approx = Catch::Approx;
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
 
-TEST_CASE("Test I_\alpha", "[gw]")
+TEST_CASE("Test I_alpha", "[gw]")
 {
   // Tests bounce solver with analytical derivative
   using namespace BSMPT;

@@ -280,6 +280,13 @@ public:
   double GradientThreshold = 1e-3;
 
   /**
+   * @brief Add a constant to the diagonals of the hessian matrix in the
+   * LocateMinimum function. Helps with convergence.
+   *
+   */
+  double HessianDiagonalShift = 1e-3;
+
+  /**
    * @brief Minimum found in IsThereEWSymmetryRestoration()
    *
    */
@@ -543,60 +550,6 @@ public:
   std::vector<std::string> GetLegend(const int &num_coex_phases,
                                      const bool &do_gw_calc);
 };
-
-/**
- * @brief Numerical method to calculate the
- * gradient of a function f using finite differences method.
- *
- * This method is used while BSMPT is not able to
- * calculate the potential derivative analytically. We used the 4th order
- * method
- *
- * \f$\frac{\partial f}{\partial \phi_i} = \frac{1}{12
- * \epsilon}\left(-f(\dots ,\vec{\phi}_i + 2  \epsilon ) + 8 f(\dots
- * ,\vec{\phi}_i + \epsilon )- 8 f(\dots ,\vec{\phi}_i - \epsilon ) +
- * f(\dots ,\vec{\phi}_i - 2  \epsilon )\right)\f$
- *
- * where \f$ \epsilon \f$ is a small step.
- *
- * @param phi Where we want to calculate the gradient
- * @param f function
- * @param eps Size of finite differences step
- * @param dim Dimensions of the VEV space (or dimensions of V argument)
- * @return std::vector<double> The \f$ dim \times 1 \f$ gradient of V taken at
- * phi
- */
-std::vector<double>
-NablaNumerical(const std::vector<double> &phi,
-               const std::function<double(std::vector<double>)> &f,
-               const double &eps,
-               const int &dim);
-
-/**
- * @brief Numerical method to calculate the
- * hessian matrix of a function f using finite differences method.
- *
- * \f$\frac{\partial^2 f}{\partial \phi_i \phi_j} = \frac{1}{4
- * \epsilon^2}\left(V(\dots, \vec{\phi}_i + \epsilon , \vec{\phi}_j +
- * \epsilon) - f(\dots, \vec{\phi}_i - \epsilon , \vec{\phi}_j +
- * \epsilon) - f(\dots, \vec{\phi}_i + \epsilon , \vec{\phi}_j -
- * \epsilon) + f(\dots, \vec{\phi}_i - \epsilon , \vec{\phi}_j -
- * \epsilon) \right)\f$
- *
- * where \f$ \epsilon \f$ is a small step.
- *
- * @param phi Where we want to calculate the Hessian matrix
- * @param f Potential (or other function)
- * @param eps Size of finite differences step
- * @param dim Dimensions of the VEV space (or dimensions of f argument)
- * @return std::vector<std::vector<double>> The \f$ dim \times \dim \f$
- *  hessian matrix of f taken at phi
- */
-std::vector<std::vector<double>>
-HessianNumerical(const std::vector<double> &phi,
-                 const std::function<double(std::vector<double>)> &f,
-                 const double &eps,
-                 const int &dim);
 
 /**
  * @brief Create1DimGrid creates a 1-dim grid of given size in index-direction

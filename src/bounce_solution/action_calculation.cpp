@@ -8,6 +8,7 @@
  */
 
 #include <BSMPT/bounce_solution/action_calculation.h>
+#include <BSMPT/utility/NumericalDerivatives.h>
 
 namespace BSMPT
 {
@@ -29,7 +30,7 @@ BounceActionInt::BounceActionInt(
   this->V  = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   this->dV = dV_In;
   this->Hessian = [=](auto const &arg)
-  { return HessianNumerical(arg, V_In, this->eps, this->dim); };
+  { return HessianNumerical(arg, V_In, this->eps); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
   this->InitPath            = InitPath_In;
@@ -53,9 +54,9 @@ BounceActionInt::BounceActionInt(
   this->V = [&](std::vector<double> vev) { return V_In(vev) - this->Vfalse; };
   // Use numerical derivative
   this->dV = [=](auto const &arg)
-  { return NablaNumerical(arg, this->V, this->eps, this->dim); };
+  { return NablaNumerical(arg, this->V, this->eps); };
   this->Hessian = [=](auto const &arg)
-  { return HessianNumerical(arg, V_In, this->eps, this->dim); };
+  { return HessianNumerical(arg, V_In, this->eps); };
   this->TrueVacuum          = TrueVacuum_In;
   this->FalseVacuum         = FalseVacuum_In;
   this->InitPath            = InitPath_In;
@@ -116,75 +117,6 @@ void BounceActionInt::PrintVector(std::vector<double> vec)
     ss << i << " ";
   ss << "]";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-}
-
-std::vector<double> BounceActionInt::NablaNumerical(
-    const std::vector<double> &phi,
-    const std::function<double(std::vector<double>)> &V,
-    const double &eps,
-    const int &dim)
-{
-  // Numerical gradient of the potential up to second order
-  std::vector<double> result(dim);
-
-  for (int i = 0; i < dim; i++)
-  {
-    std::vector<double> lp2 = phi;
-    lp2[i] += 2 * eps;
-    std::vector<double> lp1 = phi;
-    lp1[i] += eps;
-    std::vector<double> lm1 = phi;
-    lm1[i] -= eps;
-    std::vector<double> lm2 = phi;
-    lm2[i] -= 2 * eps;
-    result[i] = (-V(lp2) + 8 * V(lp1) - 8 * V(lm1) + V(lm2)) / (12 * eps);
-  }
-  return result;
-}
-
-std::vector<std::vector<double>> BounceActionInt::HessianNumerical(
-    const std::vector<double> &phi,
-    const std::function<double(std::vector<double>)> &V,
-    double eps,
-    const int &dim)
-{
-  std::vector<std::vector<double>> result(dim, std::vector<double>(dim));
-  for (int i = 0; i < dim; i++)
-  {
-    // https://en.wikipedia.org/wiki/Finite_difference
-    for (int j = i; j < dim; j++)
-    {
-      double r = 0;
-
-      if (i == j) eps /= 2;
-
-      std::vector<double> xp = phi; // F(x+h, y+h)
-      xp[i] += eps;
-      xp[j] += eps;
-      r += V(xp);
-
-      xp = phi; //-F(x+h, y-h)
-      xp[i] += eps;
-      xp[j] -= eps;
-      r -= V(xp);
-
-      xp = phi; //-F(x-h, y+h)
-      xp[i] -= eps;
-      xp[j] += eps;
-      r -= V(xp);
-
-      xp = phi; // F(x-h, y-h)
-      xp[i] -= eps;
-      xp[j] -= eps;
-      r += V(xp);
-
-      result[i][j] = r / (4 * eps * eps);
-      result[j][i] = r / (4 * eps * eps);
-
-      if (i == j) eps *= 2;
-    }
-  }
-  return result;
 }
 
 std::vector<double>
