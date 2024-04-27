@@ -20,7 +20,7 @@ jobs:
   tests-fullSetup:
     strategy:
       matrix:
-        setup: [ {os: ubuntu-latest, profile: conan-linux-x86_64-release}, {os: windows-latest, profile: conan-windows-x86_64-release}, {os: macos-latest, profile: conan-macos-x86_64-release}] 
+        setup: [ {os: ubuntu-latest}, {os: windows-latest}, {os: macos-latest}] 
     runs-on: ${{matrix.setup.os}}
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
@@ -39,12 +39,29 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - run: python3 Setup.py --options CompileBaryo=True
+
+    - name: Set cmake preset name
+      run: python3 .github/GetProfile.py
+
     - name: cmake
-      run: cmake --preset ${{matrix.setup.profile}}
+      run: cmake --preset $GeneratedCMakeProfile
+      if: runner.os != 'Windows'
     - name: build
-      run: cmake --build --preset ${{matrix.setup.profile}} -j${{ steps.cpu-cores.outputs.count }}
+      run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+      if: runner.os != 'Windows'
     - name: run tests
-      run: ctest --preset ${{matrix.setup.profile}} -j --output-on-failure 
+      run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
+      if: runner.os != 'Windows'
+
+    - name: cmake
+      run: cmake --preset $env:GeneratedCMakeProfile
+      if: runner.os == 'Windows'
+    - name: build
+      run: cmake --build --preset $env:GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+      if: runner.os == 'Windows'
+    - name: run tests
+      run: ctest --preset $env:GeneratedCMakeProfile -j --output-on-failure 
+      if: runner.os == 'Windows'
     
       
 
