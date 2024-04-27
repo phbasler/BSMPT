@@ -121,7 +121,7 @@ public:
 int main()
 {
   // Set the logger
-  SetLogger({"--logginglevel::complete"});
+  SetLogger({"--logginglevel::complete=true"});
 
   std::shared_ptr<Class_Potential_OriginDerived> modelPointerDerived;
   modelPointerDerived = std::make_shared<Class_Potential_OriginDerived>();

@@ -11,5 +11,5 @@
     "low3": "-300",
     "high2": "300",
     "high3": "300",
-    "logginglevel::complete": "enable complete logging output"
+    "logginglevel::complete": "false"
 }

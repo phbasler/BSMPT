@@ -31,7 +31,7 @@ using namespace Minimizer;
 int main()
 {
   // Set the logger
-  SetLogger({"--logginglevel::complete"});
+  SetLogger({"--logginglevel::complete=true"});
 
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
                                                /* vs = */ 0,

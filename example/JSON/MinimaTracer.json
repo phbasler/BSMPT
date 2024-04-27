@@ -12,5 +12,5 @@
     "usecmaes": "true",
     "usegsl": "true",
     "usemultithreading": "true",
-    "logginglevel::complete": "enable complete logging output"
+    "logginglevel::complete": "false"
 }

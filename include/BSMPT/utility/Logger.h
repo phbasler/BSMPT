@@ -35,7 +35,8 @@ enum class LoggingLevel
   BounceDetailed,
   ProgDetailed,
   EWBGDetailed,
-  Debug
+  Debug,
+  Complete
 };
 
 /**

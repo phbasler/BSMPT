@@ -19,7 +19,7 @@ using namespace BSMPT;
 int main()
 {
   // Set the logger
-  SetLogger({"--logginglevel::complete"});
+  SetLogger({"--logginglevel::complete=true"});
 
   // Define the potential
   // BounceActionInt only takes std::vector functions as arguments.

@@ -88,7 +88,7 @@ parser::parser(const bool &enable_column_output)
                false);
   add_argument("logginglevel::complete",
                "enable all except minimizer output",
-               "",
+               "false",
                false);
 }
 
@@ -276,8 +276,7 @@ void parser::print_help() const
       }
       else if (StringStartsWith(el.second.argument, "logginglevel"))
       {
-        if (el.second.argument.find("disable") or
-            el.second.argument.find("complete"))
+        if (el.second.argument.find("disable"))
         {
           ss_end << std::setw(size_first_column) << std::left
                  << "--" + el.second.argument << std::setw(size_second_column)
