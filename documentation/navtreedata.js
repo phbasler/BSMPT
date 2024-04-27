@@ -115,14 +115,14 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"Logger_8cpp.html#ad215912cde195738a2b2809f4c243e1b",
-"TripleHiggsNLO_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97",
-"classBSMPT_1_1Class__Potential__Origin.html#a16150813f8e3aaf6133af7c655c85a89",
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a93159171e38188acbee95c7a3fc475c6",
-"classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108",
-"namespaceBSMPT_1_1ModelID.html#a9c0e4a151de955f3cddeb1eaf0b0324f",
-"transport__equations_8h.html#ac605c862b875984970d57d46e9916251"
+"BSMPT_8cpp.html",
+"Logger_8h.html#afbd5a73c8a0693dd74b9a29eb4c18804a083fe74f35e1b7b103d76dbaae30479a",
+"WallThickness1D_8cpp.html#ad891abc1c92c9ad0a1cf13d022545b5a",
+"classBSMPT_1_1Class__Potential__Origin.html#a281e675c723114e08e0d915e0219577c",
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ac50246c867d5852d0c9a376f3d5aa7c9",
+"classBSMPT_1_1parserException.html#a7062f4d9b8a5381e8eb48b9582120d5f",
+"structBSMPT_1_1Baryo_1_1AdditionalBaryoArgs.html",
+"transport__equations_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
