@@ -6,9 +6,13 @@ name: Unit tests
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ master, develop ]
+    branches: 
+      - master
+      - develop
+      - BSMPTv3
   workflow_dispatch:
     
 
