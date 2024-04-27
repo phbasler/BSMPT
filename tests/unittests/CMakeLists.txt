@@ -20,7 +20,6 @@ target_link_libraries(
           BounceSolution
           TransitionTracer
           GW)
-          ThermalFunctions)
 target_compile_features(GenericTests PUBLIC cxx_std_17)
 
 include(Catch)
