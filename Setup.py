@@ -24,18 +24,18 @@ class BuildMode(ArgTypeEnum, Enum):
     release = (1,)
     debug = 2
 
+
 def get_compiler():
-    compiler=""
+    compiler = ""
 
     if sys.platform != "linux":
         return compiler
-    
+
     compiler += "-gcc-"
     compiler += get_gcc_version()
 
-
-    
     return compiler
+
 
 def get_profile(os: str, arch: str, build_type: BuildMode):
     profile = ""
@@ -58,14 +58,25 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
 
     profile += get_compiler()
 
-
     return profile
 
+
+def check_profile(profile):
+    path = os.path.join("profiles", "BSMPT", profile)
+    if not os.path.isfile(path):
+        raise Exception(
+            f"The desired profile {profile} does not exist in BSMPT/profiles. Please create it."
+        )
+
+
 def get_gcc_version():
-    version_response = subprocess.check_output('gcc --version'.split(), encoding="UTF-8").partition("\n")[0]
-    semver_string=version_response[version_response.rfind(' ')+1:]
-    major = semver_string.partition('.')[0]
+    version_response = subprocess.check_output(
+        "gcc --version".split(), encoding="UTF-8"
+    ).partition("\n")[0]
+    semver_string = version_response[version_response.rfind(" ") + 1 :]
+    major = semver_string.partition(".")[0]
     return major
+
 
 def get_arch():
     arch = "x86_64"
@@ -88,7 +99,6 @@ def conan_install(profile, additional_options=[], build_missing=False):
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
 
-    
     build_profile = get_profile(sys.platform, get_arch(), BuildMode.release)
 
     cmd = f"conan install . -pr:h BSMPT/{profile} -pr:b BSMPT/{build_profile} ".split()
@@ -105,11 +115,33 @@ def conan_install(profile, additional_options=[], build_missing=False):
     subprocess.check_call(cmd)
 
 
-def conan_install_all(mode: BuildMode, options=[], build_missing=False):
+def conan_install_all(
+    mode: BuildMode, options=[], build_missing=False, custom_profile=""
+):
     if mode == BuildMode.all or mode == BuildMode.release:
-        conan_install( get_profile(sys.platform, get_arch(), BuildMode.release) , options, build_missing)
+        profile = (
+            custom_profile
+            if custom_profile != ""
+            else get_profile(sys.platform, get_arch(), BuildMode.release)
+        )
+        check_profile(profile)
+        conan_install(
+            profile,
+            options,
+            build_missing,
+        )
     if mode == BuildMode.all or mode == BuildMode.debug:
-        conan_install(get_profile(sys.platform, get_arch(), BuildMode.debug), options, build_missing)
+        profile = (
+            custom_profile
+            if custom_profile != ""
+            else get_profile(sys.platform, get_arch(), BuildMode.debug)
+        )
+        check_profile(profile)
+        conan_install(
+            profile,
+            options,
+            build_missing,
+        )
 
 
 class ArgTypeEnum(Enum):
@@ -145,8 +177,19 @@ if __name__ == "__main__":
         "--build-missing", "-b", action="store_true", help="Build missing dependencies."
     )
 
+    parser.add_argument(
+        "-p",
+        "--profile",
+        type=str,
+        help="The name of a custom profile. If you leave this empty we will try to deduce a matching profile.",
+        default="",
+    )
+
     opts = parser.parse_args()
     setup_profiles()
     conan_install_all(
-        opts.mode, opts.options if opts.options is not None else [], opts.build_missing
+        opts.mode,
+        opts.options if opts.options is not None else [],
+        opts.build_missing,
+        opts.profile,
     )
