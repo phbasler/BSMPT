@@ -54,11 +54,16 @@ jobs:
       - name: Setup
         run: python3 Setup.py --options CompileBaryo=True
         if: matrix.language == 'cpp'
+
+      - name: Set cmake preset name
+        run: python3 .github/GetProfile.py
+        if: matrix.language == 'cpp'
+
       - name: Preset cmake
-        run: cmake --preset conan-linux-x86_64-release
+        run: cmake --preset $GeneratedCMakeProfile
         if: matrix.language == 'cpp'
       - name: build
-        run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} 
+        run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }} 
         if: matrix.language == 'cpp'
 
       - name: Autobuild
