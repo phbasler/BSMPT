@@ -4,9 +4,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/utility")
-set(header ${header_path}/utility.h ${header_path}/Logger.h
-           ${header_path}/parser.h ${header_path}/const_velocity_spline.h ${header_path}/NumericalDerivatives.h)
-set(src utility.cpp Logger.cpp parser.cpp const_velocity_spline.cpp NumericalDerivatives.cpp)
+set(header
+    ${header_path}/utility.h ${header_path}/Logger.h ${header_path}/parser.h
+    ${header_path}/const_velocity_spline.h
+    ${header_path}/NumericalDerivatives.h)
+set(src utility.cpp Logger.cpp parser.cpp const_velocity_spline.cpp
+        NumericalDerivatives.cpp)
 add_library(Utility ${header} ${src})
 target_include_directories(Utility PUBLIC ${BSMPT_SOURCE_DIR}/include
                                           ${BSMPT_BINARY_DIR}/include)
