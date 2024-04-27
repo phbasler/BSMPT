@@ -16,5 +16,4 @@ analyze*.py
 *.synctex.gz
 
 CMakeUserPresets.json
-__pycache__/Build.cpython-310.pyc
-__pycache__/Setup.cpython-310.pyc
+__pycache__/*
