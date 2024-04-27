@@ -41,14 +41,6 @@ double cvspline::Simpson_step(
   r += lin_abs_deriv(t1);
 
   return r * (t1 - t0) / 8;
-
-  /* 1/3 Simpson Rule
-  double r = lin_abs_deriv(t0);
-  r += 4*lin_abs_deriv((t0+t1)/2);
-  r += lin_abs_deriv(t1);
-  r *= (t1-t0)/6;
-  return r;
-  */
 }
 
 cvspline::cvspline() = default; // Default constructor
@@ -86,10 +78,6 @@ void cvspline::initialize() // Initalizes the class
                                phipath[1][i] * 1 /
                                    3); // Calculates middle point
     }
-    // phipath.insert(phipath.begin() + 1, middle_vector); // Adds it to the
-    // 2nd position
-
-    // middle_vector.clear();
 
     for (int i = 0; i < dim; i++)
     {
@@ -308,7 +296,6 @@ void cvspline::print_path()
 
   ss << "\n" << std::string(15 * (dim + 2), '-') << std::endl;
 
-  // ss << "-------------------------------\n";
   for (int i = 0; i < num_points; i++)
   {
 

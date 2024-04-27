@@ -89,16 +89,12 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
   for (auto GroupElement : GroupElements)
   {
     Eigen::VectorXd CandidateTrueVacuum = GroupElement * TrueVacuum;
-    // std::cout << "Group elmeent\n" << GroupElement << "\n";
-    std::vector<double> DeltaVEV = FalseVacuum;
+    std::vector<double> DeltaVEV        = FalseVacuum;
     for (std::size_t el = 0; el < FalseVacuum.size(); el++)
       DeltaVEV.push_back(FalseVacuum[el] - TrueVacuum[el]);
 
-    // std::cout << "Distance is\t" << L2NormVector(DeltaVEV) << "\n";
-
     if (L2NormVector(DeltaVEV) < MaximumDistance)
     {
-      // std::cout << "New group element selected\n";
       MaximumDistance         = L2NormVector(DeltaVEV);
       OptimalDiscreteSymmetry = GroupElement;
     }
@@ -181,7 +177,6 @@ void BounceSolution::GWInitialScan()
                                               const BounceActionInt &b)
                                            { return a.T < b.T; }),
                           bc);
-      // SolutionList.push_back(bc);
     }
 
     if (bc.Action / T < 40 and bc.Action > 0) break;
