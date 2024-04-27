@@ -663,39 +663,35 @@ double BounceActionInt::BackwardsPropagation()
   // Backwards propagation starting point finder
   double l0  = 0;
   double l00 = 1e100;
-  int i;
-  for (i = 0; i < 100; i++)
+  for (int i = 0; i < 100; i++)
   {
     l00 = l0;
     l0 -= Calc_dVdl(l0) / Calc_d2Vdl2(l0);
-    if (abs((l0 - l00) / Spline.L) < 1e-8 && Calc_dVdl(l0) >= 0)
-    {
-      if (l0 <= Spline.L / 100)
-      {
-        return l0;
-      }
-      ss << "Backwards propagation did not work...\t" << l0
-         << "\t using minus gradient method instead\n";
-      BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-      ss.str(std::string());
+    if (abs((l0 - l00) / Spline.L) < 1e-8 and Calc_d2Vdl2(l0) > 0 and
+        l0 <= Spline.L / 100)
 
-      l0  = 0;
-      l00 = 1e100;
-      for (i = 0; i < 1000; i++)
-      {
-        l00 = l0;
-        l0 -= Calc_dVdl(l0) / 100;
-      }
-      if (l0 <= Spline.L / 100)
-      {
-        return l0;
-        BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-      }
-      ss << "Backwards propagation converged to the other minimum...\t" << l0
-         << "\t using minus 0.1% Spline length as backwards propagation\n";
-      return (-1 * Spline.L / 100.0);
-    }
+      return l0;
   }
+  ss << "Backwards propagation did not work...\t" << l0
+     << "\t using minus gradient method instead\n";
+  BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
+  ss.str(std::string());
+
+  // Restart the loop without the second derivative.
+  l0 = 0;
+  for (int i = 0; i < 1000; i++)
+  {
+    l00 = l0;
+    l0 -= Calc_dVdl(l0) / 100;
+  }
+  if (l0 <= Spline.L / 100)
+  {
+    return l0;
+    BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
+  }
+  ss << "Backwards propagation converged to the other minimum...\t" << l0
+     << "\t using minus 0.1% Spline length as backwards propagation\n";
+  return (-1 * Spline.L / 100.0);
   ss << "Backwards propagation not converging\t" << l0
      << "\t using minus 0.1% Spline length as backwards propagation\n";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
