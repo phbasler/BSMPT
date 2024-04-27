@@ -176,7 +176,7 @@ double powspec_density(const double f)
 double h2OmSens(const double f)
 {
   double H0 = 100 / 3.09e19;
-  return (2 * std::pow(M_PI, 2)) / (3 * std::pow(H0, 2)) * std::pow(f, 3) *
+  return (4 * std::pow(M_PI, 2)) / (3 * std::pow(H0, 2)) * std::pow(f, 3) *
          powspec_density(f);
 }
 
