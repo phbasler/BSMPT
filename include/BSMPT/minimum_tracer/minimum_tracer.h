@@ -284,7 +284,7 @@ public:
    * LocateMinimum function. Helps with convergence.
    *
    */
-  double HessianDiagonalShift = 1e-2;
+  double HessianDiagonalShift = 1e-3;
 
   /**
    * @brief Minimum found in IsThereEWSymmetryRestoration()
