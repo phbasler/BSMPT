@@ -24,6 +24,7 @@
  */
 
 #include <BSMPT/utility/spline/spline.h>
+#include <gsl/gsl_math.h>
 
 namespace tk
 {

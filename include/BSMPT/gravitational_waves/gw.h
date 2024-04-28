@@ -15,7 +15,7 @@
 #include <BSMPT/bounce_solution/bounce_solution.h> // BounceSolution
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/Logger.h>
-#include <math.h> // M_PI
+#include <gsl/gsl_math.h>
 
 namespace BSMPT
 {
