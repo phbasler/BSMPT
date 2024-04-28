@@ -962,3 +962,19 @@ TEST_CASE("Test for EW symmetry restoration BP3", "[gw]")
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
   REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == 3);
 }
+
+TEST_CASE("Test string conversion of enums", "[gw]")
+{
+  using namespace BSMPT;
+  std::stringstream ss;
+  REQUIRE_NOTHROW( ss << StatusNLOStability::NotSet << StatusNLOStability::Off 
+    << StatusNLOStability::NoNLOStability << StatusNLOStability::Success
+    << StatusEWSR::EWSymNonRes << StatusEWSR::EWSymRes << StatusEWSR::Failure << StatusEWSR::FlatRegion << StatusEWSR::NotBFB
+    << StatusEWSR::NotSet << StatusEWSR::Off 
+    << StatusTracing::Failure << StatusTracing::NoCoverage << StatusTracing::NoGlobMinCoverage << StatusTracing::NoGlobMinCoverage
+    << StatusTracing::NoMinsAtBoundaries << StatusTracing::NotSet << StatusTracing::Success
+    << StatusCoexPair::NoCoexPairs << StatusCoexPair::NotSet << StatusCoexPair::Success
+    << StatusCrit::Failure << StatusCrit::FalseLower << StatusCrit::NotSet << StatusCrit::Success << StatusCrit::TrueLower
+    << StatusGW::Failure << StatusGW::NotSet << StatusGW::Success
+    << StatusTemperature::NaN << StatusTemperature::NotMet << StatusTemperature::NotSet << StatusTemperature::Success);
+}

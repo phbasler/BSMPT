@@ -52,7 +52,7 @@ HessianNumerical(const std::vector<double> &phi,
     {
       double r = 0;
 
-      std::vector<double> xp = phi; // F(x+h, y+h)
+      xp = phi; // F(x+h, y+h)
       xp[i] += eps;
       xp[j] += eps;
       r += V(xp);
