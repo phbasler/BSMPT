@@ -599,18 +599,6 @@ bool almost_the_same(const std::vector<double> &a,
                      const double &num_zero          = 1e-10);
 
 /**
- * @brief NoSignFlip project Minimum to positive quadrant in vev space
- * @param a Minimum
- */
-void NoSignFlip(Minimum &a);
-
-/**
- * @brief NoSignFlip project Minimum to positive quadrant in vev space
- * @param v std::vector<double>
- */
-void NoSignFlip(std::vector<double> &v);
-
-/**
  * @brief Phase object
  *
  */

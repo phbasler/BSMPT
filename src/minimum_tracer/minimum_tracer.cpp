@@ -1153,9 +1153,12 @@ void MinimumTracer::IsGlobMin(Minimum &min)
   auto glob_min =
       this->ConvertToVEVDim(this->GetGlobalMinimum(min.temp, min.point));
 
-  NoSignFlip(glob_min);
+  ReduceVEV(glob_min);
+  ConvertToNonFlatDirections(glob_min);
+
   auto test_min = min.point;
-  NoSignFlip(test_min);
+  ReduceVEV(test_min);
+  ConvertToNonFlatDirections(test_min);
 
   for (std::size_t i = 0; i < glob_min.size(); i++)
   {
@@ -1518,24 +1521,6 @@ bool almost_the_same(const std::vector<double> &a,
   {
     return false;
   }
-}
-
-void NoSignFlip(Minimum &a)
-{
-  NoSignFlip(a.point);
-  return;
-}
-
-void NoSignFlip(std::vector<double> &v)
-{
-  for (std::size_t i = 0; i < v.size(); i++)
-  {
-    if (v.at(i) < 0)
-    {
-      v.at(i) *= -1.;
-    }
-  }
-  return;
 }
 
 Phase::Phase()
