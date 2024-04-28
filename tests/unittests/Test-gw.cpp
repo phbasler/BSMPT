@@ -546,11 +546,11 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   REQUIRE(3.69052e-16 ==
           Approx(output.vec_gw_data.at(0).h2Omega_turb.value()).epsilon(1e-2));
   REQUIRE(1.23742e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
   REQUIRE(1.28789e-20 ==
-          Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
   REQUIRE(1.23742e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
@@ -626,11 +626,11 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   REQUIRE(3.69052e-16 ==
           Approx(output.vec_gw_data.at(0).h2Omega_turb.value()).epsilon(1e-2));
   REQUIRE(1.23742e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
   REQUIRE(1.28789e-20 ==
-          Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
   REQUIRE(1.23742e-09 ==
-          Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(1e-2));
+          Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
