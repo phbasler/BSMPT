@@ -17,3 +17,5 @@ target_compile_features(Spline PUBLIC cxx_std_17)
 if(nlohmann_json_FOUND)
   target_link_libraries(Spline PRIVATE nlohmann_json::nlohmann_json)
 endif()
+
+target_compile_definitions(Spline PRIVATE _USE_MATH_DEFINES)
