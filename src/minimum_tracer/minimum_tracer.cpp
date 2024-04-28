@@ -447,38 +447,6 @@ MinimumTracer::TrackPhase(double &globMinEndT,
         if (IsInMin == 1)
         {
           // We should never be here. We only track minimum
-          zeroTemp = FindZeroSmallestEigenvalue(
-              point, currentT - dT, new_point, currentT);
-          if (zeroTemp.back() > 0)
-          {
-            currentT = zeroTemp.back();
-            zeroTemp.pop_back();
-            // Reduce the VEV into the same sector
-            ReduceVEV(zeroTemp);
-            // Remove flat directions
-            ConvertToNonFlatDirections(zeroTemp);
-            newMinimum.point     = zeroTemp;
-            newMinimum.temp      = currentT;
-            newMinimum.potential = V(zeroTemp) * (1 + currentT * currentT);
-
-            if (old_min_is_global) // check if newMinimum is
-                                   // still global minimum
-            {
-              IsGlobMin(newMinimum);
-              if (!newMinimum.is_glob_min)
-              {
-                if (output)
-                  Logger::Write(
-                      LoggingLevel::MinTracerDetailed,
-                      "Phase no longer coincides with global minimum at " +
-                          std::to_string(newMinimum.temp));
-                globMinEndT       = newMinimum.temp;
-                old_min_is_global = false;
-              }
-            }
-
-            MinimumList.push_back(newMinimum);
-          }
           break;
         }
         else
@@ -702,21 +670,6 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
         if (IsInMin == 1)
         {
           // We should never be here. We only track minimum
-          zeroTemp = FindZeroSmallestEigenvalue(
-              point, currentT - dT, new_point, currentT);
-          if (zeroTemp.back() > 0)
-          {
-            currentT = zeroTemp.back();
-            zeroTemp.pop_back();
-            // Reduce the VEV into the same sector
-            ReduceVEV(zeroTemp);
-            // Remove flat directions
-            ConvertToNonFlatDirections(zeroTemp);
-            newMinimum.point     = zeroTemp;
-            newMinimum.temp      = currentT;
-            newMinimum.potential = V(zeroTemp) * (1 + currentT * currentT);
-            MinimumList.push_back(newMinimum);
-          }
           break;
         }
         else

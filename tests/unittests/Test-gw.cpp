@@ -19,6 +19,51 @@ using Approx = Catch::Approx;
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
 
+TEST_CASE("Test GetStatusEWSR", "[gw]")
+{
+  // Tests bounce solver with analytical derivative
+  using namespace BSMPT;
+
+  MinimumTracer MinTracer;
+  REQUIRE(MinTracer.GetStatusEWSR(3) == StatusEWSR::EWSymRes);
+  REQUIRE(MinTracer.GetStatusEWSR(2) == StatusEWSR::EWSymNonRes);
+  REQUIRE(MinTracer.GetStatusEWSR(1) == StatusEWSR::FlatRegion);
+  REQUIRE(MinTracer.GetStatusEWSR(0) == StatusEWSR::Failure);
+  REQUIRE(MinTracer.GetStatusEWSR(-1) == StatusEWSR::NotBFB);
+}
+
+TEST_CASE("Test Create1DimGrid (point, k, low_value, high_value, nsteps)",
+          "[gw]")
+{
+  using namespace BSMPT;
+
+  auto grid                               = Create1DimGrid({1, 3}, 0, 0, 2, 4);
+  std::vector<std::vector<double>> result = {
+      {0, 3}, {0.5, 3}, {1, 3}, {1.5, 3}, {2.0, 3.0}};
+
+  REQUIRE(grid == result);
+}
+
+TEST_CASE("Test Create1DimGrid (min_start,min_end,npoints)", "[gw] ")
+{
+  using namespace BSMPT;
+
+  auto grid                               = Create1DimGrid({0, 3}, {2, 3}, 4);
+  std::vector<std::vector<double>> result = {
+      {0, 3}, {0.5, 3}, {1, 3}, {1.5, 3}, {2.0, 3.0}};
+
+  REQUIRE(grid == result);
+}
+
+TEST_CASE("Test almost_the_same", "[gw]")
+{
+  using namespace BSMPT;
+
+  REQUIRE(almost_the_same({0, 1}, {0, 0.991}, false, 0.01, 1e-5));
+  REQUIRE(not almost_the_same({0, 1}, {0, 1.02}, false, 0.01, 1e-5));
+  REQUIRE(not almost_the_same({0, 1}, {0, 0.991}, false, 0.01, 0));
+}
+
 TEST_CASE("Test I_alpha", "[gw]")
 {
   // Tests bounce solver with analytical derivative
