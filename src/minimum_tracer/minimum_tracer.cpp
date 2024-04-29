@@ -75,8 +75,6 @@ std::vector<double> MinimumTracer::LocateMinimum(
 
   for (i = 0; (i < maxiter) && (L2NormVector(df(new_guess)) > error); i++)
   {
-    // std::cout << i << "\t" << L2NormVector(df(new_guess)) << "\n";
-
     //  Update grad and HessianNumerical :
     gradient = df(new_guess);
     Hess     = Hessian(new_guess);
@@ -85,7 +83,6 @@ std::vector<double> MinimumTracer::LocateMinimum(
     Eigen::MatrixXd HessMatrix(dim, dim);
     for (int m = 0; m < dim; m++)
     {
-      // EigenGradient(m) = 0.1;
       for (int n = 0; n < dim; n++)
       {
         HessMatrix(m, n) = Hess[m][n];
@@ -108,8 +105,6 @@ std::vector<double> MinimumTracer::LocateMinimum(
       Eigen::VectorXd delta =
           HessMatrix.colPivHouseholderQr().solve(-1 * EigenGradient);
 
-      // HessMatrix.colPivHouseholderQr().solve(EigenGradient);
-      // alpha = -const_multiplier * HessMatrix.inverse() * gradient;
       for (int j = 0; j < dim; j++)
       {
         new_guess[j] += delta(j); // Updates guess
@@ -230,7 +225,6 @@ MinimumTracer::FindZeroSmallestEigenvalue(std::vector<double> point_1,
         L2NormVector(point_1 - point_m) / dim > AllowedMaxDistance)
     {
       T_2 = T_m;
-      // break;
     }
     else if (ev_1 * ev_m > 0)
     {
@@ -303,7 +297,6 @@ MinimumTracer::TrackPhase(double &globMinEndT,
      << " | Starting minimum at = " << point << "\n";
   while ((finalT - currentT) / dT >= 0)
   {
-    // std::cout << "---->\t" << currentT << "\t<---->\n";
     std::function<double(std::vector<double>)> V = [&](std::vector<double> vev)
     {
       // Potential wrapper
@@ -543,7 +536,6 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
      << " | Starting minimum at = " << point << "\n";
   while ((finalT - currentT) / dT >= 0)
   {
-    // std::cout << "---->\t" << currentT << "\t<---->\n";
     std::function<double(std::vector<double>)> V = [&](std::vector<double> vev)
     {
       // Potential wrapper
@@ -753,9 +745,7 @@ MinimumTracer::WarpPath(const std::vector<std::vector<double>> &path,
     std::vector<double> temp = path[i];
     for (std::size_t d = 0; d < temp.size(); d++)
     {
-      // translate the path
-      // temp[d] += F2[d] - F1[d]; // TODO: Why commented out? When do we need
-      // to translate the path? warp the path
+      // warp the path
       if ((F1[d] - T1[d]) == 0)
         temp[d] = T2[d] + (temp[d] - T1[d]);
       else
@@ -1044,11 +1034,6 @@ void MinimumTracer::FindDiscreteSymmetries()
     {
       if (CheckGroupElement(SnGroupElement * C2GroupElement))
         StoreGroupElements.push_back(SnGroupElement * C2GroupElement);
-      /*std::cout << "---------\t" << (SnGroupElement * C2GroupElement).trace()
-                << "\t<->\t"
-                << CheckGroupElement(SnGroupElement * C2GroupElement)
-                << "\t-----------\n"
-                << SnGroupElement * C2GroupElement << "\n";*/
     }
 
   // Save all group elements
