@@ -13,7 +13,9 @@
 namespace BSMPT
 {
 
-BounceActionInt::BounceActionInt(){};
+BounceActionInt::BounceActionInt()
+{
+}
 
 BounceActionInt::BounceActionInt(
     std::vector<std::vector<double>> InitPath_In,
