@@ -671,9 +671,9 @@ double BounceActionInt::BackwardsPropagation()
     l0 -= Calc_dVdl(l0) / Calc_d2Vdl2(l0);
     if (abs((l0 - l00) / Spline.L) < 1e-8 and Calc_d2Vdl2(l0) > 0 and
         l0 <= Spline.L / 100)
-      {
-        return l0;
-      }
+    {
+      return l0;
+    }
   }
   ss << "Backwards propagation did not work...\t" << l0
      << "\t using minus gradient method instead\n";
