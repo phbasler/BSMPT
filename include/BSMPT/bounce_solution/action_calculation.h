@@ -57,7 +57,7 @@ private:
    * @brief Store the value of backwards propagation
    *
    */
-  double Initial_lmin = 0;
+  double Initial_lmin;
 
   /**
    * @brief Potential at the false vacuum in the unshifted potential (in the
@@ -543,7 +543,7 @@ public:
    *
    * @return double negative or zero value.
    */
-  double BackwardsPropagation();
+  void BackwardsPropagation();
 
   /**
    * @brief Integrates 1D bounce equation once

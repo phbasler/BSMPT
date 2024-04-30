@@ -557,7 +557,7 @@ void BounceActionInt::CalculateExactSolutionThreshold(double MinError)
 
   if (MinError > 1e-2) // Error not small enough
   {
-    if (FractionOfThePathExact <= 1e-6) return;
+    if (FractionOfThePathExact <= 1e-4) return;
     FractionOfThePathExact /= 10.;
     CalculateExactSolutionThreshold(MinError);
   }
@@ -717,7 +717,7 @@ void BounceActionInt::IntegrateBounce(double l0,
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
 }
 
-double BounceActionInt::BackwardsPropagation()
+void BounceActionInt::BackwardsPropagation()
 {
   std::stringstream ss;
   // Backwards propagation starting point finder
@@ -733,7 +733,8 @@ double BounceActionInt::BackwardsPropagation()
       // Calculate the threshold between linear solution and solution from
       // minimum
       CalculateExactSolutionThreshold();
-      return l0;
+      Initial_lmin = l0;
+      return;
     }
   }
   ss << "Backwards propagation did not work...\t" << l0
@@ -753,7 +754,8 @@ double BounceActionInt::BackwardsPropagation()
       // Calculate the threshold between linear solution and solution from
       // minimum
       CalculateExactSolutionThreshold();
-      return l0;
+      Initial_lmin = l0;
+      return;
     }
   }
   ss << "Backwards propagation not converging\t" << l0
@@ -761,7 +763,8 @@ double BounceActionInt::BackwardsPropagation()
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
   ExactSolutionThreshold
       .reset(); // Use always the linear solution in exact solution
-  return (-1 * Spline.L / 1000.0);
+  Initial_lmin = -1 * Spline.L / 1000.0;
+  return;
 }
 
 void BounceActionInt::Solve1DBounce(
@@ -779,9 +782,8 @@ void BounceActionInt::Solve1DBounce(
   UndershootOvershootStatus conv; // Converged?
   L = Spline.L;
 
-  Initial_lmin = BackwardsPropagation();
+  BackwardsPropagation();
   RasterizedVdl(Initial_lmin); // Update rasterized dVdl
-
   lmin = this->Initial_lmin; // Lower interval
   lmax = L;                  // Uppter interval
   ss << "Backwards propagation : \t" << lmin << "\t" << Calc_dVdl(lmin) << "\t"
