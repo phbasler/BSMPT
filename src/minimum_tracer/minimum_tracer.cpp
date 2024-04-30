@@ -775,6 +775,8 @@ MinimumTracer::MinimumTracer(
 
 void MinimumTracer::FindFlatDirections()
 {
+  // The number 2, 100, 200 were choosen arbitrarily as an example of a S0(3)
+  // rotation
   auto nvev      = this->modelPointer->get_nVEV();
   auto vev_order = this->modelPointer->Get_VevOrder();
 
@@ -850,6 +852,8 @@ void MinimumTracer::FindFlatDirections()
   }
 
   // 2-dimensional flat directions (SO(2))
+  // The number 2, 100 were choosen arbitrarily as an example of a S0(2)
+  // rotation
   for (std::size_t i = 0; i < nvev; i++)
   {
     for (std::size_t j = i + 1; j < nvev; j++)
