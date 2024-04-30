@@ -297,18 +297,28 @@ void BounceSolution::GWSecondaryScan()
 
     for (std::size_t sol = 0; sol < SolutionList.size() - 1; sol++)
     {
-      if (SolutionList[sol].Action / SolutionList[sol].T > 200) continue;
-      if (SolutionList[sol + 1].Action / SolutionList[sol + 1].T < 50) continue;
+      double t1 = SolutionList[sol].T;
+      double t2 = SolutionList[sol + 1].T;
+      double s1 = SolutionList[sol].Action / SolutionList[sol].T;
+      double s2 = SolutionList[sol + 1].Action / SolutionList[sol + 1].T;
 
-      double NumOfT =
-          ceil((SolutionList[sol + 1].Action / SolutionList[sol + 1].T -
-                SolutionList[sol].Action / SolutionList[sol].T) /
-               20);
+      // Outside our range
+      if (s1 > 200) continue;
+      if (s2 < 50) continue;
+
+      double NumOfT = ceil((s2 - s1) / 20);
 
       double dT = (SolutionList[sol + 1].T - SolutionList[sol].T) / NumOfT;
+
+      double newT;
+      double ActionProjection;
       for (int it_T = 1; it_T < NumOfT; it_T++)
       {
-        nextTList.push_back(SolutionList[sol].T + it_T * dT);
+        newT             = SolutionList[sol].T + it_T * dT;
+        ActionProjection = (newT - t1) * (s2 - s1) / (t2 - t1) + s1;
+        // Action expected to fall within the wanted range
+        if (ActionProjection < 400 and ActionProjection > 0)
+          nextTList.push_back(newT);
       }
     }
 
