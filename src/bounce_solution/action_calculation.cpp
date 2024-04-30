@@ -786,6 +786,14 @@ void BounceActionInt::Solve1DBounce(
   lmax = L;                  // Uppter interval
   ss << "Backwards propagation : \t" << lmin << "\t" << Calc_dVdl(lmin) << "\t"
      << Calc_d2Vdl2(lmin) << "\n";
+  if(ExactSolutionThreshold.has_value())
+  {
+    ss << "l_threshold =\t" << ExactSolutionThreshold.value() <<"\n";
+  } 
+  else
+  {
+    ss << "l_threshold was not been calculated\n";
+  } 
 
   if (V(Spline(lmin)) > V(Spline(lmax)))
   {
@@ -862,6 +870,8 @@ void BounceActionInt::Solve1DBounce(
         BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
         ss.str(std::string());
         PrintVector(d2l_drho2);
+        BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, "dVdl\t = " + std::to_string(Calc_dVdl(l0)));
+        BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, "d2Vdl2\t = " + std::to_string(Calc_d2Vdl2(l0)));
         ss << "\n Overshoot/Undershoot method failed!\t";
         StateOf1DIntegration   = Integration1DStatus::NotConverged;
         StateOfBounceActionInt = ActionStatus::Integration1DFailed;
