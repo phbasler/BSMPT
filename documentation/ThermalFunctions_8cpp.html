@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -91,7 +91,9 @@ $(document).ready(function(){initNavTree('ThermalFunctions_8cpp.html',''); initR
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">ThermalFunctions.cpp File Reference</div>  </div>
 </div><!--header-->
@@ -111,6 +113,12 @@ $(document).ready(function(){initNavTree('ThermalFunctions_8cpp.html',''); initR
 <code>#include &lt;gsl/gsl_sf_gamma.h&gt;</code><br />
 <code>#include &lt;gsl/gsl_sf_zeta.h&gt;</code><br />
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceBSMPT"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html">BSMPT</a></td></tr>
+<tr class="memdesc:namespaceBSMPT"><td class="mdescLeft">&#160;</td><td class="mdescRight">This classes calculates the Bounce action of the potential with a set temperature. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aba2ae3d6162b41230614dee01b104e2e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThermalFunctions_8h.html#aba2ae3d6162b41230614dee01b104e2e">BSMPT::ThermalFunctions::JbosonIntegrand</a> (const double &amp;x, const double &amp;k, int diff=0)</td></tr>
@@ -131,8 +139,14 @@ Functions</h2></td></tr>
 <tr class="separator:a46552f089eb4b58bc31a91306319b4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c097fa569775a5793eeed0ab83528cc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThermalFunctions_8h.html#a4c097fa569775a5793eeed0ab83528cc">BSMPT::ThermalFunctions::JbosonInterpolated</a> (const double &amp;x, int diff=0)</td></tr>
 <tr class="separator:a4c097fa569775a5793eeed0ab83528cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46748b28bb1e2427f95d50f072c657ff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThermalFunctions_8h.html#a46748b28bb1e2427f95d50f072c657ff">BSMPT::ThermalFunctions::JbosonInterpolatedNegative</a> (const double &amp;x)</td></tr>
-<tr class="separator:a46748b28bb1e2427f95d50f072c657ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8b42ac79caa9439b1af8d58d749b7ff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ThermalFunctions_8h.html#aa8b42ac79caa9439b1af8d58d749b7ff">BSMPT::ThermalFunctions::JbosonInterpolatedNegative</a> (const double &amp;x, int diff=0)</td></tr>
+<tr class="separator:aa8b42ac79caa9439b1af8d58d749b7ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aad59d1b50974c2ab04c9b0391ee379f4"><td class="memItemLeft" align="right" valign="top"><a id="aad59d1b50974c2ab04c9b0391ee379f4"></a>
+<a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::ThermalFunctions::JbosonNegativeSpline</b> (<a class="el" href="NegativeBosonSpline_8h.html#abfde607bc1595b6eeccd62be17afbb8f">NegLinearIntTransposed</a>[0], <a class="el" href="NegativeBosonSpline_8h.html#abfde607bc1595b6eeccd62be17afbb8f">NegLinearIntTransposed</a>[1], tk::spline::cspline, false, tk::spline::first_deriv, -pow(M_PI, 2)/12, tk::spline::first_deriv, 3.816357189)</td></tr>
+<tr class="separator:aad59d1b50974c2ab04c9b0391ee379f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="aba2ae3d6162b41230614dee01b104e2e"></a>
@@ -254,8 +268,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a46748b28bb1e2427f95d50f072c657ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46748b28bb1e2427f95d50f072c657ff">&#9670;&nbsp;</a></span>JbosonInterpolatedNegative()</h2>
+<a id="aa8b42ac79caa9439b1af8d58d749b7ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8b42ac79caa9439b1af8d58d749b7ff">&#9670;&nbsp;</a></span>JbosonInterpolatedNegative()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -264,14 +278,25 @@ Functions</h2></td></tr>
           <td class="memname">double BSMPT::ThermalFunctions::JbosonInterpolatedNegative </td>
           <td>(</td>
           <td class="paramtype">const double &amp;&#160;</td>
-          <td class="paramname"><em>x</em></td><td>)</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>diff</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Using linear interpolation with data points to interpolate the thermal integral for bosons for x=m^2/T^2 &lt; 0 </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>The ratio m^2/T^2 </td></tr>
+    <tr><td class="paramname">diff</td><td>Returns the interpolation of J_- for diff = 0 and for dJ_-/dx for diff = 1 </td></tr>
   </table>
   </dd>
 </dl>

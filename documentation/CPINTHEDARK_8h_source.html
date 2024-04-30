@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -94,27 +94,25 @@ $(document).ready(function(){initNavTree('CPINTHEDARK_8h_source.html',''); initR
 <div class="title">CPINTHEDARK.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Müller</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// SPDX-License-Identifier: GPL-3.0-or-later</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Minimizer_8h.html">BSMPT/minimizer/Minimizer.h</a>&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classCompare__CPINTHEDARK.html">    9</a></span>&#160;<span class="keyword">class </span><a class="code" href="classCompare__CPINTHEDARK.html">Compare_CPINTHEDARK</a></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keyword">using</span> Matrix3D = std::vector&lt;std::vector&lt;std::vector&lt;double&gt;&gt;&gt;;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keyword">using</span> Matrix2D = std::vector&lt;std::vector&lt;double&gt;&gt;;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <a class="code" href="classCompare__CPINTHEDARK.html">Compare_CPINTHEDARK</a>();</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  Matrix3D CheckTripleCT;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  Matrix3D CheckTripleCW;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  Matrix3D CheckTripleTree;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  std::map&lt;int, BSMPT::Minimizer::EWPTReturnType&gt; EWPTPerSetting;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// SPDX-FileCopyrightText: 2021 Philipp Basler</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// SPDX-License-Identifier: GPL-3.0-or-later</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="Minimizer_8h.html">BSMPT/minimizer/Minimizer.h</a>&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classCompare__CPINTHEDARK.html">    7</a></span>&#160;<span class="keyword">class </span><a class="code" href="classCompare__CPINTHEDARK.html">Compare_CPINTHEDARK</a></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <span class="keyword">using</span> Matrix3D = std::vector&lt;std::vector&lt;std::vector&lt;double&gt;&gt;&gt;;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keyword">using</span> Matrix2D = std::vector&lt;std::vector&lt;double&gt;&gt;;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <a class="code" href="classCompare__CPINTHEDARK.html">Compare_CPINTHEDARK</a>();</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  Matrix3D CheckTripleCT;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  Matrix3D CheckTripleCW;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  Matrix3D CheckTripleTree;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  std::map&lt;int, BSMPT::Minimizer::EWPTReturnType&gt; EWPTPerSetting;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
 <div class="ttc" id="aMinimizer_8h_html"><div class="ttname"><a href="Minimizer_8h.html">Minimizer.h</a></div></div>
-<div class="ttc" id="aclassCompare__CPINTHEDARK_html"><div class="ttname"><a href="classCompare__CPINTHEDARK.html">Compare_CPINTHEDARK</a></div><div class="ttdef"><b>Definition:</b> CPINTHEDARK.h:10</div></div>
+<div class="ttc" id="aclassCompare__CPINTHEDARK_html"><div class="ttname"><a href="classCompare__CPINTHEDARK.html">Compare_CPINTHEDARK</a></div><div class="ttdef"><b>Definition:</b> CPINTHEDARK.h:8</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

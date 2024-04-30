@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('Minimizer_8cpp.html',''); initResizabl
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Minimizer.cpp File Reference</div>  </div>
@@ -113,15 +114,21 @@ $(document).ready(function(){initNavTree('Minimizer_8cpp.html',''); initResizabl
 <code>#include &lt;<a class="el" href="MinimizeGSL_8h_source.html">BSMPT/minimizer/MinimizeGSL.h</a>&gt;</code><br />
 <code>#include &lt;exception&gt;</code><br />
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceBSMPT"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html">BSMPT</a></td></tr>
+<tr class="memdesc:namespaceBSMPT"><td class="mdescLeft">&#160;</td><td class="mdescRight">This classes calculates the Bounce action of the potential with a set temperature. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a3ac152f5d63263e90befeadbea1c14d0"><td class="memItemLeft" align="right" valign="top">MinimizersToUse&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a3ac152f5d63263e90befeadbea1c14d0">BSMPT::Minimizer::GetMinimizers</a> (int WhichMinimizer)</td></tr>
 <tr class="memdesc:a3ac152f5d63263e90befeadbea1c14d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetMinimizers returns a struct containing the bools deciding which minimizers should be used or not.  <a href="Minimizer_8h.html#a3ac152f5d63263e90befeadbea1c14d0">More...</a><br /></td></tr>
 <tr class="separator:a3ac152f5d63263e90befeadbea1c14d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c41c83bf7eb501efb9fdaa3f88adf1c"><td class="memItemLeft" align="right" valign="top"><a id="a6c41c83bf7eb501efb9fdaa3f88adf1c"></a>
-std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a6c41c83bf7eb501efb9fdaa3f88adf1c">BSMPT::Minimizer::Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, const int &amp;WhichMinimizer, bool UseMultithreading)</td></tr>
-<tr class="memdesc:a6c41c83bf7eb501efb9fdaa3f88adf1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimization of the Model Minimizes the given Potential with parameters par and CT-parameters parCT at a given Temperature Temp and writes the solution in the std::vector sol. The Minimization Debugging Options are written in the std::vector Check. The std::vector Start gives the start value for the CMA-ES Minimization. <br /></td></tr>
-<tr class="separator:a6c41c83bf7eb501efb9fdaa3f88adf1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaee17508932ac73fa3dba45c80c2386b"><td class="memItemLeft" align="right" valign="top"><a id="aaee17508932ac73fa3dba45c80c2386b"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#aaee17508932ac73fa3dba45c80c2386b">BSMPT::Minimizer::Minimize_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;Temp, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, const int &amp;WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>
+<tr class="memdesc:aaee17508932ac73fa3dba45c80c2386b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimization of the Model Minimizes the given Potential with parameters par and CT-parameters parCT at a given Temperature Temp and writes the solution in the std::vector sol. The Minimization Debugging Options are written in the std::vector Check. The std::vector Start gives the start value for the CMA-ES Minimization. <br /></td></tr>
+<tr class="separator:aaee17508932ac73fa3dba45c80c2386b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a211218e6b6deed7426dc1db2fe9c2851"><td class="memItemLeft" align="right" valign="top">EWPTReturnType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a211218e6b6deed7426dc1db2fe9c2851">BSMPT::Minimizer::PTFinder_gen_all</a> (const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;modelPointer, const double &amp;TempStart, const double &amp;TempEnd, const int &amp;WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>
 <tr class="separator:a211218e6b6deed7426dc1db2fe9c2851"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c2e16cbb0844539d8304dbc6ea500ef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Minimizer_8h.html#a4c2e16cbb0844539d8304dbc6ea500ef">BSMPT::Minimizer::Minimize_gen_all_tree_level</a> (const ModelID::ModelIDs &amp;Model, const std::vector&lt; double &gt; &amp;par, const std::vector&lt; double &gt; &amp;parCT, std::vector&lt; double &gt; &amp;Check, const std::vector&lt; double &gt; &amp;start, int WhichMinimizer=WhichMinimizerDefault, bool UseMultithreading=true)</td></tr>

@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['higgsrotationmatrix_1075',['HiggsRotationMatrix',['../classBSMPT_1_1Class__Potential__Origin.html#a0e383fd333a8fdc4f7539a5790bdd64b',1,'BSMPT::Class_Potential_Origin']]],
-  ['higgsvev_1076',['HiggsVev',['../classBSMPT_1_1Class__Potential__Origin.html#ad195337e2edf3dc98f2a23f90bfe9e88',1,'BSMPT::Class_Potential_Origin']]]
+  ['emptyvalue_1575',['EmptyValue',['../namespaceBSMPT.html#a429cace82521dd303e0345dbb2c455a3',1,'BSMPT']]],
+  ['eps_1576',['eps',['../classBSMPT_1_1BounceActionInt.html#a69e90221e7b5b887ae3fd7553e82493b',1,'BSMPT::BounceActionInt']]],
+  ['epsturb_1577',['epsturb',['../classBSMPT_1_1BounceSolution.html#adb0a1026ce5b6ba5762426a0e12b46e1',1,'BSMPT::BounceSolution']]],
+  ['exactsolutionthreshold_1578',['ExactSolutionThreshold',['../classBSMPT_1_1BounceActionInt.html#a095ef140bf0243f9808721aae53c4039',1,'BSMPT::BounceActionInt']]]
 ];

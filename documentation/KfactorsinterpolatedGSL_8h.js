@@ -1,5 +1,6 @@
 var KfactorsinterpolatedGSL_8h =
 [
+    [ "GSLAcclType", "KfactorsinterpolatedGSL_8h.html#a62e20d9b3f2863ee1499f92c73a58194", null ],
     [ "CalculateNorm1", "KfactorsinterpolatedGSL_8h.html#a826869923d9b912d55bef29767dead03", null ],
     [ "CalculateNorm2", "KfactorsinterpolatedGSL_8h.html#a34b92e53dcd8d05bebed310968dc6614", null ],
     [ "initializeK1bosonGrid", "KfactorsinterpolatedGSL_8h.html#ac089c4eee50d85c1e9dcabf297941686", null ],

@@ -1,6 +1,6 @@
 var annotated_dup =
 [
-    [ "BSMPT", null, [
+    [ "BSMPT", "namespaceBSMPT.html", [
       [ "Baryo", null, [
         [ "AdditionalBaryoArgs", "structBSMPT_1_1Baryo_1_1AdditionalBaryoArgs.html", "structBSMPT_1_1Baryo_1_1AdditionalBaryoArgs" ],
         [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface" ],
@@ -39,8 +39,9 @@ var annotated_dup =
         [ "Class_Potential_C2HDM", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html", "classBSMPT_1_1Models_1_1Class__Potential__C2HDM" ],
         [ "Class_Potential_CPintheDark", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html", "classBSMPT_1_1Models_1_1Class__Potential__CPintheDark" ],
         [ "Class_CxSM", "classBSMPT_1_1Models_1_1Class__CxSM.html", "classBSMPT_1_1Models_1_1Class__CxSM" ],
+        [ "Class_Potential_N2HDM", "classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html", "classBSMPT_1_1Models_1_1Class__Potential__N2HDM" ],
         [ "Class_Potential_R2HDM", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html", "classBSMPT_1_1Models_1_1Class__Potential__R2HDM" ],
-        [ "Class_Potential_RN2HDM", "classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html", "classBSMPT_1_1Models_1_1Class__Potential__RN2HDM" ],
+        [ "Class_SM", "classBSMPT_1_1Models_1_1Class__SM.html", "classBSMPT_1_1Models_1_1Class__SM" ],
         [ "Class_Template", "classBSMPT_1_1Models_1_1Class__Template.html", "classBSMPT_1_1Models_1_1Class__Template" ]
       ] ],
       [ "ThermalFunctions", null, [
@@ -49,18 +50,43 @@ var annotated_dup =
       [ "Wall", null, [
         [ "GSL_params", "structBSMPT_1_1Wall_1_1GSL__params.html", "structBSMPT_1_1Wall_1_1GSL__params" ]
       ] ],
+      [ "BounceActionInt", "classBSMPT_1_1BounceActionInt.html", "classBSMPT_1_1BounceActionInt" ],
+      [ "resultErrorPair", "structBSMPT_1_1resultErrorPair.html", "structBSMPT_1_1resultErrorPair" ],
+      [ "BounceSolution", "classBSMPT_1_1BounceSolution.html", "classBSMPT_1_1BounceSolution" ],
+      [ "GravitationalWaveData", "structBSMPT_1_1GravitationalWaveData.html", "structBSMPT_1_1GravitationalWaveData" ],
+      [ "GravitationalWave", "classBSMPT_1_1GravitationalWave.html", "classBSMPT_1_1GravitationalWave" ],
+      [ "Minimum", "structBSMPT_1_1Minimum.html", "structBSMPT_1_1Minimum" ],
+      [ "MinimumTracer", "classBSMPT_1_1MinimumTracer.html", "classBSMPT_1_1MinimumTracer" ],
+      [ "Phase", "structBSMPT_1_1Phase.html", "structBSMPT_1_1Phase" ],
+      [ "CoexPhases", "structBSMPT_1_1CoexPhases.html", "structBSMPT_1_1CoexPhases" ],
+      [ "Vacuum", "structBSMPT_1_1Vacuum.html", "structBSMPT_1_1Vacuum" ],
       [ "Class_Potential_Origin", "classBSMPT_1_1Class__Potential__Origin.html", "classBSMPT_1_1Class__Potential__Origin" ],
       [ "ISMConstants", "structBSMPT_1_1ISMConstants.html", "structBSMPT_1_1ISMConstants" ],
+      [ "user_input", "structBSMPT_1_1user__input.html", "structBSMPT_1_1user__input" ],
+      [ "status_codes", "structBSMPT_1_1status__codes.html", "structBSMPT_1_1status__codes" ],
+      [ "transition_data", "structBSMPT_1_1transition__data.html", "structBSMPT_1_1transition__data" ],
+      [ "gw_data", "structBSMPT_1_1gw__data.html", "structBSMPT_1_1gw__data" ],
+      [ "output", "structBSMPT_1_1output.html", "structBSMPT_1_1output" ],
+      [ "TransitionTracer", "classBSMPT_1_1TransitionTracer.html", "classBSMPT_1_1TransitionTracer" ],
       [ "BSMPTLogger", "classBSMPT_1_1BSMPTLogger.html", "classBSMPT_1_1BSMPTLogger" ],
       [ "Logger", "classBSMPT_1_1Logger.html", "classBSMPT_1_1Logger" ],
       [ "parserException", "classBSMPT_1_1parserException.html", "classBSMPT_1_1parserException" ],
       [ "parser", "classBSMPT_1_1parser.html", "classBSMPT_1_1parser" ]
     ] ],
+    [ "tk", null, [
+      [ "internal", null, [
+        [ "band_matrix", "classtk_1_1internal_1_1band__matrix.html", "classtk_1_1internal_1_1band__matrix" ]
+      ] ],
+      [ "spline", "classtk_1_1spline.html", "classtk_1_1spline" ]
+    ] ],
+    [ "AsciiPlotter", "classAsciiPlotter.html", "classAsciiPlotter" ],
     [ "CLIOptions", "structCLIOptions.html", "structCLIOptions" ],
     [ "Compare_C2HDM", "classCompare__C2HDM.html", "classCompare__C2HDM" ],
     [ "Compare_CPINTHEDARK", "classCompare__CPINTHEDARK.html", "classCompare__CPINTHEDARK" ],
     [ "Compare_CXSM", "classCompare__CXSM.html", "classCompare__CXSM" ],
+    [ "Compare_N2HDM", "classCompare__N2HDM.html", "classCompare__N2HDM" ],
     [ "Compare_R2HDM", "classCompare__R2HDM.html", "classCompare__R2HDM" ],
-    [ "Compare_RN2HDM", "classCompare__RN2HDM.html", "classCompare__RN2HDM" ],
+    [ "Compare_SM", "classCompare__SM.html", "classCompare__SM" ],
+    [ "cvspline", "classcvspline.html", "classcvspline" ],
     [ "MyListener", "structMyListener.html", "structMyListener" ]
 ];

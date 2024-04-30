@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -96,19 +96,24 @@ $(document).ready(function(){initNavTree('NegativeBosonSpline_8h.html',''); init
 <div class="title">NegativeBosonSpline.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+</div>
 <p><a href="NegativeBosonSpline_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ae7be2f10cd4525049e5abd8460b3eabb"><td class="memItemLeft" align="right" valign="top"><a id="ae7be2f10cd4525049e5abd8460b3eabb"></a>
-const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NegativeBosonSpline_8h.html#ae7be2f10cd4525049e5abd8460b3eabb">C_NegLine</a> = 3001</td></tr>
+const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NegativeBosonSpline_8h.html#ae7be2f10cd4525049e5abd8460b3eabb">C_NegLine</a></td></tr>
 <tr class="memdesc:ae7be2f10cd4525049e5abd8460b3eabb"><td class="mdescLeft">&#160;</td><td class="mdescRight">C_NegLine Number of data points used for the interpolation of J_(m^2 &lt; 0) <br /></td></tr>
 <tr class="separator:ae7be2f10cd4525049e5abd8460b3eabb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a062ab089c6d9fefd5a4799a23a446b9a"><td class="memItemLeft" align="right" valign="top"><a id="a062ab089c6d9fefd5a4799a23a446b9a"></a>
 const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NegativeBosonSpline_8h.html#a062ab089c6d9fefd5a4799a23a446b9a">NegLinearInt</a> [3001][2]</td></tr>
 <tr class="memdesc:a062ab089c6d9fefd5a4799a23a446b9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">NegLinearInt 2D Array containing the pairs (m^2 , J_(m^2)) for m^2 &lt; 0. <br /></td></tr>
 <tr class="separator:a062ab089c6d9fefd5a4799a23a446b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfde607bc1595b6eeccd62be17afbb8f"><td class="memItemLeft" align="right" valign="top"><a id="abfde607bc1595b6eeccd62be17afbb8f"></a>
+const std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NegativeBosonSpline_8h.html#abfde607bc1595b6eeccd62be17afbb8f">NegLinearIntTransposed</a></td></tr>
+<tr class="memdesc:abfde607bc1595b6eeccd62be17afbb8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">NegLinearInt Transpose of NegLinearInt. <br /></td></tr>
+<tr class="separator:abfde607bc1595b6eeccd62be17afbb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

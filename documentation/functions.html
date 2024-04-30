@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -93,8 +93,27 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <div class="textblock">Here is a list of all documented class members with links to the class documentation for each member:</div>
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>AbsErr
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#aafcb2823b8877e27e46024f2feb4e7ce">BSMPT::BounceSolution</a>
+, <a class="el" href="classBSMPT_1_1GravitationalWave.html#a8bd591555d4a16213c46ce1bedeeaaf7">BSMPT::GravitationalWave</a>
+</li>
+<li>Action
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#a381293a29a38482cf1ac38ac3fdba3d1">BSMPT::BounceActionInt</a>
+</li>
+<li>action_ratio
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#a061f26fa14ee9fb5f7d49113623c5d61">BSMPT::BounceSolution</a>
+</li>
+<li>ActionStatus
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#ad0e65e97ac71874b3d21db50d8cbd1ff">BSMPT::BounceActionInt</a>
+</li>
+<li>Add()
+: <a class="el" href="structBSMPT_1_1Phase.html#a330177358b46079d60cd359a1ab92c08">BSMPT::Phase</a>
+</li>
 <li>add_argument()
-: <a class="el" href="classBSMPT_1_1parser.html#ac9b355998267db71dec3a48e9a22c6b4">BSMPT::parser</a>
+: <a class="el" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">BSMPT::parser</a>
+</li>
+<li>add_argument_only_display()
+: <a class="el" href="classBSMPT_1_1parser.html#ab678ae6c7ea7e75a11549f4047554f29">BSMPT::parser</a>
 </li>
 <li>add_input()
 : <a class="el" href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">BSMPT::parser</a>
@@ -102,13 +121,20 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>add_json_input()
 : <a class="el" href="classBSMPT_1_1parser.html#a9e5deb552577c0b670f14284561b4ba1">BSMPT::parser</a>
 </li>
+<li>add_point()
+: <a class="el" href="classcvspline.html#ad8cb528c8a3a0f22fc45c67a9943befd">cvspline</a>
+</li>
+<li>add_subtext()
+: <a class="el" href="classBSMPT_1_1parser.html#a974e4a757c211840eee6c96a3484a160">BSMPT::parser</a>
+</li>
 <li>addLegendCT()
 : <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ae19434d8b085ab97ebb56836d4838ec7">BSMPT::Class_Potential_Origin</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#aeb6dddafbf1094c93230022107d7df45">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a9086d31483f0fd0220a34673893708b2">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#acdfc1beeed9dcc5c4881c72acd78d990">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#a69446e993b84e507b2524b47eacf2baf">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a60562a072a0f2073ac5be42b141ed6f4">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a22308881a9a802876902e1cfff61d0e1">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#a15fd4afcc0db91cd640459e7848ce4aa">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#ad8471afb085ce930cc52abc87e7fae5e">BSMPT::Models::Class_Template</a>
 </li>
 <li>addLegendTemp()
@@ -116,8 +142,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#a6d678aa5de1be95566ac2459871e4c99">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#af963603325853c70742aea5d7bb91dc0">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#aa13e32d42584765c9ecaad1a26be0910">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#aa51f34f4e38af14307cc3808254dae8e">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a9754e9a7e34379bbbdfeb0cf4387711f">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a18ece00a75a29939eddee550e7169858">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#ab5afa308607705383b3f3b9956e84fee">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#a2a5af373144bdd2f69467dd6db334d2c">BSMPT::Models::Class_Template</a>
 </li>
 <li>addLegendTripleCouplings()
@@ -125,8 +152,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#a312e948cf6e264b1f9de794c6046619f">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a4d2ceb1e7ce3eebf0742b29c3e34c2c1">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#a65b8b47d7518f573b134d1675bfb757a">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#a65a3c32fdb03c5a78ba066b105aadcfa">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#af86b8547885248c9a82d8b5934da94f9">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a844336bfb7a86a78c3552139e7183d61">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#a13067b5b36fd7276d9530e5755d0b66f">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#aa754ea5f9ca1ce2f236a4c56f7578fe9">BSMPT::Models::Class_Template</a>
 </li>
 <li>addLegendVEV()
@@ -134,12 +162,25 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#a97f113f23b89e0b6a52326ef85e75e9c">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a8076c4825a02f8f3ca21beb64738327a">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#a5515b76e8953438b16d6bfa572c4f361">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#a632a47f83d14269ae88e23eec701d54c">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#ab120d58e5f800b5da5a436cd9a32c03c">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a94b4248b66ac6b417d769469ccf711a3">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#a7fed44141f59c577ee5a68ec55935b31">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#a2a0f67593cb84e6340a3354694f11a27">BSMPT::Models::Class_Template</a>
+</li>
+<li>addPhase()
+: <a class="el" href="structBSMPT_1_1Vacuum.html#a2c242c262d65b3f98a321bd67f63f1a1">BSMPT::Vacuum</a>
 </li>
 <li>all_required_set()
 : <a class="el" href="classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964">BSMPT::parser</a>
+</li>
+<li>Alpha
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#ae67bd826a910bac7a4d85518d7b1d509">BSMPT::BounceActionInt</a>
+</li>
+<li>alpha
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#ad748b0e18d854cc0b2d49da5648da0bb">BSMPT::BounceSolution</a>
+</li>
+<li>AuxFunctionDev()
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#abea15c1789845d23ef2eb7497b764444">BSMPT::BounceActionInt</a>
 </li>
 </ul>
 </div><!-- contents -->

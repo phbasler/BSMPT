@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -115,7 +115,7 @@ $(document).ready(function(){initNavTree('MinimizePlane_8h_source.html',''); ini
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span>                  <span class="comment">// for shared_ptr</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span>                  <span class="comment">// for vector</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>BSMPT</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceBSMPT.html">BSMPT</a></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">class </span>Class_Potential_Origin;</div>
@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('MinimizePlane_8h_source.html',''); ini
 <div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn.html">   37</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1MinimizePlaneReturn.html">MinimizePlaneReturn</a></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keywordtype">double</span> PotVal;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  std::vector&lt;double&gt; Minimum;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  std::vector&lt;double&gt; <a class="code" href="structBSMPT_1_1Minimum.html">Minimum</a>;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html">   46</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html">GSLPlaneReturn</a></div>
@@ -216,6 +216,7 @@ $(document).ready(function(){initNavTree('MinimizePlane_8h_source.html',''); ini
 <div class="ttc" id="aMinimizePlane_8h_html_ae9334b91fcbc0706fc4f9f626c25cffe"><div class="ttname"><a href="MinimizePlane_8h.html#ae9334b91fcbc0706fc4f9f626c25cffe">BSMPT::Minimizer::TransformCoordinates</a></div><div class="ttdeci">std::vector&lt; double &gt; TransformCoordinates(const std::vector&lt; double &gt; &amp;vMinTilde, const struct PointerContainerMinPlane &amp;params)</div><div class="ttdef"><b>Definition:</b> MinimizePlane.cpp:43</div></div>
 <div class="ttc" id="aMinimizer_8h_html"><div class="ttname"><a href="Minimizer_8h.html">Minimizer.h</a></div></div>
 <div class="ttc" id="anamespaceBSMPT_1_1ModelID_html_a5f777ff3c379602f5d554d87edc7dc3a"><div class="ttname"><a href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">BSMPT::ModelID::ModelIDs</a></div><div class="ttdeci">ModelIDs</div><div class="ttdoc">The ModelIDs enum containing all IDs for identifying the Models.</div><div class="ttdef"><b>Definition:</b> IncludeAllModels.h:32</div></div>
+<div class="ttc" id="anamespaceBSMPT_html"><div class="ttname"><a href="namespaceBSMPT.html">BSMPT</a></div><div class="ttdoc">This classes calculates the Bounce action of the potential with a set temperature.</div><div class="ttdef"><b>Definition:</b> CalculateEtaInterface.h:24</div></div>
 <div class="ttc" id="astructBSMPT_1_1ISMConstants_html"><div class="ttname"><a href="structBSMPT_1_1ISMConstants.html">BSMPT::ISMConstants</a></div><div class="ttdoc">The ISMConstants struct containing all necessary SM constants.</div><div class="ttdef"><b>Definition:</b> SMparam.h:24</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1GSLPlaneReturn_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html">BSMPT::Minimizer::GSLPlaneReturn</a></div><div class="ttdoc">The GSLPlaneReturn struct.</div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:47</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1GSLPlaneReturn_html_a83fc86831fba374ed0c37ec118e28a44"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html#a83fc86831fba374ed0c37ec118e28a44">BSMPT::Minimizer::GSLPlaneReturn::PotVal</a></div><div class="ttdeci">double PotVal</div><div class="ttdoc">PotVal The value of the potential in the minimum.</div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:55</div></div>
@@ -232,6 +233,7 @@ $(document).ready(function(){initNavTree('MinimizePlane_8h_source.html',''); ini
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1PointerContainerMinPlane_html_a92b1c0f38cd8f27bb0a25ae88e2df562"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#a92b1c0f38cd8f27bb0a25ae88e2df562">BSMPT::Minimizer::PointerContainerMinPlane::normalvector</a></div><div class="ttdeci">std::vector&lt; double &gt; normalvector</div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:94</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1PointerContainerMinPlane_html_ac2bba7e00090d28feaf38d82b6a663eb"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#ac2bba7e00090d28feaf38d82b6a663eb">BSMPT::Minimizer::PointerContainerMinPlane::Point</a></div><div class="ttdeci">std::vector&lt; double &gt; Point</div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:89</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1PointerContainerMinPlane_html_ae0d0ed5866a873bdc2043e0e253532f1"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#ae0d0ed5866a873bdc2043e0e253532f1">BSMPT::Minimizer::PointerContainerMinPlane::Temp</a></div><div class="ttdeci">double Temp</div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:98</div></div>
+<div class="ttc" id="astructBSMPT_1_1Minimum_html"><div class="ttname"><a href="structBSMPT_1_1Minimum.html">BSMPT::Minimum</a></div><div class="ttdoc">struct to store minimum and temperature</div><div class="ttdef"><b>Definition:</b> minimum_tracer.h:253</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

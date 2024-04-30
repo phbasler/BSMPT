@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -93,6 +93,15 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <div class="textblock">Here is a list of all documented class members with links to the class documentation for each member:</div>
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>S3ofT_spline
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#aea321e56f6292de82943b64279080084">BSMPT::BounceSolution</a>
+</li>
+<li>save_path()
+: <a class="el" href="classcvspline.html#a5b36ed57e1ac3c166303dc2ff608ff8a">cvspline</a>
+</li>
+<li>SavedMinimaFromVEVSplitting
+: <a class="el" href="classBSMPT_1_1MinimumTracer.html#ad8ae1bb86962b7a98f3b529624b4b9be">BSMPT::MinimumTracer</a>
+</li>
 <li>scale
 : <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a73f59d475aa10163979c34a5bb935b22">BSMPT::Class_Potential_Origin</a>
 </li>
@@ -114,8 +123,9 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#a3eaf0f2879f9ffd573afe88e65f19071">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ac42264e964a5435e39866a5b0034ab7b">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#a17fc106f7ccfa0fb9bb6c80878ceea0c">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#ad33746ae303f5e3073bb65e47a6a6cfa">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a93626ca0c14cbb73cd5c340d52f9f0ab">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a6b74fc52fcf7b549e71228eb5f13b98f">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#ad1d8707473b4858db3ebbe5e7f97b880">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#a3a7a320e48bee8da16c08ae87a22658c">BSMPT::Models::Class_Template</a>
 </li>
 <li>set_gen()
@@ -123,8 +133,9 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#ad4c614a817cd4d7f4c0fd1f9b4e5130a">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a7791e1dc058100ca0c8afea57188de66">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#aea630adf8b7ef894b9dbd65995a3696e">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#aaae1950a0309d880be39111181ac5fd7">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a79248fae9c55486d26cad2b5a2e8a54f">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a22c37b0133c37615f02dab482ee560f7">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#ae346d97512541a416c80b51b1fd7053f">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#af5db2f148b46b8283bc7822e0bf73361">BSMPT::Models::Class_Template</a>
 </li>
 <li>set_help_header()
@@ -143,26 +154,51 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <li>set_vev_sym_theta()
 : <a class="el" href="structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a803e729acaf15cbeacf2731b0343d179">BSMPT::Baryo::GSL_integration_mubl</a>
 </li>
+<li>SetBounceSol()
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#aadd4cad91e1125f1024abc4a73499555">BSMPT::BounceSolution</a>
+</li>
+<li>setCoexPhases()
+: <a class="el" href="structBSMPT_1_1Vacuum.html#acae11c1e476a1023792c51ae97bc2178">BSMPT::Vacuum</a>
+</li>
+<li>setCoexRegion()
+: <a class="el" href="structBSMPT_1_1Vacuum.html#af26df1b35c5c13b6515b43d7ced4955b">BSMPT::Vacuum</a>
+</li>
+<li>SetCriticalTemp()
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#a29d9a5c346f720b60299a9411a59e3f1">BSMPT::BounceSolution</a>
+</li>
 <li>SetCurvatureArrays()
 : <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ac39b156f75e04c068784a4c42333e592">BSMPT::Class_Potential_Origin</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__CxSM.html#acbbabc20074a9703701ff01c44f80dd5">BSMPT::Models::Class_CxSM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#ac8494b8edcf251696dcc3524d84a0255">BSMPT::Models::Class_Potential_C2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__CPintheDark.html#a7c62601e02a0ae1ef1a8a6a1cc33b11b">BSMPT::Models::Class_Potential_CPintheDark</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__N2HDM.html#aec657c5ce1e9b24a61e292d05ae23dff">BSMPT::Models::Class_Potential_N2HDM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__R2HDM.html#a7e762f1cd253df57ebea8703b09c6014">BSMPT::Models::Class_Potential_R2HDM</a>
-, <a class="el" href="classBSMPT_1_1Models_1_1Class__Potential__RN2HDM.html#a3d71e3f8ef9cc62e954844023ee89357">BSMPT::Models::Class_Potential_RN2HDM</a>
+, <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html#a353b4fda8038395a266cf2be431b60ed">BSMPT::Models::Class_SM</a>
 , <a class="el" href="classBSMPT_1_1Models_1_1Class__Template.html#aff922600bbe7bfdfb22f9dd269c4562c">BSMPT::Models::Class_Template</a>
 </li>
 <li>SetCurvatureDone
 : <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a8d42c3286c5bbfd816c325f47aa0aa67">BSMPT::Class_Potential_Origin</a>
 </li>
+<li>SetEWVEVZero()
+: <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#ac31fd5483d523c3beb58757b30f72366">BSMPT::Class_Potential_Origin</a>
+</li>
+<li>SetGstar()
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#a82522f6a61fbe6aa59792e868b0fb834">BSMPT::BounceSolution</a>
+</li>
 <li>setNumerics()
-: <a class="el" href="classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ad38487000cbc9f99f8270bf508a89f6d">BSMPT::Baryo::CalculateEtaInterface</a>
+: <a class="el" href="classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a0dbc4f45dbd0a1729973718074c197ca">BSMPT::Baryo::CalculateEtaInterface</a>
 </li>
 <li>SetOStream()
-: <a class="el" href="classBSMPT_1_1BSMPTLogger.html#a3a1ed14027fa3dd50799034db1a40a36">BSMPT::BSMPTLogger</a>
+: <a class="el" href="classBSMPT_1_1BSMPTLogger.html#a67ab115f5019af93ce0f46e95376896c">BSMPT::BSMPTLogger</a>
 </li>
 <li>setpar()
 : <a class="el" href="structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#ac2623731712362ec29fef3f94c7c235d">BSMPT::Baryo::GSL_integration_mubl</a>
+</li>
+<li>SetPath()
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#ad7cd71a57c1a9200157a3e3e5e23bfc7">BSMPT::BounceActionInt</a>
+</li>
+<li>SetStoredTemp()
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#acb0901e907d784106608ca8efd0b953a">BSMPT::BounceSolution</a>
 </li>
 <li>setSymmetricCPViolatingPhase()
 : <a class="el" href="structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a785c621e54bcca731c75c1610899f0b4">BSMPT::Baryo::GSL_integration_mubl</a>
@@ -189,16 +225,81 @@ $(document).ready(function(){initNavTree('functions_s.html',''); initResizable()
 <li>SignSymmetries
 : <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a105701013dedcfb38d44c4dda3c0f1e0">BSMPT::Class_Potential_Origin</a>
 </li>
+<li>Simpson_step()
+: <a class="el" href="classcvspline.html#a21775e41488a4b26d0650f144e420cd7">cvspline</a>
+</li>
+<li>SinglePathDeformation()
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#acf11eb656f185581647c4877b168d4e2">BSMPT::BounceActionInt</a>
+</li>
+<li>SmallestEigenvalue()
+: <a class="el" href="classBSMPT_1_1MinimumTracer.html#a65011905215f47fc44b4191214b7da35">BSMPT::MinimumTracer</a>
+</li>
 <li>SMConstants
 : <a class="el" href="classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ad7911b4505bffa3200bdb278ba7a7d30">BSMPT::Baryo::CalculateEtaInterface</a>
 , <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a392cca20cc3964bd4dddcc48e25baacb">BSMPT::Class_Potential_Origin</a>
 </li>
+<li>snr_integrand
+: <a class="el" href="classBSMPT_1_1GravitationalWave.html#ad433276f014049a2b6a2dc0597cc7804">BSMPT::GravitationalWave</a>
+</li>
+<li>SolutionList
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#a1f1621c008192b518a9b88f315b31802">BSMPT::BounceSolution</a>
+</li>
+<li>Solve1DBounce()
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#a885608a426afd615d80c13ef4a3c1172">BSMPT::BounceActionInt</a>
+</li>
 <li>spline
 : <a class="el" href="structBSMPT_1_1Baryo_1_1GSL__mubl__interpolation.html#a8eda7cd124ca249f4294ae60cfbd8e80">BSMPT::Baryo::GSL_mubl_interpolation</a>
-, <a class="el" href="structBSMPT_1_1Wall_1_1GSL__params.html#a194b2a4b191df826bacb697601fbabb6">BSMPT::Wall::GSL_params</a>
+</li>
+<li>Spline
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#abc4330ab52d72bb7a0a9a2ae55267021">BSMPT::BounceActionInt</a>
+</li>
+<li>spline
+: <a class="el" href="structBSMPT_1_1Wall_1_1GSL__params.html#a194b2a4b191df826bacb697601fbabb6">BSMPT::Wall::GSL_params</a>
+</li>
+<li>splines
+: <a class="el" href="classcvspline.html#af6d349042847597008ba750c52f8c1ee">cvspline</a>
+</li>
+<li>StateOf1DIntegration
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#a94fed28e7da1fa31fc2d832e6262203a">BSMPT::BounceActionInt</a>
+</li>
+<li>StateOfBounceActionInt
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#a5a45d485ea861cdf709c5dc035f370ba">BSMPT::BounceActionInt</a>
+</li>
+<li>StateOfPathDeformation
+: <a class="el" href="classBSMPT_1_1BounceActionInt.html#a31b192a035855958fbbe882838598504">BSMPT::BounceActionInt</a>
+</li>
+<li>status_bounce_sol
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#afeb7a3ff39e6d95a49eaade9c8a2b1ad">BSMPT::BounceSolution</a>
+</li>
+<li>status_coex_pairs
+: <a class="el" href="structBSMPT_1_1Vacuum.html#a630f06ec754d580aace9e621fbe7cb33">BSMPT::Vacuum</a>
+</li>
+<li>status_compl
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#a3b87b677837eccdd9ee8b8a5e4e4ff55">BSMPT::BounceSolution</a>
+</li>
+<li>status_nucl
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#ad8e4b2acff6904c754a8c18c7061fc25">BSMPT::BounceSolution</a>
+</li>
+<li>status_nucl_approx
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#aded455c4b498050666af920fe0246c2c">BSMPT::BounceSolution</a>
+</li>
+<li>status_perc
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#a795aba5b35fa5ea511e813e7e69dd212">BSMPT::BounceSolution</a>
+</li>
+<li>status_vacuum
+: <a class="el" href="structBSMPT_1_1Vacuum.html#af831d0d1c409eaa7faaad49e1a10e78a">BSMPT::Vacuum</a>
 </li>
 <li>StatusFlag
 : <a class="el" href="structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html#adb52d0752533fc36f651b751ce9d0e18">BSMPT::Minimizer::GSLPlaneReturn</a>
+</li>
+<li>store_Temp
+: <a class="el" href="classBSMPT_1_1BounceSolution.html#ab5538ee4205361f42123c8e7952918c1">BSMPT::BounceSolution</a>
+</li>
+<li>sym2Dim()
+: <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a0740b032b9366ffdf45b531e31b0f2d6">BSMPT::Class_Potential_Origin</a>
+</li>
+<li>sym3Dim()
+: <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a22740d0c7d9fe76688d51390fe91bb28">BSMPT::Class_Potential_Origin</a>
 </li>
 <li>sym4Dim()
 : <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html#a8eccf97f1c19c5d90d8cee0b20d9c2f0">BSMPT::Class_Potential_Origin</a>

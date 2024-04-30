@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -106,7 +106,7 @@ $(document).ready(function(){initNavTree('ClassTemplate_8h_source.html',''); ini
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span> <span class="comment">// for vector</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="ClassPotentialOrigin_8h.html">BSMPT/models/ClassPotentialOrigin.h</a>&gt;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>BSMPT</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceBSMPT.html">BSMPT</a></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span>Models</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('ClassTemplate_8h_source.html',''); ini
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <span class="keywordtype">double</span> <a class="code" href="classBSMPT_1_1Models_1_1Class__Template.html#a327f46148f703a7e36085a34950768ad">VTreeSimplified</a>(<span class="keyword">const</span> std::vector&lt;double&gt; &amp;v) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keywordtype">double</span> <a class="code" href="classBSMPT_1_1Models_1_1Class__Template.html#acb4bf5b3e17b02f2a79d9d6732e99560">VCounterSimplified</a>(<span class="keyword">const</span> std::vector&lt;double&gt; &amp;v) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classBSMPT_1_1Models_1_1Class__Template.html#ae2e515606746c7db2a152f544dd3a145">Debugging</a>(<span class="keyword">const</span> std::vector&lt;double&gt; &amp;input,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                 std::vector&lt;double&gt; &amp;output) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                 std::vector&lt;double&gt; &amp;<a class="code" href="structBSMPT_1_1output.html">output</a>) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;};</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;} <span class="comment">// namespace Models</span></div>
@@ -170,7 +170,9 @@ $(document).ready(function(){initNavTree('ClassTemplate_8h_source.html',''); ini
 <div class="ttc" id="aclassBSMPT_1_1Models_1_1Class__Template_html_aea277c110b8d0e94341aa253c6cd6e3e"><div class="ttname"><a href="classBSMPT_1_1Models_1_1Class__Template.html#aea277c110b8d0e94341aa253c6cd6e3e">BSMPT::Models::Class_Template::Class_Template</a></div><div class="ttdeci">Class_Template(const ISMConstants &amp;smConstants)</div><div class="ttdef"><b>Definition:</b> ClassTemplate.cpp:36</div></div>
 <div class="ttc" id="aclassBSMPT_1_1Models_1_1Class__Template_html_af5db2f148b46b8283bc7822e0bf73361"><div class="ttname"><a href="classBSMPT_1_1Models_1_1Class__Template.html#af5db2f148b46b8283bc7822e0bf73361">BSMPT::Models::Class_Template::set_gen</a></div><div class="ttdeci">void set_gen(const std::vector&lt; double &gt; &amp;par) override</div><div class="ttdef"><b>Definition:</b> ClassTemplate.cpp:179</div></div>
 <div class="ttc" id="aclassBSMPT_1_1Models_1_1Class__Template_html_aff922600bbe7bfdfb22f9dd269c4562c"><div class="ttname"><a href="classBSMPT_1_1Models_1_1Class__Template.html#aff922600bbe7bfdfb22f9dd269c4562c">BSMPT::Models::Class_Template::SetCurvatureArrays</a></div><div class="ttdeci">void SetCurvatureArrays() override</div><div class="ttdef"><b>Definition:</b> ClassTemplate.cpp:378</div></div>
+<div class="ttc" id="anamespaceBSMPT_html"><div class="ttname"><a href="namespaceBSMPT.html">BSMPT</a></div><div class="ttdoc">This classes calculates the Bounce action of the potential with a set temperature.</div><div class="ttdef"><b>Definition:</b> CalculateEtaInterface.h:24</div></div>
 <div class="ttc" id="astructBSMPT_1_1ISMConstants_html"><div class="ttname"><a href="structBSMPT_1_1ISMConstants.html">BSMPT::ISMConstants</a></div><div class="ttdoc">The ISMConstants struct containing all necessary SM constants.</div><div class="ttdef"><b>Definition:</b> SMparam.h:24</div></div>
+<div class="ttc" id="astructBSMPT_1_1output_html"><div class="ttname"><a href="structBSMPT_1_1output.html">BSMPT::output</a></div><div class="ttdef"><b>Definition:</b> transition_tracer.h:143</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

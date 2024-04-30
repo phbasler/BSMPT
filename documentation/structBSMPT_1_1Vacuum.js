@@ -1,0 +1,27 @@
+var structBSMPT_1_1Vacuum =
+[
+    [ "Vacuum", "structBSMPT_1_1Vacuum.html#a3940d5c5171cf742f94c7a4a17a3f603", null ],
+    [ "addPhase", "structBSMPT_1_1Vacuum.html#a2c242c262d65b3f98a321bd67f63f1a1", null ],
+    [ "DoGlobMinOverlap", "structBSMPT_1_1Vacuum.html#ad05bc23a3a5cd444d44b1fea01e20f59", null ],
+    [ "DoPhasesOverlap", "structBSMPT_1_1Vacuum.html#aeeaf7a1f9261d3fa38461b74864de52d", null ],
+    [ "MinimumFoundAlready", "structBSMPT_1_1Vacuum.html#a400a34830042f23d6cbef483e6d45ab1", null ],
+    [ "MultiStepPTMode0", "structBSMPT_1_1Vacuum.html#a00260c3e9282f61929a758d678ccfc33", null ],
+    [ "MultiStepPTMode1", "structBSMPT_1_1Vacuum.html#affb074e3f69841d3ee6686bc8d8e0bc4", null ],
+    [ "MultiStepPTMode2", "structBSMPT_1_1Vacuum.html#a8076f89c163f88adc27f3592e502d1f2", null ],
+    [ "MultiStepPTTracer", "structBSMPT_1_1Vacuum.html#a4637508335789b6a24f09769a8d12990", null ],
+    [ "print", "structBSMPT_1_1Vacuum.html#aab1f7b1cdca940d8d62ef7d3fe8e926a", null ],
+    [ "PrintPhasesDiagram", "structBSMPT_1_1Vacuum.html#a422db47a54a026095e8c41ce94d702c0", null ],
+    [ "setCoexPhases", "structBSMPT_1_1Vacuum.html#acae11c1e476a1023792c51ae97bc2178", null ],
+    [ "setCoexRegion", "structBSMPT_1_1Vacuum.html#af26df1b35c5c13b6515b43d7ced4955b", null ],
+    [ "CoexPhasesList", "structBSMPT_1_1Vacuum.html#a42c1bc7761899f2ea292dc323ec0d485", null ],
+    [ "MinTracer", "structBSMPT_1_1Vacuum.html#a6e7012a5f6391ecd3274f58557f9e5f0", null ],
+    [ "modelPointer", "structBSMPT_1_1Vacuum.html#a72c406d5caf4afe2b645b67e4721dc3f", null ],
+    [ "num_points", "structBSMPT_1_1Vacuum.html#a70fac0ee7c733d7303213f72c3832d1f", null ],
+    [ "PhasesList", "structBSMPT_1_1Vacuum.html#adc8ca9c7c9cf6f69b9ede7e34750a718", null ],
+    [ "status_coex_pairs", "structBSMPT_1_1Vacuum.html#a630f06ec754d580aace9e621fbe7cb33", null ],
+    [ "status_vacuum", "structBSMPT_1_1Vacuum.html#af831d0d1c409eaa7faaad49e1a10e78a", null ],
+    [ "T_high", "structBSMPT_1_1Vacuum.html#a551faef3107dfb35998351ce086a613b", null ],
+    [ "T_high_lowTempPhase", "structBSMPT_1_1Vacuum.html#abb3f79effec5bdcd1d66db94ab08e03f", null ],
+    [ "T_low", "structBSMPT_1_1Vacuum.html#ad2ed938a332928f0f1d62d6f1bd9512a", null ],
+    [ "T_low_highTempPhase", "structBSMPT_1_1Vacuum.html#adb2b42fb0365500c524260c466053392", null ]
+];

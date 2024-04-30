@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -106,7 +106,7 @@ $(document).ready(function(){initNavTree('MinimizeNLOPT_8h_source.html',''); ini
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;nlopt.hpp&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>BSMPT</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceBSMPT.html">BSMPT</a></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">class </span>Class_Potential_Origin;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>Minimizer</div>
@@ -129,7 +129,7 @@ $(document).ready(function(){initNavTree('MinimizeNLOPT_8h_source.html',''); ini
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html">   45</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html">NLOPTReturnType</a></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;{</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  std::vector&lt;double&gt; Minimum;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  std::vector&lt;double&gt; <a class="code" href="structBSMPT_1_1Minimum.html">Minimum</a>;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keywordtype">double</span> PotVal;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  nlopt::result NLOPTResult;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keywordtype">bool</span> Success;</div>
@@ -141,7 +141,7 @@ $(document).ready(function(){initNavTree('MinimizeNLOPT_8h_source.html',''); ini
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                  <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;PotValIn,</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                  <span class="keyword">const</span> nlopt::result &amp;NLOPTResultIn,</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                  <span class="keywordtype">bool</span> SuccessIn)</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      : Minimum{MinimumIn}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      : <a class="code" href="structBSMPT_1_1Minimum.html">Minimum</a>{MinimumIn}</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      , PotVal{PotValIn}</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      , NLOPTResult{NLOPTResultIn}</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      , Success{SuccessIn}</div>
@@ -177,9 +177,11 @@ $(document).ready(function(){initNavTree('MinimizeNLOPT_8h_source.html',''); ini
 <div class="ttc" id="aMinimizeNLOPT_8h_html_a7a71d554fc3fb1db1e18794d13ee70d6"><div class="ttname"><a href="MinimizeNLOPT_8h.html#a7a71d554fc3fb1db1e18794d13ee70d6">BSMPT::Minimizer::LibNLOPT::FindLocalMinimum</a></div><div class="ttdeci">NLOPTReturnType FindLocalMinimum(const std::shared_ptr&lt; Class_Potential_Origin &gt; &amp;model, const std::vector&lt; double &gt; &amp;Start, const double &amp;Temp)</div><div class="ttdoc">FindLocalMinimum finds the local minimum near the starting point.</div><div class="ttdef"><b>Definition:</b> MinimizeNLOPT.cpp:143</div></div>
 <div class="ttc" id="aMinimizeNLOPT_8h_html_a96d8e08d5eac4ea59c5c11b9bf4de089"><div class="ttname"><a href="MinimizeNLOPT_8h.html#a96d8e08d5eac4ea59c5c11b9bf4de089">BSMPT::Minimizer::LibNLOPT::MinimizeUsingNLOPT</a></div><div class="ttdeci">NLOPTReturnType MinimizeUsingNLOPT(const Class_Potential_Origin &amp;model, const double &amp;Temp)</div><div class="ttdoc">MinimizeUsingNLOPT minimizes the effective potential using the NLopt LN_COBYLA algorithm.</div><div class="ttdef"><b>Definition:</b> MinimizeNLOPT.cpp:31</div></div>
 <div class="ttc" id="aclassBSMPT_1_1Class__Potential__Origin_html"><div class="ttname"><a href="classBSMPT_1_1Class__Potential__Origin.html">BSMPT::Class_Potential_Origin</a></div><div class="ttdoc">The Class_Potential_Origin class Base class for all models. This class contains all numerical calcula...</div><div class="ttdef"><b>Definition:</b> ClassPotentialOrigin.h:57</div></div>
+<div class="ttc" id="anamespaceBSMPT_html"><div class="ttname"><a href="namespaceBSMPT.html">BSMPT</a></div><div class="ttdoc">This classes calculates the Bounce action of the potential with a set temperature.</div><div class="ttdef"><b>Definition:</b> CalculateEtaInterface.h:24</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1NLOPTReturnType.html">BSMPT::Minimizer::LibNLOPT::NLOPTReturnType</a></div><div class="ttdoc">The NLOPTReturnType struct which is returned by the minimization.</div><div class="ttdef"><b>Definition:</b> MinimizeNLOPT.h:46</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1LibNLOPT_1_1ShareInformationNLOPT_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1LibNLOPT_1_1ShareInformationNLOPT.html">BSMPT::Minimizer::LibNLOPT::ShareInformationNLOPT</a></div><div class="ttdoc">The ShareInformationNLOPT struct which is used to pass the model information to the NLopt minimizatio...</div><div class="ttdef"><b>Definition:</b> MinimizeNLOPT.h:31</div></div>
 <div class="ttc" id="astructBSMPT_1_1Minimizer_1_1PointerContainerMinPlane_html"><div class="ttname"><a href="structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html">BSMPT::Minimizer::PointerContainerMinPlane</a></div><div class="ttdef"><b>Definition:</b> MinimizePlane.h:71</div></div>
+<div class="ttc" id="astructBSMPT_1_1Minimum_html"><div class="ttname"><a href="structBSMPT_1_1Minimum.html">BSMPT::Minimum</a></div><div class="ttdoc">struct to store minimum and temperature</div><div class="ttdef"><b>Definition:</b> minimum_tracer.h:253</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

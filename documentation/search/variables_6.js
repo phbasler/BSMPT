@@ -1,16 +1,15 @@
 var searchData=
 [
-  ['k1m_1079',['K1m',['../Kfunctions__grid_8h.html#a1e3856f58bc3d95178cb94d9bbb46996',1,'BSMPT::Kfactors::Data']]],
-  ['k1p_1080',['K1p',['../Kfunctions__grid_8h.html#a36b6dda19b3cfcc56f1f244c4adf082e',1,'BSMPT::Kfactors::Data']]],
-  ['k2p_1081',['K2p',['../Kfunctions__grid_8h.html#a8d25a9bff57945590e0daf593c8b1715',1,'BSMPT::Kfactors::Data']]],
-  ['k4m_1082',['K4m',['../Kfunctions__grid_8h.html#a696cafb5443aed7fd9c48c967d65f6cf',1,'BSMPT::Kfactors::Data']]],
-  ['k4p_1083',['K4p',['../Kfunctions__grid_8h.html#aeb2ccd21c2b2c171f15ded0fbabc7a09',1,'BSMPT::Kfactors::Data']]],
-  ['k5m_1084',['K5m',['../Kfunctions__grid_8h.html#aae4c148564f6afaa43abe57c03a7b874',1,'BSMPT::Kfactors::Data']]],
-  ['k5p_1085',['K5p',['../Kfunctions__grid_8h.html#a19ec44ec73d172e0d72867d746b487d0',1,'BSMPT::Kfactors::Data']]],
-  ['k6p_1086',['K6p',['../Kfunctions__grid_8h.html#ad273f394863899780c4c88e3cda7eaa8',1,'BSMPT::Kfactors::Data']]],
-  ['k8p_1087',['K8p',['../Kfunctions__grid_8h.html#a8f35abc27f46e78959205bd563b5591a',1,'BSMPT::Kfactors::Data']]],
-  ['k9p_1088',['K9p',['../Kfunctions__grid_8h.html#ad24d236231064bad28f7e52c41a2825e',1,'BSMPT::Kfactors::Data']]],
-  ['ktildeinterpolationsize_1089',['KtildeInterpolationSize',['../KtildeInterpolation_8h.html#a5d07381ea6a8e0a9a2b313d027fe1931',1,'BSMPT::Kfactors::Data']]],
-  ['ktildenormboson_5fgrid_1090',['KtildeNormBoson_grid',['../KtildeInterpolation_8h.html#a1964924c15e2313da5fa275acd8c0153',1,'BSMPT::Kfactors::Data']]],
-  ['ktildenormfermion_5fgrid_1091',['KtildeNormFermion_grid',['../KtildeInterpolation_8h.html#abc33dcbf5a3c9f89eb8f699227d5e679',1,'BSMPT::Kfactors::Data']]]
+  ['gam_5fss_1585',['Gam_SS',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a7fce9bc5464f2efa493159bbc85959e9',1,'BSMPT::Baryo::gen_fluid']]],
+  ['gam_5fy_1586',['Gam_Y',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a284e493b8e70572899da5e7ec1c341ee',1,'BSMPT::Baryo::gen_fluid']]],
+  ['gam_5fy_5fb_1587',['Gam_Y_b',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a0dd30374f5e9ddb7395cde66385abb5b',1,'BSMPT::Baryo::gen_fluid']]],
+  ['gam_5fy_5ft_1588',['Gam_Y_t',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a8e6ebb54a5d9eb32b17a4ee9e36ea029',1,'BSMPT::Baryo::gen_fluid']]],
+  ['gam_5fy_5ftau_1589',['Gam_Y_tau',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a3907c26f16495ed8407af9a975776231',1,'BSMPT::Baryo::gen_fluid']]],
+  ['gamt_1590',['GamT',['../classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#aed147618dfd09cfd1fa5f2c0e5ea6f97',1,'BSMPT::Baryo::Calc_Gam_M']]],
+  ['gen_5fvcritical_1591',['gen_vcritical',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a9f897e49015422bd3ccc87a8b3079394',1,'BSMPT::Baryo::gen_fluid']]],
+  ['gradientthreshold_1592',['GradientThreshold',['../classBSMPT_1_1MinimumTracer.html#afb5bf011334bab53572b2fd336679abe',1,'BSMPT::MinimumTracer']]],
+  ['groupelements_1593',['GroupElements',['../classBSMPT_1_1BounceSolution.html#a34acd7ce9dc3e843e7a526d0b55d4478',1,'BSMPT::BounceSolution::GroupElements()'],['../classBSMPT_1_1MinimumTracer.html#a3aa1563907f76badf7a7b4ccb5408d50',1,'BSMPT::MinimumTracer::GroupElements()']]],
+  ['gsl_5fintegration_5fmubl_5fcontainer_1594',['GSL_integration_mubl_container',['../classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#abc2869a9043c901d94d2b57d87b1ec9c',1,'BSMPT::Baryo::CalculateEtaInterface']]],
+  ['gsl_5ftolerance_1595',['GSL_Tolerance',['../MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c',1,'BSMPT::Minimizer']]],
+  ['gstar_1596',['gstar',['../classBSMPT_1_1BounceSolution.html#aea8b2fdaba400b1e66c39f5bfb19b1e9',1,'BSMPT::BounceSolution']]]
 ];

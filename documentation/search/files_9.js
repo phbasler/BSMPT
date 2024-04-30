@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['smparam_2eh_691',['SMparam.h',['../include_2BSMPT_2models_2SMparam_8h.html',1,'']]]
+  ['plotewbg_5fnl_2ecpp_1027',['PlotEWBG_nL.cpp',['../PlotEWBG__nL_8cpp.html',1,'']]],
+  ['plotewbg_5fvw_2ecpp_1028',['PlotEWBG_vw.cpp',['../PlotEWBG__vw_8cpp.html',1,'']]],
+  ['potplotter_2ecpp_1029',['PotPlotter.cpp',['../PotPlotter_8cpp.html',1,'']]]
 ];

@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">2.6.0</span>
+   &#160;<span id="projectnumber">3.0.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('utility_8cpp.html',''); initResizable(
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">utility.cpp File Reference</div>  </div>
@@ -102,61 +103,42 @@ $(document).ready(function(){initNavTree('utility_8cpp.html',''); initResizable(
 <code>#include &lt;sstream&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceBSMPT"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html">BSMPT</a></td></tr>
+<tr class="memdesc:namespaceBSMPT"><td class="mdescLeft">&#160;</td><td class="mdescRight">This classes calculates the Bounce action of the potential with a set temperature. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a6c20b7a437ed80792bc18e44668605c2"><td class="memItemLeft" align="right" valign="top"><a id="a6c20b7a437ed80792bc18e44668605c2"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::operator&lt;&lt;</b> (std::ostream &amp;os, const ModelID::ModelIDs &amp;Model)</td></tr>
 <tr class="separator:a6c20b7a437ed80792bc18e44668605c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af399e9a581e9c31fc59194a3f32b66f1"><td class="memItemLeft" align="right" valign="top"><a id="af399e9a581e9c31fc59194a3f32b66f1"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#af399e9a581e9c31fc59194a3f32b66f1">BSMPT::split</a> (const std::string &amp;str, char delimiter)</td></tr>
+<tr class="memdesc:af399e9a581e9c31fc59194a3f32b66f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">split string separated by delimiter into substrings <br /></td></tr>
+<tr class="separator:af399e9a581e9c31fc59194a3f32b66f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81ad5e54211841dd33b4e4edd53b5b9e"><td class="memItemLeft" align="right" valign="top"><a id="a81ad5e54211841dd33b4e4edd53b5b9e"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::ModelIDToString</b> (const ModelID::ModelIDs &amp;Model)</td></tr>
 <tr class="separator:a81ad5e54211841dd33b4e4edd53b5b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68d199b1c37b6807ce1cfb6c57c0721b"><td class="memItemLeft" align="right" valign="top"><a id="a68d199b1c37b6807ce1cfb6c57c0721b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utility_8h.html#a68d199b1c37b6807ce1cfb6c57c0721b">BSMPT::StringStartsWith</a> (const std::string &amp;str, const std::string &amp;prefix)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a68d199b1c37b6807ce1cfb6c57c0721b">BSMPT::StringStartsWith</a> (const std::string &amp;str, const std::string &amp;prefix)</td></tr>
 <tr class="memdesc:a68d199b1c37b6807ce1cfb6c57c0721b"><td class="mdescLeft">&#160;</td><td class="mdescRight">StringStartsWith checks if str starts with prefix. <br /></td></tr>
 <tr class="separator:a68d199b1c37b6807ce1cfb6c57c0721b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab448300c7a9bfd21a81df9069c1ed451"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utility_8h.html#ab448300c7a9bfd21a81df9069c1ed451">BSMPT::StringEndsWith</a> (const std::string &amp;str, const std::string &amp;suffix)</td></tr>
-<tr class="memdesc:ab448300c7a9bfd21a81df9069c1ed451"><td class="mdescLeft">&#160;</td><td class="mdescRight">StringEndsWith tests if str ends with suffix.  <a href="utility_8h.html#ab448300c7a9bfd21a81df9069c1ed451">More...</a><br /></td></tr>
+<tr class="memitem:a720b2c4437c3b97f3d6fd4c1466dd201"><td class="memItemLeft" align="right" valign="top"><a id="a720b2c4437c3b97f3d6fd4c1466dd201"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a720b2c4437c3b97f3d6fd4c1466dd201">BSMPT::factorial</a> (const int &amp;a)</td></tr>
+<tr class="memdesc:a720b2c4437c3b97f3d6fd4c1466dd201"><td class="mdescLeft">&#160;</td><td class="mdescRight">factorial function <br /></td></tr>
+<tr class="separator:a720b2c4437c3b97f3d6fd4c1466dd201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b82302c8d9c5e58eca68e22f3d5616c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a8b82302c8d9c5e58eca68e22f3d5616c">BSMPT::L2NormVector</a> (const std::vector&lt; double &gt; &amp;vec)</td></tr>
+<tr class="memdesc:a8b82302c8d9c5e58eca68e22f3d5616c"><td class="mdescLeft">&#160;</td><td class="mdescRight">L2NormVector.  <a href="namespaceBSMPT.html#a8b82302c8d9c5e58eca68e22f3d5616c">More...</a><br /></td></tr>
+<tr class="separator:a8b82302c8d9c5e58eca68e22f3d5616c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b3f5a8b31b9bebad301d7593f79f3d6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a7b3f5a8b31b9bebad301d7593f79f3d6">BSMPT::Transpose</a> (const std::vector&lt; std::vector&lt; double &gt;&gt; &amp;A)</td></tr>
+<tr class="memdesc:a7b3f5a8b31b9bebad301d7593f79f3d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the tranpose of a matrix.  <a href="namespaceBSMPT.html#a7b3f5a8b31b9bebad301d7593f79f3d6">More...</a><br /></td></tr>
+<tr class="separator:a7b3f5a8b31b9bebad301d7593f79f3d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab448300c7a9bfd21a81df9069c1ed451"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#ab448300c7a9bfd21a81df9069c1ed451">BSMPT::StringEndsWith</a> (const std::string &amp;str, const std::string &amp;suffix)</td></tr>
+<tr class="memdesc:ab448300c7a9bfd21a81df9069c1ed451"><td class="mdescLeft">&#160;</td><td class="mdescRight">StringEndsWith tests if str ends with suffix.  <a href="namespaceBSMPT.html#ab448300c7a9bfd21a81df9069c1ed451">More...</a><br /></td></tr>
 <tr class="separator:ab448300c7a9bfd21a81df9069c1ed451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="ab448300c7a9bfd21a81df9069c1ed451"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab448300c7a9bfd21a81df9069c1ed451">&#9670;&nbsp;</a></span>StringEndsWith()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BSMPT::StringEndsWith </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>suffix</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>StringEndsWith tests if str ends with suffix. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td></td></tr>
-    <tr><td class="paramname">suffix</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

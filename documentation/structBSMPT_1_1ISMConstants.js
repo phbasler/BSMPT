@@ -31,7 +31,9 @@ var structBSMPT_1_1ISMConstants =
     [ "C_Wolfenstein_eta", "structBSMPT_1_1ISMConstants.html#a36164ce606966f82e97e6e14cc9e4db3", null ],
     [ "C_Wolfenstein_lambda", "structBSMPT_1_1ISMConstants.html#a5aa3001a19ad252b3322839b6e6bcf99", null ],
     [ "C_Wolfenstein_rho", "structBSMPT_1_1ISMConstants.html#a2af900b749209f208164b7bd93d81a55", null ],
+    [ "Csound", "structBSMPT_1_1ISMConstants.html#a72c7d435cbe846cda7d68cdc99667b1d", null ],
     [ "delta", "structBSMPT_1_1ISMConstants.html#a4a6512f57aa352ec019cec8b405fdbe9", null ],
+    [ "MPl", "structBSMPT_1_1ISMConstants.html#ad41c230cae45a8f3e724422fa68923ea", null ],
     [ "theta12", "structBSMPT_1_1ISMConstants.html#af53e77b7ae9d80435a00055ddb5fc1f8", null ],
     [ "theta13", "structBSMPT_1_1ISMConstants.html#ad06d13e8bde9a3327be43621ab9024cb", null ],
     [ "theta23", "structBSMPT_1_1ISMConstants.html#a4fb4a3bca2437a315b6e6db9d6db6212", null ]

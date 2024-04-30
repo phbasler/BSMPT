@@ -3,7 +3,7 @@ var ThermalFunctions_8h =
     [ "JbosonIntegrand", "ThermalFunctions_8h.html#aba2ae3d6162b41230614dee01b104e2e", null ],
     [ "JbosonInterpolated", "ThermalFunctions_8h.html#a4c097fa569775a5793eeed0ab83528cc", null ],
     [ "JbosonInterpolatedLow", "ThermalFunctions_8h.html#a13d89b2fc9da0c27901ebd362cc36157", null ],
-    [ "JbosonInterpolatedNegative", "ThermalFunctions_8h.html#a46748b28bb1e2427f95d50f072c657ff", null ],
+    [ "JbosonInterpolatedNegative", "ThermalFunctions_8h.html#aa8b42ac79caa9439b1af8d58d749b7ff", null ],
     [ "JbosonNumericalIntegration", "ThermalFunctions_8h.html#a69495bde4137d9595122917a41e4358f", null ],
     [ "JfermionIntegrand", "ThermalFunctions_8h.html#a6f7e13fa8bc6cab391a1a615bdf6aa82", null ],
     [ "JfermionInterpolated", "ThermalFunctions_8h.html#a46552f089eb4b58bc31a91306319b4e4", null ],
