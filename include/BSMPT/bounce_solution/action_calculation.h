@@ -17,6 +17,7 @@
 #include <Eigen/Dense>
 #include <gsl/gsl_math.h>
 #include <numeric>
+#include <optional> // std::optional
 #include <sys/stat.h>
 #include <sys/types.h>
 
