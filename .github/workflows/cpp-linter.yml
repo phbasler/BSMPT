@@ -13,17 +13,46 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: cpp-linter/cpp-linter-action@v2
-        id: linter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          style: "file"
-          tidy-checks: '-*'
-          version: '14'
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
-      - name: Fail fast?!
-        if: steps.linter.outputs.checks-failed > 0
+      - name: Install clang-format
+        if: inputs.apply_clang_format
+        run: pip3 install clang-format==14.0.0
+
+      - run: git fetch origin $GITHUB_BASE_REF
+
+      - name: Set Branch name
+        id: branch-name
+        run:
+          echo "branchName=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+
+      - name: Define base git diff args
+        id: git-diff-args
         run: |
-          echo "Some files failed the linting checks!"
-          exit 1
+          echo "args=origin/${{steps.branch-name.outputs.branchName}}..HEAD" >> $GITHUB_OUTPUT
+          
+      - name: Apply clang-format on changed files
+        run: |
+          changedFileList=`git diff ${{steps.git-diff-args.outputs.args}} --name-only --diff-filter=d  -- '***.hpp' '***.cpp' '***.h' '***.c'`
+          for file in $changedFileList; do echo "Checking file " $file; clang-format --style=file -i $file; done
+
+      - name: Check if we have local changes
+        id: check-changes
+        shell: bash
+        run: |
+          if [[ -z $(git status --porcelain --untracked-files=no) ]]; then echo "ChangesFound=False" >> $GITHUB_OUTPUT; else echo "ChangesFound=True" >> $GITHUB_OUTPUT; fi
+
+      - name: setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Commit changes
+        if: steps.check-changes.outputs.ChangesFound == 'True'
+        run: |
+          git commit -am "Automatically applied linter"
+          git push
+

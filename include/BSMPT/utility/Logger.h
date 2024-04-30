@@ -29,9 +29,14 @@ enum class LoggingLevel
   None,
   Default,
   MinimizerDetailed,
+  MinTracerDetailed,
+  TransitionDetailed,
+  GWDetailed,
+  BounceDetailed,
   ProgDetailed,
   EWBGDetailed,
-  Debug
+  Debug,
+  Complete
 };
 
 /**
@@ -88,6 +93,10 @@ private:
       {LoggingLevel::EWBGDetailed, false},
       {LoggingLevel::ProgDetailed, false},
       {LoggingLevel::MinimizerDetailed, false},
+      {LoggingLevel::MinTracerDetailed, false},
+      {LoggingLevel::TransitionDetailed, false},
+      {LoggingLevel::BounceDetailed, false},
+      {LoggingLevel::GWDetailed, false},
       {LoggingLevel::Debug, false}};
 };
 
@@ -123,6 +132,11 @@ public:
                     int line                = -1)
   {
     Instance().Write(level, toWrite, file, line);
+  }
+
+  static bool GetLoggingLevelStatus(LoggingLevel level)
+  {
+    return Instance().mCurrentSetup[level];
   }
 
   static void Disable() { Instance().Disable(); }

@@ -1,6 +1,13 @@
+// Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef PARSER_H
 #define PARSER_H
 
+#include <BSMPT/models/IncludeAllModels.h>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -27,11 +34,29 @@ class parser
 {
 public:
   parser();
+  parser(const bool &enable_column_output);
   /**
    * @brief enable_minimizer_options Enables the options regarding the
    * minimizer.
    */
   void enable_minimizer_options();
+  /**
+   * @brief add_argument Silently adds a new argument for the parser options.
+   * @param argument The parameter name for the CLI or JSON key. This will be
+   * treated case insensitive.
+   * @param description The description for the parameter shown in help.
+   * @param default_val The default value for optional parameters.
+   */
+  void add_argument_only_display(const std::string &argument,
+                                 const std::string &description,
+                                 const std::string &default_val);
+  /**
+   * @brief add_argument Silently adds a new argument for the parser options.
+   * @param argument The parameter name for the CLI or JSON key. This will be
+   * treated case insensitive.
+   * @param required Decide if it is a required parameter or not.
+   */
+  void add_argument(const std::string &argument, bool required);
   /**
    * @brief add_argument Adds a new argument for the parser options.
    * @param argument The parameter name for the CLI or JSON key. This will be
@@ -42,6 +67,23 @@ public:
   void add_argument(const std::string &argument,
                     const std::string &description,
                     bool required);
+  /**
+   * @brief add_argument Adds a new argument for the parser options.
+   * @param argument The parameter name for the CLI or JSON key. This will be
+   * treated case insensitive.
+   * @param description The description for the parameter shown in help.
+   * @param default_val The default value for optional parameters.
+   * @param required Decide if it is a required parameter or not.
+   */
+  void add_argument(const std::string &argument,
+                    const std::string &description,
+                    const std::string &default_val,
+                    bool required);
+  /**
+   * @brief add_subtext add subtext to description column
+   * @param subtext string to print in description column
+   */
+  void add_subtext(const std::string &subtext);
   /**
    * @brief add_input Add the vector with each input as it is given in the CLI
    * in the form "--argument=value".
@@ -115,6 +157,7 @@ private:
     std::string argument;
     std::string description;
     std::optional<std::string> value;
+    std::string default_val = "";
   };
   struct KeyValue
   {
@@ -128,8 +171,12 @@ private:
     }
   };
 
+  std::vector<std::pair<std::string, Options>> mOrderedArguments;
   std::unordered_map<std::string, Options> mRequiredArguments;
   std::unordered_map<std::string, Options> mOptionalArguments;
+
+  bool extra_column_output = false;
+
   /**
    * @brief get_value Get the value for the required parameter.
    * @param argument The required CLI name or JSON key.

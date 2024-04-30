@@ -23,12 +23,6 @@ namespace BSMPT
 namespace Kfactors
 {
 
-/**
- * @brief GSLAcclType Type used by the interpolations of the Kfunctions
- */
-using GSLAcclType =
-    std::unique_ptr<gsl_interp_accel, decltype(&gsl_interp_accel_free)>;
-
 double CalculateNorm1(const double &T)
 {
   return -std::pow(M_PI, 3) * std::pow(T, 2) * 2.0 / 3.0;

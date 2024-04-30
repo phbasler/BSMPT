@@ -11,8 +11,9 @@ set(header
     ${header_path}/ClassPotentialOrigin.h
     ${header_path}/ClassPotentialC2HDM.h
     ${header_path}/ClassPotentialR2HDM.h
-    ${header_path}/ClassPotentialRN2HDM.h
+    ${header_path}/ClassPotentialN2HDM.h
     ${header_path}/ClassPotentialCxSM.h
+    ${header_path}/ClassPotentialSM.h
     ${header_path}/ClassPotentialCPintheDark.h
     # Here you can add your new model
     ${header_path}/ClassTemplate.h)
@@ -25,8 +26,9 @@ set(src
     ClassPotentialOrigin_deprecated.cpp
     ClassPotentialC2HDM.cpp
     ClassPotentialR2HDM.cpp
-    ClassPotentialRN2HDM.cpp
+    ClassPotentialN2HDM.cpp
     ClassPotentialCxSM.cpp
+    ClassPotentialSM.cpp
     ClassPotentialCPintheDark.cpp
     # Here you can add your new model
     ClassTemplate.cpp)

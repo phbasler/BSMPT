@@ -3043,22 +3043,22 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
         res += -2 * fermion(LeptonMassesVec[k], Temp, 0);
       }
 
-      double VDebay = 0;
+      double VDebye = 0;
       for (std::size_t k = 0; k < NHiggs; k++)
       {
-        if (HiggsMassesVec[k] > 0) VDebay += std::pow(HiggsMassesVec[k], 1.5);
+        if (HiggsMassesVec[k] > 0) VDebye += std::pow(HiggsMassesVec[k], 1.5);
         if (HiggsMassesZeroTempVec[k] > 0)
-          VDebay += -std::pow(HiggsMassesZeroTempVec[k], 1.5);
+          VDebye += -std::pow(HiggsMassesZeroTempVec[k], 1.5);
       }
       for (std::size_t k = 0; k < NGauge; k++)
       {
-        if (GaugeMassesVec[k] > 0) VDebay += std::pow(GaugeMassesVec[k], 1.5);
+        if (GaugeMassesVec[k] > 0) VDebye += std::pow(GaugeMassesVec[k], 1.5);
         if (GaugeMassesZeroTempVec[k] > 0)
-          VDebay += -std::pow(GaugeMassesZeroTempVec[k], 1.5);
+          VDebye += -std::pow(GaugeMassesZeroTempVec[k], 1.5);
       }
 
-      VDebay *= -Temp / (12 * M_PI);
-      res += VDebay;
+      VDebye *= -Temp / (12 * M_PI);
+      res += VDebye;
     }
   }
   else if (diff > 0 and static_cast<size_t>(diff) <= NHiggs)
@@ -3118,17 +3118,17 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
                fermion(LeptonMassesVec[k], Temp, diff);
       }
 
-      double VDebay = 0;
+      double VDebye = 0;
       for (std::size_t k = 0; k < NHiggs; k++)
       {
         if (HiggsMassesVec[k] > 0)
         {
-          VDebay += 1.5 * HiggsMassesVec.at(k + NHiggs) *
+          VDebye += 1.5 * HiggsMassesVec.at(k + NHiggs) *
                     std::pow(HiggsMassesVec.at(k), 0.5);
         }
         if (HiggsMassesZeroTempVec[k] > 0)
         {
-          VDebay += -1.5 * HiggsMassesZeroTempVec.at(k + NHiggs) *
+          VDebye += -1.5 * HiggsMassesZeroTempVec.at(k + NHiggs) *
                     std::pow(HiggsMassesZeroTempVec[k], 0.5);
         }
       }
@@ -3136,18 +3136,18 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
       {
         if (GaugeMassesVec[k] > 0)
         {
-          VDebay += 1.5 * GaugeMassesVec.at(k + NGauge) *
+          VDebye += 1.5 * GaugeMassesVec.at(k + NGauge) *
                     std::pow(GaugeMassesVec[k], 0.5);
         }
         if (GaugeMassesZeroTempVec[k] > 0)
         {
-          VDebay += -1.5 * GaugeMassesZeroTempVec.at(k + NGauge) *
+          VDebye += -1.5 * GaugeMassesZeroTempVec.at(k + NGauge) *
                     std::pow(GaugeMassesZeroTempVec[k], 0.5);
         }
       }
 
-      VDebay *= -Temp / (12 * M_PI);
-      res += VDebay;
+      VDebye *= -Temp / (12 * M_PI);
+      res += VDebye;
     }
   }
   else if (diff == -1)
@@ -3198,22 +3198,22 @@ double Class_Potential_Origin::V1Loop(const std::vector<double> &v,
       for (std::size_t k = 0; k < NLepton; k++)
         res += -2 * fermion(LeptonMassesVec[k], Temp, -1);
 
-      double VDebay = 0;
+      double VDebye = 0;
       for (std::size_t k = 0; k < NHiggs; k++)
       {
-        if (HiggsMassesVec[k] > 0) VDebay += std::pow(HiggsMassesVec[k], 1.5);
+        if (HiggsMassesVec[k] > 0) VDebye += std::pow(HiggsMassesVec[k], 1.5);
         if (HiggsMassesZeroTempVec[k] > 0)
-          VDebay += -std::pow(HiggsMassesZeroTempVec[k], 1.5);
+          VDebye += -std::pow(HiggsMassesZeroTempVec[k], 1.5);
       }
       for (std::size_t k = 0; k < NGauge; k++)
       {
-        if (GaugeMassesVec[k] > 0) VDebay += std::pow(GaugeMassesVec[k], 1.5);
+        if (GaugeMassesVec[k] > 0) VDebye += std::pow(GaugeMassesVec[k], 1.5);
         if (GaugeMassesZeroTempVec[k] > 0)
-          VDebay += -std::pow(GaugeMassesZeroTempVec[k], 1.5);
+          VDebye += -std::pow(GaugeMassesZeroTempVec[k], 1.5);
       }
 
-      VDebay *= -1.0 / (12 * M_PI);
-      res += VDebay;
+      VDebye *= -1.0 / (12 * M_PI);
+      res += VDebye;
     }
   }
 
@@ -3286,12 +3286,6 @@ void Class_Potential_Origin::CalculateDebye(bool forceCalculation)
         DebyeHiggs[i][j] = DebyeHiggs[j][i];
       }
     }
-  }
-
-  std::size_t nHiggsGauge = 0;
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    if (Curvature_Gauge_G2H2[0][0][i][i] != 0) nHiggsGauge++;
   }
 }
 
@@ -3395,6 +3389,42 @@ void Class_Potential_Origin::initVectors()
   HiggsVev = std::vector<double>(NHiggs, 0);
 }
 
+void Class_Potential_Origin::sym2Dim(
+    std::vector<std::vector<double>> &Tensor2Dim,
+    std::size_t Nk1,
+    std::size_t Nk2)
+{
+  for (std::size_t k1 = 0; k1 < Nk1; k1++)
+  {
+    for (std::size_t k2 = k1; k2 < Nk2; k2++)
+    {
+      Tensor2Dim[k2][k1] = Tensor2Dim[k1][k2];
+    }
+  }
+}
+
+void Class_Potential_Origin::sym3Dim(
+    std::vector<std::vector<std::vector<double>>> &Tensor3Dim,
+    std::size_t Nk1,
+    std::size_t Nk2,
+    std::size_t Nk3)
+{
+  for (std::size_t k1 = 0; k1 < Nk1; k1++)
+  {
+    for (std::size_t k2 = k1; k2 < Nk2; k2++)
+    {
+      for (std::size_t k3 = k2; k3 < Nk3; k3++)
+      {
+        Tensor3Dim[k1][k3][k2] = Tensor3Dim[k1][k2][k3];
+        Tensor3Dim[k2][k1][k3] = Tensor3Dim[k1][k2][k3];
+        Tensor3Dim[k2][k3][k1] = Tensor3Dim[k1][k2][k3];
+        Tensor3Dim[k3][k1][k2] = Tensor3Dim[k1][k2][k3];
+        Tensor3Dim[k3][k2][k1] = Tensor3Dim[k1][k2][k3];
+      }
+    }
+  }
+}
+
 void Class_Potential_Origin::sym4Dim(
     std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor4Dim,
     std::size_t Nk1,
@@ -3483,9 +3513,32 @@ double Class_Potential_Origin::EWSBVEV(const std::vector<double> &v) const
   return res;
 }
 
+void Class_Potential_Origin::SetEWVEVZero(std::vector<double> &sol) const
+{
+  int count = 0;
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    double checkgauge = 0;
+    for (std::size_t j = 0; j < NGauge; j++)
+    {
+      checkgauge += std::abs(Curvature_Gauge_G2H2[j][j][i][i]);
+    }
+    if (checkgauge > 1e-10 and i == VevOrder[count]) // true for doublet vevs
+    {
+      sol.at(count) = 0;
+      count += 1;
+    }
+  }
+}
+
 void Class_Potential_Origin::setUseIndexCol(std::string legend)
 {
   UseIndexCol = legend.rfind(sep, 0) == 0;
+}
+
+bool Class_Potential_Origin::getUseIndexCol()
+{
+  return UseIndexCol;
 }
 
 void Class_Potential_Origin::CheckImplementation(

@@ -1,5 +1,6 @@
 // Copyright (C) 2020  Philipp Basler, Margarete Mühlleitner and Jonas Müller
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9,6 +10,8 @@
 
 #ifndef INCLUDE_BSMPT_THERMALFUNCTIONS_THERMALFUNCTIONS_H_
 #define INCLUDE_BSMPT_THERMALFUNCTIONS_THERMALFUNCTIONS_H_
+
+#include <BSMPT/utility/spline/spline.h>
 namespace BSMPT
 {
 namespace ThermalFunctions
@@ -76,8 +79,11 @@ double JbosonInterpolatedLow(const double &x, const int &n, int diff = 0);
  * Using linear interpolation with data points to interpolate the thermal
  * integral for bosons for x=m^2/T^2 < 0
  * @param x The ratio m^2/T^2
+ * @param diff Returns the interpolation of J_- for diff = 0 and for dJ_-/dx for
+ * diff = 1
  */
-double JbosonInterpolatedNegative(const double &x);
+double JbosonInterpolatedNegative(const double &x, int diff = 0);
+
 /**
  * Puts together the separate interpolations for J_-
  * @param x The ratio m^2/T^2

@@ -1,6 +1,5 @@
 // SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
 // Müller
-//
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "CXSM.h"
 Compare_CXSM::Compare_CXSM()
@@ -12,41 +11,41 @@ Compare_CXSM::Compare_CXSM()
       Matrix3D{NHiggs, Matrix2D{NHiggs, std::vector<double>(NHiggs, 0)}};
   CheckTripleCT =
       Matrix3D{NHiggs, Matrix2D{NHiggs, std::vector<double>(NHiggs, 0)}};
-  EWPTPerSetting[4].Tc = 300;
-  EWPTPerSetting[4].vc = 0;
+  EWPTPerSetting[4].Tc = 159.21;
+  EWPTPerSetting[4].vc = 21.0029;
+  EWPTPerSetting[4].EWMinimum.push_back(21.0029);
+  EWPTPerSetting[4].EWMinimum.push_back(538.699);
   EWPTPerSetting[4].EWMinimum.push_back(0);
-  EWPTPerSetting[4].EWMinimum.push_back(0);
-  EWPTPerSetting[4].EWMinimum.push_back(0);
-  EWPTPerSetting[1].Tc = 160.208;
-  EWPTPerSetting[1].vc = 20.93;
-  EWPTPerSetting[1].EWMinimum.push_back(20.93);
-  EWPTPerSetting[1].EWMinimum.push_back(538.687);
+  EWPTPerSetting[1].Tc = 159.082;
+  EWPTPerSetting[1].vc = 18.8436;
+  EWPTPerSetting[1].EWMinimum.push_back(-18.8436);
+  EWPTPerSetting[1].EWMinimum.push_back(538.715);
   EWPTPerSetting[1].EWMinimum.push_back(0);
-  EWPTPerSetting[5].Tc = 160.208;
-  EWPTPerSetting[5].vc = 20.9296;
-  EWPTPerSetting[5].EWMinimum.push_back(20.9296);
-  EWPTPerSetting[5].EWMinimum.push_back(538.687);
-  EWPTPerSetting[5].EWMinimum.push_back(-1.63173e-05);
-  EWPTPerSetting[2].Tc = 160.181;
-  EWPTPerSetting[2].vc = 24.2265;
-  EWPTPerSetting[2].EWMinimum.push_back(-24.2265);
-  EWPTPerSetting[2].EWMinimum.push_back(-538.689);
-  EWPTPerSetting[2].EWMinimum.push_back(0);
-  EWPTPerSetting[6].Tc = 160.181;
-  EWPTPerSetting[6].vc = 24.2265;
-  EWPTPerSetting[6].EWMinimum.push_back(-24.2265);
-  EWPTPerSetting[6].EWMinimum.push_back(-538.689);
-  EWPTPerSetting[6].EWMinimum.push_back(0);
-  EWPTPerSetting[3].Tc = 160.181;
-  EWPTPerSetting[3].vc = 24.2264;
-  EWPTPerSetting[3].EWMinimum.push_back(24.2264);
-  EWPTPerSetting[3].EWMinimum.push_back(-538.689);
-  EWPTPerSetting[3].EWMinimum.push_back(0);
-  EWPTPerSetting[7].Tc = 160.181;
-  EWPTPerSetting[7].vc = 24.2264;
-  EWPTPerSetting[7].EWMinimum.push_back(24.2264);
-  EWPTPerSetting[7].EWMinimum.push_back(-538.689);
-  EWPTPerSetting[7].EWMinimum.push_back(1.30964e-05);
+  EWPTPerSetting[5].Tc = 159.073;
+  EWPTPerSetting[5].vc = 20.4261;
+  EWPTPerSetting[5].EWMinimum.push_back(20.4261);
+  EWPTPerSetting[5].EWMinimum.push_back(538.715);
+  EWPTPerSetting[5].EWMinimum.push_back(-2.25701e-05);
+  EWPTPerSetting[2].Tc = 159.055;
+  EWPTPerSetting[2].vc = 22.4402;
+  EWPTPerSetting[2].EWMinimum.push_back(22.4402);
+  EWPTPerSetting[2].EWMinimum.push_back(-538.717);
+  EWPTPerSetting[2].EWMinimum.push_back(1.26363e-05);
+  EWPTPerSetting[6].Tc = 159.055;
+  EWPTPerSetting[6].vc = 22.4402;
+  EWPTPerSetting[6].EWMinimum.push_back(22.4402);
+  EWPTPerSetting[6].EWMinimum.push_back(-538.717);
+  EWPTPerSetting[6].EWMinimum.push_back(1.26363e-05);
+  EWPTPerSetting[3].Tc = 159.055;
+  EWPTPerSetting[3].vc = 22.4402;
+  EWPTPerSetting[3].EWMinimum.push_back(22.4402);
+  EWPTPerSetting[3].EWMinimum.push_back(-538.717);
+  EWPTPerSetting[3].EWMinimum.push_back(1.26363e-05);
+  EWPTPerSetting[7].Tc = 159.055;
+  EWPTPerSetting[7].vc = 22.4402;
+  EWPTPerSetting[7].EWMinimum.push_back(22.4402);
+  EWPTPerSetting[7].EWMinimum.push_back(-538.717);
+  EWPTPerSetting[7].EWMinimum.push_back(1.26363e-05);
   CheckTripleTree.at(0).at(0).at(4) = -63.5495;
   CheckTripleCT.at(0).at(0).at(4)   = 5.21565;
   CheckTripleCW.at(0).at(0).at(4)   = -5.21565;

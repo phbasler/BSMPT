@@ -20,14 +20,16 @@ namespace BSMPT
 {
 
 static std::map<std::string, LoggingLevel> LoggingPrefixes{
-    {
-        "logginglevel::default",
-        LoggingLevel::Default,
-    },
-    {"logginglevel::debug", LoggingLevel::Debug},
-    {"logginglevel::ewbgdetailed", LoggingLevel::EWBGDetailed},
-    {"logginglevel::progdetailed", LoggingLevel::ProgDetailed},
-    {"logginglevel::minimizerdetailed", LoggingLevel::MinimizerDetailed}};
+    {"--logginglevel::default=", LoggingLevel::Default},
+    {"--logginglevel::debug=", LoggingLevel::Debug},
+    {"--logginglevel::ewbgdetailed=", LoggingLevel::EWBGDetailed},
+    {"--logginglevel::progdetailed=", LoggingLevel::ProgDetailed},
+    {"--logginglevel::minimizerdetailed=", LoggingLevel::MinimizerDetailed},
+    {"--logginglevel::transitiondetailed=", LoggingLevel::TransitionDetailed},
+    {"--logginglevel::mintracerdetailed=", LoggingLevel::MinTracerDetailed},
+    {"--logginglevel::bouncedetailed=", LoggingLevel::BounceDetailed},
+    {"--logginglevel::gwdetailed=", LoggingLevel::GWDetailed},
+    {"--logginglevel::complete=", LoggingLevel::Complete}};
 
 void ShowLoggerHelp()
 {
@@ -60,10 +62,21 @@ void SetLogger(const BSMPT::parser &argparser)
 
   for (const auto &[prefix, enumValue] : LoggingPrefixes)
   {
+    auto beginning  = prefix.find_first_not_of("-");
+    auto seperator  = prefix.find("=");
+    std::string key = prefix.substr(beginning, seperator - beginning);
+
     try
     {
-      auto value = argparser.get_value(prefix);
+      auto value = argparser.get_value(key);
       Logger::SetLevel(enumValue, value == "true");
+      // Catch logginglevel::complete
+      if ((key == "logginglevel::complete") and (value == "true"))
+      {
+        for (const auto &[prefix_, enumValue_] : LoggingPrefixes)
+          Logger::SetLevel(enumValue_, true);
+        Logger::SetLevel(LoggingLevel::MinimizerDetailed, false);
+      }
     }
     catch (BSMPT::parserException &)
     {
@@ -90,6 +103,14 @@ void SetLogger(const std::vector<std::string> &args)
     if (pos != LoggingPrefixes.end())
     {
       Logger::SetLevel(pos->second, el.substr(pos->first.size()) == "true");
+    }
+    // Catch logginglevel::complete
+    if ((pos->second == LoggingLevel::Complete) and
+        (el.substr(pos->first.size()) == "true"))
+    {
+      for (const auto &[prefix, enumValue] : LoggingPrefixes)
+        Logger::SetLevel(enumValue, true);
+      Logger::SetLevel(LoggingLevel::MinimizerDetailed, false);
     }
   }
 }

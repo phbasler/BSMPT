@@ -12,9 +12,16 @@ if(BSMPTCompileBaryo)
 endif(BSMPTCompileBaryo)
 add_subdirectory(ThermalFunctions)
 
+add_subdirectory(minimum_tracer)
+add_subdirectory(transition_tracer)
+add_subdirectory(bounce_solution)
+add_subdirectory(gravitational_waves)
+
 # ==============================Utility==================================
 
 add_subdirectory(utility)
+add_subdirectory(utility/asciiplotter)
+add_subdirectory(utility/spline)
 
 # ==============================EXE======================================
 
@@ -41,6 +48,23 @@ target_compile_features(TripleHiggsCouplingsNLO PUBLIC cxx_std_17)
 add_executable(Test prog/Test.cpp)
 target_link_libraries(Test Minimizer Models Utility)
 target_compile_features(Test PUBLIC cxx_std_17)
+
+add_executable(CalcGW prog/CalcGW.cpp)
+target_link_libraries(CalcGW Utility GW MinimumTracer TransitionTracer)
+target_compile_features(CalcGW PUBLIC cxx_std_14)
+
+add_executable(CalcTemps prog/CalcTemps.cpp)
+target_link_libraries(CalcTemps Utility GW MinimumTracer TransitionTracer)
+target_compile_features(CalcTemps PUBLIC cxx_std_14)
+
+add_executable(MinimaTracer prog/MinimaTracer.cpp)
+target_link_libraries(MinimaTracer Minimizer Models Utility MinimumTracer
+                      TransitionTracer)
+target_compile_features(MinimaTracer PUBLIC cxx_std_14)
+
+add_executable(PotPlotter prog/PotPlotter.cpp)
+target_link_libraries(PotPlotter Models Utility Minimizer MinimumTracer)
+target_compile_features(PotPlotter PUBLIC cxx_std_14)
 
 if(BSMPTCompileBaryo)
   add_executable(CalculateEWBG prog/CalculateEWBG.cpp)

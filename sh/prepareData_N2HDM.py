@@ -25,11 +25,10 @@ tanbeta='p_tbeta'
 m12squared='p_m12sq'
 vs='p_vs'
 
-
 def convert(IndexCol):
 	df=pd.DataFrame()
 	if IndexCol == 'False':
-		df=pd.read_table(InputFILE,index_col=False,sep=Seperator)	
+		df=pd.read_table(InputFILE,index_col=False,sep=Seperator)
 	else:
 		df=pd.read_table(InputFILE,index_col=int(IndexCol),sep=Seperator)
 
@@ -46,4 +45,3 @@ parser.add_argument('-i','--indexcol',help='Column which stores the index of you
 if __name__ == "__main__":
 	args = parser.parse_args()
 	convert(args.indexcol)
-

@@ -8,6 +8,7 @@
 
 #include <functional>
 #include <map>
+
 namespace BSMPT
 {
 namespace ThermalFunctions

@@ -1,6 +1,4 @@
-// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
-// Müller
-//
+// SPDX-FileCopyrightText: 2021 Philipp Basler
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "CPINTHEDARK.h"
@@ -13,52 +11,52 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
       Matrix3D{NHiggs, Matrix2D{NHiggs, std::vector<double>(NHiggs, 0)}};
   CheckTripleCT =
       Matrix3D{NHiggs, Matrix2D{NHiggs, std::vector<double>(NHiggs, 0)}};
-  EWPTPerSetting[4].Tc = 201.599;
-  EWPTPerSetting[4].vc = 185.063;
+  EWPTPerSetting[4].Tc = 202.615;
+  EWPTPerSetting[4].vc = 177.534;
   EWPTPerSetting[4].EWMinimum.push_back(0);
-  EWPTPerSetting[4].EWMinimum.push_back(-185.063);
+  EWPTPerSetting[4].EWMinimum.push_back(177.534);
   EWPTPerSetting[4].EWMinimum.push_back(0);
   EWPTPerSetting[4].EWMinimum.push_back(0);
   EWPTPerSetting[4].EWMinimum.push_back(0);
-  EWPTPerSetting[1].Tc = 228.552;
-  EWPTPerSetting[1].vc = 159.987;
+  EWPTPerSetting[1].Tc = 224.551;
+  EWPTPerSetting[1].vc = 154.173;
   EWPTPerSetting[1].EWMinimum.push_back(0);
-  EWPTPerSetting[1].EWMinimum.push_back(159.987);
+  EWPTPerSetting[1].EWMinimum.push_back(154.173);
   EWPTPerSetting[1].EWMinimum.push_back(0);
   EWPTPerSetting[1].EWMinimum.push_back(0);
-  EWPTPerSetting[1].EWMinimum.push_back(1.33704e-05);
-  EWPTPerSetting[5].Tc = 201.599;
-  EWPTPerSetting[5].vc = 185.05;
+  EWPTPerSetting[1].EWMinimum.push_back(1.81339e-05);
+  EWPTPerSetting[5].Tc = 202.679;
+  EWPTPerSetting[5].vc = 177.468;
   EWPTPerSetting[5].EWMinimum.push_back(0);
-  EWPTPerSetting[5].EWMinimum.push_back(185.05);
+  EWPTPerSetting[5].EWMinimum.push_back(177.468);
   EWPTPerSetting[5].EWMinimum.push_back(0);
   EWPTPerSetting[5].EWMinimum.push_back(0);
   EWPTPerSetting[5].EWMinimum.push_back(0);
-  EWPTPerSetting[2].Tc = 184.717;
-  EWPTPerSetting[2].vc = 198.073;
+  EWPTPerSetting[2].Tc = 185.202;
+  EWPTPerSetting[2].vc = 192.757;
   EWPTPerSetting[2].EWMinimum.push_back(0);
-  EWPTPerSetting[2].EWMinimum.push_back(198.073);
-  EWPTPerSetting[2].EWMinimum.push_back(-1.14246e-05);
-  EWPTPerSetting[2].EWMinimum.push_back(1.17576e-05);
-  EWPTPerSetting[2].EWMinimum.push_back(1.54765e-05);
-  EWPTPerSetting[6].Tc = 184.717;
-  EWPTPerSetting[6].vc = 198.073;
+  EWPTPerSetting[2].EWMinimum.push_back(192.757);
+  EWPTPerSetting[2].EWMinimum.push_back(0);
+  EWPTPerSetting[2].EWMinimum.push_back(0);
+  EWPTPerSetting[2].EWMinimum.push_back(0);
+  EWPTPerSetting[6].Tc = 185.202;
+  EWPTPerSetting[6].vc = 192.757;
   EWPTPerSetting[6].EWMinimum.push_back(0);
-  EWPTPerSetting[6].EWMinimum.push_back(198.073);
-  EWPTPerSetting[6].EWMinimum.push_back(-1.14246e-05);
-  EWPTPerSetting[6].EWMinimum.push_back(1.17576e-05);
-  EWPTPerSetting[6].EWMinimum.push_back(1.54765e-05);
-  EWPTPerSetting[3].Tc = 184.717;
-  EWPTPerSetting[3].vc = 198.073;
+  EWPTPerSetting[6].EWMinimum.push_back(192.757);
+  EWPTPerSetting[6].EWMinimum.push_back(0);
+  EWPTPerSetting[6].EWMinimum.push_back(0);
+  EWPTPerSetting[6].EWMinimum.push_back(0);
+  EWPTPerSetting[3].Tc = 185.202;
+  EWPTPerSetting[3].vc = 192.757;
   EWPTPerSetting[3].EWMinimum.push_back(0);
-  EWPTPerSetting[3].EWMinimum.push_back(198.073);
+  EWPTPerSetting[3].EWMinimum.push_back(192.757);
   EWPTPerSetting[3].EWMinimum.push_back(0);
   EWPTPerSetting[3].EWMinimum.push_back(0);
   EWPTPerSetting[3].EWMinimum.push_back(0);
-  EWPTPerSetting[7].Tc = 184.717;
-  EWPTPerSetting[7].vc = 198.073;
+  EWPTPerSetting[7].Tc = 185.202;
+  EWPTPerSetting[7].vc = 192.757;
   EWPTPerSetting[7].EWMinimum.push_back(0);
-  EWPTPerSetting[7].EWMinimum.push_back(198.073);
+  EWPTPerSetting[7].EWMinimum.push_back(192.757);
   EWPTPerSetting[7].EWMinimum.push_back(0);
   EWPTPerSetting[7].EWMinimum.push_back(0);
   EWPTPerSetting[7].EWMinimum.push_back(0);
@@ -275,7 +273,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(5).at(5).at(4) = 63.551;
   CheckTripleCT.at(5).at(5).at(4)   = -65.8413;
   CheckTripleCW.at(5).at(5).at(4)   = 65.8413;
-  CheckTripleTree.at(5).at(6).at(6) = -3.6593e-13;
+  CheckTripleTree.at(5).at(6).at(6) = -3.1664e-13;
   CheckTripleCT.at(5).at(6).at(6)   = -0.419379;
   CheckTripleCW.at(5).at(6).at(6)   = 0.419379;
   CheckTripleTree.at(5).at(6).at(7) = 53.5156;
@@ -287,7 +285,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(5).at(7).at(6) = 53.5156;
   CheckTripleCT.at(5).at(7).at(6)   = -0.343723;
   CheckTripleCW.at(5).at(7).at(6)   = 0.343723;
-  CheckTripleTree.at(5).at(7).at(7) = 3.24185e-13;
+  CheckTripleTree.at(5).at(7).at(7) = 2.92999e-13;
   CheckTripleCT.at(5).at(7).at(7)   = 0.68013;
   CheckTripleCW.at(5).at(7).at(7)   = -0.68013;
   CheckTripleTree.at(5).at(7).at(8) = 142.293;
@@ -299,7 +297,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(5).at(8).at(7) = 142.293;
   CheckTripleCT.at(5).at(8).at(7)   = -1.37743;
   CheckTripleCW.at(5).at(8).at(7)   = 1.37743;
-  CheckTripleTree.at(5).at(8).at(8) = 4.9738e-14;
+  CheckTripleTree.at(5).at(8).at(8) = 2.07475e-14;
   CheckTripleCT.at(5).at(8).at(8)   = -0.260752;
   CheckTripleCW.at(5).at(8).at(8)   = 0.260752;
   CheckTripleTree.at(6).at(0).at(2) = 83.6912;
@@ -335,7 +333,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(6).at(4).at(8) = 449.782;
   CheckTripleCT.at(6).at(4).at(8)   = 0.178107;
   CheckTripleCW.at(6).at(4).at(8)   = 315.248;
-  CheckTripleTree.at(6).at(5).at(6) = -3.6593e-13;
+  CheckTripleTree.at(6).at(5).at(6) = -3.1664e-13;
   CheckTripleCT.at(6).at(5).at(6)   = -0.419379;
   CheckTripleCW.at(6).at(5).at(6)   = 0.419379;
   CheckTripleTree.at(6).at(5).at(7) = 53.5156;
@@ -347,7 +345,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(6).at(6).at(4) = -61.509;
   CheckTripleCT.at(6).at(6).at(4)   = 3.46871;
   CheckTripleCW.at(6).at(6).at(4)   = 79.5555;
-  CheckTripleTree.at(6).at(6).at(5) = -3.6593e-13;
+  CheckTripleTree.at(6).at(6).at(5) = -3.1664e-13;
   CheckTripleCT.at(6).at(6).at(5)   = -0.419379;
   CheckTripleCW.at(6).at(6).at(5)   = 0.419379;
   CheckTripleTree.at(6).at(7).at(4) = 67.2656;
@@ -398,7 +396,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(7).at(5).at(6) = 53.5156;
   CheckTripleCT.at(7).at(5).at(6)   = -0.343723;
   CheckTripleCW.at(7).at(5).at(6)   = 0.343723;
-  CheckTripleTree.at(7).at(5).at(7) = 3.24185e-13;
+  CheckTripleTree.at(7).at(5).at(7) = 2.92999e-13;
   CheckTripleCT.at(7).at(5).at(7)   = 0.68013;
   CheckTripleCW.at(7).at(5).at(7)   = -0.68013;
   CheckTripleTree.at(7).at(5).at(8) = 142.293;
@@ -413,7 +411,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(7).at(7).at(4) = -137.401;
   CheckTripleCT.at(7).at(7).at(4)   = 3.13061;
   CheckTripleCW.at(7).at(7).at(4)   = -16.7975;
-  CheckTripleTree.at(7).at(7).at(5) = 3.24185e-13;
+  CheckTripleTree.at(7).at(7).at(5) = 2.92999e-13;
   CheckTripleCT.at(7).at(7).at(5)   = 0.68013;
   CheckTripleCW.at(7).at(7).at(5)   = -0.68013;
   CheckTripleTree.at(7).at(8).at(4) = 141.657;
@@ -461,7 +459,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(8).at(5).at(7) = 142.293;
   CheckTripleCT.at(8).at(5).at(7)   = -1.37743;
   CheckTripleCW.at(8).at(5).at(7)   = 1.37743;
-  CheckTripleTree.at(8).at(5).at(8) = 4.9738e-14;
+  CheckTripleTree.at(8).at(5).at(8) = 2.07475e-14;
   CheckTripleCT.at(8).at(5).at(8)   = -0.260752;
   CheckTripleCW.at(8).at(5).at(8)   = 0.260752;
   CheckTripleTree.at(8).at(6).at(4) = 449.782;
@@ -479,7 +477,7 @@ Compare_CPINTHEDARK::Compare_CPINTHEDARK()
   CheckTripleTree.at(8).at(8).at(4) = 1552.7;
   CheckTripleCT.at(8).at(8).at(4)   = -0.679378;
   CheckTripleCW.at(8).at(8).at(4)   = 892.734;
-  CheckTripleTree.at(8).at(8).at(5) = 4.9738e-14;
+  CheckTripleTree.at(8).at(8).at(5) = 2.07475e-14;
   CheckTripleCT.at(8).at(8).at(5)   = -0.260752;
   CheckTripleCW.at(8).at(8).at(5)   = 0.260752;
 }

@@ -1,17 +1,19 @@
-# SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
+#  SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas Müller
 #
-# SPDX-License-Identifier: GPL-3.0-or-later
+#  SPDX-License-Identifier: GPL-3.0-or-later
 
-build
-
+build/
+tmp/
+tmp*
+local/
+.*
 .vscode
 .atom
-
+analyze*.py
 *.aux
 *.log
 *.out
 *.synctex.gz
 
 CMakeUserPresets.json
-__pycache__/Build.cpython-310.pyc
-__pycache__/Setup.cpython-310.pyc
+__pycache__/*

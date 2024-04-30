@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas
+// Müller
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include <BSMPT/config.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/parser.h>
@@ -24,10 +29,14 @@ const char *parserException::what() const noexcept
 
 parser::parser()
 {
-  add_argument("logginglevel::disabled", "Disable the Logger.", false);
+  add_argument("logginglevel::default",
+               "Turn on/off (true/false) the default output.",
+               false);
   add_argument("logginglevel::debug",
                "Turn on/off (true/false) the debug output for the logger.",
                false);
+  add_argument("logginglevel::disabled", "Disable the Logger.", false);
+
   add_argument("logginglevel::ewbgdetailed",
                "Turn on/off (true/false) the output for the EWBG calculation.",
                false);
@@ -39,13 +48,47 @@ parser::parser()
       "logginglevel::minimizerdetailed",
       "Turn on/off (true/false) the additional output of the minimizers.",
       false);
-  add_argument("logginglevel::default",
-               "Turn on/off (true/false) the default output.",
-               false);
 
   add_argument("json",
                "Use a json file to define the input instead of additional cli "
                "parameters.",
+               false);
+}
+
+parser::parser(const bool &enable_column_output)
+{
+  this->extra_column_output = enable_column_output;
+
+  add_argument("logginglevel::default", "default output", "true", false);
+  add_argument("logginglevel::debug", "debug output", "false", false);
+  add_argument("logginglevel::disabled", "disable all output", "", false);
+  add_argument("logginglevel::ewbgdetailed",
+               "baryogenesis calculation output",
+               "false",
+               false);
+  add_argument(
+      "logginglevel::progdetailed", "executable output", "false", false);
+  add_argument(
+      "logginglevel::minimizerdetailed", "minimizer output", "false", false);
+  add_argument("logginglevel::transitiondetailed",
+               "transition calculation output",
+               "false",
+               false);
+  add_argument("logginglevel::mintracerdetailed",
+               "minimum tracking output",
+               "false",
+               false);
+  add_argument("logginglevel::bouncedetailed",
+               "bounce solution calculation output",
+               "false",
+               false);
+  add_argument("logginglevel::gwdetailed",
+               "gravitational wave calculation output",
+               "false",
+               false);
+  add_argument("logginglevel::complete",
+               "enable all except minimizer output",
+               "false",
                false);
 }
 
@@ -65,6 +108,36 @@ void parser::enable_minimizer_options()
                false);
 }
 
+void parser::add_argument_only_display(const std::string &argument,
+                                       const std::string &description,
+                                       const std::string &default_val)
+{
+  auto arg = to_lower(argument);
+  Options options;
+  options.argument    = argument;
+  options.description = description;
+  options.default_val = default_val;
+
+  mOrderedArguments.push_back(std::pair<std::string, Options>(arg, options));
+}
+
+void parser::add_argument(const std::string &argument, bool required)
+{
+  auto arg = to_lower(argument);
+  Options options;
+  options.argument = argument;
+  options.value    = std::nullopt;
+
+  if (required)
+  {
+    mRequiredArguments.emplace(arg, options);
+  }
+  else
+  {
+    mOptionalArguments.emplace(arg, options);
+  }
+}
+
 void parser::add_argument(const std::string &argument,
                           const std::string &description,
                           bool required)
@@ -74,6 +147,9 @@ void parser::add_argument(const std::string &argument,
   options.argument    = argument;
   options.description = description;
   options.value       = std::nullopt;
+
+  mOrderedArguments.push_back(std::pair<std::string, Options>(arg, options));
+
   if (required)
   {
     mRequiredArguments.emplace(arg, options);
@@ -82,6 +158,38 @@ void parser::add_argument(const std::string &argument,
   {
     mOptionalArguments.emplace(arg, options);
   }
+}
+
+void parser::add_argument(const std::string &argument,
+                          const std::string &description,
+                          const std::string &default_val,
+                          bool required)
+{
+  auto arg = to_lower(argument);
+  Options options;
+  options.argument    = argument;
+  options.description = description;
+  options.value       = std::nullopt;
+  options.default_val = default_val;
+
+  mOrderedArguments.push_back(std::pair<std::string, Options>(arg, options));
+
+  if (required)
+  {
+    mRequiredArguments.emplace(arg, options);
+  }
+  else
+  {
+    mOptionalArguments.emplace(arg, options);
+  }
+}
+
+void parser::add_subtext(const std::string &subtext)
+{
+  Options options;
+  options.description = subtext;
+  mOrderedArguments.push_back(
+      std::pair<std::string, Options>("subtext", options));
 }
 
 void parser::add_input(const std::vector<std::string> &input)
@@ -146,21 +254,80 @@ void parser::print_help() const
     return;
   }
   mHelpAlreadyPrinted = true;
-  std::stringstream ss;
+  std::stringstream ss, ss_end;
   ss << mHeader << std::endl;
-  ss << "The required options are:" << std::endl;
-  for (const auto &[arg, options] : mRequiredArguments)
+  ss_end << "The following options for the Logger are available:\n\n";
+
+  int size_first_column  = 37;
+  int size_second_column = 10;
+  if (extra_column_output)
   {
-    (void)arg;
-    ss << "--" << options.argument << ":\t" << options.description << std::endl;
+    ss << std::setw(size_first_column) << std::left << "argument"
+       << std::setw(size_second_column) << std::left << "default"
+       << "description" << std::endl;
+
+    for (const auto &el : mOrderedArguments)
+    {
+      if (el.first == "subtext")
+      {
+        ss << std::setw(size_first_column) << std::left << ""
+           << std::setw(size_second_column) << std::left << ""
+           << el.second.description << std::endl;
+      }
+      else if (StringStartsWith(el.second.argument, "logginglevel"))
+      {
+        if (el.second.argument.find("disable"))
+        {
+          ss_end << std::setw(size_first_column) << std::left
+                 << "--" + el.second.argument << std::setw(size_second_column)
+                 << std::left << el.second.default_val << el.second.description
+                 << std::endl;
+        }
+        else
+        {
+          ss_end << std::setw(size_first_column) << std::left
+                 << "--" + el.second.argument + "="
+                 << std::setw(size_second_column) << std::left
+                 << el.second.default_val << el.second.description << std::endl;
+        }
+      }
+      else if (StringStartsWith(el.second.argument, "help"))
+      {
+        ss << std::setw(size_first_column) << std::left
+           << "--" + el.second.argument << std::setw(size_second_column)
+           << std::left << el.second.default_val << el.second.description
+           << std::endl;
+      }
+      else
+      {
+        ss << std::setw(size_first_column) << std::left
+           << "--" + el.second.argument + "=" << std::setw(size_second_column)
+           << std::left << el.second.default_val << el.second.description
+           << std::endl;
+      }
+    }
+    Logger::Write(LoggingLevel::Default, ss.str());
+    Logger::Write(LoggingLevel::Default, ss_end.str());
+    ShowInputError();
   }
-  ss << "The optional arguments are:" << std::endl;
-  for (const auto &[arg, options] : mOptionalArguments)
+  else
   {
-    (void)arg;
-    ss << "--" << options.argument << ":\t" << options.description << std::endl;
+    ss << "The required options are:" << std::endl;
+    for (const auto &[arg, options] : mRequiredArguments)
+    {
+      (void)arg;
+      ss << "--" << options.argument << "=\t" << options.description
+         << std::endl;
+    }
+    ss << "The optional arguments are:" << std::endl;
+    for (const auto &[arg, options] : mOptionalArguments)
+    {
+      (void)arg;
+      ss << "--" << options.argument << "=\t" << options.description
+         << std::endl;
+    }
+    Logger::Write(LoggingLevel::Default, ss.str());
   }
-  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 std::string parser::get_value_as_string(const std::string &argument) const

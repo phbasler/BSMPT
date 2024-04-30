@@ -4,14 +4,12 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete M체hlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 2.6.0
+Program: BSMPT version 3.0.0
 
-Released by: Philipp Basler and Lisa Biermann and Margarete M체hlleitner and Jonas M체ller
+Released by: Philipp Basler, Lisa Biermann, Margarete M체hlleitner, Jonas M체ller, Rui Santos and Jo찾o Viana
 
 [!["GitHub Discussions"](https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&logo=github&colorB=purple)](https://github.com/phbasler/BSMPT/discussions)
-[![Ubuntu unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test.yml)
-[![Mac unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test-mac.yml)
-[![Windows unit tests](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/windows_unit_tests.yml)
+[![Unit tests](https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/phbasler/BSMPT/actions/workflows/test.yml)
 [![codecov master](https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5)](https://codecov.io/gh/phbasler/BSMPT)
 [![Documentation](https://img.shields.io/badge/Documentation-master-success)][DoxygenLink]
 [![Benchmarks](https://img.shields.io/badge/Benchmark-master-success)](https://phbasler.github.io/BSMPT/benchmarks/)
@@ -20,25 +18,25 @@ Released by: Philipp Basler and Lisa Biermann and Margarete M체hlleitner and Jon
 [![Latest release](https://badgen.net/github/release/phbasler/bsmpt)](https://github.com/phbasler/bsmpt/releases)
 
 
-
-Manual: version 2.0
+Manual: version 3.0
 
 BSMPT - Beyond the Standard Model Phase Transitions:
-The C++ program package BSMPT calculates the strength of the electroweak phase transition in extended Higgs sectors. For this the loop-corrected effective potential at finite temperature is calculated including the daisy resummation of the bosonic masses.
-The program computes the vacuum expectation value (VEV) \f$ v \f$ of the potential
-as a function of the temperature, and in particular the critical VEV
-\f$v_c\f$ at the temperature \f$T_c\f$ where the phase transition takes
-place. 
-In addition, the loop-corrected trilinear Higgs self-couplings are
-provided. We apply an 'on-shell' renormalization scheme in the sense
+
+The C++ program package BSMPT allows for the detailed study of (multi-step) phase transitions between temperature-dependent minima in the one-loop daisy-resummed finite-temperature effective potential.
+
+The program tracks temperature-dependent minima, calculates the bounce solution, the characteristic temperatures and gravitational wave signals of first-order phase transitions.
+The code also allows to derive the loop-corrected trilinear Higgs self-couplings and provides the computation of the baryon asymmetry for the CP-violating 2-Higgs Doublet Model (C2HDM).
+
+We apply an 'on-shell' renormalization scheme in the sense
 that the loop-corrected masses and mixing angles are required to be
 equal to their tree-level input values. This allows for efficient
 scans in the parameter space of the models. 
 
 The models implemented so far are
 
-  - CP-conserving 2-Higgs-Doublet Models (R2HDM)
-  - CP-violating  2-Higgs-Doublet Models (C2HDM)
+  - Standard Model (SM)
+  - CP-conserving 2-Higgs-Doublet Model (R2HDM)
+  - CP-violating 2-Higgs-Doublet Model (C2HDM)
   - Next-to-Minimal 2HDM (N2HDM)
   - CP in the Dark ([arXiv 1807.10322](https://arxiv.org/abs/1807.10322), [arXiv 2204.13425](https://arxiv.org/abs/2204.13425))
   - Complex Singlet Extension (CxSM)
@@ -59,7 +57,7 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 For additional information, comments, complaints or suggestions please e-mail
-to:  bsmpt@lists.kit.edu, open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions).
+to: bsmpt@lists.kit.edu, open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions).
 
 ---
 
@@ -117,31 +115,35 @@ After compiling the code call `ctest --preset ${profile} -j` in the root folder 
 ### Development
 Most modern IDEs support cmake profiles. After running the `Setup.py` script you can open the root folder in an IDE of your choice (e.g. VSCode with cmake extension) and it will recognise the cmake profile.
 
+
+Code from the following repositories is used in BSMPT:
+- [`ttk592::spline`](https://github.com/ttk592/spline) by Tino Kluge, a C++ cubic spline interpolation library 
+- [`AsciiPlotter`](https://github.com/joehood/asciiplotter) by Joe Hood, for ASCII plots in the terminal 
+
 ---
 
-## How to add a new model (for further details, also see the manual):
+## How to add a new model:
 
-To add a new model you have to modify/create five files  
+To add a new model, you have to modify/create five files (for further details, also consult the manual):
 
-1. Go to include/BSMPT/models and copy ClassTemplate.h to YourModel.h. Adjust the Class_Template name to your new model. For step 5 I will assume that your class is named Class_YourModel. 
+1. Go to `include/BSMPT/models` and copy `ClassTemplate.h` to `YourModel.h`. Adjust the name of the class `Class_Template` to `Class_YourModel`.
 
-2. Go to src/models and copy ClassTemplate.cpp to YourModel.cpp, and change the Class_Template class name in the file to your model name. Also follow the instructions in here and in the manual to set up your new model. 
+2. Go to `src/models` and copy `ClassTemplate.cpp` to `YourModel.cpp`, and again change `Class_Template` to `Class_YourModel`. Also, follow the instructions in this file and in the manual to set up your new model. 
 
-3. For your model to compile you have to open src/models/CMakeLists.txt and add ${header_path}/YourModel.h in the set(header enviroment as well as YourModel.cpp in the set(src enviroment)
+3. For your model to compile, you have to open `src/models/CMakeLists.txt` and add `${header_path}/YourModel.h` as well as `YourModel.cpp` to the listed headers and source files.
 
-4. In include/BSMPT/models/IncludeAllModels.h you need to add a new entry in the ModelIDs enum above the `stop` entry which is different from the ones already in the enum, e.g. YourModel. Additionally, you have to create a new entry in the `const std::unordered_map<std::string,ModelIDs> ModelNames` map in the same file and add a new line with {"YourModelName",ModelIDs::YourModel} , the matching will be done automatically.
-Then you can call your model with `./binary YourModelName ...` .
+4. In `include/BSMPT/models/IncludeAllModels.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
 
-5. In src/models/IncludeAllModels.cpp you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also to actually call your model you have to extend the FChoose function. For this you add a new case to the switch statement, which reads
+5. In `src/models/IncludeAllModels.cpp` you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also, to be able to call your model, you have to extend the `FChoose` function. For this you add a new case to the switch statement, which reads
 
         case ModelIDs::YourModel: return std::make_unique<Class_YourModel>(); break;
-        
+
 ### Generate the C++ code for a model
 We provide currently two methods to generate the tensors and calculate the counter terms for a new model.
 
-1. At tools/ModelGeneration/Maple we provide the maple Worksheet CreateModel.mw which you can use to implement your model and get the tensors. 
-2. At tools/ModelGeneration/sympy we provide a setup using only python3 with sympy (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, SM.py and G2HDM.py which both implement two different models and use the ModelGenerator.py module to calculate the tensors and CT. You can get the CT using `python3 SM.py --show ct` and the tensors by calling `python3 SM.py --show tensors`. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. the G2HDM example).
-3. To show the simplified Tree level and counterterm potentials you can use `python3 SM.py --show treeSimpl` und `python3 SM.py --show CTSimpl`.
+1. At `tools/ModelGeneration/Maple` we provide the maple Worksheet `CreateModel.mw` which you can use to implement your model and get the tensors.
+2. At `tools/ModelGeneration/sympy` we provide a setup using only `python3` with `sympy` (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, `SM.py` and `G2HDM.py` (generic 2HDM) which both use the `ModelGenerator.py` module to calculate the tensors and CT. You can get the CT using `python3 SM.py --show ct` and the tensors by calling `python3 SM.py --show tensors`. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. in the G2HDM example).
+3. To show the simplified tree-level and counterterm potentials, you can use `python3 SM.py --show treeSimpl` and `python3 SM.py --show CTSimpl`.
 
 
 
@@ -150,95 +152,62 @@ You can use the Test executable to detect possible errors in your implementation
 Also contact us if you have a custom model for BSMPT v1.x and you have trouble converting it to the new notation.
 
 ## Executables
-BSMPT provides multiple executables. Here we give a quick overview of them. For every executable you can call them with the `--help` option to get an overview of possible input parameters.
+BSMPT provides multiple executables. Here we give a quick overview of them. 
+Every executable can be called with the `--help` option to see how it can be run and to get an overview of all its required and optional arguments.
+Also, consult the manuals ([BSMPTv1](https://arxiv.org/abs/1803.02846), [BSMPTv2](https://arxiv.org/abs/2007.01725), [BSMPTv3](https://arxiv.org/abs/24XX.XXXXX])) for more details on the executables and their input parameters.
 
-Additionally, every executable has the option to set the `--json=/path/to/your/file.json` which contains a json string with the parameters you can set through the CLI. This can be useful if you want to store the parameters you used for a given call. Please beware that all relative paths in the json file are considered relative to the current working directory and not to the location of the json file. Examples can be found in `example/JSON`. If you want to be sure to have the correct output file we recommend using absolute paths.
+Note, that every executable has the option to set the `--json=/path/to/your/file.json` which contains a json string with the parameters you can set through the CLI. This can be useful if you want to store the parameters you used for a given call. Please beware that all paths in the json file are considered relative to the current working directory and not to the location of the json file. Examples can be found in `example/JSON`. If you want to be sure to have the correct output file we recommend using absolute paths.
 
-For the following examples the C2HDM with the example/C2HDM_Input.dat file is used.
+
+In BSMPTv3, the following four executables are added:
+
+
+### MinimaTracer
+MinimaTracer tracks temperature-dependent local minima in a user-defined temperature interval.
+
+### CalcTemps
+CalcTemps identifies regions of coexisting minima, calculates the bounce solutions and characteristic temperature scales (critical, nucleation, percolation and completion temperature) of first-order phase transitions. Based on that, we report a transition history for the point.
+
+### CalcGW
+CalcGW expands CalcTemps by the additional calculation of the gravitational waves spectra sourced by first-order phase transitions.
+
+### PotPlotter
+PotPlotter calculates user-defined data grids that can be used for the visualization of multi-dimensional potential contours.
+
+
+The following executables were released with BSMPTv1 and BSMPTv2:
+
+
+### Test
+Test checks the model implementation for a provided parameter point. Some of the performed tests are e.g.: matching fermion masses and tree-level electroweak minimum with SM, tadpole relations, matching scalar masses between tree-level and NLO and symmetries of the coupling-tensors. The number of passed/failed tests is reported.
 
 ### BSMPT
-BSMPT calculates the EWPT for every parameter point in the input file and gives out the results of those parameter points for which \f$v_c/T_c\f$ > 1. 
-To find these points a bisection method is used with the temperature starting between 0 and 300 GeV. The executable is called through:
-
-        ./bin/BSMPT Model Inputfile Outputfile LineStart LineEnd
-
-This will call the specific model to be used, identified through 'Model', and calculate the EWPT for each parameter point (corresponding to one line) between 'LineStart' and 'LineEnd'.
-
-For our example the command
-
-    	./bin/BSMPT c2hdm example/C2HDM_Input.dat example/test_BSMPT.dat 2 2
-
-will calculate for the C2HDM the EWPT for one parameter point given in line 2 in C2HDM_Input.dat. This will generate the output file example/test_BSMPT.dat 2 2 which can be compared with the already available file example/C2HDM_Input.dat_BSMPT.
+BSMPT calculates the strength of a single-step electroweak phase transition (EWPT), defined as the ratio of the vacuum expectation value (VEV) at the critical temperature \f$v_c\f$ over the critical temperature \f$T_c\f$, based on finding a discontinuity in the electroweak VEV of the temperature-dependent global minimum.
 
 ### CalcCT
-This will calculate the counterterms. In the output file the information on the input parameter point is given and the counterterms are added at the end of the line.
-
-It is called through the command
-
-    	./bin/CalcCT Model Inputfile Outputfile LineStart LineEnd
-
-For the C2HDM example this reads
-
-    	./bin/CalcCT c2hdm example/C2HDM_Input.dat example/test_CalcCT.dat 2 2
-
-which will generate the output file example/test_CalcCT.dat. This can be compared with the already available file example/C2HDM_Input.dat_CalcCT.
+CalcCT calculates the (finite) counterterms for the 'on-shell' renormalization scheme.
 
 ### NLOVEV
-This calculates the VEV at 1-loop order at vanishing temperature in the effective potential approach. This can be used to investigate the vacuum stability of the model. It is called through
-
-    	./bin/NLOVEV Model Inputfile Outputfile LineStart LineEnd
-
-and for the C2HDM example it is given by
-
-    	./bin/NLOVEV c2hdm example/C2HDM_Input.dat example/test_NLOVEV.dat 2 2
-
-where the result is written into the file example/test_NLOVEV.dat which can be compared with the already available file example/C2HDM_Input.dat_NLOVEV.
+NLOVEV calculates the zero-temperature VEV at one-loop order. This can be used to investigate the vacuum stability of the model.
 
 ### VEVEVO
-This program calculates the evolution of the vacuum expecation value of a given point with the temperature. It is called through
-
-    	./bin/VEVEVO Model Inputfile Outputfile Line Tempstart Tempstep Tempend
-
-where 'Tempstart' is the starting value of the temperature which increases with 'Tempstep' until 'Tempend'.
-
-For our C2HDM example this would be
-
-     	./bin/VEVEVO c2hdm example/C2HDM_Input.dat example/test_VEVEVO.dat 2 0 5 150
-
-where the result for the NLO VEV is given in example/test_VEVEVO.dat as function of the temperature in the interval between 0 and 150 GeV in steps of 5 GeV. This can be compared with the already available file example/C2HDM_Input.dat_vevevo.
+VEVEVO calculates the evolution of the global minimum of a given point in a user-specified temperature range.
 
 ### TripleHiggsCouplingNLO
-This program calculates the trilinear Higgs self-couplings at NLO at zero temperature. It is called through
-
-    	./bin/TripleHiggsNLO Model Inputfile Outputfile LineStart LineEnd
-
-The C2HDM example is called through
-
-    	./bin/TripleHiggsNLO c2hdm example/C2HDM_Input.dat example/test_TripleHiggsCouplingNLO.dat 2 2
-
-with the result given in example/test_TripleHiggsNLO.dat which can be compared with the already available file example/C2HDM_Input.dat_TripleHiggsCouplingNLO .
+TripleHiggsCouplingNLO calculates the trilinear Higgs self-couplings at NLO at zero temperature.
 
 ### CalculateEWBG
-This program calculates the difference between baryons and anti-baryons
+CalculateEWBG calculates the difference between baryons and anti-baryons
 normalized to the photon density generated through the EWPT.
 Please beware that this is only tested for the C2HDM so far and the general
-implementation is future work. It is called through
-
-    	./bin/CalculateEWBG c2hdm Inputfile Outputfile LineStart LineEnd config_file
-
- An example is given for the example/C2HDM_Input.dat parameter point through
-
-    	./bin/CalculateEWBG c2hdm example/C2HDM_Input.dat example/test_EWBG.dat 2 2 example/EWBG_config.txt
-
-with the result given in example/test_EWBG.dat which can be compared with
-the already available file example/C2HDM_Input.dat_EWBG.
+implementation is future work.
 
 ### PlotEWBG_vw
-This executable varies the wall velocity of a given parameter point and
-calculates the EWBG for each velocity.
+PlotEWBG_vw varies the wall velocity of a given parameter point and
+calculates the baryon asymmetry for each velocity.
 
 ### PlotEWBG_nL
-This executable calculates the left-handed fermion density in front of the
+PlotEWBG_nL calculates the left-handed fermion density in front of the
 wall as a function of the distance to the bubble wall.
 
 

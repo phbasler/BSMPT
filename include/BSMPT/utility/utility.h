@@ -7,7 +7,9 @@
 #pragma once
 
 #include <BSMPT/config.h>
+#include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <random>
 #include <string>
 #include <vector>
@@ -46,7 +48,48 @@ bool StringEndsWith(const std::string &str, const std::string &suffix);
 const std::string sep = "\t";
 
 /**
- * Overload to print out vectors with the << operator
+ * @brief factorial function
+ */
+int factorial(const int &a);
+
+/**
+ * @brief push back vector into vector
+ */
+template <typename T>
+std::vector<T> push_back(std::vector<T> &a, const std::vector<T> &b)
+{
+  return a.insert(a.end(), b.begin(), b.end());
+}
+
+/**
+ * @brief vector to_string
+ */
+template <typename T> std::string vec_to_string(const std::vector<T> &vec)
+{
+  std::string res;
+  bool first = true;
+  for (const auto &el : vec)
+  {
+    if (not first)
+    {
+      res += sep + std::to_string(el);
+    }
+    else
+    {
+      res   = std::to_string(el);
+      first = false;
+    }
+  }
+  return res;
+}
+
+/**
+ * @brief split string separated by delimiter into substrings
+ */
+std::vector<std::string> split(const std::string &str, char delimiter);
+
+/**
+ * @brief Overload to print out vectors with the << operator
  */
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
@@ -66,6 +109,153 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
   }
   return os;
 }
+
+/**
+ * @brief vector addition
+ */
+template <typename T>
+std::vector<T> operator+(const std::vector<T> &a, const std::vector<T> &b)
+{
+  if (a.size() != b.size())
+    throw std::runtime_error(
+        "Vector cannot be added. Must have the same size.");
+  std::vector<T> result;
+  result.reserve(a.size());
+
+  std::transform(a.begin(),
+                 a.end(),
+                 b.begin(),
+                 std::back_inserter(result),
+                 std::plus<T>());
+  return result;
+}
+
+/**
+ * @brief vector subtraction
+ */
+template <typename T>
+std::vector<T> operator-(const std::vector<T> &a, const std::vector<T> &b)
+{
+  if (a.size() != b.size())
+    throw("Vector cannot be subtracted. Must have the same size.");
+
+  std::vector<T> result;
+  result.reserve(a.size());
+
+  std::transform(a.begin(),
+                 a.end(),
+                 b.begin(),
+                 std::back_inserter(result),
+                 std::minus<T>());
+  return result;
+}
+
+/**
+ * @brief multiplication of vector with scalar
+ */
+template <typename T, typename T2>
+std::vector<T> operator*(const T2 &a, const std::vector<T> &b)
+{
+  std::vector<T> result;
+  result.reserve(b.size());
+
+  std::transform(b.begin(),
+                 b.end(),
+                 std::back_inserter(result),
+                 [&a](T i) { return a * i; });
+  return result;
+}
+
+/**
+ * @brief division of vector by scalar
+ */
+template <typename T, typename T2>
+std::vector<T> operator/(const std::vector<T> &a, const T2 &b)
+{
+  std::vector<T> result;
+  result.reserve(a.size());
+
+  std::transform(a.begin(),
+                 a.end(),
+                 std::back_inserter(result),
+                 [&b](T i) { return i / b; });
+  return result;
+}
+
+/**
+ * @brief dot product of two vectors
+ */
+template <typename T>
+T operator*(const std::vector<T> &a, const std::vector<T> &b)
+{
+  if (a.size() != b.size())
+    throw(
+        "Dot product between vectors cannot be done. Must have the same size.");
+
+  std::vector<T> result;
+  result.reserve(a.size());
+
+  std::transform(a.begin(),
+                 a.end(),
+                 b.begin(),
+                 std::back_inserter(result),
+                 [](T i, T j) { return (i * j); });
+
+  T result1 = std::accumulate(result.begin(), result.end(), 0.0);
+
+  return result1;
+}
+
+/**
+ * @brief multiplication of matrix with vector
+ */
+template <typename T>
+std::vector<T> operator*(const std::vector<std::vector<T>> &a,
+                         const std::vector<T> &b)
+{
+  if (a.size() != b.size())
+    throw("Multiplication of matrix with vector cannot be done. Must have the "
+          "same size.");
+
+  std::vector<T> result;
+  result.reserve(a.size());
+
+  std::transform(a.begin(),
+                 a.end(),
+                 std::back_inserter(result),
+                 [&](std::vector<T> i) { return (i * b); });
+
+  return result;
+}
+
+/**
+ * @brief flatten matrix
+ */
+template <typename T>
+std::vector<T> flatten(std::vector<std::vector<T>> const &vec)
+{
+  std::vector<T> flattened;
+  for (auto const &v : vec)
+  {
+    flattened.insert(flattened.end(), v.begin(), v.end());
+  }
+  return flattened;
+}
+
+/**
+ * @brief L2NormVector
+ * @param vec vector
+ * @return L2 norm of vector
+ */
+double L2NormVector(const std::vector<double> &vec);
+
+/**
+ * @brief Calculates the tranpose of a matrix
+ * @param A matrix to be transposed
+ * @return std::vector<std::vector<double>> transposed matrix
+ */
+std::vector<std::vector<double>>
+Transpose(const std::vector<std::vector<double>> &A);
 
 /**
  * @brief operator << overload for the model parameter

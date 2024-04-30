@@ -80,13 +80,6 @@ MinimizersToUse GetMinimizers(int WhichMinimizer)
   return MinimizersToUse(UseCMAES, UseGSL, UseNLopt);
 }
 
-/**
- * @brief Minimization of the Model
- * Minimizes the given Potential with parameters par and CT-parameters parCT at
- * a given Temperature Temp and writes the solution in the std::vector sol. The
- * Minimization Debugging Options are written in the std::vector Check. The
- * std::vector Start gives the start value for the CMA-ES Minimization.
- */
 std::vector<double>
 Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
                  const double &Temp,
@@ -264,7 +257,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
 
   auto sol   = Minima.at(minIndex);
   auto EWVEV = modelPointer->EWSBVEV(modelPointer->MinimizeOrderVEV(sol));
-  if (EWVEV <= 0.5) sol = std::vector<double>(modelPointer->get_nVEV(), 0);
+  if (EWVEV <= 0.5) modelPointer->SetEWVEVZero(sol);
 
   solGSLMin.clear();
   if (UseMinimizer.UseGSL and gslMinSuc)

@@ -458,6 +458,12 @@ public:
   const auto &Get_Curvature_Quark_F2() const { return Curvature_Quark_F2; }
 
   /**
+   * @brief Get_VevOrder allows const ref access to the VevOrder vector
+   * @return
+   */
+  const std::vector<std::size_t> &Get_VevOrder() const { return VevOrder; }
+
+  /**
    * @brief get_scale
    * @return the MSBar renormalisation scale
    */
@@ -519,6 +525,16 @@ public:
    * @return NHiggs
    */
   std::size_t get_NHiggs() const { return NHiggs; }
+  /**
+   * @brief get_NChargedHiggs
+   * @return NChargedHiggs
+   */
+  std::size_t get_NChargedHiggs() const { return NChargedHiggs; }
+  /**
+   * @brief get_NNeutralHiggs
+   * @return NNeutralHiggs
+   */
+  std::size_t get_NNeutralHiggs() const { return NNeutralHiggs; }
   /**
    * @brief get_NLepton
    * @return NLepton
@@ -593,9 +609,31 @@ public:
   void setUseIndexCol(std::string legend);
 
   /**
-   * Initializes all vectors needed for the calculations.
+   * get UseIndexCol var
    */
-  void initVectors();
+  bool getUseIndexCol();
+
+  /**
+   * @brief sym2Dim Symmetrize scalar 2-dim tensor
+   * @param Tensor2Dim 2-dim scalar tensor
+   * @param Nk1 number of first indices
+   * @param Nk2 number of second indices
+   */
+  void sym2Dim(std::vector<std::vector<double>> &Tensor2Dim,
+               std::size_t Nk1,
+               std::size_t Nk2);
+
+  /**
+   * @brief sym3Dim Symmetrize scalar 3-dim tensor
+   * @param Tensor3Dim 4-dim scalar tensor
+   * @param Nk1 number of first indices
+   * @param Nk2 number of second indices
+   * @param Nk3 number of third indices
+   */
+  void sym3Dim(std::vector<std::vector<std::vector<double>>> &Tensor3Dim,
+               std::size_t Nk1,
+               std::size_t Nk2,
+               std::size_t Nk3);
 
   /**
    * @brief sym4Dim Symmetrize scalar 4-dim tensor
@@ -613,6 +651,11 @@ public:
       std::size_t Nk4);
 
   /**
+   * Initializes all vectors needed for the calculations.
+   */
+  void initVectors();
+
+  /**
    * Calculates the effective potential and its derivatives.
    * @param v vev configuration at which the potential should be evaluated
    * @param Temp temperature at which the potential should be evaluated
@@ -621,10 +664,10 @@ public:
    * @param Order 0 returns the tree level potential and 1 the NLO potential.
    * Default value is the NLO potential
    */
-  double VEff(const std::vector<double> &v,
-              double Temp = 0,
-              int diff    = 0,
-              int Order   = 1) const;
+  virtual double VEff(const std::vector<double> &v,
+                      double Temp = 0,
+                      int diff    = 0,
+                      int Order   = 1) const;
   /**
    * Calculates the tree-level potential and its derivatives.
    * @param v the configuration of all VEVs at which the potential should be
@@ -660,11 +703,20 @@ public:
    * @return the value of the one-loop part of the effective potential
    */
   double V1Loop(const std::vector<double> &v, double Temp, int diff) const;
+
   /**
    * This function calculates the EW breaking VEV from all contributing field
    * configurations.
    */
-  double EWSBVEV(const std::vector<double> &v) const;
+  virtual double EWSBVEV(const std::vector<double> &v) const;
+
+  /**
+   * @brief SetEWVEVZero Set all VEV directions in sol-vector to zero that
+   * contibute to EW VEV
+   * @param sol solution in nVEV-space
+   * @return sol with EWVEV dirs set to zero
+   */
+  virtual void SetEWVEVZero(std::vector<double> &sol) const;
 
   /**
    * Reads the string linestr and sets the parameter point
@@ -750,6 +802,7 @@ public:
    * tree-level minimum.
    */
   std::vector<double> WeinbergForthDerivative() const;
+
   /**
    * Calculates the Debye corrections to the Higgs mass matrix.
    * If you can provide CalculateDebyeSimplified() with the Matrix as this will
@@ -759,6 +812,7 @@ public:
    * skipped.
    */
   void CalculateDebye(bool forceCalculation = false);
+
   /**
    * Calculates the Debye corrections to the gauge sector. By using
    * CalculateDebyeGaugeSimplified() the runtime can be reduced.

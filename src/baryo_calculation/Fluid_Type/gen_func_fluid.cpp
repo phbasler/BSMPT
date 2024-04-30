@@ -17,14 +17,6 @@ namespace BSMPT
 {
 namespace Baryo
 {
-/**
- * @brief C_AbsErr Absolute tolerance for boost::integrate_adaptive
- */
-const double C_AbsErr = 1e-6;
-/**
- * @brief C_RelErr Relative tolerance for boost::integrate_adaptive
- */
-const double C_RelErr = 1e-9;
 
 void Calc_Gam_M::operator()(const state_type &Gam,
                             state_type &dGam,
@@ -295,7 +287,6 @@ void Calc_eta::set_class(std::vector<double> array_z_in,
                          double Temp_in,
                          double vw_in)
 {
-
   Calc_eta::array_z  = array_z_in;
   Calc_eta::array_nL = array_nL_in;
   Calc_eta::Temp     = Temp_in;
