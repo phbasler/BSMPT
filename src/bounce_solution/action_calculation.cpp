@@ -533,7 +533,7 @@ void BounceActionInt::CalculateExactSolutionThreshold(double MinError)
 
   std::vector<double> MinSol, LinSol;
   inital_exponent = log((Spline.L - Initial_lmin) / 100.) -
-                    10; // Search from 2e-21% spline path
+                    10; // Search from 4e-7% spline path
   final_exponent =
       log((Spline.L - Initial_lmin) / 100.); // Search until 10% spline path
 
