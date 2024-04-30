@@ -892,6 +892,32 @@ TEST_CASE(
   REQUIRE(not output.vec_gw_data.at(0).SNR.has_value());
 }
 
+TEST_CASE("Test for SO(3)", "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 10,
+                                               /* vs = */ 10,
+                                               /* va = */ 10,
+                                               /* msq = */ -100,
+                                               /* lambda = */ 0,
+                                               /* delta2 = */ 0,
+                                               /* b2 = */ -100,
+                                               /* d2 = */ 0,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+  MinTracer->FindFlatDirections();
+  REQUIRE(MinTracer->flat_3D_dirs.size() == 1);
+}
+
 TEST_CASE("Test for EW symmetry restoration BP1", "[gw]")
 {
   const std::vector<double> example_point_R2HDM{

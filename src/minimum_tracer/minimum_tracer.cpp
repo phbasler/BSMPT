@@ -935,7 +935,13 @@ void MinimumTracer::FindFlatDirections()
                   "directions as: " +
                       vec_to_string(NonFlatDirections));
   }
-
+  // Remove duplicates
+  flat_1D_dirs.erase(unique(flat_1D_dirs.begin(), flat_1D_dirs.end()),
+                     flat_1D_dirs.end());
+  flat_2D_dirs.erase(unique(flat_2D_dirs.begin(), flat_2D_dirs.end()),
+                     flat_2D_dirs.end());
+  flat_3D_dirs.erase(unique(flat_3D_dirs.begin(), flat_3D_dirs.end()),
+                     flat_3D_dirs.end());
   return;
 }
 
