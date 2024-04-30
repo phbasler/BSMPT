@@ -57,7 +57,7 @@ private:
    * @brief Store the value of backwards propagation
    *
    */
-  double Initial_lmin;
+  double Initial_lmin = 0;
 
   /**
    * @brief Potential at the false vacuum in the unshifted potential (in the
