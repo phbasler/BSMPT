@@ -78,6 +78,20 @@ private:
    */
   bool PathDeformationConvergedWithout1D = false;
 
+  /**
+   * @brief Lmin - L0 that splits between the two branches of the H > 0
+   * analytical solution. If unset, we only use the linear approximation
+   *
+   */
+  std::optional<double> ExactSolutionThreshold;
+
+  /**
+   * @brief First guess of l(rho) - l0 used to to integrate in the analytical
+   * solution. Can be decreased if the error is too high.
+   *
+   */
+  double FractionOfThePathExact = 1e-4;
+
 public:
   /**
    * @brief Dimension of the VEV space
@@ -484,11 +498,32 @@ public:
    * linear in l, i.e. \f$ \frac{dV}{dl} \approx H (l - l_{min}) \f$. This
    * correspondes to a purely qudratic potential.
    *
-   * @param l0 is the integration starting point.
    * @param l is the integration final point.
    * @return std::vector<double>
    */
-  std::vector<double> ExactSolutionFromMinimum(double l0, double l);
+  std::vector<double> ExactSolutionFromMinimum(double l);
+
+  /**
+   * @brief Logistic function with patched edges to account for numerical
+   * instability/nans
+   *
+   * \f$ \text{LogisticFunction}(x)=\begin{cases}1,\quad x\ge10\\0,\quad x\le
+   * -10\\\frac{1}{1+e^{-x}},\quad\text{otherwise}\end{cases} \f$
+   *
+   * @param x independent variable
+   * @return double logistic function at at x
+   */
+  double LogisticFunction(const double &x);
+
+  /**
+   * @brief Calculate \f$l_\text{threshold}\f$ that splits the two branches of
+   * analytical integration. This function works recursively until the error
+   * **MinError** is small enough or the integration step is too small to be
+   * numerically stable.
+   *
+   * @param MinError Lowest error found
+   */
+  void CalculateExactSolutionThreshold(double MinError = 1e100);
 
   /**
    * @brief Calculates the 1D solution by comparing the @ref

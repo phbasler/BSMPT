@@ -263,10 +263,8 @@ double BounceActionInt::BesselJ(double x, int terms)
   return r;
 }
 
-std::vector<double> BounceActionInt::ExactSolutionFromMinimum(double l0,
-                                                              double l)
+std::vector<double> BounceActionInt::ExactSolutionFromMinimum(double l)
 {
-  (void)l0; // TODO: if l0 is unused, then we can remove it
   double rho_down   = 1e-100;
   double rho_up     = 1;
   double rho_middle = 0;
@@ -351,11 +349,6 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
   double rho_middle  = 0;
   double rho_up      = 1;
   std::function<double(double)> LinearSolution, LinearSolutionDerivative;
-
-  if (abs(dVdl) < 1e-3 or l0 - Initial_lmin < 1e-2)
-  {
-    return BounceActionInt::ExactSolutionFromMinimum(l0, l);
-  }
 
   // Set maximum values that rho can have
   if (Alpha == 2 and d2Vdl2 > 0)
@@ -526,19 +519,64 @@ double BounceActionInt::Calc_d2Vdl2(double l)
          ((Hessian(Spline(l)) * Spline.dl(l)) * Spline.dl(l));
 }
 
+double BounceActionInt::LogisticFunction(const double &x)
+{
+  if (x >= 10) return 1;
+  if (x <= -10) return 0;
+  return 1 / (1 + exp(-x));
+}
+
+void BounceActionInt::CalculateExactSolutionThreshold(double MinError)
+{
+  double NumberOfSteps = 1000;
+  double Error, l0, l, inital_exponent, final_exponent;
+
+  std::vector<double> MinSol, LinSol;
+  inital_exponent = log((Spline.L - Initial_lmin) / 100.) -
+                    10; // Search from 2e-21% spline path
+  final_exponent =
+      log((Spline.L - Initial_lmin) / 100.); // Search until 10% spline path
+
+  for (double exponent = inital_exponent; exponent <= final_exponent;
+       exponent += (final_exponent - inital_exponent) / NumberOfSteps)
+  {
+    l0_minus_lmin = exp(exponent);
+    l0            = Initial_lmin + l0_minus_lmin;
+    l             = l0 + Spline.L * FractionOfThePathExact;
+    MinSol        = ExactSolutionFromMinimum(l);
+    LinSol        = ExactSolutionLin(l0, l, Calc_dVdl(l0), Calc_d2Vdl2(l0));
+    Error         = 0.5 *
+            abs((LinSol.at(0) - MinSol.at(0)) / (LinSol.at(0) + MinSol.at(0)));
+    if (Error < MinError)
+    {
+      // Found a better ExactSolutionThreshold
+      MinError               = Error;
+      ExactSolutionThreshold = l0_minus_lmin;
+    }
+  }
+
+  if (MinError > 1e-2) // Error not small enough
+  {
+    if (FractionOfThePathExact <= 1e-6) return;
+    FractionOfThePathExact /= 10.;
+    CalculateExactSolutionThreshold(MinError);
+  }
+}
 std::vector<double> BounceActionInt::ExactSolution(double l0)
 {
-  double dVdl = Calc_dVdl(l0);
+  // FractionOfThePathExact = 1e-5;
+  // Solving FractionOfThePathExact of the path
+  double l = l0 + Spline.L * FractionOfThePathExact;
   // Computing the second derivative of the potential beforehand
   double d2Vdl2 = Calc_d2Vdl2(l0);
-  // Spline length
-  double L = Spline.L;
+  // dVdl
+  double dVdl = Calc_dVdl(l0);
 
   std::stringstream ss;
 
-  double l_inf   = l0;
-  double l_sup   = l0 + L / 10000.0;    // Solving, at most, 1% of the path
-  double lmiddle = (l_inf + l_sup) / 2; // Middle point
+  // In the case Backwards propagation failed we use only the Linear Solution
+  if (not ExactSolutionThreshold.has_value())
+    return ExactSolutionLin(l0, l, dVdl, d2Vdl2);
 
   if (dVdl <= -1e-3)
   {
@@ -550,10 +588,30 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
     return {};
   }
 
-  std::vector<double> linS =
-      ExactSolutionLin(l0, lmiddle, dVdl, d2Vdl2); // Linear Solution
+  std::vector<double> MinSol = ExactSolutionFromMinimum(l);
+  std::vector<double> LinSol = ExactSolutionLin(l0, l, dVdl, d2Vdl2);
 
-  return linS;
+  // Calculate the LogisticExponent which indicates the contribution from both
+  // branches
+  double LogisticExponent = 100 *
+                            (l0_minus_lmin - ExactSolutionThreshold.value()) /
+                            (ExactSolutionThreshold.value() - Initial_lmin);
+
+  // If the contribution is too close to 0 or 1 we assume only a single type of
+  // solution. The protects the code againts NANs from the LinSol when
+  // the gradient is negative due to numerical instabilities.
+  if (LogisticFunction(-LogisticExponent) == 1) return MinSol;
+  if (LogisticFunction(LogisticExponent) == 1) return LinSol;
+
+  // Interpolate between both solution at ExactSolutionThreshold)
+  std::vector<double> MinLinInterpolated = LinSol;
+
+  MinLinInterpolated.at(0) = MinSol.at(0) * LogisticFunction(-LogisticExponent);
+  MinLinInterpolated.at(0) += LinSol.at(0) * LogisticFunction(LogisticExponent);
+  MinLinInterpolated.at(2) = MinSol.at(2) * LogisticFunction(-LogisticExponent);
+  MinLinInterpolated.at(2) += LinSol.at(2) * LogisticFunction(LogisticExponent);
+
+  return MinLinInterpolated;
 }
 
 void BounceActionInt::IntegrateBounce(double l0,
@@ -672,6 +730,9 @@ double BounceActionInt::BackwardsPropagation()
     if (abs((l0 - l00) / Spline.L) < 1e-8 and Calc_d2Vdl2(l0) > 0 and
         l0 <= Spline.L / 100)
     {
+      // Calculate the threshold between linear solution and solution from
+      // minimum
+      CalculateExactSolutionThreshold();
       return l0;
     }
   }
@@ -686,19 +747,20 @@ double BounceActionInt::BackwardsPropagation()
   {
     l00 = l0;
     l0 -= Calc_dVdl(l0) / 100;
+    if (abs((l0 - l00) / Spline.L) < 1e-8 and Calc_d2Vdl2(l0) > 0 and
+        l0 <= Spline.L / 100)
+    {
+      // Calculate the threshold between linear solution and solution from
+      // minimum
+      CalculateExactSolutionThreshold();
+      return l0;
+    }
   }
-  if (l0 <= Spline.L / 100)
-  {
-    return l0;
-    BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-  }
-  ss << "Backwards propagation converged to the other minimum...\t" << l0
-     << "\t using minus 0.1% Spline length as backwards propagation\n";
-  return (-1 * Spline.L / 100.0);
   ss << "Backwards propagation not converging\t" << l0
      << "\t using minus 0.1% Spline length as backwards propagation\n";
   BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
-
+  ExactSolutionThreshold
+      .reset(); // Use always the linear solution in exact solution
   return (-1 * Spline.L / 1000.0);
 }
 
