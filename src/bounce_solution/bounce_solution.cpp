@@ -329,7 +329,7 @@ void BounceSolution::GWScanTowardsHighAction()
 {
   for (int i = 0;
        i <=
-       1. + (200 - SolutionList.back().Action / SolutionList.back().T) / 5.;
+       1. + (200 - SolutionList.back().Action / SolutionList.back().T) / 10.;
        i++)
   {
     if (SolutionList.back().Action / SolutionList.back().T > 200) break;
@@ -339,7 +339,7 @@ void BounceSolution::GWScanTowardsHighAction()
     double t2            = SolutionList[SolutionList.size() - 1].T;
     double s1            = SolutionList[SolutionList.size() - 2].Action / t1;
     double s2            = SolutionList[SolutionList.size() - 1].Action / t2;
-    double goal          = s2 + 5;
+    double goal          = s2 + 10;
     std::size_t NumOfSol = SolutionList.size();
 
     double T = ((s1 - goal) * t2 - (s2 - goal) * t1) / (s1 - s2);
