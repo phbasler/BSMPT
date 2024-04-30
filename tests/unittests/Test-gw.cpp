@@ -648,6 +648,8 @@ TEST_CASE("Checking phase tracking for SM with Mode 1", "[gw]")
       /* lambda = */ 0.12905349405143487};
 
   using namespace BSMPT;
+  // Check the ASCIIPlotter
+  SetLogger({"--logginglevel::mintracerdetailed=true"});
   const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
@@ -656,6 +658,7 @@ TEST_CASE("Checking phase tracking for SM with Mode 1", "[gw]")
   std::shared_ptr<MinimumTracer> MinTracer(
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
   Vacuum vac(0, 300, MinTracer, modelPointer, 1, 10, true);
+  SetLogger({"--logginglevel::mintracerdetailed=false"});
 
   REQUIRE(vac.PhasesList.size() == 2);
 }
