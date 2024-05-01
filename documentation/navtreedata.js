@@ -97,17 +97,17 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"KtildeInterpolation_8h.html#abc33dcbf5a3c9f89eb8f699227d5e679",
-"ThermalFunctions_8h.html#a6f7e13fa8bc6cab391a1a615bdf6aa82",
-"classBSMPT_1_1Baryo_1_1gen__fluid.html#ad0254bad126b462a9f08c6541464b4b2",
-"classBSMPT_1_1Class__Potential__Origin.html#a430dee54232c4858b7580cb39e741186",
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a4d2ceb1e7ce3eebf0742b29c3e34c2c1",
-"classBSMPT_1_1Models_1_1Class__SM.html#ad105380eae0d14b223eac3e5253b6088",
-"functions_e.html",
-"namespaceBSMPT.html#afbd5a73c8a0693dd74b9a29eb4c18804a7a1920d61156abc05a60135aefe8bc67",
-"structBSMPT_1_1Vacuum.html#a72c406d5caf4afe2b645b67e4721dc3f",
-"utility_8h.html#a68d199b1c37b6807ce1cfb6c57c0721b"
+"BSMPT_8cpp.html",
+"Logger_8h.html#afbd5a73c8a0693dd74b9a29eb4c18804",
+"ThermalFunctions_8h.html#ad2dd5f388e9864379d5c4119488d9bc6",
+"classBSMPT_1_1Baryo_1_1tau__source.html#af2b601a886180158d1300e1761b631bc",
+"classBSMPT_1_1Class__Potential__Origin.html#a4d3af2825ae7b724491afd6c8e0bd61a",
+"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a8076c4825a02f8f3ca21beb64738327a",
+"classBSMPT_1_1Models_1_1Class__Template.html#a483263908b8187495fbed6514739756c",
+"functions_func_i.html",
+"namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aa037338d48cb78bf582349354f0bda85b",
+"structBSMPT_1_1Vacuum.html#affb074e3f69841d3ee6686bc8d8e0bc4",
+"utility_8h.html#adc8d51ff68d9148100c44051d41c46ae"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
