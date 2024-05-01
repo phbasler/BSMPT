@@ -66,6 +66,7 @@ If you use this program for your work, please cite
 
   - [1803.02846](https://arxiv.org/abs/1803.02846)
   - [2007.01725](https://arxiv.org/abs/2007.01725)
+  - [2404.19037](https://arxiv.org/abs/2404.19037)
 
 ## Installation:
 BSMPT uses cmake and [conan 2](https://conan.io/) for its installation which can be installed through pip with `pip3 install cmake conan`.
