@@ -16,3 +16,5 @@ ignore:
   - "src/utility/spline/spline.cpp"
   - "src/utility/asciiplotter/asciiplotter.cpp"
   - "example/**"
+  - ".github"
+  - "**/README.md"
