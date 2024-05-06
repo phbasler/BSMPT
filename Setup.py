@@ -69,7 +69,10 @@ def check_profile(profile):
         if not os.path.isfile(conan_home + "/profiles/default"):
             cmd = "conan profile detect".split()
             subprocess.check_output(cmd)
-        cmd = "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
+        if (sys.platform != "win32"):
+            cmd = "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
+        else:
+            cmd = "copy " + conan_home + "\\profiles\\default profiles\\BSMPT\\" + str(profile)
         subprocess.check_call(cmd, shell=True)
         setup_profiles()
         check_profile(profile)
