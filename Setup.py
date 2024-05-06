@@ -3,6 +3,7 @@ import sys
 import os
 import shutil
 from enum import Enum
+import fileinput
 from argparse import ArgumentParser, ArgumentTypeError
 import platform
 
@@ -60,6 +61,11 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
 
     return profile
 
+def set_setting(file, setting, value):
+    for line in fileinput.input([file], inplace=True):
+        if line.strip().startswith(setting):
+            line = setting + "=" + value + "\n"
+        sys.stdout.write(line)
 
 def check_profile(profile):
     path = os.path.join("profiles", "BSMPT", profile)
@@ -71,9 +77,14 @@ def check_profile(profile):
             subprocess.check_output(cmd)
         if (sys.platform != "win32"):
             cmd = "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
+            subprocess.check_call(cmd, shell=True)
+            set_setting(path, "compiler.cppstd", "gnu17")
+           
         else:
             cmd = "copy " + conan_home + "\\profiles\\default profiles\\BSMPT\\" + str(profile)
-        subprocess.check_call(cmd, shell=True)
+            subprocess.check_call(cmd, shell=True)
+            set_setting(path, "compiler.cppstd", "17")
+
         setup_profiles()
         check_profile(profile)
 
