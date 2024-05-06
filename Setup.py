@@ -64,9 +64,14 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
 def check_profile(profile):
     path = os.path.join("profiles", "BSMPT", profile)
     if not os.path.isfile(path):
-        raise Exception(
-            f"The desired profile {profile} does not exist in BSMPT/profiles. Please create it."
-        )
+        print(f"Profile does not exist in BSMPT/profiles.\nUsing profile {profile} created from the default profile. Change it accordingly.")
+        cmd = "conan profile detect -f".split()
+        subprocess.check_output(cmd)
+        conan_home = subprocess.check_output("conan config home".split(), encoding="UTF-8").split("\n")[0]
+        cmd = "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
+        subprocess.check_call(cmd, shell=True)
+        setup_profiles()
+        check_profile(profile)
 
 
 def get_gcc_version():
