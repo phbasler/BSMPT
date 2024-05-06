@@ -94,13 +94,144 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">BSMPT Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_src_utility_asciiplotter_README"></a> <b>joehood::asciiplotter</b> is a C++ package used to construct ASCII plots in text format as a quick way of checking the results.</p>
-<p>The source code can be found in <a href="https://github.com/joehood/asciiplotter">joehood's GitHub</a> (commit <a href="https://github.com/joehood/asciiplotter/tree/f32de9a66aca4aa19321f6e1a6d62af4a4f43377">f32de9a</a>).</p>
-<h4><a class="anchor" id="autotoc_md0"></a>
-Modifications:</h4>
+<div class="textblock"><p><a class="anchor" id="md_README"></a></p>
+<p>Program: <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> version 3.0.0</p>
+<p>Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana</p>
+<p><a href="https://github.com/phbasler/BSMPT/discussions">&lt;img src="https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&amp;logo=github&amp;colorB=purple" alt=""GitHub Discussions""/&gt;</a> <a href="https://github.com/phbasler/BSMPT/actions/workflows/test.yml"><img src="https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master" alt="Unit tests" style="pointer-events: none;" class="inline"/></a> <a href="https://codecov.io/gh/phbasler/BSMPT"><img src="https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5" alt="codecov master" style="pointer-events: none;" class="inline"/></a> <a href="https://phbasler.github.io/BSMPT/documentation"><img src="https://img.shields.io/badge/Documentation-master-success" alt="Documentation" class="inline"/></a> <a href="https://phbasler.github.io/BSMPT/benchmarks/"><img src="https://img.shields.io/badge/Benchmark-master-success" alt="Benchmarks" class="inline"/></a> <a href="https://github.com/phbasler/bsmpt/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/phbasler/BSMPT/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/phbasler/bsmpt.svg" alt="GitHub license" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/phbasler/bsmpt/releases"><img src="https://badgen.net/github/release/phbasler/bsmpt" alt="Latest release" class="inline"/></a></p>
+<p>Manual: version 3.0</p>
+<p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> - Beyond the Standard Model Phase Transitions:</p>
+<p>The C++ program package <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> allows for the detailed study of (multi-step) phase transitions between temperature-dependent minima in the one-loop daisy-resummed finite-temperature effective potential.</p>
+<p>The program tracks temperature-dependent minima, calculates the bounce solution, the characteristic temperatures and gravitational wave signals of first-order phase transitions. The code also allows to derive the loop-corrected trilinear Higgs self-couplings and provides the computation of the baryon asymmetry for the CP-violating 2-Higgs Doublet Model (C2HDM).</p>
+<p>We apply an 'on-shell' renormalization scheme in the sense that the loop-corrected masses and mixing angles are required to be equal to their tree-level input values. This allows for efficient scans in the parameter space of the models.</p>
+<p>The models implemented so far are</p>
 <ul>
-<li>Converted some <code>int</code> to <code>std::size_t</code> to avoid some warnings. </li>
+<li>Standard Model (SM)</li>
+<li>CP-conserving 2-Higgs-Doublet Model (R2HDM)</li>
+<li>CP-violating 2-Higgs-Doublet Model (C2HDM)</li>
+<li>Next-to-Minimal 2HDM (N2HDM)</li>
+<li>CP in the Dark (<a href="https://arxiv.org/abs/1807.10322">arXiv 1807.10322</a>, <a href="https://arxiv.org/abs/2204.13425">arXiv 2204.13425</a>)</li>
+<li>Complex Singlet Extension (CxSM)</li>
 </ul>
+<p>The code is structured such that users can add their own models.</p>
+<p>The program package can be downloaded at: <a href="https://github.com/phbasler/BSMPT">https://github.com/phbasler/BSMPT</a></p>
+<p>The documentation of the code is provided at <a href="https://phbasler.github.io/BSMPT/documentation">https://phbasler.github.io/BSMPT/documentation</a>.</p>
+<p>Sample input and output files are provided in the directory 'example'.</p>
+<p>Modifications and corrected bugs are reported in the file 'Changelog.md'.</p>
+<p>For additional information, comments, complaints or suggestions please e-mail to: <a href="#" onclick="location.href='mai'+'lto:'+'bsm'+'pt'+'@li'+'st'+'s.k'+'it'+'.ed'+'u'; return false;">bsmpt<span style="display: none;">.nosp@m.</span>@lis<span style="display: none;">.nosp@m.</span>ts.ki<span style="display: none;">.nosp@m.</span>t.ed<span style="display: none;">.nosp@m.</span>u</a>, open a corresponding <a href="https://github.com/phbasler/BSMPT/issues">issue</a> or start a <a href="https://github.com/phbasler/BSMPT/discussions">discussion</a>.</p>
+<hr  />
+<h3><a class="anchor" id="autotoc_md1"></a>
+Citation:</h3>
+<p>If you use this program for your work, please cite</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1803.02846">1803.02846</a></li>
+<li><a href="https://arxiv.org/abs/2007.01725">2007.01725</a></li>
+<li><a href="https://arxiv.org/abs/2404.19037">2404.19037</a></li>
+</ul>
+<h2><a class="anchor" id="autotoc_md2"></a>
+Installation:</h2>
+<p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> uses cmake and <a href="https://conan.io/">conan 2</a> for its installation which can be installed through pip with <code>pip3 install cmake conan</code>. In addition, you need a <code>C</code> and <code>C++</code> compiler installed.</p>
+<h3><a class="anchor" id="autotoc_md3"></a>
+build - simple</h3>
+<p>If you want the default installation of <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a>, you can then use the <code>Build.py</code> script. The script <code>Build.py</code> installs the necessary conan profiles for your operating system, handles the dependencies and compiles <code><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a></code> with its default settings in release mode. You can execute it with</p>
+<div class="fragment"><div class="line">python3 Build.py</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
+Dependencies</h3>
+<p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> uses cmake and <a href="https://conan.io/">conan 2</a> for dependencies. The used dependencies are:</p>
+<ol type="1">
+<li><a href="https://www.gnu.org/software/gsl/">GSL library</a>.</li>
+<li><a href="https://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen3</a> <br  />
+</li>
+<li><a href="https://github.com/CMA-ES/libcmaes">libcmaes</a>: Additionally to GSL you should either use libcmaes or NLopt. For more details on the libcmaes installation, e.g. possible dependencies, visit their <a href="https://github.com/CMA-ES/libcmaes/wiki">wiki</a>. If you don't want to install or use it, you can set <code>--options UseLibCMAES=False</code> when using the detailed build, as described below.</li>
+<li><a href="https://nlopt.readthedocs.io/en/latest/">NLopt</a>: If you do not want to use NLopt, you can set <code>--options UseNLopt=False</code> when using the detailed build, as described below.</li>
+<li><a href="https://www.boost.org/">Boost</a> : This is optional and only required for the Baryogenesis calculations. In order to compile the Baryogenesis calculation, set <code>--options CompileBaryo=True</code> when using the detailed build, as described below.</li>
+</ol>
+<h3><a class="anchor" id="autotoc_md5"></a>
+build - detailed</h3>
+<p>We provide the script <code>Setup.py</code> which installs conan profiles for your operating system and runs <code>conan install</code> to download the dependencies. If you want to use other profiles feel free to execute <code>conan install</code> with your profile manually or add it to the script.</p>
+<p>You can build the code with</p>
+<div class="fragment"><div class="line">python3 Setup.py  </div>
+<div class="line">cmake --preset ${profile}  </div>
+<div class="line">cmake --build --preset ${profile} -j  </div>
+<div class="line">cmake --build --preset ${profile} -j -t doc</div>
+</div><!-- fragment --><p>The <code>-t doc</code> will use doxygen to create the online help in build/html which can be opened locally. The <code>${profile}</code> parameter depends on your operating system. After running the <code>Setup</code> script you can call <code>cmake --list-presets</code> to show the found presets.</p>
+<p>The script <code>Setup.py</code> can take several optional arguments, run <code>python3 Setup.py -h</code> or <code>python3 Setup.py --help</code> to display them.</p>
+<h3><a class="anchor" id="autotoc_md6"></a>
+Unit tests</h3>
+<p>After compiling the code call <code>ctest --preset ${profile} -j</code> in the root folder to run some checks. Here the NLO VEV and EWPT for the R2HDM, C2HDM and N2HDM example points will be calculated and compared to the expected results.</p>
+<h3><a class="anchor" id="autotoc_md7"></a>
+Development</h3>
+<p>Most modern IDEs support cmake profiles. After running the <code>Setup.py</code> script you can open the root folder in an IDE of your choice (e.g. VSCode with cmake extension) and it will recognise the cmake profile.</p>
+<p>Code from the following repositories is used in <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a>:</p><ul>
+<li><a href="https://github.com/ttk592/spline"><code>ttk592::spline</code></a> by Tino Kluge, a C++ cubic spline interpolation library</li>
+<li><a href="https://github.com/joehood/asciiplotter"><code>AsciiPlotter</code></a> by Joe Hood, for ASCII plots in the terminal</li>
+</ul>
+<hr  />
+<h2><a class="anchor" id="autotoc_md9"></a>
+How to add a new model:</h2>
+<p>To add a new model, you have to modify/create five files (for further details, also consult the manual):</p>
+<ol type="1">
+<li>Go to <code>include/BSMPT/models</code> and copy <code><a class="el" href="ClassTemplate_8h.html">ClassTemplate.h</a></code> to <code>YourModel.h</code>. Adjust the name of the class <code>Class_Template</code> to <code>Class_YourModel</code>.</li>
+<li>Go to <code>src/models</code> and copy <code><a class="el" href="ClassTemplate_8cpp.html">ClassTemplate.cpp</a></code> to <code>YourModel.cpp</code>, and again change <code>Class_Template</code> to <code>Class_YourModel</code>. Also, follow the instructions in this file and in the manual to set up your new model.</li>
+<li>For your model to compile, you have to open <code>src/models/CMakeLists.txt</code> and add <code>${header_path}/YourModel.h</code> as well as <code>YourModel.cpp</code> to the listed headers and source files.</li>
+<li>In <code><a class="el" href="IncludeAllModels_8h.html">include/BSMPT/models/IncludeAllModels.h</a></code> you need to add a new entry in the <code>enum class ModelIDs</code> above the <code>stop</code> entry which is different from the already defined <code>ModelIDs</code>, e.g. <code>YourModel</code>. Additionally, you have to create a new entry in the <code>const std::unordered_map&lt;std::string, ModelIDs&gt; ModelNames</code> map in the same file and add a new line with <code>{"YourModelName",ModelIDs::YourModel}</code>.</li>
+<li>In <code>src/models/IncludeAllModels.cpp</code> you have to add <code>#include &lt;BSMPT/models/YourModel.h&gt;</code> to the include list. Also, to be able to call your model, you have to extend the <code>FChoose</code> function. For this you add a new case to the switch statement, which reads <pre class="fragment"> case ModelIDs::YourModel: return std::make_unique&lt;Class_YourModel&gt;(); break;
+</pre> </li>
+</ol>
+<h3><a class="anchor" id="autotoc_md10"></a>
+Generate the C++ code for a model</h3>
+<p>We provide currently two methods to generate the tensors and calculate the counter terms for a new model.</p>
+<ol type="1">
+<li>At <code>tools/ModelGeneration/Maple</code> we provide the maple Worksheet <code>CreateModel.mw</code> which you can use to implement your model and get the tensors.</li>
+<li>At <code>tools/ModelGeneration/sympy</code> we provide a setup using only <code>python3</code> with <code>sympy</code> (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, <code>SM.py</code> and <code>G2HDM.py</code> (generic 2HDM) which both use the <code>ModelGenerator.py</code> module to calculate the tensors and CT. You can get the CT using <code>python3 SM.py --show ct</code> and the tensors by calling <code>python3 SM.py --show tensors</code>. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. in the G2HDM example).</li>
+<li>To show the simplified tree-level and counterterm potentials, you can use <code>python3 SM.py --show treeSimpl</code> and <code>python3 SM.py --show CTSimpl</code>.</li>
+</ol>
+<p>You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at <a href="#" onclick="location.href='mai'+'lto:'+'bsm'+'pt'+'@li'+'st'+'s.k'+'it'+'.ed'+'u'; return false;">bsmpt<span style="display: none;">.nosp@m.</span>@lis<span style="display: none;">.nosp@m.</span>ts.ki<span style="display: none;">.nosp@m.</span>t.ed<span style="display: none;">.nosp@m.</span>u</a></p>
+<p>Also contact us if you have a custom model for <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> v1.x and you have trouble converting it to the new notation.</p>
+<h2><a class="anchor" id="autotoc_md11"></a>
+Executables</h2>
+<p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> provides multiple executables. Here we give a quick overview of them. Every executable can be called with the <code>--help</code> option to see how it can be run and to get an overview of all its required and optional arguments. Also, consult the manuals (<a href="https://arxiv.org/abs/1803.02846">BSMPTv1</a>, <a href="https://arxiv.org/abs/2007.01725">BSMPTv2</a>, <a href="https://arxiv.org/abs/24XX.XXXXX]">BSMPTv3</a>) for more details on the executables and their input parameters.</p>
+<p>Note, that every executable has the option to set the <code>--json=/path/to/your/file.json</code> which contains a json string with the parameters you can set through the CLI. This can be useful if you want to store the parameters you used for a given call. Please beware that all paths in the json file are considered relative to the current working directory and not to the location of the json file. Examples can be found in <code>example/JSON</code>. If you want to be sure to have the correct output file we recommend using absolute paths.</p>
+<p>In BSMPTv3, the following four executables are added:</p>
+<h3><a class="anchor" id="autotoc_md12"></a>
+MinimaTracer</h3>
+<p>MinimaTracer tracks temperature-dependent local minima in a user-defined temperature interval.</p>
+<h3><a class="anchor" id="autotoc_md13"></a>
+CalcTemps</h3>
+<p>CalcTemps identifies regions of coexisting minima, calculates the bounce solutions and characteristic temperature scales (critical, nucleation, percolation and completion temperature) of first-order phase transitions. Based on that, we report a transition history for the point.</p>
+<h3><a class="anchor" id="autotoc_md14"></a>
+CalcGW</h3>
+<p>CalcGW expands CalcTemps by the additional calculation of the gravitational waves spectra sourced by first-order phase transitions.</p>
+<h3><a class="anchor" id="autotoc_md15"></a>
+PotPlotter</h3>
+<p>PotPlotter calculates user-defined data grids that can be used for the visualization of multi-dimensional potential contours.</p>
+<p>The following executables were released with BSMPTv1 and BSMPTv2:</p>
+<h3><a class="anchor" id="autotoc_md16"></a>
+Test</h3>
+<p>Test checks the model implementation for a provided parameter point. Some of the performed tests are e.g.: matching fermion masses and tree-level electroweak minimum with SM, tadpole relations, matching scalar masses between tree-level and NLO and symmetries of the coupling-tensors. The number of passed/failed tests is reported.</p>
+<h3><a class="anchor" id="autotoc_md17"></a>
+BSMPT</h3>
+<p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> calculates the strength of a single-step electroweak phase transition (EWPT), defined as the ratio of the vacuum expectation value (VEV) at the critical temperature \(v_c\) over the critical temperature \(T_c\), based on finding a discontinuity in the electroweak VEV of the temperature-dependent global minimum.</p>
+<h3><a class="anchor" id="autotoc_md18"></a>
+CalcCT</h3>
+<p>CalcCT calculates the (finite) counterterms for the 'on-shell' renormalization scheme.</p>
+<h3><a class="anchor" id="autotoc_md19"></a>
+NLOVEV</h3>
+<p>NLOVEV calculates the zero-temperature VEV at one-loop order. This can be used to investigate the vacuum stability of the model.</p>
+<h3><a class="anchor" id="autotoc_md20"></a>
+VEVEVO</h3>
+<p>VEVEVO calculates the evolution of the global minimum of a given point in a user-specified temperature range.</p>
+<h3><a class="anchor" id="autotoc_md21"></a>
+TripleHiggsCouplingNLO</h3>
+<p>TripleHiggsCouplingNLO calculates the trilinear Higgs self-couplings at NLO at zero temperature.</p>
+<h3><a class="anchor" id="autotoc_md22"></a>
+CalculateEWBG</h3>
+<p>CalculateEWBG calculates the difference between baryons and anti-baryons normalized to the photon density generated through the EWPT. Please beware that this is only tested for the C2HDM so far and the general implementation is future work.</p>
+<h3><a class="anchor" id="autotoc_md23"></a>
+PlotEWBG_vw</h3>
+<p>PlotEWBG_vw varies the wall velocity of a given parameter point and calculates the baryon asymmetry for each velocity.</p>
+<h3><a class="anchor" id="autotoc_md24"></a>
+PlotEWBG_nL</h3>
+<p>PlotEWBG_nL calculates the left-handed fermion density in front of the wall as a function of the distance to the bubble wall. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
