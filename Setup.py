@@ -64,10 +64,11 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
 def check_profile(profile):
     path = os.path.join("profiles", "BSMPT", profile)
     if not os.path.isfile(path):
-        print(f"Profile does not exist in BSMPT/profiles.\nUsing profile {profile} created from the default profile. Change it accordingly.")
-        cmd = "conan profile detect -f".split()
-        subprocess.check_output(cmd)
         conan_home = subprocess.check_output("conan config home".split(), encoding="UTF-8").split("\n")[0]
+        print(f"Profile does not exist in BSMPT/profiles.\nUsing profile {profile} created from the default profile. Change it accordingly.")
+        if not os.path.isfile(conan_home + "/profiles/default"):
+            cmd = "conan profile detect".split()
+            subprocess.check_output(cmd)
         cmd = "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
         subprocess.check_call(cmd, shell=True)
         setup_profiles()
