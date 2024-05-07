@@ -258,6 +258,14 @@ std::vector<std::vector<double>>
 Transpose(const std::vector<std::vector<double>> &A);
 
 /**
+ * @brief Dilogarithm of x
+ *
+ * @param x real argument of from \f$ (-\infty, 1)\f$
+ * @return double
+ */
+double Li2(const double &x);
+
+/**
  * @brief operator << overload for the model parameter
  */
 namespace ModelID

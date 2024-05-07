@@ -81,6 +81,26 @@ Transpose(const std::vector<std::vector<double>> &A)
   return r;
 }
 
+double Li2(const double &x)
+{
+  if (x == 0) return 0;
+  if (x == 1) return pow(M_PI, 2) / 6.;
+  if (x < -1) return -pow(M_PI, 2) / 6. - pow(log(-x), 2) / 2. - Li2(1. / x);
+  if (x < 0) return 1 / 2. * Li2(-x * -x) - Li2(-x);
+  if (x > 0.5) return pow(M_PI, 2) / 6. - log(x) * log(1 - x) - Li2(1 - x);
+  double sum = 1e-100;
+  for (int k = 1; k <= 1e5; k++)
+  {
+    if (abs((pow(x, k) / pow(k, 2.)) / sum) < 1e-10)
+    {
+      sum += pow(x, k) / pow(k, 2.);
+      return sum;
+    }
+    sum += pow(x, k) / pow(k, 2.);
+  }
+  return sum;
+}
+
 bool StringEndsWith(const std::string &str, const std::string &suffix)
 {
   return str.size() >= suffix.size() and
