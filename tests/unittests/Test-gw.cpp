@@ -1013,3 +1013,65 @@ TEST_CASE("Test string conversion of enums", "[gw]")
          << StatusTemperature::NotMet << StatusTemperature::NotSet
          << StatusTemperature::Success);
 }
+
+TEST_CASE(
+    "Espinosa-Konstandin - Example A: Polynomial Vt - Phi0 = 0.99 (thin wall)",
+    "[gw]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0                                  = 0.99;
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    if (x[0] == 0) return 0.;
+    if (x[0] == 1) return -1.;
+    return x[0] * x[0] *
+           (2 * x[0] - 3 +
+            pow(1 - x[0], 2) * log((pow(1. - x[0], 2) * phi0 * phi0) /
+                                   (pow(1. - phi0, 2) * x[0] * x[0])));
+  };
+
+  std::vector<double> FalseVacuum = {0};
+  std::vector<double> TrueVacuum  = {1};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action ==
+          Approx(-pow(M_PI, 2) / 3. * (phi0 + Li2(phi0 / (phi0 - 1))))
+              .epsilon(1e-3));
+}
+
+TEST_CASE(
+    "Espinosa-Konstandin - Example A: Polynomial Vt - Phi0 = 0.5 (thick wall)",
+    "[gw]")
+{
+  // Tests bounce solver with analytical derivative
+  using namespace BSMPT;
+  double phi0                                  = 0.5;
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    if (x[0] == 0) return 0.;
+    if (x[0] == 1) return -1.;
+    return x[0] * x[0] *
+           (2 * x[0] - 3 +
+            pow(1 - x[0], 2) * log((pow(1. - x[0], 2) * phi0 * phi0) /
+                                   (pow(1. - phi0, 2) * x[0] * x[0])));
+  };
+
+  std::vector<double> FalseVacuum = {0};
+  std::vector<double> TrueVacuum  = {1 - 0.17};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action ==
+          Approx(-pow(M_PI, 2) / 3. * (phi0 + Li2(phi0 / (phi0 - 1))))
+              .epsilon(1e-3));
+}
