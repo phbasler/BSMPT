@@ -1078,7 +1078,7 @@ TEST_CASE(
 
 TEST_CASE("Espinosa-Konstandin - Example B: Trigonometric tunneling potential "
           "- Phi0 = 1.4 (thick wall)",
-          "[gw1]")
+          "[gw]")
 {
   // Espinosa-Konstandin examples from arXiv:2312.12360
   using namespace BSMPT;
@@ -1109,7 +1109,7 @@ TEST_CASE("Espinosa-Konstandin - Example B: Trigonometric tunneling potential "
 
 TEST_CASE("Espinosa-Konstandin - Example B: Trigonometric tunneling potential "
           "- Phi0 = 1.54 (thin wall)",
-          "[gw1]")
+          "[gw]")
 {
   // Espinosa-Konstandin examples from arXiv:2312.12360
   using namespace BSMPT;
