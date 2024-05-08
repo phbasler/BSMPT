@@ -1049,7 +1049,7 @@ TEST_CASE(
     "Espinosa-Konstandin - Example A: Polynomial Vt - Phi0 = 0.5 (thick wall)",
     "[gw]")
 {
-  // Tests bounce solver with analytical derivative
+  // Espinosa-Konstandin examples from arXiv:2312.12360
   using namespace BSMPT;
   double phi0                                  = 0.5;
   std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
@@ -1073,5 +1073,67 @@ TEST_CASE(
 
   REQUIRE(bc.Action ==
           Approx(-pow(M_PI, 2) / 3. * (phi0 + Li2(phi0 / (phi0 - 1))))
+              .epsilon(1e-3));
+}
+
+TEST_CASE("Espinosa-Konstandin - Example B: Trigonometric tunneling potential "
+          "- Phi0 = 1.4 (thick wall)",
+          "[gw1]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0                                  = 1.4;
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    if (x[0] == 0) return 0.;
+    x[0] = abs(x[0]);
+    return pow(sin(x[0]), 2) * (-1. + 2. / 3. * pow(cos(x[0]), 2) *
+                                          log(tan(phi0) / abs(tan(x[0]))));
+  };
+
+  std::vector<double> FalseVacuum = {0};
+  std::vector<double> TrueVacuum  = {1.54751};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action ==
+          Approx(pow(M_PI, 2) / 4. *
+                 (pow(M_PI, 2) / 2. + 6 * pow(log(1. / tan(phi0)), 2) +
+                  3 * Li2(-pow(1. / tan(phi0), 2))))
+              .epsilon(1e-3));
+}
+
+TEST_CASE("Espinosa-Konstandin - Example B: Trigonometric tunneling potential "
+          "- Phi0 = 1.54 (thin wall)",
+          "[gw1]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0                                  = 1.54;
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    if (x[0] == 0) return 0.;
+    x[0] = abs(x[0]);
+    return pow(sin(x[0]), 2) * (-1. + 2. / 3. * pow(cos(x[0]), 2) *
+                                          log(tan(phi0) / abs(tan(x[0]))));
+  };
+
+  std::vector<double> FalseVacuum = {0};
+  std::vector<double> TrueVacuum  = {1.5666275};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action ==
+          Approx(pow(M_PI, 2) / 4. *
+                 (pow(M_PI, 2) / 2. + 6 * pow(log(1. / tan(phi0)), 2) +
+                  3 * Li2(-pow(1. / tan(phi0), 2))))
               .epsilon(1e-3));
 }
