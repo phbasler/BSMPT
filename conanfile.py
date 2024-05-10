@@ -1,4 +1,4 @@
-from conan import ConanFile
+from conan import ConanFile, tools
 from conan.tools.cmake import cmake_layout, CMakeToolchain
 from conan.tools.system.package_manager import Apt
 from conan.errors import ConanInvalidConfiguration
@@ -82,3 +82,5 @@ class BSMPT(ConanFile):
 
         if self.settings.os != "Linux" and self.options.EnableCoverage:
             raise ConanInvalidConfiguration("We depend on lcov for coverage.")
+        
+        tools.build.check_min_cppstd(self, "17")
