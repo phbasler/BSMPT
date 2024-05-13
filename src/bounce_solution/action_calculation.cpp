@@ -474,7 +474,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
       ss << rho_up << "\t" << l << "\t" << dVdl << "\t" << d2Vdl2 << "\n";
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       ss.str(std::string());
-      return (ExactSolutionLin(l0, l / 10., dVdl, d2Vdl2));
+      return (ExactSolutionLin(l0, l0 + (l - l0) / 10., dVdl, d2Vdl2));
     }
   }
   else
