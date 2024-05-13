@@ -18,6 +18,7 @@ using Approx = Catch::Approx;
 #include <BSMPT/transition_tracer/transition_tracer.h>
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
+#include <gsl/gsl_sf_expint.h>
 
 TEST_CASE("Test GetStatusEWSR", "[gw]")
 {
