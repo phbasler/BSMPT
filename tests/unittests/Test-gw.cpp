@@ -1137,3 +1137,34 @@ TEST_CASE("Espinosa-Konstandin - Example B: Trigonometric tunneling potential "
                   3 * Li2(-pow(1. / tan(phi0), 2))))
               .epsilon(1e-3));
 }
+
+TEST_CASE(
+    "Espinosa-Konstandin - Example D: Derivative of the tunneling potential "
+    "- Phi0 = 0.8 (thin wall)",
+    "[gw]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0    = 0.8;
+  double cut_off = 0.95;
+
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    if (x[0] < 0) x[0] = -x[0];
+    if (x[0] > cut_off) x[0] = 2 * cut_off - x[0];
+
+    return gsl_sf_expint_Ei(2 * log(x[0] + 1e-100)) +
+           1. / 6. * pow(x[0], 2) * (1. - pow(log(phi0) / log(x[0]), 2));
+  };
+
+  std::vector<double> FalseVacuum = {0};
+  std::vector<double> TrueVacuum  = {cut_off};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action == Approx(5.1968779132).epsilon(1e-3));
+}
