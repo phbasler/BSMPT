@@ -435,7 +435,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
       // We used numerical derivative here because Bessel function J are not
       // completely implemented
       return (
-          (LinearSolution(rho_in + 0.001) - LinearSolution(rho_in - 0.001)) /
+          -(LinearSolution(rho_in + 0.001) - LinearSolution(rho_in - 0.001)) /
           (0.002));
     };
   }
