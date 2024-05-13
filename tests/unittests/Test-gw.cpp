@@ -1203,3 +1203,39 @@ TEST_CASE(
 
   REQUIRE(bc.Action == Approx(5.1968779132).epsilon(1e-3));
 }
+
+TEST_CASE("Espinosa-Konstandin - Example E: Finite mass with thin-wall limit "
+          "- Phi0 = 0.8",
+          "[gw]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0    = 0.8;
+  double cut_off = 0.9;
+
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    if (x[0] < 0) x[0] = -x[0];
+    if (x[0] > cut_off) x[0] = 2 * cut_off - x[0];
+    if (x[0] == 0) x[0] = 1e-100;
+
+    return exp(2) * gsl_sf_expint_Ei(-2 + 2 * log(x[0])) -
+           exp(3) * gsl_sf_expint_Ei(-3 + 3 * log(x[0])) +
+           (pow(-1 + x[0], 2) * pow(x[0], 2) *
+            (pow(log(x[0]), 2) - pow(log(phi0), 2) +
+             2 * log(((-1 + x[0]) * phi0) / (x[0] * (-1 + phi0))) +
+             2 * Li2(1 - x[0]) - 2 * Li2(1 - phi0))) /
+               (6. * pow(-1 + log(x[0]), 2));
+  };
+
+  std::vector<double> FalseVacuum = {0};
+  std::vector<double> TrueVacuum  = {cut_off};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action == Approx(37.878999).epsilon(1e-3));
+}
