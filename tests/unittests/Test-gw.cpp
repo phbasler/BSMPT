@@ -1239,3 +1239,56 @@ TEST_CASE("Espinosa-Konstandin - Example E: Finite mass with thin-wall limit "
 
   REQUIRE(bc.Action == Approx(37.878999).epsilon(1e-3));
 }
+
+TEST_CASE("Espinosa-Konstandin - Two-Field Examples", "[gw]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0  = 0.999;
+  double alpha = 1 / 2.;
+
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    x[0] = x[0] + 1e-100;
+    x[1] = x[1] + 1e-100;
+    return -4.5 * (-2. + x[0]) * pow(1. + pow(x[0], 2) - 1. * pow(x[1], 2), 2) +
+           pow(EllipIntSecond(asinh(x[0])), 2) *
+               (-3 + 2 * EllipIntSecond(asinh(x[0])) +
+                pow(-1 + EllipIntSecond(asinh(x[0])), 2) *
+                    log((pow(phi0, 2) *
+                         pow(-1 + EllipIntSecond(asinh(x[0])), 2)) /
+                        (pow(-1 + phi0, 2) *
+                         pow(EllipIntSecond(asinh(x[0])), 2)))) +
+           ((-sqrt(1 + pow(x[0], 2)) + x[1]) *
+            (-1 + EllipIntSecond(asinh(x[0]))) * EllipIntSecond(asinh(x[0])) *
+            pow(1. / cosh(x[0] / alpha), 3) *
+            (4 * pow(EllipIntSecond(asinh(x[0])), 2) *
+                 log((pow(phi0, 2) * pow(-1 + EllipIntSecond(asinh(x[0])), 2)) /
+                     (pow(-1 + phi0, 2) *
+                      pow(EllipIntSecond(asinh(x[0])), 2))) -
+             4 * alpha * pow(cosh(x[0] / alpha), 2) *
+                 (-4 + log((pow(phi0, 2) *
+                            pow(-1 + EllipIntSecond(asinh(x[0])), 2)) /
+                           (pow(-1 + phi0, 2) *
+                            pow(EllipIntSecond(asinh(x[0])), 2)))) *
+                 sinh(x[0] / alpha) +
+             2 * EllipIntSecond(asinh(x[0])) *
+                 log((pow(phi0, 2) * pow(-1 + EllipIntSecond(asinh(x[0])), 2)) /
+                     (pow(-1 + phi0, 2) *
+                      pow(EllipIntSecond(asinh(x[0])), 2))) *
+                 (-2 + alpha * sinh(x[0] / alpha) +
+                  alpha * sinh((3 * x[0]) / alpha)))) /
+               (2. * alpha);
+  };
+
+  std::vector<double> FalseVacuum = {0., 1.};
+  std::vector<double> TrueVacuum  = {0.9181398979435043, 1.3575643168526};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action == Approx(80.59).epsilon(2e-2));
+}

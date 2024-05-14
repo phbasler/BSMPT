@@ -8,6 +8,7 @@
 
 #include <BSMPT/config.h>
 #include <algorithm>
+#include <gsl/gsl_integration.h>
 #include <iostream>
 #include <numeric>
 #include <random>
@@ -260,10 +261,27 @@ Transpose(const std::vector<std::vector<double>> &A);
 /**
  * @brief Dilogarithm of x
  *
+ * https://en.wikipedia.org/wiki/Dilogarithm
+ *
  * @param x real argument of from \f$ (-\infty, 1)\f$
  * @return double
  */
 double Li2(const double &x);
+
+/**
+ * @brief Incomplete elliptic integral of the second kind of x with a different
+ * parameterization and k^2 = -2
+ *
+ * \f$ \text{EllipIntSecond}(x) = -i E(i \phi, 2) = \int_0^\phi
+ * \sqrt{1+2\sinh^2{\theta}}\,d\theta \f$
+ *
+ * https://en.wikipedia.org/wiki</Elliptic_integral#Incomplete_elliptic_integral_of_the_second_kind
+ * https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html
+ *
+ * @param x real argument
+ * @return double
+ */
+double EllipIntSecond(const double &x);
 
 /**
  * @brief operator << overload for the model parameter
