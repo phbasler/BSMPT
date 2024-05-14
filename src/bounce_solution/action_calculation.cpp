@@ -435,7 +435,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
       // We used numerical derivative here because Bessel function J are not
       // completely implemented
       return (
-          (LinearSolution(rho_in + 0.001) - LinearSolution(rho_in - 0.001)) /
+          -(LinearSolution(rho_in + 0.001) - LinearSolution(rho_in - 0.001)) /
           (0.002));
     };
   }
@@ -474,7 +474,14 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
       ss << rho_up << "\t" << l << "\t" << dVdl << "\t" << d2Vdl2 << "\n";
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       ss.str(std::string());
-      return (ExactSolutionLin(l0, l / 10., dVdl, d2Vdl2));
+      if (l0 == l0 + (l - l0) / 10.)
+      {
+        // Maximum numerical precision reached.
+        StateOfBounceActionInt = ActionStatus::Integration1DFailed;
+        // Abort calculation
+        return {0, 0, 0};
+      }
+      return (ExactSolutionLin(l0, l0 + (l - l0) / 10., dVdl, d2Vdl2));
     }
   }
   else
