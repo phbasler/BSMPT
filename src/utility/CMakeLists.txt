@@ -22,4 +22,4 @@ if(nlohmann_json_FOUND)
   target_link_libraries(Utility PRIVATE nlohmann_json::nlohmann_json)
 endif()
 
-target_link_libraries(Utility PUBLIC ASCIIPlotter Spline)
+target_link_libraries(Utility PUBLIC ASCIIPlotter Spline GSL::gsl)
