@@ -37,7 +37,7 @@ def get_compiler():
 
     if (sys.platform == "darwin"):
         compiler += "-clang-"
-    compiler += get_gcc_version()
+    compiler += get_compiler_version()
 
     return compiler
 
@@ -93,7 +93,7 @@ def check_profile(profile):
         check_profile(profile)
 
 
-def get_gcc_version():
+def get_compiler_version():
     if (sys.platform == "linux"):
         version_response = subprocess.check_output(
             "gcc --version".split(), encoding="UTF-8"
