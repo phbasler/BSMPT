@@ -29,11 +29,15 @@ class BuildMode(ArgTypeEnum, Enum):
 def get_compiler():
     compiler = ""
 
-    if sys.platform != "linux":
+    if sys.platform != "linux" and sys.platform != "darwin":
         return compiler
 
-    compiler += "-gcc-"
-    compiler += get_gcc_version()
+    if (sys.platform == "linux"):
+        compiler += "-gcc-"
+
+    if (sys.platform == "darwin"):
+        compiler += "-clang-"
+    compiler += get_compiler_version()
 
     return compiler
 
@@ -89,13 +93,20 @@ def check_profile(profile):
         check_profile(profile)
 
 
-def get_gcc_version():
-    version_response = subprocess.check_output(
-        "gcc --version".split(), encoding="UTF-8"
-    ).partition("\n")[0]
-    semver_string = version_response[version_response.rfind(" ") + 1 :]
-    major = semver_string.partition(".")[0]
-    return major
+def get_compiler_version():
+    if (sys.platform == "linux"):
+        version_response = subprocess.check_output(
+            "gcc --version".split(), encoding="UTF-8"
+        ).partition("\n")[0]
+        semver_string = version_response[version_response.rfind(" ") + 1 :]
+        return semver_string.partition(".")[0]
+    if (sys.platform == "darwin"):
+        version_response = subprocess.check_output(
+            "clang --version".split(), encoding="UTF-8"
+        ).partition("\n")[0]
+        semver_string = version_response[version_response.rfind("version") + 8 :]
+        return semver_string.partition(".")[0]
+    return ""
 
 
 def get_arch():
