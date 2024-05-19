@@ -435,7 +435,7 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
       // We used numerical derivative here because Bessel function J are not
       // completely implemented
       return (
-          (LinearSolution(rho_in + 0.001) - LinearSolution(rho_in - 0.001)) /
+          -(LinearSolution(rho_in + 0.001) - LinearSolution(rho_in - 0.001)) /
           (0.002));
     };
   }
@@ -474,7 +474,14 @@ std::vector<double> BounceActionInt::ExactSolutionLin(double l0,
       ss << rho_up << "\t" << l << "\t" << dVdl << "\t" << d2Vdl2 << "\n";
       BSMPT::Logger::Write(BSMPT::LoggingLevel::BounceDetailed, ss.str());
       ss.str(std::string());
-      return (ExactSolutionLin(l0, l / 10., dVdl, d2Vdl2));
+      if (abs((l - l0) / Spline.L) < 1e-10)
+      {
+        // Maximum numerical precision reached.
+        StateOfBounceActionInt = ActionStatus::Integration1DFailed;
+        // Abort calculation
+        return {0, 0, 0};
+      }
+      return (ExactSolutionLin(l0, l0 + (l - l0) / 10., dVdl, d2Vdl2));
     }
   }
   else
@@ -578,8 +585,12 @@ std::vector<double> BounceActionInt::ExactSolution(double l0)
   if (not ExactSolutionThreshold.has_value())
     return ExactSolutionLin(l0, l, dVdl, d2Vdl2);
 
-  if (dVdl <= -1e-3)
+  if (dVdl <= 0)
   {
+    // Assume negative grad is numerical error if close to the true minimum
+    if (l0_minus_lmin / Spline.L < 1e-2) return ExactSolutionFromMinimum(l);
+    // If we are not close to the minimum then probably l0 in not a solution as
+    // it will roll backwards
     ss << " \n l = " << l0 << std::endl;
     ss << " dVdl = " << dVdl << std::endl;
     ss << " d2Vd2l = " << d2Vdl2 << std::endl;
