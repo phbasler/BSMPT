@@ -1,8 +1,10 @@
 var utility_8h =
 [
+    [ "EllipIntSecond", "utility_8h.html#adcb7a745c3dcbb7dac3319dc94f792f1", null ],
     [ "factorial", "utility_8h.html#a720b2c4437c3b97f3d6fd4c1466dd201", null ],
     [ "flatten", "utility_8h.html#ab177fd4fc6d886de7d14758f20feedf5", null ],
     [ "L2NormVector", "utility_8h.html#a8b82302c8d9c5e58eca68e22f3d5616c", null ],
+    [ "Li2", "utility_8h.html#a9b7ee9ad848ad4f37479dd595602f1cc", null ],
     [ "ModelIDToString", "utility_8h.html#a81ad5e54211841dd33b4e4edd53b5b9e", null ],
     [ "operator*", "utility_8h.html#aacaa5a7d38fc35aaf71f2672fd154e23", null ],
     [ "operator*", "utility_8h.html#a7a3c7e03a108c4c850fb10339515df88", null ],

@@ -33,7 +33,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BSMPT
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">3.0.1</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -422,6 +422,12 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7b3f5a8b31b9bebad301d7593f79f3d6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a7b3f5a8b31b9bebad301d7593f79f3d6">Transpose</a> (const std::vector&lt; std::vector&lt; double &gt;&gt; &amp;A)</td></tr>
 <tr class="memdesc:a7b3f5a8b31b9bebad301d7593f79f3d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the tranpose of a matrix.  <a href="namespaceBSMPT.html#a7b3f5a8b31b9bebad301d7593f79f3d6">More...</a><br /></td></tr>
 <tr class="separator:a7b3f5a8b31b9bebad301d7593f79f3d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b7ee9ad848ad4f37479dd595602f1cc"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a9b7ee9ad848ad4f37479dd595602f1cc">Li2</a> (const double &amp;x)</td></tr>
+<tr class="memdesc:a9b7ee9ad848ad4f37479dd595602f1cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dilogarithm of x.  <a href="namespaceBSMPT.html#a9b7ee9ad848ad4f37479dd595602f1cc">More...</a><br /></td></tr>
+<tr class="separator:a9b7ee9ad848ad4f37479dd595602f1cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#adcb7a745c3dcbb7dac3319dc94f792f1">EllipIntSecond</a> (const double &amp;x)</td></tr>
+<tr class="memdesc:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incomplete elliptic integral of the second kind of x with a different parameterization and k^2 = -2.  <a href="namespaceBSMPT.html#adcb7a745c3dcbb7dac3319dc94f792f1">More...</a><br /></td></tr>
+<tr class="separator:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c20b7a437ed80792bc18e44668605c2"><td class="memItemLeft" align="right" valign="top"><a id="a6c20b7a437ed80792bc18e44668605c2"></a>
 std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;Model)</td></tr>
 <tr class="separator:a6c20b7a437ed80792bc18e44668605c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -685,6 +691,35 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="e
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>gridsize-dim vector of vectors </dd></dl>
+
+</div>
+</div>
+<a id="adcb7a745c3dcbb7dac3319dc94f792f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcb7a745c3dcbb7dac3319dc94f792f1">&#9670;&nbsp;</a></span>EllipIntSecond()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::EllipIntSecond </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Incomplete elliptic integral of the second kind of x with a different parameterization and k^2 = -2. </p>
+<p>\( \text{EllipIntSecond}(x) = -i E(i \phi, 2) = \int_0^\phi \sqrt{1+2\sinh^2{\theta}}\,d\theta \)</p>
+<p><a href="https://en.wikipedia.org/wiki">https://en.wikipedia.org/wiki</a>&lt;/Elliptic_integral#Incomplete_elliptic_integral_of_the_second_kind <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>real argument </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
 
 </div>
 </div>
@@ -1017,6 +1052,34 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="e
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>L2 norm of vector </dd></dl>
+
+</div>
+</div>
+<a id="a9b7ee9ad848ad4f37479dd595602f1cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b7ee9ad848ad4f37479dd595602f1cc">&#9670;&nbsp;</a></span>Li2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::Li2 </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dilogarithm of x. </p>
+<p><a href="https://en.wikipedia.org/wiki/Dilogarithm">https://en.wikipedia.org/wiki/Dilogarithm</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>real argument of from \( (-\infty, 1)\) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
 
 </div>
 </div>
