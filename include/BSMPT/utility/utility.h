@@ -8,9 +8,9 @@
 
 #include <BSMPT/config.h>
 #include <algorithm>
+#include <functional>
 #include <gsl/gsl_integration.h>
 #include <iostream>
-#include <functional>
 #include <numeric>
 #include <random>
 #include <string>
