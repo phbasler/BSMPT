@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <gsl/gsl_integration.h>
 #include <iostream>
+#include <functional>
 #include <numeric>
 #include <random>
 #include <string>
