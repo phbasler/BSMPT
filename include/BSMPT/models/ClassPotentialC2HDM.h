@@ -105,6 +105,9 @@ public:
   std::vector<std::string> addLegendTripleCouplings() const override;
   std::vector<std::string> addLegendVEV() const override;
 
+  std::optional<Eigen::MatrixXd> HiggsMassMatrixTreeLevelSimplified(
+      const std::vector<double> &v) const override;
+
   /**
    * Set the numerical values for the Lagrange parameters
    * @param par[0] = lambda_1
