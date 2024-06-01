@@ -21,7 +21,7 @@ if(nlohmann_json_FOUND)
 endif()
 
 install(
-  TARGETS Utility
+  TARGETS ASCIIPlotter
   PUBLIC_HEADER DESTINATION ${suffix}
 )
 

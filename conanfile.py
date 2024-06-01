@@ -15,7 +15,14 @@ class BSMPT(ConanFile):
     name = "bsmpt"
     version = "3.0.2"
 
-    exports_sources = "CMakeLists.txt", "src/*", "include/*", "tools/*", "tests/*" , "standalone/*"
+    exports_sources = (
+        "CMakeLists.txt",
+        "src/*",
+        "include/*",
+        "tools/*",
+        "tests/*",
+        "standalone/*",
+    )
 
     options = {
         "EnableTests": [True, False],  # enables the unit tests
@@ -92,12 +99,9 @@ class BSMPT(ConanFile):
 
         tools.build.check_min_cppstd(self, "17")
 
-
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
-
-
 
     def build(self):
         cmake = CMake(self)
@@ -108,4 +112,12 @@ class BSMPT(ConanFile):
         cmake = CMake(self)
         cmake.install()
 
-
+    def package_info(self):
+        self.cpp_info.components["BounceSolution"].libs = ["BounceSolution"]
+        self.cpp_info.components["BounceSolution"].requires = [
+            "eigen::eigen",
+            "gsl::gsl",
+            #"Minimizer",
+            #"Utility",
+            #"MinimumTracer",
+        ]
