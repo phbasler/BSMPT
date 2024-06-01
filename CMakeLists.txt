@@ -118,7 +118,7 @@ if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message(FATAL_ERROR "You need at least libcmaes or NLopt.")
 endif()
 
-configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
+
 
 # -------------------- Coverage
 # --------------------------------------------------
@@ -161,6 +161,8 @@ find_lto(CXX)
 add_subdirectory(src)
 add_subdirectory(standalone)
 
+# ----- installation
+
 # -------------------------- export as cmake package --------------------------
 if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   include(CMakePackageConfigHelpers)
@@ -169,7 +171,13 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
-  set(ExportList Models Minimizer ThermalFunctions Utility Spline ASCIIPlotter)
+  set(ExportList Models Minimizer ThermalFunctions Utility Spline ASCIIPlotter BSMPT_Config)
+  if(libcmaes_FOUND)
+    list(APPEND ExportList Minimizer_CMAES)
+  endif()
+  if(NLopt_FOUND)
+    list(APPEND ExportList Minimizer_NLOPT)
+  endif()
 
   if(BSMPTCompileBaryo)
     set(ExportList ${ExportList} Baryo LibWallThickness Kfactors)

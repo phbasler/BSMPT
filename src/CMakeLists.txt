@@ -3,6 +3,25 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+
+configure_file(${BSMPT_SOURCE_DIR}/include/BSMPT/config.h.in ${BSMPT_BINARY_DIR}/include/BSMPT/config.h)
+add_library(BSMPT_Config INTERFACE)
+set(header_path ${BSMPT_BINARY_DIR}/include/BSMPT)
+target_include_directories(BSMPT_Config INTERFACE 
+  <BUILD_INTERFACE:${BSMPT_SOURCE_DIR}/include> 
+  <BUILD_INTERFACE:${BSMPT_BINARY_DIR}/include>
+  <INSTALL_INTERFACE:include>
+  )
+set(header ${header_path}/config.h)
+set_property(TARGET BSMPT_Config PROPERTY PUBLIC_HEADER ${header})
+
+
+install(
+  TARGETS BSMPT_Config
+  PUBLIC_HEADER DESTINATION include/BSMPT
+)
+
+
 add_subdirectory(minimizer)
 add_subdirectory(models)
 if(BSMPTCompileBaryo)
