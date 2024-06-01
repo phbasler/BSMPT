@@ -1,7 +1,9 @@
 from conan import ConanFile, tools
-from conan.tools.cmake import cmake_layout, CMakeToolchain
 from conan.tools.system.package_manager import Apt
 from conan.errors import ConanInvalidConfiguration
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
+from conan.tools.files import load, update_conandata
+from conan.tools.scm import Git
 
 required_conan_version = ">=2.0.0 <3"
 
@@ -9,6 +11,11 @@ required_conan_version = ">=2.0.0 <3"
 class BSMPT(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "CMakeDeps"
+
+    name = "bsmpt"
+    version = "3.0.2"
+
+    exports_sources = "CMakeLists.txt", "src/*", "include/*", "tools/*", "tests/*" , "standalone/*"
 
     options = {
         "EnableTests": [True, False],  # enables the unit tests
@@ -82,5 +89,23 @@ class BSMPT(ConanFile):
 
         if self.settings.os != "Linux" and self.options.EnableCoverage:
             raise ConanInvalidConfiguration("We depend on lcov for coverage.")
-        
+
         tools.build.check_min_cppstd(self, "17")
+
+
+    def config_options(self):
+        if self.settings.os == "Windows":
+            del self.options.fPIC
+
+
+
+    def build(self):
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
+
+    def package(self):
+        cmake = CMake(self)
+        cmake.install()
+
+

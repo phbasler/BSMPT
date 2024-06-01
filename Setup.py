@@ -32,10 +32,10 @@ def get_compiler():
     if sys.platform != "linux" and sys.platform != "darwin":
         return compiler
 
-    if (sys.platform == "linux"):
+    if sys.platform == "linux":
         compiler += "-gcc-"
 
-    if (sys.platform == "darwin"):
+    if sys.platform == "darwin":
         compiler += "-clang-"
     compiler += get_compiler_version()
 
@@ -65,27 +65,40 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
 
     return profile
 
+
 def set_setting(file, setting, value):
     for line in fileinput.input([file], inplace=True):
         if line.strip().startswith(setting):
             line = setting + "=" + value + "\n"
         sys.stdout.write(line)
 
+
 def check_profile(profile):
     path = os.path.join("profiles", "BSMPT", profile)
     if not os.path.isfile(path):
-        conan_home = subprocess.check_output("conan config home".split(), encoding="UTF-8").split("\n")[0]
-        print(f"Profile does not exist in BSMPT/profiles.\nUsing profile {profile} created from the default profile. Change it accordingly.")
+        conan_home = subprocess.check_output(
+            "conan config home".split(), encoding="UTF-8"
+        ).split("\n")[0]
+        print(
+            f"Profile does not exist in BSMPT/profiles.\nUsing profile {profile} created from the default profile. Change it accordingly."
+        )
         if not os.path.isfile(conan_home + "/profiles/default"):
             cmd = "conan profile detect".split()
             subprocess.check_output(cmd)
-        if (sys.platform != "win32"):
-            cmd = "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
+        if sys.platform != "win32":
+            cmd = (
+                "cp " + conan_home + "/profiles/default profiles/BSMPT/" + str(profile)
+            )
             subprocess.check_call(cmd, shell=True)
             set_setting(path, "compiler.cppstd", "gnu17")
-           
+
         else:
-            cmd = "copy " + conan_home + "\\profiles\\default profiles\\BSMPT\\" + str(profile)
+            cmd = (
+                "copy "
+                + conan_home
+                + "\\profiles\\default profiles\\BSMPT\\"
+                + str(profile)
+            )
             subprocess.check_call(cmd, shell=True)
             set_setting(path, "compiler.cppstd", "17")
 
@@ -94,13 +107,13 @@ def check_profile(profile):
 
 
 def get_compiler_version():
-    if (sys.platform == "linux"):
+    if sys.platform == "linux":
         version_response = subprocess.check_output(
             "gcc --version".split(), encoding="UTF-8"
         ).partition("\n")[0]
         semver_string = version_response[version_response.rfind(" ") + 1 :]
         return semver_string.partition(".")[0]
-    if (sys.platform == "darwin"):
+    if sys.platform == "darwin":
         version_response = subprocess.check_output(
             "clang --version".split(), encoding="UTF-8"
         ).partition("\n")[0]
@@ -175,6 +188,21 @@ def conan_install_all(
         )
 
 
+def create():
+
+    config_settings = [
+        "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
+    ]
+
+    profile = get_profile(sys.platform, get_arch(), BuildMode.release)
+    cmd = f"conan create . -pr:h BSMPT/{profile} -pr:b BSMPT/{profile}".split()
+
+    for conf in config_settings:
+        cmd += ["-c", conf]
+
+    subprocess.check_call(cmd)
+
+
 class ArgTypeEnum(Enum):
     @classmethod
     def argtype(cls, s: str) -> Enum:
@@ -216,11 +244,20 @@ if __name__ == "__main__":
         default="",
     )
 
-    opts = parser.parse_args()
-    setup_profiles()
-    conan_install_all(
-        opts.mode,
-        opts.options if opts.options is not None else [],
-        opts.build_missing,
-        opts.profile,
+    parser.add_argument(
+        "-c", "--create", action="store_true", help="create the local conan package"
     )
+
+    opts = parser.parse_args()
+
+    if opts.create:
+        create()
+    else:
+
+        setup_profiles()
+        conan_install_all(
+            opts.mode,
+            opts.options if opts.options is not None else [],
+            opts.build_missing,
+            opts.profile,
+        )
