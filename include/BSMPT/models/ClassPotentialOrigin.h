@@ -15,16 +15,14 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/SMparam.h>
+#include <BSMPT/utility/settings.h>
 #include <iostream>
 #include <vector>
 
 namespace BSMPT
 {
 
-/**
- * @brief C_UseParwani Use the Parwani Method instead of Arnold-Espinosa
- */
-const bool C_UseParwani = false;
+
 
 /**
  * @brief C_PT Lower threshold to stop the EWPT calculation
