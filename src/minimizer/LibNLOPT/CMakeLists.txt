@@ -9,7 +9,8 @@ set(header ${header_path}/MinimizeNLOPT.h)
 
 set(src MinimizeNLOPT.cpp)
 
-add_library(Minimizer_NLOPT INTERFACE ${header} ${src})
+add_library(Minimizer_NLOPT INTERFACE)
+target_sources(Minimizer_NLOPT INTERFACE ${header} ${src})
 target_link_libraries(Minimizer_NLOPT INTERFACE Minimizer)
 
   if(TARGET NLopt::nlopt)

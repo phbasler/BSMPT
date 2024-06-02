@@ -12,7 +12,7 @@ set(header ${header_path}/Minimizer.h ${header_path}/MinimizePlane.h
 add_library(Minimizer STATIC)
 target_link_libraries(Minimizer PUBLIC Eigen3::Eigen GSL::gsl Threads::Threads
                                        Utility Models)
-target_sources(Minimizer PRIVATE MinimizeGSL.cpp Minimizer.cpp MinimizePlane.cpp PUBLIC ${header})
+target_sources(Minimizer PUBLIC MinimizeGSL.cpp Minimizer.cpp MinimizePlane.cpp PUBLIC ${header})
 
 
 
