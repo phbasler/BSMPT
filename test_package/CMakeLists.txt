@@ -4,4 +4,4 @@ project(PackageTest CXX)
 find_package(BSMPT CONFIG REQUIRED)
 
 add_executable(example src/example.cpp)
-target_link_libraries(example bsmpt::bsmpt)
+target_link_libraries(example bsmpt::Utility)

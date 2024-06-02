@@ -113,11 +113,101 @@ class BSMPT(ConanFile):
         cmake.install()
 
     def package_info(self):
+
+        self.cpp_info.components["ASCIIPlotter"].libs = ["ASCIIPlotter"]
+        self.cpp_info.components["ASCIIPlotter"].requires = [
+            "nlohmann_json::nlohmann_json",
+        ]
+
+        if self.options.CompileBaryo:
+            self.cpp_info.components["ASCIIPlotter"].requires.append(
+                "boost::boost",
+            )
+
+        self.cpp_info.components["Spline"].libs = ["Spline"]
+        self.cpp_info.components["Spline"].requires = [
+            "nlohmann_json::nlohmann_json",
+        ]
+
+        if self.options.CompileBaryo:
+            self.cpp_info.components["Spline"].requires.append(
+                "boost::boost",
+            )
+
+        self.cpp_info.components["Utility"].libs = ["Utility"]
+        self.cpp_info.components["Utility"].requires = [
+            "gsl::gsl",
+            "nlohmann_json::nlohmann_json",
+            "ASCIIPlotter",
+            "Spline",
+        ]
+
+        if self.options.CompileBaryo:
+            self.cpp_info.components["Utility"].requires.append(
+                "boost::boost",
+            )
+
         self.cpp_info.components["BounceSolution"].libs = ["BounceSolution"]
         self.cpp_info.components["BounceSolution"].requires = [
             "eigen::eigen",
             "gsl::gsl",
-            #"Minimizer",
-            #"Utility",
-            #"MinimumTracer",
+            "Minimizer",
+            "Utility",
+            "MinimumTracer",
+        ]
+
+        self.cpp_info.components["GW"].libs = ["GW"]
+        self.cpp_info.components["GW"].requires = [
+            "eigen::eigen",
+            "gsl::gsl",
+            "Minimizer",
+            "Utility",
+            "BounceSolution",
+        ]
+
+        self.cpp_info.components["Minimizer"].libs = ["Minimizer"]
+        self.cpp_info.components["Minimizer"].requires = [
+            "eigen::eigen",
+            "gsl::gsl",
+            "Threads::Threads",
+            "Utility",
+            "Models",
+            # "Minimizer_CMAES"
+        ]
+
+        if self.options.UseNLopt:
+
+            self.cpp_info.components["Minimizer_NLOPT"].libs = ["Minimizer_NLOPT"]
+            self.cpp_info.components["Minimizer_NLOPT"].requires = [
+                "nlopt::nlopt",
+                "Minimizer",
+            ]
+
+            self.cpp_info.components["Minimizer"].requires.append("Minimizer_NLOPT")
+
+        self.cpp_info.components["MinimumTracer"].libs = ["MinimumTracer"]
+        self.cpp_info.components["MinimumTracer"].requires = [
+            "eigen::eigen",
+            "gsl::gsl",
+            "Minimizer",
+            "Utility",
+        ]
+
+        self.cpp_info.components["Models"].libs = ["Models"]
+        self.cpp_info.components["Models"].requires = [
+            "gsl::gsl",
+            "eigen::eigen",
+            "Minimizer",
+            "ThermalFunctions",
+            "Utility",
+        ]
+
+        self.cpp_info.components["ThermalFunctions"].libs = ["ThermalFunctions"]
+        self.cpp_info.components["ThermalFunctions"].requires = ["gsl::gsl", "Utility"]
+
+        self.cpp_info.components["TransitionTracer"].libs = ["TransitionTracer"]
+        self.cpp_info.components["TransitionTracer"].requires = [
+            "BounceSolution",
+            "MinimumTracer",
+            "GW",
         ]
