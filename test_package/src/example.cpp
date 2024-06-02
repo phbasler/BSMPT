@@ -1,6 +1,6 @@
-//#include <BSMPT/utility/utility.h>
-//#include <BSMPT/utility/asciiplotter/asciiplotter.h>
-//#include <BSMPT/utility/spline/spline.h>
+#include <BSMPT/utility/utility.h>
+#include <BSMPT/utility/asciiplotter/asciiplotter.h>
+#include <BSMPT/utility/spline/spline.h>
 #include <BSMPT/bounce_solution/action_calculation.h>
 /*#include <BSMPT/gravitational_waves/gw.h>
 #include <BSMPT/minimizer/Minimizer.h>
@@ -10,4 +10,5 @@
 #include <BSMPT/transition_tracer/transition_tracer.h>*/
 
 int main() {
+    BSMPT::Logger::Disable();
 }

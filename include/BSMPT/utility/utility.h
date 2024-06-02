@@ -284,15 +284,7 @@ double Li2(const double &x);
  */
 double EllipIntSecond(const double &x);
 
-/**
- * @brief operator << overload for the model parameter
- */
-namespace ModelID
-{
-enum class ModelIDs;
-}
-std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model);
-std::string ModelIDToString(const ModelID::ModelIDs &Model);
+
 
 #ifdef Boost_FOUND
 #if BOOST_VERSION >= 107200

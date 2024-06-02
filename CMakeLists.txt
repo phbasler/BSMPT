@@ -4,9 +4,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.23)
+set(BSMPT_VERSION 3.0.2)
 project(
   BSMPT
-  VERSION 3.0.2
+  VERSION ${BSMPT_VERSION}
   LANGUAGES C CXX
   DESCRIPTION
     "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models"
@@ -158,6 +159,8 @@ if(EnableCoverage)
 endif(EnableCoverage)
 
 find_lto(CXX)
+
+
 
 add_subdirectory(src)
 add_subdirectory(standalone)

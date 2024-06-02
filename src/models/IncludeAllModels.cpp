@@ -108,4 +108,20 @@ void ShowInputError()
   Logger::Write(LoggingLevel::Default, ss.str());
 }
 
+
+std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
+{
+  static auto IMN = BSMPT::ModelID::InvertModelNames();
+  os << IMN.at(Model);
+  return os;
+}
+
+
+std::string ModelIDToString(const ModelID::ModelIDs &Model)
+{
+  std::stringstream ss;
+  ss << Model;
+  return ss.str();
+}
+
 } // namespace BSMPT

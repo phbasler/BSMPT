@@ -4,6 +4,7 @@ from conan.errors import ConanInvalidConfiguration
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
 from conan.tools.files import load, update_conandata
 from conan.tools.scm import Git
+import os, re
 
 required_conan_version = ">=2.0.0 <3"
 
@@ -13,7 +14,7 @@ class BSMPT(ConanFile):
     generators = "CMakeDeps"
 
     name = "bsmpt"
-    version = "3.0.2"
+    
 
     exports_sources = (
         "CMakeLists.txt",
@@ -73,6 +74,26 @@ class BSMPT(ConanFile):
         if self.options.EnableCoverage:
             apt = Apt(self)
             apt.install(["lcov"], update=True, check=True)
+
+    def set_version(self):
+        content = load(self, os.path.join(self.recipe_folder, "CMakeLists.txt"))
+        value = re.search(r"set\(BSMPT_VERSION (.*)\)", content)
+        extracted_version = value.group(1).strip()
+
+        is_git_tag = False
+        git = Git(self, folder=self.recipe_folder)
+        try:
+            git.run("describe --exact-match --tags")
+            is_git_tag = True
+        except Exception:
+            is_git_tag = False
+
+        if is_git_tag:
+            self.version = extracted_version
+        else:
+            # if not tag -> pre-release version
+            commit_hash = git.get_commit()[:8]
+            self.version = f"{extracted_version}.{commit_hash}"
 
     def layout(self):
         cmake_layout(self)
