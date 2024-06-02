@@ -188,7 +188,7 @@ def conan_install_all(
         )
 
 
-def create():
+def create(build_missing=False):
 
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
@@ -199,6 +199,9 @@ def create():
 
     for conf in config_settings:
         cmd += ["-c", conf]
+
+    if build_missing:
+        cmd += ["--build=missing"]
 
 
     subprocess.check_call(cmd)
@@ -251,11 +254,13 @@ if __name__ == "__main__":
 
     opts = parser.parse_args()
 
+    setup_profiles()
+
     if opts.create:
-        create()
+        create(build_missing=opts.build_missing,)
     else:
 
-        setup_profiles()
+        
         conan_install_all(
             opts.mode,
             opts.options if opts.options is not None else [],

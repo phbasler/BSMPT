@@ -170,7 +170,7 @@ class BSMPT(ConanFile):
         self.cpp_info.components["Minimizer"].requires = [
             "eigen::eigen",
             "gsl::gsl",
-            "Threads::Threads",
+            #"Threads::Threads",
             "Utility",
             "Models",
             # "Minimizer_CMAES"
