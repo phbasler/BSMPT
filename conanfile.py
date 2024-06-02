@@ -49,7 +49,7 @@ class BSMPT(ConanFile):
         "CompileBaryo": False,
         "EnableCoverage": False,
         "UseVectorization": True,
-        "BuildExecutables": False
+        "BuildExecutables": True
     }
 
     def requirements(self):
