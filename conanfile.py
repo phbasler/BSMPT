@@ -37,16 +37,18 @@ class BSMPT(ConanFile):
             False,
         ],  # compile the electroweak baryogenesis for the C2HDM
         "EnableCoverage": [True, False],  # enable code coverage
-        "UseVectorization": [True, False],  # use vectorization for the build
+        "UseVectorization": [True, False],  # use vectorization for the build,
+        "BuildExecutables": [True,False]
     }
     default_options = {
-        "EnableTests": True,
-        "UseLibCMAES": True,
+        "EnableTests": False,
+        "UseLibCMAES": False,
         "UseNLopt": True,
         "MakeAdditionalTesting": False,
         "CompileBaryo": False,
         "EnableCoverage": False,
         "UseVectorization": True,
+        "BuildExecutables": False
     }
 
     def requirements(self):
@@ -85,6 +87,7 @@ class BSMPT(ConanFile):
         tc.variables["BSMPTCompileBaryo"] = self.options.CompileBaryo
         tc.variables["EnableCoverage"] = self.options.EnableCoverage
         tc.variables["BSMPTUseVectorization"] = self.options.UseVectorization
+        tc.variables["BSMPTBuildExecutables"] = self.options.BuildExecutables
 
         tc.generate()
 

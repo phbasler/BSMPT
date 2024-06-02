@@ -44,6 +44,8 @@ add_subdirectory(utility/spline)
 
 # ==============================EXE======================================
 
+if(BSMPTBuildExecutables)
+
 add_executable(BSMPT prog/BSMPT.cpp)
 target_link_libraries(BSMPT Minimizer Models Utility)
 target_compile_features(BSMPT PUBLIC cxx_std_17)
@@ -131,3 +133,5 @@ if(MakeAdditionalTesting)
   endif(BSMPTCompileBaryo)
 
 endif(MakeAdditionalTesting)
+
+endif(BSMPTBuildExecutables)

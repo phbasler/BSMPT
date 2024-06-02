@@ -21,6 +21,7 @@ option(MakeAdditionalTesting "Build the executables used for further testing"
 option(BSMPTCompileBaryo "Compile Baryogenesis" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
 option(BSMPTUseVectorization "Disable vectorization" ON)
+option(BSMPTBuildExecutables "Build the executables" ON)
 
 set(BSMPT_IS_TOPLEVEL NO)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

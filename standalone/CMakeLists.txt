@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+if(BSMPTBuildExecutables)
+
 set(STANDALONE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 file(GLOB SOURCE_FILES "*.cpp" CONFIURE_DEPENDS)
 
@@ -27,3 +29,6 @@ foreach(file_path ${SOURCE_FILES})
 
   target_compile_features("${filename}" PUBLIC cxx_std_14)
 endforeach()
+
+
+endif(BSMPTBuildExecutables)
