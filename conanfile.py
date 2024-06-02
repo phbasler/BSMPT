@@ -100,8 +100,9 @@ class BSMPT(ConanFile):
         tools.build.check_min_cppstd(self, "17")
 
     def config_options(self):
-        if self.settings.os == "Windows":
-            del self.options.fPIC
+        pass
+        #if self.settings.os == "Windows":
+        #    del self.options.fPIC
 
     def build(self):
         cmake = CMake(self)
