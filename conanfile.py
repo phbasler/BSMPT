@@ -178,13 +178,10 @@ class BSMPT(ConanFile):
 
         if self.options.UseNLopt:
 
-            self.cpp_info.components["Minimizer_NLOPT"].libs = ["Minimizer_NLOPT"]
-            self.cpp_info.components["Minimizer_NLOPT"].requires = [
+            self.cpp_info.components["Minimizer"].requires = [
                 "nlopt::nlopt",
-                "Minimizer",
             ]
 
-            self.cpp_info.components["Minimizer"].requires.append("Minimizer_NLOPT")
 
         self.cpp_info.components["MinimumTracer"].libs = ["MinimumTracer"]
         self.cpp_info.components["MinimumTracer"].requires = [

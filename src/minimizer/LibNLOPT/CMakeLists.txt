@@ -9,19 +9,19 @@ set(header ${header_path}/MinimizeNLOPT.h)
 
 set(src MinimizeNLOPT.cpp)
 
-add_library(Minimizer_NLOPT STATIC ${header} ${src})
-target_link_libraries(Minimizer_NLOPT PUBLIC Minimizer)
+add_library(Minimizer_NLOPT INTERFACE ${header} ${src})
+target_link_libraries(Minimizer_NLOPT INTERFACE Minimizer)
 
   if(TARGET NLopt::nlopt)
-    target_link_libraries(Minimizer_NLOPT PUBLIC NLopt::nlopt)
+    target_link_libraries(Minimizer_NLOPT INTERFACE NLopt::nlopt)
   else()
-    target_link_libraries(Minimizer_NLOPT PUBLIC NLopt::nlopt_cxx)
+    target_link_libraries(Minimizer_NLOPT INTERFACE NLopt::nlopt_cxx)
   endif()
 
-target_include_directories(Minimizer_NLOPT PUBLIC ${BSMPT_SOURCE_DIR}/include
+target_include_directories(Minimizer_NLOPT INTERFACE ${BSMPT_SOURCE_DIR}/include
                                             ${BSMPT_BINARY_DIR}/include)
-target_include_directories(Minimizer_NLOPT PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(Minimizer_NLOPT PUBLIC cxx_std_17)
+target_include_directories(Minimizer_NLOPT INTERFACE ${BSMPT_SOURCE_DIR}/include)
+target_compile_features(Minimizer_NLOPT INTERFACE cxx_std_17)
 
 set_property(TARGET Minimizer_NLOPT PROPERTY PUBLIC_HEADER ${header})
 
