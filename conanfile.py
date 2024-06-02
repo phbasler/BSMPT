@@ -137,6 +137,9 @@ class BSMPT(ConanFile):
         cmake = CMake(self)
         cmake.install()
 
+    def package_id(self):
+        del self.info.options.EnableTests
+
     def package_info(self):
 
         self.cpp_info.components["ASCIIPlotter"].libs = ["ASCIIPlotter"]

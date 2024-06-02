@@ -203,6 +203,8 @@ def create(build_missing=False):
     if build_missing:
         cmd += ["--build=missing"]
 
+    cmd += ["--options", "EnableTests=False"]
+
 
     subprocess.check_call(cmd)
 
