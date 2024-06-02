@@ -13,5 +13,6 @@ int main() {
     using namespace BSMPT;
     Logger::Disable();
     ModelID::FChoose(ModelID::ModelIDs::C2HDM, GetSMConstants());
+    Minimizer::CalcWhichMinimizer();
 
 }

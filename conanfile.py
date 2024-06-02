@@ -42,8 +42,8 @@ class BSMPT(ConanFile):
         "BuildExecutables": [True,False]
     }
     default_options = {
-        "EnableTests": False,
-        "UseLibCMAES": False,
+        "EnableTests": True,
+        "UseLibCMAES": True,
         "UseNLopt": True,
         "MakeAdditionalTesting": False,
         "CompileBaryo": False,
@@ -143,6 +143,7 @@ class BSMPT(ConanFile):
         self.cpp_info.components["ASCIIPlotter"].requires = [
             "nlohmann_json::nlohmann_json",
         ]
+        self.cpp_info.components["ASCIIPlotter"].set_property("cmake_target_name", "BSMPT::ASCIIPlotter")
 
         if self.options.CompileBaryo:
             self.cpp_info.components["ASCIIPlotter"].requires.append(
@@ -153,6 +154,7 @@ class BSMPT(ConanFile):
         self.cpp_info.components["Spline"].requires = [
             "nlohmann_json::nlohmann_json",
         ]
+        self.cpp_info.components["Spline"].set_property("cmake_target_name", "BSMPT::Spline")
 
         if self.options.CompileBaryo:
             self.cpp_info.components["Spline"].requires.append(
@@ -166,6 +168,7 @@ class BSMPT(ConanFile):
             "ASCIIPlotter",
             "Spline",
         ]
+        self.cpp_info.components["Utility"].set_property("cmake_target_name", "BSMPT::Utility")
 
         if self.options.CompileBaryo:
             self.cpp_info.components["Utility"].requires.append(
@@ -180,6 +183,7 @@ class BSMPT(ConanFile):
             "Utility",
             "MinimumTracer",
         ]
+        self.cpp_info.components["BounceSolution"].set_property("cmake_target_name", "BSMPT::BounceSolution")
 
         self.cpp_info.components["GW"].libs = ["GW"]
         self.cpp_info.components["GW"].requires = [
@@ -189,6 +193,7 @@ class BSMPT(ConanFile):
             "Utility",
             "BounceSolution",
         ]
+        self.cpp_info.components["GW"].set_property("cmake_target_name", "BSMPT::GW")
 
         self.cpp_info.components["Minimizer"].libs = ["Minimizer"]
         self.cpp_info.components["Minimizer"].requires = [
@@ -199,6 +204,7 @@ class BSMPT(ConanFile):
             "Models",
             # "Minimizer_CMAES"
         ]
+        self.cpp_info.components["Minimizer"].set_property("cmake_target_name", "BSMPT::Minimizer")
 
         if self.options.UseNLopt:
 
@@ -213,6 +219,7 @@ class BSMPT(ConanFile):
             "Minimizer",
             "Utility",
         ]
+        self.cpp_info.components["MinimumTracer"].set_property("cmake_target_name", "BSMPT::MinimumTracer")
 
         self.cpp_info.components["Models"].libs = ["Models"]
         self.cpp_info.components["Models"].requires = [
@@ -222,9 +229,11 @@ class BSMPT(ConanFile):
             "ThermalFunctions",
             "Utility",
         ]
+        self.cpp_info.components["Models"].set_property("cmake_target_name", "BSMPT::Models")
 
         self.cpp_info.components["ThermalFunctions"].libs = ["ThermalFunctions"]
         self.cpp_info.components["ThermalFunctions"].requires = ["gsl::gsl", "Utility"]
+        self.cpp_info.components["ThermalFunctions"].set_property("cmake_target_name", "BSMPT::ThermalFunctions")
 
         self.cpp_info.components["TransitionTracer"].libs = ["TransitionTracer"]
         self.cpp_info.components["TransitionTracer"].requires = [
@@ -232,3 +241,4 @@ class BSMPT(ConanFile):
             "MinimumTracer",
             "GW",
         ]
+        self.cpp_info.components["TransitionTracer"].set_property("cmake_target_name", "BSMPT::TransitionTracer")
