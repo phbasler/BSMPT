@@ -50,15 +50,15 @@ class BSMPT(ConanFile):
     }
 
     def requirements(self):
-        self.requires("eigen/3.4.0")
-        self.requires("gsl/2.7.1")
-        self.requires("nlohmann_json/3.11.3")
+        self.requires("eigen/3.4.0", transitive_headers=True, transitive_libs=True)
+        self.requires("gsl/2.7.1", transitive_headers=True, transitive_libs=True)
+        self.requires("nlohmann_json/3.11.3", transitive_headers=True)
 
         if self.options.CompileBaryo:
-            self.requires("boost/1.84.0")
+            self.requires("boost/1.84.0", transitive_headers=True, transitive_libs=True)
 
         if self.options.UseNLopt:
-            self.requires("nlopt/2.7.1")
+            self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
 
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
@@ -101,7 +101,7 @@ class BSMPT(ConanFile):
 
     def config_options(self):
         pass
-        #if self.settings.os == "Windows":
+        # if self.settings.os == "Windows":
         #    del self.options.fPIC
 
     def build(self):
@@ -170,7 +170,7 @@ class BSMPT(ConanFile):
         self.cpp_info.components["Minimizer"].requires = [
             "eigen::eigen",
             "gsl::gsl",
-            #"Threads::Threads",
+            # "Threads::Threads",
             "Utility",
             "Models",
             # "Minimizer_CMAES"
@@ -181,7 +181,6 @@ class BSMPT(ConanFile):
             self.cpp_info.components["Minimizer"].requires = [
                 "nlopt::nlopt",
             ]
-
 
         self.cpp_info.components["MinimumTracer"].libs = ["MinimumTracer"]
         self.cpp_info.components["MinimumTracer"].requires = [
