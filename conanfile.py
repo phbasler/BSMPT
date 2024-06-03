@@ -178,6 +178,7 @@ class BSMPT(ConanFile):
                 "boost::boost",
             )
 
+
         self.cpp_info.components["BounceSolution"].libs = ["BounceSolution"]
         self.cpp_info.components["BounceSolution"].requires = [
             "eigen::eigen",
@@ -208,6 +209,10 @@ class BSMPT(ConanFile):
             # "Minimizer_CMAES"
         ]
         self.cpp_info.components["Minimizer"].set_property("cmake_target_name", "BSMPT::Minimizer")
+
+        if self.options.UseLibCMAES:
+            self.cpp_info.components["libcmaes"].libs= ["libcmaes"]
+            self.cpp_info.components["Minimizer"].requires.append("libcmaes")
 
         if self.options.UseNLopt:
 

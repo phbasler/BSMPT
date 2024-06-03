@@ -12,7 +12,11 @@
 int main() {
     using namespace BSMPT;
     Logger::Disable();
-    ModelID::FChoose(ModelID::ModelIDs::C2HDM, GetSMConstants());
+    auto testModel = ModelID::FChoose(ModelID::ModelIDs::C2HDM, GetSMConstants());
     Minimizer::CalcWhichMinimizer();
+
+    std::vector<double> check;
+    std::vector<double> start(0,8);
+    Minimize_gen_all(testModel,0,check,start);
 
 }

@@ -205,7 +205,6 @@ def create(build_missing=False):
 
     cmd += ["--options", "EnableTests=False"]
     cmd += ["--options", "BuildExecutables=False"]
-    cmd += ["--options", "UseLibCMAES=False"]
 
 
     subprocess.check_call(cmd)
