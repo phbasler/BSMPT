@@ -12,11 +12,26 @@
 int main() {
     using namespace BSMPT;
     Logger::Disable();
-    auto testModel = ModelID::FChoose(ModelID::ModelIDs::C2HDM, GetSMConstants());
+    std::shared_ptr<Class_Potential_Origin> testModel = ModelID::FChoose(ModelID::ModelIDs::C2HDM, GetSMConstants());
     Minimizer::CalcWhichMinimizer();
+
+    const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
+                                              /* lambda_2 = */ 0.274365,
+                                              /* lambda_3 = */ 4.71019,
+                                              /* lambda_4 = */ -2.23056,
+                                              /* Re(lambda_5) = */ -2.43487,
+                                              /* Im(lambda_5) = */ 0.124948,
+                                              /* Re(m_{12}^2) = */ 2706.86,
+                                              /* tan(beta) = */ 4.64487,
+                                              /* Yukawa Type = */ 1};
+
+    testModel->initModel(example_point_C2HDM);
 
     std::vector<double> check;
     std::vector<double> start(0,8);
-    Minimize_gen_all(testModel,0,check,start);
+    auto result = Minimizer::Minimize_gen_all(testModel,0,check,start);
+    std::cout << "result = " << result << std::endl;
+
+
 
 }

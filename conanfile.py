@@ -26,6 +26,7 @@ class BSMPT(ConanFile):
     )
 
     options = {
+        "fPIC": [True, False],
         "EnableTests": [True, False],  # enables the unit tests
         "UseLibCMAES": [
             True,
@@ -42,6 +43,7 @@ class BSMPT(ConanFile):
         "BuildExecutables": [True,False]
     }
     default_options = {
+        "fPIC": True,
         "EnableTests": True,
         "UseLibCMAES": True,
         "UseNLopt": True,
@@ -124,9 +126,8 @@ class BSMPT(ConanFile):
         tools.build.check_min_cppstd(self, "17")
 
     def config_options(self):
-        pass
-        # if self.settings.os == "Windows":
-        #    del self.options.fPIC
+        if self.settings.os == "Windows":
+           del self.options.fPIC
 
     def build(self):
         cmake = CMake(self)
