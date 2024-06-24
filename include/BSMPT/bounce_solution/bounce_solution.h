@@ -226,6 +226,19 @@ public:
   const double RelErr = 1e-6;
 
   /**
+   * @brief Maximum relative difference in temperature on the fraction of false
+   * vacuum to be accepted.
+   *
+   */
+  const double RelativeTemperatureInCalcTempAtFalseVacFraction = 1e-8;
+
+  /**
+   * @brief Maximum relative error on the fraction of vacuum tunneled to be
+   * accepted.
+   */
+  const double RelativeErrorInCalcTempAtFalseVacFraction = 1e-3;
+
+  /**
    * @brief pair of coexisiting phases
    */
   CoexPhases phase_pair;
