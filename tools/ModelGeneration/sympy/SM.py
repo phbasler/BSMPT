@@ -13,7 +13,7 @@ Cgs = symbols('C_gs',real=True)
 sigma0 = Matrix([[1,0],[0,1]])
 sigma1 = Matrix([[0,1],[1,0]])
 sigma2 = Matrix([[0,-I],[I,0]])
-sigma3 = Matrix([[1,0],[0,-1]]) 
+sigma3 = Matrix([[1,0],[0,-1]])
 m_electron = symbols('C_MassElectron',real=True)
 m_mu = symbols('C_MassMu',real=True)
 m_tau = symbols('C_MassTau',real=True)
@@ -69,7 +69,7 @@ NuL = symbols('veL vmuL vtauL',real=True)
 ER = symbols('eR muR tauR', real=True)
 EL = symbols('eL muL tauL', real=True)
 
-ye = sqrt(2)*m_electron/v 
+ye = sqrt(2)*m_electron/v
 ymu = sqrt(2)*m_mu/v
 ytau = sqrt(2)*m_tau/v
 
@@ -94,9 +94,9 @@ UR = symbols('uR cR tR', real=True)
 DR = symbols('dR sR bR', real=True)
 QuarkBase = UL + DL + UR + DR
 
-yb = sqrt(2)*m_bottom/v 
-yc = sqrt(2)*m_charm/v 
-yd = sqrt(2)*m_down/v 
+yb = sqrt(2)*m_bottom/v
+yc = sqrt(2)*m_charm/v
+yd = sqrt(2)*m_down/v
 ys = sqrt(2)*m_strange/v
 yt = sqrt(2)*m_top/v
 yu = sqrt(2)*m_up/v
@@ -109,10 +109,10 @@ DLVector = Matrix([[x] for x in DL])
 URVector = Matrix([[x] for x in UR])
 DRVector = Matrix([[x] for x in DR])
 
-VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phi[0] 
-VQuark+= DLVector.transpose() * DownCoupling * DRVector * phi[0] 
+VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phi[0]
+VQuark+= DLVector.transpose() * DownCoupling * DRVector * phi[1]
 VQuark+= ULVector.transpose() * UpCoupling * URVector * phi[1].conjugate()
-VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phi[1].conjugate()
+VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phi[0].conjugate()
 VQuark = simplify(VQuark[0,0])
 
 
@@ -152,6 +152,6 @@ if __name__ == "__main__":
 
     if method == 'treeSimpl':
         toyModel.printTreeSimplified()
-    
+
     if method == 'CTSimpl':
         toyModel.printVCTSimplified()
