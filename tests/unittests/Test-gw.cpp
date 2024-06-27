@@ -1292,3 +1292,135 @@ TEST_CASE("Espinosa-Konstandin - Two-Field Examples", "[gw]")
 
   REQUIRE(bc.Action == Approx(80.59).epsilon(2e-2));
 }
+
+TEST_CASE("Espinosa-Konstandin - Three-Field Examples - rho = 1/6", "[gw]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0  = 0.999;
+  double alpha = 1 / 2.;
+  double rho   = 1 / 6.;
+
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    x[0] = x[0] + 1e-100;
+    x[1] = x[1] + 1e-100;
+    x[2] = x[2] + 1e-100;
+    if (x[0] == 0.5) x[0] -= 0.0000001;
+    return 25 * pow(x[2] - rho +
+                        rho * cos((sqrt(1 - pow(alpha, 2)) * x[0]) /
+                                  (alpha * rho)),
+                    2) +
+           (pow(x[0], 2) *
+            (alpha * (-3 * alpha + 2 * x[0]) +
+             pow(alpha - x[0], 2) * log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                                        (pow(-1 + phi0, 2) * pow(x[0], 2))))) /
+               pow(alpha, 4) +
+           25 * pow(x[1] - rho * sin((sqrt(1 - pow(alpha, 2)) * x[0]) /
+                                     (alpha * rho)),
+                    2) +
+           (2 * (alpha - x[0]) * x[0] *
+            (x[1] -
+             rho * sin((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho))) *
+            (alpha * sqrt(1 - pow(alpha, 2)) * rho *
+                 cos((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)) *
+                 (-4 * alpha + (alpha - 2 * x[0]) *
+                                   log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                                       (pow(-1 + phi0, 2) * pow(x[0], 2)))) +
+             (-1 + pow(alpha, 2)) * (alpha - x[0]) * x[0] *
+                 log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                     (pow(-1 + phi0, 2) * pow(x[0], 2))) *
+                 sin((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)))) /
+               (pow(alpha, 4) * rho) -
+           (2 * x[0] * (-alpha + x[0]) *
+            (x[2] - rho +
+             rho * cos((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho))) *
+            (-((-1 + pow(alpha, 2)) * (alpha - x[0]) * x[0] *
+               cos((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)) *
+               log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                   (pow(-1 + phi0, 2) * pow(x[0], 2)))) +
+             alpha * sqrt(1 - pow(alpha, 2)) * rho *
+                 (-4 * alpha + (alpha - 2 * x[0]) *
+                                   log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                                       (pow(-1 + phi0, 2) * pow(x[0], 2)))) *
+                 sin((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)))) /
+               (pow(alpha, 4) * rho);
+  };
+
+  std::vector<double> FalseVacuum = {0., 0., 0.};
+  std::vector<double> TrueVacuum  = {0.500068, -0.147487, 0.0890438};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action == Approx(80.59).epsilon(2e-2));
+}
+
+TEST_CASE("Espinosa-Konstandin - Three-Field Examples - rho = 1/8", "[gw]")
+{
+  // Espinosa-Konstandin examples from arXiv:2312.12360
+  using namespace BSMPT;
+  double phi0  = 0.999;
+  double alpha = 1 / 2.;
+  double rho   = 1 / 8.;
+
+  std::function<double(std::vector<double>)> V = [&](std::vector<double> x)
+  {
+    x[0] = x[0] + 1e-100;
+    x[1] = x[1] + 1e-100;
+    x[2] = x[2] + 1e-100;
+    if (x[0] == 0.5) x[0] -= 0.0000001;
+    return 25 * pow(x[2] - rho +
+                        rho * cos((sqrt(1 - pow(alpha, 2)) * x[0]) /
+                                  (alpha * rho)),
+                    2) +
+           (pow(x[0], 2) *
+            (alpha * (-3 * alpha + 2 * x[0]) +
+             pow(alpha - x[0], 2) * log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                                        (pow(-1 + phi0, 2) * pow(x[0], 2))))) /
+               pow(alpha, 4) +
+           25 * pow(x[1] - rho * sin((sqrt(1 - pow(alpha, 2)) * x[0]) /
+                                     (alpha * rho)),
+                    2) +
+           (2 * (alpha - x[0]) * x[0] *
+            (x[1] -
+             rho * sin((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho))) *
+            (alpha * sqrt(1 - pow(alpha, 2)) * rho *
+                 cos((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)) *
+                 (-4 * alpha + (alpha - 2 * x[0]) *
+                                   log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                                       (pow(-1 + phi0, 2) * pow(x[0], 2)))) +
+             (-1 + pow(alpha, 2)) * (alpha - x[0]) * x[0] *
+                 log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                     (pow(-1 + phi0, 2) * pow(x[0], 2))) *
+                 sin((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)))) /
+               (pow(alpha, 4) * rho) -
+           (2 * x[0] * (-alpha + x[0]) *
+            (x[2] - rho +
+             rho * cos((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho))) *
+            (-((-1 + pow(alpha, 2)) * (alpha - x[0]) * x[0] *
+               cos((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)) *
+               log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                   (pow(-1 + phi0, 2) * pow(x[0], 2)))) +
+             alpha * sqrt(1 - pow(alpha, 2)) * rho *
+                 (-4 * alpha + (alpha - 2 * x[0]) *
+                                   log((pow(phi0, 2) * pow(alpha - x[0], 2)) /
+                                       (pow(-1 + phi0, 2) * pow(x[0], 2)))) *
+                 sin((sqrt(1 - pow(alpha, 2)) * x[0]) / (alpha * rho)))) /
+               (pow(alpha, 4) * rho);
+  };
+
+  std::vector<double> FalseVacuum = {0., 0., 0.};
+  std::vector<double> TrueVacuum  = {0.500068, 0.0752454, 0.0251845};
+
+  std::vector<std::vector<double>> path = {TrueVacuum, FalseVacuum};
+
+  BounceActionInt bc(path, TrueVacuum, FalseVacuum, V, 0, 6);
+  bc.Alpha = 3;
+  bc.CalculateAction();
+
+  REQUIRE(bc.Action == Approx(55.6).epsilon(2e-2));
+}

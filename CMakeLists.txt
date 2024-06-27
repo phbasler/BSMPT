@@ -6,7 +6,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(
   BSMPT
-  VERSION 3.0.0
+  VERSION 3.0.3
   LANGUAGES C CXX
   DESCRIPTION
     "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models"
