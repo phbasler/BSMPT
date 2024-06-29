@@ -21,8 +21,8 @@ var searchData=
   ['addphase_18',['addPhase',['../structBSMPT_1_1Vacuum.html#a2c242c262d65b3f98a321bd67f63f1a1',1,'BSMPT::Vacuum']]],
   ['all_5frequired_5fset_19',['all_required_set',['../classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964',1,'BSMPT::parser']]],
   ['almost_5fthe_5fsame_20',['almost_the_same',['../namespaceBSMPT.html#ac5dd574f107251ff284bc79473d4c5c5',1,'BSMPT::almost_the_same(const std::vector&lt; double &gt; &amp;a, const std::vector&lt; double &gt; &amp;b, const bool &amp;allow_for_sign_flip=false, const double &amp;rel_precision=0.01, const double &amp;num_zero=1e-10)'],['../namespaceBSMPT.html#a7ef27f7780c7d96480ff01a91dc88a17',1,'BSMPT::almost_the_same(const double &amp;a, const double &amp;b, const double &amp;rel_precision=0.01, const double &amp;num_zero=1e-10)']]],
-  ['alpha_21',['Alpha',['../classBSMPT_1_1BounceActionInt.html#ae67bd826a910bac7a4d85518d7b1d509',1,'BSMPT::BounceActionInt']]],
-  ['alpha_22',['alpha',['../classBSMPT_1_1BounceSolution.html#ad748b0e18d854cc0b2d49da5648da0bb',1,'BSMPT::BounceSolution']]],
+  ['alpha_21',['alpha',['../classBSMPT_1_1BounceSolution.html#ad748b0e18d854cc0b2d49da5648da0bb',1,'BSMPT::BounceSolution']]],
+  ['alpha_22',['Alpha',['../classBSMPT_1_1BounceActionInt.html#ae67bd826a910bac7a4d85518d7b1d509',1,'BSMPT::BounceActionInt']]],
   ['asciiplotter_23',['AsciiPlotter',['../classAsciiPlotter.html',1,'']]],
   ['auxfunctiondev_24',['AuxFunctionDev',['../classBSMPT_1_1BounceActionInt.html#abea15c1789845d23ef2eb7497b764444',1,'BSMPT::BounceActionInt']]]
 ];
