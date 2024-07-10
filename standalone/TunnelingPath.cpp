@@ -77,10 +77,10 @@ int main()
     bounce.CalculatePercolationTemp();
     if (bounce.GetPercolationTemp() == -1) continue;
     double errorTtoTp = 1e100;
-    BounceActionInt *ClosestBounceActionInt;
+    BounceActionInt const *ClosestBounceActionInt;
     std::cout << "Found a transitions with Tp =\t"
               << bounce.GetPercolationTemp() << " GeV.\n";
-    for (auto &BAInt : bounce.SolutionList)
+    for (const auto &BAInt : bounce.SolutionList)
     {
       if (abs(BAInt.T - bounce.GetPercolationTemp()) < errorTtoTp)
       {
