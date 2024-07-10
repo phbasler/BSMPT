@@ -80,7 +80,7 @@ int main()
     BounceActionInt *ClosestBounceActionInt;
     std::cout << "Found a transitions with Tp =\t"
               << bounce.GetPercolationTemp() << " GeV.\n";
-    for (auto BAInt : bounce.SolutionList)
+    for (auto &BAInt : bounce.SolutionList)
     {
       if (abs(BAInt.T - bounce.GetPercolationTemp()) < errorTtoTp)
       {
