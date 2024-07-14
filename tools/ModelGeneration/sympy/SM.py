@@ -8,21 +8,21 @@ import ModelGenerator as ModelGenerator
 
 # SM paramters
 
-Cg = symbols("C_g", real=True)
-Cgs = symbols("C_gs", real=True)
-sigma0 = Matrix([[1, 0], [0, 1]])
-sigma1 = Matrix([[0, 1], [1, 0]])
-sigma2 = Matrix([[0, -I], [I, 0]])
-sigma3 = Matrix([[1, 0], [0, -1]])
-m_electron = symbols("C_MassElectron", real=True)
-m_mu = symbols("C_MassMu", real=True)
-m_tau = symbols("C_MassTau", real=True)
-m_up = symbols("C_MassUp", real=True)
-m_charm = symbols("C_MassCharm", real=True)
-m_top = symbols("C_MassTop", real=True)
-m_down = symbols("C_MassDown", real=True)
-m_strange = symbols("C_MassStrange", real=True)
-m_bottom = symbols("C_MassBottom", real=True)
+Cg = symbols('C_g',real=True)
+Cgs = symbols('C_gs',real=True)
+sigma0 = Matrix([[1,0],[0,1]])
+sigma1 = Matrix([[0,1],[1,0]])
+sigma2 = Matrix([[0,-I],[I,0]])
+sigma3 = Matrix([[1,0],[0,-1]])
+m_electron = symbols('C_MassElectron',real=True)
+m_mu = symbols('C_MassMu',real=True)
+m_tau = symbols('C_MassTau',real=True)
+m_up = symbols('C_MassUp',real=True)
+m_charm = symbols('C_MassCharm',real=True)
+m_top = symbols('C_MassTop',real=True)
+m_down = symbols('C_MassDown',real=True)
+m_strange = symbols('C_MassStrange',real=True)
+m_bottom = symbols('C_MassBottom',real=True)
 
 
 # CKM Matrix
@@ -72,9 +72,9 @@ NuL = symbols("veL vmuL vtauL", real=True)
 ER = symbols("eR muR tauR", real=True)
 EL = symbols("eL muL tauL", real=True)
 
-ye = sqrt(2) * m_electron / v
-ymu = sqrt(2) * m_mu / v
-ytau = sqrt(2) * m_tau / v
+ye = sqrt(2)*m_electron/v
+ymu = sqrt(2)*m_mu/v
+ytau = sqrt(2)*m_tau/v
 
 PiLep = Matrix([[ye, 0, 0], [0, ymu, 0], [0, 0, ytau]])
 
@@ -97,12 +97,12 @@ UR = symbols("uR cR tR", real=True)
 DR = symbols("dR sR bR", real=True)
 QuarkBase = UL + DL + UR + DR
 
-yb = sqrt(2) * m_bottom / v
-yc = sqrt(2) * m_charm / v
-yd = sqrt(2) * m_down / v
-ys = sqrt(2) * m_strange / v
-yt = sqrt(2) * m_top / v
-yu = sqrt(2) * m_up / v
+yb = sqrt(2)*m_bottom/v
+yc = sqrt(2)*m_charm/v
+yd = sqrt(2)*m_down/v
+ys = sqrt(2)*m_strange/v
+yt = sqrt(2)*m_top/v
+yu = sqrt(2)*m_up/v
 
 DownCoupling = Matrix([[yd, 0, 0], [0, ys, 0], [0, 0, yb]])
 UpCoupling = Matrix([[yu, 0, 0], [0, yc, 0], [0, 0, yt]])
@@ -113,12 +113,11 @@ URVector = Matrix([[x] for x in UR])
 DRVector = Matrix([[x] for x in DR])
 
 VQuark = ULVector.transpose() * VCKM * DownCoupling * DRVector * phi[0]
-VQuark += DLVector.transpose() * DownCoupling * DRVector * phi[0]
-VQuark += ULVector.transpose() * UpCoupling * URVector * phi[1].conjugate()
-VQuark += (
-    -DLVector.transpose() * Dagger(VCKM) * UpCoupling * URVector * phi[1].conjugate()
-)
-VQuark = simplify(VQuark[0, 0])
+VQuark+= DLVector.transpose() * DownCoupling * DRVector * phi[1]
+VQuark+= ULVector.transpose() * UpCoupling * URVector * phi[1].conjugate()
+VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phi[0].conjugate()
+VQuark = simplify(VQuark[0,0])
+
 
 
 # Generate the model
@@ -161,5 +160,6 @@ if __name__ == "__main__":
     if method == "treeSimpl":
         toyModel.printTreeSimplified()
 
-    if method == "CTSimpl":
+
+    if method == 'CTSimpl':
         toyModel.printVCTSimplified()
