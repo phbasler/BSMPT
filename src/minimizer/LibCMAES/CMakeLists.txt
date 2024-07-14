@@ -12,6 +12,7 @@ target_sources(Minimizer_CMAES INTERFACE MinimizeLibCMAES.cpp ${header})
 target_link_libraries(Minimizer_CMAES INTERFACE Minimizer)
 
 target_link_libraries(Minimizer_CMAES INTERFACE libcmaes::cmaes)
+target_link_libraries(Minimizer_CMAES INTERFACE "$<LINK_LIBRARY:WHOLE_ARCHIVE,libcmaes::cmaes>")
 if(OpenMP_FOUND)
 target_link_libraries(Minimizer_CMAES INTERFACE OpenMP::OpenMP_CXX)
 endif()
