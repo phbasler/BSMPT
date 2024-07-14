@@ -16,7 +16,4 @@ target_compile_features(BounceSolution PUBLIC cxx_std_14)
 
 set_property(TARGET BounceSolution PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS BounceSolution
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS BounceSolution PUBLIC_HEADER DESTINATION ${suffix})

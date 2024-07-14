@@ -12,19 +12,19 @@ target_sources(Minimizer_CMAES INTERFACE MinimizeLibCMAES.cpp ${header})
 target_link_libraries(Minimizer_CMAES INTERFACE Minimizer)
 
 # target_link_libraries(Minimizer_CMAES INTERFACE libcmaes::cmaes)
-target_link_libraries(Minimizer_CMAES INTERFACE "$<LINK_LIBRARY:WHOLE_ARCHIVE,libcmaes::cmaes>")
+target_link_libraries(Minimizer_CMAES
+                      INTERFACE "$<LINK_LIBRARY:WHOLE_ARCHIVE,libcmaes::cmaes>")
 if(OpenMP_FOUND)
-target_link_libraries(Minimizer_CMAES INTERFACE OpenMP::OpenMP_CXX)
+  target_link_libraries(Minimizer_CMAES INTERFACE OpenMP::OpenMP_CXX)
 endif()
 
-target_include_directories(Minimizer_CMAES INTERFACE ${BSMPT_SOURCE_DIR}/include
-                                            ${BSMPT_BINARY_DIR}/include)
-target_include_directories(Minimizer_CMAES INTERFACE ${BSMPT_SOURCE_DIR}/include)
+target_include_directories(
+  Minimizer_CMAES INTERFACE ${BSMPT_SOURCE_DIR}/include
+                            ${BSMPT_BINARY_DIR}/include)
+target_include_directories(Minimizer_CMAES
+                           INTERFACE ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Minimizer_CMAES INTERFACE cxx_std_17)
 
 set_property(TARGET Minimizer_CMAES PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS Minimizer_CMAES
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS Minimizer_CMAES PUBLIC_HEADER DESTINATION ${suffix})

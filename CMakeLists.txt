@@ -55,7 +55,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif(NOT CMAKE_BUILD_TYPE)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 include(LTO)
 
@@ -120,8 +120,6 @@ if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message(FATAL_ERROR "You need at least libcmaes or NLopt.")
 endif()
 
-
-
 # -------------------- Coverage
 # --------------------------------------------------
 
@@ -160,8 +158,6 @@ endif(EnableCoverage)
 
 find_lto(CXX)
 
-
-
 add_subdirectory(src)
 add_subdirectory(standalone)
 
@@ -175,7 +171,14 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
-  set(ExportList Models Minimizer ThermalFunctions Utility Spline ASCIIPlotter BSMPT_Config)
+  set(ExportList
+      Models
+      Minimizer
+      ThermalFunctions
+      Utility
+      Spline
+      ASCIIPlotter
+      BSMPT_Config)
   if(libcmaes_FOUND)
     list(APPEND ExportList Minimizer_CMAES)
   endif()

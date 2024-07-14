@@ -24,7 +24,4 @@ target_compile_definitions(Spline PRIVATE _USE_MATH_DEFINES)
 
 set_property(TARGET Spline PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS Spline
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS Spline PUBLIC_HEADER DESTINATION ${suffix})

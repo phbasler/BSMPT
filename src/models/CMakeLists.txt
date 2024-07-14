@@ -46,7 +46,4 @@ target_compile_features(Models PUBLIC cxx_std_17)
 
 set_property(TARGET Models PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS Models
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS Models PUBLIC_HEADER DESTINATION ${suffix})

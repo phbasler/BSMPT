@@ -18,7 +18,4 @@ target_compile_features(MinimumTracer PUBLIC cxx_std_17)
 
 set_property(TARGET MinimumTracer PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS MinimumTracer
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS MinimumTracer PUBLIC_HEADER DESTINATION ${suffix})

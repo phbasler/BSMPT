@@ -4,4 +4,5 @@ project(PackageTest CXX)
 find_package(BSMPT CONFIG REQUIRED)
 
 add_executable(example src/example.cpp)
-target_link_libraries(example BSMPT::Utility BSMPT::BounceSolution BSMPT::Models BSMPT::Minimizer ) 
+target_link_libraries(example BSMPT::Utility BSMPT::BounceSolution
+                      BSMPT::Models BSMPT::Minimizer)

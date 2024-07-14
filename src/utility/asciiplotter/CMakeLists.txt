@@ -20,8 +20,4 @@ if(nlohmann_json_FOUND)
   target_link_libraries(ASCIIPlotter PRIVATE nlohmann_json::nlohmann_json)
 endif()
 
-install(
-  TARGETS ASCIIPlotter
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
-
+install(TARGETS ASCIIPlotter PUBLIC_HEADER DESTINATION ${suffix})

@@ -17,7 +17,4 @@ target_compile_features(GW PUBLIC cxx_std_17)
 
 set_property(TARGET GW PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS GW
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS GW PUBLIC_HEADER DESTINATION ${suffix})

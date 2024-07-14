@@ -20,7 +20,4 @@ target_compile_features(ThermalFunctions PUBLIC cxx_std_17)
 
 set_property(TARGET ThermalFunctions PROPERTY PUBLIC_HEADER ${header})
 
-install(
-  TARGETS ThermalFunctions
-  PUBLIC_HEADER DESTINATION ${suffix}
-)
+install(TARGETS ThermalFunctions PUBLIC_HEADER DESTINATION ${suffix})
