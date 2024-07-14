@@ -187,6 +187,9 @@ def conan_install_all(
             build_missing,
         )
 
+def create_cmaes():
+    cmd = "conan export . --version=0.10.0".split()
+    subprocess.check_call(cmd, cwd="tools/conan/cmaes")
 
 def create(build_missing=False):
 
@@ -258,6 +261,8 @@ if __name__ == "__main__":
     opts = parser.parse_args()
 
     setup_profiles()
+
+    create_cmaes()
 
     if opts.create:
         create(build_missing=opts.build_missing,)

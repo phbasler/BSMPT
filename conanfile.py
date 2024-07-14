@@ -68,6 +68,9 @@ class BSMPT(ConanFile):
         if self.options.UseLibCMAES and self.settings.os != "Windows":
             self.requires("llvm-openmp/17.0.6", transitive_headers=True)
 
+        if self.options.UseLibCMAES:
+            self.requires("cmaes/0.10.0",transitive_headers=True,transitive_libs=True)
+
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
 
@@ -145,6 +148,15 @@ class BSMPT(ConanFile):
         del self.info.options.EnableTests
 
     def package_info(self):
+
+        if self.settings.compiler == "msvc":
+            openmp_flags = ["-openmp"]
+        elif self.settings.compiler in ("gcc", "clang"):
+            openmp_flags = ["-fopenmp"]
+        elif self.settings.compiler == "apple-clang":
+            openmp_flags = ["-Xpreprocessor", "-fopenmp"]
+        else:
+            openmp_flags = []
 
         self.cpp_info.components["ASCIIPlotter"].libs = ["ASCIIPlotter"]
         self.cpp_info.components["ASCIIPlotter"].requires = [
@@ -247,6 +259,8 @@ class BSMPT(ConanFile):
             "Utility",
         ]
         self.cpp_info.components["Models"].set_property("cmake_target_name", "BSMPT::Models")
+        self.cpp_info.components["Models"].exelinkflags = openmp_flags
+        self.cpp_info.components["Models"].sharedlinkflags = openmp_flags
 
         self.cpp_info.components["ThermalFunctions"].libs = ["ThermalFunctions"]
         self.cpp_info.components["ThermalFunctions"].requires = ["gsl::gsl", "Utility"]
