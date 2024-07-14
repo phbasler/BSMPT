@@ -65,7 +65,7 @@ class BSMPT(ConanFile):
         if self.options.UseNLopt:
             self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
 
-        if self.options.UseLibCMAES:
+        if self.options.UseLibCMAES and self.settings.os != "Windows":
             self.requires("llvm-openmp/17.0.6", transitive_headers=True)
 
     def build_requirements(self):
