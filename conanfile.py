@@ -142,6 +142,10 @@ class BSMPT(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
+    
+    def configure(self):
+        if self.settings.os == "Windows":
+            self.options["cmaes"].openmp = False
 
     def package_id(self):
         del self.info.options.EnableTests
