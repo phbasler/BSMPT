@@ -219,7 +219,7 @@ class BSMPT(ConanFile):
             self.cpp_info.components["libcmaes"].set_property("cmake_target_name", "BSMPT::cmaes")
             self.cpp_info.components["libcmaes"].requires = ["eigen::eigen"]
             if self.settings.os != "Windows":
-                self.cpp_info.components["libcmaes"].requires = ["openmp::openmp"]
+                self.cpp_info.components["libcmaes"].requires = ["llvm-openmp::llvm-openmp"]
 
             self.cpp_info.components["Minimizer"].requires.append("libcmaes")
 
