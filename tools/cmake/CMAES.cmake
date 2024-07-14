@@ -1,4 +1,4 @@
-find_package(OpenMP::OpenMP QUIET)
+find_package(OpenMP CONFIG QUIET)
 find_package(libcmaes 0.10 QUIET)
 if(NOT libcmaes_FOUND)
   set(BSMPT_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
