@@ -1,11 +1,11 @@
 #pragma once
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 namespace BSMPT
 {
-    namespace ModelID
+namespace ModelID
 {
 
 /**
@@ -47,8 +47,7 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
  * @return The switched map to ModelNames
  */
 std::unordered_map<ModelIDs, std::string> InvertModelNames();
-}
-
+} // namespace ModelID
 
 /**
  * @brief ShowInputError shows all the available models in the terminal
@@ -61,4 +60,4 @@ void ShowInputError();
 std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model);
 std::string ModelIDToString(const ModelID::ModelIDs &Model);
 
-}
+} // namespace BSMPT

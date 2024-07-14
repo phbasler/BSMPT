@@ -5,9 +5,9 @@
 
 #include <BSMPT/config.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/ModelIDs.h>
 #include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
-#include <BSMPT/utility/ModelIDs.h>
 #include <algorithm>
 #include <sstream>
 

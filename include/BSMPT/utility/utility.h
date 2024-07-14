@@ -284,8 +284,6 @@ double Li2(const double &x);
  */
 double EllipIntSecond(const double &x);
 
-
-
 #ifdef Boost_FOUND
 #if BOOST_VERSION >= 107200
 template <typename T>

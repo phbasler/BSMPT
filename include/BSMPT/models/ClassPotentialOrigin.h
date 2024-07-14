@@ -22,8 +22,6 @@
 namespace BSMPT
 {
 
-
-
 /**
  * @brief C_PT Lower threshold to stop the EWPT calculation
  */

@@ -9,12 +9,12 @@
 
 #pragma once
 
+#include <BSMPT/utility/ModelIDs.h>
 #include <algorithm> // for max
 #include <memory>
 #include <string> // for string
 #include <unordered_map>
 #include <vector>
-#include <BSMPT/utility/ModelIDs.h>
 
 /**
  * @file
@@ -25,7 +25,6 @@ struct ISMConstants;
 class Class_Potential_Origin;
 namespace ModelID
 {
-
 
 /**
  * @param choice ModelIDs for the Model under investigation

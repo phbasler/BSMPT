@@ -16,7 +16,6 @@
 namespace BSMPT
 {
 
-
 std::vector<std::string> split(const std::string &str, char delimiter)
 {
   // Using str in a string stream
@@ -29,7 +28,6 @@ std::vector<std::string> split(const std::string &str, char delimiter)
   }
   return res;
 }
-
 
 bool StringStartsWith(const std::string &str, const std::string &prefix)
 {
