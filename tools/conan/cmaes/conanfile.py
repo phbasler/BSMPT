@@ -43,8 +43,8 @@ class CmaesConan(ConanFile):
 
     def requirements(self):
         self.requires("eigen/3.4.0", transitive_headers=True)
-        # if self.options.openmp:
-        #     self.requires("llvm-openmp/17.0.6", transitive_headers=True)
+        if self.options.openmp:
+            self.requires("llvm-openmp/17.0.6", transitive_headers=True)
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -85,14 +85,3 @@ class CmaesConan(ConanFile):
         self.cpp_info.libs = ["cmaes"]
         self.cpp_info.set_property("cmake_target_name", "libcmaes::cmaes")
 
-        if self.settings.compiler == "msvc":
-            openmp_flags = ["-openmp"]
-        elif self.settings.compiler in ("gcc", "clang"):
-            openmp_flags = ["-fopenmp"]
-        elif self.settings.compiler == "apple-clang":
-            openmp_flags = ["-Xpreprocessor", "-fopenmp"]
-        else:
-            openmp_flags = []
-
-        self.cpp_info.exelinkflags = openmp_flags
-        self.cpp_info.sharedlinkflags = openmp_flags
