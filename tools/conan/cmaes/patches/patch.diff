@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4a38212..0d6a968 100644
+index 4a38212..ca76bdd 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -6,9 +6,11 @@ if (NOT DEFINED CMAKE_BUILD_TYPE)
+@@ -6,9 +6,16 @@ if (NOT DEFINED CMAKE_BUILD_TYPE)
    set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
  endif ()
  
@@ -11,10 +11,15 @@ index 4a38212..0d6a968 100644
  set(CMAKE_CXX_FLAGS_DEBUG "-g")
  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 +endif()
++
++if(MSVC)
++add_compile_options(/wd4244)
++add_compile_options(/wd4267)
++endif()
  
  list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
  
-@@ -152,9 +154,7 @@ if (NOT MSVC)
+@@ -152,9 +159,7 @@ if (NOT MSVC)
    set (libdir ${INSTALL_LIB_DIR})
    set (includedir ${INSTALL_INCLUDE_DIR})
    set (VERSION ${LIBCMAES_VERSION_STRING})
@@ -25,7 +30,7 @@ index 4a38212..0d6a968 100644
  endif ()
  
  # ---------- subdirectories ----------
-@@ -174,23 +174,4 @@ endif ()
+@@ -174,23 +179,4 @@ endif ()
  # ------------ export ------------
  add_library (libcmaes::cmaes ALIAS cmaes)
  
