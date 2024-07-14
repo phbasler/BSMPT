@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - main
-      - feature/create-conan-package
   pull_request:
     branches: 
       - master
