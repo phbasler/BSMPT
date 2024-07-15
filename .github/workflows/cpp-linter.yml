@@ -2,7 +2,13 @@ name: cpp-linter
 
 on:
   pull_request:
-    branches: [master]
+    branches: 
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} 
@@ -10,12 +16,14 @@ concurrency:
 
 jobs:
   cpp-linter:
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          ssh-key: ${{secrets.DEPLOY_KEY}}
 
       - name: Install clang-format
         if: inputs.apply_clang_format

@@ -2,7 +2,14 @@ name: Run cmake-format linter
 
 on: 
   pull_request:
-    branches: [ master, develop ]
+    branches: 
+      - master
+      - develop
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
     
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} 
@@ -10,11 +17,14 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name == 'pull_request' && github.event.pull_request.draft == false
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ssh-key: ${{secrets.DEPLOY_KEY}}
 
     - name: Format CMake files
       id: cmake-format
