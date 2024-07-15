@@ -2,7 +2,7 @@ from conan import ConanFile, tools
 from conan.tools.system.package_manager import Apt
 from conan.errors import ConanInvalidConfiguration
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
-from conan.tools.files import load, update_conandata
+from conan.tools.files import load
 from conan.tools.scm import Git
 import os, re
 
@@ -63,9 +63,6 @@ class BSMPT(ConanFile):
 
         if self.options.UseNLopt:
             self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
-
-        #if self.options.UseLibCMAES and self.settings.os != "Windows":
-        #    self.requires("llvm-openmp/17.0.6", transitive_headers=True)
 
         if self.options.UseLibCMAES:
             self.requires("cmaes/0.10.0", transitive_headers=True, transitive_libs=True)
