@@ -12,4 +12,3 @@ add_compile_options(
 add_executable(example src/example.cpp)
 target_link_libraries(example BSMPT::Utility BSMPT::BounceSolution
                       BSMPT::Models BSMPT::Minimizer)
-
