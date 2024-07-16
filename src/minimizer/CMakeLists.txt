@@ -16,7 +16,7 @@ target_sources(
   PUBLIC MinimizeGSL.cpp Minimizer.cpp MinimizePlane.cpp
   PUBLIC ${header})
 
-if(libcmaes_FOUND)
+if(cmaes_FOUND)
   add_subdirectory(LibCMAES)
   target_link_libraries(Minimizer PUBLIC Minimizer_CMAES)
 endif()

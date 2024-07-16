@@ -116,7 +116,7 @@ if(UseNLopt)
 
 endif(UseNLopt)
 
-if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
+if(NOT cmaes_FOUND AND NOT NLopt_FOUND)
   message(FATAL_ERROR "You need at least libcmaes or NLopt.")
 endif()
 
@@ -179,7 +179,7 @@ if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
       Spline
       ASCIIPlotter
       BSMPT_Config)
-  if(libcmaes_FOUND)
+  if(cmaes_FOUND)
     list(APPEND ExportList Minimizer_CMAES)
   endif()
   if(NLopt_FOUND)
