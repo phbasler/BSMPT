@@ -19,3 +19,4 @@ CMakeUserPresets.json
 __pycache__/*
 
 test_package/build/
+CMakeLists.txt.user

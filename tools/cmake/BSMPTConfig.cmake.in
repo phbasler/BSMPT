@@ -15,7 +15,7 @@ find_dependency(OpenMP @OpenMP_CXX_VERSION@)
 find_dependency(Threads @Threads_VERSION@)
 
 if(@cmaes_FOUND@ AND NOT @EXPORT_CMAES@)
-  find_dependency(libcmaes)
+  #find_dependency(cmaes)
 endif(@cmaes_FOUND@ AND NOT @EXPORT_CMAES@)
 
 if(@NLopt_FOUND@)

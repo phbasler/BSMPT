@@ -51,6 +51,7 @@ class BSMPT(ConanFile):
         "EnableCoverage": False,
         "UseVectorization": True,
         "BuildExecutables": True,
+        "cmaes/*:shared": True
     }
 
     def requirements(self):
