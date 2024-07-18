@@ -49,7 +49,7 @@ class BSMPT(ConanFile):
         "MakeAdditionalTesting": False,
         "CompileBaryo": False,
         "EnableCoverage": False,
-        "UseVectorization": True,
+        "UseVectorization": False,
         "BuildExecutables": True,
         "cmaes/*:shared": True,
     }

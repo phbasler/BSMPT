@@ -165,6 +165,8 @@ def conan_install(profile, additional_options=[], build_missing=False, compiler 
     else:
         cmd += ["--build=cmaes/0.10.0"]
 
+    print(f"Executing command {cmd}")
+
     subprocess.check_call(cmd)
 
 

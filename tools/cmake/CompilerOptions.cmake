@@ -19,6 +19,7 @@ add_compile_options(
 )
 
 if(BSMPTUseVectorization)
+message(FATAL_ERROR "DONT")
   include(CheckCXXCompilerFlag)
 
   check_cxx_compiler_flag("-march=native" _march_native_works)
