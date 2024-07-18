@@ -25,8 +25,9 @@ class BuildMode(ArgTypeEnum, Enum):
     release = (1,)
     debug = 2
 
+
 class Compiler(ArgTypeEnum, Enum):
-    gcc = 0,
+    gcc = (0,)
     clang = 1
 
 
@@ -113,7 +114,7 @@ def check_profile(profile):
         check_profile(profile)
 
 
-def get_compiler_version(compiler : Compiler):
+def get_compiler_version(compiler: Compiler):
     if sys.platform == "linux" and compiler != Compiler.clang:
         version_response = subprocess.check_output(
             "gcc --version".split(), encoding="UTF-8"
@@ -145,7 +146,9 @@ def setup_profiles():
     shutil.copytree("profiles/BSMPT", profile_dir)
 
 
-def conan_install(profile, additional_options=[], build_missing=False, compiler : Compiler = None):
+def conan_install(
+    profile, additional_options=[], build_missing=False, compiler: Compiler = None
+):
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
@@ -171,46 +174,42 @@ def conan_install(profile, additional_options=[], build_missing=False, compiler 
 
 
 def conan_install_all(
-    mode: BuildMode, options=[], build_missing=False, custom_profile="", compiler: Compiler = None
+    mode: BuildMode,
+    options=[],
+    build_missing=False,
+    custom_profile="",
+    compiler: Compiler = None,
 ):
     if mode == BuildMode.all or mode == BuildMode.release:
         profile = (
             custom_profile
             if custom_profile != ""
-            else get_profile(sys.platform, get_arch(), BuildMode.release)
+            else get_profile(sys.platform, get_arch(), BuildMode.release, compiler)
         )
         check_profile(profile)
-        conan_install(
-            profile,
-            options,
-            build_missing,
-            compiler
-        )
+        conan_install(profile, options, build_missing, compiler)
     if mode == BuildMode.all or mode == BuildMode.debug:
         profile = (
             custom_profile
             if custom_profile != ""
-            else get_profile(sys.platform, get_arch(), BuildMode.debug)
+            else get_profile(sys.platform, get_arch(), BuildMode.debug, compiler)
         )
         check_profile(profile)
-        conan_install(
-            profile,
-            options,
-            build_missing,
-            compiler
-        )
+        conan_install(profile, options, build_missing, compiler)
+
 
 def create_cmaes():
     cmd = "conan export . --version=0.10.0".split()
     subprocess.check_call(cmd, cwd="tools/conan/cmaes")
 
-def create(build_missing=False):
+
+def create(build_missing=False, compiler: Compiler = None):
 
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
 
-    profile = get_profile(sys.platform, get_arch(), BuildMode.release)
+    profile = get_profile(sys.platform, get_arch(), BuildMode.release, compiler)
     cmd = f"conan create . -pr:h BSMPT/{profile} -pr:b BSMPT/{profile}".split()
 
     for conf in config_settings:
@@ -221,7 +220,6 @@ def create(build_missing=False):
 
     cmd += ["--options", "EnableTests=False"]
     cmd += ["--options", "BuildExecutables=False"]
-
 
     subprocess.check_call(cmd)
 
@@ -271,10 +269,14 @@ if __name__ == "__main__":
         "-c", "--create", action="store_true", help="create the local conan package"
     )
 
-    parser.add_argument("-co","--compiler", default=None,
+    parser.add_argument(
+        "-co",
+        "--compiler",
+        default=None,
         type=Compiler.argtype,
         choices=Compiler,
-        help="Force a certain compiler",)
+        help="Force a certain compiler",
+    )
 
     opts = parser.parse_args()
 
@@ -283,14 +285,13 @@ if __name__ == "__main__":
     create_cmaes()
 
     if opts.create:
-        create(build_missing=opts.build_missing,)
+        create(build_missing=opts.build_missing, compiler=opts.compiler)
     else:
 
-        
         conan_install_all(
             opts.mode,
             opts.options if opts.options is not None else [],
             opts.build_missing,
             opts.profile,
-            opts.compiler
+            opts.compiler,
         )
