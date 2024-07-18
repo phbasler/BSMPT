@@ -51,7 +51,7 @@ class BSMPT(ConanFile):
         "EnableCoverage": False,
         "UseVectorization": True,
         "BuildExecutables": True,
-        "cmaes/*:shared": True
+        "cmaes/*:shared": True,
     }
 
     def requirements(self):
@@ -140,7 +140,7 @@ class BSMPT(ConanFile):
     def package(self):
         cmake = CMake(self)
         cmake.install()
-    
+
     def configure(self):
         if self.settings.os == "Windows":
             self.options["cmaes"].openmp = False

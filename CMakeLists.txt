@@ -13,6 +13,9 @@ project(
     "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models"
 )
 
+set(CMAKE_CXX_FLAGS "-g")
+
+
 # -------------------------------- options     --------------------------------
 
 option(UseLibCMAES "Use libcmaes to minimize the potential" ON)

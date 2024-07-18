@@ -25,24 +25,31 @@ class BuildMode(ArgTypeEnum, Enum):
     release = (1,)
     debug = 2
 
+class Compiler(ArgTypeEnum, Enum):
+    gcc = 0,
+    clang = 1
 
-def get_compiler():
-    compiler = ""
+
+def get_compiler(compiler: Compiler):
+    compilerString = ""
 
     if sys.platform != "linux" and sys.platform != "darwin":
-        return compiler
+        return compilerString
 
     if sys.platform == "linux":
-        compiler += "-gcc-"
+        if compiler == Compiler.gcc or compiler is None:
+            compilerString += "-gcc-"
+        else:
+            compilerString += "-clang-"
 
     if sys.platform == "darwin":
-        compiler += "-clang-"
-    compiler += get_compiler_version()
+        compilerString += "-clang-"
+    compilerString += get_compiler_version(compiler)
 
-    return compiler
+    return compilerString
 
 
-def get_profile(os: str, arch: str, build_type: BuildMode):
+def get_profile(os: str, arch: str, build_type: BuildMode, compiler: Compiler):
     profile = ""
     if os == "win32":
         profile += "windows"
@@ -61,7 +68,7 @@ def get_profile(os: str, arch: str, build_type: BuildMode):
     profile += "-"
     profile += arch
 
-    profile += get_compiler()
+    profile += get_compiler(compiler)
 
     return profile
 
@@ -106,14 +113,14 @@ def check_profile(profile):
         check_profile(profile)
 
 
-def get_compiler_version():
-    if sys.platform == "linux":
+def get_compiler_version(compiler : Compiler):
+    if sys.platform == "linux" and compiler != Compiler.clang:
         version_response = subprocess.check_output(
             "gcc --version".split(), encoding="UTF-8"
         ).partition("\n")[0]
         semver_string = version_response[version_response.rfind(" ") + 1 :]
         return semver_string.partition(".")[0]
-    if sys.platform == "darwin":
+    elif sys.platform == "darwin" or compiler == Compiler.clang:
         version_response = subprocess.check_output(
             "clang --version".split(), encoding="UTF-8"
         ).partition("\n")[0]
@@ -138,12 +145,12 @@ def setup_profiles():
     shutil.copytree("profiles/BSMPT", profile_dir)
 
 
-def conan_install(profile, additional_options=[], build_missing=False):
+def conan_install(profile, additional_options=[], build_missing=False, compiler : Compiler = None):
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
 
-    build_profile = get_profile(sys.platform, get_arch(), BuildMode.release)
+    build_profile = get_profile(sys.platform, get_arch(), BuildMode.release, compiler)
 
     cmd = f"conan install . -pr:h BSMPT/{profile} -pr:b BSMPT/{build_profile} ".split()
 
@@ -162,7 +169,7 @@ def conan_install(profile, additional_options=[], build_missing=False):
 
 
 def conan_install_all(
-    mode: BuildMode, options=[], build_missing=False, custom_profile=""
+    mode: BuildMode, options=[], build_missing=False, custom_profile="", compiler: Compiler = None
 ):
     if mode == BuildMode.all or mode == BuildMode.release:
         profile = (
@@ -175,6 +182,7 @@ def conan_install_all(
             profile,
             options,
             build_missing,
+            compiler
         )
     if mode == BuildMode.all or mode == BuildMode.debug:
         profile = (
@@ -187,6 +195,7 @@ def conan_install_all(
             profile,
             options,
             build_missing,
+            compiler
         )
 
 def create_cmaes():
@@ -260,6 +269,11 @@ if __name__ == "__main__":
         "-c", "--create", action="store_true", help="create the local conan package"
     )
 
+    parser.add_argument("-co","--compiler", default=None,
+        type=Compiler.argtype,
+        choices=Compiler,
+        help="Force a certain compiler",)
+
     opts = parser.parse_args()
 
     setup_profiles()
@@ -276,4 +290,5 @@ if __name__ == "__main__":
             opts.options if opts.options is not None else [],
             opts.build_missing,
             opts.profile,
+            opts.compiler
         )
