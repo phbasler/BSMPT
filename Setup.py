@@ -203,7 +203,7 @@ def create_cmaes():
     subprocess.check_call(cmd, cwd="tools/conan/cmaes")
 
 
-def create(build_missing=False, compiler: Compiler = None):
+def create(build_missing=False, compiler: Compiler = None, additional_options=[]):
 
     config_settings = [
         "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
@@ -218,7 +218,10 @@ def create(build_missing=False, compiler: Compiler = None):
     if build_missing:
         cmd += ["--build=missing"]
 
-    cmd += ["--options", "EnableTests=False"]
+    for option in additional_options:
+        cmd += ["--options", option]
+
+    # cmd += ["--options", "EnableTests=False"]
     cmd += ["--options", "BuildExecutables=False"]
 
     subprocess.check_call(cmd)
@@ -285,7 +288,11 @@ if __name__ == "__main__":
     create_cmaes()
 
     if opts.create:
-        create(build_missing=opts.build_missing, compiler=opts.compiler)
+        create(
+            build_missing=opts.build_missing,
+            compiler=opts.compiler,
+            additional_options=opts.options if opts.options is not None else [],
+        )
     else:
 
         conan_install_all(

@@ -12,3 +12,16 @@ add_compile_options(
 add_executable(example src/example.cpp)
 target_link_libraries(example BSMPT::Utility BSMPT::BounceSolution
                       BSMPT::Models BSMPT::Minimizer)
+
+include(../tools/cmake/CompilerOptions.cmake)
+
+add_compile_options(
+  $<$<CONFIG:DEBUG>:-DCOMPILEDEBUG=true>
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-pedantic>
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall>
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wextra>
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wshadow>
+  $<$<AND:$<CONFIG:DEBUG>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-Wmissing-declarations>
+  $<$<AND:$<CONFIG:DEBUG>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-Wmissing-include-dirs>
+  $<$<AND:$<CONFIG:RELEASE>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>>:-O3>
+)

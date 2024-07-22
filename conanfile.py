@@ -5,6 +5,7 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
 from conan.tools.files import load
 from conan.tools.scm import Git
 import os, re
+from conan.tools.env import Environment
 
 required_conan_version = ">=2.0.0 <3"
 
@@ -137,6 +138,15 @@ class BSMPT(ConanFile):
         cmake.configure()
         cmake.build()
 
+        environment = Environment()
+        environment.define("CTEST_OUTPUT_ON_FAILURE","1")
+        envvars = environment.vars(self)
+
+
+        if self.options.get_safe("EnableTests"):
+            with envvars.apply():
+                cmake.test()
+
     def package(self):
         cmake = CMake(self)
         cmake.install()
@@ -149,7 +159,6 @@ class BSMPT(ConanFile):
         del self.info.options.EnableTests
 
     def package_info(self):
-
         if self.settings.compiler == "msvc":
             openmp_flags = ["-openmp"]
         elif self.settings.compiler in ("gcc", "clang"):
@@ -265,8 +274,8 @@ class BSMPT(ConanFile):
         self.cpp_info.components["Models"].set_property(
             "cmake_target_name", "BSMPT::Models"
         )
-        self.cpp_info.components["Models"].exelinkflags = openmp_flags
-        self.cpp_info.components["Models"].sharedlinkflags = openmp_flags
+        # self.cpp_info.components["Models"].exelinkflags = openmp_flags
+        # self.cpp_info.components["Models"].sharedlinkflags = openmp_flags
 
         self.cpp_info.components["ThermalFunctions"].libs = ["ThermalFunctions"]
         self.cpp_info.components["ThermalFunctions"].requires = ["gsl::gsl", "Utility"]

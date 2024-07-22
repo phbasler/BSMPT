@@ -162,7 +162,7 @@ if(EnableCoverage)
     GenericTests)
 endif(EnableCoverage)
 
-find_lto(CXX)
+# find_lto(CXX)
 
 add_subdirectory(src)
 add_subdirectory(standalone)

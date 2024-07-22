@@ -114,27 +114,6 @@ index 0000000..af4f716
 +
 +      set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${MSVC_DISABLED_WARNINGS_STR}")
 + endif()
-diff --git a/include/libcmaes/cmastrategy.h b/include/libcmaes/cmastrategy.h
-index c8dc1f6..01fc948 100644
---- a/include/libcmaes/cmastrategy.h
-+++ b/include/libcmaes/cmastrategy.h
-@@ -31,6 +31,7 @@
- #include <libcmaes/vdcmaupdate.h>
- #include <libcmaes/eigenmvn.h>
- #include <fstream>
-+#include <memory>
- 
- namespace libcmaes
- {
-@@ -123,7 +124,7 @@ namespace libcmaes
-     protected:
-       Eigen::EigenMultivariateNormal<double> _esolver;  /**< multivariate normal distribution sampler, and eigendecomposition solver. */
-       CMAStopCriteria<TGenoPheno> _stopcriteria; /**< holds the set of termination criteria, see reference paper. */
--      std::ofstream *_fplotstream = nullptr; /**< plotting file stream, not in parameters because of copy-constructor hell. */
-+      std::shared_ptr<std::ofstream> _fplotstream = nullptr; /**< plotting file stream, not in parameters because of copy-constructor hell. */
-     
-     public:
-     static ProgressFunc<CMAParameters<TGenoPheno>,CMASolutions> _defaultPFunc; /**< the default progress function. */
 diff --git a/include/libcmaes/eigenmvn.h b/include/libcmaes/eigenmvn.h
 index fb8b11d..6a6943b 100644
 --- a/include/libcmaes/eigenmvn.h
@@ -161,33 +140,3 @@ index fb8b11d..6a6943b 100644
      
      scalar_normal_dist_op &operator=(scalar_normal_dist_op &&other) 
      {
-diff --git a/src/cmastrategy.cc b/src/cmastrategy.cc
-index cc8814c..e628085 100644
---- a/src/cmastrategy.cc
-+++ b/src/cmastrategy.cc
-@@ -109,7 +109,7 @@ namespace libcmaes
-     LOG_IF(INFO,!eostrat<TGenoPheno>::_parameters._quiet) << "CMA-ES / dim=" << eostrat<TGenoPheno>::_parameters._dim << " / lambda=" << eostrat<TGenoPheno>::_parameters._lambda << " / sigma0=" << eostrat<TGenoPheno>::_solutions._sigma << " / mu=" << eostrat<TGenoPheno>::_parameters._mu << " / mueff=" << eostrat<TGenoPheno>::_parameters._muw << " / c1=" << eostrat<TGenoPheno>::_parameters._c1 << " / cmu=" << eostrat<TGenoPheno>::_parameters._cmu << " / tpa=" << (eostrat<TGenoPheno>::_parameters._tpa==2) << " / threads=" << Eigen::nbThreads() << std::endl;
-     if (!eostrat<TGenoPheno>::_parameters._fplot.empty())
-       {
--	_fplotstream = new std::ofstream(eostrat<TGenoPheno>::_parameters._fplot);
-+	_fplotstream = std::make_shared<std::ofstream>(eostrat<TGenoPheno>::_parameters._fplot);
- 	_fplotstream->precision(std::numeric_limits<double>::digits10);
-       }
-     auto mit=eostrat<TGenoPheno>::_parameters._stoppingcrit.begin();
-@@ -133,14 +133,14 @@ namespace libcmaes
-     _esolver = Eigen::EigenMultivariateNormal<double>(false,eostrat<TGenoPheno>::_parameters._seed); // seeding the multivariate normal generator.
-     LOG_IF(INFO,!eostrat<TGenoPheno>::_parameters._quiet) << "CMA-ES / dim=" << eostrat<TGenoPheno>::_parameters._dim << " / lambda=" << eostrat<TGenoPheno>::_parameters._lambda << " / sigma0=" << eostrat<TGenoPheno>::_solutions._sigma << " / mu=" << eostrat<TGenoPheno>::_parameters._mu << " / mueff=" << eostrat<TGenoPheno>::_parameters._muw << " / c1=" << eostrat<TGenoPheno>::_parameters._c1 << " / cmu=" << eostrat<TGenoPheno>::_parameters._cmu << " / lazy_update=" << eostrat<TGenoPheno>::_parameters._lazy_update << std::endl;
-     if (!eostrat<TGenoPheno>::_parameters._fplot.empty())
--      _fplotstream = new std::ofstream(eostrat<TGenoPheno>::_parameters._fplot);
-+      _fplotstream = std::make_shared<std::ofstream>(std::ofstream(eostrat<TGenoPheno>::_parameters._fplot));
-   }
- 
-   template <class TCovarianceUpdate, class TGenoPheno>
-   CMAStrategy<TCovarianceUpdate,TGenoPheno>::~CMAStrategy()
-   {
-     if (!eostrat<TGenoPheno>::_parameters._fplot.empty())
--      delete _fplotstream;
-+       _fplotstream.reset();
-   }
-   
-   template <class TCovarianceUpdate, class TGenoPheno>
