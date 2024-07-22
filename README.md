@@ -56,8 +56,7 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 
-For additional information, comments, complaints or suggestions please e-mail
-to: bsmpt@lists.kit.edu, open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions).
+For additional information, comments, complaints or suggestions open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions). For non-public matters please send an e-mail to bsmpt@lists.kit.edu.
 
 ---
 
