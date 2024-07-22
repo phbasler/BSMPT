@@ -105,6 +105,8 @@ class CmaesConan(ConanFile):
         self.cpp_info.libs = ["cmaes"]
         self.cpp_info.set_property("cmake_target_name", "libcmaes::cmaes")
 
+        self.cpp_info.requires.append("eigen::eigen")
+
         if self.options.openmp:
             if self.settings.compiler in ["clang", "apple-clang"]:
                 self.cpp_info.requires.append("llvm-openmp::llvm-openmp")
