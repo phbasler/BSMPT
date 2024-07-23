@@ -201,6 +201,7 @@ def parse_arguments():
         "--options",
         "-o",
         nargs="+",
+        action="extend",
         help="Options to pass through to conan. For the available options please look into the conanfile.",
     )
     parser.add_argument(
