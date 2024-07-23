@@ -20,7 +20,7 @@ def get_preset():
     return preset
 
 def build(preset):
-    cmd=f"cmake --preset {preset}".split()
+    cmd=f"cmake --preset {preset} --fresh".split()
     subprocess.check_call(cmd)
 
     cmd=f"cmake --build --preset {preset}".split()
