@@ -28,8 +28,14 @@ def build(preset):
 
 
 def main():
+    opts = Setup.parse_arguments()
     Setup.setup_profiles()
-    Setup.conan_install_all(Setup.BuildMode.release,build_missing=True)
+    print("The preset options is--------------------", opts.options)
+    Setup.conan_install_all(Setup.BuildMode.release,
+                            opts.options if opts.options is not None else [],
+                            build_missing=True,
+                            custom_profile=opts.profile
+                            )
     build(get_preset())
 
 if __name__ == "__main__":
