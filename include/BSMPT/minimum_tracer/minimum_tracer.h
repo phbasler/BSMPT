@@ -18,6 +18,7 @@
 #include <BSMPT/utility/asciiplotter/asciiplotter.h>
 #include <BSMPT/utility/utility.h>
 #include <Eigen/Dense> // Eigenvalues matrix
+#include <algorithm>   // std::swap
 #include <chrono>
 #include <cmath>    // std::pow
 #include <memory>   // for shared_ptr

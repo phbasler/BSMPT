@@ -2401,6 +2401,12 @@ Vacuum::Vacuum(const double &T_lowIn,
       PhasesList[i].id = i;
     }
 
+    // impose that true vacuum at T = Tthigh has id = 0.
+    for (auto &phase : PhasesList)
+      if ((phase.T_high == T_high) and
+          (phase.Get(T_high).potential < PhasesList[0].Get(T_high).potential))
+        std::swap(PhasesList[0], phase);
+
     // identify coexisiting phase regions
     setCoexRegion(UseMultiStepPTMode); // can flip status_vacuum to error code
 
