@@ -187,8 +187,7 @@ class ArgTypeEnum(Enum):
         return self.name
 
 
-if __name__ == "__main__":
-
+def parse_arguments():
     parser = ArgumentParser()
     parser.add_argument(
         "--mode",
@@ -202,6 +201,7 @@ if __name__ == "__main__":
         "--options",
         "-o",
         nargs="+",
+        action="extend",
         help="Options to pass through to conan. For the available options please look into the conanfile.",
     )
     parser.add_argument(
@@ -216,7 +216,12 @@ if __name__ == "__main__":
         default="",
     )
 
-    opts = parser.parse_args()
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+
+    opts = parse_arguments()
     setup_profiles()
     conan_install_all(
         opts.mode,
