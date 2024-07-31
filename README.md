@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 3.0.3
+Program: BSMPT version 3.0.6
 
 Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana
 
@@ -56,8 +56,7 @@ Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 
-For additional information, comments, complaints or suggestions please e-mail
-to: bsmpt@lists.kit.edu, open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions).
+For additional information, comments, complaints or suggestions open a corresponding [issue](https://github.com/phbasler/BSMPT/issues) or start a [discussion](https://github.com/phbasler/BSMPT/discussions). For non-public matters please send an e-mail to bsmpt@lists.kit.edu.
 
 ---
 

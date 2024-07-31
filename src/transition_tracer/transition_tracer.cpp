@@ -413,6 +413,7 @@ TransitionTracer::TransitionTracer(user_input &input)
           // store current false phase
           transition_history.push_back(tmp_phase_id);
           tmp_next_phase_id = -1;
+          tmp_compl_temp    = -1;
 
           for (auto pair : vec_coex)
           {
