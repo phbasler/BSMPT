@@ -189,12 +189,12 @@ public:
    * @param l
    * @return std::vector<double>
    */
-  std::vector<double> operator()(double l);
+  std::vector<double> operator()(double l) const;
   /**
    * @brief print the current knots of the spline
    *
    */
-  void print_path();
+  void print_path() const;
   /**
    * @brief save the knots of the splien into a file
    *

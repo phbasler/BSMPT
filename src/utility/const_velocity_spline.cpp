@@ -266,7 +266,7 @@ std::vector<double> cvspline::d2l(double l)
 
   return rr;
 }
-std::vector<double> cvspline::operator()(double l)
+std::vector<double> cvspline::operator()(double l) const
 {
   // Calculates the VEV at the position l in spline length,
   l = l_to_x(l); // Convert from spline length to linear length.
@@ -278,7 +278,7 @@ std::vector<double> cvspline::operator()(double l)
   return r;
 }
 
-void cvspline::print_path()
+void cvspline::print_path() const
 {
   int wid = 15;
 
