@@ -21,10 +21,10 @@ def convert(InputFile, OutputFile):
     Lambda2='L2'
     Lambda3='L3'
     Lambda4='L4'
-    re_Lambda5='L5r'
-    im_Lambda5='L5i'
+    re_Lambda5='re_L5'
+    im_Lambda5='im_L5'
     tanbeta='tbeta'
-    re_m12squared='m12sqr'
+    re_m12squared='re_m12sq'
 
     with open(InputFile, 'r') as file:
         df = pd.read_csv(file,index_col=HasIndexCol,sep=Separator)
