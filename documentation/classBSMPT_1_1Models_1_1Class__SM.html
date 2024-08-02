@@ -99,7 +99,7 @@ $(document).ready(function(){initNavTree('classBSMPT_1_1Models_1_1Class__SM.html
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html" title="The Class_SM class Implementation of the SM.">Class_SM</a> class Implementation of the SM.  
+<p>The <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html" title="The Class_SM class Implementation of the Standard Model.">Class_SM</a> class Implementation of the Standard Model.  
  <a href="classBSMPT_1_1Models_1_1Class__SM.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ClassPotentialSM_8h_source.html">BSMPT/models/ClassPotentialSM.h</a>&gt;</code></p>
@@ -610,7 +610,25 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="separator:a4c507c7abe9be676ace4e315170d24b1 inherit pro_attribs_classBSMPT_1_1Class__Potential__Origin"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html" title="The Class_SM class Implementation of the SM.">Class_SM</a> class Implementation of the SM. </p>
+<div class="textblock"><p>The <a class="el" href="classBSMPT_1_1Models_1_1Class__SM.html" title="The Class_SM class Implementation of the Standard Model.">Class_SM</a> class Implementation of the Standard Model. </p>
+<ul>
+<li>\( -L_S = muSq \Phi^\dagger \Phi + lambda (\Phi^\dagger \Phi)^2 \)</li>
+<li>\( -L_Y = \overline{U}_L V \text{diag}(y_d,y_s,y_b) D_R \Phi^+ + \overline{D}_L \text{diag}(y_d,y_s,y_b) D_R \Phi^0 + \overline{U}_L \text{diag}(y_u, y_c, y_t) U_R (\Phi^0)^\ast - \overline{D}_L V^\dagger \text{diag}(y_u, y_c, y_t) U_R \Phi^- + \overline{E}_L \text{diag}(y_e, y_\mu, y_\tau) E_R \Phi^0 +\overline{\nu}_L \text{diag}(y_e, y_\mu, y_\tau) E_R \Phi^+ + c.c. \)</li>
+<li>\( L_G = (D_\mu \Phi)^\dagger (D^\mu \Phi) \)</li>
+</ul>
+<p>with</p>
+<ul>
+<li>\( \Phi = \begin{pmatrix} \Phi^+ \\ \Phi^0 \end{pmatrix} = 1/\sqrt{2} \begin{pmatrix} higgsbase[0] + I*higgsbase[1] \\ higgsbase[2] + I *higgsbase[3] \end{pmatrix}\,, \)</li>
+<li>\( D_\mu = -I C\_{}g/2 * W_\mu^a \sigma^a -I C\_{}gs/2 B_\mu = -\frac{I}{2} \begin{pmatrix} C\_{}gs B + C\_{}g W3 &amp; C\_{}g (W1 -I W2) \\ C\_{}g (W1 +I W2) &amp; C\_{}gs B - C\_{}g W3 \end{pmatrix} \) with the gauge base = [W1,W2,W3,B]</li>
+<li>\( \overline{U}_L = \begin{pmatrix} \overline{u}_L &amp; \overline{c}_L &amp; \overline{t}_L \end{pmatrix}\,, \)</li>
+<li>\( U_R = \begin{pmatrix} u_R \\ c_R \\ t_R \end{pmatrix}\,, \)</li>
+<li>\( \overline{D}_L = \begin{pmatrix} \overline{d}_L &amp; \overline{s}_L &amp; \overline{b}_L \end{pmatrix}\,, \)</li>
+<li>\( D_R = \begin{pmatrix} d_R \\ s_R \\ b_R \end{pmatrix}\,, \)</li>
+<li>\( \overline{E}_L = \begin{pmatrix} \overline{e}_L &amp; \overline{\mu}_L &amp; \overline{\tau}_L \end{pmatrix}\,, \)</li>
+<li>\( E_R = \begin{pmatrix} e_R \\ \mu_R \\ \tau_R \end{pmatrix}\,, \)</li>
+<li>\( \overline{\nu}_L = \begin{pmatrix} \overline{\nu}_{e,L} &amp; \overline{\nu}_{\mu,L} &amp; \overline{\nu}_{\tau,L} \end{pmatrix} \)</li>
+</ul>
+<p>The basis of the quarks given by \( [u_R, c_R, t_R, d_R, s_R, b_R, \overline{u}_L, \overline{c}_L, \overline{t}_L, \overline{d}_L, \overline{s}_L, \overline{b}_L ] \) and for the leptons \( [\overline{e}_L, e_R, \overline{\mu}_L , \mu_R, \overline{\tau}_L, \tau_R, \overline{\nu}_{e,L}, \overline{\nu}_{\mu,L}, \overline{\nu}_{\tau,L} ] \) </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a15fd4afcc0db91cd640459e7848ce4aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a15fd4afcc0db91cd640459e7848ce4aa">&#9670;&nbsp;</a></span>addLegendCT()</h2>
