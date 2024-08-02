@@ -56,5 +56,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.6.3
         with:
             branch: gh-pages # The branch the action should deploy to.
-            folder: build/linux-x86_64-release/html # The folder the action should deploy.
+            folder: documentation # The folder the action should deploy.
             target-folder: documentation/testPR
