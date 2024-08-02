@@ -44,7 +44,7 @@ jobs:
         name: documentation
 
   UploadDocumentation:
-    # if:   github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if:   github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: CreateDocumentation
     runs-on: ubuntu-latest
     steps:
@@ -58,4 +58,4 @@ jobs:
         with:
             branch: gh-pages # The branch the action should deploy to.
             folder: documentation # The folder the action should deploy.
-            target-folder: documentation/testPR
+            target-folder: documentation
