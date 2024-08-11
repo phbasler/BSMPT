@@ -15,6 +15,7 @@ if(NOT libcmaes_FOUND)
     option(LIBCMAES_BUILD_PYTHON OFF)
     option(LIBCMAES_BUILD_EXAMPLES OFF)
     option(LIBCMAES_USE_OPENMP OpenMP_FOUND)
+    option(LIBCMAES_BUILD_SHARED_LIBS OFF)
     FetchContent_Populate(libcmaes)
     add_subdirectory(${libcmaes_SOURCE_DIR} ${libcmaes_BINARY_DIR})
     include(GenerateExportHeader)
@@ -31,3 +32,5 @@ else()
   set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
                                         "${libcmaes_ROOT_DIR}/*")
 endif()
+
+set(cmaes_FOUND ${libcmaes_FOUND})

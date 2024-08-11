@@ -4,13 +4,17 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.23)
+set(BSMPT_VERSION 3.0.6)
 project(
   BSMPT
-  VERSION 3.0.6
+  VERSION ${BSMPT_VERSION}
   LANGUAGES C CXX
   DESCRIPTION
     "BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models"
 )
+
+set(CMAKE_CXX_FLAGS "-g")
+
 
 # -------------------------------- options     --------------------------------
 
@@ -21,6 +25,7 @@ option(MakeAdditionalTesting "Build the executables used for further testing"
 option(BSMPTCompileBaryo "Compile Baryogenesis" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
 option(BSMPTUseVectorization "Disable vectorization" ON)
+option(BSMPTBuildExecutables "Build the executables" ON)
 
 set(BSMPT_IS_TOPLEVEL NO)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -53,7 +58,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
 endif(NOT CMAKE_BUILD_TYPE)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 
 include(LTO)
 
@@ -68,6 +73,9 @@ find_package(Threads REQUIRED)
 if(NOT Boost_FOUND)
   set(BSMPTCompileBaryo OFF)
 endif()
+
+# add_compile_options(-fsanitize=address)
+# add_link_options(-fsanitize=address)
 
 set(CodeCoverageExcludesFromOtherPkgs "")
 if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")
@@ -114,11 +122,9 @@ if(UseNLopt)
 
 endif(UseNLopt)
 
-if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
+if(NOT cmaes_FOUND AND NOT NLopt_FOUND)
   message(FATAL_ERROR "You need at least libcmaes or NLopt.")
 endif()
-
-configure_file(include/BSMPT/config.h.in include/BSMPT/config.h)
 
 # -------------------- Coverage
 # --------------------------------------------------
@@ -156,42 +162,10 @@ if(EnableCoverage)
     GenericTests)
 endif(EnableCoverage)
 
-find_lto(CXX)
+# find_lto(CXX)
 
 add_subdirectory(src)
 add_subdirectory(standalone)
-
-# -------------------------- export as cmake package --------------------------
-if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  include(CMakePackageConfigHelpers)
-  write_basic_package_version_file(
-    BSMPTConfigVersion.cmake
-    VERSION ${PACKAGE_VERSION}
-    COMPATIBILITY AnyNewerVersion)
-
-  set(ExportList Models Minimizer ThermalFunctions Utility Spline ASCIIPlotter)
-
-  if(BSMPTCompileBaryo)
-    set(ExportList ${ExportList} Baryo LibWallThickness Kfactors)
-  endif(BSMPTCompileBaryo)
-
-  export(
-    TARGETS ${ExportList}
-    NAMESPACE BSMPT::
-    FILE BSMPTTargets.cmake)
-
-  if(EXPORT_CMAES)
-    export(
-      TARGETS cmaes
-      NAMESPACE libcmaes::
-      APPEND
-      FILE BSMPTTargets.cmake)
-  endif(EXPORT_CMAES)
-
-  configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
-
-  export(PACKAGE BSMPT)
-endif()
 
 # ------------------------ Doxygen --------------------------------------------
 if(BSMPT_IS_TOPLEVEL)
