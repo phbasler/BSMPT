@@ -165,8 +165,6 @@ def conan_install(
 
     if build_missing:
         cmd += ["--build=missing"]
-    else:
-        cmd += ["--build=cmaes/0.10.0"]
 
     print(f"Executing command {cmd}")
 

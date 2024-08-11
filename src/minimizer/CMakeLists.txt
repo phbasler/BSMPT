@@ -18,7 +18,7 @@ target_sources(
 
 if(cmaes_FOUND)
   add_subdirectory(LibCMAES)
-  target_link_libraries(Minimizer PUBLIC Minimizer_CMAES)
+  target_link_libraries(Minimizer PRIVATE Minimizer_CMAES)
 endif()
 
 if(NLopt_FOUND)
