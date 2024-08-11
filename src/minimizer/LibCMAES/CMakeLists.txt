@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+include(CMAES)
+
 set(suffix "include/BSMPT/minimizer/LibCMAES")
 set(header_path "${BSMPT_SOURCE_DIR}/${suffix}")
 set(header ${header_path}/MinimizeLibCMAES.h)
@@ -13,9 +15,6 @@ target_link_libraries(Minimizer_CMAES INTERFACE Minimizer)
 
 target_link_libraries(Minimizer_CMAES
                       INTERFACE libcmaes::cmaes)
-# if(OpenMP_FOUND)
-#   target_link_libraries(Minimizer_CMAES INTERFACE OpenMP::OpenMP_CXX)
-# endif()
 
 target_include_directories(
   Minimizer_CMAES INTERFACE ${BSMPT_SOURCE_DIR}/include

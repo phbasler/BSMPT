@@ -167,53 +167,6 @@ endif(EnableCoverage)
 add_subdirectory(src)
 add_subdirectory(standalone)
 
-# ----- installation
-
-# -------------------------- export as cmake package --------------------------
-if(PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  include(CMakePackageConfigHelpers)
-  write_basic_package_version_file(
-    BSMPTConfigVersion.cmake
-    VERSION ${PACKAGE_VERSION}
-    COMPATIBILITY AnyNewerVersion)
-
-  set(ExportList
-      Models
-      Minimizer
-      ThermalFunctions
-      Utility
-      Spline
-      ASCIIPlotter
-      BSMPT_Config)
-  if(cmaes_FOUND)
-    list(APPEND ExportList Minimizer_CMAES)
-  endif()
-  if(NLopt_FOUND)
-    list(APPEND ExportList Minimizer_NLOPT)
-  endif()
-
-  if(BSMPTCompileBaryo)
-    set(ExportList ${ExportList} Baryo LibWallThickness Kfactors)
-  endif(BSMPTCompileBaryo)
-
-  export(
-    TARGETS ${ExportList}
-    NAMESPACE BSMPT::
-    FILE BSMPTTargets.cmake)
-
-  if(EXPORT_CMAES)
-    export(
-      TARGETS cmaes
-      NAMESPACE libcmaes::
-      APPEND
-      FILE BSMPTTargets.cmake)
-  endif(EXPORT_CMAES)
-
-  configure_file(tools/cmake/BSMPTConfig.cmake.in BSMPTConfig.cmake @ONLY)
-
-  export(PACKAGE BSMPT)
-endif()
-
 # ------------------------ Doxygen --------------------------------------------
 if(BSMPT_IS_TOPLEVEL)
   find_package(Doxygen)

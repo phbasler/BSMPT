@@ -31,3 +31,5 @@ else()
   set(CodeCoverageExcludesFromOtherPkgs ${CodeCoverageExcludesFromOtherPkgs}
                                         "${libcmaes_ROOT_DIR}/*")
 endif()
+
+set(cmaes_FOUND ${libcmaes_FOUND})

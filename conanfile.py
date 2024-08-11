@@ -52,7 +52,6 @@ class BSMPT(ConanFile):
         "EnableCoverage": False,
         "UseVectorization": False,
         "BuildExecutables": True,
-        "cmaes/*:shared": True,
     }
 
     def requirements(self):
@@ -65,9 +64,6 @@ class BSMPT(ConanFile):
 
         if self.options.UseNLopt:
             self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
-
-        if self.options.UseLibCMAES:
-            self.requires("cmaes/0.10.0", transitive_headers=True, transitive_libs=True)
 
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
@@ -139,9 +135,8 @@ class BSMPT(ConanFile):
         cmake.build()
 
         environment = Environment()
-        environment.define("CTEST_OUTPUT_ON_FAILURE","1")
+        environment.define("CTEST_OUTPUT_ON_FAILURE", "1")
         envvars = environment.vars(self)
-
 
         if self.options.get_safe("EnableTests"):
             with envvars.apply():
@@ -151,23 +146,10 @@ class BSMPT(ConanFile):
         cmake = CMake(self)
         cmake.install()
 
-    def configure(self):
-        if self.settings.os == "Windows":
-            self.options["cmaes"].openmp = False
-
     def package_id(self):
         del self.info.options.EnableTests
 
     def package_info(self):
-        if self.settings.compiler == "msvc":
-            openmp_flags = ["-openmp"]
-        elif self.settings.compiler in ("gcc", "clang"):
-            openmp_flags = ["-fopenmp"]
-        elif self.settings.compiler == "apple-clang":
-            openmp_flags = ["-Xpreprocessor", "-fopenmp"]
-        else:
-            openmp_flags = []
-
         self.cpp_info.components["ASCIIPlotter"].libs = ["ASCIIPlotter"]
         self.cpp_info.components["ASCIIPlotter"].requires = [
             "nlohmann_json::nlohmann_json",
@@ -245,9 +227,6 @@ class BSMPT(ConanFile):
             "cmake_target_name", "BSMPT::Minimizer"
         )
 
-        if self.options.UseLibCMAES:
-            self.cpp_info.components["Minimizer"].requires.append("cmaes::cmaes")
-
         if self.options.UseNLopt:
 
             self.cpp_info.components["Minimizer"].requires.append("nlopt::nlopt")
@@ -274,8 +253,6 @@ class BSMPT(ConanFile):
         self.cpp_info.components["Models"].set_property(
             "cmake_target_name", "BSMPT::Models"
         )
-        # self.cpp_info.components["Models"].exelinkflags = openmp_flags
-        # self.cpp_info.components["Models"].sharedlinkflags = openmp_flags
 
         self.cpp_info.components["ThermalFunctions"].libs = ["ThermalFunctions"]
         self.cpp_info.components["ThermalFunctions"].requires = ["gsl::gsl", "Utility"]
