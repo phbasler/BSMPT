@@ -744,7 +744,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
   }
 
   Logger::Write(LoggingLevel::BounceDetailed,
-                "T ( Pf = " + std::to_string(int_at_false_vac_frac) +
+                "T ( Pf = " + std::to_string(std::exp(-int_at_false_vac_frac)) +
                     " ) is in interval [ " + std::to_string(T_down) + ", " +
                     std::to_string(T_up) + " ]");
 
@@ -769,7 +769,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
 
       Logger::Write(LoggingLevel::BounceDetailed,
                     "Pf ( T = " + std::to_string(T_middle) +
-                        " ) = " + std::to_string(IatT));
+                        " ) = " + std::to_string(std::exp(-IatT)));
 
       if (IatT < int_at_false_vac_frac)
       {
