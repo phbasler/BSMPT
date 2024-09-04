@@ -7,23 +7,6 @@
 import pandas as pd
 import argparse
 
-'''
-The parameters should have the label of the corresponding parameter.
-'''
-
-v = 'v'
-vs = 'vs'
-va = 'va'
-msq = 'msq'
-lamb = 'lambda'
-delta2 = 'delta2'
-b2 = 'b2'
-d2 = 'd2'
-Reb1 = 'Reb1'
-Imb1 = 'Imb1'
-Rea1 = 'Rea1'
-Ima1 = 'Ima1'
-
 
 def convert(IndexCol, InputFILE, OutputFILE, Seperator):
     df = pd.DataFrame()
@@ -31,6 +14,22 @@ def convert(IndexCol, InputFILE, OutputFILE, Seperator):
         df = pd.read_table(InputFILE, index_col=False, sep=Seperator)
     else:
         df = pd.read_table(InputFILE, index_col=int(IndexCol), sep=Seperator)
+
+    '''
+    The parameters should have the label of the corresponding parameter.
+    '''
+    v = 'v'
+    vs = 'vs'
+    va = 'va'
+    msq = 'msq'
+    lamb = 'lambda'
+    delta2 = 'delta2'
+    b2 = 'b2'
+    d2 = 'd2'
+    Reb1 = 'Reb1'
+    Imb1 = 'Imb1'
+    Rea1 = 'Rea1'
+    Ima1 = 'Ima1'
 
     NoImb1 = False
     NoIma1 = False
