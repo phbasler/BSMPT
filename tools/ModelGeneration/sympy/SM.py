@@ -31,12 +31,12 @@ Vud,Vus,Vub,Vcd,Vcs,Vcb,Vtd,Vts,Vtb = symbols('Vud Vus Vub Vcd Vcs Vcb Vtd Vts V
 VCKM = Matrix([[Vud,Vus,Vub],[Vcd,Vcs,Vcb],[Vtd,Vts,Vtb]])
 
 #parameters
-msq, la = symbols('msq lambda', real=True)
-params=[msq,la]
+muSq, lamb = symbols('muSq lambda', real=True)
+params=[muSq,lamb]
 
 #CT params
-dmsq, dla = symbols('dmsq dlambda', real=True)
-dparams=[dmsq,dla]
+dmuSq, dlamb = symbols('dmuSq dlambda', real=True)
+dparams=[dmuSq,dlamb]
 
 #VEVs
 v = symbols('v', real=True)
@@ -55,11 +55,10 @@ finiteTempVEV = zeroTempVEV
 fieldsZero = [(x,0) for x in Higgsfields]
 
 phiSq = simplify((Dagger(phi)*phi)[0])
-VHiggs = msq/2 * phiSq + la/factorial(4) * phiSq**2
+VHiggs = muSq * phiSq + lamb * phiSq**2
 
 # Set Gauge fields
 W1, W2, W3, B0 = symbols('W1 W2 W3 B0',real=True)
-
 
 Dmu = -I*Cg/2 * (sigma1*W1 + sigma2 * W2 + sigma3*W3) -I*Cgs/2 * sigma0 * B0
 VGauge = simplify(Dagger(Dmu*phi)*(Dmu*phi))[0,0]
@@ -85,14 +84,14 @@ for i in range(len(EL)):
         VFLep += (EL[i] * PiLep[i,j] * ER[j])*phi[1]
 
 VFLep = simplify(VFLep)
-LepBase = NuL + ER + EL
+LepBase = symbols('eL eR muL muR tauL tauR veL vmuL vtauL', real=True)
 
 # Generate Quark Potentials
 UL = symbols('uL cL tL', real=True)
 DL = symbols('dL sL bL', real=True)
 UR = symbols('uR cR tR', real=True)
 DR = symbols('dR sR bR', real=True)
-QuarkBase = UL + DL + UR + DR
+QuarkBase = UR + DR + UL + DL
 
 yb = sqrt(2)*m_bottom/v
 yc = sqrt(2)*m_charm/v
@@ -116,16 +115,11 @@ VQuark+= -DLVector.transpose() * Dagger(VCKM)*UpCoupling*URVector*phi[0].conjuga
 VQuark = simplify(VQuark[0,0])
 
 
-
 # Generate the model
 toyModel = ModelGenerator.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs,zeroTempVEV,finiteTempVEV)
 toyModel.setGauge([W1,W2,W3,B0],VGauge)
 toyModel.setLepton(LepBase, VFLep)
 toyModel.setQuark(QuarkBase, VQuark)
-
-
-
-
 
 
 parser = argparse.ArgumentParser()

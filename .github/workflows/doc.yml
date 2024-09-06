@@ -6,7 +6,11 @@ name: Doxygen Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+  pull_request: 
+    branches: 
+      - master
   
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} 
@@ -14,7 +18,7 @@ concurrency:
     
     
 jobs:
-  Deploy:
+  CreateDocumentation:
      runs-on: ubuntu-latest
      steps:
      - uses: actions/checkout@v4
@@ -34,9 +38,24 @@ jobs:
      - run: python3 Setup.py --build-missing
      - run: cmake --preset conan-linux-x86_64-release
      - run: cmake --build --preset conan-linux-x86_64-release -j${{ steps.cpu-cores.outputs.count }} -t doc
-     - name: Deploy
-       uses: JamesIves/github-pages-deploy-action@v4.6.3
+     - uses: actions/upload-artifact@v4
        with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: build/linux-x86_64-release/html # The folder the action should deploy.
-          target-folder: documentation
+        path: build/linux-x86_64-release/html
+        name: documentation
+
+  UploadDocumentation:
+    if:   github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: CreateDocumentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: documentation
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.6.3
+        with:
+            branch: gh-pages # The branch the action should deploy to.
+            folder: documentation # The folder the action should deploy.
+            target-folder: documentation

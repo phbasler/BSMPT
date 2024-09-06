@@ -711,7 +711,7 @@ void MinimumTracer::ReduceVEV(std::vector<double> &vev)
     // Feed buffer
     for (size_t i = 0; i < vev.size(); i++)
       BinaryNumber.append(std::to_string(vev[i] * GroupElement(i, i) >=
-                                         0)); // Heaviside function
+                                         1e-5)); // Heaviside function
 
     // Converto to decimal and compare
     if (std::strtol(BinaryNumber.c_str(), &ptr, 2) > MaximumMeasure)
