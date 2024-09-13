@@ -396,3 +396,122 @@ Return[CodeLn]];
 
 QuarkCurvatureL3 = GenerateQuarkCurvature;
 If[QuarkCurvatureL3=={},"No entries for Curvature_Quark_F2H1",QuarkCurvatureL3//TableForm]
+
+
+ImplementModel[higgsbase_,higgsvev_,higgsvevFiniteTemp_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_]:=Block[{},1]
+
+
+ImplementModel[higgsbase, higgsvev, CurvatureL1,CurvatureL2,CurvatureL3,CurvatureL4];
+
+
+ListImplementedModels := Block[{}, models = Import[Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/IncludeAllModels.cpp", "Text"]//StringDelete[#, WhitespaceCharacter]&;
+Return[StringSplit[models, {"caseModelIDs::", ":returnstd::make_unique"}][[2;;-2;;2]]]]
+ListImplementedModels
+
+
+ListImplementedModels
+
+
+ImplementModel[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_]:=Block[{},1]
+
+
+InsertCMakeLists[name_] := Block[{},
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/CMakeLists.txt";
+file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
+If[MemberQ[file,"    ${header_path}/"<> ToString[name] <>".h"] || MemberQ[file,"    ClassPotential"<> ToString[name] <>".cpp"],Print["Model is already in CMakeList.txt"];Return[]];
+indexheader = Position[file, "set(header_path \"${BSMPT_SOURCE_DIR}/include/BSMPT/models\")"][[1,1]]+1;
+indexsrc = Position[file, "set(src"][[1,1]];
+indexaddlibrary = Position[file, "add_library(Models ${header} ${src})"][[1,1]];
+before = file[[;;indexheader]];
+coreheader = Insert[file[[indexheader+1;; indexsrc-1]],"    ${header_path}/" <> ToString[name] <> ".h",-3];
+middlecore = file[[indexsrc;;indexsrc]];
+corecpp = Insert[file[[indexsrc+1;;indexaddlibrary-1]],"    ClassPotential" <> ToString[name] <> ".cpp",-3];
+after = file[[indexaddlibrary;;]];
+file = Join[before, coreheader, middlecore, corecpp, after,{""}];
+Export[filename, file, "Table"];]
+InsertCMakeLists["TestModel"]
+
+
+InsertIncludeAllModelsHeader[name_] := Block[{},
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/IncludeAllModels.h";
+file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
+If[MemberQ[file,"  " <> ToUpperCase[ToString[name]] <> ","] || MemberQ[file,"    {\"" <> ToLowerCase[ToString[name]] <> "\", ModelIDs::"<> ToUpperCase[ToString[name]] <>"},"],Print["Model is already in IncludeAllModels.h"];Return[]];
+indexheader = Position[file, "  // DO NOT EDIT the part below"][[1,1]];
+indexunorderedmap = Position[file, "const std::unordered_map<std::string, ModelIDs> ModelNames{"][[1,1]];
+indexendunorderedmap = Position[file, "};"][[2,1]];
+before = Insert[file[[;;indexheader]],"  " <> ToUpperCase[ToString[name]] <> ",", -3];
+middle = file[[indexheader+1;;indexunorderedmap]];
+unorderedmap = Append[file[[indexunorderedmap+1;;indexendunorderedmap-1]], "    {\"" <> ToLowerCase[ToString[name]] <> "\", ModelIDs::"<> ToUpperCase[ToString[name]] <>"},"];
+end =file[[indexendunorderedmap;;]];
+file = Join[before,middle,unorderedmap,end,{""}];
+Export[filename, file, "Table"];]
+InsertIncludeAllModelsHeader["TestModel"]
+
+
+InsertIncludeAllModelssrc[name_] := Block[{},
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/IncludeAllModels.cpp";
+file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
+If[MemberQ[file,"#include <BSMPT/models/ClassPotential" <> ToString[name] <> ".h>"] || MemberQ[file,"  case ModelIDs::" <> ToUpperCase[ToString[name]] <> ":"],Print["Model is already in IncludeAllModels.h"];Return[]];
+indexinclude = Position[file, "#include <BSMPT/models/IncludeAllModels.h>"][[1,1]];
+indexchoice = Position[file, "  switch (choice)"][[1,1]]+1;
+indexinvalidmodel = Position[file, "  default: throw std::runtime_error(\"Invalid model\");"][[1,1]];
+include = Insert[file[[;;indexinclude]],"#include <BSMPT/models/ClassPotential" <> ToString[name] <> ".h>",-2];
+untilchoice = file[[indexinclude+1;;indexchoice]];
+cases = Append[file[[indexchoice+1;;indexinvalidmodel-1]], "  case ModelIDs::" <> ToUpperCase[ToString[name]] <> ":\n    return std::make_unique<Class_" <> ToString[name] <> ">(smConstants);\n    break;"];
+end = file[[indexinvalidmodel;;]];
+file = Join[include,untilchoice, cases, end,{""}];
+Export[filename, file, "Table"];]
+InsertIncludeAllModelssrc["TestModel"]
+
+
+CreateModelHeader[name_,par_,parCT_,higgsvev_] :=Block[{},
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/ClassPotential" <> ToString[name] <> ".h";
+uppercasename = ToUpperCase[ToString[name]];
+
+file={"#ifndef SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
+#define SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
+
+#include <BSMPT/models/ClassPotentialOrigin.h>
+
+namespace BSMPT
+{
+namespace Models
+{
+class Class_"<> ToString[name] <>" : public Class_Potential_Origin
+{
+public:
+  "<>ToString[name]<>"(const ISMConstants &smConstants);
+  virtual ~"<>ToString[name]<>"();
+", 
+  "  // Initialize variables", Sequence@@Table["  double " <> ToString[i] <> ";",{i,par}],,
+  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> ";",{i,parCT}],,
+  "  // Initialize T = 0 vevs", Sequence@@Table["  double " <> ToString[i] <> ";",{i,Select[higgsvev, Not[PossibleZeroQ[#]]&]}],"
+  void ReadAndSet(const std::string &linestr,
+                  std::vector<double> &par) override;
+  std::vector<std::string> addLegendCT() const override;
+  std::vector<std::string> addLegendTemp() const override;
+  std::vector<std::string> addLegendTripleCouplings() const override;
+  std::vector<std::string> addLegendVEV() const override;
+
+  void set_gen(const std::vector<double> &par) override;
+  void set_CT_Pot_Par(const std::vector<double> &par) override;
+  void write() const override;
+
+  void TripleHiggsCouplings() override;
+  std::vector<double> calc_CT() const override;
+
+  void SetCurvatureArrays() override;
+  bool CalculateDebyeSimplified() override;
+  bool CalculateDebyeGaugeSimplified() override;
+  double VTreeSimplified(const std::vector<double> &v) const override;
+  double VCounterSimplified(const std::vector<double> &v) const override;
+  void Debugging(const std::vector<double> &input,
+                 std::vector<double> &output) const override;
+};
+
+} // namespace Models
+} // namespace BSMPT
+#endif /* SRC_"<>uppercasename<>"_H_ */
+"};
+Export[filename, file, "Table"];]
+CreateModelHeader["TestModel",par,parCT,higgsvev]
