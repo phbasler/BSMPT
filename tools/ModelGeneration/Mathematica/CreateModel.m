@@ -60,7 +60,7 @@ VHiggsGrad//TableForm
 (*Which parameters should be replaced through the minimum conditions?*)
 ParToReplace = {m11Sq, m22Sq, msSq};
 TadpoleRep = Solve[VHiggsGrad == Table[0,{VHiggsGrad}],ParToReplace];
-TadpoleRep[[1]]//TableForm
+(DepententParameters = TadpoleRep[[1]])//TableForm
 
 
 (* ::Chapter:: *)
@@ -182,7 +182,7 @@ CTs += NullSpaceofCT;
 
 
 (*Chosen so that dL4 = 0 and dT9 = 0*)
-tiChoice = {Subscript[t, 1]->0,Subscript[t, 2]->-((-v1 HCW[1,2]+v2 HCW[2,2]+v1 HCW[5,6]-v2 HCW[8,8])/(v1^2 v2))}/.CWRelations
+tiChoice = Solve[CTs[[7]]==0 && CTs[[21]]==0,{Subscript[t, 1],Subscript[t, 2]}][[1]]/.CWRelations
 
 
 (*Fixed CTs*)
