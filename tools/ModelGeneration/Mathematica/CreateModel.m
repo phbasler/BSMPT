@@ -1,81 +1,11 @@
 (* ::Package:: *)
 
-(* ::Chapter:: *)
-(*In this section the scalar potential is defined. As an example the N2HDM is shown*)
-
-
-(*Define higgs fields*)
-higgsbase = {\[Rho]1, \[Rho]2, \[Eta]1, \[Eta]2, \[Psi]1, \[Psi]2, \[Zeta]1, \[Zeta]2, \[Zeta]S};
-
-
-(*Assign vevs at T=0*)
-higgsvev = {0, 0, 0, 0, 0, 0, v1, v2, vs};
-
-
-(*Assign vevs at T != 0*)
-higgsvevFiniteTemp = {0, wcb, 0, 0, 0, wcp, w1, w2, ws};
-
-
-(*Replacement list for the vevs*)
-VEVRep = Table[i[[1]]->i[[2]],{i,Transpose[{higgsbase,higgsvev}]}];
-
-
-(*Replacement list set fields zero*)
-RepHiggsZero = Table[i->0,{i,higgsbase}];
-
-
-(*Define number of Higgses*)
-nHiggs = Length[higgsbase];
-
-
-(*Define parameters of the potential*)
-par = {m11Sq, m22Sq, m12Sq, L1, L2, L3, L4, L5, msSq, L6, L7, L8};
-
-
-(*Define doublets and scalar fields*)
-Phi1 = {higgsbase[[1]] + higgsbase[[3]]*I, higgsbase[[7]] + higgsbase[[5]]*I}/Sqrt[2];
-Phi2 = {higgsbase[[2]] + higgsbase[[4]]*I, higgsbase[[8]] + higgsbase[[6]]*I}/Sqrt[2];
-S = higgsbase[[9]];
-(*Print fields*)
-Phi1//MatrixForm//TraditionalForm
-Phi2//MatrixForm//TraditionalForm
-S//MatrixForm//TraditionalForm
-
-
-(*Write the potential*)
-$Assumptions = higgsbase \[Element] Reals;
-C11 = Simplify[ConjugateTranspose[Phi1] . Phi1];
-C12 = Simplify[ConjugateTranspose[Phi1] . Phi2];
-C21 = Simplify[ConjugateTranspose[Phi2] . Phi1];
-C22 = Simplify[ConjugateTranspose[Phi2] . Phi2];
-CS = Simplify[Conjugate[S]*S];
-VHiggs = par[[1]]*C11 + par[[2]]*C22 - par[[3]]*(C12 + C21) + par[[4]]/2*C11^2 + par[[5]]/2*C22^2 + par[[6]]*C11*C22 + par[[7]]*C12*C21 + par[[8]]/2*(C12^2 + C21^2) + par[[9]]/2*CS + par[[10]]/8*CS^2 + par[[11]]/2*C11*CS + par[[12]]/2*C22*CS//Simplify
-
-
-(*Calculate Tadpoles for Minimisation conditions*)
-VHiggsGrad=D[VHiggs,{higgsbase}]/.VEVRep//Simplify;
-VHiggsGrad//TableForm
-
-
-(*Which parameters should be replaced through the minimum conditions?*)
-ParToReplace = {m11Sq, m22Sq, msSq};
-TadpoleRep = Solve[VHiggsGrad == Table[0,{VHiggsGrad}],ParToReplace];
-(DepententParameters = TadpoleRep[[1]])//TableForm
-
-
-(* ::Chapter:: *)
-(*Code*)
-(*In this section the model implementation is generated.*)
-
-
 (* ::Section:: *)
-(*MinimizeOrderVEV*)
+(*Helper functions*)
 
 
-(*This section calculates the vector VevOrder which is set in the MinimizeOrderVEV function.*)
-VEVList={};
-Table[If[Not[PossibleZeroQ[higgsvevFiniteTemp[[i]]]],AppendTo[VEVList,i-1]];{i,higgsvevFiniteTemp[[i]]},{i,Length[higgsvevFiniteTemp]}];
-Table["VevOrder[" <> ToString[vev-1] <> "] = " <> ToString[VEVList[[vev]]] <> ";" ,{vev,Length[VEVList]}]//TableForm
+ToC[x_]:=StringReplace[ToString[CForm[x//HoldForm]],{"Power"->"pow", "vev0" -> "SMConstants.C_vev0","Sqrt"->"sqrt"}]
+RemoveDuplicates[list__] := Cases[Tally[list], {x_, 1} :> x]
 
 
 (* ::Section:: *)
@@ -85,124 +15,9 @@ Table["VevOrder[" <> ToString[vev-1] <> "] = " <> ToString[VEVList[[vev]]] <> ";
 GenerateCurvature[n_]:= Module[{AllCombinationsN,CodeLn},
 AllCombinationsN = Tuples[Range[RepHiggsZero//Length],{n}];
 CodeLn={};
-Table[curvature=(D[VHiggs,Sequence@@higgsbase[[Combination]]]/.RepHiggsZero);
+Table[curvature=(D[VHiggs,Sequence@@higgsbase[[Combination]]]/.RepHiggsZero)//Simplify;
 If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Higgs_L"<>ToString[n]<>"["<>StringRiffle[Combination-1, "]["]<>"] = "<>ToString[curvature//CForm]<>";"]],{Combination,AllCombinationsN}];
 Return[CodeLn]];
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature L1*)
-
-
-CurvatureL1 = GenerateCurvature[1];
-If[CurvatureL1=={},"No entries for Curvature_Higgs_L1",CurvatureL1//TableForm]
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature L2*)
-
-
-CurvatureL2 = GenerateCurvature[2];
-If[CurvatureL2=={},"No entries for Curvature_Higgs_L2",CurvatureL2//TableForm]
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature L3*)
-
-
-CurvatureL3 = GenerateCurvature[3];
-If[CurvatureL3=={},"No entries for Curvature_Higgs_L3",CurvatureL3//TableForm]
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature L4*)
-
-
-CurvatureL4 = GenerateCurvature[4];
-If[CurvatureL4=={},"No entries for Curvature_Higgs_L4",CurvatureL4//TableForm]
-
-
-(* ::Section:: *)
-(*Counterterm potential*)
-
-
-(*Define counterterms*)
-parCT = Join[Table[Symbol["d"<>ToString[p]],{p,par}], Table[Symbol["dT"<>ToString[i]],{i,Length[higgsbase]}]]
-
-
-(*Define the counterterm potential*)
-VCT = ((VHiggs/.Table[par[[i]]->parCT[[i]],{i,Length[par]}]) + parCT[[(par//Length)+1;;]] . higgsbase)
-
-
-(*Define the sytem of equation to determine the CTs*)
-nCount=0;
-EqTar={};
-Table[nCount+=1; GL[nCount]=D[VCT,higgsbase[[i]]]/.VEVRep; If[PossibleZeroQ[GL[nCount]],nCount-=1,AppendTo[EqTar,-NCW[i]]],{i,Length[higgsbase]}];
-Table[nCount+=1; GL[nCount]=D[VCT,higgsbase[[i]],higgsbase[[j]]]/.VEVRep; If[PossibleZeroQ[GL[nCount]],nCount-=1,AppendTo[EqTar,-HCW[i,j]]],{i,Length[higgsbase]},{j,i,Length[higgsbase]}];
-EqMatrix = Table[D[GL[i],j],{i,nCount},{j,parCT}];
-Print["EqMatrix rank is ", EqMatrix//MatrixRank]
-EqMatrix//MatrixForm
-Print["EqTar is ", EqTar//TableForm]
-
-
-(*Define the sytem of equation to determine the CTs*)
-SysOriginal = Append[EqMatrix//Transpose,EqTar]//Transpose;
-Print["SysOriginal rank is ", SysOriginal//MatrixRank]
-SysOriginal//MatrixForm
-
-
-(*Find the CW relations that help solve the system*)
-SysOriginal = Append[EqMatrix//Transpose,EqTar]//Transpose;
-Stmp=RowReduce[SysOriginal, ZeroTest -> (! FreeQ[#, HCW[_,_]] || !FreeQ[#,NCW[_]] &)];
-CWRelations =Solve[Select[Stmp,#[[;;-2]]==Table[0,{i,21}]&][[All,-1]]==0,-EqTar][[1]];
-Print["Relations found between the CW 1st and 2nd derivative\n", CWRelations//TableForm]
-
-
-(*Reduce the system of equation so that Mathematica can solve it*)
-SysOriginal = Append[EqMatrix//Transpose,EqTar]//Transpose;
-SysOriginal = (SysOriginal/.CWRelations);
-NewMatrix={SysOriginal[[1]]};
-nCount=1;
-While[MatrixRank[NewMatrix]!=MatrixRank[SysOriginal] && nCount < (Length[SysOriginal] + 1),
-nCount+=1;
-If[MatrixRank[Append[NewMatrix,SysOriginal[[nCount]]]]>MatrixRank[NewMatrix],AppendTo[NewMatrix,SysOriginal[[nCount]]]]]
-
-
-(*Determine the CTs*)
-NullSpaceofCT = NullSpace[NewMatrix[[All,;;-2]]];
-NullSpaceofCT = Sum[NullSpaceofCT[[i]]*Subscript[t, i],{i,Length[NullSpaceofCT]}];
-CTs = LinearSolve[NewMatrix[[All,;;-2]],NewMatrix[[All,-1]]];
-CTs += NullSpaceofCT;
-{parCT,Table["\t\[RightArrow]\t",{i,parCT}],CTs}//Transpose//TableForm
-
-
-(* ::Subsection:: *)
-(*The Subscript[t, i] still need to be fixed *)
-(*We chose the following Subscript[t, i] to match the python and Maple implementation, but any other choice is valid .*)
-
-
-(*Chosen so that dL4 = 0 and dT9 = 0*)
-tiChoice = Solve[CTs[[7]]==0 && CTs[[21]]==0,{Subscript[t, 1],Subscript[t, 2]}][[1]]/.CWRelations
-
-
-(*Fixed CTs*)
-tiCTs = CTs/.tiChoice//Simplify;
-{parCT,Table["\t\[RightArrow]\t",{i,parCT}],tiCTs}//Transpose//TableForm
-
-
-(* ::Subsection:: *)
-(*Check that the counter terms are correct*)
-
-
-test = (((((EqMatrix) . parCT)/.(Thread[parCT -> tiCTs]))==(EqTar/.CWRelations))//Simplify);
-If[test,Print["Success!"],Print["Something went wrong.\nMake sure the missmatch between the CW derivatives and CT cannot bet solved by a CWRelations substitution rule."];test//TableForm]
-
-
-(* ::Subsection:: *)
-(*Print the CT into C++*)
-
-
-Table[ToString[parCT[[i]]//CForm] <> " = " <> ToString[CForm[tiCTs[[i]]/.{NCW[x_]->NablaWeinberg[x-1],HCW[x_,y_]->HesseWeinberg[x-1,y-1]}]] <> ";",{i,Length[parCT]}]//TableForm
 
 
 (* ::Section:: *)
@@ -218,57 +33,6 @@ Return[CodeLn]];
 
 
 (* ::Section:: *)
-(*Calculate Higgs Curvature CT L1*)
-
-
-CTCurvatureL1 = GenerateCTsCurvature[1];
-If[CTCurvatureL1=={},"No entries for Curvature_Higgs_CT_L1",CTCurvatureL1//TableForm]
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature CT L2*)
-
-
-CTCurvatureL2 = GenerateCTsCurvature[2];
-If[CTCurvatureL2=={},"No entries for Curvature_Higgs_CT_L2",CTCurvatureL2//TableForm]
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature CT L3*)
-
-
-CTCurvatureL3 = GenerateCTsCurvature[3];
-If[CTCurvatureL3=={},"No entries for Curvature_Higgs_CT_L3",CTCurvatureL3//TableForm]
-
-
-(* ::Section:: *)
-(*Calculate Higgs Curvature CT L4*)
-
-
-CTCurvatureL4 = GenerateCTsCurvature[4];
-If[CTCurvatureL4=={},"No entries for Curvature_Higgs_CT_L4",CTCurvatureL4//TableForm]
-
-
-(* ::Chapter:: *)
-(*Gauge interaction*)
-(*This section defines the interaction between gauge bosons and scalars*)
-(*First define the basis for the gauge bosons*)
-
-
-(*Define the gauge fields*)
-GaugeBasis={Subscript[W, 1],Subscript[W, 2],Subscript[W, 3],Subscript[B, 0]}
-
-
-(*Define the covariant derivative*)
-Subscript[D, \[Mu]]= -I Subscript[C, g]/2 Sum[Subscript[W, i]PauliMatrix[i],{i,3}] -I Subscript[C, gs]/2 Subscript[B, 0] IdentityMatrix[2];
-Subscript[D, \[Mu]]//MatrixForm
-
-
-(*Define the gauge potential*)
-Vgauge = (Conjugate[(Subscript[D, \[Mu]] . Phi1)] . (Subscript[D, \[Mu]] . Phi1) + Conjugate[(Subscript[D, \[Mu]] . Phi2)] . (Subscript[D, \[Mu]] . Phi2))//ComplexExpand//Simplify
-
-
-(* ::Section:: *)
 (*Gauge Curvatures*)
 
 
@@ -276,51 +40,8 @@ GenerateGaugeCurvature := Module[{AllCombinationsN,CodeLn},
 AllCombinationsN = Tuples[{Range[Length[GaugeBasis]],Range[Length[GaugeBasis]],Range[Length[higgsbase]],Range[Length[higgsbase]]}];
 CodeLn={};
 Table[curvature=(D[Vgauge,Sequence@@GaugeBasis[[Combination[[;;2]]]],Sequence@@higgsbase[[Combination[[3;;]]]]]/.RepHiggsZero);
-If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Gauge_G2H2["<>StringRiffle[Combination-1, "]["]<>"] = "<>(ToString[(curvature//CForm)]//StringReplace[#,{"Power"->"pow","Subscript(C,g)"->"C_g","Subscript(C,gs)"->"C_gs"}]&)<>";"]],{Combination,AllCombinationsN}];
+If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Gauge_G2H2["<>StringRiffle[Combination-1, "]["]<>"] = "<>(ToString[(curvature//CForm)]//StringReplace[#,{"Power"->"pow","Subscript(C,g)"->"SMConstants.C_g","Subscript(C,gs)"->"SMConstants.C_gs"}]&)<>";"]],{Combination,AllCombinationsN}];
 Return[CodeLn]];
-
-
-(* ::Section:: *)
-(*Calculate Gauge Curvature L4*)
-
-
-GaugeCurvatureL4 = GenerateGaugeCurvature;
-If[GaugeCurvatureL4=={},"No entries for "Curvature_Gauge _G2H2 "",GaugeCurvatureL4//TableForm]
-
-
-(* ::Chapter:: *)
-(*Lepton interaction*)
-(*This defines the interactions with Leptons. The N2HDM has several types to avoid FCNC. *)
-(*I am showing only Type 2 here as an example, meaning the Leptons and down-type quarks couple to the first doublet while the up-type quark couple to the second doublet.*)
-
-
-(*First we define the coupling matrix for the leptons*)
-PiLep = {{ye, 0, 0}, {0, ymu, 0}, {0, 0, ytau}};
-PiLep//MatrixForm
-
-
-(*Define the components of the lepton sectors*)
-NuL = {veL, vmuL, vtauL};
-ER = {eR, muR, tauR};
-EL = {eL, muL, tauL};
-LepBase = {eL, eR, muL, muR, tauL, tauR, veL, vmuL, vtauL};
-
-
-(*Defining the Lepton potential (=-L_yuk)*)
-VFLep = (NuL . PiLep . ER)Phi1[[1]] + (EL . PiLep . ER)Phi1[[2]]
-
-
-(*Leptonic mass matrix*)
-MassLep = D[VFLep,{LepBase,2}]/.VEVRep;
-MassLep//MatrixForm
-
-
-(*Fermionic masses*)
-MatrixForm[MLep = Eigenvalues[MassLep]]
-
-
-(*Calculate the Yukawas*)
-RepLepMass = Solve[{MLep[[5]] == CMassElectron, MLep[[7]] == CMassMu, MLep[[9]] == CMassTau}, {ye, ymu, ytau}][[1]]
 
 
 (* ::Section:: *)
@@ -331,55 +52,8 @@ GenerateLeptonCurvature := Module[{AllCombinationsN,CodeLn},
 AllCombinationsN = Tuples[{Range[Length[LepBase]],Range[Length[LepBase]],Range[Length[higgsbase]]}];
 CodeLn={};
 Table[curvature=(D[VFLep,Sequence@@LepBase[[Combination[[;;2]]]],Sequence@@higgsbase[[Combination[[3;;]]]]]/.RepHiggsZero);
-If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Lepton_F2H1["<>StringRiffle[Combination-1, "]["]<>"] = "<>(ToString[(curvature/.RepLepMass//CForm)]//StringReplace[#,{"Power"->"pow","Complex(0,1)"-> "II", "CMass" -> "C_Mass"}]&)<>";"]],{Combination,AllCombinationsN}];
+If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Lepton_F2H1["<>StringRiffle[Combination-1, "]["]<>"] = "<>(ToString[(curvature/.RepLepMass//CForm)]//StringReplace[#,{"Power"->"pow","Complex(0,1)"-> "II", "CMass" -> "SMConstants.C_Mass"}]&)<>";"]],{Combination,AllCombinationsN}];
 Return[CodeLn]];
-
-
-LeptonCurvatureL3 = GenerateLeptonCurvature;
-If[LeptonCurvatureL3=={},"No entries for Curvature_Lepton_F2H1",LeptonCurvatureL3//TableForm]
-
-
-(* ::Chapter:: *)
-(*Quark interaction*)
-(*As for the Leptons this shows the Type 2 scenario*)
-
-
-(*First we define the quark doublets*)
-UL = {uL, cL, tL};
-DL = {dL, sL, bL};
-UR = {uR, cR, tR};
-DR = {dR, sR, bR};
-
-baseQuarks = {uR, cR, tR, dR, sR, bR, uL, cL, tL, dL, sL, bL};
-
-
-(*This part is the CKM matrix. If you don't want to include it, set it to unity*)
-VCKM = {{V11, V12, V13}, {V21, V22, V23}, {V31, V32, V33}};
-VCKM//MatrixForm
-CKML = {V11 -> Vud, V12 -> Vus, V13 -> Vub, V21 -> Vcd, V22 -> Vcs, V23 -> Vcb, V31 -> Vtd, V32 -> Vts, V33 -> Vtb};
-VCKM/.CKML//MatrixForm
-
-
-(*Yukawa*)
-Dd = {{yd, 0, 0}, {0, ys, 0}, {0, 0, yb}};
-DU = {{yu, 0, 0}, {0, yc, 0}, {0, 0, yt}};
-Dd//MatrixForm
-DU//MatrixForm
-
-
-VF = (UL . VCKM . Dd . DR)Phi1[[1]] + (DL . Dd . DR)Phi1[[2]] + (UL . DU . UR)Conjugate[Phi2[[2]]] + (DL . ConjugateTranspose[VCKM] . DU . UR)Conjugate[Phi2[[1]]]//Simplify
-
-
-MQuark = D[VF,{baseQuarks,2}]/.VEVRep;
-MQuark//MatrixForm
-
-
-mQ = Eigenvalues[MQuark];
-mQ//MatrixForm
-
-
-RepMassQuark = Solve[{mQ[[2]] == CMassBottom, mQ[[4]] == CMassCharm, mQ[[6]] == CMassDown, mQ[[8]] ==CMassStrange, mQ[[10]] == CMassTop, mQ[[12]] == CMassUp}, {yb, yc, yd, ys, yt, yu}][[1]];
-RepMassQuark//MatrixForm
 
 
 (* ::Section:: *)
@@ -390,29 +64,16 @@ GenerateQuarkCurvature := Module[{AllCombinationsN,CodeLn},
 AllCombinationsN = Tuples[{Range[Length[baseQuarks]],Range[Length[baseQuarks]],Range[Length[higgsbase]]}];
 CodeLn={};
 Table[curvature=(D[VF,Sequence@@baseQuarks[[Combination[[;;2]]]],Sequence@@higgsbase[[Combination[[3;;]]]]]/.RepHiggsZero);
-If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Lepton_F2H1["<>StringRiffle[Combination-1, "]["]<>"] = "<>(ToString[(curvature/.RepMassQuark//CForm)]//StringReplace[#,{"Power"->"pow","Complex(0,1)"-> "II","Complex(0,-1)"-> "-II", "CMass" -> "C_Mass","Conjugate"->"conj"}]&)<>";"]],{Combination,AllCombinationsN}];
+If[Not[PossibleZeroQ[curvature]],AppendTo[CodeLn,"Curvature_Quark_F2H1["<>StringRiffle[Combination-1, "]["]<>"] = "<>(ToString[(curvature/.RepMassQuark//CForm)]//StringReplace[#,{"Power"->"pow","Complex(0,1)"-> "II","Complex(0,-1)"-> "-II", "CMass" -> "SMConstants.C_Mass","Conjugate"->"conj"}]&)<>";"]],{Combination,AllCombinationsN}];
 Return[CodeLn]];
 
 
-QuarkCurvatureL3 = GenerateQuarkCurvature;
-If[QuarkCurvatureL3=={},"No entries for Curvature_Quark_F2H1",QuarkCurvatureL3//TableForm]
-
-
-ImplementModel[higgsbase_,higgsvev_,higgsvevFiniteTemp_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_]:=Block[{},1]
-
-
-ImplementModel[higgsbase, higgsvev, CurvatureL1,CurvatureL2,CurvatureL3,CurvatureL4];
+(* ::Section:: *)
+(*Model Implementation*)
 
 
 ListImplementedModels := Block[{}, models = Import[Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/IncludeAllModels.cpp", "Text"]//StringDelete[#, WhitespaceCharacter]&;
 Return[StringSplit[models, {"caseModelIDs::", ":returnstd::make_unique"}][[2;;-2;;2]]]]
-ListImplementedModels
-
-
-ListImplementedModels
-
-
-ImplementModel[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_]:=Block[{},1]
 
 
 InsertCMakeLists[name_] := Block[{},
@@ -423,13 +84,12 @@ indexheader = Position[file, "set(header_path \"${BSMPT_SOURCE_DIR}/include/BSMP
 indexsrc = Position[file, "set(src"][[1,1]];
 indexaddlibrary = Position[file, "add_library(Models ${header} ${src})"][[1,1]];
 before = file[[;;indexheader]];
-coreheader = Insert[file[[indexheader+1;; indexsrc-1]],"    ${header_path}/" <> ToString[name] <> ".h",-3];
+coreheader = Insert[file[[indexheader+1;; indexsrc-1]],"    ${header_path}/ClassPotential" <> ToString[name] <> ".h",-3];
 middlecore = file[[indexsrc;;indexsrc]];
 corecpp = Insert[file[[indexsrc+1;;indexaddlibrary-1]],"    ClassPotential" <> ToString[name] <> ".cpp",-3];
 after = file[[indexaddlibrary;;]];
 file = Join[before, coreheader, middlecore, corecpp, after,{""}];
 Export[filename, file, "Table"];]
-InsertCMakeLists["TestModel"]
 
 
 InsertIncludeAllModelsHeader[name_] := Block[{},
@@ -445,7 +105,6 @@ unorderedmap = Append[file[[indexunorderedmap+1;;indexendunorderedmap-1]], "    
 end =file[[indexendunorderedmap;;]];
 file = Join[before,middle,unorderedmap,end,{""}];
 Export[filename, file, "Table"];]
-InsertIncludeAllModelsHeader["TestModel"]
 
 
 InsertIncludeAllModelssrc[name_] := Block[{},
@@ -457,14 +116,13 @@ indexchoice = Position[file, "  switch (choice)"][[1,1]]+1;
 indexinvalidmodel = Position[file, "  default: throw std::runtime_error(\"Invalid model\");"][[1,1]];
 include = Insert[file[[;;indexinclude]],"#include <BSMPT/models/ClassPotential" <> ToString[name] <> ".h>",-2];
 untilchoice = file[[indexinclude+1;;indexchoice]];
-cases = Append[file[[indexchoice+1;;indexinvalidmodel-1]], "  case ModelIDs::" <> ToUpperCase[ToString[name]] <> ":\n    return std::make_unique<Class_" <> ToString[name] <> ">(smConstants);\n    break;"];
+cases = Append[file[[indexchoice+1;;indexinvalidmodel-1]], "  case ModelIDs::" <> ToUpperCase[ToString[name]] <> ":\n    return std::make_unique<Class_Potential_" <> ToString[name] <> ">(smConstants);\n    break;"];
 end = file[[indexinvalidmodel;;]];
 file = Join[include,untilchoice, cases, end,{""}];
 Export[filename, file, "Table"];]
-InsertIncludeAllModelssrc["TestModel"]
 
 
-CreateModelHeader[name_,par_,parCT_,higgsvev_] :=Block[{},
+CreateModelHeader[name_,InputParameters_,DepententParameters_,parCT_,higgsvev_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/ClassPotential" <> ToString[name] <> ".h";
 uppercasename = ToUpperCase[ToString[name]];
 
@@ -477,15 +135,15 @@ namespace BSMPT
 {
 namespace Models
 {
-class Class_"<> ToString[name] <>" : public Class_Potential_Origin
+class Class_Potential_"<> ToString[name] <>" : public Class_Potential_Origin
 {
 public:
-  "<>ToString[name]<>"(const ISMConstants &smConstants);
-  virtual ~"<>ToString[name]<>"();
+  Class_Potential_"<>ToString[name]<>"(const ISMConstants &smConstants);
+  virtual ~Class_Potential_"<>ToString[name]<>"();
 ", 
-  "  // Initialize variables", Sequence@@Table["  double " <> ToString[i] <> ";",{i,par}],,
-  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> ";",{i,parCT}],,
-  "  // Initialize T = 0 vevs", Sequence@@Table["  double " <> ToString[i] <> ";",{i,Select[higgsvev, Not[PossibleZeroQ[#]]&]}],"
+  "  // Initialize input parameters", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,InputParameters}],,
+  "  // Initialize dependent parameters", Sequence@@Table["  double " <> ToString[i[[1]]] <> " = 0;",{i,DepententParameters}],,
+  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,parCT}],,"
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
@@ -514,4 +172,469 @@ public:
 #endif /* SRC_"<>uppercasename<>"_H_ */
 "};
 Export[filename, file, "Table"];]
-CreateModelHeader["TestModel",par,parCT,higgsvev]
+
+
+CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParameters_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_] :=Block[{},
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/ClassPotential" <> ToString[name] <> ".cpp";
+uppercasename = ToUpperCase[ToString[name]];
+
+file={"#include \"Eigen/Dense\"
+#include \"Eigen/Eigenvalues\"
+#include \"Eigen/IterativeLinearSolvers\"
+#include <BSMPT/models/SMparam.h> // for SMConstants.C_vev0, SMConstants.C_MassTop, SMConstants.C_g
+#include <algorithm> // for max, copy
+#include <iomanip>
+#include <iostream> // for operator<<, endl, basic_o...
+#include <memory>   // for allocator_traits<>::value...
+#include <stddef.h> // for std::size_t
+
+#include <BSMPT/models/ClassPotential" <> name <> ".h>
+#include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/utility.h>
+using namespace Eigen;
+
+namespace BSMPT
+{
+namespace Models
+{
+
+Class_Potential_" <> name <> "::Class_Potential_" <> name <> "(
+    const ISMConstants &smConstants)
+    : Class_Potential_Origin(smConstants)
+{
+  Model         = ModelID::ModelIDs::" <> uppercasename <> ";
+
+  nPar = " <> ToString[Length[par]] <> ";   // number of parameters in the tree-Level Lagrangian AFTER using
+               // tadpole equations
+  nParCT = " <> ToString[Length[parCT]] <> "; // number of parameters in the counterterm potential
+
+  nVEV = " <> ToString[Length[Select[higgsvevFiniteTemp,Not[PossibleZeroQ[#]]&]]] <>"; // number of VEVs to minimize the potential
+
+  NHiggs = " <> ToString[Length[higgsbase]] <> "; // number of scalar d.o.f.
+
+  VevOrder.resize(nVEV);", Sequence@@Table["  VevOrder[" <> ToString[i-1] <> "] = "<> ToString[VEVList[[i]]] <>"; // " <> ToString[higgsvevFiniteTemp[[VEVList[[i]]+1]]],{i,Length[VEVList]}],
+  "
+  // Set UseVTreeSimplified to use the tree-level potential defined in
+  // VTreeSimplified
+  UseVTreeSimplified = false;
+
+  // Set UseVCounterSimplified to use the counterterm potential defined in
+  // VCounterSimplified
+  UseVCounterSimplified = false;
+}
+
+Class_Potential_"<>name<>"::~Class_Potential_"<>name<>"()
+{
+}
+
+/**
+ * returns a string which tells the user the chronological order of the
+ * counterterms. Use this to complement the legend of the given input file
+ */
+std::vector<std::string> Class_Potential_"<>name<>"::addLegendCT() const
+{
+  std::vector<std::string> labels;",
+  Sequence@@Table["  labels.push_back(\""<> ToString[i] <>"\");",{i,parCT}],
+  "
+  return labels;
+}
+
+/**
+ * returns a string which tells the user the chronological order of the VEVs and
+ * the critical temperature. Use this to complement the legend of the given
+ * input file
+ */
+std::vector<std::string> Class_Potential_"<>name<>"::addLegendTemp() const
+{
+  std::vector<std::string> labels;
+  labels.push_back(\"T_c\");     // Label for the critical temperature
+  labels.push_back(\"v_c\");     // Label for the critical vev
+  labels.push_back(\"v_c/T_c\"); // Label for xi_c
+  // out += \"VEV order\";",
+  Sequence@@Table["  labels.push_back(\"" <> ToString[i] <> "(T_c)\");",{i,Select[higgsvevFiniteTemp,Not[PossibleZeroQ[#]]&]}]
+  ,"
+  return labels;
+}
+
+/**
+ * returns a string which tells the user the chronological order of the Triple
+ * Higgs couplings. Use this to complement the legend of the given input file
+ */
+std::vector<std::string>
+Class_Potential_"<>name<>"::addLegendTripleCouplings() const
+{
+  std::vector<std::string> labels;
+  std::vector<std::string> particles;
+
+  // mass basis, you can identify here your particles",Sequence@@Table["  particles.push_back(\"h_" <> ToString[i] <> "\");",{i,nHiggs}],"
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = i; j < NHiggs; j++)
+    {
+      for (std::size_t k = j; k < NHiggs; k++)
+      {
+        labels.push_back(\"Tree_\" + particles.at(i) + particles.at(j) +
+                         particles.at(k));
+        labels.push_back(\"CT_\" + particles.at(i) + particles.at(j) +
+                         particles.at(k));
+        labels.push_back(\"CW_\" + particles.at(i) + particles.at(j) +
+                         particles.at(k));
+      }
+    }
+  }
+
+  return labels;
+}
+
+/**
+ * returns a string which tells the user the chronological order of the VEVs.
+ * Use this to complement the legend of the given input file
+ */
+std::vector<std::string> Class_Potential_"<>name<>"::addLegendVEV() const
+{
+  std::vector<std::string> labels;
+  // out = \"Your VEV order\"",
+  Sequence@@Table["  labels.push_back(\"" <> ToString[i] <> "\");",{i,Select[higgsvevFiniteTemp,Not[PossibleZeroQ[#]]&]}]
+  ,"
+  return labels;
+}
+
+/**
+ * Reads the string linestr and sets the parameter point
+ */
+void Class_Potential_"<>name<>"::ReadAndSet(const std::string &linestr,
+                                             std::vector<double> &par)
+{
+  std::stringstream ss(linestr);
+  double tmp;
+
+  if (UseIndexCol)
+  {
+    ss >> tmp;
+  }
+
+  for (int k = 1; k <= "<>ToString[Length[InputParameters]]<>"; k++)
+  {
+    ss >> tmp;",Sequence@@Table["    if (k == " <> ToString[i] <>")\n      par[" <> ToString[i-1] <> "] = tmp; // " <> ToString[InputParameters[[i]]],{i,Length[InputParameters]}],"
+  }
+
+  set_gen(par);
+  return;
+}
+
+/**
+ * Set Class Object as well as the VEV configuration
+ */
+void Class_Potential_"<>name<>"::set_gen(const std::vector<double> &par)
+{
+", Sequence@@Table["  " <> ToString[InputParameters[[i]]] <>" = par[" <> ToString[i-1] <> "]; ",{i,Length[InputParameters]}],,Sequence@@Table["  " <> (DepententParameters[[i]][[1]]//ToC) <> " = " <> ToString[DepententParameters[[i]][[2]]//ToC] <> "; ",{i,Length[DepententParameters]}],"
+  scale = SMConstants.C_vev0; // renormalisation scale is set to the SM VEV
+
+  vevTreeMin.resize(nVEV);
+  vevTree.resize(NHiggs);
+  // set the vector vevTreeMin. vevTree will then be set by the
+  // function MinimizeOrderVEV", Sequence@@Table["  vevTreeMin[" <> ToString[i-1] <> "] = "<> ToString[higgsvev[[VEVList[[i]]+1]]] <>"; // " <> ToString[higgsvevFiniteTemp[[VEVList[[i]]+1]]],{i,Length[VEVList]}],"
+  vevTree = MinimizeOrderVEV(vevTreeMin);
+  if (!SetCurvatureDone) SetCurvatureArrays();
+}
+
+/**
+ * set your counterterm parameters from the entries of par as well as the
+ * entries of Curvature_Higgs_CT_L1 to Curvature_Higgs_CT_L4.
+ */
+void Class_Potential_"<>name<>"::set_CT_Pot_Par(const std::vector<double> &par)
+{",
+  Sequence@@Table["  " <> ToString[parCT[[i]]] <> " = par[" <> ToString[i-1]<>"];",{i,Length[parCT]}],"
+  // assign the non-zero entries",
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL1}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL2}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL3}] ,
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL4}] ,
+  ,"
+}
+
+/**
+ * console output of all parameters
+ */
+void Class_Potential_"<>name<>"::write() const
+{
+  std::stringstream ss;
+  typedef std::numeric_limits<double> dbl;
+  ss.precision(dbl::max_digits10);
+
+  ss << \"Model = \" << Model << \"\\n\";\n
+  ss << \"\\nThe input parameters are : \\n\";",
+  Sequence@@Table["  ss << \""<> ToString[i] <> " = \" << " <> ToString[i] <> " << \"\\n\";",{i,InputParameters}],"
+  ss << \"\\nThe parameters are : \\n\";",
+  Sequence@@Table["  ss << \""<> ToString[i] <> " = \" << " <> ToString[i] <> " << \"\\n\";",{i,par}],"
+  ss << \"\\nThe counterterm parameters are : \\n\";",
+  Sequence@@Table["  ss << \""<> ToString[i] <> " = \" << " <> ToString[i] <> " << \"\\n\";",{i,parCT}],"
+  ss << \"\\nThe scale is given by mu = \" << scale << \" GeV \\n\";
+
+  Logger::Write(LoggingLevel::Default, ss.str());
+}
+
+/**
+ * Calculates the counterterms. Here you need to work out the scheme and
+ * implement the formulas.
+ */
+std::vector<double> Class_Potential_"<>name<>"::calc_CT() const
+{
+  std::vector<double> parCT;
+
+  if (!SetCurvatureDone)
+  {
+    std::string retmes = __func__;
+    retmes += \" was called before SetCurvatureArrays()!\\n\";
+    throw std::runtime_error(retmes);
+  }
+  if (!CalcCouplingsdone)
+  {
+    std::string retmes = __func__;
+    retmes += \" was called before CalculatePhysicalCouplings()!\\n\";
+    throw std::runtime_error(retmes);
+  }
+
+  std::vector<double> WeinbergNabla, WeinbergHesse;
+  WeinbergNabla = WeinbergFirstDerivative();
+  WeinbergHesse = WeinbergSecondDerivative();
+
+  VectorXd NablaWeinberg(NHiggs);
+  MatrixXd HesseWeinberg(NHiggs, NHiggs), HiggsRot(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    NablaWeinberg[i] = WeinbergNabla[i];
+    for (std::size_t j = 0; j < NHiggs; j++)
+      HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
+  }
+
+  // formulae for the counterterm scheme",Sequence@@Table["  parCT.push_back(" <> ToC[tiCTs[[i]]/.{NCW[x_]->NablaWeinberg[x-1],HCW[x_,y_]->HesseWeinberg[x-1,y-1]}]<> "); //"<>ToString[parCT[[i]]//CForm]<>";",{i,Length[parCT]}],"
+  return parCT;
+}
+
+// mass basis triple couplings
+void Class_Potential_"<>name<>"::TripleHiggsCouplings()
+{
+  if (!SetCurvatureDone) SetCurvatureArrays();
+  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+
+  // new rotation matrix with
+  MatrixXd HiggsRotSort(NHiggs, NHiggs);
+
+  std::vector<double> HiggsOrder(NHiggs);
+
+  // example for keeping the mass order
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    HiggsOrder[i] = i;
+  }
+
+  std::vector<double> TripleDeriv;
+  TripleDeriv = WeinbergThirdDerivative();
+  std::vector<std::vector<std::vector<double>>> GaugeBasis(
+      NHiggs,
+      std::vector<std::vector<double>>(NHiggs, std::vector<double>(NHiggs)));
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        GaugeBasis[i][j][k] =
+            TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
+      }
+    }
+  }
+
+  TripleHiggsCorrectionsCWPhysical.resize(NHiggs);
+  TripleHiggsCorrectionsTreePhysical.resize(NHiggs);
+  TripleHiggsCorrectionsCTPhysical.resize(NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    TripleHiggsCorrectionsTreePhysical[i].resize(NHiggs);
+    TripleHiggsCorrectionsCWPhysical[i].resize(NHiggs);
+    TripleHiggsCorrectionsCTPhysical[i].resize(NHiggs);
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      TripleHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
+      TripleHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
+      TripleHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
+    }
+  }
+
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        TripleHiggsCorrectionsCWPhysical[i][j][k]   = 0;
+        TripleHiggsCorrectionsTreePhysical[i][j][k] = 0;
+        TripleHiggsCorrectionsCTPhysical[i][j][k]   = 0;
+        for (std::size_t l = 0; l < NHiggs; l++)
+        {
+          for (std::size_t m = 0; m < NHiggs; m++)
+          {
+            for (std::size_t n = 0; n < NHiggs; n++)
+            {
+              double RotFac =
+                  HiggsRotSort(i, l) * HiggsRotSort(j, m) * HiggsRotSort(k, n);
+              TripleHiggsCorrectionsCWPhysical[i][j][k] +=
+                  RotFac * GaugeBasis[l][m][n];
+              TripleHiggsCorrectionsTreePhysical[i][j][k] +=
+                  RotFac * LambdaHiggs_3[l][m][n];
+              TripleHiggsCorrectionsCTPhysical[i][j][k] +=
+                  RotFac * LambdaHiggs_3_CT[l][m][n];
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void Class_Potential_"<>name<>"::SetCurvatureArrays()
+{
+  initVectors();
+  SetCurvatureDone = true;
+  for (std::size_t i = 0; i < NHiggs; i++)
+    HiggsVev[i] = vevTree[i];
+
+  // assign the non-zero entries",
+  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL1}] ,
+  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL2}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL3}] ,
+  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL4}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,GaugeCurvatureL4}] ,
+  "
+  std::complex<double> V11, V12, V13, V21, V22, V23, V31, V32, V33;
+  V11 = SMConstants.C_Vud;
+  V12 = SMConstants.C_Vus;
+  V13 = SMConstants.C_Vub;
+  V21 = SMConstants.C_Vcd;
+  V22 = SMConstants.C_Vcs;
+  V23 = SMConstants.C_Vcb;
+  V31 = SMConstants.C_Vtd;
+  V32 = SMConstants.C_Vts;
+  V33 = SMConstants.C_Vtb;
+",
+  Sequence@@Table[ "  " <> ToString[i],{i,LeptonCurvatureL3}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,QuarkCurvatureL3}] ,"
+}
+
+bool Class_Potential_"<>name<>"::CalculateDebyeSimplified()
+{
+  return false;
+  /*
+   * Use this function if you calculated the Debye corrections to the Higgs mass
+   * matrix and implement your formula here and return true. The vector is given
+   * by DebyeHiggs[NHiggs][NHiggs]
+   */
+}
+
+bool Class_Potential_"<>name<>"::CalculateDebyeGaugeSimplified()
+{
+  /*
+   * Use this function if you calculated the Debye corrections to the gauge mass
+   * matrix and implement your formula here and return true. The vector is given
+   * by DebyeGauge[NGauge][NGauge]
+   */
+  return false;
+}
+double
+Class_Potential_"<>name<>"::VTreeSimplified(const std::vector<double> &v) const
+{
+  if (not UseVTreeSimplified) return 0;
+  double res = 0;
+  res = " <> ToC[Simplify[VHiggs/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0,v[[i-1]]],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
+  
+  return res;
+}
+
+double Class_Potential_"<>name<>"::VCounterSimplified(
+    const std::vector<double> &v) const
+{
+  if (not UseVTreeSimplified) return 0;
+  double res = 0;
+  res = " <> ToC[Simplify[VCT/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0,v[[i-1]]],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
+  
+  return res;
+}
+
+void Class_Potential_"<>name<>"::Debugging(const std::vector<double> &input,
+                                            std::vector<double> &output) const
+{
+  (void)input;
+  (void)output;
+}
+
+} // namespace Models
+} // namespace BSMPT
+"};
+Export[filename, file, "Table"];]
+
+
+CreateExamplePoint[name_,InputParameters_] := Block[{},
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.dat";
+file = {Prepend[InputParameters,],{1,Sequence@@Table[0,{i,InputParameters}]}};
+Export[filename, file, "Table"];]
+
+
+
+
+
+ImplementModel[
+name_,
+higgsbase_,
+higgsvev_,
+higgsvevFiniteTemp_,
+VEVList_,par_,
+InputParameters_,
+DepententParameters_,
+CurvatureL1_,
+CurvatureL2_,
+CurvatureL3_,
+CurvatureL4_,
+GaugeCurvatureL4_,
+LeptonCurvatureL3_,
+QuarkCurvatureL3_,
+parCT_,
+CTCurvatureL1_,
+CTCurvatureL2_,
+CTCurvatureL3_,
+CTCurvatureL4_]:=Block[{},
+Print["Inserting model name into CMakeList"];
+InsertCMakeLists[name];
+Print["Inserting model name into IncludeAllModels.h"];
+InsertIncludeAllModelsHeader[name];
+Print["Inserting model name into IncludeAllModels.cpp"];
+InsertIncludeAllModelssrc[name];
+Print["Creating model header"];
+CreateModelHeader[name,InputParameters,DepententParameters,parCT,higgsvev];
+Print["Creating model implementation .cpp"];
+CreateModelFile[name,
+higgsbase,
+higgsvev,
+higgsvevFiniteTemp,
+VEVList,
+par,
+InputParameters,
+DepententParameters,
+CurvatureL1,
+CurvatureL2,
+CurvatureL3,
+CurvatureL4,
+GaugeCurvatureL4,
+LeptonCurvatureL3,
+QuarkCurvatureL3,
+parCT,
+CTCurvatureL1,
+CTCurvatureL2,
+CTCurvatureL3,
+CTCurvatureL4];
+Print["Created example point in BSMPT/example"];
+CreateExamplePoint[name,InputParameters]]
+
+
+Print[Style["Helper functions successfully imported!",FontSize->20, Directive[Thick]]];
