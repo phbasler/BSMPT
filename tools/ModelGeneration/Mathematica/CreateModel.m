@@ -174,7 +174,7 @@ public:
 Export[filename, file, "Table"];]
 
 
-CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParameters_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_] :=Block[{},
+CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParameters_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_,GaugeBasis_,LepBase_,baseQuarks_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/ClassPotential" <> ToString[name] <> ".cpp";
 uppercasename = ToUpperCase[ToString[name]];
 
@@ -212,6 +212,12 @@ Class_Potential_" <> name <> "::Class_Potential_" <> name <> "(
   nVEV = " <> ToString[Length[Select[higgsvevFiniteTemp,Not[PossibleZeroQ[#]]&]]] <>"; // number of VEVs to minimize the potential
 
   NHiggs = " <> ToString[Length[higgsbase]] <> "; // number of scalar d.o.f.
+
+  NGauge = " <> ToString[Length[GaugeBasis]] <> "; // number of gauge fields
+
+  NLepton = " <> ToString[Length[LepBase]] <> "; // number of lepton fields
+
+  NQuarks = " <> ToString[Length[baseQuarks]] <> "; // number of quark fields
 
   VevOrder.resize(nVEV);", Sequence@@Table["  VevOrder[" <> ToString[i-1] <> "] = "<> ToString[VEVList[[i]]] <>"; // " <> ToString[higgsvevFiniteTemp[[VEVList[[i]]+1]]],{i,Length[VEVList]}],
   "
@@ -603,7 +609,10 @@ parCT_,
 CTCurvatureL1_,
 CTCurvatureL2_,
 CTCurvatureL3_,
-CTCurvatureL4_]:=Block[{},
+CTCurvatureL4_,
+GaugeBasis_,
+LepBase_,
+baseQuarks_]:=Block[{},
 Print["Inserting model name into CMakeList"];
 InsertCMakeLists[name];
 Print["Inserting model name into IncludeAllModels.h"];
@@ -632,7 +641,10 @@ parCT,
 CTCurvatureL1,
 CTCurvatureL2,
 CTCurvatureL3,
-CTCurvatureL4];
+CTCurvatureL4,
+GaugeBasis,
+LepBase,
+baseQuarks];
 Print["Created example point in BSMPT/example"];
 CreateExamplePoint[name,InputParameters]]
 

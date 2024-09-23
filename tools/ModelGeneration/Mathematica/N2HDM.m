@@ -380,49 +380,31 @@ If[QuarkCurvatureL3=={},"No entries for Curvature_Quark_F2H1",QuarkCurvatureL3//
 ListImplementedModels//TableForm
 
 
-(*Arguments of CreateModelFile
-> Model name
-> List of all field
-> VEVs as T = 0
-> VEVs as T != 0
-> Derivation VEVList (calculated automatically)
-> Potential parameters 
-> Input parameters 
-> Depentent parameters and how to calculate them
-> Scalar curvatures L1 (calculated automatically)
-> Scalar curvatures L2 (calculated automatically)
-> Scalar curvatures L3 (calculated automatically)
-> Scalar curvatures L4 (calculated automatically)
-> Gauge curvatures L4 (calculated automatically)
-> Lepton curvatures L3 (calculated automatically)
-> Quark curvatures L3 (calculated automatically)
-> Counter terms
-> Counterterm scalar curvatures L1 (calculated automatically)
-> Counterterm scalar curvatures L2 (calculated automatically)
-> Counterterm scalar curvatures L3 (calculated automatically)
-> Counterterm scalar curvatures L4 (calculated automatically)
-*)
+(*Arguments of CreateModelFile*)
 ImplementModel[
-"N2HDMmathematica",
-higgsbase,
-higgsvev,
-higgsvevFiniteTemp,
-VEVList,
-par,
-InputParameters,
-DepententParameters,
-CurvatureL1,
-CurvatureL2,
-CurvatureL3,
-CurvatureL4,
-GaugeCurvatureL4,
-LeptonCurvatureL3,
-QuarkCurvatureL3,
-parCT,
-CTCurvatureL1,
-CTCurvatureL2,
-CTCurvatureL3,
-CTCurvatureL4]
+"N2HDMmathematica123", (*Model name*)
+higgsbase, (*List of all field*)
+higgsvev, (*VEVs as T = 0*)
+higgsvevFiniteTemp, (*VEVs as T != 0*)
+VEVList, (*Derivation VEVList (calculated automatically)*)
+par, (*Potential parameters *)
+InputParameters, (*Input parameters *)
+DepententParameters, (*Depentent parameters and how to calculate them*)
+CurvatureL1, (*Scalar curvatures L1 (calculated automatically)*)
+CurvatureL2, (*Scalar curvatures L2 (calculated automatically)*)
+CurvatureL3, (*Scalar curvatures L3 (calculated automatically)*)
+CurvatureL4, (*Scalar curvatures L4 (calculated automatically)*)
+GaugeCurvatureL4, (*Gauge curvatures L4 (calculated automatically)*)
+LeptonCurvatureL3, (*Lepton curvatures L3 (calculated automatically)*)
+QuarkCurvatureL3, (*Quark curvatures L3 (calculated automatically)*)
+parCT, (*Counter terms*)
+CTCurvatureL1, (*Counterterm scalar curvatures L1 (calculated automatically)*)
+CTCurvatureL2, (*Counterterm scalar curvatures L2 (calculated automatically)*)
+CTCurvatureL3, (*Counterterm scalar curvatures L3 (calculated automatically)*)
+CTCurvatureL4, (*Counterterm scalar curvatures L4 (calculated automatically)*)
+GaugeBasis, (*Gauge fields*)
+LepBase, (*Leptonic fields*)
+baseQuarks] (*Quark fields*)
 
 
 
