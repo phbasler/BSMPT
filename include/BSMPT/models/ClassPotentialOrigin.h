@@ -182,10 +182,10 @@ protected:
    */
   bool SetCurvatureDone = false;
   /**
-   * @brief CalcCouplingsdone Used to check if CalculatePhysicalCouplings has
+   * @brief CalcCouplingsDone Used to check if CalculatePhysicalCouplings has
    * already been called
    */
-  bool CalcCouplingsdone = false;
+  bool CalcCouplingsDone = false;
   /**
    * @brief CalculatedTripleCopulings Used to check if TripleHiggsCouplings has
    * already been called

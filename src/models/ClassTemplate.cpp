@@ -245,7 +245,7 @@ std::vector<double> Class_Template::calc_CT() const
     retmes += " was called before SetCurvatureArrays()!\n";
     throw std::runtime_error(retmes);
   }
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " was called before CalculatePhysicalCouplings()!\n";
@@ -292,7 +292,7 @@ void Class_Template::AdjustRotationMatrix()
 void Class_Template::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
-  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+  if (!CalcCouplingsDone) CalculatePhysicalCouplings();
 
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;

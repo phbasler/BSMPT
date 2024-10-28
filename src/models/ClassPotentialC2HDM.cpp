@@ -2128,7 +2128,7 @@ void Class_Potential_C2HDM::write() const
   ss << "DT3:= " << DT3 << ";\n";
   ss << "DIL6:= " << DIL6CT << ";\n";
 
-  if (CalcCouplingsdone)
+  if (CalcCouplingsDone)
   {
     MatrixXd HiggsRot(NHiggs, NHiggs);
     for (std::size_t i = 0; i < NHiggs; i++)
@@ -2294,7 +2294,7 @@ std::vector<double> Class_Potential_C2HDM::calc_CT() const
     retmes += " was called before SetCurvatureArrays()!\n";
     throw std::runtime_error(retmes);
   }
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " was called before CalculatePhysicalCouplings()!\n";
@@ -2405,7 +2405,7 @@ void Class_Potential_C2HDM::AdjustRotationMatrix()
   const double ZeroThreshold = 1e-5;
 
   if (!SetCurvatureDone) SetCurvatureArrays();
-  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+  if (!CalcCouplingsDone) CalculatePhysicalCouplings();
 
   if (!CheckRotationMatrix()) // Check whether generically generated rotation
                               // matrix is proper rotation matrix
@@ -2722,7 +2722,7 @@ void Class_Potential_C2HDM::AdjustRotationMatrix()
 void Class_Potential_C2HDM::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
-  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+  if (!CalcCouplingsDone) CalculatePhysicalCouplings();
 
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;

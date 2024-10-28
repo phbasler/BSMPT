@@ -1453,7 +1453,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
     }
   }
 
-  CalcCouplingsdone = true;
+  CalcCouplingsDone = true;
 
   return;
 }
@@ -1461,7 +1461,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
 {
   std::vector<double> res;
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     //        CalculatePhysicalCouplings();
     std::string retmes = __func__;
@@ -1555,7 +1555,7 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
 Eigen::MatrixXd
 Class_Potential_Origin::WeinbergSecondDerivativeAsMatrixXd() const
 {
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     //        CalculatePhysicalCouplings();
     std::string retmes = __func__;
@@ -1714,7 +1714,7 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
 std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
 {
 
-  if (not CalcCouplingsdone)
+  if (not CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " tries to use Physical couplings but they are not initialised.";
@@ -1960,7 +1960,7 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
 std::vector<double> Class_Potential_Origin::WeinbergForthDerivative() const
 {
 
-  if (not CalcCouplingsdone)
+  if (not CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " tries to use Physical couplings but they are not initialised.";
@@ -3530,7 +3530,7 @@ void Class_Potential_Origin::sym4Dim(
 void Class_Potential_Origin::resetbools()
 {
   SetCurvatureDone          = false;
-  CalcCouplingsdone         = false;
+  CalcCouplingsDone         = false;
   CalculatedTripleCopulings = false;
   parStored.clear();
   parCTStored.clear();

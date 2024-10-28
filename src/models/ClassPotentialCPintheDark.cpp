@@ -1258,7 +1258,7 @@ std::vector<double> Class_Potential_CPintheDark::calc_CT() const
     retmes += " was called before SetCurvatureArrays()!\n";
     throw std::runtime_error(retmes);
   }
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " was called before CalculatePhysicalCouplings()!\n";
@@ -1322,7 +1322,7 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
   const double ZeroThreshold = 1e-5;
 
   if (!SetCurvatureDone) SetCurvatureArrays();
-  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+  if (!CalcCouplingsDone) CalculatePhysicalCouplings();
 
   if (!CheckRotationMatrix()) // Check whether generically generated rotation
                               // matrix is proper rotation matrix
@@ -1525,7 +1525,7 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
 void Class_Potential_CPintheDark::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
-  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+  if (!CalcCouplingsDone) CalculatePhysicalCouplings();
 
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;
