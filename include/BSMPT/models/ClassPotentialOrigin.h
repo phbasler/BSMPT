@@ -288,6 +288,11 @@ protected:
    */
   std::vector<std::vector<double>> HiggsRotationMatrix;
   /**
+   * Storage of the model-specific Higgs rotation matrix for the Higgs mass
+   * matrix at the tree-level Vacuum
+   */
+  std::vector<std::vector<double>> HiggsRotationMatrixEnsuredConvention;
+  /**
    * @brief Couplings_Higgs_Quartic Stores the quartic Higgs couplings in the
    * mass base
    */
@@ -969,6 +974,21 @@ public:
    */
   Eigen::MatrixXcd LeptonMassMatrix(const std::vector<double> &v) const;
 
+  /**
+   * Ensures the correct rotation matrix convention
+   */
+  virtual void AdjustRotationMatrix() = 0;
+  /**
+   * Returns true if two values are the same given some relative precision
+   */
+  bool almost_the_same(double a, double b, double rel_precision = 0.01);
+  bool almost_the_same(std::complex<double> a,
+                       std::complex<double> b,
+                       double rel_precision = 0.01);
+  /**
+   * Checks whether rotation matrix is properly set after implying conventions
+   */
+  bool CheckRotationMatrix();
   /**
    * Calculates the triple Higgs couplings at NLO in the mass basis.
    *

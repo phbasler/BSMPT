@@ -279,10 +279,23 @@ std::vector<double> Class_Template::calc_CT() const
   return parCT;
 }
 
+/**
+ * Ensures the correct rotation matrix convention
+ */
+void Class_Template::AdjustRotationMatrix()
+{
+  // Here you implement the rotation matrix convention of your model
+  // and define HiggsRotationMatrixEnsuredConvention, use then HiggsRotationMatrixEnsuredConvention in
+  // TripleHiggsCouplings
+}
+
 void Class_Template::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+
+  if (CalculatedTripleCopulings) return;
+  CalculatedTripleCopulings = true;
 
   std::vector<double> HiggsOrder(NHiggs);
   // Here you have to set the vector HiggsOrder. By telling e.g. HiggsOrder[0] =

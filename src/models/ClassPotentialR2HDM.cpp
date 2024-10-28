@@ -743,6 +743,191 @@ std::vector<double> Class_Potential_R2HDM::calc_CT() const
 }
 
 /**
+ * Ensures the correct rotation matrix convention
+ */
+void Class_Potential_R2HDM::AdjustRotationMatrix()
+{
+  const double ZeroThreshold = 1e-5;
+
+  if (!SetCurvatureDone) SetCurvatureArrays();
+  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+
+  if (!CheckRotationMatrix()) // Check whether generically generated rotation
+                              // matrix is proper rotation matrix
+  {
+    throw std::runtime_error("Error in rotation matrix.");
+  }
+
+  MatrixXd HiggsRot(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+    }
+  }
+
+  // initialize position indices (new initialization for each point in multiline
+  // files)
+  int posG1 = -1, posG2 = -1, posH1 = -1, posH2 = -1, posG0 = -1, posA = -1,
+      posH = -1, posh = -1;
+
+  // interaction basis
+  // rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2
+  int pos_rho1 = 0, pos_eta1 = 1, pos_rho2 = 2, pos_eta2 = 3, pos_zeta1 = 4,
+      pos_psi1 = 5, pos_zeta2 = 6, pos_psi2 = 7;
+
+  // higgsbasis = {rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2}
+  for (std::size_t i = 0; i < NHiggs;
+       i++) // mass base index i corresponds to mass vector sorted in ascending
+            // mass
+  {
+    // charged submatrices
+    if (std::abs(HiggsRot(i, pos_rho1)) + std::abs(HiggsRot(i, pos_rho2)) >
+        ZeroThreshold) // use that mGpm < mHpm
+    {
+      if (posG1 == -1)
+      {
+        posG1 = i;
+      }
+      else
+      {
+        posH1 = i;
+      }
+    }
+    if (std::abs(HiggsRot(i, pos_eta1)) + std::abs(HiggsRot(i, pos_eta2)) >
+        ZeroThreshold) // use that mGpm < mHpm
+    {
+      if (posG2 == -1)
+      {
+        posG2 = i;
+      }
+      else
+      {
+        posH2 = i;
+      }
+    }
+    if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2)) >
+        ZeroThreshold) // use that mh < mH
+    {
+      if (posh == -1)
+      {
+        posh = i;
+      }
+      else
+      {
+        posH = i;
+      }
+    }
+    if (std::abs(HiggsRot(i, pos_psi1)) + std::abs(HiggsRot(i, pos_psi2)) >
+        ZeroThreshold) // use that 0 = mG0 < mA
+    {
+      if (posG0 == -1)
+      {
+        posG0 = i;
+      }
+      else
+      {
+        posA = i;
+      }
+    }
+  }
+
+  // check if all position indices are set
+  if (posG1 == -1 or posG2 == -1 or posH1 == -1 or posH2 == -1 or posG0 == -1 or
+      posA == -1 or posH == -1 or posh == -1)
+  {
+    throw std::runtime_error("Error. Not all position indices are set.");
+  }
+
+  // check if all other elements of rotation matrix are zero
+  bool zero_element = false;
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      int ii = int(i);
+      int jj = int(j);
+      if (not((jj == pos_rho1 and (ii == posG1 or ii == posH1)) or
+              (jj == pos_eta1 and (ii == posG2 or ii == posH2)) or
+              (jj == pos_zeta1 and (ii == posh or ii == posH)) or
+              (jj == pos_psi1 and (ii == posG0 or ii == posA)) or
+              (jj == pos_rho2 and (ii == posG1 or ii == posH1)) or
+              (jj == pos_eta2 and (ii == posG2 or ii == posH2)) or
+              (jj == pos_zeta2 and (ii == posh or ii == posH)) or
+              (jj == pos_psi2 and (ii == posG0 or ii == posA))))
+      {
+        zero_element = true;
+      }
+      if (zero_element and std::abs(HiggsRot(i, j)) > 0)
+      {
+        throw std::runtime_error("Error. Invalid rotation matrix detected.");
+      }
+      zero_element = false;
+    }
+  }
+
+  MatrixXd HiggsRotFixed(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    HiggsRotFixed.row(i) = HiggsRot.row(i);
+  }
+
+  // charged submatrix
+  if (HiggsRotFixed(posG1, pos_rho1) < 0) // G1 rho1 (+ cos(beta))
+  {
+    HiggsRotFixed.row(posG1) *= -1;
+  }
+  if (HiggsRotFixed(posG2, pos_eta1) < 0) // G2 eta1 (+ cos(beta))
+  {
+    HiggsRotFixed.row(posG2) *= -1;
+  }
+  if (HiggsRotFixed(posH1, pos_rho2) < 0) // H1 rho2 (+ cos(beta))
+  {
+    HiggsRotFixed.row(posH1) *= -1;
+  }
+  if (HiggsRotFixed(posH2, pos_eta2) < 0) // H2 eta2 (+ cos(beta))
+  {
+    HiggsRotFixed.row(posH2) *= -1;
+  }
+
+  // check neutral, CP-odd submatrix
+  if (HiggsRotFixed(posG0, pos_psi1) < 0) // G0 psi1 (+ cos(beta))
+  {
+    HiggsRotFixed.row(posG0) *= -1; // G0
+  }
+  if (HiggsRotFixed(posA, pos_psi2) < 0) // A psi2 (+ cos(beta))
+  {
+    HiggsRotFixed.row(posA) *= -1; // A
+  }
+
+  // // check neutral, CP-even submatrix
+  if (HiggsRotFixed(posH, pos_zeta1) < 0) // H zeta1 (+ cos(alpha))
+  {
+    // if negative, rotate H
+    HiggsRotFixed.row(posH) *= -1; // H
+  }
+  if (HiggsRotFixed(posh, pos_zeta2) < 0) // h zeta2 (+ cos(alpha))
+  {
+    // if negative, rotate h
+    HiggsRotFixed.row(posh) *= -1; // h
+  }
+
+  // Extract the fixed mixing angle
+  alpha = std::asin(HiggsRotFixed(posH, pos_zeta2)); // H zeta2 (+ sin(alpha))
+
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      HiggsRotationMatrixEnsuredConvention[i][j] = HiggsRotFixed(i, j);
+    }
+  }
+
+  return;
+}
+
+/**
  * Calculates the corrections to the Triple higgs couplings in the mass basis.
  *
  * Use the vector TripleHiggsCorrectionsCWPhysical to save your couplings and
@@ -752,6 +937,9 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
   if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+
+  if (CalculatedTripleCopulings) return;
+  CalculatedTripleCopulings = true;
 
   std::vector<double> TripleDeriv;
   TripleDeriv = WeinbergThirdDerivative();
@@ -775,7 +963,7 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   {
     for (std::size_t j = 0; j < NHiggs; j++)
     {
-      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+      HiggsRot(i, j) = HiggsRotationMatrixEnsuredConvention[i][j];
     }
   }
 

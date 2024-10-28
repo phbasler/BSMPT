@@ -959,6 +959,64 @@ Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepeated(
   return res;
 }
 
+bool Class_Potential_Origin::almost_the_same(double a,
+                                             double b,
+                                             double rel_precision)
+{
+  if (std::abs(a) < 1e-10 and std::abs(b) < 1e-10)
+  {
+    return true;
+  }
+  return std::abs(a - b) < std::abs(a + b) / 2 * rel_precision;
+}
+
+bool Class_Potential_Origin::almost_the_same(std::complex<double> a,
+                                             std::complex<double> b,
+                                             double rel_precision)
+{
+  bool real_part = almost_the_same(a.real(), b.real(), rel_precision);
+  bool imag_part = almost_the_same(a.imag(), b.imag(), rel_precision);
+  return (real_part and imag_part);
+}
+
+bool Class_Potential_Origin::CheckRotationMatrix()
+{
+  MatrixXd mat(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      mat(i, j) = HiggsRotationMatrix[i][j];
+    }
+  }
+
+  double precision = 1e-10;
+
+  bool DetIsOne   = almost_the_same(mat.determinant(), 1., precision);
+  bool InvEqTrans = true;
+
+  auto inv    = mat.inverse();
+  auto transp = mat.transpose();
+
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      if (!almost_the_same(inv(i, j), transp(i, j), precision))
+      {
+        InvEqTrans = false;
+        break;
+      }
+    }
+  }
+
+  if (DetIsOne and InvEqTrans)
+  {
+    return true;
+  }
+  return false;
+}
+
 void Class_Potential_Origin::CalculatePhysicalCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
@@ -3777,6 +3835,8 @@ Class_Potential_Origin::initModel(const std::vector<double> &par)
   set_CT_Pot_Par(parCT);
   CalculateDebye();
   CalculateDebyeGauge();
+
+  AdjustRotationMatrix();
 
   parStored   = par;
   parCTStored = parCT;
