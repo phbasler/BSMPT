@@ -979,6 +979,9 @@ bool Class_Potential_Origin::almost_the_same(std::complex<double> a,
   return (real_part and imag_part);
 }
 
+// Sanity check to make sure HiggsRotationMatrix is a proper rotation
+// matrix, i.e. its inverse should correspond to its transpose, and its
+// determinant should be +1 or -1
 bool Class_Potential_Origin::CheckRotationMatrix()
 {
   MatrixXd mat(NHiggs, NHiggs);
@@ -992,7 +995,8 @@ bool Class_Potential_Origin::CheckRotationMatrix()
 
   double precision = 1e-10;
 
-  bool DetIsOne   = almost_the_same(mat.determinant(), 1., precision);
+  bool AbsDetIsOne   = almost_the_same(std::abs(mat.determinant()), 1.,
+                                       precision);
   bool InvEqTrans = true;
 
   auto inv    = mat.inverse();
@@ -1010,7 +1014,7 @@ bool Class_Potential_Origin::CheckRotationMatrix()
     }
   }
 
-  if (DetIsOne and InvEqTrans)
+  if (AbsDetIsOne and InvEqTrans)
   {
     return true;
   }
@@ -3445,6 +3449,9 @@ void Class_Potential_Origin::initVectors()
       vec3Complex{NQuarks, vec2Complex{NHiggs, vec1Complex(NHiggs, 0)}}};
 
   HiggsVev = std::vector<double>(NHiggs, 0);
+
+  HiggsRotationMatrixEnsuredConvention =
+      std::vector<std::vector<double>>{NHiggs, std::vector<double>(NHiggs, 0)};
 }
 
 void Class_Potential_Origin::sym2Dim(
