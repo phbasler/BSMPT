@@ -58,6 +58,7 @@ public:
     (void)v;
     return 0;
   };
+  void AdjustRotationMatrix() override { return; };
   void TripleHiggsCouplings() override { return; };
   std::vector<double> calc_CT() const override { return {0}; };
   void Debugging(const std::vector<double> &input,
