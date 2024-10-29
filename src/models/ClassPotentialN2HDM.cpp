@@ -989,11 +989,11 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
   }
 
   // Extract the fixed mixing angles
-  double sina2 = HiggsRotFixed(pos_si_h1, pos_zeta3); // +sin(a2)
+  double sina2 = HiggsRotFixed(pos_h1, pos_rhoS); // +sin(a2)
   double cosa2 = std::sqrt(1.0 - sina2*sina2);
-  alpha1 = std::asin(HiggsRotFixed(pos_si_h1, pos_zeta2)/cosa2); // +sin(a1) cos(a2)
+  alpha1 = std::asin(HiggsRotFixed(pos_h1, pos_zeta2)/cosa2); // +sin(a1) cos(a2)
   alpha2 = std::asin(sina2);
-  alpha3 = std::asin(HiggsRotFixed(pos_si_h2, pos_zeta3)/cosa2); // +cos(a2) sin(a3)
+  alpha3 = std::asin(HiggsRotFixed(pos_h2, pos_rhoS)/cosa2); // +cos(a2) sin(a3)
 
   for (std::size_t i = 0; i < NHiggs; i++)
   {

@@ -2705,11 +2705,11 @@ void Class_Potential_C2HDM::AdjustRotationMatrix()
   HiggsRotFixed = MoveGoldstoneFirst*HiggsRotFixedGoldstone*RotGoldstone;
 
   // Extract the fixed mixing angles
-  double sina2 = HiggsRotFixedGoldstone(pos_si_h1, pos_zeta3); // +sin(a2)
+  double sina2 = HiggsRotFixedGoldstone(pos_si_h1, pos_si_zeta3); // +sin(a2)
   double cosa2 = std::sqrt(1.0 - sina2*sina2);
-  alpha1 = std::asin(HiggsRotFixedGoldstone(pos_si_h1, pos_zeta2)/cosa2); // +sin(a1) cos(a2)
+  alpha1 = std::asin(HiggsRotFixedGoldstone(pos_si_h1, pos_si_zeta2)/cosa2); // +sin(a1) cos(a2)
   alpha2 = std::asin(sina2);
-  alpha3 = std::asin(HiggsRotFixedGoldstone(pos_si_h2, pos_zeta3)/cosa2); // +cos(a2) sin(a3)
+  alpha3 = std::asin(HiggsRotFixedGoldstone(pos_si_h2, pos_si_zeta3)/cosa2); // +cos(a2) sin(a3)
 
   for (std::size_t i = 0; i < NHiggs; i++)
   {
