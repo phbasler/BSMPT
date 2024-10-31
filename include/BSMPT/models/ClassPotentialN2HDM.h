@@ -101,6 +101,7 @@ public:
 
   int pos_G0, pos_G1, pos_G2, pos_H1, pos_H2;
   int pos_h1, pos_h2, pos_h3, pos_A;
+  int pos_h_SM, pos_h_l, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;

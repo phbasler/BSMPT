@@ -911,6 +911,37 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
     }
   }
 
+  // Determine the additional indices relative to the SM Higgs
+  pos_h_SM = -1, pos_h_l = -1, pos_h_H = -1;
+
+  std::vector<double> HiggsMasses;
+  HiggsMasses = HiggsMassesSquared(vevTree, 0);
+
+  // Due to the masses being ordered, we will always have
+  //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]
+  double MSM = 125.09;
+  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1]) - MSM);
+  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2]) - MSM);
+  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3]) - MSM);
+  if (diff1 < diff2 and diff1 < diff3)
+  {
+    pos_h_SM = pos_h1;
+    pos_h_l = pos_h2;
+    pos_h_H = pos_h3;
+  }
+  else if (diff2 < diff1 and diff2 < diff3)
+  {
+    pos_h_SM = pos_h2;
+    pos_h_l = pos_h1;
+    pos_h_H = pos_h3;
+  }
+  else
+  {
+    pos_h_SM = pos_h3;
+    pos_h_l = pos_h1;
+    pos_h_H = pos_h2;
+  }
+
   MatrixXd HiggsRotFixed(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -1038,34 +1069,6 @@ void Class_Potential_N2HDM::TripleHiggsCouplings()
     {
       HiggsRot(i, j) = HiggsRotationMatrixEnsuredConvention[i][j];
     }
-  }
-
-  int pos_h_SM = -1, pos_h_l = -1, pos_h_H = -1;
-
-  std::vector<double> HiggsMasses;
-  HiggsMasses = HiggsMassesSquared(vevTree, 0);
-
-  double MSM = 125.09;
-  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1]) - MSM);
-  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2]) - MSM);
-  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3]) - MSM);
-  if (diff1 < diff2 and diff1 < diff3)
-  {
-    pos_h_SM = pos_h1;
-    pos_h_l = pos_h2;
-    pos_h_H = pos_h3;
-  }
-  else if (diff2 < diff1 and diff2 < diff3)
-  {
-    pos_h_SM = pos_h2;
-    pos_h_l = pos_h1;
-    pos_h_H = pos_h3;
-  }
-  else
-  {
-    pos_h_SM = pos_h3;
-    pos_h_l = pos_h1;
-    pos_h_H = pos_h2;
   }
 
   std::vector<double> HiggsOrder(NHiggs);

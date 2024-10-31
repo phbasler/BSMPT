@@ -570,7 +570,7 @@ void Class_Potential_R2HDM::write() const
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
-  ss << "The mass spectrum is given by :\n";
+  ss << "The mass spectrum is given by :\n"
      << "m_{G^+}^2 = " << HiggsMasses[pos_G1] << " GeV^2 \n"
      << "m_{G^-}^2 = " << HiggsMasses[pos_G2] << " GeV^2 \n"
      << "m_{G^0}^2 = " << HiggsMasses[pos_G0] << " GeV^2 \n"
