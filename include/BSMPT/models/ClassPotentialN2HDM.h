@@ -99,6 +99,9 @@ public:
   double NDus = 0, NDL6 = 0, NDL7 = 0, NDL8 = 0, NDvs = 0, NDTS = 0;
   double DTCharged = 0;
 
+  int pos_G0, pos_G1, pos_G2, pos_H1, pos_H2;
+  int pos_h1, pos_h2, pos_h3, pos_A;
+
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
