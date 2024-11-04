@@ -138,6 +138,9 @@ TransitionTracer::TransitionTracer(user_input &input)
             new_transition_data.crit_false_vev =
                 pair.false_phase.Get(pair.crit_temp).point;
 
+            CheckMassRatio(
+                input, new_transition_data.crit_false_vev, pair.crit_temp);
+
             BounceSolution bounce(input.modelPointer,
                                   mintracer,
                                   pair,
@@ -172,6 +175,10 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(new_transition_data.nucl_approx_temp.value_or(
                             EmptyValue))
                         .point;
+
+                CheckMassRatio(input,
+                               new_transition_data.nucl_approx_false_vev,
+                               bounce.GetNucleationTempApprox());
               }
               else
               {
@@ -195,6 +202,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                     pair.false_phase
                         .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
                         .point;
+                CheckMassRatio(input,
+                               new_transition_data.nucl_false_vev,
+                               bounce.GetNucleationTemp());
               }
               else
               {
@@ -218,6 +228,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                     pair.false_phase
                         .Get(new_transition_data.perc_temp.value_or(EmptyValue))
                         .point;
+                CheckMassRatio(input,
+                               new_transition_data.perc_false_vev,
+                               bounce.GetPercolationTemp());
               }
               else
               {
@@ -243,6 +256,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(
                             new_transition_data.compl_temp.value_or(EmptyValue))
                         .point;
+                CheckMassRatio(input,
+                               new_transition_data.compl_false_vev,
+                               bounce.GetCompletionTemp());
               }
               else
               {
@@ -487,6 +503,55 @@ TransitionTracer::TransitionTracer(user_input &input)
 
 TransitionTracer::~TransitionTracer()
 {
+}
+
+void TransitionTracer::CheckMassRatio(const user_input &input,
+                                      const std::vector<double> &vec,
+                                      const double &temp) const
+{
+  std::stringstream ss;
+  std::vector<double> massOverTempSq, tmp;
+  massOverTempSq = input.modelPointer->HiggsMassesSquared(
+                       input.modelPointer->MinimizeOrderVEV(vec), temp) /
+                   std::pow(temp, 2);
+  tmp = input.modelPointer->GaugeMassesSquared(
+            input.modelPointer->MinimizeOrderVEV(vec), temp) /
+        std::pow(temp, 2);
+
+  massOverTempSq.insert(massOverTempSq.end(), tmp.begin(), tmp.end());
+
+  int color = 0;
+  for (auto el : massOverTempSq)
+  {
+    if (el > 0.25) // m/T > 0.5
+    {
+      color = 1;
+      if (el > 1) // m/T > 1.0
+      {
+        color = 2;
+        break;
+      }
+    }
+  }
+
+  if (color == 0)
+  {
+    ss << "\n\033[1;92mm^2(vev_false, T = " << std::to_string(temp)
+       << ") / T^2 = " << vec_to_string(massOverTempSq) << "\033[0m\n";
+  }
+  else if (color == 1)
+  {
+    ss << "\n\033[1;93mm^2(vev_false, T = " << std::to_string(temp)
+       << ") / T^2 = " << vec_to_string(massOverTempSq) << "\033[0m\n";
+  }
+  else
+  {
+    ss << "\n\033[1;91mm^2(vev_false, T = " << std::to_string(temp)
+       << ") / T^2 = " << vec_to_string(massOverTempSq) << "\033[0m\n";
+  }
+
+  Logger::Write(LoggingLevel::TransitionDetailed, ss.str());
+  return;
 }
 
 } // namespace BSMPT

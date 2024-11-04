@@ -181,7 +181,6 @@ public:
 
   /**
    * @brief Store the list of bounce solutions
-   *
    */
   std::vector<BounceSolution> ListBounceSolution;
 
@@ -189,6 +188,16 @@ public:
    * @brief output data storage
    */
   output output_store;
+
+  /**
+   * @brief CheckMassRatio
+   * @param input
+   * @param vev
+   * @param temp
+   */
+  void CheckMassRatio(const user_input &input,
+                      const std::vector<double> &vec,
+                      const double &temp) const;
 };
 
 } // namespace BSMPT
