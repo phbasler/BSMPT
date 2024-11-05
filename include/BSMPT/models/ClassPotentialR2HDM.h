@@ -91,6 +91,7 @@ public:
   double CTempC1 = 0, CTempC2 = 0, CTempCS = 0;
 
   int pos_G1, pos_G2, pos_H1, pos_H2, pos_G0, pos_A, pos_H, pos_h;
+  int pos_h_SM, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;

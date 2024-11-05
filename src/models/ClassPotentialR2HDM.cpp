@@ -563,7 +563,7 @@ void Class_Potential_R2HDM::write() const
   {
     for (std::size_t j = 0; j < NHiggs; j++)
     {
-      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+      HiggsRot(i, j) = HiggsRotationMatrixEnsuredConvention[i][j];
     }
   }
 
@@ -837,6 +837,30 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
     }
   }
 
+  // Determine the additional indices for the SM-like
+  // and lighter/heavier Higgses
+  pos_h_SM = -1, pos_h_H = -1;
+
+  std::vector<double> HiggsMasses;
+  HiggsMasses = HiggsMassesSquared(vevTree, 0);
+
+  // Due to the masses being ordered, we will always have
+  //  HiggsMasses[pos_h] <= HiggsMasses[pos_H]
+  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h])
+                          - SMConstants.C_MassSMHiggs);
+  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_H])
+                          - SMConstants.C_MassSMHiggs);
+  if (diff1 < diff2)
+  {
+    pos_h_SM = pos_h;
+    pos_h_H = pos_H;
+  }
+  else
+  {
+    pos_h_H = pos_h;
+    pos_h_SM = pos_H;
+  }
+
   MatrixXd HiggsRotFixed(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -911,23 +935,6 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;
 
-  std::vector<double> TripleDeriv;
-  TripleDeriv = WeinbergThirdDerivative();
-  std::vector<std::vector<std::vector<double>>> GaugeBasis(
-      NHiggs,
-      std::vector<std::vector<double>>(NHiggs, std::vector<double>(NHiggs)));
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    for (std::size_t j = 0; j < NHiggs; j++)
-    {
-      for (std::size_t k = 0; k < NHiggs; k++)
-      {
-        GaugeBasis[i][j][k] =
-            TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
-      }
-    }
-  }
-
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -951,6 +958,23 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
   for (std::size_t i = 0; i < NHiggs; i++)
   {
     HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
+  }
+
+  std::vector<double> TripleDeriv;
+  TripleDeriv = WeinbergThirdDerivative();
+  std::vector<std::vector<std::vector<double>>> GaugeBasis(
+      NHiggs,
+      std::vector<std::vector<double>>(NHiggs, std::vector<double>(NHiggs)));
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        GaugeBasis[i][j][k] =
+            TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
+      }
+    }
   }
 
   TripleHiggsCorrectionsCWPhysical.resize(NHiggs);

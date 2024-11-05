@@ -453,84 +453,27 @@ void Class_CxSM::write() const
   {
     for (std::size_t j = 0; j < NHiggs; j++)
     {
-      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+      HiggsRot(i, j) = HiggsRotationMatrixEnsuredConvention[i][j];
     }
-  }
-
-  int posN[3];
-  posN[0]         = 3;
-  posN[1]         = 4;
-  posN[2]         = 5;
-  int posGCharged = 0, posG0 = 0;
-  double testsum             = 0;
-  const double ZeroThreshold = 1e-5;
-  for (int i = 0; i < 3; i++)
-  {
-    testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 1));
-    if (testsum > ZeroThreshold and posGCharged == 0)
-    {
-      posGCharged = i;
-    }
-    testsum = std::abs(HiggsRot(i, 2));
-    if (testsum > ZeroThreshold) posG0 = i;
   }
 
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
-  double MhUp = 0, MhDown = 0, MSM = 0;
-  double NeutralHiggs[3];
-  for (int i = 0; i < 3; i++)
-  {
-    NeutralHiggs[i] = HiggsMasses[posN[i]];
-  }
-  for (int i = 0; i < 3; i++)
-  {
-    if (std::sqrt(NeutralHiggs[i]) < 126 and std::sqrt(NeutralHiggs[i]) > 124)
-      MSM = std::sqrt(NeutralHiggs[i]);
-  }
-  if (std::sqrt(NeutralHiggs[0]) == MSM)
-  {
-    MhUp   = std::sqrt(NeutralHiggs[2]);
-    MhDown = std::sqrt(NeutralHiggs[1]);
-  }
-  else if (std::sqrt(NeutralHiggs[1]) == MSM)
-  {
-    MhUp   = std::sqrt(NeutralHiggs[2]);
-    MhDown = std::sqrt(NeutralHiggs[0]);
-  }
-  else
-  {
-    MhUp   = std::sqrt(NeutralHiggs[1]);
-    MhDown = std::sqrt(NeutralHiggs[0]);
-  }
-
-  if (MSM > MhUp)
-  {
-    double tmp = posN[1];
-    posN[1]    = posN[2];
-    posN[2]    = tmp;
-  }
-  if (MSM > MhDown)
-  {
-    double tmp = posN[0];
-    posN[0]    = posN[1];
-    posN[1]    = tmp;
-  }
-
   MatrixXd NeutralMatrix(3, 3);
   for (int j = 0; j < 3; j++)
   {
-    for (int i = 0; i < 3; i++)
-      NeutralMatrix(i, j) = HiggsRot(posN[i], j + 3);
+    NeutralMatrix(0, j) = HiggsRot(pos_h_SM, j + 3);
+    NeutralMatrix(1, j) = HiggsRot(pos_h_l, j + 3);
+    NeutralMatrix(2, j) = HiggsRot(pos_h_H, j + 3);
   }
 
   ss << "The mass spectrum is given by :\n";
-  ss << "m_{G^+}^2 = " << HiggsMasses[posGCharged] << " GeV^2 \n"
-     << "m_{G^0}^2 = " << HiggsMasses[posG0] << " GeV^2 \n"
-     << "m_{H_SM} = " << MSM << " GeV \n"
-     << "m_{H_l} = " << MhDown << " GeV \n"
-     << "m_{H_h} = " << MhUp << " GeV \n";
+  ss << "m_{G^+}^2 = " << HiggsMasses[pos_Gp] << " GeV^2 \n"
+     << "m_{G^0}^2 = " << HiggsMasses[pos_G0] << " GeV^2 \n"
+     << "m_{H_SM} = " << std::sqrt(HiggsMasses[pos_h_SM]) << " GeV \n"
+     << "m_{H_l} = " << std::sqrt(HiggsMasses[pos_h_l]) << " GeV \n"
+     << "m_{H_h} = " << std::sqrt(HiggsMasses[pos_h_H]) << " GeV \n";
   ss << "The neutral mixing Matrix is given by :\n";
   bool IsNegative = NeutralMatrix(0, 1) < 0;
   ss << "H_{SM} = " << NeutralMatrix(0, 0) << " h ";
@@ -793,12 +736,13 @@ void Class_CxSM::AdjustRotationMatrix()
   // CxSM interaction basis
   // 0   1   2   3      4      5
   // Gp, Gm, G0, zeta1, zeta2, zeta3
-  int pos_Gp = 0, pos_Gm = 1, pos_G0 = 2,
-      pos_zeta1 = 3, pos_zeta2 = 4, pos_zeta3 = 5;
+  pos_Gp = 0, pos_Gm = 1, pos_G0 = 2;
+
+  int pos_zeta1 = 3, pos_zeta2 = 4, pos_zeta3 = 5;
 
   // Indices of mass eigenstates for rotation from interaction to mass basis
   // Only neutral/physical part necessary, as Goldstones are already diagonal
-  int pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
+  pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
 
   // Starting from 3 to NHiggs, i.e. fixing the physical Higgs bosons
   for (std::size_t i = 3; i < NHiggs; i++)
@@ -849,6 +793,40 @@ void Class_CxSM::AdjustRotationMatrix()
       }
       zero_element = false;
     }
+  }
+
+  // Determine the additional indices for the SM-like
+  // and lighter/heavier Higgses
+  pos_h_SM = -1, pos_h_l = -1, pos_h_H = -1;
+
+  std::vector<double> HiggsMasses;
+  HiggsMasses = HiggsMassesSquared(vevTree, 0);
+
+  // Due to the masses being ordered, we will always have
+  //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]
+  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1])
+                          - SMConstants.C_MassSMHiggs);
+  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2])
+                          - SMConstants.C_MassSMHiggs);
+  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3])
+                          - SMConstants.C_MassSMHiggs);
+  if (diff1 < diff2 and diff1 < diff3)
+  {
+    pos_h_SM = pos_h1;
+    pos_h_l = pos_h2;
+    pos_h_H = pos_h3;
+  }
+  else if (diff2 < diff1 and diff2 < diff3)
+  {
+    pos_h_l = pos_h1;
+    pos_h_SM = pos_h2;
+    pos_h_H = pos_h3;
+  }
+  else
+  {
+    pos_h_l = pos_h1;
+    pos_h_H = pos_h2;
+    pos_h_SM = pos_h3;
   }
 
   MatrixXd HiggsRotFixed(NHiggs, NHiggs);
@@ -933,11 +911,6 @@ void Class_CxSM::TripleHiggsCouplings()
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;
 
-  std::vector<double> HiggsOrder(NHiggs);
-  // Here you have to set the vector HiggsOrder. By telling e.g. HiggsOrder[0] =
-  // 5 you always want your 6th lightest particle to be the first particle in
-  // the vector (which has the index 5 because they are sorted by mass)
-
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -947,50 +920,20 @@ void Class_CxSM::TripleHiggsCouplings()
     }
   }
 
-  std::size_t posGp = 0, posGm = 0, posG0 = 0;
-  std::size_t posH1 = 0, posH2 = 0, posH3 = 0;
-  const double ZeroThreshold = 1e-5;
+  std::vector<double> HiggsOrder(NHiggs);
+  // mass order: Gp, Gm, G0, h1, h2, h3
+  HiggsOrder[0] = pos_Gp;
+  HiggsOrder[1] = pos_Gm;
+  HiggsOrder[2] = pos_G0;
+  HiggsOrder[3] = pos_h1;
+  HiggsOrder[4] = pos_h2;
+  HiggsOrder[5] = pos_h3;
 
+  MatrixXd HiggsRotSort(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
-    // the rotation matrix is diagonal besides for the neutral scalars
-    if (std::abs(HiggsRot(i, 0)) > ZeroThreshold)
-      posGp = i;
-    else if (std::abs(HiggsRot(i, 1)) > ZeroThreshold)
-      posGm = i;
-    else if (std::abs(HiggsRot(i, 2)) > ZeroThreshold)
-      posG0 = i;
-
-    // the neutral scalars mix
-    if ((std::abs(HiggsRot(i, 3)) + std::abs(HiggsRot(i, 4)) +
-         std::abs(HiggsRot(i, 5))) > ZeroThreshold)
-    {
-      // use that scalars are sorted by mass
-      if (posH1 == 0)
-      {
-        posH1 = i;
-      }
-      else
-      {
-        if (posH2 == 0)
-        {
-          posH2 = i;
-        }
-        else
-        {
-          posH3 = i;
-        }
-      }
-    }
+    HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
   }
-
-  // mass order: Gp, Gm, G0, H1, H2, H3
-  HiggsOrder[0] = posGp;
-  HiggsOrder[1] = posGm;
-  HiggsOrder[2] = posG0;
-  HiggsOrder[3] = posH1;
-  HiggsOrder[4] = posH2;
-  HiggsOrder[5] = posH3;
 
   std::vector<double> TripleDeriv;
   TripleDeriv = WeinbergThirdDerivative();
@@ -1007,13 +950,6 @@ void Class_CxSM::TripleHiggsCouplings()
             TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
       }
     }
-  }
-
-  MatrixXd HiggsRotSort(NHiggs, NHiggs);
-
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
   }
 
   TripleHiggsCorrectionsCWPhysical.resize(NHiggs);

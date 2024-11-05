@@ -1175,71 +1175,19 @@ void Class_Potential_CPintheDark::write() const
 
   ss << "The scale is given by mu = " << scale << " GeV \n";
 
-  const double ZeroThreshold = 1e-5;
-
-  std::size_t posGp  = 0;
-  std::size_t posGm  = 0;
-  std::size_t posHp  = 0;
-  std::size_t posHm  = 0;
-  std::size_t posHSM = 0;
-  std::size_t posG0  = 0;
-  std::size_t posh1  = 0;
-  std::size_t posh2  = 0;
-  std::size_t posh3  = 0;
-
-  for (size_t i = 0; i < NHiggs; i++)
-  {
-    // the rotation matrix is diagonal besides for the neutral dark scalars
-    if (std::abs(HiggsRotationMatrix[i][0]) > ZeroThreshold)
-      posGp = i;
-    else if (std::abs(HiggsRotationMatrix[i][1]) > ZeroThreshold)
-      posGm = i;
-    else if (std::abs(HiggsRotationMatrix[i][2]) > ZeroThreshold)
-      posHp = i;
-    else if (std::abs(HiggsRotationMatrix[i][3]) > ZeroThreshold)
-      posHm = i;
-    else if (std::abs(HiggsRotationMatrix[i][4]) > ZeroThreshold)
-      posHSM = i;
-    else if (std::abs(HiggsRotationMatrix[i][5]) > ZeroThreshold)
-      posG0 = i;
-
-    // the neutral dark scalars mix
-    if ((std::abs(HiggsRotationMatrix[i][6]) +
-         std::abs(HiggsRotationMatrix[i][7]) +
-         std::abs(HiggsRotationMatrix[i][8])) > ZeroThreshold)
-    {
-      // use that scalars are sorted by mass
-      if (posh1 == 0)
-      {
-        posh1 = i;
-      }
-      else
-      {
-        if (posh2 == 0)
-        {
-          posh2 = i;
-        }
-        else
-        {
-          posh3 = i;
-        }
-      }
-    }
-  }
-
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
   ss << "The mass spectrum is given by :\n";
-  ss << "m_{G^+} = " << std::sqrt(HiggsMasses[posGp]) << " GeV \n"
-     << "m_{G^-} = " << std::sqrt(HiggsMasses[posGm]) << " GeV \n"
-     << "m_{H^+} = " << std::sqrt(HiggsMasses[posHp]) << " GeV \n"
-     << "m_{H^-} = " << std::sqrt(HiggsMasses[posHm]) << " GeV \n"
-     << "m_{hSM} = " << std::sqrt(HiggsMasses[posHSM]) << " GeV \n"
-     << "m_{G^0} = " << std::sqrt(HiggsMasses[posG0]) << " GeV \n"
-     << "m_{h_1} = " << std::sqrt(HiggsMasses[posh1]) << " GeV \n"
-     << "m_{h_2} = " << std::sqrt(HiggsMasses[posh2]) << " GeV \n"
-     << "m_{h_3} = " << std::sqrt(HiggsMasses[posh3]) << " GeV \n";
+  ss << "m_{G^+} = " << std::sqrt(HiggsMasses[pos_Gp]) << " GeV \n"
+     << "m_{G^-} = " << std::sqrt(HiggsMasses[pos_Gm]) << " GeV \n"
+     << "m_{H^+} = " << std::sqrt(HiggsMasses[pos_Hp]) << " GeV \n"
+     << "m_{H^-} = " << std::sqrt(HiggsMasses[pos_Hm]) << " GeV \n"
+     << "m_{hSM} = " << std::sqrt(HiggsMasses[pos_HSM]) << " GeV \n"
+     << "m_{G^0} = " << std::sqrt(HiggsMasses[pos_G0]) << " GeV \n"
+     << "m_{h_1} = " << std::sqrt(HiggsMasses[pos_h1]) << " GeV \n"
+     << "m_{h_2} = " << std::sqrt(HiggsMasses[pos_h2]) << " GeV \n"
+     << "m_{h_3} = " << std::sqrt(HiggsMasses[pos_h3]) << " GeV \n";
 
   Logger::Write(LoggingLevel::Default, ss.str());
 }
@@ -1346,9 +1294,9 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
       pos_zeta1 = 4, pos_psi1 = 5, pos_zeta2 = 6, pos_psi2 = 7,
       pos_rhoS = 8;
 
-  // Indices of mass eigenstates for rotation from semi-interaction to mass basis
-  int pos_Gp = -1, pos_Gm = -1, pos_Hp = -1, pos_Hm = -1, pos_HSM = -1;
-  int pos_G0 = -1, pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
+  // Indices of mass eigenstates for rotation from interaction to mass basis
+  pos_Gp = -1, pos_Gm = -1, pos_Hp = -1, pos_Hm = -1, pos_HSM = -1,
+  pos_G0 = -1, pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
 
 
   // basis = {rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2, rhoS}
@@ -1530,17 +1478,6 @@ void Class_Potential_CPintheDark::TripleHiggsCouplings()
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;
 
-  // position indices store the position of the physical fields
-  std::size_t posGp  = 0;
-  std::size_t posGm  = 0;
-  std::size_t posHp  = 0;
-  std::size_t posHm  = 0;
-  std::size_t posHSM = 0;
-  std::size_t posG0  = 0;
-  std::size_t posh1  = 0;
-  std::size_t posh2  = 0;
-  std::size_t posh3  = 0;
-
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -1550,59 +1487,22 @@ void Class_Potential_CPintheDark::TripleHiggsCouplings()
     }
   }
 
-  const double ZeroThreshold = 1e-5;
+  std::vector<double> HiggsOrder(NHiggs);
+  HiggsOrder[0] = pos_Gp;
+  HiggsOrder[1] = pos_Gm;
+  HiggsOrder[2] = pos_Hp;
+  HiggsOrder[3] = pos_Hm;
+  HiggsOrder[4] = pos_HSM;
+  HiggsOrder[5] = pos_G0;
+  HiggsOrder[6] = pos_h1;
+  HiggsOrder[7] = pos_h2;
+  HiggsOrder[8] = pos_h3;
 
-  for (size_t i = 0; i < NHiggs; i++)
-  {
-    // the rotation matrix is diagonal besides for the neutral dark scalars
-    if (std::abs(HiggsRot(i, 0)) > ZeroThreshold)
-      posGp = i;
-    else if (std::abs(HiggsRot(i, 1)) > ZeroThreshold)
-      posGm = i;
-    else if (std::abs(HiggsRot(i, 2)) > ZeroThreshold)
-      posHp = i;
-    else if (std::abs(HiggsRot(i, 3)) > ZeroThreshold)
-      posHm = i;
-    else if (std::abs(HiggsRot(i, 4)) > ZeroThreshold)
-      posHSM = i;
-    else if (std::abs(HiggsRot(i, 5)) > ZeroThreshold)
-      posG0 = i;
-
-    // the neutral dark scalars mix
-    if ((std::abs(HiggsRot(i, 6)) + std::abs(HiggsRot(i, 7)) +
-         std::abs(HiggsRot(i, 8))) > ZeroThreshold)
-    {
-      // use that scalars are sorted by mass
-      if (posh1 == 0)
-      {
-        posh1 = i;
-      }
-      else
-      {
-        if (posh2 == 0)
-        {
-          posh2 = i;
-        }
-        else
-        {
-          posh3 = i;
-        }
-      }
-    }
-  }
-
-  // new rotation matrix with
   MatrixXd HiggsRotSort(NHiggs, NHiggs);
-
-  HiggsRotSort.row(0) = HiggsRot.row(posGp);
-  HiggsRotSort.row(1) = HiggsRot.row(posGm);
-  HiggsRotSort.row(2) = HiggsRot.row(posHp);
-  HiggsRotSort.row(3) = HiggsRot.row(posHm);
-  HiggsRotSort.row(4) = HiggsRot.row(posHSM);
-  HiggsRotSort.row(5) = HiggsRot.row(posG0);
-  HiggsRotSort.row(6) = HiggsRot.row(posh1);
-  HiggsRotSort.row(7) = HiggsRot.row(posh2);
-  HiggsRotSort.row(8) = HiggsRot.row(posh3);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
+  }
 
   std::vector<double> TripleDeriv;
   TripleDeriv = WeinbergThirdDerivative();

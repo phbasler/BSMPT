@@ -485,90 +485,27 @@ void Class_Potential_N2HDM::write() const
   {
     for (std::size_t j = 0; j < NHiggs; j++)
     {
-      HiggsRot(i, j) = HiggsRotationMatrix[i][j];
+      HiggsRot(i, j) = HiggsRotationMatrixEnsuredConvention[i][j];
     }
-  }
-
-  MatrixXd HiggsRotSort(NHiggs, NHiggs);
-  int posMHCS1 = 0;
-  int posA     = 0;
-  int posN[3];
-  int countposN              = 0;
-  double testsum             = 0;
-  const double ZeroThreshold = 1e-5;
-
-  for (std::size_t i = 3; i < NHiggs; i++)
-  {
-    testsum = std::abs(HiggsRot(i, 0)) + std::abs(HiggsRot(i, 1));
-    if (testsum > ZeroThreshold) posMHCS1 = i;
-    testsum = std::abs(HiggsRot(i, 6)) + std::abs(HiggsRot(i, 7)) +
-              std::abs(HiggsRot(i, 8));
-    if (testsum > ZeroThreshold)
-    {
-      posN[countposN] = i;
-      countposN++;
-    }
-    testsum = std::abs(HiggsRot(i, 4)) + std::abs(HiggsRot(i, 5));
-    if (testsum > ZeroThreshold) posA = i;
   }
 
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
-  double NeutralHiggs[3];
-  double MSMlocal = 0, MhUplocal = 0, MhDownlocal = 0;
-  for (int i = 0; i < 3; i++)
-  {
-    NeutralHiggs[i] = HiggsMasses[posN[i]];
-  }
-  for (int i = 0; i < 3; i++)
-  {
-    if (std::sqrt(NeutralHiggs[i]) < 126 and std::sqrt(NeutralHiggs[i]) > 124)
-      MSMlocal = std::sqrt(NeutralHiggs[i]);
-  }
-  if (std::sqrt(NeutralHiggs[0]) == MSMlocal)
-  {
-    MhUplocal   = std::sqrt(NeutralHiggs[2]);
-    MhDownlocal = std::sqrt(NeutralHiggs[1]);
-  }
-  else if (std::sqrt(NeutralHiggs[1]) == MSMlocal)
-  {
-    MhUplocal   = std::sqrt(NeutralHiggs[2]);
-    MhDownlocal = std::sqrt(NeutralHiggs[0]);
-  }
-  else
-  {
-    MhUplocal   = std::sqrt(NeutralHiggs[1]);
-    MhDownlocal = std::sqrt(NeutralHiggs[0]);
-  }
-
-  if (MSMlocal > MhUplocal)
-  {
-    double tmp = posN[1];
-    posN[1]    = posN[2];
-    posN[2]    = tmp;
-  }
-  if (MSMlocal > MhDownlocal)
-  {
-    double tmp = posN[0];
-    posN[0]    = posN[1];
-    posN[1]    = tmp;
-  }
-
   MatrixXd NeutralMixing(3, 3);
   for (int i = 0; i < 3; i++)
   {
-    NeutralMixing(0, i) = HiggsRot(posN[0], i + 6);
-    NeutralMixing(1, i) = HiggsRot(posN[1], i + 6);
-    NeutralMixing(2, i) = HiggsRot(posN[2], i + 6);
+    NeutralMixing(0, i) = HiggsRot(pos_h_SM, i + 6);
+    NeutralMixing(1, i) = HiggsRot(pos_h_l, i + 6);
+    NeutralMixing(2, i) = HiggsRot(pos_h_H, i + 6);
   }
 
   ss << "The mass spectrum is given by :\n";
-  ss << "m_{H^+} = " << std::sqrt(HiggsMasses[posMHCS1]) << " GeV \n"
-     << "m_A = " << std::sqrt(HiggsMasses[posA]) << " GeV \n"
-     << "m_{H_SM} = " << MSMlocal << " GeV \n"
-     << "m_{H_l} = " << MhDownlocal << " GeV \n"
-     << "m_{H_h} = " << MhUplocal << " GeV \n";
+  ss << "m_{H^+} = " << std::sqrt(HiggsMasses[pos_H1]) << " GeV \n"
+     << "m_A = " << std::sqrt(HiggsMasses[pos_A]) << " GeV \n"
+     << "m_{H_SM} = " << std::sqrt(HiggsMasses[pos_h_SM]) << " GeV \n"
+     << "m_{H_l} = " << std::sqrt(HiggsMasses[pos_h_l]) << " GeV \n"
+     << "m_{H_h} = " << std::sqrt(HiggsMasses[pos_h_H]) << " GeV \n";
 
   ss << "The neutral mixing Matrix is given by :\n";
   bool IsNegative = NeutralMixing(0, 1) < 0;
@@ -911,7 +848,8 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
     }
   }
 
-  // Determine the additional indices relative to the SM Higgs
+  // Determine the additional indices for the SM-like
+  // and lighter/heavier Higgses
   pos_h_SM = -1, pos_h_l = -1, pos_h_H = -1;
 
   std::vector<double> HiggsMasses;
@@ -919,10 +857,12 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
 
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]
-  double MSM = 125.09;
-  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1]) - MSM);
-  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2]) - MSM);
-  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3]) - MSM);
+  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1])
+                          - SMConstants.C_MassSMHiggs);
+  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2])
+                          - SMConstants.C_MassSMHiggs);
+  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3])
+                          - SMConstants.C_MassSMHiggs);
   if (diff1 < diff2 and diff1 < diff3)
   {
     pos_h_SM = pos_h1;
@@ -931,15 +871,15 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
   }
   else if (diff2 < diff1 and diff2 < diff3)
   {
-    pos_h_SM = pos_h2;
     pos_h_l = pos_h1;
+    pos_h_SM = pos_h2;
     pos_h_H = pos_h3;
   }
   else
   {
-    pos_h_SM = pos_h3;
     pos_h_l = pos_h1;
     pos_h_H = pos_h2;
+    pos_h_SM = pos_h3;
   }
 
   MatrixXd HiggsRotFixed(NHiggs, NHiggs);
@@ -1045,23 +985,6 @@ void Class_Potential_N2HDM::TripleHiggsCouplings()
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;
 
-  std::vector<double> TripleDeriv;
-  TripleDeriv = WeinbergThirdDerivative();
-  std::vector<std::vector<std::vector<double>>> GaugeBasis(
-      NHiggs,
-      std::vector<std::vector<double>>(NHiggs, std::vector<double>(NHiggs)));
-  for (std::size_t i = 0; i < NHiggs; i++)
-  {
-    for (std::size_t j = 0; j < NHiggs; j++)
-    {
-      for (std::size_t k = 0; k < NHiggs; k++)
-      {
-        GaugeBasis[i][j][k] =
-            TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
-      }
-    }
-  }
-
   MatrixXd HiggsRot(NHiggs, NHiggs);
   for (std::size_t i = 0; i < NHiggs; i++)
   {
@@ -1086,6 +1009,23 @@ void Class_Potential_N2HDM::TripleHiggsCouplings()
   for (std::size_t i = 0; i < NHiggs; i++)
   {
     HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
+  }
+
+  std::vector<double> TripleDeriv;
+  TripleDeriv = WeinbergThirdDerivative();
+  std::vector<std::vector<std::vector<double>>> GaugeBasis(
+      NHiggs,
+      std::vector<std::vector<double>>(NHiggs, std::vector<double>(NHiggs)));
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      for (std::size_t k = 0; k < NHiggs; k++)
+      {
+        GaugeBasis[i][j][k] =
+            TripleDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs);
+      }
+    }
   }
 
   TripleHiggsCorrectionsCWPhysical.resize(NHiggs);
