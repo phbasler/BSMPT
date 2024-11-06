@@ -754,14 +754,11 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
     this->SetStoredTemp(T_middle); // update temp storage for inner integral
     double IatT = prefac * Nintegrate_Outer(*this).result;
 
-    while ((std::abs(T_up / T_down - 1) >
-            RelativeTemperatureInCalcTempAtFalseVacFraction *
-                MarginOfCalcTempAtFalseVacFractionBeforeFailure) and
-           (not almost_the_same(
-               int_at_false_vac_frac,
-               IatT,
-               RelativeErrorInCalcTempAtFalseVacFraction *
-                   MarginOfCalcTempAtFalseVacFractionBeforeFailure)))
+    while (not(std::abs(T_up / T_down - 1) <
+                   RelativeTemperatureInCalcTempAtFalseVacFraction and
+               almost_the_same(int_at_false_vac_frac,
+                               IatT,
+                               RelativeErrorInCalcTempAtFalseVacFraction)))
     {
       T_middle = (T_up + T_down) / 2.;
       this->SetStoredTemp(T_middle); // update temp storage for inner integral

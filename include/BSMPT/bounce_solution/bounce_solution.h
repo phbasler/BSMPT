@@ -239,12 +239,6 @@ public:
   const double RelativeErrorInCalcTempAtFalseVacFraction = 1e-3;
 
   /**
-   * @brief Additional margin of error in the while loop without admitting
-   * failure.
-   */
-  const double MarginOfCalcTempAtFalseVacFractionBeforeFailure = 1e-4;
-
-  /**
    * @brief pair of coexisiting phases
    */
   CoexPhases phase_pair;
