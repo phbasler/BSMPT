@@ -759,17 +759,22 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
     {
       pos_G1 = i;
     }
-    if (std::abs(HiggsRot(i, pos_eta1))
+    else if (std::abs(HiggsRot(i, pos_eta1))
         + std::abs(HiggsRot(i, pos_eta2)) > ZeroThreshold)
     {
       pos_G2 = i;
     }
-
     // Neutral CP-odd submatrix
-    if (std::abs(HiggsRot(i, pos_psi1))
+    else if (std::abs(HiggsRot(i, pos_psi1))
         + std::abs(HiggsRot(i, pos_psi2)) > ZeroThreshold)
     {
       pos_G0 = i;
+    }
+    else
+    {
+      throw std::runtime_error("Error. Non-Goldstone in Goldstone submatrix."
+                               " Particle with negative mass? Check your "
+                               "parameter point.");
     }
   }
 
@@ -783,21 +788,19 @@ void Class_Potential_N2HDM::AdjustRotationMatrix()
     {
       pos_H1 = i;
     }
-    if (std::abs(HiggsRot(i, pos_eta1))
+    else if (std::abs(HiggsRot(i, pos_eta1))
         + std::abs(HiggsRot(i, pos_eta2)) > ZeroThreshold)
     {
       pos_H2 = i;
     }
-
     // Neutral CP-odd submatrix
-    if (std::abs(HiggsRot(i, pos_psi1))
+    else if (std::abs(HiggsRot(i, pos_psi1))
         + std::abs(HiggsRot(i, pos_psi2)) > ZeroThreshold)
     {
       pos_A = i;
     }
-
     // Neutral CP-even submatrix
-    if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2))
+    else if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2))
         + std::abs(HiggsRot(i, pos_rhoS)) > ZeroThreshold)
       // use that mh1 < mh2 < mh3
     {

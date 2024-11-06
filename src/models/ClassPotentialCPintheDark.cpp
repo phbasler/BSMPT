@@ -1327,9 +1327,8 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
     {
       pos_G0 = i;
     }
-
     // the neutral dark scalars mix
-    if ((std::abs(HiggsRot(i, pos_zeta2)) + std::abs(HiggsRot(i, pos_psi2)) +
+    else if ((std::abs(HiggsRot(i, pos_zeta2)) + std::abs(HiggsRot(i, pos_psi2)) +
          std::abs(HiggsRot(i, pos_rhoS))) > ZeroThreshold)
     {
       // use that scalars are sorted by mass

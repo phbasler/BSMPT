@@ -736,13 +736,41 @@ void Class_CxSM::AdjustRotationMatrix()
   // CxSM interaction basis
   // 0   1   2   3      4      5
   // Gp, Gm, G0, zeta1, zeta2, zeta3
-  pos_Gp = 0, pos_Gm = 1, pos_G0 = 2;
-
+  int pos_i_G1 = 0, pos_i_G2 = 1, pos_i_G0 = 2;
   int pos_zeta1 = 3, pos_zeta2 = 4, pos_zeta3 = 5;
 
   // Indices of mass eigenstates for rotation from interaction to mass basis
   // Only neutral/physical part necessary, as Goldstones are already diagonal
+  pos_Gp = -1, pos_Gm = -1, pos_G0 = -1,
   pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
+
+  // First finding the correct rows for the Goldstone bosons
+  for (std::size_t i = 0; i < 3; i++)
+  {
+    if (std::abs(HiggsRot(i, pos_i_G1))
+        + std::abs(HiggsRot(i, pos_i_G2)) > ZeroThreshold)
+    {
+      if (pos_Gp == -1)
+      {
+        pos_Gp = i;
+      }
+      else
+      {
+        pos_Gm = i;
+      }
+    }
+    else if (std::abs(HiggsRot(i, pos_i_G0)) > ZeroThreshold)
+    {
+      pos_G0 = i;
+    }
+    else
+    {
+      throw std::runtime_error("Error. Non-Goldstone in Goldstone submatrix."
+                               " Particle with negative mass? Check your "
+                               "parameter point.");
+    }
+  }
+
 
   // Starting from 3 to NHiggs, i.e. fixing the physical Higgs bosons
   for (std::size_t i = 3; i < NHiggs; i++)
@@ -801,6 +829,9 @@ void Class_CxSM::AdjustRotationMatrix()
 
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
+
+  std::cout << "HiggsMasses=" << std::endl;
+  std::cout << HiggsMasses << std::endl;
 
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]

@@ -765,7 +765,7 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
         pos_H1 = i;
       }
     }
-    if (std::abs(HiggsRot(i, pos_eta1)) + std::abs(HiggsRot(i, pos_eta2)) >
+    else if (std::abs(HiggsRot(i, pos_eta1)) + std::abs(HiggsRot(i, pos_eta2)) >
         ZeroThreshold) // use that mGpm < mHpm
     {
       if (pos_G2 == -1)
@@ -777,7 +777,7 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
         pos_H2 = i;
       }
     }
-    if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2)) >
+    else if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2)) >
         ZeroThreshold) // use that mh < mH
     {
       if (pos_h == -1)
@@ -789,7 +789,7 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
         pos_H = i;
       }
     }
-    if (std::abs(HiggsRot(i, pos_psi1)) + std::abs(HiggsRot(i, pos_psi2)) >
+    else if (std::abs(HiggsRot(i, pos_psi1)) + std::abs(HiggsRot(i, pos_psi2)) >
         ZeroThreshold) // use that 0 = mG0 < mA
     {
       if (pos_G0 == -1)
