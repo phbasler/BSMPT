@@ -68,7 +68,7 @@ VHiggsGrad=D[VHiggs,{higgsbase}]/.VEVRep//Transpose//Simplify;
 
 
 ListOfDependentParameter = Select[RemoveDuplicates[Join[RemoveDuplicates[InputParameters],RemoveDuplicates[Join[par,higgsvev]]]],MemberQ[Join[par,higgsvev],#]&];
-Print["List of depent parameters that you have to calculate is\n", ListOfDependentParameter//TableForm]
+Print["List of dependent parameters that you have to calculate is\n", ListOfDependentParameter//TableForm]
 
 
 (*Which parameters should be replaced through the minimum conditions?*)
