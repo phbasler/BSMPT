@@ -36,10 +36,6 @@ RepHiggsZero = Table[i->0,{i,higgsbase}];
 nHiggs = Length[higgsbase];
 
 
-(*Define input parameters of the potential*)
-InputParameters={tanbeta, vs, L1, L2, L3, L4, L5, L6, L7, L8,m12Sq};
-
-
 (*Define parameters of the potential*)
 par = {m11Sq, m22Sq, m12Sq, L1, L2, L3, L4, L5, msSq, L6, L7, L8};
 
@@ -67,6 +63,10 @@ VHiggs = par[[1]]*C11 + par[[2]]*C22 - par[[3]]*(C12 + C21) + par[[4]]/2*C11^2 +
 (*Calculate Tadpoles for Minimisation conditions*)
 VHiggsGrad=D[VHiggs,{higgsbase}]/.VEVRep//Transpose//Simplify;
 {"Derivative with respective to" higgsbase,VHiggsGrad}//Transpose//TableForm
+
+
+(*Define input parameters of the potential*)
+InputParameters={tanbeta, vs, L1, L2, L3, L4, L5, L6, L7, L8,m12Sq};
 
 
 ListOfDependentParameter = Select[RemoveDuplicates[Join[RemoveDuplicates[InputParameters],RemoveDuplicates[Join[par,higgsvev]]]],MemberQ[Join[par,higgsvev],#]&];
