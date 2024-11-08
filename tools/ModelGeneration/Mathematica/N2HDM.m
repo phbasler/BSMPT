@@ -161,7 +161,7 @@ SysOriginal//MatrixForm
 (*Find the CW relations that help solve the system*)
 SysOriginal = Append[EqMatrix//Transpose,EqTar]//Transpose;
 Stmp=RowReduce[SysOriginal, ZeroTest -> (! FreeQ[#, HCW[_,_]] || !FreeQ[#,NCW[_]] &)];
-CWRelations =Solve[Select[Stmp,#[[;;-2]]==Table[0,{i,21}]&][[All,-1]]==0,-EqTar][[1]];
+CWRelations =Solve[Select[Stmp,#[[;;-2]]==Table[0,{i,(EqMatrix//Dimensions)[[2]]}]&][[All,-1]]==0,-EqTar][[1]];
 Print["Relations found between the CW 1st and 2nd derivative\n", CWRelations//TableForm]
 
 
