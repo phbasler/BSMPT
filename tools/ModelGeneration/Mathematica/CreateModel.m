@@ -582,7 +582,7 @@ Export[filename, file, "Table"];]
 
 
 CreateExamplePoint[name_,InputParameters_] := Block[{},
-filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.dat";
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
 file = {Prepend[InputParameters,],{1,Sequence@@Table[0,{i,InputParameters}]}};
 Export[filename, file, "Table"];]
 
