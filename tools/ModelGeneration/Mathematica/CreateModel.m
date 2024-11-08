@@ -1,6 +1,13 @@
 (* ::Package:: *)
 
 (* ::Section:: *)
+(*Disable error message*)
+
+
+Off[Part::partd]
+
+
+(* ::Section:: *)
 (*Helper functions*)
 
 
@@ -141,9 +148,9 @@ public:
   Class_Potential_"<>ToString[name]<>"(const ISMConstants &smConstants);
   virtual ~Class_Potential_"<>ToString[name]<>"();
 ", 
-  "  // Initialize input parameters", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,InputParameters}],,
-  "  // Initialize dependent parameters", Sequence@@Table["  double " <> ToString[i[[1]]] <> " = 0;",{i,DepententParameters}],,
-  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,parCT}],,"
+  "  // Initialize input parameters", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,InputParameters}],"",
+  "  // Initialize dependent parameters", Sequence@@Table["  double " <> ToString[i[[1]]] <> " = 0;",{i,DepententParameters}],"",
+  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,parCT}],"","
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
@@ -334,7 +341,7 @@ void Class_Potential_"<>name<>"::ReadAndSet(const std::string &linestr,
  */
 void Class_Potential_"<>name<>"::set_gen(const std::vector<double> &par)
 {
-", Sequence@@Table["  " <> ToString[InputParameters[[i]]] <>" = par[" <> ToString[i-1] <> "]; ",{i,Length[InputParameters]}],,Sequence@@Table["  " <> (DepententParameters[[i]][[1]]//ToC) <> " = " <> ToString[DepententParameters[[i]][[2]]//ToC] <> "; ",{i,Length[DepententParameters]}],"
+", Sequence@@Table["  " <> ToString[InputParameters[[i]]] <>" = par[" <> ToString[i-1] <> "]; ",{i,Length[InputParameters]}],"",Sequence@@Table["  " <> (DepententParameters[[i]][[1]]//ToC) <> " = " <> ToString[DepententParameters[[i]][[2]]//ToC] <> "; ",{i,Length[DepententParameters]}],"
   scale = SMConstants.C_vev0; // renormalisation scale is set to the SM VEV
 
   vevTreeMin.resize(nVEV);
@@ -353,10 +360,10 @@ void Class_Potential_"<>name<>"::set_CT_Pot_Par(const std::vector<double> &par)
 {",
   Sequence@@Table["  " <> ToString[parCT[[i]]] <> " = par[" <> ToString[i-1]<>"];",{i,Length[parCT]}],"
   // assign the non-zero entries",
-  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL1}] ,,
-  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL2}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL1}] ,"",
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL2}] ,"",
   Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL3}] ,
-  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL4}] ,
+  Sequence@@Table[ "  " <> ToString[i],{i,CTCurvatureL4}] ,""
   ,"
 }
 
@@ -509,9 +516,9 @@ void Class_Potential_"<>name<>"::SetCurvatureArrays()
 
   // assign the non-zero entries",
   Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL1}] ,
-  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL2}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL2}] ,"",
   Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL3}] ,
-  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL4}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,CurvatureL4}] ,"",
   Sequence@@Table[ "  " <> ToString[i],{i,GaugeCurvatureL4}] ,
   "
   std::complex<double> V11, V12, V13, V21, V22, V23, V31, V32, V33;
@@ -525,7 +532,7 @@ void Class_Potential_"<>name<>"::SetCurvatureArrays()
   V32 = SMConstants.C_Vts;
   V33 = SMConstants.C_Vtb;
 ",
-  Sequence@@Table[ "  " <> ToString[i],{i,LeptonCurvatureL3}] ,,
+  Sequence@@Table[ "  " <> ToString[i],{i,LeptonCurvatureL3}] ,"",
   Sequence@@Table[ "  " <> ToString[i],{i,QuarkCurvatureL3}] ,"
 }
 
