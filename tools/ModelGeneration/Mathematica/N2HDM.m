@@ -1,11 +1,5 @@
 (* ::Package:: *)
 
-(*Import helper functions*)
-
-
-<< (NotebookDirectory[]<>"CreateModel.m")
-
-
 (* ::Chapter:: *)
 (*In this section the scalar potential is defined. As an example the N2HDM is shown*)
 
@@ -375,6 +369,10 @@ If[QuarkCurvatureL3=={},"No entries for Curvature_Quark_F2H1",QuarkCurvatureL3//
 
 (* ::Section:: *)
 (*Model implementation*)
+
+
+(*Import helper functions*)
+<< (NotebookDirectory[]<>"CreateModel.m")
 
 
 ListImplementedModels//TableForm
