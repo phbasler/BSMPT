@@ -384,13 +384,14 @@ ListImplementedModels//TableForm
 
 (*Arguments of CreateModelFile*)
 ImplementModel[
-"N2HDMmathematica123", (*Model name*)
+"N2HDMMathematica", (*Model name*)
 higgsbase, (*List of all field*)
 higgsvev, (*VEVs as T = 0*)
 higgsvevFiniteTemp, (*VEVs as T != 0*)
 VEVList, (*Derivation VEVList (calculated automatically)*)
 par, (*Potential parameters *)
 InputParameters, (*Input parameters *)
+{5.91129,293.035,0.300812,0.321809,-0.133425,4.11105,-3.84178,9.46329,-0.750455,0.743982,4842.28},(*Specific input parameters for the example file*)
 DepententParameters, (*Depentent parameters and how to calculate them*)
 CurvatureL1, (*Scalar curvatures L1 (calculated automatically)*)
 CurvatureL2, (*Scalar curvatures L2 (calculated automatically)*)
