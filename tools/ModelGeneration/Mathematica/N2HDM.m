@@ -77,7 +77,7 @@ Print["List of dependent parameters that you have to calculate is\n", ListOfDepe
 ParToReplace = {m11Sq, m22Sq, msSq};
 TadpoleRep = Solve[VHiggsGrad == Table[0,{VHiggsGrad}],ParToReplace][[1]];
 AdditionalConditions = Solve[v1^2+v2^2==vev0^2&& tanbeta==v2/v1,{v1,v2}][[2]];
-(DepententParameters = Flatten[{TadpoleRep,AdditionalConditions }])//TableForm
+(DepententParameters = Flatten[{TadpoleRep//.AdditionalConditions//Simplify,AdditionalConditions }])//TableForm
 
 
 (*Sanity check*)
