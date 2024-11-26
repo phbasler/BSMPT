@@ -588,9 +588,11 @@ void Class_Potential_"<>name<>"::Debugging(const std::vector<double> &input,
 Export[filename, file, "Table"];]
 
 
-CreateExamplePoint[name_,InputParameters_] := Block[{},
+CreateExamplePoint[name_,InputParameters_,InputParametersExample_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
-file = {Prepend[InputParameters,],{1,Sequence@@Table[0,{i,InputParameters}]}};
+file = {Prepend[InputParameters,],{1,Sequence@@InputParametersExample}};
+fileTest = FileNames["Test",Nest[ParentDirectory, NotebookDirectory[], 3]<>"/build/*/bin"][[1]]; 
+Print["To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
 Export[filename, file, "Table"];]
 
 
@@ -604,6 +606,7 @@ higgsvev_,
 higgsvevFiniteTemp_,
 VEVList_,par_,
 InputParameters_,
+InputParametersExample_,
 DepententParameters_,
 CurvatureL1_,
 CurvatureL2_,
@@ -653,7 +656,8 @@ GaugeBasis,
 LepBase,
 baseQuarks];
 Print["Created example point in BSMPT/example"];
-CreateExamplePoint[name,InputParameters]]
+CreateExamplePoint[name,InputParameters,InputParametersExample];
+Print[Style["Remember to recompile!",Red]]]
 
 
 Print[Style["Helper functions successfully imported!",FontSize->20, Directive[Thick]]];
