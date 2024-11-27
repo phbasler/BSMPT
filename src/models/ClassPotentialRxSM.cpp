@@ -142,46 +142,6 @@ std::vector<std::string> Class_RxSM::addLegendTripleCouplings() const
 }
 
 /**
- * returns a string which tells the user the chronological order of the Quartic
- * Higgs couplings. Use this to complement the legend of the given input file
- *
- */
-// std::vector<std::string> Class_RxSM::addLegendQuarticCouplings() const
-// {
-//   std::vector<std::string> labels;
-//   std::vector<std::string> particles;
-//   particles.resize(NHiggs);
-//   // here you have to define the particle names in the vector particles
-// 
-//   particles[0] = "G+";
-//   particles[1] = "G-";
-//   particles[2] = "G0";
-//   particles[3] = "h_SM";
-//   particles[4] = "h_H";
-// 
-//   for (std::size_t i = 0; i < NHiggs; i++)
-//   {
-//     for (std::size_t j = i; j < NHiggs; j++)
-//     {
-//       for (std::size_t k = j; k < NHiggs; k++)
-//       {
-//         for (std::size_t l = k; l < NHiggs; l++)
-//         {
-//           labels.push_back("Tree_" + particles.at(i) + particles.at(j) +
-//                            particles.at(k) + particles.at(l));
-//           labels.push_back("CT_" + particles.at(i) + particles.at(j) +
-//                            particles.at(k) + particles.at(l));
-//           labels.push_back("CW_" + particles.at(i) + particles.at(j) +
-//                            particles.at(k) + particles.at(l));
-//         }
-//       }
-//     }
-//   }
-// 
-//   return labels;
-// }
-
-/**
  * returns a string which tells the user the chronological order of the VEVs.
  * Use this to complement the legend of the given input file
  */
@@ -607,8 +567,8 @@ void Class_RxSM::AdjustRotationMatrix()
   // files)
   pos_G1 = -1, pos_G2 = -1, pos_G0 = -1, pos_h = -1, pos_H = -1;
 
-  // Phi1 = 1/Sqrt(2)*{rho1 + I*eta1, zeta1 + vH + I*psi1}
-  // S = zetaS + vS
+  // Doublet: Phi1 = 1/Sqrt(2)*{rho1 + I*eta1, zeta1 + vH + I*psi1}
+  // Singlet: S = zetaS + vS
   // higgsbasis = {rho1, eta1, psi1, zeta1, zetaS}
 
   // interaction basis
@@ -843,120 +803,6 @@ void Class_RxSM::TripleHiggsCouplings()
     }
   }
 }
-
-// void Class_RxSM::QuarticHiggsCouplings()
-// {
-//   if (!SetCurvatureDone) SetCurvatureArrays();
-//   if (!CalcCouplingsDone) CalculatePhysicalCouplings();
-// 
-//   if (CalculatedQuarticCouplings) return;
-//   CalculatedQuarticCouplings = true;
-// 
-//   MatrixXd HiggsRot(NHiggs, NHiggs);
-//   for (std::size_t i = 0; i < NHiggs; i++)
-//   {
-//     for (std::size_t j = 0; j < NHiggs; j++)
-//     {
-//       HiggsRot(i, j) = HiggsRotationMatrixEnsuredConvention[i][j];
-//     }
-//   }
-// 
-//   std::vector<double> HiggsOrder(NHiggs);
-//   HiggsOrder[0] = pos_G1;
-//   HiggsOrder[1] = pos_G2;
-//   HiggsOrder[2] = pos_G0;
-//   HiggsOrder[3] = pos_h_SM;
-//   HiggsOrder[4] = pos_h_H;
-// 
-//   MatrixXd HiggsRotSort(NHiggs, NHiggs);
-//   for (std::size_t i = 0; i < NHiggs; i++)
-//   {
-//     HiggsRotSort.row(i) = HiggsRot.row(HiggsOrder[i]);
-//   }
-// 
-//   std::vector<double> QuarticDeriv;
-//   QuarticDeriv = WeinbergForthDerivative();
-//   std::vector<std::vector<std::vector<std::vector<double>>>> GaugeBasis(
-//       NHiggs,
-//       std::vector<std::vector<std::vector<double>>>(
-//           NHiggs,
-//           std::vector<std::vector<double>>(NHiggs,
-//                                            std::vector<double>(NHiggs))));
-//   for (std::size_t i = 0; i < NHiggs; i++)
-//   {
-//     for (std::size_t j = 0; j < NHiggs; j++)
-//     {
-//       for (std::size_t k = 0; k < NHiggs; k++)
-//       {
-//         for (std::size_t l = 0; l < NHiggs; l++)
-//         {
-//           GaugeBasis[i][j][k][l] =
-//               QuarticDeriv.at(i + j * NHiggs + k * NHiggs * NHiggs +
-//                               l * NHiggs * NHiggs * NHiggs);
-//         }
-//       }
-//     }
-//   }
-// 
-//   QuarticHiggsCorrectionsCWPhysical.resize(NHiggs);
-//   QuarticHiggsCorrectionsTreePhysical.resize(NHiggs);
-//   QuarticHiggsCorrectionsCTPhysical.resize(NHiggs);
-//   for (std::size_t i = 0; i < NHiggs; i++)
-//   {
-//     QuarticHiggsCorrectionsTreePhysical[i].resize(NHiggs);
-//     QuarticHiggsCorrectionsCWPhysical[i].resize(NHiggs);
-//     QuarticHiggsCorrectionsCTPhysical[i].resize(NHiggs);
-//     for (std::size_t j = 0; j < NHiggs; j++)
-//     {
-//       QuarticHiggsCorrectionsCWPhysical[i][j].resize(NHiggs);
-//       QuarticHiggsCorrectionsTreePhysical[i][j].resize(NHiggs);
-//       QuarticHiggsCorrectionsCTPhysical[i][j].resize(NHiggs);
-//       for (std::size_t k = 0; k < NHiggs; k++)
-//       {
-//         QuarticHiggsCorrectionsCWPhysical[i][j][k].resize(NHiggs);
-//         QuarticHiggsCorrectionsTreePhysical[i][j][k].resize(NHiggs);
-//         QuarticHiggsCorrectionsCTPhysical[i][j][k].resize(NHiggs);
-//       }
-//     }
-//   }
-// 
-//   for (std::size_t i = 0; i < NHiggs; i++)
-//   {
-//     for (std::size_t j = 0; j < NHiggs; j++)
-//     {
-//       for (std::size_t k = 0; k < NHiggs; k++)
-//       {
-//         for (std::size_t l = 0; l < NHiggs; l++)
-//         {
-//           QuarticHiggsCorrectionsCWPhysical[i][j][k][l]   = 0;
-//           QuarticHiggsCorrectionsTreePhysical[i][j][k][l] = 0;
-//           QuarticHiggsCorrectionsCTPhysical[i][j][k][l]   = 0;
-// 
-//           for (std::size_t m = 0; m < NHiggs; m++)
-//           {
-//             for (std::size_t n = 0; n < NHiggs; n++)
-//             {
-//               for (std::size_t o = 0; o < NHiggs; o++)
-//               {
-//                 for (std::size_t p = 0; p < NHiggs; p++)
-//                 {
-//                   double RotFac = HiggsRotSort(i, m) * HiggsRotSort(j, n) *
-//                                   HiggsRotSort(k, o) * HiggsRotSort(l, p);
-//                   QuarticHiggsCorrectionsCWPhysical[i][j][k][l] +=
-//                       RotFac * GaugeBasis[m][n][o][p];
-//                   QuarticHiggsCorrectionsTreePhysical[i][j][k][l] +=
-//                       RotFac * LambdaHiggs_4[m][n][o][p];
-//                   QuarticHiggsCorrectionsCTPhysical[i][j][k][l] +=
-//                       RotFac * LambdaHiggs_4_CT[m][n][o][p];
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
 
 void Class_RxSM::SetCurvatureArrays()
 {
