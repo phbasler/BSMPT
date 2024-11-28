@@ -61,7 +61,7 @@ jobs:
     - name: Generate Coverage
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{  secrets.BSMPT_CODECOV_UPLOAD_TOKEN  }}
         flags: unittests # optional
