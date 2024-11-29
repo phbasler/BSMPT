@@ -909,6 +909,16 @@ struct Vacuum
   int MinimumFoundAlready(const Minimum &minimum);
 
   /**
+   * @brief If the global minimizer, incorrectly, finds a high temperature
+   * non-global minimum and but then another phase turns out to be the minimum
+   * at high temperature will break our logic. This is a safety check to ensure
+   * that at high temperature \f$ T_{high} \f$ the Universe is on the global
+   * minimum.
+   *
+   */
+  void EnsureHighTemperatureGlobalMininum();
+
+  /**
    * @brief MultiStepPTMode0 single-step PT mode
    * @param LowTempPoint tracing starting point at T_low
    * @param HighTempPoint tracing starting point at T_high

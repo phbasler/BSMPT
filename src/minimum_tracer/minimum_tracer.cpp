@@ -2390,22 +2390,15 @@ Vacuum::Vacuum(const double &T_lowIn,
        status_vacuum == StatusTracing::NoCoverage)) // no_coverage can get fixed
                                                     // in setCoexRegion
   {
-    // sort phases in decending T_high
-    std::sort(PhasesList.begin(),
-              PhasesList.end(),
-              [](auto a, auto b) { return a.T_high > b.T_high; });
+    // Swaps the phases to make the global minimum the position 0 of the
+    // PhasesList vector;
+    EnsureHighTemperatureGlobalMininum();
 
     // assign ids to phases
     for (std::size_t i = 0; i < PhasesList.size(); i++)
     {
       PhasesList[i].id = i;
     }
-
-    // impose that true vacuum at T = Tthigh has id = 0.
-    for (auto &phase : PhasesList)
-      if ((phase.T_high == T_high) and
-          (phase.Get(T_high).potential < PhasesList[0].Get(T_high).potential))
-        std::swap(PhasesList[0], phase);
 
     // identify coexisiting phase regions
     setCoexRegion(UseMultiStepPTMode); // can flip status_vacuum to error code
@@ -2422,8 +2415,29 @@ Vacuum::Vacuum(const double &T_lowIn,
       setCoexPhases();
     }
   }
+}
 
-  return;
+void Vacuum::EnsureHighTemperatureGlobalMininum()
+{
+  // sort phases in decending T_high
+  std::sort(PhasesList.begin(),
+            PhasesList.end(),
+            [](auto a, auto b) { return a.T_high > b.T_high; });
+
+  // Check that we have a phase that reaches up to T_high
+  if (PhasesList.at(0).T_high < T_high)
+  {
+    Logger::Write(LoggingLevel::MinTracerDetailed,
+                  "No traceable global-minimum phase found at Thigh. Abort.");
+    status_vacuum = StatusTracing::NoMinsAtBoundaries;
+    return;
+  }
+  // Global minimum at Thigh at position 0 of PhasesList
+  for (auto phase = PhasesList.begin(); phase != PhasesList.end(); ++phase)
+    if ((phase->T_high == T_high) and
+        (phase->Get(T_high).potential <
+         PhasesList.begin()->Get(T_high).potential))
+      std::iter_swap(PhasesList.begin(), phase);
 }
 
 void Vacuum::MultiStepPTTracer(const double &Temp, const double &deltaT)
