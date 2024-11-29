@@ -1424,3 +1424,49 @@ TEST_CASE("Espinosa-Konstandin - Three-Field Examples - rho = 1/8", "[gw]")
 
   REQUIRE(bc.Action == Approx(55.6).epsilon(2e-2));
 }
+
+TEST_CASE("Checking EnsureHighTemperatureGlobalMininum()", "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* msq = */ -15650,
+                                               /* lambda = */ 0.52,
+                                               /* delta2 = */ 0.55,
+                                               /* b2 = */ -8859,
+                                               /* d2 = */ 0.5,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+  Vacuum vac(0, 300, MinTracer, modelPointer, -1, 10, true);
+
+  // Swap PhasesList to simulate an error
+  std::swap(vac.PhasesList[0], vac.PhasesList[1]);
+
+  // Reorder the PhaseList
+  vac.EnsureHighTemperatureGlobalMininum();
+
+  // Check that it puts a phase with T_high = vac.T_high in the first position
+  REQUIRE(vac.PhasesList[0].T_high > vac.PhasesList[1].T_high);
+
+  // Make 2nd phase the true vacuum to simulate an error
+  vac.PhasesList[1] = vac.PhasesList[0];
+  vac.PhasesList[1].MinimumPhaseVector.back().potential *= 2;
+
+  // Reorder the PhaseList
+  vac.EnsureHighTemperatureGlobalMininum();
+
+  // Check that it puts the global minimum at T_high in the first position
+  REQUIRE(vac.PhasesList[0].Get(vac.T_high).potential <
+          vac.PhasesList[1].Get(vac.T_high).potential);
+}
