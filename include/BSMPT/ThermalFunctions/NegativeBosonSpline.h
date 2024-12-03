@@ -8,7 +8,9 @@
  * @file
  */
 
+#define _USE_MATH_DEFINES
 #include <BSMPT/utility/spline/spline.h>
+#include <cmath>
 #include <vector>
 
 #ifndef INCLUDE_BSMPT_THERMALFUNCTIONS_NEGATIVEBOSONSPLINE_H_
