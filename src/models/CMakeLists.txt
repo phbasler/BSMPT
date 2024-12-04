@@ -34,8 +34,8 @@ set(src
     ClassTemplate.cpp)
 
 add_library(Models ${header} ${src})
-target_link_libraries(Models PUBLIC GSL::gsl Eigen3::Eigen
-                                    ThermalFunctions Utility)
+target_link_libraries(Models PUBLIC GSL::gsl Eigen3::Eigen ThermalFunctions
+                                    Utility)
 target_include_directories(Models PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Models PUBLIC cxx_std_17)
 
