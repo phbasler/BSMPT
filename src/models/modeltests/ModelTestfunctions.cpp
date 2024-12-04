@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <BSMPT/models/ClassPotentialOrigin.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 #include <array>
@@ -1043,6 +1043,182 @@ TestResults CheckSymmetricTensorGauge(
   }
 
   return TestResults::Pass;
+}
+
+void CheckImplementation(
+    const std::unique_ptr<Class_Potential_Origin> &modelPointer,
+    const int &WhichMinimizer)
+{
+  using std::pow;
+
+  const std::string Pass = "Pass";
+  const std::string Fail = "Fail";
+
+  Logger::Write(LoggingLevel::Default,
+                "The tested Model is the " +
+                    ModelIDToString(modelPointer->get_Model()));
+
+  std::vector<std::string> TestNames, TestResults;
+
+  TestNames.push_back("CT number/label match");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNumberOfCTParameters(*modelPointer)));
+
+  TestNames.push_back("VEV number/label match");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNumberOfVEVLabels(*modelPointer)));
+
+  TestNames.push_back("addLegendTemp number/label match");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckLegendTemp(*modelPointer)));
+
+  TestNames.push_back("addLegendTripleCouplings number/label match");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNumberOfTripleCouplings(*modelPointer)));
+
+  TestNames.push_back("CKM matrix unitarity");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCKMUnitarity(modelPointer->SMConstants)));
+
+  Logger::Write(LoggingLevel::Default,
+                "This function calculates the masses of the gauge bosons, "
+                "fermions and Higgs boson and compares them "
+                "with the parameters defined in SMparam.h.");
+
+  TestNames.push_back("Matching gauge boson masses with SMparam.h");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckGaugeBosonMasses(*modelPointer)));
+
+  auto FermionCheck = ModelTests::CheckFermionicMasses(*modelPointer);
+  TestNames.push_back("Matching lepton masses with SMparam.h");
+  TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.first));
+  TestNames.push_back("Matching quark masses with SMparam.h");
+  TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.second));
+
+  TestNames.push_back("Correct EW Minimum");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckTreeLevelMin(*modelPointer, WhichMinimizer)));
+
+  TestNames.push_back("Tadpole relations fullfilled");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckTadpoleRelations(*modelPointer)));
+
+  TestNames.push_back("Matching Masses between NLO and tree-level");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckNLOMasses(*modelPointer)));
+
+  if (modelPointer->UseVTreeSimplified)
+  {
+    TestNames.push_back("Checking VTreeSimplified");
+    TestResults.push_back(ModelTests::TestResultsToString(
+        ModelTests::CheckVTreeSimplified(*modelPointer)));
+  }
+
+  if (modelPointer->UseVCounterSimplified)
+  {
+    TestNames.push_back("Checking VCounterSimplified");
+    TestResults.push_back(ModelTests::TestResultsToString(
+        ModelTests::CheckVCounterSimplified(*modelPointer)));
+  }
+
+  TestNames.push_back("Checking second derivative of CW+CT");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCTConditionsSecondDerivative(*modelPointer)));
+
+  TestNames.push_back("Checking first derivative of CW+CT");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckCTConditionsFirstDerivative(*modelPointer)));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lij");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarSecond(
+          modelPointer->Get_Curvature_Higgs_L2())));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lijk");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarThird(
+          modelPointer->Get_Curvature_Higgs_L3())));
+
+  TestNames.push_back("Check symmetric properties of the scalar tensor Lijkl");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorScalarFourth(
+          modelPointer->Get_Curvature_Higgs_L4())));
+
+  TestNames.push_back(
+      "Check symmetric properties of the gauge tensor in the C2HDM");
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckSymmetricTensorGauge(
+          modelPointer->Get_Curvature_Gauge_G2H2())));
+
+  TestNames.push_back(
+      "Check symmetric properties of the Lepton tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorLeptonsThird(
+          modelPointer->Get_Curvature_Lepton_F2H1())));
+
+  TestNames.push_back(
+      "Check symmetric properties of the mass Lepton tensor in the C2HDM");
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckSymmetricTensorLeptons(
+          modelPointer->Get_Curvature_Lepton_F2())));
+
+  TestNames.push_back(
+      "Check symmetric properties of the Quark tensor in the C2HDM");
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorQuarksThird(
+          modelPointer->Get_Curvature_Quark_F2H1())));
+
+  TestNames.push_back(
+      "Check symmetric properties of the mass Quark tensor in the C2HDM");
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckSymmetricTensorQuarks(
+          modelPointer->Get_Curvature_Quark_F2())));
+
+  if (TestNames.size() != TestResults.size())
+  {
+    std::stringstream ss;
+    ss << "TestNames : " << std::endl << TestNames << std::endl;
+    ss << "TestResults : " << std::endl << TestResults << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+    std::string errmsg{
+        "Mismatch between the number of labels for the tests and the results."};
+    errmsg += "TestNames.size() = " + std::to_string(TestNames.size());
+    errmsg += " TestResults.size() = " + std::to_string(TestResults.size());
+    throw std::runtime_error(errmsg);
+  }
+
+  std::size_t Passes{0};
+  for (const auto &el : TestResults)
+  {
+    if (el == Pass) Passes++;
+  }
+
+  std::stringstream ss;
+  ss << "\nTEST | Pass/Fail\n================================\n" << std::endl;
+  auto maxsize = TestNames.at(0).size();
+  for (const auto &el : TestNames)
+  {
+    if (el.size() > maxsize) maxsize = el.size();
+  }
+  maxsize += 5;
+  for (std::size_t i{0}; i < TestNames.size(); ++i)
+  {
+    ss << std::setw(maxsize) << std::left << TestNames.at(i) << "| "
+       << TestResults.at(i) << std::endl;
+  }
+
+  ss << Passes << " tests out of " << TestResults.size() << " passed.\n"
+     << std::endl;
+  if (Passes != TestResults.size())
+  {
+    ss << TestResults.size() - Passes
+       << " tests failed. Please check and try again." << std::endl;
+  }
+  else
+  {
+    ss << "You're good to go!\n" << std::endl;
+  }
+  Logger::Write(LoggingLevel::Default, ss.str());
 }
 
 } // namespace ModelTests

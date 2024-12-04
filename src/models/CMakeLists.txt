@@ -6,7 +6,6 @@
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/models")
 set(header
     ${header_path}/SMparam.h
-    ${header_path}/ModelTestfunctions.h
     ${header_path}/IncludeAllModels.h
     ${header_path}/ClassPotentialOrigin.h
     ${header_path}/ClassPotentialC2HDM.h
@@ -20,7 +19,6 @@ set(header
 
 set(src
     SMParam.cpp
-    ModelTestfunctions.cpp
     IncludeAllModels.cpp
     ClassPotentialOrigin.cpp
     ClassPotentialOrigin_deprecated.cpp
