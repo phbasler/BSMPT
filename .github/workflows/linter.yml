@@ -17,6 +17,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.LINTER_PAT }}
 
       - name: Install clang-format
         if: inputs.apply_clang_format
