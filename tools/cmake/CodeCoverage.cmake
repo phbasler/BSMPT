@@ -131,7 +131,6 @@ list(GET LANGUAGES 0 LANG)
 
 if("${CMAKE_${LANG}_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
 
-
   if("${CMAKE_${LANG}_COMPILER_VERSION}" VERSION_LESS 3)
     message(FATAL_ERROR "Clang version must be 3.0.0 or greater! Aborting...")
   endif()
