@@ -9,7 +9,7 @@ concurrency:
     cancel-in-progress: true
  
 jobs:
-  build:
+  linter:
     runs-on: ubuntu-latest
   
     steps:
