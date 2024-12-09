@@ -12,7 +12,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     env:
-      LocalCommit: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+      LocalCommit:  github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
   
     steps:
       - uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           token: ${{ secrets.LINTER_PAT }}
-        if: !env.LocalCommit
+        if: ${{ !env.LocalCommit }}
 
       - name: Install clang-format
         if: inputs.apply_clang_format
@@ -74,7 +74,7 @@ jobs:
           git push
 
       - name: Notify that changes are required
-        if: steps.check-changes.outputs.ChangesFound == 'True' && !env.LocalCommit
+        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && !env.LocalCommit }}
         run: |
           echo "Linter changes are required" >> $GITHUB_STEP_SUMMARY
           exit 1
