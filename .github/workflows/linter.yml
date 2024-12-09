@@ -12,7 +12,7 @@ jobs:
   linter:
     runs-on: ubuntu-latest
     env:
-      LocalCommit:  github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
+      LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
   
     steps:
       - run: echo ${{ env.LocalCommit }}
