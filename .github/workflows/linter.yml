@@ -15,7 +15,6 @@ jobs:
       LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
   
     steps:
-      - run: echo ${{ env.LocalCommit }}
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
