@@ -30,8 +30,7 @@ namespace LibCMAES
 
 using namespace libcmaes;
 
-LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
-                                 const double &Temp,
+LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,                                 const double &Temp,
                                  const std::vector<double> &Start)
 {
 
