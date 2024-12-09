@@ -1,21 +1,23 @@
-name: cpp-linter
+name: Run all linters
 
-on:
+on: 
   pull_request:
-    branches: [master]
-
+      branches: [ master, develop ]
+     
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }} 
-  cancel-in-progress: true
-
+    group: ${{ github.workflow }}-${{ github.ref }} 
+    cancel-in-progress: true
+ 
 jobs:
-  cpp-linter:
+  linter:
     runs-on: ubuntu-latest
+  
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.LINTER_PAT }}
 
       - name: Install clang-format
         if: inputs.apply_clang_format
@@ -27,6 +29,12 @@ jobs:
         id: branch-name
         run:
           echo "branchName=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+
+      - name: Format CMake files
+        id: cmake-format
+        uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
+        with:
+          args: --config-files .cmake-format.py --in-place
 
       - name: Define base git diff args
         id: git-diff-args
