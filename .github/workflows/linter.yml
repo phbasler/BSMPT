@@ -28,10 +28,6 @@ jobs:
           token: ${{ secrets.LINTER_PAT }}
         if: ${{ !env.LocalCommit }}
 
-      - name: Install clang-format
-        if: inputs.apply_clang_format
-        run: pip3 install clang-format==14.0.0
-
       - run: git fetch origin $GITHUB_BASE_REF
 
       - name: Set Branch name
