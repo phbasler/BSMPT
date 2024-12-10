@@ -979,13 +979,6 @@ public:
    */
   virtual void AdjustRotationMatrix() = 0;
   /**
-   * Returns true if two values are the same given some relative precision
-   */
-  bool almost_the_same(double a, double b, double rel_precision = 0.01);
-  bool almost_the_same(std::complex<double> a,
-                       std::complex<double> b,
-                       double rel_precision = 0.01);
-  /**
    * Checks whether rotation matrix is properly set after implying conventions
    */
   bool CheckRotationMatrix();

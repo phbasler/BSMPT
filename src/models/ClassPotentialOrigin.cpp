@@ -959,26 +959,6 @@ Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepeated(
   return res;
 }
 
-bool Class_Potential_Origin::almost_the_same(double a,
-                                             double b,
-                                             double rel_precision)
-{
-  if (std::abs(a) < 1e-10 and std::abs(b) < 1e-10)
-  {
-    return true;
-  }
-  return std::abs(a - b) < std::abs(a + b) / 2 * rel_precision;
-}
-
-bool Class_Potential_Origin::almost_the_same(std::complex<double> a,
-                                             std::complex<double> b,
-                                             double rel_precision)
-{
-  bool real_part = almost_the_same(a.real(), b.real(), rel_precision);
-  bool imag_part = almost_the_same(a.imag(), b.imag(), rel_precision);
-  return (real_part and imag_part);
-}
-
 // Sanity check to make sure HiggsRotationMatrix is a proper rotation
 // matrix, i.e. its inverse should correspond to its transpose, and its
 // determinant should be +1 or -1

@@ -9,6 +9,7 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <complex>
 
 /**
  * @file
@@ -127,6 +128,64 @@ double EllipIntSecond(const double &x)
   gsl_integration_qags(&F, 0, x, 0, 1e-7, 1000, w, &result, &error);
   gsl_integration_workspace_free(w);
   return result;
+}
+
+bool almost_the_same(const double &a,
+                     const double &b,
+                     const double &rel_precision,
+                     const double &num_zero)
+{
+  if (std::abs(a) < num_zero and std::abs(b) < num_zero)
+  {
+    return true;
+  }
+  return std::abs(a - b) < std::abs(a + b) / 2 * rel_precision;
+}
+
+bool almost_the_same(const std::complex<double> &a,
+		     const std::complex<double> &b,
+                     const double &rel_precision,
+		     const double &num_zero)
+{
+  bool real_part = almost_the_same(a.real(), b.real(), rel_precision,
+		                   num_zero);
+  bool imag_part = almost_the_same(a.imag(), b.imag(), rel_precision,
+		                   num_zero);
+  return (real_part and imag_part);
+}
+
+bool almost_the_same(const std::vector<double> &a,
+                     const std::vector<double> &b,
+                     const bool &allow_for_sign_flip,
+                     const double &rel_precision,
+                     const double &num_zero)
+{
+  if (a.size() != b.size())
+  {
+    throw std::runtime_error("Error. Vectors must have the same size.");
+  }
+  int count_true = 0;
+  for (std::size_t i = 0; i < a.size(); i++)
+  {
+    if (allow_for_sign_flip)
+    {
+      count_true +=
+          int(almost_the_same(a.at(i), b.at(i), rel_precision, num_zero));
+    }
+    else
+    {
+      count_true += int(almost_the_same(
+          std::abs(a.at(i)), std::abs(b.at(i)), rel_precision, num_zero));
+    }
+  }
+  if (std::size_t(count_true) == a.size())
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 } // namespace BSMPT
