@@ -510,15 +510,17 @@ void TransitionTracer::CheckMassRatio(const user_input &input,
                                       const double &temp) const
 {
   std::stringstream ss;
-  std::vector<double> massOverTempSq, tmp;
+  std::vector<double> massOverTempSq, massOverTempSqGauge;
   massOverTempSq = input.modelPointer->HiggsMassesSquared(
                        input.modelPointer->MinimizeOrderVEV(vec), temp) /
                    std::pow(temp, 2);
-  tmp = input.modelPointer->GaugeMassesSquared(
-            input.modelPointer->MinimizeOrderVEV(vec), temp) /
-        std::pow(temp, 2);
+  massOverTempSqGauge = input.modelPointer->GaugeMassesSquared(
+                            input.modelPointer->MinimizeOrderVEV(vec), temp) /
+                        std::pow(temp, 2);
 
-  massOverTempSq.insert(massOverTempSq.end(), tmp.begin(), tmp.end());
+  massOverTempSq.insert(massOverTempSq.end(),
+                        massOverTempSqGauge.begin(),
+                        massOverTempSqGauge.end());
 
   int color = 0;
   for (auto el : massOverTempSq)
