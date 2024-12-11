@@ -843,7 +843,7 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
 }
 
 TEST_CASE(
-    "Checking phase tracking and GW for BP3 (low sample) (suposed to fail)",
+    "Checking phase tracking and GW for BP3 (low sample) (supposed to fail)",
     "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
@@ -991,6 +991,40 @@ TEST_CASE("Test for EW symmetry restoration BP3", "[gw]")
   std::shared_ptr<MinimumTracer> MinTracer(
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
   REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == 3);
+}
+
+TEST_CASE("Check percolation temperature for point of issue #173", "[gw]")
+{
+  const std::vector<double> example_point_R2HDM_machine_dep_temp_failure{
+      /* lambda_1 = */ 1.939019085953685,
+      /* lambda_2 = */ 2.368448996569993,
+      /* lambda_3 = */ 7.6135777364421875,
+      /* lambda_4 = */ -5.450539233086667,
+      /* lambda_5 = */ -3.9705820766209374,
+      /* m_{12}^2 = */ 162500.89873320065,
+      /* tan(beta) = */ 1.2197198842183743,
+      /* Yukawa Type = */ 1};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::R2HDM, SMConstants);
+  modelPointer->initModel(example_point_R2HDM_machine_dep_temp_failure);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  input.T_high         = 1000;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
+
+  auto output = trans.output_store;
+
+  REQUIRE(314.566 ==
+          Approx(output.vec_trans_data.at(1).perc_temp.value()).epsilon(1e-2));
 }
 
 TEST_CASE("Test string conversion of enums", "[gw]")
