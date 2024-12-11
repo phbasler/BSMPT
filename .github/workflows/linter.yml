@@ -2,7 +2,7 @@ name: Run all linters
 
 on: 
   pull_request:
-      branches: [ master, develop, fix/* ]
+      branches: [ master, develop ]
      
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }} 
