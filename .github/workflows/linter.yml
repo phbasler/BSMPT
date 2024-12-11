@@ -20,13 +20,13 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           token: ${{ secrets.LINTER_PAT }}
-        if: env.LocalCommit
+        if: env.LocalCommit == 'true'
 
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
-        if: ${{ !env.LocalCommit }}
+        if: env.LocalCommit != 'true'
 
       - run: git fetch origin $GITHUB_BASE_REF
 
@@ -64,13 +64,13 @@ jobs:
           git config user.email "<>"
 
       - name: Commit changes
-        if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit
+        if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
         run: |
           git commit -am "Automatically applied linter"
           git push
 
       - name: Notify that changes are required
-        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && !env.LocalCommit }}
+        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true' }}
         run: |
           echo "Linter changes are required" >> $GITHUB_STEP_SUMMARY
           exit 1
