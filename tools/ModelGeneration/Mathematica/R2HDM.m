@@ -9,19 +9,19 @@
 
 
 (* ::Chapter:: *)
-(*In this section the scalar potential is defined. As an example the N2HDM in the convention of [arXiv:1803.02846] is shown*)
+(*In this section the scalar potential is defined. As an example the Type-1 R2HDM in the convention of [arXiv:1803.02846] is shown*)
 
 
 (*Define higgs fields*)
-higgsbase = {\[Rho]1, \[Rho]2, \[Eta]1, \[Eta]2, \[Psi]1, \[Psi]2, \[Zeta]1, \[Zeta]2, \[Zeta]S};
+higgsbase = {\[Rho]1, \[Eta]1, \[Rho]2, \[Eta]2, \[Zeta]1, \[Psi]1, \[Zeta]2, \[Psi]2};
 
 
 (*Assign vevs at T=0*)
-higgsvev = {0, 0, 0, 0, 0, 0, v1, v2, vs};
+higgsvev = {0, 0, 0, 0, v1, 0, v2, 0};
 
 
 (*Assign vevs at T != 0*)
-higgsvevFiniteTemp = {0, wcb, 0, 0, 0, wcp, w1, w2, ws};
+higgsvevFiniteTemp = {0, 0, wcb, 0, w1, 0, w2, wcp};
 
 
 (*Replacement list for the vevs*)
@@ -37,17 +37,15 @@ nHiggs = Length[higgsbase];
 
 
 (*Define parameters of the potential*)
-par = {m11Sq, m22Sq, m12Sq, L1, L2, L3, L4, L5, msSq, L6, L7, L8};
+par = {m11Sq, m22Sq, m12Sq, L1, L2, L3, L4, L5};
 
 
 (*Define doublets and scalar fields*)
-Phi1 = {higgsbase[[1]] + higgsbase[[3]]*I, higgsbase[[7]] + higgsbase[[5]]*I}/Sqrt[2];
-Phi2 = {higgsbase[[2]] + higgsbase[[4]]*I, higgsbase[[8]] + higgsbase[[6]]*I}/Sqrt[2];
-S = higgsbase[[9]];
+Phi1 = {higgsbase[[1]] + higgsbase[[2]]*I, higgsbase[[5]] + higgsbase[[6]]*I}/Sqrt[2];
+Phi2 = {higgsbase[[3]] + higgsbase[[4]]*I, higgsbase[[7]] + higgsbase[[8]]*I}/Sqrt[2];
 (*Print fields*)
 Phi1//MatrixForm//TraditionalForm
 Phi2//MatrixForm//TraditionalForm
-S//MatrixForm//TraditionalForm
 
 
 (*Write the potential*)
@@ -56,8 +54,9 @@ C11 = Simplify[ConjugateTranspose[Phi1] . Phi1];
 C12 = Simplify[ConjugateTranspose[Phi1] . Phi2];
 C21 = Simplify[ConjugateTranspose[Phi2] . Phi1];
 C22 = Simplify[ConjugateTranspose[Phi2] . Phi2];
-CS = Simplify[Conjugate[S]*S];
-VHiggs = par[[1]]*C11 + par[[2]]*C22 - par[[3]]*(C12 + C21) + par[[4]]/2*C11^2 + par[[5]]/2*C22^2 + par[[6]]*C11*C22 + par[[7]]*C12*C21 + par[[8]]/2*(C12^2 + C21^2) + par[[9]]/2*CS + par[[10]]/8*CS^2 + par[[11]]/2*C11*CS + par[[12]]/2*C22*CS//Simplify
+VHiggs = par[[1]]*C11 + par[[2]]*C22 - par[[3]]*(C12 + C21) + \
+		 par[[4]]/2*C11^2 + par[[5]]/2*C22^2 + par[[6]]*C11*C22 + \
+		 par[[7]]*C12*C21 + par[[8]]/2*(C12^2 + C21^2)//Simplify
 
 
 (*Calculate Tadpoles for Minimisation conditions*)
@@ -66,7 +65,7 @@ VHiggsGrad=D[VHiggs,{higgsbase}]/.VEVRep//Transpose//Simplify;
 
 
 (*Define input parameters of the potential*)
-InputParameters={tanbeta, vs, L1, L2, L3, L4, L5, L6, L7, L8,m12Sq};
+InputParameters={type, L1, L2, L3, L4, L5, m12Sq, tanbeta};
 
 
 ListOfDependentParameter = Select[RemoveDuplicates[Join[RemoveDuplicates[InputParameters],RemoveDuplicates[Join[par,higgsvev]]]],MemberQ[Join[par,higgsvev],#]&];
@@ -74,7 +73,7 @@ Print["List of dependent parameters that you have to calculate is\n", ListOfDepe
 
 
 (*Which parameters should be replaced through the minimum conditions?*)
-ParToReplace = {m11Sq, m22Sq, msSq};
+ParToReplace = {m11Sq, m22Sq};
 TadpoleRep = Solve[VHiggsGrad == Table[0,{VHiggsGrad}],ParToReplace][[1]];
 AdditionalConditions = Solve[v1^2+v2^2==vev0^2&& tanbeta==v2/v1,{v1,v2}][[2]];
 (DepententParameters = Flatten[{TadpoleRep//.AdditionalConditions//Simplify,AdditionalConditions }])//TableForm
@@ -191,7 +190,7 @@ CTs += NullSpaceofCT;
 
 
 (*Chosen so that dL4 = 0 and dT9 = 0*)
-tiChoice = Solve[CTs[[7]]==0 && CTs[[21]]==0,{Subscript[t, 1],Subscript[t, 2]}][[1]]/.CWRelations
+tiChoice = Solve[CTs[[7]]==0,{Subscript[t, 1]}][[1]]/.CWRelations
 
 
 (*Fixed CTs*)
@@ -352,7 +351,8 @@ Dd//MatrixForm
 DU//MatrixForm
 
 
-VF = (UL . VCKM . Dd . DR) Phi2[[1]] + (DL . Dd . DR)Phi2[[2]] + (UL . DU . UR)Conjugate[Phi2[[2]]] - (DL . ConjugateTranspose[VCKM] . DU . UR) Conjugate[Phi2[[1]]]//Simplify
+VF = (UL . VCKM . Dd . DR) Phi2[[1]] + (DL . Dd . DR)Phi2[[2]] + (UL . DU . UR)Conjugate[Phi2[[2]]] -\
+     (DL . ConjugateTranspose[VCKM] . DU . UR) Conjugate[Phi2[[1]]]//Simplify
 
 
 MQuark = D[VF,{baseQuarks,2}]/.VEVRep;
@@ -384,14 +384,15 @@ ListImplementedModels//TableForm
 
 (*Arguments of CreateModelFile*)
 ImplementModel[
-"N2HDMMathematica", (*Model name*)
+"R2HDMMathematica", (*Model name*)
 higgsbase, (*List of all field*)
 higgsvev, (*VEVs as T = 0*)
 higgsvevFiniteTemp, (*VEVs as T != 0*)
 VEVList, (*Derivation VEVList (calculated automatically)*)
 par, (*Potential parameters *)
 InputParameters, (*Input parameters *)
-{5.91129,293.035,0.300812,0.321809,-0.133425,4.11105,-3.84178,9.46329,-0.750455,0.743982,4842.28},(*Specific input parameters for the example file*)
+(* type, L1, L2, L3, L4, L5, m12Sq, tanbeta *)
+{1, 2.740594787, 0.2423556498, 5.534491052, -2.585467181, -2.225991025, 7738.56, 4.63286},(*Specific input parameters for the example file*)
 DepententParameters, (*Depentent parameters and how to calculate them*)
 CurvatureL1, (*Scalar curvatures L1 (calculated automatically)*)
 CurvatureL2, (*Scalar curvatures L2 (calculated automatically)*)
@@ -408,7 +409,6 @@ CTCurvatureL4, (*Counterterm scalar curvatures L4 (calculated automatically)*)
 GaugeBasis, (*Gauge fields*)
 LepBase, (*Leptonic fields*)
 baseQuarks] (*Quark fields*)
-
 
 
 
