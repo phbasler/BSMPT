@@ -70,7 +70,7 @@ jobs:
           git push
 
       - name: Notify that changes are required
-        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true' }}
+        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit != 'true' }}
         run: |
           echo "Linter changes are required" >> $GITHUB_STEP_SUMMARY
           exit 1
