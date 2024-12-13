@@ -138,7 +138,7 @@ TransitionTracer::TransitionTracer(user_input &input)
             new_transition_data.crit_false_vev =
                 pair.false_phase.Get(pair.crit_temp).point;
 
-            CheckMassRatio(
+            auto max_ratio = CheckMassRatio(
                 input, new_transition_data.crit_false_vev, pair.crit_temp);
 
             BounceSolution bounce(input.modelPointer,
@@ -176,9 +176,10 @@ TransitionTracer::TransitionTracer(user_input &input)
                             EmptyValue))
                         .point;
 
-                CheckMassRatio(input,
-                               new_transition_data.nucl_approx_false_vev,
-                               bounce.GetNucleationTempApprox());
+                auto max_ratio =
+                    CheckMassRatio(input,
+                                   new_transition_data.nucl_approx_false_vev,
+                                   bounce.GetNucleationTempApprox());
               }
               else
               {
@@ -202,9 +203,11 @@ TransitionTracer::TransitionTracer(user_input &input)
                     pair.false_phase
                         .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
                         .point;
-                CheckMassRatio(input,
-                               new_transition_data.nucl_false_vev,
-                               bounce.GetNucleationTemp());
+
+                auto max_ratio =
+                    CheckMassRatio(input,
+                                   new_transition_data.nucl_false_vev,
+                                   bounce.GetNucleationTemp());
               }
               else
               {
@@ -228,9 +231,11 @@ TransitionTracer::TransitionTracer(user_input &input)
                     pair.false_phase
                         .Get(new_transition_data.perc_temp.value_or(EmptyValue))
                         .point;
-                CheckMassRatio(input,
-                               new_transition_data.perc_false_vev,
-                               bounce.GetPercolationTemp());
+
+                auto max_ratio =
+                    CheckMassRatio(input,
+                                   new_transition_data.perc_false_vev,
+                                   bounce.GetPercolationTemp());
               }
               else
               {
@@ -256,9 +261,11 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(
                             new_transition_data.compl_temp.value_or(EmptyValue))
                         .point;
-                CheckMassRatio(input,
-                               new_transition_data.compl_false_vev,
-                               bounce.GetCompletionTemp());
+
+                auto max_ratio =
+                    CheckMassRatio(input,
+                                   new_transition_data.compl_false_vev,
+                                   bounce.GetCompletionTemp());
               }
               else
               {
@@ -505,9 +512,9 @@ TransitionTracer::~TransitionTracer()
 {
 }
 
-void TransitionTracer::CheckMassRatio(const user_input &input,
-                                      const std::vector<double> &vec,
-                                      const double &temp) const
+double TransitionTracer::CheckMassRatio(const user_input &input,
+                                        const std::vector<double> &vec,
+                                        const double &temp) const
 {
   std::stringstream ss;
   std::vector<double> massOverTempSq, massOverTempSqGauge;
@@ -553,7 +560,7 @@ void TransitionTracer::CheckMassRatio(const user_input &input,
   }
 
   Logger::Write(LoggingLevel::TransitionDetailed, ss.str());
-  return;
+  return *std::max_element(massOverTempSq.begin(), massOverTempSq.end());
 }
 
 } // namespace BSMPT

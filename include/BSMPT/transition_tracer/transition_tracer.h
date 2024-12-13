@@ -194,10 +194,11 @@ public:
    * @param input
    * @param vev
    * @param temp
+   * @return maximal ratio
    */
-  void CheckMassRatio(const user_input &input,
-                      const std::vector<double> &vec,
-                      const double &temp) const;
+  double CheckMassRatio(const user_input &input,
+                        const std::vector<double> &vec,
+                        const double &temp) const;
 };
 
 } // namespace BSMPT
