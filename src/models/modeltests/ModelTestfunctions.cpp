@@ -1045,9 +1045,8 @@ TestResults CheckSymmetricTensorGauge(
   return TestResults::Pass;
 }
 
-void CheckImplementation(
-    const std::unique_ptr<Class_Potential_Origin> &modelPointer,
-    const int &WhichMinimizer)
+void CheckImplementation(const Class_Potential_Origin &point,
+                         const int &WhichMinimizer)
 {
   using std::pow;
 
@@ -1056,29 +1055,29 @@ void CheckImplementation(
 
   Logger::Write(LoggingLevel::Default,
                 "The tested Model is the " +
-                    ModelIDToString(modelPointer->get_Model()));
+                    ModelIDToString(point.get_Model()));
 
   std::vector<std::string> TestNames, TestResults;
 
   TestNames.push_back("CT number/label match");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNumberOfCTParameters(*modelPointer)));
+      ModelTests::CheckNumberOfCTParameters(point)));
 
   TestNames.push_back("VEV number/label match");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNumberOfVEVLabels(*modelPointer)));
+      ModelTests::CheckNumberOfVEVLabels(point)));
 
   TestNames.push_back("addLegendTemp number/label match");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckLegendTemp(*modelPointer)));
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckLegendTemp(point)));
 
   TestNames.push_back("addLegendTripleCouplings number/label match");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNumberOfTripleCouplings(*modelPointer)));
+      ModelTests::CheckNumberOfTripleCouplings(point)));
 
   TestNames.push_back("CKM matrix unitarity");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckCKMUnitarity(modelPointer->SMConstants)));
+      ModelTests::CheckCKMUnitarity(point.SMConstants)));
 
   Logger::Write(LoggingLevel::Default,
                 "This function calculates the masses of the gauge bosons, "
@@ -1087,9 +1086,9 @@ void CheckImplementation(
 
   TestNames.push_back("Matching gauge boson masses with SMparam.h");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckGaugeBosonMasses(*modelPointer)));
+      ModelTests::CheckGaugeBosonMasses(point)));
 
-  auto FermionCheck = ModelTests::CheckFermionicMasses(*modelPointer);
+  auto FermionCheck = ModelTests::CheckFermionicMasses(point);
   TestNames.push_back("Matching lepton masses with SMparam.h");
   TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.first));
   TestNames.push_back("Matching quark masses with SMparam.h");
@@ -1097,82 +1096,80 @@ void CheckImplementation(
 
   TestNames.push_back("Correct EW Minimum");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckTreeLevelMin(*modelPointer, WhichMinimizer)));
+      ModelTests::CheckTreeLevelMin(point, WhichMinimizer)));
 
   TestNames.push_back("Tadpole relations fullfilled");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckTadpoleRelations(*modelPointer)));
+      ModelTests::CheckTadpoleRelations(point)));
 
   TestNames.push_back("Matching Masses between NLO and tree-level");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNLOMasses(*modelPointer)));
+  TestResults.push_back(
+      ModelTests::TestResultsToString(ModelTests::CheckNLOMasses(point)));
 
-  if (modelPointer->UseVTreeSimplified)
+  if (point.UseVTreeSimplified)
   {
     TestNames.push_back("Checking VTreeSimplified");
     TestResults.push_back(ModelTests::TestResultsToString(
-        ModelTests::CheckVTreeSimplified(*modelPointer)));
+        ModelTests::CheckVTreeSimplified(point)));
   }
 
-  if (modelPointer->UseVCounterSimplified)
+  if (point.UseVCounterSimplified)
   {
     TestNames.push_back("Checking VCounterSimplified");
     TestResults.push_back(ModelTests::TestResultsToString(
-        ModelTests::CheckVCounterSimplified(*modelPointer)));
+        ModelTests::CheckVCounterSimplified(point)));
   }
 
   TestNames.push_back("Checking second derivative of CW+CT");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckCTConditionsSecondDerivative(*modelPointer)));
+      ModelTests::CheckCTConditionsSecondDerivative(point)));
 
   TestNames.push_back("Checking first derivative of CW+CT");
   TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckCTConditionsFirstDerivative(*modelPointer)));
+      ModelTests::CheckCTConditionsFirstDerivative(point)));
 
   TestNames.push_back("Check symmetric properties of the scalar tensor Lij");
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckSymmetricTensorScalarSecond(
-          modelPointer->Get_Curvature_Higgs_L2())));
+          point.Get_Curvature_Higgs_L2())));
 
   TestNames.push_back("Check symmetric properties of the scalar tensor Lijk");
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckSymmetricTensorScalarThird(
-          modelPointer->Get_Curvature_Higgs_L3())));
+          point.Get_Curvature_Higgs_L3())));
 
   TestNames.push_back("Check symmetric properties of the scalar tensor Lijkl");
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckSymmetricTensorScalarFourth(
-          modelPointer->Get_Curvature_Higgs_L4())));
+          point.Get_Curvature_Higgs_L4())));
 
   TestNames.push_back(
       "Check symmetric properties of the gauge tensor in the C2HDM");
-  TestResults.push_back(
-      ModelTests::TestResultsToString(ModelTests::CheckSymmetricTensorGauge(
-          modelPointer->Get_Curvature_Gauge_G2H2())));
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorGauge(point.Get_Curvature_Gauge_G2H2())));
 
   TestNames.push_back(
       "Check symmetric properties of the Lepton tensor in the C2HDM");
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckSymmetricTensorLeptonsThird(
-          modelPointer->Get_Curvature_Lepton_F2H1())));
+          point.Get_Curvature_Lepton_F2H1())));
 
   TestNames.push_back(
       "Check symmetric properties of the mass Lepton tensor in the C2HDM");
   TestResults.push_back(
       ModelTests::TestResultsToString(ModelTests::CheckSymmetricTensorLeptons(
-          modelPointer->Get_Curvature_Lepton_F2())));
+          point.Get_Curvature_Lepton_F2())));
 
   TestNames.push_back(
       "Check symmetric properties of the Quark tensor in the C2HDM");
   TestResults.push_back(ModelTests::TestResultsToString(
       ModelTests::CheckSymmetricTensorQuarksThird(
-          modelPointer->Get_Curvature_Quark_F2H1())));
+          point.Get_Curvature_Quark_F2H1())));
 
   TestNames.push_back(
       "Check symmetric properties of the mass Quark tensor in the C2HDM");
-  TestResults.push_back(
-      ModelTests::TestResultsToString(ModelTests::CheckSymmetricTensorQuarks(
-          modelPointer->Get_Curvature_Quark_F2())));
+  TestResults.push_back(ModelTests::TestResultsToString(
+      ModelTests::CheckSymmetricTensorQuarks(point.Get_Curvature_Quark_F2())));
 
   if (TestNames.size() != TestResults.size())
   {

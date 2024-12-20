@@ -95,7 +95,7 @@ try
       modelPointer->write();
       std::vector<double> dummy;
       modelPointer->Debugging(dummy, dummy);
-      ModelTests::CheckImplementation(modelPointer, args.WhichMinimizer);
+      ModelTests::CheckImplementation(*modelPointer, args.WhichMinimizer);
     }
     linecounter++;
     if (infile.eof()) break;

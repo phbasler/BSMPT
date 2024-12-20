@@ -70,7 +70,7 @@ TestResults CheckSymmetricTensorGauge(
  * defined in SMparah.h
  */
 void CheckImplementation(
-    const std::unique_ptr<Class_Potential_Origin> &modelPointer,
+    const Class_Potential_Origin &point,
     const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
 } // namespace ModelTests
