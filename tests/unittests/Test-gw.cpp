@@ -1045,7 +1045,7 @@ TEST_CASE("Test for EW symmetry restoration BP3", "[gw]")
   REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == 3);
 }
 
-TEST_CASE("Check percolation temperature for point of issue #173", "[gw]")
+TEST_CASE("Check percolation temperature for point of issue #173", "[gw1]")
 {
   const std::vector<double> example_point_R2HDM_machine_dep_temp_failure{
       /* lambda_1 = */ 1.939019085953685,
@@ -1059,6 +1059,7 @@ TEST_CASE("Check percolation temperature for point of issue #173", "[gw]")
 
   using namespace BSMPT;
   const auto SMConstants = GetSMConstants();
+  SetLogger({"--logginglevel::complete=true"});
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::R2HDM, SMConstants);
   modelPointer->initModel(example_point_R2HDM_machine_dep_temp_failure);
@@ -1067,9 +1068,11 @@ TEST_CASE("Check percolation temperature for point of issue #173", "[gw]")
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
 
   user_input input;
-  input.modelPointer   = modelPointer;
-  input.gw_calculation = true;
-  input.T_high         = 1000;
+  input.modelPointer        = modelPointer;
+  input.gw_calculation      = true;
+  input.T_high              = 1000;
+  input.maxpathintegrations = 2;
+
   TransitionTracer trans(input);
   trans.ListBounceSolution.at(0).CalculatePercolationTemp();
 
