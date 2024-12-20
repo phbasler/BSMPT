@@ -683,6 +683,58 @@ TEST_CASE("Checking phase tracking for SM with Mode 2", "[gw]")
   REQUIRE(vac.PhasesList.size() == 2);
 }
 
+TEST_CASE("Check maximal thermal mass squared over temperature ratio")
+{
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
+  modelPointer->initModel(example_point_SM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
+
+  auto output = trans.output_store;
+
+  REQUIRE(0.781639 == Approx(trans.CheckMassRatio(
+                                 input,
+                                 output.vec_trans_data.at(0).crit_false_vev,
+                                 output.vec_trans_data.at(0).crit_temp.value()))
+                          .epsilon(1e-2));
+  REQUIRE(0.781639 ==
+          Approx(trans.CheckMassRatio(
+                     input,
+                     output.vec_trans_data.at(0).nucl_approx_false_vev,
+                     output.vec_trans_data.at(0).nucl_approx_temp.value()))
+              .epsilon(1e-2));
+  REQUIRE(0.781639 == Approx(trans.CheckMassRatio(
+                                 input,
+                                 output.vec_trans_data.at(0).nucl_false_vev,
+                                 output.vec_trans_data.at(0).nucl_temp.value()))
+                          .epsilon(1e-2));
+  REQUIRE(0.781639 == Approx(trans.CheckMassRatio(
+                                 input,
+                                 output.vec_trans_data.at(0).perc_false_vev,
+                                 output.vec_trans_data.at(0).perc_temp.value()))
+                          .epsilon(1e-2));
+  REQUIRE(0.781639 ==
+          Approx(trans.CheckMassRatio(
+                     input,
+                     output.vec_trans_data.at(0).compl_false_vev,
+                     output.vec_trans_data.at(0).compl_temp.value()))
+              .epsilon(1e-2));
+}
+
 TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
@@ -843,7 +895,7 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
 }
 
 TEST_CASE(
-    "Checking phase tracking and GW for BP3 (low sample) (suposed to fail)",
+    "Checking phase tracking and GW for BP3 (low sample) (supposed to fail)",
     "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
