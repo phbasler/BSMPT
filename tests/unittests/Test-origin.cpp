@@ -131,4 +131,3 @@ TEST_CASE("Check CheckImplementation", "[origin]")
   ModelTests::CheckImplementation(*modelPointer,
                                   Minimizer::WhichMinimizerDefault);
 }
-
