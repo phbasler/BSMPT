@@ -193,7 +193,7 @@ TEST_CASE("Check CheckImplementation gmock", "[origin]")
   using namespace BSMPT;
   using ::testing::AtLeast;
   using ::testing::Return;
-  SetLogger({"--logginglevel::complete=true"});
+
   Mock_Class_Potential_Origin mock_point;
 
   EXPECT_CALL(mock_point, addLegendCT()).Times(AtLeast(0));
