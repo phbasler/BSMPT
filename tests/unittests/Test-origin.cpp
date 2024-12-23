@@ -188,7 +188,7 @@ public:
   MOCK_METHOD(std::vector<double>, GetCTIdentities, (), (override, const));
 };
 
-TEST_CASE("Check CheckImplementation", "[origin]")
+TEST_CASE("Check CheckImplementation gmock", "[origin]")
 {
   using namespace BSMPT;
   using ::testing::AtLeast;
