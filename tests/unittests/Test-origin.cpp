@@ -15,7 +15,7 @@ using Approx = Catch::Approx;
 #include "C2HDM.h"
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
-
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 namespace
 {
 
