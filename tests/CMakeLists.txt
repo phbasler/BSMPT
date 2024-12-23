@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 find_package(Catch2 3 CONFIG QUIET)
+find_package(GTest QUIET)
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
 

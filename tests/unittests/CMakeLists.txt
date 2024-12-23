@@ -12,6 +12,8 @@ target_link_libraries(
   PRIVATE GSL::gsl
           Catch2::Catch2WithMain
           CatchEventListener
+          GTest::gmock
+          ModelTests
           Minimizer
           MinimumTracer
           Models
