@@ -51,7 +51,8 @@ class BSMPT(ConanFile):
 
         if self.options.EnableTests:
             self.test_requires("catch2/3.5.3")
-            self.test_requires("benchmark/1.6.2")
+            self.test_requires("benchmark/1.9.0")
+            self.test_requires("gtest/1.11.0")
 
     def system_requirements(self):
         if self.options.EnableCoverage:

@@ -9,12 +9,14 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <gmock/gmock.h>
 
 using Approx = Catch::Approx;
 
 #include "C2HDM.h"
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 
 namespace
 {
@@ -132,3 +134,72 @@ TEST_CASE("Check CheckImplementation", "[origin]")
                                   Minimizer::WhichMinimizerDefault);
 }
 
+class Mock_Class_Potential_Origin : public BSMPT::Class_Potential_Origin
+{
+public:
+  Mock_Class_Potential_Origin()
+      : BSMPT::Class_Potential_Origin(BSMPT::GetSMConstants()) {};
+  MOCK_METHOD(double,
+              VEff,
+              (const std::vector<double> &v, double Temp, int diff, int Order),
+              (override, const));
+  MOCK_METHOD(double,
+              EWSBVEV,
+              (const std::vector<double> &v),
+              (override, const));
+  MOCK_METHOD(void,
+              SetEWVEVZero,
+              (std::vector<double> & sol),
+              (override, const));
+  MOCK_METHOD(void,
+              ReadAndSet,
+              (const std::string &linestr, std::vector<double> &par),
+              (override));
+  MOCK_METHOD(std::vector<std::string>, addLegendCT, (), (override, const));
+  MOCK_METHOD(std::vector<std::string>, addLegendTemp, (), (override, const));
+  MOCK_METHOD(std::vector<std::string>,
+              addLegendTripleCouplings,
+              (),
+              (override, const));
+  MOCK_METHOD(std::vector<std::string>, addLegendVEV, (), (override, const));
+  MOCK_METHOD(void, set_gen, (const std::vector<double> &par), (override));
+  MOCK_METHOD(void,
+              set_CT_Pot_Par,
+              (const std::vector<double> &par),
+              (override));
+  MOCK_METHOD(void, write, (), (override, const));
+  MOCK_METHOD(void, SetCurvatureArrays, (), (override));
+  MOCK_METHOD(bool, CalculateDebyeSimplified, (), (override));
+  MOCK_METHOD(bool, CalculateDebyeGaugeSimplified, (), (override));
+  MOCK_METHOD(double,
+              VTreeSimplified,
+              (const std::vector<double> &v),
+              (override, const));
+  MOCK_METHOD(double,
+              VCounterSimplified,
+              (const std::vector<double> &v),
+              (override, const));
+  MOCK_METHOD(void, TripleHiggsCouplings, (), (override));
+  MOCK_METHOD(std::vector<double>, calc_CT, (), (override, const));
+  MOCK_METHOD(void,
+              Debugging,
+              (const std::vector<double> &input, std::vector<double> &output),
+              (override, const));
+  MOCK_METHOD(std::vector<double>, GetCTIdentities, (), (override, const));
+};
+
+TEST_CASE("Check CheckImplementation", "[origin]")
+{
+  using namespace BSMPT;
+  using ::testing::AtLeast;
+  using ::testing::Return;
+  SetLogger({"--logginglevel::complete=true"});
+  Mock_Class_Potential_Origin mock_point;
+
+  EXPECT_CALL(mock_point, addLegendCT()).Times(AtLeast(0));
+  EXPECT_CALL(mock_point, addLegendVEV()).Times(1);
+  EXPECT_CALL(mock_point, addLegendTemp()).Times(1);
+  EXPECT_CALL(mock_point, addLegendTripleCouplings()).Times(1);
+
+  ModelTests::CheckImplementation(mock_point, Minimizer::WhichMinimizerDefault);
+}
