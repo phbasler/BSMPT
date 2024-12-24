@@ -197,7 +197,7 @@ endif()
 if(BSMPT_IS_TOPLEVEL)
   find_package(Doxygen)
   if(DOXYGEN_FOUND)
-  
+
     set(DOXYGEN_USE_MATHJAX YES)
     set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
     set(DOXYGEN_EXCLUDE

@@ -166,7 +166,7 @@ try
         outfile << sep << x;
       outfile << std::endl;
     } // END: vw loop
-  } // END: SFOEWPT FOUND
+  }   // END: SFOEWPT FOUND
   else
   {
     outfile << -1 << -1 << -1 << -1 << -1 << std::endl;
