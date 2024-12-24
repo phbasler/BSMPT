@@ -3,6 +3,8 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import os
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -14,25 +16,34 @@ release = '3.0.7'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['breathe', 'sphinx.ext.graphviz', 'sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'myst_parser']
+extensions = ['breathe', 'sphinx.ext.graphviz', 'sphinx.ext.autodoc', 'sphinx.ext.viewcode',
+              'sphinx.ext.napoleon', 'myst_parser', 'sphinx_github_changelog', 'sphinx_rtd_dark_mode']
+
+# Sphinx Github Changelog Token
+sphinx_github_changelog_token = os.getenv('SPHINX_GITHUB_CHANGELOG_TOKEN')
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-#breathe_debug_trace_directives = True
+# breathe_debug_trace_directives = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-#html_theme = 'classic'
+# html_theme = 'classic'
 html_theme = 'sphinx_rtd_theme'
+default_dark_mode = True
 html_static_path = ['_static']
 
+# Custom CSS, word wrap
+html_css_files = [
+    'custom.css',
+]
 
-#Logo
+# Logo
 html_logo = 'logo.png'
 
-#LaTeX
+# LaTeX
 latex_engine = 'xelatex'
 latex_elements = {
     'fontpkg': r'''
@@ -52,5 +63,6 @@ latex_elements = {
 }
 latex_show_urls = 'footnote'
 
-breathe_projects = {"BSMPT":"/Users/joaofranciscoviana/mega/BSMPT/build/macos-armv8-release/xml/"}
+breathe_projects = {
+    "BSMPT": "/Users/joaofranciscoviana/mega/BSMPT/build/macos-armv8-release/xml/"}
 breathe_default_project = "BSMPT"

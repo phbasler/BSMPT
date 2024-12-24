@@ -32,7 +32,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_MinimaTracer
 {
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int firstline{0}, lastline{0};
@@ -47,7 +47,7 @@ struct CLIOptions
   int CheckEWSymmetryRestoration{1};
   int num_check_pts{10};
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_MinimaTracer(const BSMPT::parser &argparser);
   bool good() const;
 };
 
@@ -61,7 +61,7 @@ try
   const auto SMConstants = GetSMConstants();
   auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_MinimaTracer args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -282,7 +282,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_MinimaTracer::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
@@ -355,7 +355,7 @@ bool CLIOptions::good() const
   return true;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_MinimaTracer::CLIOptions_MinimaTracer(const BSMPT::parser &argparser)
 {
   std::stringstream ss;
   argparser.check_required_parameters();

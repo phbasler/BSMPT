@@ -30,7 +30,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_PlotPlotter
 {
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int Line{2};
@@ -44,7 +44,7 @@ struct CLIOptions
   std::vector<double> min_start, min_end;
   std::vector<double> point;
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_PlotPlotter(const BSMPT::parser &argparser);
   bool good() const;
 };
 
@@ -58,7 +58,7 @@ try
   const auto SMConstants = GetSMConstants();
   auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_PlotPlotter args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -371,7 +371,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_PlotPlotter::good() const
 {
   if (Model == ModelID::ModelIDs::NotSet)
   {
@@ -424,7 +424,7 @@ bool CLIOptions::good() const
   return true;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_PlotPlotter::CLIOptions_PlotPlotter(const BSMPT::parser &argparser)
 {
   std::stringstream ss;
   argparser.check_required_parameters();

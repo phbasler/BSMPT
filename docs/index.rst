@@ -13,7 +13,9 @@ BSMPT - Beyond the Standard Model Phase Transitions documentation
    :maxdepth: 1
    :caption: Contents:
 
-   models
-   minima_tracer
+   release_notes
+   bsmptv3worldtour
    example_1
+   minima_tracer
+   models
    code

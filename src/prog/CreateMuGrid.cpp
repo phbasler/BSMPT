@@ -30,7 +30,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_CreateMuGrid
 {
   BSMPT::ModelID::ModelIDs Model{};
   int Line{};
@@ -41,14 +41,14 @@ struct CLIOptions
   bool UseNLopt{Minimizer::UseNLoptDefault};
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
 
-  CLIOptions(int argc, char *argv[]);
+  CLIOptions_CreateMuGrid(int argc, char *argv[]);
   bool good() const;
 };
 
 int main(int argc, char *argv[])
 try
 {
-  const CLIOptions args(argc, argv);
+  const CLIOptions_CreateMuGrid args(argc, argv);
 
   if (not args.good())
   {
@@ -156,7 +156,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(int argc, char *argv[])
+CLIOptions_CreateMuGrid::CLIOptions_CreateMuGrid(int argc, char *argv[])
 {
   std::vector<std::string> args;
   for (int i{1}; i < argc; ++i)
@@ -274,7 +274,7 @@ CLIOptions::CLIOptions(int argc, char *argv[])
   }
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_CreateMuGrid::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {

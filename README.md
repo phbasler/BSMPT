@@ -60,7 +60,7 @@ For additional information, comments, complaints or suggestions open a correspon
 
 ---
 
-### Citation:
+## Citation:
 If you use this program for your work, please cite 
 
   - [1803.02846](https://arxiv.org/abs/1803.02846)

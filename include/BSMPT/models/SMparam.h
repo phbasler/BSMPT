@@ -228,7 +228,7 @@ struct ISMConstants
 /**
  * @brief imaginary number i
  */
-const std::complex<double> II(0, 1);
+extern const std::complex<double> II;
 
 /**
  * @brief GetSMConstants returns a set of SM contants as indicated by the

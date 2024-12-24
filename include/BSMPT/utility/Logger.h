@@ -45,7 +45,7 @@ enum class LoggingLevel
 class BSMPTLogger
 {
 public:
-  friend Logger;
+  friend class Logger;
   BSMPTLogger(std::ostream &os) : mOstream{os.rdbuf()} {}
   BSMPTLogger(const BSMPTLogger &)            = delete;
   BSMPTLogger(BSMPTLogger &&)                 = delete;
