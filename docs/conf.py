@@ -63,6 +63,8 @@ latex_elements = {
 }
 latex_show_urls = 'footnote'
 
+xml_directory = os.getenv('XML_DIR', 'xml')
+
 breathe_projects = {
-    "BSMPT": "/Users/joaofranciscoviana/mega/BSMPT/build/macos-armv8-release/xml/"}
+    "BSMPT": xml_directory}
 breathe_default_project = "BSMPT"

@@ -18,3 +18,4 @@ analyze*.py
 CMakeUserPresets.json
 __pycache__/*
 docs/_build/*
+Pipfile
