@@ -41,13 +41,19 @@ jobs:
      
      # sphinx
      - run: pip3 install sphinx pipenv breathe myst_parser sphinx_github_changelog sphinx_rtd_dark_mode
+     - run: python3 docs/build_sphinx.py ./build/linux-x86_64-release/html
 
 
 
      - uses: actions/upload-artifact@v4
        with:
         path: build/linux-x86_64-release/html
-        name: documentation
+        name: doxygen
+
+     - uses: actions/upload-artifact@v4
+       with:
+        path: docs/_build
+        name: sphinx
 
   UploadDocumentation:
     if:   github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -57,11 +63,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: documentation
-          path: documentation
+          name: doxygen
+          path: doxygen
+      - uses: actions/download-artifact@v4
+        with:
+          name: sphinx
+          path: sphinx
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
             branch: gh-pages # The branch the action should deploy to.
-            folder: documentation # The folder the action should deploy.
+            folder: doxygen # The folder the action should deploy.
             target-folder: documentation
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.7.2
+        with:
+            branch: gh-pages # The branch the action should deploy to.
+            folder: sphinx # The folder the action should deploy.
+            target-folder: sphinx
