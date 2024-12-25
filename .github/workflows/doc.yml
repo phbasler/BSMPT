@@ -26,7 +26,7 @@ jobs:
        with:
           persist-credentials: false
      - name: installPackages
-       run: sudo apt-get install --no-install-recommends --yes doxygen
+       run: sudo apt-get install --no-install-recommends --yes doxygen graphviz
      - uses: actions/setup-python@v5
        with:
          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
