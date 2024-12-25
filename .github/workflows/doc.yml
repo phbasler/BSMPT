@@ -42,7 +42,7 @@ jobs:
      
      # sphinx
      - run: pip3 install sphinx pipenv breathe myst_parser sphinx_github_changelog sphinx_rtd_dark_mode
-     - run: python3 docs/build_sphinx.py ./build/linux-x86_64-release/html
+     - run: python3 docs/build_sphinx.py ./build/linux-x86_64-release/xml
 
 
 
