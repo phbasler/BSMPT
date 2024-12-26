@@ -63,7 +63,9 @@ latex_elements = {
 }
 latex_show_urls = 'footnote'
 
-xml_directory = os.getenv('XML_DIR', '../build/linux-x86_64-release/xml')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+xml_default = os.path.join(script_dir, "..", "build", "linux-x86_64-release","xml")
+xml_directory = os.getenv('XML_DIR', xml_default)
 
 breathe_projects = {
     "BSMPT": xml_directory}
