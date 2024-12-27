@@ -11,11 +11,51 @@ BSMPT - Beyond the Standard Model Phase Transitions documentation
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :caption: Info
 
    release_notes
-   bsmptv3worldtour
-   example_1
-   minima_tracer
-   models
+   worldtour
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Executables
+
+   executables/bsmpt
+   executables/calcct
+   executables/calctemps
+   executables/calcgw
+   executables/calculateewbg
+   executables/minimatracer
+   executables/nlovev
+   executables/plotewbg_nl
+   executables/plotewbg_vw
+   executables/potplotter 
+   executables/test
+   executables/triplehiggscouplingnlo
+   executables/vevevo
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Examples
+
+   examples/example_1
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Model Implementation
+
+   model_implementation/maple
+   model_implementation/mathematica
+   model_implementation/python
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Models
+
+   models/r2hdm
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Code
+
    code

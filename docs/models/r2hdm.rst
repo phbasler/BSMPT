@@ -1,6 +1,6 @@
 .. _new_page:
 
-Models
+R2HDM
 ==============
 
 .. doxygenenum:: BSMPT::ModelID::ModelIDs 

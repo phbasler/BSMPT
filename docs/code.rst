@@ -1,6 +1,6 @@
 .. _code_page:
 
-Code Base
+Code Structure
 ==============
 
 .. doxygenindex::
