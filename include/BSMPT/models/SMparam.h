@@ -236,4 +236,3 @@ extern const std::complex<double> II;
  */
 const ISMConstants GetSMConstants();
 } // namespace BSMPT
-
