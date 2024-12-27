@@ -22,7 +22,7 @@ The potential is given by
 .. math::
    \begin{aligned}V_{\text {C2HDM}}= & m_{11}^2 \Phi_1^{\dagger} \Phi_1+m_{22}^2 \Phi_2^{\dagger} \Phi_2-\left[m_{12}^2 \Phi_1^{\dagger} \Phi_2+\text { h.c. }\right]+\frac{1}{2} \lambda_1\left(\Phi_1^{\dagger} \Phi_1\right)^2+\frac{1}{2} \lambda_2\left(\Phi_2^{\dagger} \Phi_2\right)^2 \\& +\lambda_3\left(\Phi_1^{\dagger} \Phi_1\right)\left(\Phi_2^{\dagger} \Phi_2\right)+\lambda_4\left(\Phi_1^{\dagger} \Phi_2\right)\left(\Phi_2^{\dagger} \Phi_1\right)+\left[\frac{1}{2} \lambda_5\left(\Phi_1^{\dagger} \Phi_2\right)^2+\text { h.c. }\right] .\end{aligned}
 
-where all coupling constants are real except :math:`m_{12}` and :math:`\lambda_5` which, if non-real, explicitly break CP in the model at :math:`T = 0`.
+where all parameters are real except :math:`m_{12}` and :math:`\lambda_5` which, if non-real, explicitly break CP in the model at :math:`T = 0`.
 
 The :math:`T=0` vacuum is chosen to be
 

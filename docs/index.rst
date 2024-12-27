@@ -54,8 +54,10 @@ BSMPT - Beyond the Standard Model Phase Transitions documentation
 
    models/c2hdm
    models/cp_in_the_dark
-   models/r2hdm
+   models/cxsm
    models/n2hdm
+   models/sm
+   models/r2hdm
 
 .. toctree::
    :maxdepth: 1

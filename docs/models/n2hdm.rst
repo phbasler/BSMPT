@@ -5,7 +5,7 @@ N2HDM
 
 This implementation was based on [`1612.01309 <https://arxiv.org/abs/1612.01309>`_] and [`1912.10477 <https://arxiv.org/abs/1912.10477>`_]. 
 
-On the scalar sector there are two doublets 
+On the scalar sector there are two doublets and a real scalar field
 
 .. math::
    \Phi_1=\frac{1}{\sqrt{2}}\binom{\rho_1+\mathrm{i} \eta_1}{\zeta_1+\omega_1+\mathrm{i} \psi_1}, \quad \Phi_2=\frac{1}{\sqrt{2}}\binom{\rho_2+\omega_{\mathrm{CB}}+\mathrm{i} \eta_2}{\zeta_2+\omega_2+\mathrm{i}\left(\psi_2+\omega_{\mathrm{CP}}\right)}, \quad \Phi_S=\zeta_3+\omega_S
@@ -33,7 +33,7 @@ The potential is given by
 .. math::
    \begin{aligned}V_{\mathrm{N} 2 \mathrm{HDM}}= & m_{11}^2 \Phi_1^{\dagger} \Phi_1+m_{22}^2 \Phi_2^{\dagger} \Phi_2-m_{12}^2\left(\Phi_1^{\dagger} \Phi_2+\text { h.c. }\right)+\frac{\lambda_1}{2}\left(\Phi_1^{\dagger} \Phi_1\right)^2+\frac{\lambda_2}{2}\left(\Phi_2^{\dagger} \Phi_2\right)^2 \\& +\lambda_3 \Phi_1^{\dagger} \Phi_1 \Phi_2^{\dagger} \Phi_2+\lambda_4 \Phi_1^{\dagger} \Phi_2 \Phi_2^{\dagger} \Phi_1+\frac{\lambda_5}{2}\left(\left(\Phi_1^{\dagger} \Phi_2\right)^2+\text { h.c. }\right) \\& +\frac{1}{2} m_S^2 \Phi_S^2+\frac{\lambda_6}{8} \Phi_S^4+\lambda_7\left(\Phi_1^{\dagger} \Phi_1\right) \Phi_S^2+\lambda_8\left(\Phi_2^{\dagger} \Phi_2\right) \Phi_S^2,\end{aligned}
 
-where all coupling constants are real to preserve CP in the model at :math:`T = 0`.
+where all parameters are real to preserve CP in the model at :math:`T = 0`.
 
 The :math:`T=0` vacuum is chosen to be
 
