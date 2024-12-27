@@ -15,6 +15,7 @@ foreach(file_path ${SOURCE_FILES})
     PRIVATE Minimizer
             MinimumTracer
             Models
+            ModelTests
             Utility
             TestCompares
             ThermalFunctions

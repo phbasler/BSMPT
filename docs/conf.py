@@ -64,7 +64,11 @@ latex_elements = {
 latex_show_urls = 'footnote'
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-xml_default = os.path.join(script_dir, "..", "build", "linux-x86_64-release","xml")
+try:
+    preset = os.listdir(os.path.join(script_dir, "..", "build"))[0]
+except:
+    raise Exception("No build arch found inside /build/.")
+xml_default = os.path.join(script_dir, "..", "build", preset, "xml")
 xml_directory = os.getenv('XML_DIR', xml_default)
 
 breathe_projects = {
