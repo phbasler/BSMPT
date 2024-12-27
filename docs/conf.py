@@ -59,6 +59,7 @@ latex_elements = {
 \setlength{\cftsecnumwidth}{1.25cm}
 ''',
     'fncychap': r'\usepackage[Bjornstrup]{fncychap}',
+    'amsmath': r'\usepackage{amsmath}',
     'printindex': r'\footnotesize\raggedright\printindex',
 }
 latex_show_urls = 'footnote'
