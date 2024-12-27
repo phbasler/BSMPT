@@ -9,6 +9,7 @@ On the scalar sector there are two doublets
 
 .. math::
    \Phi_1=\frac{1}{\sqrt{2}}\binom{\rho_1+\mathrm{i} \eta_1}{\zeta_1+\omega_1+\mathrm{i} \psi_1}, \quad \Phi_2=\frac{1}{\sqrt{2}}\binom{\rho_2+\omega_{\mathrm{CB}}+\mathrm{i} \eta_2}{\zeta_2+\omega_2+\mathrm{i}\left(\psi_2+\omega_{\mathrm{CP}}\right)}
+
 where we impose a softly-broken :math:`\mathbb{Z}_2` which takes
 
 .. math::
