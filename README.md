@@ -121,36 +121,5 @@ Code from the following repositories is used in BSMPT:
 - [`ttk592::spline`](https://github.com/ttk592/spline) by Tino Kluge, a C++ cubic spline interpolation library 
 - [`AsciiPlotter`](https://github.com/joehood/asciiplotter) by Joe Hood, for ASCII plots in the terminal 
 
----
-
-## How to add a new model:
-
-To add a new model, you have to modify/create five files (for further details, also consult the manual):
-
-1. Go to `include/BSMPT/models` and copy `ClassTemplate.h` to `YourModel.h`. Adjust the name of the class `Class_Template` to `Class_YourModel`.
-
-2. Go to `src/models` and copy `ClassTemplate.cpp` to `YourModel.cpp`, and again change `Class_Template` to `Class_YourModel`. Also, follow the instructions in this file and in the manual to set up your new model. 
-
-3. For your model to compile, you have to open `src/models/CMakeLists.txt` and add `${header_path}/YourModel.h` as well as `YourModel.cpp` to the listed headers and source files.
-
-4. In `include/BSMPT/models/IncludeAllModels.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
-
-5. In `src/models/IncludeAllModels.cpp` you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also, to be able to call your model, you have to extend the `FChoose` function. For this you add a new case to the switch statement, which reads
-
-        case ModelIDs::YourModel: return std::make_unique<Class_YourModel>(); break;
-
-### Generate the C++ code for a model
-We provide currently two methods to generate the tensors and calculate the counter terms for a new model.
-
-1. At `tools/ModelGeneration/Maple` we provide the maple Worksheet `CreateModel.mw` which you can use to implement your model and get the tensors.
-2. At `tools/ModelGeneration/sympy` we provide a setup using only `python3` with `sympy` (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, `SM.py` and `G2HDM.py` (generic 2HDM) which both use the `ModelGenerator.py` module to calculate the tensors and CT. You can get the CT using `python3 SM.py --show ct` and the tensors by calling `python3 SM.py --show tensors`. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. in the G2HDM example).
-3. To show the simplified tree-level and counterterm potentials, you can use `python3 SM.py --show treeSimpl` and `python3 SM.py --show CTSimpl`.
-
-
-
-You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at bsmpt@lists.kit.edu
-
-Also contact us if you have a custom model for BSMPT v1.x and you have trouble converting it to the new notation.
-
 [DoxygenLink]: https://phbasler.github.io/BSMPT/documentation
 [SphinxLink]: https://phbasler.github.io/BSMPT/sphinx
