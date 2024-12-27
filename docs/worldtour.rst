@@ -1,6 +1,6 @@
 .. _bsmpt_v3_world_tour:
 
-World tour
+World Tour
 ==============
 
 .. csv-table:: 
