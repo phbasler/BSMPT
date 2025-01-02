@@ -17,7 +17,7 @@ release = '3.0.7'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = ['breathe', 'sphinx.ext.graphviz', 'sphinx.ext.autodoc', 'sphinx.ext.viewcode',
-              'sphinx.ext.napoleon', 'myst_parser', 'sphinx_github_changelog', 'sphinx_rtd_dark_mode']
+              'sphinx.ext.napoleon', 'myst_parser', 'sphinx_github_changelog']
 
 # Sphinx Github Changelog Token
 sphinx_github_changelog_token = os.getenv('SPHINX_GITHUB_CHANGELOG_TOKEN')
@@ -32,7 +32,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # html_theme = 'classic'
 html_theme = 'sphinx_rtd_theme'
-default_dark_mode = True
 html_static_path = ['_static']
 
 # Custom CSS, word wrap
