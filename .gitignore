@@ -16,6 +16,6 @@ analyze*.py
 *.synctex.gz
 
 CMakeUserPresets.json
-__pycache__/*
+*/__pycache__/*
 docs/_build/*
 Pipfile
