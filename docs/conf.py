@@ -40,7 +40,7 @@ html_css_files = [
 ]
 
 # Logo
-html_logo = 'logo.png'
+html_logo = '../logos/logo_(BSM_PT).png'
 
 # LaTeX
 latex_engine = 'xelatex'
