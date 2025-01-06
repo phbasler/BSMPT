@@ -49,11 +49,9 @@ The code is structured such that users can add their own models.
 The program package can be downloaded at:
 https://github.com/phbasler/BSMPT
 
-The documentation of the code is provided at [https://phbasler.github.io/BSMPT/documentation][DoxygenLink].
+The documentation of the code is provided at [https://phbasler.github.io/BSMPT/sphinx][SphinxLink].
 
 Sample input and output files are provided in the directory 'example'.
-
-Modifications and corrected bugs are reported in the file 'Changelog.md'.
 
 
 
