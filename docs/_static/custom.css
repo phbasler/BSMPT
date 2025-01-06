@@ -1,0 +1,45 @@
+table.docutils td {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+body {
+    --themecolor: #fc9403;
+}
+
+.wy-side-nav-search {
+    background-color: var(--themecolor);
+}
+
+.wy-nav-top {
+    background-color: var(--themecolor);
+}
+
+.wy-menu-vertical a:hover {
+    background-color: var(--themecolor) !important;
+}
+
+/* Change sidebar section header color */
+.wy-nav-side .wy-menu-vertical a:hover {
+    background-color: var(--themecolor) !important;
+    /* Background color */
+    color: #ffffff !important;
+}
+
+.wy-menu-vertical p.caption {
+    color: #d95555;
+}
+
+a {
+    color: var(--themecolor);
+}
+
+/* Hover effect for links in the main content */
+.rst-content a:hover {
+    color: #e97502 !important;
+}
+
+.rst-content a:visited {
+    color: #d95555 !important;
+    /* Change visited link color */
+}

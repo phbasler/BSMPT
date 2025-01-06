@@ -32,7 +32,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_BSMPT
 {
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int FirstLine{0}, LastLine{0};
@@ -44,7 +44,7 @@ struct CLIOptions
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
   bool UseMultithreading{true};
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_BSMPT(const BSMPT::parser &argparser);
   bool good() const;
 };
 
@@ -64,7 +64,7 @@ try
 
   auto argparser = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_BSMPT args(argparser);
 
   if (not args.good())
   {
@@ -236,7 +236,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_BSMPT::CLIOptions_BSMPT(const BSMPT::parser &argparser)
 {
   argparser.check_required_parameters();
   Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
@@ -288,7 +288,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_BSMPT::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {

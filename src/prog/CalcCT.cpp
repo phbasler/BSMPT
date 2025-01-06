@@ -26,7 +26,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_CalcCT
 {
 public:
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
@@ -34,7 +34,7 @@ public:
   std::string InputFile, OutputFile;
   bool TerminalOutput{false};
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_CalcCT(const BSMPT::parser &argparser);
   bool good() const;
 
 private:
@@ -51,7 +51,7 @@ try
   const auto SMConstants = GetSMConstants();
   auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_CalcCT args(argparser);
 
   if (not args.good())
   {
@@ -111,7 +111,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_CalcCT::CLIOptions_CalcCT(const BSMPT::parser &argparser)
 {
   argparser.check_required_parameters();
   Model      = BSMPT::ModelID::getModel(argparser.get_value("model"));
@@ -129,7 +129,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_CalcCT::good() const
 {
   if (Model == ModelID::ModelIDs::NotSet)
   {
