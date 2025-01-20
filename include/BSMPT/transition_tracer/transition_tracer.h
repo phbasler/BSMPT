@@ -123,14 +123,21 @@ struct gw_data
   std::optional<double> alpha;
   std::optional<double> beta_over_H;
 
-  std::optional<double> K_sw;
-  std::optional<double> K_turb;
+  std::optional<double> K;
+  std::optional<double> Epsilon_Turb;
 
-  std::optional<double> fpeak_sw;
-  std::optional<double> fpeak_turb;
-  std::optional<double> h2Omega_sw;
-  std::optional<double> h2Omega_turb;
+  std::optional<double> fb_col;
+  std::optional<double> omegab_col;
 
+  std::optional<double> f1_sw;
+  std::optional<double> f2_sw;
+  std::optional<double> omega_2_sw;
+
+  std::optional<double> f1_turb;
+  std::optional<double> f2_turb;
+  std::optional<double> omega_2_turb;
+
+  std::optional<double> SNR_col;
   std::optional<double> SNR_sw;
   std::optional<double> SNR_turb;
   std::optional<double> SNR;

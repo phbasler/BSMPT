@@ -193,14 +193,19 @@ try
               << output.vec_gw_data.at(i).vwall.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).alpha.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).beta_over_H.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).K_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).fpeak_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).h2Omega_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).SNR_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).K_turb.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).fpeak_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).K.value_or(EmptyValue) << sep
+              << output.vec_gw_data.at(i).Epsilon_Turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).fb_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).omegab_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f1_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f2_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).omega_2_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f1_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f2_turb.value_or(EmptyValue)
               << sep
-              << output.vec_gw_data.at(i).h2Omega_turb.value_or(EmptyValue)
+              << output.vec_gw_data.at(i).omega_2_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR_sw.value_or(EmptyValue)
               << sep << output.vec_gw_data.at(i).SNR_turb.value_or(EmptyValue)
               << sep << output.vec_gw_data.at(i).SNR.value_or(EmptyValue)
               << sep;

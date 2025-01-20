@@ -313,31 +313,49 @@ TransitionTracer::TransitionTracer(user_input &input)
 
                 if (new_gw_data.status_gw != StatusGW::Failure)
                 {
-                  gw.CalcPeakFrequencySoundWave();
-                  gw.CalcPeakAmplitudeSoundWave();
-                  new_gw_data.fpeak_sw   = gw.data.fPeakSoundWave;
-                  new_gw_data.h2Omega_sw = gw.data.h2OmegaPeakSoundWave;
+                  gw.CalcPeakCollision();
+                  new_gw_data.fb_col = gw.data.CollisionParameter.f_b.value();
+                  new_gw_data.omegab_col =
+                      gw.data.CollisionParameter.Omega_b.value();
 
-                  gw.CalcPeakFrequencyTurbulence();
-                  gw.CalcPeakAmplitudeTurbulence();
-                  new_gw_data.fpeak_turb   = gw.data.fPeakTurbulence;
-                  new_gw_data.h2Omega_turb = gw.data.h2OmegaPeakTurbulence;
+                  gw.CalcPeakSoundWave();
+                  new_gw_data.f1_sw = gw.data.SoundWaveParameter.f_1.value();
+                  new_gw_data.f2_sw = gw.data.SoundWaveParameter.f_2.value();
+                  new_gw_data.omega_2_sw =
+                      gw.data.SoundWaveParameter.Omega_2.value();
 
-                  // center integration limits around fpeak
-                  gw.data.swON       = true;
-                  gw.data.turbON     = false;
-                  new_gw_data.SNR_sw = gw.GetSNR(1e-6, 10);
+                  gw.CalcPeakTurbulence();
+                  new_gw_data.f1_turb = gw.data.TurbulanceParameter.f_1.value();
+                  new_gw_data.f2_turb = gw.data.TurbulanceParameter.f_2.value();
+                  new_gw_data.omega_2_turb =
+                      gw.data.TurbulanceParameter.Omega_2.value();
 
+                  // SNR of Collision
+                  gw.data.collisionON = true;
+                  gw.data.swON        = false;
+                  gw.data.turbON      = false;
+                  new_gw_data.SNR_col = gw.GetSNR(1e-6, 10);
+
+                  // SNR of Sound Waves
+                  gw.data.collisionON = false;
+                  gw.data.swON        = true;
+                  gw.data.turbON      = false;
+                  new_gw_data.SNR_sw  = gw.GetSNR(1e-6, 10);
+
+                  // SNR of Turbulence
+                  gw.data.collisionON  = false;
                   gw.data.swON         = false;
                   gw.data.turbON       = true;
                   new_gw_data.SNR_turb = gw.GetSNR(1e-6, 10);
 
-                  gw.data.swON    = true;
-                  gw.data.turbON  = true;
-                  new_gw_data.SNR = gw.GetSNR(1e-6, 10);
+                  // SNR of all contributions
+                  gw.data.collisionON = true;
+                  gw.data.swON        = true;
+                  gw.data.turbON      = true;
+                  new_gw_data.SNR     = gw.GetSNR(1e-6, 10);
 
-                  new_gw_data.K_sw   = gw.data.K_sw;
-                  new_gw_data.K_turb = gw.data.K_turb;
+                  new_gw_data.K            = gw.data.K;
+                  new_gw_data.Epsilon_Turb = gw.data.Epsilon_Turb;
 
                   new_gw_data.status_gw = gw.data.status;
                 }

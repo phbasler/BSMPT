@@ -20,6 +20,40 @@
 namespace BSMPT
 {
 
+struct BPLParameters
+{
+  std::optional<double> Omega_b;
+  std::optional<double> f_b;
+  std::optional<double> n1;
+  std::optional<double> n2;
+  std::optional<double> a1;
+
+  inline bool IsDefined() const
+  {
+    return Omega_b.has_value() && f_b.has_value() && n1.has_value() &&
+           n2.has_value() && a1.has_value();
+  }
+};
+
+struct DBPLParameters
+{
+  std::optional<double> Omega_2;
+  std::optional<double> f_1;
+  std::optional<double> f_2;
+  std::optional<double> n1;
+  std::optional<double> n2;
+  std::optional<double> n3;
+  std::optional<double> a1;
+  std::optional<double> a2;
+
+  inline bool IsDefined() const
+  {
+    return Omega_2.has_value() && f_1.has_value() && f_2.has_value() &&
+           n1.has_value() && n2.has_value() && n3.has_value() &&
+           a1.has_value() && a2.has_value();
+  }
+};
+
 /**
  * @brief struct to store all calculated GW data
  */
@@ -27,25 +61,29 @@ struct GravitationalWaveData
 {
   bool swON             = true;  // enable sound wave contribution by default
   bool turbON           = true;  // enable turbulence contribution by default
+  bool collisionON      = true;  // enable collision contribution by default
   double transitionTemp = false; // transition temperature
   double PTStrength     = false; // strength of EW phase transition
-  double InvTimeScale   = false; // inverse time scale beta/H
-  double vb             = false; // bubble wall velocity
+  double betaH          = false; // inverse time scale beta/H
+  double vw             = false; // bubble wall velocity
+  double Csound         = false; // Soud speed = 1/sqrt(3)
 
-  double kappa_sw = false;   // efficiency factor for sound waves
-  double K_sw     = false;   // kinetic energy fraction in fluid of total bubble
-                             // energy for sound waves
-  double HR         = false; // time scale times max. velocity for sound waves
-  double kappa_turb = false; // efficiency factor for turbulence
+  double kappa = false; // kinetic energy fraction of a single expanding bubble
+  double K     = false; // kinetic energy fraction
+  double HR    = false; // time scale times max. velocity for sound waves
+  double Epsilon_Turb = false; //  fraction of overall kinetic energy in bulk
+                               //  motion that is converted to MHD
+  double kappa_turb = false;   // efficiency factor for turbulence
   double K_turb     = false; // kinetic energy fraction in fluid of total bubble
                              // energy for turbulence
-  double gstar = false;      // number of eff. d.o.f.
-  double Hstar = false;      // Hubble rate at percolation temperature
+  double gstar  = false;     // number of eff. d.o.f.
+  double Hstar  = false;     // Hubble rate at transition temperature
+  double Hstar0 = false; // Hubble rate at transition temperature redshift today
+  double FGW0   = false; // Redshift factor for the fractional energy density
 
-  double fPeakSoundWave        = false; // peak frequency for sound wave
-  double h2OmegaPeakSoundWave  = false; // peak amplitude for sound wave
-  double fPeakTurbulence       = false; // peak frequency for turbulence
-  double h2OmegaPeakTurbulence = false; // peak amplitude for turbulence
+  BPLParameters CollisionParameter;
+  DBPLParameters SoundWaveParameter;
+  DBPLParameters TurbulanceParameter;
 
   StatusGW status = StatusGW::NotSet; // gw calculation status
 };
@@ -85,35 +123,31 @@ public:
   double h = 0.674;
 
   /**
-   * @brief Calculate peak frequency of GW signal for sound waves
+   * @brief Calculate peak amplitude and frequency for GW signal from collision
    */
-  void CalcPeakFrequencySoundWave();
+  void CalcPeakCollision();
 
   /**
-   * @brief Calculate peak amplitude of GW signal for sound waves
+   * @brief Calculate peak amplitude and frequency for GW signal from sound
+   * waves
    */
-  void CalcPeakAmplitudeSoundWave();
+  void CalcPeakSoundWave();
 
   /**
-   * @brief Calculate peak frequency of GW signal from turbulence
+   * @brief Calculate peak amplitude and frequency for GW signal from turbulence
    */
-  void CalcPeakFrequencyTurbulence();
+  void CalcPeakTurbulence();
 
-  /**
-   * @brief Calculate peak amplitude of GW signal from turbulence
-   */
-  void CalcPeakAmplitudeTurbulence();
+  double BPL(const double &f, const BPLParameters &par) const;
+
+  double DBPL(const double &f, const DBPLParameters &par) const;
 
   /**
    * @brief Amplitude of GW signal as a function of
    * @param f frequency
-   * @param swON true = contribution from sound waves switched on,
-   * false = switched off
-   * @param turbON true = contribution from turbulence switched on,
-   * false = switched off
    * @return h2OmegaGW
    */
-  double CalcGWAmplitude(double f, bool swON, bool turbON);
+  double CalcGWAmplitude(double f);
 
   /**
    * @brief GetSNR
@@ -171,53 +205,49 @@ struct resultErrorPair
 Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax);
 
 /**
- * @brief Get efficiency factor kappa_sw for sound waves
+ * @brief Get kinetic energy fraction of a single expanding bubble
  *
  * @param alpha strength of the phase transition
  * @param vwall bubble wall velocity
  * @param Csound speed of sound
  * @return double
  */
-double
-Getkappa_sw(const double &alpha, const double &vwall, const double &Csound);
+double Getkappa(const double &alpha, const double &vwall, const double &Csound);
 
 /**
- * @brief Get K for sound waves
+ * @brief Get the kinetic energy fraction \f$ K \f$
  *
  * @param alpha strength of the phase transition
  * @param vwall bubble wall velocity
  * @param Csound speed of sound
  * @return double
  */
-double GetK_sw(const double &alpha, const double &vwall, const double &Csound);
+double GetK(const double &alpha, const double &vwall, const double &Csound);
 
 /**
- * @brief Get HR for sound waves
+ * @brief Get HR
  *
- * @param invTimeScale beta/H, inverse time scale
+ * @param betaH beta/H, inverse time scale
  * @param vwall bubble wall velocity
  * @param Csound speed of sound
  * @return double
  */
-double
-GetHR(const double &invTimeScale, const double &vwall, const double &Csound);
+double GetHR(const double &betaH, const double &vwall, const double &Csound);
 
 /**
- * @brief Get K for turbulence
+ * @brief Calculate the Hubble rate at transition time refshifted to today
+ *
+ * @param temp transition temperature
+ * @param gstar effective d.o.f. at transition time
+ */
+double GetHstar0(const double &temp, const double &gstar);
+
+/**
+ * @brief Get \f$ \tilde{K} = \frac{\alpha}{1+\alpha}\f$
  *
  * @param alpha strength of the phase transition
- * @param kappa turbulence efficiency factor
  * @return double
  */
-double GetK_turb(const double &alpha, const double &kappa);
-
-/**
- * @brief Determine fluid turnover time regime
- *
- * @param HR mean bubble separation
- * @param K fraction of the kinetic energy in the fluid
- * @return true if H*tauSH approx. 1, false if smaller than 1
- */
-bool IsFluidTurnoverApproxOne(const double &HR, const double &K);
+double GetKtilde(const double &alpha);
 
 } // namespace BSMPT

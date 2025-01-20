@@ -17,26 +17,28 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
 {
   data.transitionTemp = BACalc.CalcTransitionTemp(which_transition_temp);
   data.PTStrength     = BACalc.GetPTStrength();
-  data.InvTimeScale   = BACalc.GetInvTimeScale();
-  data.vb             = BACalc.GetWallVelocity();
-  data.kappa_sw       = Getkappa_sw(
-      data.PTStrength, data.vb, BACalc.modelPointer->SMConstants.Csound);
-  data.K_sw = GetK_sw(
-      data.PTStrength, data.vb, BACalc.modelPointer->SMConstants.Csound);
-  data.HR = GetHR(
-      data.InvTimeScale, data.vb, BACalc.modelPointer->SMConstants.Csound);
-  data.kappa_turb = CalcEpsTurb(BACalc.GetEpsTurb()) * data.kappa_sw;
-  data.K_turb     = GetK_turb(data.PTStrength, data.kappa_turb);
-  data.gstar      = BACalc.GetGstar();
-  data.Hstar      = BACalc.HubbleRate(data.transitionTemp);
+  data.betaH          = BACalc.GetInvTimeScale();
+  data.vw             = BACalc.GetWallVelocity();
+  data.kappa          = Getkappa(
+      data.PTStrength, data.vw, BACalc.modelPointer->SMConstants.Csound);
+  data.K =
+      GetK(data.PTStrength, data.vw, BACalc.modelPointer->SMConstants.Csound);
+  data.HR = GetHR(data.betaH, data.vw, BACalc.modelPointer->SMConstants.Csound);
+  data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
+                          BACalc.GetGstar());
+  data.Epsilon_Turb = BACalc.GetEpsTurb();
+  data.kappa_turb   = CalcEpsTurb(BACalc.GetEpsTurb()) * data.kappa;
+  data.gstar        = BACalc.GetGstar();
+  data.Hstar        = BACalc.HubbleRate(data.transitionTemp);
+  data.FGW0         = 1.64 * 1.e-5 * pow(100. / BACalc.GetGstar(), 1 / 3.);
+  data.Csound       = BACalc.modelPointer->SMConstants.Csound;
 
-  if (data.InvTimeScale < 1)
+  if (data.betaH < 1)
   {
     data.status = StatusGW::Failure;
     Logger::Write(
         LoggingLevel::GWDetailed,
-        "beta/H < 1 detected, with beta/H = " +
-            std::to_string(data.InvTimeScale) +
+        "beta/H < 1 detected, with beta/H = " + std::to_string(data.betaH) +
             ". Transition is assumed to happen, but no GWs calculated.");
   }
   else if (data.transitionTemp == -1)
@@ -55,7 +57,7 @@ double GravitationalWave::CalcEpsTurb(double epsturb_in)
 {
   if (epsturb_in == -1)
   {
-    double HtauSW = 2. / std::sqrt(3) * data.HR / std::sqrt(data.K_sw);
+    double HtauSW = 2. / std::sqrt(3) * data.HR / std::sqrt(data.K);
     return std::pow((1 - std::min(HtauSW, 1.)), 2. / 3.);
   }
   else
@@ -64,85 +66,142 @@ double GravitationalWave::CalcEpsTurb(double epsturb_in)
   }
 }
 
-void GravitationalWave::CalcPeakFrequencySoundWave()
+void GravitationalWave::CalcPeakCollision()
 {
-  double res = 26e-6 * (1. / this->data.HR) *
-               (this->data.transitionTemp / 100) *
-               std::pow(this->data.gstar / 100, 1. / 6);
-  this->data.fPeakSoundWave = res;
+  const double n1 = 2.4;
+  const double n2 = -2.4;
+  const double a1 = 1.2;
+
+  data.CollisionParameter.n1 = n1;
+  data.CollisionParameter.n2 = n2;
+  data.CollisionParameter.a1 = a1;
+
+  // Calculate characteristic frequency
+
+  const double f_p            = 0.11 * data.Hstar0 / data.betaH;
+  data.CollisionParameter.f_b = f_p * pow(-n1 / n2, -1 / a1);
+
+  // Calculate amplitude for collisions
+  const double A_str  = 0.05;
+  const double Ktilde = GetKtilde(data.PTStrength);
+  const double Omega_p =
+      data.FGW0 * A_str * pow(Ktilde, 2) / pow(data.betaH, 2);
+
+  data.CollisionParameter.Omega_b =
+      Omega_p * pow(1. / 2. * pow(-n2 / n1, n1 / (n1 - n2)) +
+                        1. / 2. * pow(-n1 / n2, -n2 / (n1 - n2)),
+                    (n1 - n2) / a1);
 }
 
-void GravitationalWave::CalcPeakAmplitudeSoundWave()
+void GravitationalWave::CalcPeakSoundWave()
 {
-  double ratio = 0;
-  if (IsFluidTurnoverApproxOne(this->data.HR, this->data.K_sw))
-  {
-    ratio = this->data.HR * std::pow(this->data.K_sw, 2.);
-  }
-  else
-  {
-    ratio = 2. / std::sqrt(3) * std::pow(this->data.HR, 2) *
-            std::pow(this->data.K_sw, 3. / 2);
-  }
+  data.SoundWaveParameter.n1 = 3.;
+  data.SoundWaveParameter.n2 = 1.;
+  data.SoundWaveParameter.n3 = -3.;
+  data.SoundWaveParameter.a1 = 2.;
+  data.SoundWaveParameter.a2 = 4.;
 
-  //  Taken from erratum of https://arxiv.org/pdf/1704.05871.pdf
-  this->data.h2OmegaPeakSoundWave = h * h * 2.061 * 1.2e-2 * 3.57e-5 *
-                                    std::pow(100. / this->data.gstar, 1. / 3.) *
-                                    ratio;
+  // Characteristic frequencies
+
+  const double xi_shell = abs(data.vw - data.Csound);
+  const double delta_w  = xi_shell / max(data.vw, data.Csound);
+
+  const double f_1 = 0.2 * data.Hstar0 / data.HR;
+  const double f_2 = 0.5 * data.Hstar0 / (data.HR * delta_w);
+
+  // Sound wave amplitude
+
+  const double Asw = 0.11; // Numerical simulation
+  const double HtauSW =
+      std::min(1., 2. / std::sqrt(3) * data.HR / std::sqrt(data.K));
+
+  const double Omega_int = data.FGW0 * Asw * pow(data.K, 2) * HtauSW * data.HR;
+
+  // Convert Omega_int to Omega_2
+
+  data.SoundWaveParameter.f_1 = f_1;
+  data.SoundWaveParameter.f_2 = f_2;
+  data.SoundWaveParameter.Omega_2 =
+      Omega_int * (sqrt(2) + (2 * f_2 / f_1) / (1 + pow(f_2 / f_1, 2))) / M_PI;
 }
 
-void GravitationalWave::CalcPeakFrequencyTurbulence()
+void GravitationalWave::CalcPeakTurbulence()
 {
-  double res = 7.909e-5 * (1. / this->data.HR) *
-               (this->data.transitionTemp / 100) *
-               std::pow(this->data.gstar / 100., 1. / 6.);
-  this->data.fPeakTurbulence = res;
+  data.TurbulanceParameter.n1 = 3.;
+  data.TurbulanceParameter.n2 = 1.;
+  data.TurbulanceParameter.n3 = -8. / 3.;
+  data.TurbulanceParameter.a1 = 4.;
+  data.TurbulanceParameter.a2 = 2.15;
+
+  // Characteristic frequencies
+  const double A       = 0.085;
+  const double N       = 2.;
+  const double Omega_s = data.Epsilon_Turb * data.K;
+
+  data.TurbulanceParameter.f_1 =
+      sqrt(3 * Omega_s * data.Hstar0) / (2. * N * data.HR);
+  data.TurbulanceParameter.f_2 = 2.2 * data.Hstar0 / (data.HR);
+
+  // Calculate Omega_2 for turbulence
+
+  const double A_MHD = 3 * 2.2 * A / (4 * pow(M_PI, 2)) *
+                       pow(2, -11 / (3 * data.TurbulanceParameter.a2.value()));
+
+  data.TurbulanceParameter.Omega_2 =
+      data.FGW0 * A_MHD * pow(Omega_s, 2) * pow(data.HR, 2);
 }
 
-void GravitationalWave::CalcPeakAmplitudeTurbulence()
+double GravitationalWave::BPL(const double &f, const BPLParameters &par) const
 {
-  double res = 1.144e-4 * std::pow(100. / this->data.gstar, 1. / 3.) *
-               this->data.HR * std::pow(this->data.K_turb, 3. / 2.);
-  this->data.h2OmegaPeakTurbulence = res;
+  const double Omega_b = par.Omega_b.value();
+  const double f_b     = par.f_b.value();
+  const double n1      = par.n1.value();
+  const double n2      = par.n2.value();
+  const double a1      = par.a1.value();
+
+  return Omega_b * pow(f / f_b, n1) *
+         pow(0.5 + 0.5 * pow(f / f_b, a1), (n2 - n1) / a1);
 }
 
-double GravitationalWave::CalcGWAmplitude(double f, bool swON, bool turbON)
+double GravitationalWave::DBPL(const double &f, const DBPLParameters &par) const
+{
+  const double Omega_2 = par.Omega_2.value();
+  const double f_1     = par.f_1.value();
+  const double f_2     = par.f_2.value();
+  const double n1      = par.n1.value();
+  const double n2      = par.n2.value();
+  const double n3      = par.n3.value();
+  const double a1      = par.a1.value();
+  const double a2      = par.a2.value();
+
+  const double Sf = pow(f / f_1, n1) *
+                    pow(1 + pow(f / f_1, a1), (-n1 + n2) / a1) *
+                    pow(1 + pow(f / f_2, a2), (-n2 + n3) / a2);
+  const double S2 = pow(f_2 / f_1, n1) *
+                    pow(1 + pow(f_2 / f_1, a1), (-n1 + n2) / a1) *
+                    pow(1 + pow(f_2 / f_2, a2), (-n2 + n3) / a2);
+  return Omega_2 * Sf / S2;
+}
+
+double GravitationalWave::CalcGWAmplitude(double f)
 {
   double res = 0;
-  if (swON)
+  if (data.swON)
   {
-    if (!this->data.h2OmegaPeakSoundWave)
-    {
-      this->CalcPeakAmplitudeSoundWave();
-    }
-    else if (!this->data.fPeakSoundWave)
-    {
-      this->CalcPeakFrequencySoundWave();
-    }
-
-    res += this->data.h2OmegaPeakSoundWave * std::pow(4. / 7, -7. / 2) *
-           std::pow(f / this->data.fPeakSoundWave, 3) *
-           std::pow((1 + 3. / 4 * std::pow(f / this->data.fPeakSoundWave, 2)),
-                    -7. / 2);
+    if (!data.SoundWaveParameter.IsDefined()) this->CalcPeakSoundWave();
+    res += DBPL(f, data.SoundWaveParameter);
   }
-  if (turbON)
+  if (data.turbON)
   {
-    if (!this->data.h2OmegaPeakTurbulence)
-    {
-      this->CalcPeakAmplitudeTurbulence();
-    }
-    else if (!this->data.fPeakTurbulence)
-    {
-      this->CalcPeakFrequencyTurbulence();
-    }
-
-    res += this->data.h2OmegaPeakTurbulence *
-           std::pow(f / this->data.fPeakTurbulence, 3) /
-           std::pow(1 + f / this->data.fPeakTurbulence, 11 / 3) /
-           (1 + 8 * M_PI * f / this->data.Hstar);
+    if (!data.TurbulanceParameter.IsDefined()) this->CalcPeakTurbulence();
+    res += DBPL(f, data.TurbulanceParameter);
   }
-
-  return res;
+  if (data.collisionON)
+  {
+    if (!data.CollisionParameter.IsDefined()) this->CalcPeakTurbulence();
+    res += BPL(f, data.CollisionParameter);
+  }
+  return h * h * res; // Reduced hubble factor \f$ h^2 \f$
 }
 
 double
@@ -184,9 +243,7 @@ double snr_integrand(double f, void *params)
 {
   class GravitationalWave &obj = *static_cast<GravitationalWave *>(params);
 
-  double func = std::pow(
-      obj.CalcGWAmplitude(f, obj.data.swON, obj.data.turbON) / (h2OmSens(f)),
-      2);
+  double func = std::pow(obj.CalcGWAmplitude(f) / (h2OmSens(f)), 2);
   return func;
 }
 
@@ -220,8 +277,7 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
   return res;
 }
 
-double
-Getkappa_sw(const double &alpha, const double &vwall, const double &Csound)
+double Getkappa(const double &alpha, const double &vwall, const double &Csound)
 {
   double kappa;
   double kappaA = std::pow(vwall, 6.0 / 5.0) * 6.9 * alpha /
@@ -253,28 +309,26 @@ Getkappa_sw(const double &alpha, const double &vwall, const double &Csound)
   return kappa;
 }
 
-double GetK_sw(const double &alpha, const double &vwall, const double &Csound)
+double GetK(const double &alpha, const double &vwall, const double &Csound)
 {
-  double kappa = Getkappa_sw(alpha, vwall, Csound);
-  return kappa * alpha / (1. + alpha);
+  double kappa = Getkappa(alpha, vwall, Csound);
+  return 0.6 * kappa * alpha / (1. + alpha);
 }
 
-double
-GetHR(const double &invTimeScale, const double &vwall, const double &Csound)
+double GetHR(const double &betaH, const double &vwall, const double &Csound)
 {
   double max_velo = std::max(vwall, Csound);
-  return 1. / invTimeScale * std::pow(8 * M_PI, 1. / 3) * max_velo;
+  return 1. / betaH * std::pow(8 * M_PI, 1. / 3) * max_velo;
 }
 
-double GetK_turb(const double &alpha, const double &kappa)
+double GetHstar0(const double &temp, const double &gstar)
 {
-  return kappa * alpha / (1. + alpha);
+  return 1.65 * 1e-5 * pow(gstar / 100, 1 / 6.) * (temp / 100);
 }
 
-bool IsFluidTurnoverApproxOne(const double &HR, const double &K)
+double GetKtilde(const double &alpha)
 {
-  double ratio = 2 * HR / std::sqrt(3 * K);
-  return (ratio < 1) ? false : true;
+  return alpha / (1. + alpha);
 }
 
 } // namespace BSMPT
