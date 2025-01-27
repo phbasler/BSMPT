@@ -19,10 +19,26 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.PTStrength     = BACalc.GetPTStrength();
   data.betaH          = BACalc.GetInvTimeScale();
   data.vw             = BACalc.GetWallVelocity();
-  data.kappa          = Getkappa(
-      data.PTStrength, data.vw, BACalc.modelPointer->SMConstants.Csound);
-  data.K =
-      GetK(data.PTStrength, data.vw, BACalc.modelPointer->SMConstants.Csound);
+  std::vector<double> FalseVacuum =
+      BACalc.phase_pair.false_phase.Get(data.transitionTemp).point;
+  std::vector<double> TrueVacuum =
+      BACalc.phase_pair.true_phase.Get(data.transitionTemp).point;
+
+  data.Csound_false =
+      CalculateSoundSpeed(BACalc.CalcTransitionTemp(which_transition_temp),
+                          BACalc.phase_pair.false_phase,
+                          BACalc.modelPointer);
+
+  data.Csound_true =
+      CalculateSoundSpeed(BACalc.CalcTransitionTemp(which_transition_temp),
+                          BACalc.phase_pair.true_phase,
+                          BACalc.modelPointer);
+
+  data.kappa = kappa::kappaNuMuModel(pow(data.Csound_true, 2),
+                                     pow(data.Csound_false, 2),
+                                     BACalc.GetPTStrength(),
+                                     BACalc.vwall);
+  data.K     = GetK(data.PTStrength, data.kappa);
   data.HR = GetHR(data.betaH, data.vw, BACalc.modelPointer->SMConstants.Csound);
   data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
                           BACalc.GetGstar());
@@ -31,7 +47,6 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.gstar        = BACalc.GetGstar();
   data.Hstar        = BACalc.HubbleRate(data.transitionTemp);
   data.FGW0         = 1.64 * 1.e-5 * pow(100. / BACalc.GetGstar(), 1 / 3.);
-  data.Csound       = BACalc.modelPointer->SMConstants.Csound;
 
   if (data.betaH < 1)
   {
@@ -103,8 +118,8 @@ void GravitationalWave::CalcPeakSoundWave()
 
   // Characteristic frequencies
 
-  const double xi_shell = abs(data.vw - data.Csound);
-  const double delta_w  = xi_shell / max(data.vw, data.Csound);
+  const double xi_shell = abs(data.vw - data.Csound_false);
+  const double delta_w  = xi_shell / max(data.vw, data.Csound_false);
 
   const double f_1 = 0.2 * data.Hstar0 / data.HR;
   const double f_2 = 0.5 * data.Hstar0 / (data.HR * delta_w);
@@ -183,6 +198,39 @@ double GravitationalWave::DBPL(const double &f, const DBPLParameters &par) const
   return Omega_2 * Sf / S2;
 }
 
+double GravitationalWave::CalculateSoundSpeed(
+    const double &Tstar,
+    Phase &phase,
+    const std::shared_ptr<Class_Potential_Origin> &modelPointer)
+{
+  const double eps                         = 0.01;
+  std::function<double(Minimum minimum)> V = [&](Minimum minimum)
+  {
+    // Potential wrapper
+    std::vector<double> res = modelPointer->MinimizeOrderVEV(minimum.point);
+    return modelPointer->VEff(res, minimum.temp);
+  };
+  const double V_before = V(phase.Get(Tstar + eps));
+  const double V_tstar  = V(phase.Get(Tstar));
+  const double V_after  = V(phase.Get(Tstar - eps));
+  const double dVdT     = (V_before - V_after) / (2. * eps);
+  const double d2VdT2   = (V_before - 2. * V_tstar + V_after) / (eps * eps);
+  const double cs       = sqrt(dVdT / (d2VdT2 * Tstar));
+  if (isnan(cs))
+  {
+    stringstream ss;
+    ss << "Sound speed calculation failed!" << "\n";
+    ss << "V(T-eps) V(T) V(T + eps) " << V_after << " " << V_tstar << " "
+       << V_before << "\n";
+    ss << "dVdT = \t" << dVdT << "\n";
+    ss << "d2VdT2 = \t" << d2VdT2 << "\n";
+    ss << "Using cs = 1/sqrt(3) instead.";
+    Logger::Write(LoggingLevel::GWDetailed, ss.str());
+    return 1 / sqrt(3.);
+  }
+  return cs;
+}
+
 double GravitationalWave::CalcGWAmplitude(double f)
 {
   double res = 0;
@@ -250,9 +298,8 @@ double snr_integrand(double f, void *params)
 struct resultErrorPair
 Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
 {
-  double abs_err = obj.AbsErr;
-  double rel_err = obj.RelErr;
-
+  double abs_err             = obj.AbsErr;
+  double rel_err             = obj.RelErr;
   std::size_t workspace_size = 1000;
   gsl_integration_workspace *w =
       gsl_integration_workspace_alloc(workspace_size);
@@ -277,41 +324,8 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
   return res;
 }
 
-double Getkappa(const double &alpha, const double &vwall, const double &Csound)
+double GetK(const double &alpha, const double &kappa)
 {
-  double kappa;
-  double kappaA = std::pow(vwall, 6.0 / 5.0) * 6.9 * alpha /
-                  (1.36 - 0.037 * std::sqrt(alpha) + alpha);
-  double kappaB =
-      std::pow(alpha, 2.0 / 5.0) / (0.017 + std::pow(0.997 + alpha, 2.0 / 5.0));
-  double kappaC = std::sqrt(alpha) / (0.135 + std::sqrt(0.98 + alpha));
-  double kappaD = alpha / (0.73 + 0.083 * std::sqrt(alpha) + alpha);
-  double xiJ =
-      (sqrt((2.0 / 3.0) * alpha + alpha * alpha) + std::sqrt(1.0 / 3.0)) /
-      (1 + alpha);
-  double deltaK = -0.9 * log((sqrt(alpha) / (1 + std::sqrt(alpha))));
-
-  if (vwall < Csound)
-    kappa = std::pow(Csound, 11.0 / 5.0) * kappaA * kappaB /
-            ((pow(Csound, 11.0 / 5.0) - std::pow(vwall, 11.0 / 5.0)) * kappaB +
-             vwall * std::pow(Csound, 6.0 / 5.0) * kappaA);
-  else if (vwall > xiJ)
-    kappa = std::pow(xiJ - 1, 3.0) * std::pow(xiJ, 5.0 / 2.0) *
-            std::pow(vwall, -5.0 / 2.0) * kappaC * kappaD /
-            ((pow(xiJ - 1, 3.0) - std::pow(vwall - 1, 3.0)) *
-                 std::pow(xiJ, 5.0 / 2.0) * kappaC +
-             std::pow(vwall - 1, 3.0) * kappaD);
-  else
-    kappa = kappaB + (vwall - Csound) * deltaK +
-            (pow(vwall - Csound, 3.0) / std::pow(xiJ - Csound, 3.0)) *
-                (kappaC - kappaB - (xiJ - Csound) * deltaK);
-
-  return kappa;
-}
-
-double GetK(const double &alpha, const double &vwall, const double &Csound)
-{
-  double kappa = Getkappa(alpha, vwall, Csound);
   return 0.6 * kappa * alpha / (1. + alpha);
 }
 
@@ -331,4 +345,267 @@ double GetKtilde(const double &alpha)
   return alpha / (1. + alpha);
 }
 
+namespace kappa
+{
+// Compute kappa https://arxiv.org/abs/2010.09744
+
+double mu(double a, double b)
+{
+  return (a - b) / (1.0 - a * b);
+}
+
+double getwow(double a, double b)
+{
+  return a / (1.0 - a * a) / b * (1.0 - b * b);
+}
+
+std::pair<double, int> getvm(double al, double vw, double cs2b)
+{
+  if (vw * vw < cs2b)
+  {
+    return {vw, 0};
+  }
+  double cc   = 1.0 - 3.0 * al + vw * vw * (1.0 / cs2b + 3.0 * al);
+  double disc = -4.0 * vw * vw / cs2b + cc * cc;
+  if (disc < 0.0 || cc < 0.0)
+  {
+    return {std::sqrt(cs2b), 1};
+  }
+  return {(cc + std::sqrt(disc)) / 2.0 * cs2b / vw, 2};
+}
+
+// Differential equation system for dfdv
+int dfdv(double v, const double y[], double dydv[], void *params)
+{
+  double cs2 = *(double *)params;
+  double xi  = y[0];
+  double w   = y[1];
+
+  dydv[0] = (std::pow(mu(xi, v), 2) / cs2 - 1.0) * (1.0 - v * xi) * xi /
+            (2.0 * v * (1.0 - v * v));
+  dydv[1] = (1.0 + 1.0 / cs2) * mu(xi, v) * w / (1.0 - v * v);
+
+  return GSL_SUCCESS;
+}
+
+// Solve ODE using GSL
+std::vector<std::vector<double>> solve_ode(double vw, double v0, double cs2)
+{
+  const size_t dim          = 2;
+  gsl_odeiv2_system sys     = {dfdv, nullptr, dim, &cs2};
+  gsl_odeiv2_driver *driver = gsl_odeiv2_driver_alloc_y_new(
+      &sys, gsl_odeiv2_step_rkf45, -1e-10, 1e-10, 0.0);
+
+  std::vector<std::vector<double>> results;
+
+  double v    = v0;
+  double y[2] = {vw, 1.}; // Initial conditions
+  results.push_back({v, y[0], y[1]});
+
+  const size_t steps = 64 * 1024;
+  for (size_t i = 1; i < steps; ++i)
+  {
+    double v_next = v0 * (1.0 - static_cast<double>(i) / (steps - 1));
+    if (i == steps - 1) v_next = v / 100.; // Avoid 1/0
+    gsl_odeiv2_driver_apply(driver, &v, v_next, y);
+    results.push_back({v_next, y[0], y[1]});
+  }
+  gsl_odeiv2_driver_free(driver);
+  return results;
+}
+
+double integrate(const std::vector<double> &y, const std::vector<double> &x)
+{
+  if (y.size() != x.size() || y.size() < 2)
+  {
+
+    throw std::invalid_argument(
+        "Vectors x and y must have the same size and "
+        "contain at least two elements. The x and y sizes are " +
+        std::to_string(x.size()) + " and " + std::to_string(y.size()));
+  }
+
+  // Check if x is in ascending or descending order
+  bool is_descending = x.front() > x.back();
+
+  // Create local copies if x is descending
+  std::vector<double> x_sorted = x, y_sorted = y;
+  if (is_descending)
+  {
+    std::reverse(x_sorted.begin(), x_sorted.end());
+    std::reverse(y_sorted.begin(), y_sorted.end());
+  }
+
+  gsl_integration_workspace *workspace = gsl_integration_workspace_alloc(2000);
+  gsl_function F;
+  double result, error;
+
+  // Interpolation function
+  F.function = [](double xi, void *params) -> double
+  {
+    auto data = static_cast<
+        std::pair<const std::vector<double> *, const std::vector<double> *> *>(
+        params);
+    const auto &y = *data->first;
+    const auto &x = *data->second;
+
+    if (xi < x.front() || xi > x.back())
+    {
+      throw std::out_of_range("xi is out of bounds of the x vector.");
+    }
+
+    // Find the interval
+    size_t idx = std::lower_bound(x.begin(), x.end(), xi) - x.begin();
+    if (idx == 0) return y[0];
+    if (idx >= x.size()) return y.back();
+
+    // Linear interpolation
+    double x1 = x[idx - 1], x2 = x[idx];
+    double y1 = y[idx - 1], y2 = y[idx];
+    return y1 + (xi - x1) * (y2 - y1) / (x2 - x1);
+  };
+
+  // Pass sorted data as parameters
+  auto params = std::make_pair(&y_sorted, &x_sorted);
+  F.params    = &params;
+
+  // Integrate
+  gsl_set_error_handler_off(); // Disable custom error handler if not defined
+  gsl_integration_qags(&F,
+                       x_sorted.front(),
+                       x_sorted.back(),
+                       1e-10,
+                       1e-10,
+                       2000,
+                       workspace,
+                       &result,
+                       &error);
+
+  // Clean up
+  gsl_integration_workspace_free(workspace);
+
+  // If x was descending, negate the result because integration limits are
+  // reversed
+  if (is_descending)
+  {
+    result = -result;
+  }
+
+  return result;
+}
+
+// Get K and Wow
+std::pair<double, double> getKandWow(double vw, double v0, double cs2)
+{
+  if (v0 == 0)
+  {
+    return {0, 1};
+  }
+  auto results = solve_ode(vw, v0, cs2);
+  std::vector<double> vs, xis, wows, yis;
+
+  for (const auto &r : results)
+  {
+    vs.push_back(r[0]);
+    xis.push_back(r[1]);
+    wows.push_back(r[2]);
+  }
+
+  if (mu(vw, v0) * vw <= cs2)
+  {
+    size_t ll = 1;
+    for (size_t i = 0; i < xis.size(); ++i)
+    {
+      if (mu(xis[i], vs[i]) * xis[i] <= cs2)
+      {
+        ll = std::max(static_cast<size_t>(1), i + 1);
+      }
+    }
+
+    vs.resize(std::min(ll + 1, vs.size()));
+    xis.resize(std::min(ll + 1, vs.size()));
+    wows.resize(std::min(ll + 1, vs.size()));
+
+    for (size_t i = 0; i < wows.size(); ++i)
+      wows[i] *= getwow(xis.back(), mu(xis.back(), vs.back())) / wows.back();
+  }
+
+  for (size_t i = 0; i < wows.size(); ++i)
+    yis.push_back(wows[i] * pow(xis[i] * vs[i], 2) / (1 - pow(vs[i], 2)));
+
+  if (xis.size() == 1) return {0, wows[0]};
+
+  double Kint = integrate(yis, xis);
+  return {Kint * 4.0 / std::pow(vw, 3), wows[0]};
+}
+
+// Remaining functions
+double alN(double al, double wow, double cs2b, double cs2s)
+{
+  double da = (1.0 / cs2b - 1.0 / cs2s) / (1.0 / cs2s + 1.0) / 3.0;
+  return (al + da) * wow - da;
+}
+
+std::pair<double, double>
+getalNwow(double vp, double vm, double vw, double cs2b, double cs2s)
+{
+  auto [Ksh, wow] = getKandWow(vw, mu(vw, vp), cs2s);
+  double al = (vp / vm - 1.0) * (vp * vm / cs2b - 1.0) / (1.0 - vp * vp) / 3.0;
+  return {alN(al, wow, cs2b, cs2s), wow};
+}
+
+void custom_error_handler(const char *reason,
+                          const char *file,
+                          int line,
+                          int gsl_errno)
+{
+  std::cerr << "GSL Warning: " << reason << " at " << file << ":" << line
+            << std::endl;
+  (void)gsl_errno;
+}
+
+double kappaNuMuModel(double cs2b, double cs2s, double al, double vw)
+{
+  gsl_set_error_handler(&custom_error_handler);
+  auto [vm, mode] = getvm(al, vw, cs2b);
+  double Ksh = 0, wow = 1, vp = vw;
+  double vpm;
+
+  if (mode < 2)
+  {
+    auto [almax, wow2] = getalNwow(0, vm, vw, cs2b, cs2s);
+    if (almax < al) return 0;
+
+    vp                 = std::min(cs2s / vw, vw);
+    auto [almin, wow1] = getalNwow(vp, vm, vw, cs2b, cs2s);
+
+    if (almin > al) return 0;
+
+    std::vector<std::vector<double>> iv = {{vp, almin}, {0, almax}};
+    while (abs(iv[1][0] - iv[0][0]) > 1.e-7)
+    {
+      vpm        = (iv[1][0] + iv[0][0]) / 2.0;
+      double alm = getalNwow(vpm, vm, vw, cs2b, cs2s).first;
+      if (alm > al)
+      {
+        iv = {iv[0], {vpm, alm}};
+      }
+      else
+      {
+        iv = {{vpm, alm}, iv[1]};
+      }
+    }
+    vp                 = (iv[1][0] + iv[0][0]) / 2.0;
+    std::tie(Ksh, wow) = getKandWow(vw, mu(vw, vp), cs2s);
+  }
+
+  double Krf = 0;
+  if (mode > 0)
+  {
+    auto [Krf_val, wow3] = getKandWow(vw, mu(vw, vm), cs2b);
+    Krf                  = -wow * getwow(vp, vm) * Krf_val;
+  }
+  return (Ksh + Krf) / al;
+}
+} // namespace kappa
 } // namespace BSMPT

@@ -15,8 +15,16 @@
 #include <BSMPT/bounce_solution/bounce_solution.h> // BounceSolution
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/Logger.h>
+#include <algorithm>
+#include <cmath>
+#include <functional>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_integration.h>
 #include <gsl/gsl_math.h>
-
+#include <gsl/gsl_odeiv2.h>
+#include <iostream>
+#include <numeric>
+#include <vector>
 namespace BSMPT
 {
 
@@ -66,8 +74,8 @@ struct GravitationalWaveData
   double PTStrength     = false; // strength of EW phase transition
   double betaH          = false; // inverse time scale beta/H
   double vw             = false; // bubble wall velocity
-  double Csound         = false; // Soud speed = 1/sqrt(3)
-
+  double Csound_false   = false; // speed sound false vacuum
+  double Csound_true    = false; // speed sound true vacuum
   double kappa = false; // kinetic energy fraction of a single expanding bubble
   double K     = false; // kinetic energy fraction
   double HR    = false; // time scale times max. velocity for sound waves
@@ -138,8 +146,41 @@ public:
    */
   void CalcPeakTurbulence();
 
+  /**
+   * @brief Calculate sound speed \f$ c_s^2 = \frac{1}{T}
+   * \frac{V'_{\text{eff}}(T)}{V''_{\text{eff}}(T)} \f$
+   *
+   * @param Tstar transition temperature.
+   * @param phase phase where we calculate the sound speed.
+   * @param modelPointer model pointer.
+   * @return double sound speed in that phase at that temperature.
+   */
+  double CalculateSoundSpeed(
+      const double &Tstar,
+      Phase &phase,
+      const std::shared_ptr<Class_Potential_Origin> &modelPointer);
+
+  /**
+   * @brief Broken power law spectrum \f$
+   * \Omega_{\mathrm{GW}}^{\mathrm{BPL}}\left(f,
+   * \vec{\theta}_{\mathrm{Cosmo}}\right)=\Omega_b\left(\frac{f}{f_b}\right)^{n_1}\left[\frac{1}{2}+\frac{1}{2}\left(\frac{f}{f_b}\right)^{a_1}\right]^{\frac{n_2-n_1}{a_1}}
+   * \f$
+   *
+   * @param f frequency
+   * @param par spectrum parameters
+   * @return double amplitude at that frequency
+   */
   double BPL(const double &f, const BPLParameters &par) const;
 
+  /**
+   * @brief Double broken power law spectrum \f$
+   * S(f)=N\left(\frac{f}{f_1}\right)^{n_1}\left[1+\left(\frac{f}{f_1}\right)^{a_1}\right]^{\frac{-n_1+n_2}{a_1}}\left[1+\left(\frac{f}{f_2}\right)^{a_2}\right]^{\frac{-n_2+n_3}{a_2}}
+   * \f$
+   *
+   * @param f frequency
+   * @param par spectrum parameters
+   * @return double amplitude at that frequency
+   */
   double DBPL(const double &f, const DBPLParameters &par) const;
 
   /**
@@ -205,24 +246,13 @@ struct resultErrorPair
 Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax);
 
 /**
- * @brief Get kinetic energy fraction of a single expanding bubble
- *
- * @param alpha strength of the phase transition
- * @param vwall bubble wall velocity
- * @param Csound speed of sound
- * @return double
- */
-double Getkappa(const double &alpha, const double &vwall, const double &Csound);
-
-/**
  * @brief Get the kinetic energy fraction \f$ K \f$
  *
  * @param alpha strength of the phase transition
- * @param vwall bubble wall velocity
- * @param Csound speed of sound
+ * @param kappa efficiency factor
  * @return double
  */
-double GetK(const double &alpha, const double &vwall, const double &Csound);
+double GetK(const double &alpha, const double &kappa);
 
 /**
  * @brief Get HR
@@ -250,4 +280,21 @@ double GetHstar0(const double &temp, const double &gstar);
  */
 double GetKtilde(const double &alpha);
 
+namespace kappa
+{
+// Compute kappa https://arxiv.org/abs/2010.09744
+double mu(double a, double b);
+double getwow(double a, double b);
+void custom_error_handler(const char *reason,
+                          const char *file,
+                          int line,
+                          int gsl_errno);
+std::pair<double, int> getvm(double al, double vw, double cs2b);
+int dfdv(double v, const double y[], double dydv[], void *params);
+std::vector<std::vector<double>> solve_ode(double vw, double v0, double cs2);
+double integrate(const std::vector<double> &y, const std::vector<double> &x);
+std::pair<double, double> getKandWow(double vw, double v0, double cs2);
+double alN(double al, double wow, double cs2b, double cs2s);
+double kappaNuMuModel(double cs2b, double cs2s, double al, double vw);
+} // namespace kappa
 } // namespace BSMPT
