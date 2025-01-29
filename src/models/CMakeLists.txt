@@ -14,6 +14,7 @@ set(header
     ${header_path}/ClassPotentialCxSM.h
     ${header_path}/ClassPotentialSM.h
     ${header_path}/ClassPotentialCPintheDark.h
+    ${header_path}/ClassPotentialRxSM.h
     # Here you can add your new model
     ${header_path}/ClassTemplate.h)
 
@@ -28,6 +29,7 @@ set(src
     ClassPotentialCxSM.cpp
     ClassPotentialSM.cpp
     ClassPotentialCPintheDark.cpp
+    ClassPotentialRxSM.cpp
     # Here you can add your new model
     ClassTemplate.cpp)
 
