@@ -81,13 +81,11 @@ struct GravitationalWaveData
   double HR    = false; // time scale times max. velocity for sound waves
   double Epsilon_Turb = false; //  fraction of overall kinetic energy in bulk
                                //  motion that is converted to MHD
-  double kappa_turb = false;   // efficiency factor for turbulence
-  double K_turb     = false; // kinetic energy fraction in fluid of total bubble
-                             // energy for turbulence
-  double gstar  = false;     // number of eff. d.o.f.
-  double Hstar  = false;     // Hubble rate at transition temperature
-  double Hstar0 = false; // Hubble rate at transition temperature redshift today
-  double FGW0   = false; // Redshift factor for the fractional energy density
+  double gstar = false;        // number of eff. d.o.f.
+  double Hstar = false;        // Hubble rate at transition temperature
+  double Hstar0 =
+      false; // Reduced Hubble rate at transition temperature redshift today
+  double FGW0 = false; // Redshift factor for the fractional energy density
 
   BPLParameters CollisionParameter;
   DBPLParameters SoundWaveParameter;
@@ -174,7 +172,7 @@ public:
 
   /**
    * @brief Double broken power law spectrum \f$
-   * S(f)=N\left(\frac{f}{f_1}\right)^{n_1}\left[1+\left(\frac{f}{f_1}\right)^{a_1}\right]^{\frac{-n_1+n_2}{a_1}}\left[1+\left(\frac{f}{f_2}\right)^{a_2}\right]^{\frac{-n_2+n_3}{a_2}}
+   * 2^\frac{n_2-n_3}{a_2}\left(1+\left(\frac{f_2}{f_1}\right)^{a_1}\right)^{\frac{n_1-n_2}{a_1}}\left(\frac{f}{f_2}\right)^{n_1}\left(1+\left(\frac{f}{f_1}\right)^{a_1}\right)^{\frac{n_2-n_1}{a_1}}\left(1+\left(\frac{f}{f_2}\right)^{a_2}\right)^{\frac{n_3-n_2}{a_2}}
    * \f$
    *
    * @param f frequency

@@ -43,10 +43,10 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
                           BACalc.GetGstar());
   data.Epsilon_Turb = BACalc.GetEpsTurb();
-  data.kappa_turb   = CalcEpsTurb(BACalc.GetEpsTurb()) * data.kappa;
-  data.gstar        = BACalc.GetGstar();
-  data.Hstar        = BACalc.HubbleRate(data.transitionTemp);
-  data.FGW0         = 1.64 * 1.e-5 * pow(100. / BACalc.GetGstar(), 1 / 3.);
+
+  data.gstar = BACalc.GetGstar();
+  data.Hstar = BACalc.HubbleRate(data.transitionTemp);
+  data.FGW0  = 1.64 / pow(h, 2) * 1.e-5 * pow(100. / BACalc.GetGstar(), 1 / 3.);
 
   if (data.betaH < 1)
   {
@@ -154,8 +154,8 @@ void GravitationalWave::CalcPeakTurbulence()
   const double Omega_s = data.Epsilon_Turb * data.K;
 
   data.TurbulanceParameter.f_1 =
-      sqrt(3 * Omega_s * data.Hstar0) / (2. * N * data.HR);
-  data.TurbulanceParameter.f_2 = 2.2 * data.Hstar0 / (data.HR);
+      sqrt(3 * Omega_s) * data.Hstar0 / (2. * N * data.HR);
+  data.TurbulanceParameter.f_2 = 2.2 * data.Hstar0 / data.HR;
 
   // Calculate Omega_2 for turbulence
 
