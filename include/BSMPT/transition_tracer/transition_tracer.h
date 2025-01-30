@@ -125,6 +125,8 @@ struct gw_data
 
   std::optional<double> K;
   std::optional<double> Epsilon_Turb;
+  std::optional<double> cs_f;
+  std::optional<double> cs_t;
 
   std::optional<double> fb_col;
   std::optional<double> omegab_col;

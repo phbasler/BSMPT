@@ -2880,6 +2880,8 @@ std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
       legend.push_back("beta/H_" + std::to_string(i));
       legend.push_back("K_" + std::to_string(i));
       legend.push_back("Eps_turb_" + std::to_string(i));
+      legend.push_back("cs_f_" + std::to_string(i));
+      legend.push_back("cs_t_" + std::to_string(i));
       legend.push_back("fb_col_" + std::to_string(i));
       legend.push_back("h2Omegab_col_" + std::to_string(i));
       legend.push_back("f_1_sw_" + std::to_string(i));
