@@ -63,16 +63,14 @@ void writeBaryoConfigFile(
 
   if (massiveConfig.has_value())
   {
-    file << "VIA Ansatz treating the bottom quark massive "
-         << "\n"
+    file << "VIA Ansatz treating the bottom quark massive " << "\n"
          << "Massive: " << (massiveConfig.value() == 1 ? " yes " : " no ")
          << "\n";
   }
 
   if (includeStrings.at(3).has_value())
   {
-    file << "FH Ansatz with the plasma velocities "
-         << "\n"
+    file << "FH Ansatz with the plasma velocities " << "\n"
          << "Include: " << includeStrings.at(3).value() << "\n";
   }
 
