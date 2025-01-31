@@ -45,7 +45,6 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.Epsilon_Turb = BACalc.GetEpsTurb();
 
   data.gstar = BACalc.GetGstar();
-  data.Hstar = BACalc.HubbleRate(data.transitionTemp);
   data.FGW0  = 1.64 / pow(h, 2) * 1.e-5 * pow(100. / BACalc.GetGstar(), 1 / 3.);
 
   if (data.betaH < 1)

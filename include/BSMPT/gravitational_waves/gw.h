@@ -82,7 +82,6 @@ struct GravitationalWaveData
   double Epsilon_Turb = false; //  fraction of overall kinetic energy in bulk
                                //  motion that is converted to MHD
   double gstar = false;        // number of eff. d.o.f.
-  double Hstar = false;        // Hubble rate at transition temperature
   double Hstar0 =
       false; // Reduced Hubble rate at transition temperature redshift today
   double FGW0 = false; // Redshift factor for the fractional energy density
