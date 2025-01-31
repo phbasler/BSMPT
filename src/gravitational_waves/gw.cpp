@@ -92,7 +92,7 @@ void GravitationalWave::CalcPeakCollision()
 
   // Calculate characteristic frequency
 
-  const double f_p            = 0.11 * data.Hstar0 / data.betaH;
+  const double f_p            = 0.11 * data.Hstar0 * data.betaH;
   data.CollisionParameter.f_b = f_p * pow(-n1 / n2, -1 / a1);
 
   // Calculate amplitude for collisions
