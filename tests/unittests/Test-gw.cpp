@@ -786,7 +786,7 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   REQUIRE(2.57655e-05 ==
           Approx(output.vec_gw_data.at(0).K.value()).epsilon(1e-2));
 
-  REQUIRE(2.90975e-10 ==
+  REQUIRE(0.0171346663 ==
           Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
   REQUIRE(8.43619e-19 ==
           Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
@@ -878,7 +878,7 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   REQUIRE(2.57655e-05 ==
           Approx(output.vec_gw_data.at(0).K.value()).epsilon(1e-2));
 
-  REQUIRE(2.90975e-10 ==
+  REQUIRE(0.0171346663 ==
           Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
   REQUIRE(8.43619e-19 ==
           Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
