@@ -783,8 +783,8 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
           Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
-  REQUIRE(2.57655e-05 ==
-          Approx(output.vec_gw_data.at(0).K.value()).epsilon(1e-2));
+  REQUIRE(0.00803544 ==
+          Approx(output.vec_gw_data.at(0).kappa_sw.value()).epsilon(1e-2));
 
   REQUIRE(0.0171346663 ==
           Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
@@ -875,8 +875,8 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
           Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
-  REQUIRE(2.57655e-05 ==
-          Approx(output.vec_gw_data.at(0).K.value()).epsilon(1e-2));
+  REQUIRE(0.00803544 ==
+          Approx(output.vec_gw_data.at(0).kappa_sw.value()).epsilon(1e-2));
 
   REQUIRE(0.0171346663 ==
           Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
@@ -962,7 +962,7 @@ TEST_CASE(
   REQUIRE(not output.vec_trans_data.at(0).compl_temp.has_value());
   REQUIRE(not output.vec_gw_data.at(0).alpha.has_value());
   REQUIRE(not output.vec_gw_data.at(0).beta_over_H.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).K.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).kappa_sw.has_value());
   REQUIRE(not output.vec_gw_data.at(0).fb_col.has_value());
   REQUIRE(not output.vec_gw_data.at(0).omegab_col.has_value());
   REQUIRE(not output.vec_gw_data.at(0).f1_sw.has_value());
@@ -1540,7 +1540,7 @@ TEST_CASE("Test getKandWow", "[gw]")
   REQUIRE(wow == Approx(1.938501886826841).epsilon(1e-4));
 }
 
-TEST_CASE("Test kappa", "[gw]")
+TEST_CASE("Test kappa_sw", "[gw]")
 {
   using namespace BSMPT::kappa;
   double eps = 1e-3;

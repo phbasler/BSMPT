@@ -193,7 +193,8 @@ try
               << output.vec_gw_data.at(i).vwall.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).alpha.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).beta_over_H.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).K.value_or(EmptyValue) << sep
+              << sep << output.vec_gw_data.at(i).kappa_sw.value_or(EmptyValue)
+              << sep
               << output.vec_gw_data.at(i).Epsilon_Turb.value_or(EmptyValue)
               << sep << output.vec_gw_data.at(i).cs_f.value_or(EmptyValue)
               << sep << output.vec_gw_data.at(i).cs_t.value_or(EmptyValue)
