@@ -465,6 +465,15 @@ public:
   double CalcTransitionTemp(const int &which_transition_temp);
 
   /**
+   * @brief Calculate \f$ \rho_R = \rho_\gamma = g_\star \frac{\pi^2}{30}  T_*^4
+   * \f$
+   *
+   * @param T temperature
+   * @return double
+   */
+  double CalculateRhoGamma(const double &T) const;
+
+  /**
    * @brief GetPTStrength Get PT strength alpha
    */
   double GetPTStrength() const;
