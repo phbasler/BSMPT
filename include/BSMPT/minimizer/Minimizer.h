@@ -45,7 +45,7 @@ const bool UseLibCMAESDefault = false;
 #ifdef NLopt_FOUND
 const bool UseNLoptDefault = true;
 #else
-const bool UseNLoptDefault    = false;
+const bool UseNLoptDefault = false;
 #endif
 
 const std::size_t Num_threads = std::thread::hardware_concurrency();

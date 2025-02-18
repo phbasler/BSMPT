@@ -15,7 +15,6 @@ project(
 
 set(CMAKE_CXX_FLAGS "-g")
 
-
 # -------------------------------- options     --------------------------------
 
 option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
@@ -74,8 +73,7 @@ if(NOT Boost_FOUND)
   set(BSMPTCompileBaryo OFF)
 endif()
 
-# add_compile_options(-fsanitize=address)
-# add_link_options(-fsanitize=address)
+# add_compile_options(-fsanitize=address) add_link_options(-fsanitize=address)
 
 set(CodeCoverageExcludesFromOtherPkgs "")
 if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")

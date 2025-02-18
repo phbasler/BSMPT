@@ -31,6 +31,12 @@ int main()
 
   std::vector<double> check;
   std::vector<double> start(0, 8);
-  auto result = Minimizer::Minimize_gen_all(testModel, 0, check, start, BSMPT::Minimizer::WhichMinimizerDefault, false);
+  auto result =
+      Minimizer::Minimize_gen_all(testModel,
+                                  0,
+                                  check,
+                                  start,
+                                  BSMPT::Minimizer::WhichMinimizerDefault,
+                                  false);
   std::cout << "result = " << result << std::endl;
 }

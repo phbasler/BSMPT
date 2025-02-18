@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 # add_compile_definitions(
-#   $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:_GLIBCXX_USE_CXX11_ABI=1>
+# $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:_GLIBCXX_USE_CXX11_ABI=1>
 # )
 
 add_compile_options(
@@ -19,7 +19,7 @@ add_compile_options(
 )
 
 if(BSMPTUseVectorization)
-message(FATAL_ERROR "DONT")
+  message(FATAL_ERROR "DONT")
   include(CheckCXXCompilerFlag)
 
   check_cxx_compiler_flag("-march=native" _march_native_works)
