@@ -6,7 +6,6 @@ var classBSMPT_1_1Baryo_1_1CalculateEtaInterface =
     [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a22bc4500db378c031966cac2526258f2", null ],
     [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#ad46d7de7fe21d65cf45bcfaa1759c82f", null ],
     [ "CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a4e9215792cc91a511dff258030dfa747", null ],
-    [ "~CalculateEtaInterface", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a3fe2e0ef1bf487569c24e902abe98f3e", null ],
     [ "CalcEta", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a9aa2044e6872930cfeac61e8215d2d61", null ],
     [ "CalcEta", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a71ff819dc1ab67fc34b405b7863af3b1", null ],
     [ "CalcEta", "classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a6ec0daf96a961bbb82497fdf1e93bf66", null ],

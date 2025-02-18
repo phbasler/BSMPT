@@ -9,6 +9,5 @@ var ThermalFunctions_8cpp =
     [ "JfermionInterpolated", "ThermalFunctions_8cpp.html#a46552f089eb4b58bc31a91306319b4e4", null ],
     [ "JfermionInterpolatedLow", "ThermalFunctions_8cpp.html#a3c7d588ed805784776f706651b0c2c37", null ],
     [ "JfermionNumericalIntegration", "ThermalFunctions_8cpp.html#aaf9f4d7463deebc160ed11d4edf208a8", null ],
-    [ "JInterpolatedHigh", "ThermalFunctions_8cpp.html#a6717f6caa0a7af943bdbf8f798eaa7d2", null ],
-    [ "JbosonNegativeSpline", "ThermalFunctions_8cpp.html#aad59d1b50974c2ab04c9b0391ee379f4", null ]
+    [ "JInterpolatedHigh", "ThermalFunctions_8cpp.html#a6717f6caa0a7af943bdbf8f798eaa7d2", null ]
 ];

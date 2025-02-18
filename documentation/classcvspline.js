@@ -1,8 +1,8 @@
 var classcvspline =
 [
     [ "cvspline", "classcvspline.html#a5e5d392d1e21aab71db008562eadd009", null ],
-    [ "cvspline", "classcvspline.html#a9de1720f47391851d66a4f4d3e8ecdff", null ],
-    [ "cvspline", "classcvspline.html#abec4e2f0edcfcbd9cf99abd8276fcedf", null ],
+    [ "cvspline", "classcvspline.html#a8152a21e2bf240534490f839c4818550", null ],
+    [ "cvspline", "classcvspline.html#a1a8a846c5d157e40fb76be4ddb3fb1cd", null ],
     [ "add_point", "classcvspline.html#ad8cb528c8a3a0f22fc45c67a9943befd", null ],
     [ "d2l", "classcvspline.html#a5b688944d02f85ee21910e79de0a7edb", null ],
     [ "deriv", "classcvspline.html#afbca014758a4aa92592306e38f9906c6", null ],

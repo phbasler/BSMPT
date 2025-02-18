@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ewptreturntype_939',['EWPTReturnType',['../structBSMPT_1_1Minimizer_1_1EWPTReturnType.html',1,'BSMPT::Minimizer']]]
+  ['ewptreturntype_0',['EWPTReturnType',['../structBSMPT_1_1Minimizer_1_1EWPTReturnType.html',1,'BSMPT::Minimizer']]]
 ];

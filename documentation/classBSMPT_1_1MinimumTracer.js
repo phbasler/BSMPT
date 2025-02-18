@@ -15,13 +15,13 @@ var classBSMPT_1_1MinimumTracer =
     [ "GetStatusNLOVEV", "classBSMPT_1_1MinimumTracer.html#a7cc66d3ddc69b83aa5b289fccfe5eaad", null ],
     [ "IsGlobMin", "classBSMPT_1_1MinimumTracer.html#a63209e83aacc339c3cec0d8f69c10e48", null ],
     [ "IsThereEWSymmetryRestoration", "classBSMPT_1_1MinimumTracer.html#a6c57bea2a9fcaf0ef497626f2da30624", null ],
-    [ "LocateMinimum", "classBSMPT_1_1MinimumTracer.html#a400e60c4e47815feaae779e4065795d8", null ],
+    [ "LocateMinimum", "classBSMPT_1_1MinimumTracer.html#a325badc9e845cdb15d07ab4dfb94cbb4", null ],
     [ "ReduceVEV", "classBSMPT_1_1MinimumTracer.html#a94003a2b47900e634f389c98df4323f5", null ],
     [ "ReduceVEV", "classBSMPT_1_1MinimumTracer.html#adb8985d190f10f2742d8a3ea7465b592", null ],
-    [ "SmallestEigenvalue", "classBSMPT_1_1MinimumTracer.html#a65011905215f47fc44b4191214b7da35", null ],
+    [ "SmallestEigenvalue", "classBSMPT_1_1MinimumTracer.html#af5014d09ef1995293eea1560b075df1a", null ],
     [ "TrackPhase", "classBSMPT_1_1MinimumTracer.html#ac055561489fef49a9a5134c1f39a98ec", null ],
     [ "TrackPhase", "classBSMPT_1_1MinimumTracer.html#a3895946f0e86f4871d410f40f2454be1", null ],
-    [ "WarpPath", "classBSMPT_1_1MinimumTracer.html#a6ef482b34441d06fcd9b31d99b2138a7", null ],
+    [ "WarpPath", "classBSMPT_1_1MinimumTracer.html#adb23c200c817bf0ecc00f4e06c1f0650", null ],
     [ "flat_1D_dirs", "classBSMPT_1_1MinimumTracer.html#aee0c792078d9604dad72dd4ceaaab6c1", null ],
     [ "flat_2D_dirs", "classBSMPT_1_1MinimumTracer.html#a2d247747657e174ddffa09af1d5aa23d", null ],
     [ "flat_3D_dirs", "classBSMPT_1_1MinimumTracer.html#a797be282b8a65bfa622f0f576f365735", null ],
@@ -32,7 +32,5 @@ var classBSMPT_1_1MinimumTracer =
     [ "HighTemperatureVEV", "classBSMPT_1_1MinimumTracer.html#aed54425666127f35e23eae9d5295175d", null ],
     [ "modelPointer", "classBSMPT_1_1MinimumTracer.html#a64aacb919c6a62406e0f8a39c0c00e4d", null ],
     [ "NonFlatDirections", "classBSMPT_1_1MinimumTracer.html#aa83149d93c1de4eeb51c54cd4d02c0b3", null ],
-    [ "SavedMinimaFromVEVSplitting", "classBSMPT_1_1MinimumTracer.html#ad8ae1bb86962b7a98f3b529624b4b9be", null ],
-    [ "UseMultithreading", "classBSMPT_1_1MinimumTracer.html#ab234f02ea341966e4c72be0a7edb2d1e", null ],
-    [ "WhichMinimizer", "classBSMPT_1_1MinimumTracer.html#aeada5fa9680b35a8e5782ac1860855b0", null ]
+    [ "SavedMinimaFromVEVSplitting", "classBSMPT_1_1MinimumTracer.html#ad8ae1bb86962b7a98f3b529624b4b9be", null ]
 ];

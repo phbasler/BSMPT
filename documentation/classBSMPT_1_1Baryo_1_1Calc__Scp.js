@@ -5,7 +5,6 @@ var classBSMPT_1_1Baryo_1_1Calc__Scp =
     [ "operator()", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#a2dba474cb5c712044f63ca5f28df0ecc", null ],
     [ "set_class", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#a25c4807bb46bcabb52036098b628f59b", null ],
     [ "dmsqrt_thermal", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#a55379f3bf0078c1a17cd5e2291abee0a", null ],
-    [ "GamT", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#abb03f6d73a66d661f94d02cc1bb2aad6", null ],
     [ "m_full", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#a8bd48cd4c07e7f69c57e8c251c514655", null ],
     [ "msqrt_thermal", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#a759b357212769636895d44ace9ebf4ff", null ],
     [ "T", "classBSMPT_1_1Baryo_1_1Calc__Scp.html#aea66318debf65573f707280fcb94ef0f", null ],

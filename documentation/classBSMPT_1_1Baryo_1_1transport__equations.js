@@ -1,7 +1,6 @@
 var classBSMPT_1_1Baryo_1_1transport__equations =
 [
     [ "transport_equations", "classBSMPT_1_1Baryo_1_1transport__equations.html#aee27df4e0c86b193cde553792f97fc79", null ],
-    [ "~transport_equations", "classBSMPT_1_1Baryo_1_1transport__equations.html#a4dc6e0e949e4e455773469dde46b2d6b", null ],
     [ "calculate_theta", "classBSMPT_1_1Baryo_1_1transport__equations.html#a818afde935064a9d81597286c1c930a4", null ],
     [ "calculate_vev", "classBSMPT_1_1Baryo_1_1transport__equations.html#a488c6c4b4339ff3685b601ec22e42256", null ],
     [ "calculate_vev_derivative", "classBSMPT_1_1Baryo_1_1transport__equations.html#aeb604a2eeeaf53e12db565ba6793afb9", null ],

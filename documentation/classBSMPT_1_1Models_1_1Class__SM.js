@@ -1,7 +1,5 @@
 var classBSMPT_1_1Models_1_1Class__SM =
 [
-    [ "Class_SM", "classBSMPT_1_1Models_1_1Class__SM.html#a7ebf75764114aba7c21dee258046006a", null ],
-    [ "~Class_SM", "classBSMPT_1_1Models_1_1Class__SM.html#a9f7ca7f184292bca5410d59aaff44619", null ],
     [ "addLegendCT", "classBSMPT_1_1Models_1_1Class__SM.html#a15fd4afcc0db91cd640459e7848ce4aa", null ],
     [ "addLegendTemp", "classBSMPT_1_1Models_1_1Class__SM.html#ab5afa308607705383b3f3b9956e84fee", null ],
     [ "addLegendTripleCouplings", "classBSMPT_1_1Models_1_1Class__SM.html#a13067b5b36fd7276d9530e5755d0b66f", null ],
@@ -17,14 +15,5 @@ var classBSMPT_1_1Models_1_1Class__SM =
     [ "TripleHiggsCouplings", "classBSMPT_1_1Models_1_1Class__SM.html#ab91af489d963cd98e93fbb07033ee672", null ],
     [ "VCounterSimplified", "classBSMPT_1_1Models_1_1Class__SM.html#a2808c27029ff9abe7794c838ab69861e", null ],
     [ "VTreeSimplified", "classBSMPT_1_1Models_1_1Class__SM.html#a2b3de5c0e801e313ec440348c0bd364a", null ],
-    [ "write", "classBSMPT_1_1Models_1_1Class__SM.html#ac6b3a0b7c3d9c4f9e04f871bcb2b238a", null ],
-    [ "dlambda", "classBSMPT_1_1Models_1_1Class__SM.html#a47859c2d6b09705ca0a3b48ab3ecc070", null ],
-    [ "dmuSq", "classBSMPT_1_1Models_1_1Class__SM.html#a8a18115eef6b94316b490d91a9c2957e", null ],
-    [ "dT1", "classBSMPT_1_1Models_1_1Class__SM.html#a506d9e999a76d82e1978421a2b2891dc", null ],
-    [ "dT2", "classBSMPT_1_1Models_1_1Class__SM.html#a98898c2a71255e43e37a61cff2f6b445", null ],
-    [ "dT3", "classBSMPT_1_1Models_1_1Class__SM.html#a0837e0619c72ede81b5a329f2bd4a949", null ],
-    [ "dT4", "classBSMPT_1_1Models_1_1Class__SM.html#a4a31eb4558121d0f770265f5e42b40cd", null ],
-    [ "lambda", "classBSMPT_1_1Models_1_1Class__SM.html#a0ea7ce8b599af9fd96f462687a467ded", null ],
-    [ "muSq", "classBSMPT_1_1Models_1_1Class__SM.html#a90d233144390ba6d4d113a4488a2b345", null ],
-    [ "v0", "classBSMPT_1_1Models_1_1Class__SM.html#ad105380eae0d14b223eac3e5253b6088", null ]
+    [ "write", "classBSMPT_1_1Models_1_1Class__SM.html#ac6b3a0b7c3d9c4f9e04f871bcb2b238a", null ]
 ];

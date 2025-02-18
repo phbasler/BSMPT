@@ -1,6 +1,6 @@
 var Kfactors_8h =
 [
-    [ "GSL_integration", "structBSMPT_1_1Kfactors_1_1GSL__integration.html", "structBSMPT_1_1Kfactors_1_1GSL__integration" ],
+    [ "BSMPT::Kfactors::GSL_integration", "structBSMPT_1_1Kfactors_1_1GSL__integration.html", null ],
     [ "display_results", "Kfactors_8h.html#ae7d4995137551a4f88236793111ee69a", null ],
     [ "distribution_f0", "Kfactors_8h.html#a3a12382cb6aa4fa878ea8dde4d046dff", null ],
     [ "K_functions", "Kfactors_8h.html#a5677291f33e7ed5803a73c1296195a69", null ],

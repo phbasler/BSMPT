@@ -6,7 +6,7 @@ var dir_81ad383a8e40d08ec3aced46782934f8 =
     [ "CalcTemps.cpp", "CalcTemps_8cpp.html", "CalcTemps_8cpp" ],
     [ "CalculateEWBG.cpp", "CalculateEWBG_8cpp.html", "CalculateEWBG_8cpp" ],
     [ "CreateMuGrid.cpp", "CreateMuGrid_8cpp.html", "CreateMuGrid_8cpp" ],
-    [ "Kfactor_grid.cpp", "Kfactor__grid_8cpp.html", "Kfactor__grid_8cpp" ],
+    [ "Kfactor_grid.cpp", "Kfactor__grid_8cpp.html", null ],
     [ "MinimaTracer.cpp", "MinimaTracer_8cpp.html", "MinimaTracer_8cpp" ],
     [ "NLOVEV.cpp", "NLOVEV_8cpp.html", "NLOVEV_8cpp" ],
     [ "PlotEWBG_nL.cpp", "PlotEWBG__nL_8cpp.html", "PlotEWBG__nL_8cpp" ],

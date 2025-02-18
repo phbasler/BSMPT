@@ -106,7 +106,7 @@ var NAVTREE =
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Enumerations", "functions_enum.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
+        [ "Related Symbols", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -122,17 +122,15 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"KtildeInterpolation_8h.html#abc33dcbf5a3c9f89eb8f699227d5e679",
-"ThermalFunctions_8h.html#a6f7e13fa8bc6cab391a1a615bdf6aa82",
-"classBSMPT_1_1Baryo_1_1gen__fluid.html#ad0254bad126b462a9f08c6541464b4b2",
-"classBSMPT_1_1Class__Potential__Origin.html#a3d7a6aabb22ba315a28a4ea832e20313",
-"classBSMPT_1_1Models_1_1Class__Potential__C2HDM.html#a39e2a99db7caab71af3c3dfcada268da",
-"classBSMPT_1_1Models_1_1Class__SM.html#ab5afa308607705383b3f3b9956e84fee",
-"functions_b.html",
-"namespaceBSMPT.html#ab448300c7a9bfd21a81df9069c1ed451",
-"structBSMPT_1_1Minimum.html#ac05b5a007a83b676935e9319bc27e966",
-"transport__equations_8h.html#ac13e9dfe5bf469d5ad83f4891d9e1a50"
+"BSMPT_8cpp.html",
+"Minimizer_8h.html#af3175c2bdc228d061d1d2f85eb9086f9acd11060fe30864c7a45997ae8bc4888c",
+"classBSMPT_1_1BounceActionInt.html#a0debf1c85acfb2ae72566892c055c5b9",
+"classBSMPT_1_1BounceSolution.html#aadd4cad91e1125f1024abc4a73499555",
+"classBSMPT_1_1Class__Potential__Origin.html#a7f30c4641b0f9df25ecb44cbdc4946b2",
+"classBSMPT_1_1MinimumTracer.html#af5014d09ef1995293eea1560b075df1a",
+"dir_c9fc06b6e9d38438113198441fbb9f17.html",
+"namespaceBSMPT.html#abe2fb7fb63b7fc37b93b8c5ee63b4bfc",
+"structBSMPT_1_1Vacuum.html#a630f06ec754d580aace9e621fbe7cb33"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
