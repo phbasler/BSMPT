@@ -65,6 +65,9 @@ class BSMPT(ConanFile):
         if self.options.UseNLopt:
             self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
 
+        if self.options.UseLibCMAES:
+            self.requires("cmaes/0.10.0@bsmpt/local", transitive_headers=True, transitive_libs=True)
+
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
 
@@ -221,7 +224,6 @@ class BSMPT(ConanFile):
             # "Threads::Threads",
             "Utility",
             # "Models",
-            # "Minimizer_CMAES"
         ]
         self.cpp_info.components["Minimizer"].set_property(
             "cmake_target_name", "BSMPT::Minimizer"
@@ -232,11 +234,7 @@ class BSMPT(ConanFile):
             self.cpp_info.components["Minimizer"].requires.append("nlopt::nlopt")
 
         if self.options.UseLibCMAES:
-            self.cpp_info.components["cmaes"].libs = ["cmaes"]
-            self.cpp_info.components["cmaes"].set_property(
-                "cmake_target_name", "libcmaes::cmaes"
-            )
-            self.cpp_info.components["Minimizer"].requires.append("cmaes")
+            self.cpp_info.components["Minimizer"].requires.append("cmaes::cmaes")
 
 
         self.cpp_info.components["MinimumTracer"].libs = ["MinimumTracer"]

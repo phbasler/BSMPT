@@ -42,6 +42,9 @@ LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
   double sigma;
   sigma = 5;
 
+
+
+
   // sigma *= 0.5;//0.5;
   double ftol = 1e-5;
 

@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-include(CMAES)
+# include(CMAES)
 
 set(suffix "include/BSMPT/minimizer/LibCMAES")
 set(header_path "${BSMPT_SOURCE_DIR}/${suffix}")
