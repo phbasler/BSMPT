@@ -16,13 +16,6 @@
 namespace BSMPT
 {
 
-std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
-{
-  static auto IMN = BSMPT::ModelID::InvertModelNames();
-  os << IMN.at(Model);
-  return os;
-}
-
 std::vector<std::string> split(const std::string &str, char delimiter)
 {
   // Using str in a string stream
@@ -34,13 +27,6 @@ std::vector<std::string> split(const std::string &str, char delimiter)
     res.push_back(token);
   }
   return res;
-}
-
-std::string ModelIDToString(const ModelID::ModelIDs &Model)
-{
-  std::stringstream ss;
-  ss << Model;
-  return ss.str();
 }
 
 bool StringStartsWith(const std::string &str, const std::string &prefix)
