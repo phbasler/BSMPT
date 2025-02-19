@@ -49,7 +49,7 @@ LibCMAESReturn min_cmaes_gen_all(const Class_Potential_Origin &model,
   double ftol = 1e-5;
 
   // CMAParameters<> cmaparams(dim,&x0.front(),sigma);
-  CMAParameters<> cmaparams(x0, sigma);
+  CMAParameters<> cmaparams(x0, sigma, 1);
 
   // cmaparams.set_mt_feval(true);
   cmaparams.set_algo(aCMAES);

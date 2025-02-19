@@ -44,7 +44,7 @@ class BSMPT(ConanFile):
     }
     default_options = {
         "fPIC": True,
-        "EnableTests": True,
+        "EnableTests": False,
         "UseLibCMAES": True,
         "UseNLopt": True,
         "MakeAdditionalTesting": False,

@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/build/linux-x86_64-release/example",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            // "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -27,6 +27,14 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Launch",
+            "program": "${workspaceFolder}/build/linux-x86_64-debug/example",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
 
     ]
