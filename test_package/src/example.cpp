@@ -30,7 +30,7 @@ int main()
   testModel->initModel(example_point_C2HDM);
 
   std::vector<double> check;
-  std::vector<double> start(0, 8);
+  std::vector<double> start = testModel->get_vevTreeMin();
   auto result = Minimizer::Minimize_gen_all(testModel, 0, check, start, BSMPT::Minimizer::WhichMinimizerDefault, false);
   std::cout << "result = " << result << std::endl;
 }
