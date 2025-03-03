@@ -6,6 +6,7 @@ from enum import Enum
 import fileinput
 from argparse import ArgumentParser, ArgumentTypeError
 import platform
+from pathlib import Path
 
 
 class ArgTypeEnum(Enum):
@@ -145,6 +146,11 @@ def setup_profiles():
         shutil.rmtree(profile_dir)
     shutil.copytree("profiles/BSMPT", profile_dir)
 
+def setup_cmaes():
+    file_directory = Path(__file__).parent.absolute()
+    cmaes_dir = os.path.join(file_directory, "tools", "conan", "cmaes","all")
+    subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(),cwd=cmaes_dir )
+
 
 def conan_install(
     profile, additional_options=[], build_missing=False, compiler: Compiler = None
@@ -165,6 +171,8 @@ def conan_install(
 
     if build_missing:
         cmd += ["--build=missing"]
+    else:
+        cmd += ["--build=cmaes/0.10.0@bsmpt/local"]
 
     print(f"Executing command {cmd}")
 
@@ -210,6 +218,8 @@ def create(build_missing=False, compiler: Compiler = None, additional_options=[]
 
     if build_missing:
         cmd += ["--build=missing"]
+    else:
+        cmd += ["--build=cmaes/0.10.0@bsmpt/local"]
 
     for option in additional_options:
         cmd += ["--options", option]
@@ -280,19 +290,24 @@ def parse_arguments():
 if __name__ == "__main__":
 
     opts = parse_arguments()
+    setup_cmaes()
     setup_profiles()
+
+    options = []
+    if opts.options is not None:
+        opts.options = opts.options
 
     if opts.create:
         create(
             build_missing=opts.build_missing,
             compiler=opts.compiler,
-            additional_options=opts.options if opts.options is not None else [],
+            additional_options=options,
         )
     else:
 
         conan_install_all(
             opts.mode,
-            opts.options if opts.options is not None else [],
+            options,
             opts.build_missing,
             opts.profile,
             opts.compiler,
