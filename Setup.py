@@ -295,7 +295,7 @@ if __name__ == "__main__":
 
     options = []
     if opts.options is not None:
-        opts.options = opts.options
+        options = opts.options
 
     if opts.create:
         create(
