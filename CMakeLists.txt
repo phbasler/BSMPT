@@ -101,9 +101,9 @@ endif()
 
 set(EXPORT_CMAES FALSE)
 include(FetchContent)
-if(UseLibCMAES AND NOT WIN32)
+if(UseLibCMAES)
   find_package(cmaes CONFIG REQUIRED)
-endif(UseLibCMAES AND NOT WIN32)
+endif(UseLibCMAES)
 
 if(UseNLopt)
   find_package(NLopt CONFIG QUIET)
