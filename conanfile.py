@@ -139,6 +139,7 @@ class BSMPT(ConanFile):
 
         environment = Environment()
         environment.define("CTEST_OUTPUT_ON_FAILURE", "1")
+        environment.define("CTEST_PARALLEL_LEVEL", str(os.cpu_count()) )
         envvars = environment.vars(self)
 
         if self.options.get_safe("EnableTests"):
