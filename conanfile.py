@@ -135,6 +135,7 @@ class BSMPT(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.configure()
+        cmake.parallel = True
         cmake.build()
 
         environment = Environment()
