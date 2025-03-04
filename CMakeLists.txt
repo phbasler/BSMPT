@@ -71,8 +71,6 @@ if(NOT Boost_FOUND)
   set(BSMPTCompileBaryo OFF)
 endif()
 
-# add_compile_options(-fsanitize=address) add_link_options(-fsanitize=address)
-
 set(CodeCoverageExcludesFromOtherPkgs "")
 if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")
   list(APPEND CodeCoverageExcludesFromOtherPkgs "${EIGEN3_ROOT_DIR}/*")
@@ -152,6 +150,7 @@ if(EnableCoverage)
     ctest
     -j
     ${n_cores} # Executable in PROJECT_BINARY_DIR
+    --output-on-failure
     BASE_DIRECTORY
     "${PROJECT_SOURCE_DIR}"
     DEPENDS
