@@ -354,7 +354,7 @@ TransitionTracer::TransitionTracer(user_input &input)
                   gw.data.turbON      = true;
                   new_gw_data.SNR     = gw.GetSNR(1e-6, 10);
 
-                  new_gw_data.K            = gw.data.K;
+                  new_gw_data.kappa_sw     = gw.data.kappa_sw;
                   new_gw_data.Epsilon_Turb = gw.data.Epsilon_Turb;
                   new_gw_data.cs_f         = gw.data.Csound_false;
                   new_gw_data.cs_t         = gw.data.Csound_true;

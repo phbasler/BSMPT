@@ -76,15 +76,15 @@ struct GravitationalWaveData
   double vw             = false; // bubble wall velocity
   double Csound_false   = false; // speed sound false vacuum
   double Csound_true    = false; // speed sound true vacuum
-  double kappa = false; // kinetic energy fraction of a single expanding bubble
-  double K     = false; // kinetic energy fraction
-  double HR    = false; // time scale times max. velocity for sound waves
-  double Epsilon_Turb = false; //  fraction of overall kinetic energy in bulk
-                               //  motion that is converted to MHD
-  double gstar = false;        // number of eff. d.o.f.
+  double kappa_sw       = false; // efficiency factor for sw
+  double K_sw           = false; // kinetic energy fraction for sound waves
+  double HR             = false; // time scale x max. velocity for sound waves
+  double Epsilon_Turb   = false; //  fraction of overall kinetic energy in bulk
+                                 //  motion that is converted to MHD
+  double gstar = false;          // number of eff. d.o.f.
+  double FGW0  = false; // Redshift factor for the fractional energy density
   double Hstar0 =
       false; // Reduced Hubble rate at transition temperature redshift today
-  double FGW0 = false; // Redshift factor for the fractional energy density
 
   BPLParameters CollisionParameter;
   DBPLParameters SoundWaveParameter;
@@ -246,10 +246,10 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax);
  * @brief Get the kinetic energy fraction \f$ K \f$
  *
  * @param alpha strength of the phase transition
- * @param kappa efficiency factor
+ * @param kappa_sw efficiency factor
  * @return double
  */
-double GetK(const double &alpha, const double &kappa);
+double GetK_sw(const double &alpha, const double &kappa_sw);
 
 /**
  * @brief Get HR
@@ -279,7 +279,7 @@ double GetKtilde(const double &alpha);
 
 namespace kappa
 {
-// Compute kappa https://arxiv.org/abs/2010.09744
+// Compute kappa_sw https://arxiv.org/abs/2010.09744
 double mu(double a, double b);
 double getwow(double a, double b);
 void custom_error_handler(const char *reason,
@@ -292,6 +292,17 @@ std::vector<std::vector<double>> solve_ode(double vw, double v0, double cs2);
 double integrate(const std::vector<double> &y, const std::vector<double> &x);
 std::pair<double, double> getKandWow(double vw, double v0, double cs2);
 double alN(double al, double wow, double cs2b, double cs2s);
+/**
+ * @brief Calculate the \f$ \kappa_{sw} \f$
+ *
+ * @param cs2b sound speed in the true vacuum \f$ c_{s,b}^2 =
+ * \frac{1}{T}\frac{\frac{dV(\phi_t)}{dT}}{\frac{d^2V(\phi_t)}{dT^2}} \f$
+ * @param cs2s sound speed in the false vacuum \f$ c_{s,b}^2 =
+ * \frac{1}{T}\frac{\frac{dV(\phi_f)}{dT}}{\frac{d^2V(\phi_f)}{dT^2}} \f$
+ * @param al \f$ \alpha \f$
+ * @param vw \f$ v_w \f$
+ * @return double effiency factor for sound waves
+ */
 double kappaNuMuModel(double cs2b, double cs2s, double al, double vw);
 } // namespace kappa
 } // namespace BSMPT

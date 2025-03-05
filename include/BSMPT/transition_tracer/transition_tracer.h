@@ -123,7 +123,7 @@ struct gw_data
   std::optional<double> alpha;
   std::optional<double> beta_over_H;
 
-  std::optional<double> K;
+  std::optional<double> kappa_sw;
   std::optional<double> Epsilon_Turb;
   std::optional<double> cs_f;
   std::optional<double> cs_t;

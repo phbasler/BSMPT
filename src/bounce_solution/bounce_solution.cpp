@@ -936,6 +936,11 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj)
   return res;
 }
 
+double BounceSolution::CalculateRhoGamma(const double &T) const
+{
+  return this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(T, 4);
+}
+
 void BounceSolution::CalculatePTStrength()
 {
   if (not percolation_temp_set)
@@ -978,9 +983,8 @@ void BounceSolution::CalculatePTStrength()
         Tperc,
         -1); // temperature-derivative at true vacuum const
 
-    double rho_gam =
-        this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
-    alpha = 1 / rho_gam * (Vi - Vf - Tperc / 4. * (dTVi - dTVf));
+    double rho_gam = CalculateRhoGamma(Tperc);
+    alpha          = 1 / rho_gam * (Vi - Vf - Tperc / 4. * (dTVi - dTVf));
     CalculateWallVelocity(false_min, true_min);
     if (abs(alpha / old_alpha - 1) < 1e-7) return; // Found a solution
   }
@@ -1014,8 +1018,7 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     double Vf =
         true_min
             .potential; // potential at true vacuum and percolation temperature
-    double rho_gam =
-        this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
+    double rho_gam = CalculateRhoGamma(Tperc);
 
     double v_ChapmanJouget = 1. / (1 + alpha) *
                              (modelPointer->SMConstants.Csound +

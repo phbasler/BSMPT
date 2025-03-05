@@ -34,11 +34,12 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
                           BACalc.phase_pair.true_phase,
                           BACalc.modelPointer);
 
-  data.kappa = kappa::kappaNuMuModel(pow(data.Csound_true, 2),
-                                     pow(data.Csound_false, 2),
-                                     BACalc.GetPTStrength(),
-                                     BACalc.vwall);
-  data.K     = GetK(data.PTStrength, data.kappa);
+  data.kappa_sw = kappa::kappaNuMuModel(pow(data.Csound_true, 2),
+                                        pow(data.Csound_false, 2),
+                                        BACalc.GetPTStrength(),
+                                        BACalc.vwall);
+
+  data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
   data.HR = GetHR(data.betaH, data.vw, BACalc.modelPointer->SMConstants.Csound);
   data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
                           BACalc.GetGstar());
@@ -71,7 +72,7 @@ double GravitationalWave::CalcEpsTurb(double epsturb_in)
 {
   if (epsturb_in == -1)
   {
-    double HtauSW = 2. / std::sqrt(3) * data.HR / std::sqrt(data.K);
+    double HtauSW = 2. / std::sqrt(3) * data.HR / std::sqrt(data.K_sw);
     return std::pow((1 - std::min(HtauSW, 1.)), 2. / 3.);
   }
   else
@@ -127,9 +128,10 @@ void GravitationalWave::CalcPeakSoundWave()
 
   const double Asw = 0.11; // Numerical simulation
   const double HtauSW =
-      std::min(1., 2. / std::sqrt(3) * data.HR / std::sqrt(data.K));
+      std::min(1., 2. / std::sqrt(3) * data.HR / std::sqrt(data.K_sw));
 
-  const double Omega_int = data.FGW0 * Asw * pow(data.K, 2) * HtauSW * data.HR;
+  const double Omega_int =
+      data.FGW0 * Asw * pow(data.K_sw, 2) * HtauSW * data.HR;
 
   // Convert Omega_int to Omega_2
 
@@ -150,7 +152,7 @@ void GravitationalWave::CalcPeakTurbulence()
   // Characteristic frequencies
   const double A       = 0.085;
   const double N       = 2.;
-  const double Omega_s = data.Epsilon_Turb * data.K;
+  const double Omega_s = data.Epsilon_Turb * data.K_sw;
 
   data.TurbulanceParameter.f_1 =
       sqrt(3 * Omega_s) * data.Hstar0 / (2. * N * data.HR);
@@ -323,9 +325,9 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
   return res;
 }
 
-double GetK(const double &alpha, const double &kappa)
+double GetK_sw(const double &alpha, const double &kappa_sw)
 {
-  return 0.6 * kappa * alpha / (1. + alpha);
+  return 0.6 * kappa_sw * alpha / (1. + alpha);
 }
 
 double GetHR(const double &betaH, const double &vwall, const double &Csound)
