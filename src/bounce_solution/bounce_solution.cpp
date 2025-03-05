@@ -582,9 +582,14 @@ double BounceSolution::TunnelingRate(const double &Temp)
 
 double BounceSolution::HubbleRate(const double &Temp)
 {
-  return M_PI * std::sqrt(this->GetGstar()) / std::sqrt(90.) *
-         std::pow(Temp, 2) /
-         modelPointer->SMConstants.MPl; // radiation dominated universe
+  double rhoR = this->GetGstar() * M_PI * M_PI / 30. *
+                std::pow(Temp, 4); // radiation energy density
+
+  double DeltaV = phase_pair.false_phase.Get(Temp).potential -
+                  phase_pair.true_phase.Get(Temp).potential; // vacuum energy
+
+  return 1. / (std::sqrt(3) * modelPointer->SMConstants.MPl) *
+         std::sqrt(rhoR + DeltaV);
 }
 
 void BounceSolution::CalcGstarPureRad()
@@ -948,7 +953,7 @@ void BounceSolution::CalculatePTStrength()
 
   for (int c = 0; c < 20; c++)
   {
-    // Use recurvie method to find solution of
+    // Use recursive method to find solution of
     // alpha = alpha(T_*)
     // T_* =  T_*(alpha, v_wall)
     // v_wall = v_wall(alpha, T_*)
