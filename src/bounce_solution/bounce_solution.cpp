@@ -23,6 +23,7 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
+    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in,
@@ -37,10 +38,10 @@ BounceSolution::BounceSolution(
 
   UserDefined_vwall               = UserDefined_vwall_in;
   epsturb                         = UserDefined_epsturb_in;
+  pnlo_scaling                    = UserDefined_PNLO_scaling_in;
   MaxPathIntegrations             = MaxPathIntegrations_in;
   NumberOfInitialScanTemperatures = NumberOfInitialScanTemperatures_in;
-  this->CalcGstarPureRad(); // initialize degrees of freedom for purely
-                            // radiative universe
+  InitializeGstarProfile();
   GroupElements = GroupElements_in;
 
   if (Tc > 0)
@@ -56,6 +57,7 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
+    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in)
@@ -63,6 +65,7 @@ BounceSolution::BounceSolution(
                      MinTracer_in,
                      phase_pair_in,
                      UserDefined_vwall_in,
+                     UserDefined_PNLO_scaling_in,
                      UserDefined_epsturb_in,
                      MaxPathIntegrations_in,
                      NumberOfInitialScanTemperatures_in,
@@ -472,9 +475,21 @@ void BounceSolution::SetGstar(const double &gstar_in)
   gstar = gstar_in;
 }
 
-double BounceSolution::GetGstar() const
+void BounceSolution::InitializeGstarProfile()
 {
-  return gstar;
+  CalcGstarPureRad();
+  GstarProfile.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  GstarProfile.set_points(LogTGstar, NormalizedLogGstar);
+}
+
+double BounceSolution::GetGstar(const double &T) const
+{
+  // Everything is multiplied by 1000 because the fit was done in MeV
+  if (log(1000. * T) < LogTGstar.front()) return neutrinogstar;
+  if (log(1000. * T) > LogTGstar.back()) return gstar;
+  return neutrinogstar *
+         pow(gstar / neutrinogstar, GstarProfile(log(1000. * T)));
 }
 
 void BounceSolution::SetCriticalTemp(const double &T_in)
@@ -582,9 +597,14 @@ double BounceSolution::TunnelingRate(const double &Temp)
 
 double BounceSolution::HubbleRate(const double &Temp)
 {
-  return M_PI * std::sqrt(this->GetGstar()) / std::sqrt(90.) *
-         std::pow(Temp, 2) /
-         modelPointer->SMConstants.MPl; // radiation dominated universe
+  double rhoR = this->GetGstar(Temp) * M_PI * M_PI / 30. *
+                std::pow(Temp, 4); // radiation energy density
+
+  double DeltaV = phase_pair.false_phase.Get(Temp).potential -
+                  phase_pair.true_phase.Get(Temp).potential; // vacuum energy
+
+  return 1. / (std::sqrt(3) * modelPointer->SMConstants.MPl) *
+         std::sqrt(rhoR + DeltaV);
 }
 
 void BounceSolution::CalcGstarPureRad()
@@ -931,6 +951,11 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj)
   return res;
 }
 
+double BounceSolution::CalculateRhoGamma(const double &T) const
+{
+  return this->GetGstar(T) * std::pow(M_PI, 2) / 30 * std::pow(T, 4);
+}
+
 void BounceSolution::CalculatePTStrength()
 {
   if (not percolation_temp_set)
@@ -948,7 +973,7 @@ void BounceSolution::CalculatePTStrength()
 
   for (int c = 0; c < 20; c++)
   {
-    // Use recurvie method to find solution of
+    // Use recursive method to find solution of
     // alpha = alpha(T_*)
     // T_* =  T_*(alpha, v_wall)
     // v_wall = v_wall(alpha, T_*)
@@ -973,9 +998,8 @@ void BounceSolution::CalculatePTStrength()
         Tperc,
         -1); // temperature-derivative at true vacuum const
 
-    double rho_gam =
-        this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
-    alpha = 1 / rho_gam * (Vi - Vf - Tperc / 4. * (dTVi - dTVf));
+    double rho_gam = CalculateRhoGamma(Tperc);
+    alpha          = 1 / rho_gam * (Vi - Vf - Tperc / 4. * (dTVi - dTVf));
     CalculateWallVelocity(false_min, true_min);
     if (abs(alpha / old_alpha - 1) < 1e-7) return; // Found a solution
   }
@@ -1009,8 +1033,7 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     double Vf =
         true_min
             .potential; // potential at true vacuum and percolation temperature
-    double rho_gam =
-        this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
+    double rho_gam = CalculateRhoGamma(Tperc);
 
     double v_ChapmanJouget = 1. / (1 + alpha) *
                              (modelPointer->SMConstants.Csound +

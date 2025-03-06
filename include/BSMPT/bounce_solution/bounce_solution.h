@@ -13,6 +13,7 @@
  */
 
 #include <BSMPT/bounce_solution/action_calculation.h>
+#include <BSMPT/bounce_solution/hubblerate.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/spline/spline.h>
@@ -20,7 +21,6 @@
 #include <algorithm>             // std::max
 #include <gsl/gsl_deriv.h>       // numerical derivative
 #include <gsl/gsl_integration.h> // numerical integration
-
 namespace BSMPT
 {
 
@@ -45,10 +45,19 @@ public:
    */
   std::shared_ptr<Class_Potential_Origin> modelPointer;
 
+  /** Relativistic dof for the energy at T = 0 */
+  const double neutrinogstar = 3.384;
+
   /**
    * @brief MinTracer object
    */
   std::shared_ptr<MinimumTracer> MinTracer;
+
+  /**
+   * @brief pressure scaling with \f$ \gamma \f$ of 1 -> N processes at NLO
+   *
+   */
+  int pnlo_scaling;
 
   /**
    * @brief epsilon of turbulence efficiency factor
@@ -144,6 +153,13 @@ public:
    *
    */
   tk::spline S3ofT_spline;
+
+  /**
+   * @brief log(T) vs log(gstar(T)) - log(gstar(T = 0))/(log(gstar(T =
+   * Infinity)) - log(gstar(T = 0)))
+   *
+   */
+  tk::spline GstarProfile;
 
   /**
    * @brief Set of BounceActionInt objects with valid solutions.
@@ -313,6 +329,8 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -324,6 +342,7 @@ public:
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
+                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in);
@@ -338,6 +357,8 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -350,6 +371,7 @@ public:
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
+                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in,
@@ -415,9 +437,18 @@ public:
   void SetGstar(const double &gstar_in);
 
   /**
-   * @brief GetGstar Get gstar
+   * @brief Generate the spline used to interpolate the gstar SM profile
+   *
    */
-  double GetGstar() const;
+  void InitializeGstarProfile();
+
+  /**
+   * @brief Get the Gstar object
+   *
+   * @param T temperature
+   * @return double
+   */
+  double GetGstar(const double &T) const;
 
   /**
    * @brief SetCriticalTemp Set critical temperature
@@ -463,6 +494,15 @@ public:
    * @brief CalcTransitionTemp Get transition temperature from int
    */
   double CalcTransitionTemp(const int &which_transition_temp);
+
+  /**
+   * @brief Calculate \f$ \rho_R = \rho_\gamma = g_\star \frac{\pi^2}{30}  T_*^4
+   * \f$
+   *
+   * @param T temperature
+   * @return double
+   */
+  double CalculateRhoGamma(const double &T) const;
 
   /**
    * @brief GetPTStrength Get PT strength alpha

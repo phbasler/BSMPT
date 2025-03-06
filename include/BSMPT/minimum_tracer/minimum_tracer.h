@@ -77,7 +77,7 @@ const std::unordered_map<StatusEWSR, std::string> StatusEWSRToString{
     {StatusEWSR::Failure, "failure"},
     {StatusEWSR::NotBFB, "non_bfb"},
     {StatusEWSR::FlatRegion, "flat_region"},
-    {StatusEWSR::EWSymNonRes, "ew_syum_non_res"},
+    {StatusEWSR::EWSymNonRes, "ew_sym_non_res"},
     {StatusEWSR::EWSymRes, "ew_sym_res"}};
 /**
  * @brief Possible tracing results
