@@ -4,7 +4,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/bounce_solution")
-set(header ${header_path}/bounce_solution.h ${header_path}/action_calculation.h ${header_path}/hubblerate.h)
+set(header ${header_path}/bounce_solution.h ${header_path}/action_calculation.h
+           ${header_path}/hubblerate.h)
 
 set(src bounce_solution.cpp action_calculation.cpp hubblerate.cpp)
 
