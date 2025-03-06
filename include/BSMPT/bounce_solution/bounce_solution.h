@@ -51,6 +51,12 @@ public:
   std::shared_ptr<MinimumTracer> MinTracer;
 
   /**
+   * @brief pressure scaling with \f$ \gamma \f$ of 1 -> N processes at NLO
+   *
+   */
+  int pnlo_scaling;
+
+  /**
    * @brief epsilon of turbulence efficiency factor
    */
   double epsturb = 0.1;
@@ -313,6 +319,8 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -324,6 +332,7 @@ public:
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
+                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in);
@@ -338,6 +347,8 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -350,6 +361,7 @@ public:
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
+                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in,

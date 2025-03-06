@@ -788,7 +788,7 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
 
   REQUIRE(0.0171346663 ==
           Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
-  REQUIRE(8.43619e-19 ==
+  REQUIRE(0. ==
           Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
 
   REQUIRE(0.0111955 ==
@@ -805,13 +805,12 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   REQUIRE(1.3233e-25 ==
           Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
 
-  REQUIRE(4.29233e-06 ==
-          Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
+  REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
   REQUIRE(1.67733e-08 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
   REQUIRE(2.87078e-13 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(4.30687e-06 ==
+  REQUIRE(1.67733e-08 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
@@ -880,7 +879,7 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
 
   REQUIRE(0.0171346663 ==
           Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
-  REQUIRE(8.43619e-19 ==
+  REQUIRE(0. ==
           Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
 
   REQUIRE(0.0111955 ==
@@ -897,13 +896,12 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   REQUIRE(1.3233e-25 ==
           Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
 
-  REQUIRE(4.29233e-06 ==
-          Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
+  REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
   REQUIRE(1.67733e-08 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
   REQUIRE(2.87078e-13 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(4.30687e-06 ==
+  REQUIRE(1.67733e-08 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
@@ -962,6 +960,7 @@ TEST_CASE(
   REQUIRE(not output.vec_trans_data.at(0).compl_temp.has_value());
   REQUIRE(not output.vec_gw_data.at(0).alpha.has_value());
   REQUIRE(not output.vec_gw_data.at(0).beta_over_H.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).kappa_col.has_value());
   REQUIRE(not output.vec_gw_data.at(0).kappa_sw.has_value());
   REQUIRE(not output.vec_gw_data.at(0).fb_col.has_value());
   REQUIRE(not output.vec_gw_data.at(0).omegab_col.has_value());

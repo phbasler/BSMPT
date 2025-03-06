@@ -41,6 +41,9 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
 
   data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
   data.HR = GetHR(data.betaH, data.vw, BACalc.modelPointer->SMConstants.Csound);
+  data.pnlo_scaling = BACalc.pnlo_scaling;
+  data.kappa_col    = kappa::Getkappa_col(
+      data.transitionTemp, data.pnlo_scaling, data.HR, BACalc);
   data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
                           BACalc.GetGstar());
   data.Epsilon_Turb = BACalc.GetEpsTurb();
@@ -98,7 +101,7 @@ void GravitationalWave::CalcPeakCollision()
 
   // Calculate amplitude for collisions
   const double A_str  = 0.05;
-  const double Ktilde = GetKtilde(data.PTStrength);
+  const double Ktilde = data.kappa_col * GetKtilde(data.PTStrength);
   const double Omega_p =
       data.FGW0 * A_str * pow(Ktilde, 2) / pow(data.betaH, 2);
 
@@ -332,6 +335,7 @@ double GetK_sw(const double &alpha, const double &kappa_sw)
 
 double GetHR(const double &betaH, const double &vwall, const double &Csound)
 {
+  // TODO improve this https://arxiv.org/pdf/2412.02645 3.14
   double max_velo = std::max(vwall, Csound);
   return 1. / betaH * std::pow(8 * M_PI, 1. / 3) * max_velo;
 }
@@ -607,6 +611,114 @@ double kappaNuMuModel(double cs2b, double cs2s, double al, double vw)
     Krf                  = -wow * getwow(vp, vm) * Krf_val;
   }
   return (Ksh + Krf) / al;
+}
+
+double Getkappa_col(const double &Tstar,
+                    const int &pnlo_scaling,
+                    const double &HR,
+                    BounceSolution &BACalc)
+{
+  // Calculate the false and true vacuum
+  const std::vector<double> FalseVacuum = BACalc.modelPointer->MinimizeOrderVEV(
+      BACalc.phase_pair.false_phase.Get(Tstar).point);
+  const std::vector<double> TrueVacuum = BACalc.modelPointer->MinimizeOrderVEV(
+      BACalc.phase_pair.true_phase.Get(Tstar).point);
+  // Potential difference
+  const double dV = BACalc.modelPointer->VEff(FalseVacuum, Tstar) -
+                    BACalc.modelPointer->VEff(TrueVacuum, Tstar);
+  // Potential energy contribution to the energy of the initial bubble
+  const double E0V = BACalc.GetBounceSol(Tstar) * Tstar / 2.;
+  // Initial bubble radius
+  double R0 = pow(3 * E0V / (4 * M_PI * dV), 1. / 3.);
+
+  // Mean bubble seperation
+  const double Rstar = HR / BACalc.HubbleRate(Tstar);
+  // Energy densitity radiation dominated Universe
+  const double RhoGamma = BACalc.CalculateRhoGamma(Tstar);
+
+  // Calculate masses squared in false and true vacuum
+  std::vector<double> HiggsSq_False =
+      BACalc.modelPointer->HiggsMassesSquared(FalseVacuum, Tstar);
+  std::vector<double> LeptonSq_False =
+      BACalc.modelPointer->LeptonMassesSquared(FalseVacuum);
+  std::vector<double> QuarkSq_False =
+      BACalc.modelPointer->QuarkMassesSquared(FalseVacuum);
+  std::vector<double> GaugeSq_False =
+      BACalc.modelPointer->GaugeMassesSquared(FalseVacuum, Tstar);
+
+  std::vector<double> HiggsSq_True =
+      BACalc.modelPointer->HiggsMassesSquared(TrueVacuum, Tstar);
+  std::vector<double> LeptonSq_True =
+      BACalc.modelPointer->LeptonMassesSquared(TrueVacuum);
+  std::vector<double> QuarkSq_True =
+      BACalc.modelPointer->QuarkMassesSquared(TrueVacuum);
+  std::vector<double> GaugeSq_True =
+      BACalc.modelPointer->GaugeMassesSquared(TrueVacuum, Tstar);
+
+  double P_LO = 0; // Pressure at LO. 1 -> 1
+
+  for (auto massSq : HiggsSq_True)
+    P_LO += massSq;
+  for (auto massSq : GaugeSq_True)
+    P_LO += 3 * massSq; // 3 from polarization
+  for (auto massSq : LeptonSq_True)
+    P_LO += massSq / 2.;
+  for (auto massSq : QuarkSq_True)
+    P_LO += 3 * massSq / 2.; // 3 from colour
+  for (auto massSq : HiggsSq_False)
+    P_LO -= massSq;
+  for (auto massSq : GaugeSq_False)
+    P_LO -= 3 * massSq; // 3 from polarization
+  for (auto massSq : LeptonSq_False)
+    P_LO -= massSq / 2.;
+  for (auto massSq : QuarkSq_False)
+    P_LO -= 3 * massSq / 2.; // 3 from colour
+
+  P_LO *= pow(Tstar, 2) / 24.; // pressure LO normalization
+
+  // Pressure at NLO. 1 -> N
+  // This only works for the SU(2)_L x U(1)_Y gauge group. But can be easily
+  // generalized.
+  const double W_coupling = BACalc.modelPointer->SMConstants.C_g / sqrt(2);
+  const double Z_coupling =
+      BACalc.modelPointer->SMConstants.C_g /
+      sqrt(1. - BACalc.modelPointer->SMConstants.C_sinsquaredWeinberg);
+  const double A_coupling =
+      BACalc.modelPointer->SMConstants.C_g *
+      sqrt(BACalc.modelPointer->SMConstants.C_sinsquaredWeinberg);
+  double P_NLO = 0;
+  if (pnlo_scaling == 1)
+  {
+    // Mass matrix is ordered
+    P_NLO += GaugeSq_True.at(0) * A_coupling;
+    P_NLO += 2 * GaugeSq_True.at(1) * W_coupling;
+    P_NLO += GaugeSq_True.at(3) * Z_coupling;
+
+    P_NLO -= GaugeSq_False.at(0) * A_coupling;
+    P_NLO -= 2 * GaugeSq_False.at(1) * W_coupling;
+    P_NLO -= GaugeSq_False.at(3) * Z_coupling;
+  }
+  else if (pnlo_scaling == 2)
+  {
+    P_NLO = 2 * pow(W_coupling, 2) + pow(Z_coupling, 2) + pow(A_coupling, 2);
+    P_NLO *= pow(Tstar, 4); // pressure NLO normalization
+  }
+  const double alpha_infty    = P_LO / RhoGamma;
+  const double alpha_eq       = P_NLO / RhoGamma;
+  const double gamma_run_away = Rstar / (3. * R0);
+  if (BACalc.GetPTStrength() - alpha_infty < 0)
+    return 0.; // Not enough pressure to drive the bubble wall.
+  const double gamma_eq =
+      pow((BACalc.GetPTStrength() - alpha_infty) / alpha_eq, 1. / pnlo_scaling);
+  if (gamma_eq <= 1) return 0.; // dV - P_LO < P_NLO. Unphysical gamma;
+  const double R_eq       = 3. * R0 * gamma_eq / 2.;
+  const double gamma_star = min(gamma_eq, gamma_run_away);
+  const double kappa_col  = (1 - alpha_infty / BACalc.GetPTStrength()) *
+                           (1 - 1 / pow(gamma_eq, pnlo_scaling)) *
+                           (R_eq / Rstar) * (gamma_star / gamma_eq);
+
+  if (kappa_col < 0) return 0.; // If something unphysical happened
+  return kappa_col;
 }
 } // namespace kappa
 } // namespace BSMPT

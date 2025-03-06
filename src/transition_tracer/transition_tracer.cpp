@@ -145,6 +145,7 @@ TransitionTracer::TransitionTracer(user_input &input)
                                   mintracer,
                                   pair,
                                   input.vwall,
+                                  input.PNLO_scaling,
                                   input.epsturb,
                                   input.maxpathintegrations,
                                   input.number_of_initial_scan_temperatures);
@@ -354,6 +355,7 @@ TransitionTracer::TransitionTracer(user_input &input)
                   gw.data.turbON      = true;
                   new_gw_data.SNR     = gw.GetSNR(1e-6, 10);
 
+                  new_gw_data.kappa_col    = gw.data.kappa_col;
                   new_gw_data.kappa_sw     = gw.data.kappa_sw;
                   new_gw_data.Epsilon_Turb = gw.data.Epsilon_Turb;
                   new_gw_data.cs_f         = gw.data.Csound_false;

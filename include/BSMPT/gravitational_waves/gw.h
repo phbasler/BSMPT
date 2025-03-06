@@ -76,9 +76,11 @@ struct GravitationalWaveData
   double vw             = false; // bubble wall velocity
   double Csound_false   = false; // speed sound false vacuum
   double Csound_true    = false; // speed sound true vacuum
+  double kappa_col      = false; // efficiency factor for collision
   double kappa_sw       = false; // efficiency factor for sw
   double K_sw           = false; // kinetic energy fraction for sound waves
   double HR             = false; // time scale x max. velocity for sound waves
+  int pnlo_scaling      = false; // pressure scaling at NLO, 1 -> N processes
   double Epsilon_Turb   = false; //  fraction of overall kinetic energy in bulk
                                  //  motion that is converted to MHD
   double gstar = false;          // number of eff. d.o.f.
@@ -304,5 +306,22 @@ double alN(double al, double wow, double cs2b, double cs2s);
  * @return double effiency factor for sound waves
  */
 double kappaNuMuModel(double cs2b, double cs2s, double al, double vw);
+
+/**
+ * @brief Calculate \f$ \kappa_{col} \f$ the efficiency factor for collisions
+ * https://arxiv.org/pdf/1903.09642
+ * https://arxiv.org/pdf/2208.11697
+ * https://arxiv.org/pdf/2210.07075
+ *
+ * @param Tstar transition temperature
+ * @param pnlo_scaling scaling of pressure at NLO, 1 -> N processes
+ * @param HR Hubble rate x Mean bubble size
+ * @param BACalc BACalc object
+ * @return double return the collision effiency factor
+ */
+double Getkappa_col(const double &Tstar,
+                    const int &pnlo_scaling,
+                    const double &HR,
+                    BounceSolution &BACalc);
 } // namespace kappa
 } // namespace BSMPT

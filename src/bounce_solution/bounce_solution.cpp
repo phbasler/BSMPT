@@ -23,6 +23,7 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
+    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in,
@@ -37,6 +38,7 @@ BounceSolution::BounceSolution(
 
   UserDefined_vwall               = UserDefined_vwall_in;
   epsturb                         = UserDefined_epsturb_in;
+  pnlo_scaling                    = UserDefined_PNLO_scaling_in;
   MaxPathIntegrations             = MaxPathIntegrations_in;
   NumberOfInitialScanTemperatures = NumberOfInitialScanTemperatures_in;
   this->CalcGstarPureRad(); // initialize degrees of freedom for purely
@@ -56,6 +58,7 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
+    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in)
@@ -63,6 +66,7 @@ BounceSolution::BounceSolution(
                      MinTracer_in,
                      phase_pair_in,
                      UserDefined_vwall_in,
+                     UserDefined_PNLO_scaling_in,
                      UserDefined_epsturb_in,
                      MaxPathIntegrations_in,
                      NumberOfInitialScanTemperatures_in,

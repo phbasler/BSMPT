@@ -30,6 +30,8 @@ namespace BSMPT
  * @param compl_prbl false vacuum fraction at completion temperature, default:
  * 1%
  * @param epsturb epsilon value of turbulence contribution, default: 0.1
+ * @param PNLO_scaling pressure scaling at NLO, 1 -> N processes at bubble
+ * wall
  * @param maxpathintegrations maximal number of path integrations, default: 7
  * @param multistepmode choose multi-step PT modes: default (= -1), 0, 1, 2,
  * auto (= 3)
@@ -57,6 +59,7 @@ struct user_input
   double vwall            = 0.95;
   double perc_prbl        = 0.71;
   double compl_prbl       = 0.01;
+  int PNLO_scaling        = 1;
   double epsturb          = 0.1;
   int maxpathintegrations = 7;
   int multistepmode       = -1;
@@ -123,6 +126,7 @@ struct gw_data
   std::optional<double> alpha;
   std::optional<double> beta_over_H;
 
+  std::optional<double> kappa_col;
   std::optional<double> kappa_sw;
   std::optional<double> Epsilon_Turb;
   std::optional<double> cs_f;
