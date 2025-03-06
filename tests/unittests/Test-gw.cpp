@@ -735,6 +735,36 @@ TEST_CASE("Check maximal thermal mass squared over temperature ratio")
               .epsilon(1e-2));
 }
 
+TEST_CASE("Check gstar implementation", "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* msq = */ -15650,
+                                               /* lambda = */ 0.52,
+                                               /* delta2 = */ 0.55,
+                                               /* b2 = */ -8859,
+                                               /* d2 = */ 0.5,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+
+  BounceSolution BASolution(modelPointer);
+  BASolution.InitializeGstarProfile();
+  REQUIRE(111.75 == Approx(BASolution.GetGstar(1000)).epsilon(1e-2));
+  REQUIRE(108.09 == Approx(BASolution.GetGstar(100)).epsilon(1e-2));
+  REQUIRE(89.9 == Approx(BASolution.GetGstar(10)).epsilon(1e-2));
+  REQUIRE(10.83 == Approx(BASolution.GetGstar(1e-3)).epsilon(1e-2));
+  REQUIRE(3.384 == Approx(BASolution.GetGstar(1e-6)).epsilon(1e-2));
+}
+
 TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,

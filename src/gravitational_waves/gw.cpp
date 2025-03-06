@@ -38,18 +38,18 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
                                         pow(data.Csound_false, 2),
                                         BACalc.GetPTStrength(),
                                         BACalc.vwall);
-
-  data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
+  data.K_sw     = GetK_sw(data.PTStrength, data.kappa_sw);
   data.HR = GetHR(data.betaH, data.vw, BACalc.modelPointer->SMConstants.Csound);
   data.pnlo_scaling = BACalc.pnlo_scaling;
   data.kappa_col    = kappa::Getkappa_col(
       data.transitionTemp, data.pnlo_scaling, data.HR, BACalc);
   data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
-                          BACalc.GetGstar());
+                          BACalc.GetGstar(data.transitionTemp));
   data.Epsilon_Turb = BACalc.GetEpsTurb();
 
-  data.gstar = BACalc.GetGstar();
-  data.FGW0  = 1.64 / pow(h, 2) * 1.e-5 * pow(100. / BACalc.GetGstar(), 1 / 3.);
+  data.gstar = BACalc.GetGstar(data.transitionTemp);
+  data.FGW0  = 1.64 / pow(h, 2) * 1.e-5 *
+              pow(100. / BACalc.GetGstar(data.transitionTemp), 1 / 3.);
 
   if (data.betaH < 1)
   {

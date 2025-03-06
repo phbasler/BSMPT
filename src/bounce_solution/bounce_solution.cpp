@@ -41,8 +41,7 @@ BounceSolution::BounceSolution(
   pnlo_scaling                    = UserDefined_PNLO_scaling_in;
   MaxPathIntegrations             = MaxPathIntegrations_in;
   NumberOfInitialScanTemperatures = NumberOfInitialScanTemperatures_in;
-  this->CalcGstarPureRad(); // initialize degrees of freedom for purely
-                            // radiative universe
+  InitializeGstarProfile();
   GroupElements = GroupElements_in;
 
   if (Tc > 0)
@@ -476,9 +475,21 @@ void BounceSolution::SetGstar(const double &gstar_in)
   gstar = gstar_in;
 }
 
-double BounceSolution::GetGstar() const
+void BounceSolution::InitializeGstarProfile()
 {
-  return gstar;
+  CalcGstarPureRad();
+  GstarProfile.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  GstarProfile.set_points(LogTGstar, NormalizedLogGstar);
+}
+
+double BounceSolution::GetGstar(const double &T) const
+{
+  // Everything is multiplied by 1000 because the fit was done in MeV
+  if (log(1000. * T) < LogTGstar.front()) return neutrinogstar;
+  if (log(1000. * T) > LogTGstar.back()) return gstar;
+  return neutrinogstar *
+         pow(gstar / neutrinogstar, GstarProfile(log(1000. * T)));
 }
 
 void BounceSolution::SetCriticalTemp(const double &T_in)
@@ -586,7 +597,7 @@ double BounceSolution::TunnelingRate(const double &Temp)
 
 double BounceSolution::HubbleRate(const double &Temp)
 {
-  double rhoR = this->GetGstar() * M_PI * M_PI / 30. *
+  double rhoR = this->GetGstar(Temp) * M_PI * M_PI / 30. *
                 std::pow(Temp, 4); // radiation energy density
 
   double DeltaV = phase_pair.false_phase.Get(Temp).potential -
@@ -942,7 +953,7 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj)
 
 double BounceSolution::CalculateRhoGamma(const double &T) const
 {
-  return this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(T, 4);
+  return this->GetGstar(T) * std::pow(M_PI, 2) / 30 * std::pow(T, 4);
 }
 
 void BounceSolution::CalculatePTStrength()

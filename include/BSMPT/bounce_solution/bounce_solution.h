@@ -13,6 +13,7 @@
  */
 
 #include <BSMPT/bounce_solution/action_calculation.h>
+#include <BSMPT/bounce_solution/hubblerate.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/spline/spline.h>
@@ -20,7 +21,6 @@
 #include <algorithm>             // std::max
 #include <gsl/gsl_deriv.h>       // numerical derivative
 #include <gsl/gsl_integration.h> // numerical integration
-
 namespace BSMPT
 {
 
@@ -44,6 +44,9 @@ public:
    * @brief modelPointer for the used parameter point
    */
   std::shared_ptr<Class_Potential_Origin> modelPointer;
+
+  /** Relativistic dof for the energy at T = 0 */
+  const double neutrinogstar = 3.384;
 
   /**
    * @brief MinTracer object
@@ -150,6 +153,13 @@ public:
    *
    */
   tk::spline S3ofT_spline;
+
+  /**
+   * @brief log(T) vs log(gstar(T)) - log(gstar(T = 0))/(log(gstar(T =
+   * Infinity)) - log(gstar(T = 0)))
+   *
+   */
+  tk::spline GstarProfile;
 
   /**
    * @brief Set of BounceActionInt objects with valid solutions.
@@ -427,9 +437,18 @@ public:
   void SetGstar(const double &gstar_in);
 
   /**
-   * @brief GetGstar Get gstar
+   * @brief Generate the spline used to interpolate the gstar SM profile
+   *
    */
-  double GetGstar() const;
+  void InitializeGstarProfile();
+
+  /**
+   * @brief Get the Gstar object
+   *
+   * @param T temperature
+   * @return double
+   */
+  double GetGstar(const double &T) const;
 
   /**
    * @brief SetCriticalTemp Set critical temperature
