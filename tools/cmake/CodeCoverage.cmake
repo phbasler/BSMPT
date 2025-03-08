@@ -143,9 +143,9 @@ elseif(NOT CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
-set(COVERAGE_COMPILER_FLAGS
-    "-g -fprofile-arcs -ftest-coverage"
-    CACHE INTERNAL "")
+set(COVERAGE_COMPILER_FLAGS "-g")
+# set(COVERAGE_COMPILER_FLAGS "${COVERAGE_COMPILER_FLAGS} -fprofile-arcs") # this causes segfault
+set(COVERAGE_COMPILER_FLAGS "${COVERAGE_COMPILER_FLAGS} -ftest-coverage")
 if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   include(CheckCXXCompilerFlag)
   check_cxx_compiler_flag(-fprofile-abs-path HAVE_fprofile_abs_path)
