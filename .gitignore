@@ -17,3 +17,8 @@ analyze*.py
 
 CMakeUserPresets.json
 __pycache__/*
+
+test_package/build/
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/cmake.check_cache
