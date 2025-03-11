@@ -155,11 +155,16 @@ public:
   tk::spline S3ofT_spline;
 
   /**
-   * @brief log(T) vs log(gstar(T)) - log(gstar(T = 0))/(log(gstar(T =
-   * Infinity)) - log(gstar(T = 0)))
+   * @brief Gstar spline, T < 219.67
    *
    */
-  tk::spline GstarProfile;
+  tk::spline GstarProfileLowT;
+
+  /**
+   * @brief Gstar spline, T > 219.67
+   *
+   */
+  tk::spline GstarProfileHighT;
 
   /**
    * @brief Set of BounceActionInt objects with valid solutions.

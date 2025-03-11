@@ -15,6 +15,6 @@
 
 namespace BSMPT
 {
-extern const std::vector<double> LogTGstar;
-extern const std::vector<double> NormalizedLogGstar;
+extern const std::vector<double> TGstarLowT, TGstarHighT;
+extern const std::vector<double> GstarLowT, GstarHighT;
 } // namespace BSMPT

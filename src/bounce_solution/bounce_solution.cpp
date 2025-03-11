@@ -478,18 +478,27 @@ void BounceSolution::SetGstar(const double &gstar_in)
 void BounceSolution::InitializeGstarProfile()
 {
   CalcGstarPureRad();
-  GstarProfile.set_boundary(
+  GstarProfileLowT.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
-  GstarProfile.set_points(LogTGstar, NormalizedLogGstar);
+  GstarProfileLowT.set_points(TGstarLowT, GstarLowT);
+  GstarProfileHighT.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  GstarProfileHighT.set_points(TGstarHighT, GstarHighT);
 }
 
 double BounceSolution::GetGstar(const double &T) const
 {
+  const double TinMeV    = T * 1000.;
+  const double TTreshold = TGstarLowT.back(); // = TGstarHighT.front()
   // Everything is multiplied by 1000 because the fit was done in MeV
-  if (log(1000. * T) < LogTGstar.front()) return neutrinogstar;
-  if (log(1000. * T) > LogTGstar.back()) return gstar;
-  return neutrinogstar *
-         pow(gstar / neutrinogstar, GstarProfile(log(1000. * T)));
+  if (TinMeV < TGstarLowT.front()) return neutrinogstar;
+  if (TinMeV > TGstarHighT.back()) return gstar;
+  if (TinMeV < TTreshold) return GstarProfileLowT(TinMeV);
+
+  return pow(TinMeV / TTreshold,
+             (log(gstar / GstarHighT.back()) /
+              log(TGstarHighT.back() / TTreshold))) *
+         GstarProfileHighT(TinMeV);
 }
 
 void BounceSolution::SetCriticalTemp(const double &T_in)
