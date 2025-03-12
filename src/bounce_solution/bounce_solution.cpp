@@ -792,11 +792,16 @@ void BounceSolution::CalculateNucleationTempApprox()
   return;
 }
 
+double BounceSolution::I(const double &T)
+{
+  const double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
+  this->SetStoredTemp(T);
+  return prefac * Nintegrate_Outer(*this).result;
+}
+
 double BounceSolution::CalcFalseVacFraction(const double &temp)
 {
-  double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
-  this->SetStoredTemp(temp);
-  return std::exp(-prefac * Nintegrate_Outer(*this).result);
+  return std::exp(-I(temp));
 }
 
 double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
@@ -804,17 +809,15 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
   double res_Temp = -1;
 
   double int_at_false_vac_frac = -std::log(false_vac_frac);
+  double T_up                  = -1;
+  double T_down                = -1;
 
-  double T_up   = -1;
-  double T_down = -1;
-  double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
   double T_middle;
 
   for (auto sol = SolutionList.rbegin(); sol != SolutionList.rend(); sol++)
   {
     // catch the first interval containing res_Temp
-    this->SetStoredTemp(sol->T);
-    double IatT_solT = prefac * Nintegrate_Outer(*this).result;
+    double IatT_solT = I(sol->T);
 
     if (T_up == -1 and IatT_solT < int_at_false_vac_frac) T_up = sol->T;
     if (T_down == -1 and IatT_solT > int_at_false_vac_frac) T_down = sol->T;
@@ -828,9 +831,8 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
 
   if (T_up > 0 and T_down > 0)
   {
-    T_middle = (T_up + T_down) / 2.;
-    this->SetStoredTemp(T_middle); // update temp storage for inner integral
-    double IatT = prefac * Nintegrate_Outer(*this).result;
+    T_middle    = (T_up + T_down) / 2.;
+    double IatT = I(T_middle);
 
     while ((std::abs(T_up / T_down - 1) >
             RelativeTemperatureInCalcTempAtFalseVacFraction *
@@ -842,8 +844,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
                    MarginOfCalcTempAtFalseVacFractionBeforeFailure)))
     {
       T_middle = (T_up + T_down) / 2.;
-      this->SetStoredTemp(T_middle); // update temp storage for inner integral
-      IatT = prefac * Nintegrate_Outer(*this).result;
+      IatT     = I(T_middle);
 
       Logger::Write(LoggingLevel::BounceDetailed,
                     "Pf ( T = " + std::to_string(T_middle) +

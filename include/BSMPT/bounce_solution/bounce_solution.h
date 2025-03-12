@@ -575,6 +575,17 @@ public:
   void CalculateNucleationTempApprox();
 
   /**
+   * @brief Calculate the false vacuum fraction \f$ I(T)=\frac{4\pi
+   * v_{b}^{3}}{3}\int_{T}^{T_{c}}\frac{\Gamma(T^{\prime})d
+   * T^{\prime}}{T^{\prime4}H(T^{\prime})}\left(\int_{T}^{T^{\prime}}\frac{d\tilde{T}}{H(\tilde{T})}\right)^{3}
+   * \f$
+   *
+   * @param T temperature
+   * @return double
+   */
+  double I(const double &T);
+
+  /**
    * @brief CalcTempAtFalseVacFraction calculates the temperature at which the
    * false vacuum fraction drops below val
    * @param false_vac_frac desired false vacuum fraction value
