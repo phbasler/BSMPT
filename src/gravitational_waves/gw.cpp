@@ -37,7 +37,8 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
                                         BACalc.GetPTStrength(),
                                         BACalc.vwall);
   data.K_sw     = GetK_sw(data.PTStrength, data.kappa_sw);
-  data.HR = GetHR(data.betaH, data.vw, BACalc.modelPointer->SMConstants.Csound);
+  data.HR       = BACalc.GetRstar() * BACalc.HubbleRate(data.transitionTemp);
+
   data.pnlo_scaling = BACalc.pnlo_scaling;
   data.kappa_col    = kappa::Getkappa_col(
       data.transitionTemp, data.pnlo_scaling, data.HR, BACalc);
@@ -329,13 +330,6 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax)
 double GetK_sw(const double &alpha, const double &kappa_sw)
 {
   return 0.6 * kappa_sw * alpha / (1. + alpha);
-}
-
-double GetHR(const double &betaH, const double &vwall, const double &Csound)
-{
-  // TODO improve this https://arxiv.org/pdf/2412.02645 3.14
-  double max_velo = std::max(vwall, Csound);
-  return 1. / betaH * std::pow(8 * M_PI, 1. / 3) * max_velo;
 }
 
 double GetHstar0(const double &temp, const double &gstar)

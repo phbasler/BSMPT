@@ -1163,4 +1163,31 @@ double BounceSolution::GetInvTimeScale()
   return this->betaH;
 }
 
+double BounceSolution::GetRstar()
+{
+  if (this->Rstar == -1) CalculateRstar();
+  return this->Rstar;
+}
+
+void BounceSolution::CalculateRstar()
+{
+  gsl_integration_workspace *workspace = gsl_integration_workspace_alloc(1000);
+
+  gsl_function F;
+  F.function = [](double T, void *params) -> double
+  {
+    return static_cast<BounceSolution *>(params)->TunnelingRate(T) *
+           exp(-static_cast<BounceSolution *>(params)->I(T)) /
+           (static_cast<BounceSolution *>(params)->HubbleRate(T) * pow(T, 4));
+  };
+  F.params = this; // Pass `this` pointer as parameters
+
+  double result, error;
+  gsl_integration_qags(
+      &F, Tstar, Tc, RelErr, AbsErr, 1000, workspace, &result, &error);
+
+  gsl_integration_workspace_free(workspace);
+
+  this->Rstar = pow(pow(Tstar, 3) * result, -1 / 3.);
+}
 } // namespace BSMPT

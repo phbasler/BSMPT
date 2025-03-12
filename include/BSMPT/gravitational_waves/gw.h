@@ -254,16 +254,6 @@ Nintegrate_SNR(GravitationalWave &obj, const double fmin, const double fmax);
 double GetK_sw(const double &alpha, const double &kappa_sw);
 
 /**
- * @brief Get HR
- *
- * @param betaH beta/H, inverse time scale
- * @param vwall bubble wall velocity
- * @param Csound speed of sound
- * @return double
- */
-double GetHR(const double &betaH, const double &vwall, const double &Csound);
-
-/**
  * @brief Calculate the Hubble rate at transition time refshifted to today
  *
  * @param temp transition temperature

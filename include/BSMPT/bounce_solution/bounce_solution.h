@@ -152,6 +152,14 @@ public:
   double betaH = -1;
 
   /**
+   * @brief \f$ R_{\star}=\left[T_{p}^{3}\int_{T_{p}}^{T_{c}}\frac{d
+   * T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
+   * \f$
+   *
+   */
+  double Rstar = -1;
+
+  /**
    * @brief number of effective degrees of freedom
    */
   double gstar;
@@ -643,6 +651,20 @@ public:
    * @brief Get inverse time scale of phase transition
    */
   double GetInvTimeScale();
+
+  /**
+   * @brief \f$ R_{\star}=\left[T_{p}^{3}\int_{T_{p}}^{T_{c}}\frac{d
+   * T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
+   * \f$
+   *
+   */
+  void CalculateRstar();
+
+  /**
+   * @brief Returns \f$ R_\star \f$
+   *
+   */
+  double GetRstar();
 };
 
 /**
