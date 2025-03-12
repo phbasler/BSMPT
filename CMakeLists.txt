@@ -124,8 +124,8 @@ endif()
 # --------------------------------------------------
 
 if(EnableCoverage)
-add_compile_options(-coverage)
-add_link_options(-coverage)
+  add_compile_options(-coverage)
+  add_link_options(-coverage)
   include(CodeCoverage)
   append_coverage_compiler_flags()
   # set(LCOV_ARGS "--no-external")
