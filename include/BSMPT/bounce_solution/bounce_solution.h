@@ -13,6 +13,7 @@
  */
 
 #include <BSMPT/bounce_solution/action_calculation.h>
+#include <BSMPT/bounce_solution/hubblerate.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/spline/spline.h>
@@ -20,7 +21,6 @@
 #include <algorithm>             // std::max
 #include <gsl/gsl_deriv.h>       // numerical derivative
 #include <gsl/gsl_integration.h> // numerical integration
-
 namespace BSMPT
 {
 
@@ -45,10 +45,19 @@ public:
    */
   std::shared_ptr<Class_Potential_Origin> modelPointer;
 
+  /** Relativistic dof for the energy at T = 0 */
+  const double neutrinogstar = 3.384;
+
   /**
    * @brief MinTracer object
    */
   std::shared_ptr<MinimumTracer> MinTracer;
+
+  /**
+   * @brief pressure scaling with \f$ \gamma \f$ of 1 -> N processes at NLO
+   *
+   */
+  int pnlo_scaling;
 
   /**
    * @brief epsilon of turbulence efficiency factor
@@ -59,6 +68,11 @@ public:
    * @brief wall velocity
    */
   double vwall = 0.95;
+
+  /**
+   * @brief Chapman Jouget velocity
+   */
+  double v_ChapmanJouget = -1;
 
   /**
    * @brief number of temperature steps in the initial scan of the bounce solver
@@ -112,6 +126,16 @@ public:
   double Tcompl = -1;
 
   /**
+   * @brief reheating temperature
+   */
+  double Treh = -1;
+
+  /**
+   *  @brief transition temperature
+   */
+  double Tstar = -1;
+
+  /**
    * @brief stored temperature
    */
   double store_Temp;
@@ -126,6 +150,14 @@ public:
    *
    */
   double betaH = -1;
+
+  /**
+   * @brief \f$ R_{\star}=\left[T_{p}^{3}\int_{T_{p}}^{T_{c}}\frac{d
+   * T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
+   * \f$
+   *
+   */
+  double Rstar = -1;
 
   /**
    * @brief number of effective degrees of freedom
@@ -144,6 +176,30 @@ public:
    *
    */
   tk::spline S3ofT_spline;
+
+  /**
+   * @brief Gstar spline, T < 219.67
+   *
+   */
+  tk::spline GstarProfileLowT;
+
+  /**
+   * @brief Gstar spline, T > 219.67
+   *
+   */
+  tk::spline GstarProfileHighT;
+
+  /**
+   * @brief False V spline to interpolate
+   *
+   */
+  tk::spline FalsePhaseVSpline;
+
+  /**
+   * @brief True V spline to interpolate
+   *
+   */
+  tk::spline TruePhaseVSpline;
 
   /**
    * @brief Set of BounceActionInt objects with valid solutions.
@@ -313,6 +369,8 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -324,6 +382,7 @@ public:
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
+                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in);
@@ -338,6 +397,8 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -350,6 +411,7 @@ public:
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
+                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in,
@@ -415,9 +477,25 @@ public:
   void SetGstar(const double &gstar_in);
 
   /**
-   * @brief GetGstar Get gstar
+   * @brief Generate the spline used to interpolate the gstar SM profile
+   *
    */
-  double GetGstar() const;
+  void InitializeGstarProfile();
+
+  /**
+   * @brief Initialize two splines for the potential across the tunneling
+   * profile. Used to improve the Hubble rate calculation speed
+   *
+   */
+  void InitializedVSpline();
+
+  /**
+   * @brief Get the Gstar object
+   *
+   * @param T temperature
+   * @return double
+   */
+  double GetGstar(const double &T) const;
 
   /**
    * @brief SetCriticalTemp Set critical temperature
@@ -460,9 +538,28 @@ public:
   double GetCompletionTemp() const;
 
   /**
+   * @brief GetTransitionTemp Get transition temperature
+   */
+  double GetTransitionTemp() const;
+
+  /**
+   * @brief GetReheatingTemp Get reheating temperature
+   */
+  double GetReheatingTemp() const;
+
+  /**
    * @brief CalcTransitionTemp Get transition temperature from int
    */
   double CalcTransitionTemp(const int &which_transition_temp);
+
+  /**
+   * @brief Calculate \f$ \rho_R = \rho_\gamma = g_\star \frac{\pi^2}{30}  T_*^4
+   * \f$
+   *
+   * @param T temperature
+   * @return double
+   */
+  double CalculateRhoGamma(const double &T) const;
 
   /**
    * @brief GetPTStrength Get PT strength alpha
@@ -484,6 +581,17 @@ public:
    * @brief Approximate calculation of nucleation temperature
    */
   void CalculateNucleationTempApprox();
+
+  /**
+   * @brief Calculate the false vacuum fraction \f$ I(T)=\frac{4\pi
+   * v_{b}^{3}}{3}\int_{T}^{T_{c}}\frac{\Gamma(T^{\prime})d
+   * T^{\prime}}{T^{\prime4}H(T^{\prime})}\left(\int_{T}^{T^{\prime}}\frac{d\tilde{T}}{H(\tilde{T})}\right)^{3}
+   * \f$
+   *
+   * @param T temperature
+   * @return double
+   */
+  double I(const double &T);
 
   /**
    * @brief CalcTempAtFalseVacFraction calculates the temperature at which the
@@ -518,7 +626,12 @@ public:
   void CalculateCompletionTemp(const double &false_vac_frac = 0.01);
 
   /**
-   * @brief Calculate phase transition strength alpha at percolation temperature
+   * @brief CalculateReheatingTemp calculation of the reheating temperature
+   */
+  void CalculateReheatingTemp();
+
+  /**
+   * @brief Calculate phase transition strength alpha
    */
   void CalculatePTStrength();
 
@@ -538,6 +651,20 @@ public:
    * @brief Get inverse time scale of phase transition
    */
   double GetInvTimeScale();
+
+  /**
+   * @brief \f$ R_{\star}=\left[T_{p}^{3}\int_{T_{p}}^{T_{c}}\frac{d
+   * T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
+   * \f$
+   *
+   */
+  void CalculateRstar();
+
+  /**
+   * @brief Returns \f$ R_\star \f$
+   *
+   */
+  double GetRstar();
 };
 
 /**

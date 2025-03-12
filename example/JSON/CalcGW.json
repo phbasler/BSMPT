@@ -12,6 +12,7 @@
     "compl_prbl": "0.01",
     "trans_temp": "perc",
     "epsturb": "0.1",
+    "pnlo_scaling": "1",
     "checknlo": "on",
     "checkewsr": "on",
     "maxpathintegrations": "7",

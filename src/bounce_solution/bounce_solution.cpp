@@ -23,6 +23,7 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
+    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in,
@@ -37,10 +38,10 @@ BounceSolution::BounceSolution(
 
   UserDefined_vwall               = UserDefined_vwall_in;
   epsturb                         = UserDefined_epsturb_in;
+  pnlo_scaling                    = UserDefined_PNLO_scaling_in;
   MaxPathIntegrations             = MaxPathIntegrations_in;
   NumberOfInitialScanTemperatures = NumberOfInitialScanTemperatures_in;
-  this->CalcGstarPureRad(); // initialize degrees of freedom for purely
-                            // radiative universe
+  InitializeGstarProfile();
   GroupElements = GroupElements_in;
 
   if (Tc > 0)
@@ -56,6 +57,7 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
+    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in)
@@ -63,6 +65,7 @@ BounceSolution::BounceSolution(
                      MinTracer_in,
                      phase_pair_in,
                      UserDefined_vwall_in,
+                     UserDefined_PNLO_scaling_in,
                      UserDefined_epsturb_in,
                      MaxPathIntegrations_in,
                      NumberOfInitialScanTemperatures_in,
@@ -454,6 +457,9 @@ void BounceSolution::SetBounceSol()
   S3ofT_spline.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
   S3ofT_spline.set_points(list_T, list_S3);
+
+  InitializedVSpline(); // If there are 4 solutions we can construct a spline
+
   status_bounce_sol = StatusGW::Success;
 }
 
@@ -472,9 +478,55 @@ void BounceSolution::SetGstar(const double &gstar_in)
   gstar = gstar_in;
 }
 
-double BounceSolution::GetGstar() const
+void BounceSolution::InitializeGstarProfile()
 {
-  return gstar;
+  CalcGstarPureRad();
+  GstarProfileLowT.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  GstarProfileLowT.set_points(TGstarLowT, GstarLowT);
+  GstarProfileHighT.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  GstarProfileHighT.set_points(TGstarHighT, GstarHighT);
+}
+
+void BounceSolution::InitializedVSpline()
+{
+  std::vector<double> T_list, V_list;
+  for (auto m : phase_pair.false_phase.MinimumPhaseVector)
+  {
+    T_list.push_back(m.temp);
+    V_list.push_back(m.potential);
+  }
+  FalsePhaseVSpline.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  FalsePhaseVSpline.set_points(T_list, V_list);
+
+  T_list.clear();
+  V_list.clear();
+
+  for (auto m : phase_pair.true_phase.MinimumPhaseVector)
+  {
+    T_list.push_back(m.temp);
+    V_list.push_back(m.potential);
+  }
+  TruePhaseVSpline.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  TruePhaseVSpline.set_points(T_list, V_list);
+}
+
+double BounceSolution::GetGstar(const double &T) const
+{
+  const double TinMeV    = T * 1000.;
+  const double TTreshold = TGstarLowT.back(); // = TGstarHighT.front()
+  // Everything is multiplied by 1000 because the fit was done in MeV
+  if (TinMeV < TGstarLowT.front()) return neutrinogstar;
+  if (TinMeV > TGstarHighT.back()) return gstar;
+  if (TinMeV < TTreshold) return GstarProfileLowT(TinMeV);
+
+  return pow(TinMeV / TTreshold,
+             (log(gstar / GstarHighT.back()) /
+              log(TGstarHighT.back() / TTreshold))) *
+         GstarProfileHighT(TinMeV);
 }
 
 void BounceSolution::SetCriticalTemp(const double &T_in)
@@ -517,43 +569,66 @@ double BounceSolution::GetCompletionTemp() const
   return Tcompl;
 }
 
+double BounceSolution::GetTransitionTemp() const
+{
+  return Tstar;
+}
+
+double BounceSolution::GetReheatingTemp() const
+{
+  return Treh;
+}
+
 double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
 {
-  double trans_temp = -1;
   if (status_nucl_approx == BSMPT::StatusTemperature::Success and
       which_transition_temp == 1)
   {
-    trans_temp = GetNucleationTempApprox();
+    Tstar = GetNucleationTempApprox();
     Logger::Write(
         LoggingLevel::TransitionDetailed,
-        "Approximate nucleation temperature T = " + std::to_string(trans_temp) +
+        "Approximate nucleation temperature T = " + std::to_string(Tstar) +
             " chosen as transition temperature.");
   }
   else if (status_nucl == BSMPT::StatusTemperature::Success and
            which_transition_temp == 2)
   {
-    trans_temp = GetNucleationTemp();
+    Tstar = GetNucleationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
-                  "Nucleation temperature T = " + std::to_string(trans_temp) +
+                  "Nucleation temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
   else if (status_perc == BSMPT::StatusTemperature::Success and
            which_transition_temp == 3)
   {
-    trans_temp = GetPercolationTemp();
+    Tstar = GetPercolationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
-                  "Percolation temperature T = " + std::to_string(trans_temp) +
+                  "Percolation temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
   else if (status_compl == BSMPT::StatusTemperature::Success and
            which_transition_temp == 4)
   {
-    trans_temp = GetCompletionTemp();
+    Tstar = GetCompletionTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
-                  "Completion temperature T = " + std::to_string(trans_temp) +
+                  "Completion temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
-  return trans_temp;
+
+  Logger::Write(LoggingLevel::TransitionDetailed,
+                "Calculate PT strength and inverse time scale at the chosen "
+                "transition temperature.");
+  CalculatePTStrength();
+  CalculateInvTimeScale();
+
+  // Upper bound implementation https://arxiv.org/abs/2305.02357
+  v_ChapmanJouget = 1. / (1 + alpha) *
+                    (modelPointer->SMConstants.Csound +
+                     std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+
+  CalculateReheatingTemp();
+
+  return Tstar;
 }
 
 double BounceSolution::GetPTStrength() const
@@ -582,9 +657,12 @@ double BounceSolution::TunnelingRate(const double &Temp)
 
 double BounceSolution::HubbleRate(const double &Temp)
 {
-  return M_PI * std::sqrt(this->GetGstar()) / std::sqrt(90.) *
-         std::pow(Temp, 2) /
-         modelPointer->SMConstants.MPl; // radiation dominated universe
+  const double rhoR = this->GetGstar(Temp) * M_PI * M_PI / 30. *
+                      std::pow(Temp, 4); // radiation energy density
+
+  const double DeltaV = FalsePhaseVSpline(Temp) - TruePhaseVSpline(Temp);
+  return 1. / (std::sqrt(3) * modelPointer->SMConstants.MPl) *
+         std::sqrt(rhoR + DeltaV);
 }
 
 void BounceSolution::CalcGstarPureRad()
@@ -714,11 +792,16 @@ void BounceSolution::CalculateNucleationTempApprox()
   return;
 }
 
+double BounceSolution::I(const double &T)
+{
+  const double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
+  this->SetStoredTemp(T);
+  return prefac * Nintegrate_Outer(*this).result;
+}
+
 double BounceSolution::CalcFalseVacFraction(const double &temp)
 {
-  double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
-  this->SetStoredTemp(temp);
-  return std::exp(-prefac * Nintegrate_Outer(*this).result);
+  return std::exp(-I(temp));
 }
 
 double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
@@ -726,17 +809,15 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
   double res_Temp = -1;
 
   double int_at_false_vac_frac = -std::log(false_vac_frac);
+  double T_up                  = -1;
+  double T_down                = -1;
 
-  double T_up   = -1;
-  double T_down = -1;
-  double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
   double T_middle;
 
   for (auto sol = SolutionList.rbegin(); sol != SolutionList.rend(); sol++)
   {
     // catch the first interval containing res_Temp
-    this->SetStoredTemp(sol->T);
-    double IatT_solT = prefac * Nintegrate_Outer(*this).result;
+    double IatT_solT = I(sol->T);
 
     if (T_up == -1 and IatT_solT < int_at_false_vac_frac) T_up = sol->T;
     if (T_down == -1 and IatT_solT > int_at_false_vac_frac) T_down = sol->T;
@@ -750,9 +831,8 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
 
   if (T_up > 0 and T_down > 0)
   {
-    T_middle = (T_up + T_down) / 2.;
-    this->SetStoredTemp(T_middle); // update temp storage for inner integral
-    double IatT = prefac * Nintegrate_Outer(*this).result;
+    T_middle    = (T_up + T_down) / 2.;
+    double IatT = I(T_middle);
 
     while ((std::abs(T_up / T_down - 1) >
             RelativeTemperatureInCalcTempAtFalseVacFraction *
@@ -764,8 +844,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
                    MarginOfCalcTempAtFalseVacFractionBeforeFailure)))
     {
       T_middle = (T_up + T_down) / 2.;
-      this->SetStoredTemp(T_middle); // update temp storage for inner integral
-      IatT = prefac * Nintegrate_Outer(*this).result;
+      IatT     = I(T_middle);
 
       Logger::Write(LoggingLevel::BounceDetailed,
                     "Pf ( T = " + std::to_string(T_middle) +
@@ -855,6 +934,18 @@ void BounceSolution::CalculateCompletionTemp(const double &false_vac_frac)
   return;
 }
 
+void BounceSolution::CalculateReheatingTemp()
+{
+  if (alpha < 1)
+  {
+    Treh = GetTransitionTemp(); // no supercooling
+  }
+  else // supercooling
+  {
+    Treh = GetTransitionTemp() * std::pow((1 + alpha), 1. / 4);
+  }
+}
+
 double inner_integrand(double Temp, void *params)
 {
   class BounceSolution &obj = *static_cast<BounceSolution *>(params);
@@ -931,14 +1022,13 @@ struct resultErrorPair Nintegrate_Outer(BounceSolution &obj)
   return res;
 }
 
+double BounceSolution::CalculateRhoGamma(const double &T) const
+{
+  return this->GetGstar(T) * std::pow(M_PI, 2) / 30 * std::pow(T, 4);
+}
+
 void BounceSolution::CalculatePTStrength()
 {
-  if (not percolation_temp_set)
-  {
-    throw std::runtime_error("Phase transition strength cannot be calculated "
-                             "because percolation temperature is not yet set.");
-  }
-
   if (UserDefined_vwall >= 0)
     vwall = UserDefined_vwall;
   else
@@ -948,15 +1038,14 @@ void BounceSolution::CalculatePTStrength()
 
   for (int c = 0; c < 20; c++)
   {
-    // Use recurvie method to find solution of
+    // Use recursive method to find solution of
     // alpha = alpha(T_*)
     // T_* =  T_*(alpha, v_wall)
     // v_wall = v_wall(alpha, T_*)
     // Should converge quickly, if fails use default value of v_wall = 0.95
-    old_alpha = alpha;
-    CalculatePercolationTemp();
-    Minimum true_min  = phase_pair.true_phase.Get(GetPercolationTemp());
-    Minimum false_min = phase_pair.false_phase.Get(GetPercolationTemp());
+    old_alpha         = alpha;
+    Minimum true_min  = phase_pair.true_phase.Get(GetTransitionTemp());
+    Minimum false_min = phase_pair.false_phase.Get(GetTransitionTemp());
 
     double Vi =
         false_min
@@ -966,16 +1055,15 @@ void BounceSolution::CalculatePTStrength()
             .potential; // potential at true vacuum and percolation temperature
     double dTVi = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(false_min.point),
-        Tperc,
+        GetTransitionTemp(),
         -1); // temperature-derivative at false vacuum
     double dTVf = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(true_min.point),
-        Tperc,
+        GetTransitionTemp(),
         -1); // temperature-derivative at true vacuum const
 
-    double rho_gam =
-        this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
-    alpha = 1 / rho_gam * (Vi - Vf - Tperc / 4. * (dTVi - dTVf));
+    double rho_gam = CalculateRhoGamma(GetTransitionTemp());
+    alpha = 1 / rho_gam * (Vi - Vf - GetTransitionTemp() / 4. * (dTVi - dTVf));
     CalculateWallVelocity(false_min, true_min);
     if (abs(alpha / old_alpha - 1) < 1e-7) return; // Found a solution
   }
@@ -992,29 +1080,17 @@ void BounceSolution::CalculatePTStrength()
 void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
                                            const Minimum &true_min)
 {
-  if (not percolation_temp_set)
-  {
-    throw std::runtime_error("Wall velocity cannot be calculated "
-                             "because percolation temperature is not yet set.");
-  }
+  double Temp = false_min.temp; // temperature
 
   // User defined
   if (UserDefined_vwall >= 0) vwall = UserDefined_vwall;
   if (UserDefined_vwall == -1)
   {
     // vwall https://arxiv.org/abs/2210.16305
-    double Vi =
-        false_min
-            .potential; // potential at false vacuum and percolation temperature
-    double Vf =
-        true_min
-            .potential; // potential at true vacuum and percolation temperature
-    double rho_gam =
-        this->GetGstar() * std::pow(M_PI, 2) / 30 * std::pow(Tperc, 4);
+    double Vi = false_min.potential; // potential at false vacuum
+    double Vf = true_min.potential;  // potential at true vacuum
 
-    double v_ChapmanJouget = 1. / (1 + alpha) *
-                             (modelPointer->SMConstants.Csound +
-                              std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+    double rho_gam = CalculateRhoGamma(Temp);
 
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
@@ -1023,18 +1099,13 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
   }
   if (UserDefined_vwall == -2)
   {
-    // Upper bound implementation https://arxiv.org/abs/2305.02357
-    double v_ChapmanJouget = 1. / (1 + alpha) *
-                             (modelPointer->SMConstants.Csound +
-                              std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
-
     double dTVi = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(false_min.point),
-        Tperc,
+        Temp,
         -1); // temperature-derivative at false vacuum
     double dTVf = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(true_min.point),
-        Tperc,
+        Temp,
         -1); // temperature-derivative at true vacuum const
 
     double psi = dTVf / dTVi;
@@ -1075,21 +1146,15 @@ struct resultErrorPair Nderive_BounceRatio(BounceSolution &obj)
   struct resultErrorPair res;
 
   gsl_deriv_central(
-      &F, obj.GetPercolationTemp(), step_size, &res.result, &res.error);
+      &F, obj.GetTransitionTemp(), step_size, &res.result, &res.error);
 
   return res;
 }
 
 void BounceSolution::CalculateInvTimeScale()
 {
-  if (not percolation_temp_set)
-  {
-    throw std::runtime_error("Phase transition strength cannot be calculated "
-                             "because percolation temperature is not yet set.");
-  }
-
   struct resultErrorPair res = Nderive_BounceRatio(*this);
-  this->betaH                = this->GetPercolationTemp() * res.result;
+  this->betaH                = this->GetTransitionTemp() * res.result;
 }
 
 double BounceSolution::GetInvTimeScale()
@@ -1098,4 +1163,31 @@ double BounceSolution::GetInvTimeScale()
   return this->betaH;
 }
 
+double BounceSolution::GetRstar()
+{
+  if (this->Rstar == -1) CalculateRstar();
+  return this->Rstar;
+}
+
+void BounceSolution::CalculateRstar()
+{
+  gsl_integration_workspace *workspace = gsl_integration_workspace_alloc(1000);
+
+  gsl_function F;
+  F.function = [](double T, void *params) -> double
+  {
+    return static_cast<BounceSolution *>(params)->TunnelingRate(T) *
+           exp(-static_cast<BounceSolution *>(params)->I(T)) /
+           (static_cast<BounceSolution *>(params)->HubbleRate(T) * pow(T, 4));
+  };
+  F.params = this; // Pass `this` pointer as parameters
+
+  double result, error;
+  gsl_integration_qags(
+      &F, Tstar, Tc, RelErr, AbsErr, 1000, workspace, &result, &error);
+
+  gsl_integration_workspace_free(workspace);
+
+  this->Rstar = pow(pow(Tstar, 3) * result, -1 / 3.);
+}
 } // namespace BSMPT
