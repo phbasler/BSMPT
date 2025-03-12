@@ -63,6 +63,8 @@ jobs:
     - run: cmake --preset $GeneratedCMakeProfile
     - name: compile
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+    - name: Run ctest
+      run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
     - name: Generate Coverage
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage
