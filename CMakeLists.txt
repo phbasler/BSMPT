@@ -130,6 +130,8 @@ if(EnableCoverage)
   set(COVERAGE_EXCLUDES
       "/usr/include/*"
       "/usr/lib/*"
+      "~/.conan2/*"
+      "~/.conan/*"
       ${CodeCoverageExcludesFromOtherPkgs}
       "${PROJECT_SOURCE_DIR}/tests/*"
       "tests/*"
@@ -154,7 +156,8 @@ if(EnableCoverage)
     BASE_DIRECTORY
     "${PROJECT_SOURCE_DIR}"
     DEPENDS
-    GenericTests)
+    GenericTests
+    )
 endif(EnableCoverage)
 
 # find_lto(CXX)
