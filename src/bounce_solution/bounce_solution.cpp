@@ -457,6 +457,9 @@ void BounceSolution::SetBounceSol()
   S3ofT_spline.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
   S3ofT_spline.set_points(list_T, list_S3);
+
+  InitializedVSpline(); // If there are 4 solutions we can construct a spline
+
   status_bounce_sol = StatusGW::Success;
 }
 
@@ -484,6 +487,31 @@ void BounceSolution::InitializeGstarProfile()
   GstarProfileHighT.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
   GstarProfileHighT.set_points(TGstarHighT, GstarHighT);
+}
+
+void BounceSolution::InitializedVSpline()
+{
+  std::vector<double> T_list, V_list;
+  for (auto m : phase_pair.false_phase.MinimumPhaseVector)
+  {
+    T_list.push_back(m.temp);
+    V_list.push_back(m.potential);
+  }
+  FalsePhaseVSpline.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  FalsePhaseVSpline.set_points(T_list, V_list);
+
+  T_list.clear();
+  V_list.clear();
+
+  for (auto m : phase_pair.true_phase.MinimumPhaseVector)
+  {
+    T_list.push_back(m.temp);
+    V_list.push_back(m.potential);
+  }
+  TruePhaseVSpline.set_boundary(
+      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  TruePhaseVSpline.set_points(T_list, V_list);
 }
 
 double BounceSolution::GetGstar(const double &T) const
@@ -629,12 +657,10 @@ double BounceSolution::TunnelingRate(const double &Temp)
 
 double BounceSolution::HubbleRate(const double &Temp)
 {
-  double rhoR = this->GetGstar(Temp) * M_PI * M_PI / 30. *
-                std::pow(Temp, 4); // radiation energy density
+  const double rhoR = this->GetGstar(Temp) * M_PI * M_PI / 30. *
+                      std::pow(Temp, 4); // radiation energy density
 
-  double DeltaV = phase_pair.false_phase.Get(Temp).potential -
-                  phase_pair.true_phase.Get(Temp).potential; // vacuum energy
-
+  const double DeltaV = FalsePhaseVSpline(Temp) - TruePhaseVSpline(Temp);
   return 1. / (std::sqrt(3) * modelPointer->SMConstants.MPl) *
          std::sqrt(rhoR + DeltaV);
 }

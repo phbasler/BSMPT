@@ -182,6 +182,18 @@ public:
   tk::spline GstarProfileHighT;
 
   /**
+   * @brief False V spline to interpolate
+   *
+   */
+  tk::spline FalsePhaseVSpline;
+
+  /**
+   * @brief True V spline to interpolate
+   *
+   */
+  tk::spline TruePhaseVSpline;
+
+  /**
    * @brief Set of BounceActionInt objects with valid solutions.
    *
    */
@@ -461,6 +473,13 @@ public:
    *
    */
   void InitializeGstarProfile();
+
+  /**
+   * @brief Initialize two splines for the potential across the tunneling
+   * profile. Used to improve the Hubble rate calculation speed
+   *
+   */
+  void InitializedVSpline();
 
   /**
    * @brief Get the Gstar object
