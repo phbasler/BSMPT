@@ -23,7 +23,7 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
       BACalc.phase_pair.false_phase.Get(data.transitionTemp).point;
   std::vector<double> TrueVacuum =
       BACalc.phase_pair.true_phase.Get(data.transitionTemp).point;
-
+  // General purpose GW parameters
   data.Csound_false = CalculateSoundSpeed(BACalc.GetTransitionTemp(),
                                           BACalc.phase_pair.false_phase,
                                           BACalc.modelPointer);
@@ -31,25 +31,28 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.Csound_true = CalculateSoundSpeed(BACalc.GetTransitionTemp(),
                                          BACalc.phase_pair.true_phase,
                                          BACalc.modelPointer);
-
-  data.kappa_sw = kappa::kappaNuMuModel(pow(data.Csound_true, 2),
-                                        pow(data.Csound_false, 2),
-                                        BACalc.GetPTStrength(),
-                                        BACalc.vwall);
-  data.K_sw     = GetK_sw(data.PTStrength, data.kappa_sw);
-  data.HR       = BACalc.GetRstar() * BACalc.HubbleRate(data.transitionTemp);
-
+  data.HR          = BACalc.GetRstar() * BACalc.HubbleRate(data.transitionTemp);
+  data.gstar       = BACalc.GetGstar(data.transitionTemp);
+  data.FGW0        = 1.64 / pow(h, 2) * 1.e-5 *
+              pow(100. / BACalc.GetGstar(data.transitionTemp), 1 / 3.);
+  data.Hstar0 = GetHstar0(BACalc.GetReheatingTemp(),
+                          BACalc.GetGstar(data.transitionTemp));
+  // Collisions
   data.pnlo_scaling = BACalc.pnlo_scaling;
   data.kappa_col    = kappa::Getkappa_col(
       data.transitionTemp, data.pnlo_scaling, data.HR, BACalc);
-  data.Hstar0       = GetHstar0(BACalc.GetReheatingTemp(),
-                          BACalc.GetGstar(data.transitionTemp));
+  // Turbulence
   data.Epsilon_Turb = BACalc.GetEpsTurb();
-
-  data.gstar = BACalc.GetGstar(data.transitionTemp);
-  data.FGW0  = 1.64 / pow(h, 2) * 1.e-5 *
-              pow(100. / BACalc.GetGstar(data.transitionTemp), 1 / 3.);
-
+  // Sound waves
+  const double alpha_eff =
+      (1 - data.kappa_col) *
+      data.PTStrength; // remove energy that goes into collisions
+  data.kappa_sw = (alpha_eff / data.PTStrength) *
+                  kappa::kappaNuMuModel(pow(data.Csound_true, 2),
+                                        pow(data.Csound_false, 2),
+                                        alpha_eff,
+                                        BACalc.vwall);
+  data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
   if (data.betaH < 1)
   {
     data.status = StatusGW::Failure;
