@@ -156,8 +156,7 @@ if(EnableCoverage)
     BASE_DIRECTORY
     "${PROJECT_SOURCE_DIR}"
     DEPENDS
-    GenericTests
-    )
+    GenericTests)
 endif(EnableCoverage)
 
 # find_lto(CXX)
