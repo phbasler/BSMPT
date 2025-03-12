@@ -42,7 +42,7 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov clang-16 make llvm
    
     - uses: actions/setup-python@v5
       with:
@@ -50,7 +50,12 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Install conan
       run: pip install conan>2
-    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing
+
+    - run: |
+        echo "CC=clang-16" >> "$GITHUB_ENV"
+        echo "CXX=clang++-16" >> "$GITHUB_ENV"
+
+    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing --compiler clang
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py
@@ -58,6 +63,8 @@ jobs:
     - run: cmake --preset $GeneratedCMakeProfile
     - name: compile
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+    - name: Run ctest
+      run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
     - name: Generate Coverage
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage

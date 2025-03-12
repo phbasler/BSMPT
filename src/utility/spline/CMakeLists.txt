@@ -3,7 +3,9 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/utility/spline")
+set(suffix "include/BSMPT/utility/spline")
+set(header_path "${BSMPT_SOURCE_DIR}/${suffix}")
+
 set(header ${header_path}/spline.h)
 set(src spline.cpp)
 add_library(Spline ${header} ${src})
@@ -19,3 +21,7 @@ if(nlohmann_json_FOUND)
 endif()
 
 target_compile_definitions(Spline PRIVATE _USE_MATH_DEFINES)
+
+set_property(TARGET Spline PROPERTY PUBLIC_HEADER ${header})
+
+install(TARGETS Spline PUBLIC_HEADER DESTINATION ${suffix})

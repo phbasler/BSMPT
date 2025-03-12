@@ -1,6 +1,6 @@
 #pragma once
 
-#cmakedefine libcmaes_FOUND
+#cmakedefine cmaes_FOUND
 #cmakedefine NLopt_FOUND
 #cmakedefine Boost_FOUND
 #cmakedefine nlohmann_json_FOUND
