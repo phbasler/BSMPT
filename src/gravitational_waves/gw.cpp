@@ -563,6 +563,7 @@ void custom_error_handler(const char *reason,
 
 double kappaNuMuModel(double cs2b, double cs2s, double al, double vw)
 {
+  if (vw == 1) vw = 0.999; // 1/0 if vw = 1, 0.999 is a decent approximation
   gsl_set_error_handler(&custom_error_handler);
   auto [vm, mode] = getvm(al, vw, cs2b);
   double Ksh = 0, wow = 1, vp = vw;
