@@ -42,7 +42,7 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov clang-16
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov clang-16 make llvm
    
     - uses: actions/setup-python@v5
       with:
