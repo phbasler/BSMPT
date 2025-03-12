@@ -70,6 +70,11 @@ public:
   double vwall = 0.95;
 
   /**
+   * @brief Chapman Jouget velocity
+   */
+  double v_ChapmanJouget = -1;
+
+  /**
    * @brief number of temperature steps in the initial scan of the bounce solver
    *
    */
@@ -119,6 +124,16 @@ public:
    * @brief completion temperature
    */
   double Tcompl = -1;
+
+  /**
+   * @brief reheating temperature
+   */
+  double Treh = -1;
+
+  /**
+   *  @brief transition temperature
+   */
+  double Tstar = -1;
 
   /**
    * @brief stored temperature
@@ -496,6 +511,16 @@ public:
   double GetCompletionTemp() const;
 
   /**
+   * @brief GetTransitionTemp Get transition temperature
+   */
+  double GetTransitionTemp() const;
+
+  /**
+   * @brief GetReheatingTemp Get reheating temperature
+   */
+  double GetReheatingTemp() const;
+
+  /**
    * @brief CalcTransitionTemp Get transition temperature from int
    */
   double CalcTransitionTemp(const int &which_transition_temp);
@@ -563,7 +588,12 @@ public:
   void CalculateCompletionTemp(const double &false_vac_frac = 0.01);
 
   /**
-   * @brief Calculate phase transition strength alpha at percolation temperature
+   * @brief CalculateReheatingTemp calculation of the reheating temperature
+   */
+  void CalculateReheatingTemp();
+
+  /**
+   * @brief Calculate phase transition strength alpha
    */
   void CalculatePTStrength();
 

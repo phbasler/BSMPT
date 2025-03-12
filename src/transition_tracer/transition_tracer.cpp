@@ -138,7 +138,7 @@ TransitionTracer::TransitionTracer(user_input &input)
             new_transition_data.crit_false_vev =
                 pair.false_phase.Get(pair.crit_temp).point;
 
-            auto max_ratio = CheckMassRatio(
+            (void)CheckMassRatio(
                 input, new_transition_data.crit_false_vev, pair.crit_temp);
 
             BounceSolution bounce(input.modelPointer,
@@ -177,10 +177,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                             EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.nucl_approx_false_vev,
-                                   bounce.GetNucleationTempApprox());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.nucl_approx_false_vev,
+                                     bounce.GetNucleationTempApprox());
               }
               else
               {
@@ -205,10 +204,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.nucl_false_vev,
-                                   bounce.GetNucleationTemp());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.nucl_false_vev,
+                                     bounce.GetNucleationTemp());
               }
               else
               {
@@ -233,10 +231,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(new_transition_data.perc_temp.value_or(EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.perc_false_vev,
-                                   bounce.GetPercolationTemp());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.perc_false_vev,
+                                     bounce.GetPercolationTemp());
               }
               else
               {
@@ -263,10 +260,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                             new_transition_data.compl_temp.value_or(EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.compl_false_vev,
-                                   bounce.GetCompletionTemp());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.compl_false_vev,
+                                     bounce.GetCompletionTemp());
               }
               else
               {
@@ -301,16 +297,14 @@ TransitionTracer::TransitionTracer(user_input &input)
                 Logger::Write(LoggingLevel::TransitionDetailed,
                               "Start GW parameters calculation.");
 
-                new_gw_data.vwall = bounce.GetWallVelocity();
-
-                bounce.CalculatePTStrength();
-                new_gw_data.alpha       = bounce.GetPTStrength();
-                new_gw_data.beta_over_H = bounce.GetInvTimeScale();
-
                 GravitationalWave gw(bounce, input.which_transition_temp);
 
                 new_gw_data.status_gw  = gw.data.status;
                 new_gw_data.trans_temp = gw.data.transitionTemp;
+
+                new_gw_data.alpha       = gw.data.PTStrength;
+                new_gw_data.beta_over_H = gw.data.betaH;
+                new_gw_data.vwall       = gw.data.vw;
 
                 if (new_gw_data.status_gw != StatusGW::Failure)
                 {

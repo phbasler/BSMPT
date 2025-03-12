@@ -541,43 +541,66 @@ double BounceSolution::GetCompletionTemp() const
   return Tcompl;
 }
 
+double BounceSolution::GetTransitionTemp() const
+{
+  return Tstar;
+}
+
+double BounceSolution::GetReheatingTemp() const
+{
+  return Treh;
+}
+
 double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
 {
-  double trans_temp = -1;
   if (status_nucl_approx == BSMPT::StatusTemperature::Success and
       which_transition_temp == 1)
   {
-    trans_temp = GetNucleationTempApprox();
+    Tstar = GetNucleationTempApprox();
     Logger::Write(
         LoggingLevel::TransitionDetailed,
-        "Approximate nucleation temperature T = " + std::to_string(trans_temp) +
+        "Approximate nucleation temperature T = " + std::to_string(Tstar) +
             " chosen as transition temperature.");
   }
   else if (status_nucl == BSMPT::StatusTemperature::Success and
            which_transition_temp == 2)
   {
-    trans_temp = GetNucleationTemp();
+    Tstar = GetNucleationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
-                  "Nucleation temperature T = " + std::to_string(trans_temp) +
+                  "Nucleation temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
   else if (status_perc == BSMPT::StatusTemperature::Success and
            which_transition_temp == 3)
   {
-    trans_temp = GetPercolationTemp();
+    Tstar = GetPercolationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
-                  "Percolation temperature T = " + std::to_string(trans_temp) +
+                  "Percolation temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
   else if (status_compl == BSMPT::StatusTemperature::Success and
            which_transition_temp == 4)
   {
-    trans_temp = GetCompletionTemp();
+    Tstar = GetCompletionTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
-                  "Completion temperature T = " + std::to_string(trans_temp) +
+                  "Completion temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
-  return trans_temp;
+
+  Logger::Write(LoggingLevel::TransitionDetailed,
+                "Calculate PT strength and inverse time scale at the chosen "
+                "transition temperature.");
+  CalculatePTStrength();
+  CalculateInvTimeScale();
+
+  // Upper bound implementation https://arxiv.org/abs/2305.02357
+  v_ChapmanJouget = 1. / (1 + alpha) *
+                    (modelPointer->SMConstants.Csound +
+                     std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+
+  CalculateReheatingTemp();
+
+  return Tstar;
 }
 
 double BounceSolution::GetPTStrength() const
@@ -884,6 +907,18 @@ void BounceSolution::CalculateCompletionTemp(const double &false_vac_frac)
   return;
 }
 
+void BounceSolution::CalculateReheatingTemp()
+{
+  if (alpha < 1)
+  {
+    Treh = GetTransitionTemp(); // no supercooling
+  }
+  else // supercooling
+  {
+    Treh = GetTransitionTemp() * std::pow((1 + alpha), 1. / 4);
+  }
+}
+
 double inner_integrand(double Temp, void *params)
 {
   class BounceSolution &obj = *static_cast<BounceSolution *>(params);
@@ -967,12 +1002,6 @@ double BounceSolution::CalculateRhoGamma(const double &T) const
 
 void BounceSolution::CalculatePTStrength()
 {
-  if (not percolation_temp_set)
-  {
-    throw std::runtime_error("Phase transition strength cannot be calculated "
-                             "because percolation temperature is not yet set.");
-  }
-
   if (UserDefined_vwall >= 0)
     vwall = UserDefined_vwall;
   else
@@ -987,10 +1016,9 @@ void BounceSolution::CalculatePTStrength()
     // T_* =  T_*(alpha, v_wall)
     // v_wall = v_wall(alpha, T_*)
     // Should converge quickly, if fails use default value of v_wall = 0.95
-    old_alpha = alpha;
-    CalculatePercolationTemp();
-    Minimum true_min  = phase_pair.true_phase.Get(GetPercolationTemp());
-    Minimum false_min = phase_pair.false_phase.Get(GetPercolationTemp());
+    old_alpha         = alpha;
+    Minimum true_min  = phase_pair.true_phase.Get(GetTransitionTemp());
+    Minimum false_min = phase_pair.false_phase.Get(GetTransitionTemp());
 
     double Vi =
         false_min
@@ -1000,15 +1028,15 @@ void BounceSolution::CalculatePTStrength()
             .potential; // potential at true vacuum and percolation temperature
     double dTVi = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(false_min.point),
-        Tperc,
+        GetTransitionTemp(),
         -1); // temperature-derivative at false vacuum
     double dTVf = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(true_min.point),
-        Tperc,
+        GetTransitionTemp(),
         -1); // temperature-derivative at true vacuum const
 
-    double rho_gam = CalculateRhoGamma(Tperc);
-    alpha          = 1 / rho_gam * (Vi - Vf - Tperc / 4. * (dTVi - dTVf));
+    double rho_gam = CalculateRhoGamma(GetTransitionTemp());
+    alpha = 1 / rho_gam * (Vi - Vf - GetTransitionTemp() / 4. * (dTVi - dTVf));
     CalculateWallVelocity(false_min, true_min);
     if (abs(alpha / old_alpha - 1) < 1e-7) return; // Found a solution
   }
@@ -1025,28 +1053,17 @@ void BounceSolution::CalculatePTStrength()
 void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
                                            const Minimum &true_min)
 {
-  if (not percolation_temp_set)
-  {
-    throw std::runtime_error("Wall velocity cannot be calculated "
-                             "because percolation temperature is not yet set.");
-  }
+  double Temp = false_min.temp; // temperature
 
   // User defined
   if (UserDefined_vwall >= 0) vwall = UserDefined_vwall;
   if (UserDefined_vwall == -1)
   {
     // vwall https://arxiv.org/abs/2210.16305
-    double Vi =
-        false_min
-            .potential; // potential at false vacuum and percolation temperature
-    double Vf =
-        true_min
-            .potential; // potential at true vacuum and percolation temperature
-    double rho_gam = CalculateRhoGamma(Tperc);
+    double Vi = false_min.potential; // potential at false vacuum
+    double Vf = true_min.potential;  // potential at true vacuum
 
-    double v_ChapmanJouget = 1. / (1 + alpha) *
-                             (modelPointer->SMConstants.Csound +
-                              std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+    double rho_gam = CalculateRhoGamma(Temp);
 
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
@@ -1055,18 +1072,13 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
   }
   if (UserDefined_vwall == -2)
   {
-    // Upper bound implementation https://arxiv.org/abs/2305.02357
-    double v_ChapmanJouget = 1. / (1 + alpha) *
-                             (modelPointer->SMConstants.Csound +
-                              std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
-
     double dTVi = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(false_min.point),
-        Tperc,
+        Temp,
         -1); // temperature-derivative at false vacuum
     double dTVf = this->modelPointer->VEff(
         this->modelPointer->MinimizeOrderVEV(true_min.point),
-        Tperc,
+        Temp,
         -1); // temperature-derivative at true vacuum const
 
     double psi = dTVf / dTVi;
@@ -1107,21 +1119,15 @@ struct resultErrorPair Nderive_BounceRatio(BounceSolution &obj)
   struct resultErrorPair res;
 
   gsl_deriv_central(
-      &F, obj.GetPercolationTemp(), step_size, &res.result, &res.error);
+      &F, obj.GetTransitionTemp(), step_size, &res.result, &res.error);
 
   return res;
 }
 
 void BounceSolution::CalculateInvTimeScale()
 {
-  if (not percolation_temp_set)
-  {
-    throw std::runtime_error("Phase transition strength cannot be calculated "
-                             "because percolation temperature is not yet set.");
-  }
-
   struct resultErrorPair res = Nderive_BounceRatio(*this);
-  this->betaH                = this->GetPercolationTemp() * res.result;
+  this->betaH                = this->GetTransitionTemp() * res.result;
 }
 
 double BounceSolution::GetInvTimeScale()

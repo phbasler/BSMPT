@@ -24,15 +24,13 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   std::vector<double> TrueVacuum =
       BACalc.phase_pair.true_phase.Get(data.transitionTemp).point;
 
-  data.Csound_false =
-      CalculateSoundSpeed(BACalc.CalcTransitionTemp(which_transition_temp),
-                          BACalc.phase_pair.false_phase,
-                          BACalc.modelPointer);
+  data.Csound_false = CalculateSoundSpeed(BACalc.GetTransitionTemp(),
+                                          BACalc.phase_pair.false_phase,
+                                          BACalc.modelPointer);
 
-  data.Csound_true =
-      CalculateSoundSpeed(BACalc.CalcTransitionTemp(which_transition_temp),
-                          BACalc.phase_pair.true_phase,
-                          BACalc.modelPointer);
+  data.Csound_true = CalculateSoundSpeed(BACalc.GetTransitionTemp(),
+                                         BACalc.phase_pair.true_phase,
+                                         BACalc.modelPointer);
 
   data.kappa_sw = kappa::kappaNuMuModel(pow(data.Csound_true, 2),
                                         pow(data.Csound_false, 2),
@@ -43,7 +41,7 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   data.pnlo_scaling = BACalc.pnlo_scaling;
   data.kappa_col    = kappa::Getkappa_col(
       data.transitionTemp, data.pnlo_scaling, data.HR, BACalc);
-  data.Hstar0 = GetHstar0(BACalc.CalcTransitionTemp(which_transition_temp),
+  data.Hstar0       = GetHstar0(BACalc.GetReheatingTemp(),
                           BACalc.GetGstar(data.transitionTemp));
   data.Epsilon_Turb = BACalc.GetEpsTurb();
 
