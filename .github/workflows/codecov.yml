@@ -15,7 +15,10 @@ on:
       - '**CMakeLists.txt'
       - 'conanfile.py'
   pull_request:
-    branches: [ master, develop ]
+    branches: 
+      - master
+      - develop
+      - feature/create-conan-package
     paths:
       - '**.cpp'
       - '**.c'
