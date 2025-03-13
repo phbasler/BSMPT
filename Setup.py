@@ -156,8 +156,13 @@ def conan_install(
     profile, additional_options=[], build_missing=False, compiler: Compiler = None
 ):
     config_settings = [
-        "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type','settings.compiler']"
+        "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
+
+    if 'GITHUB_ENV' not in os.environ:
+        config_settings = [
+            "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type','settings.compiler']"
+        ]
 
     build_profile = get_profile(sys.platform, get_arch(), BuildMode.release, compiler)
 
