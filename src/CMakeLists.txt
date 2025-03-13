@@ -5,6 +5,7 @@
 
 add_subdirectory(minimizer)
 add_subdirectory(models)
+add_subdirectory(models/modeltests)
 if(BSMPTCompileBaryo)
   add_subdirectory(baryo_calculation)
   add_subdirectory(WallThickness)
@@ -46,7 +47,7 @@ target_link_libraries(TripleHiggsCouplingsNLO Models Utility)
 target_compile_features(TripleHiggsCouplingsNLO PUBLIC cxx_std_17)
 
 add_executable(Test prog/Test.cpp)
-target_link_libraries(Test Minimizer Models Utility)
+target_link_libraries(Test Minimizer Models ModelTests Utility)
 target_compile_features(Test PUBLIC cxx_std_17)
 
 add_executable(CalcGW prog/CalcGW.cpp)

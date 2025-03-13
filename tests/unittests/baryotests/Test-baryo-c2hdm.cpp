@@ -11,7 +11,7 @@ using Approx = Catch::Approx;
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 
 #include "C2HDM.h"
 
@@ -63,16 +63,14 @@ void writeBaryoConfigFile(
 
   if (massiveConfig.has_value())
   {
-    file << "VIA Ansatz treating the bottom quark massive "
-         << "\n"
+    file << "VIA Ansatz treating the bottom quark massive " << "\n"
          << "Massive: " << (massiveConfig.value() == 1 ? " yes " : " no ")
          << "\n";
   }
 
   if (includeStrings.at(3).has_value())
   {
-    file << "FH Ansatz with the plasma velocities "
-         << "\n"
+    file << "FH Ansatz with the plasma velocities " << "\n"
          << "Include: " << includeStrings.at(3).value() << "\n";
   }
 
