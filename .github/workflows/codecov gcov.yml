@@ -54,7 +54,7 @@ jobs:
     - name: Install conan
       run: pip install conan>2
 
-    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing
+    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing --mode-debug
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py

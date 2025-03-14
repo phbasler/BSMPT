@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 
-def get_preset():
+def get_preset(mode : Setup.BuildMode):
     preset = "conan-"
     os = sys.platform
     if os == "win32":
@@ -16,7 +16,10 @@ def get_preset():
     preset += "-"
     preset += Setup.get_arch()
 
-    preset += "-release"
+    if mode == Setup.BuildMode.release:
+        preset += "-release"
+    elif mode == Setup.BuildMode.debug:
+        preset += "-debug"
 
     return preset
 
@@ -37,7 +40,7 @@ def main():
                             build_missing=True,
                             custom_profile=opts.profile
                             )
-    build(get_preset())
+    build(get_preset(Setup.BuildMode.release))
 
 
 if __name__ == "__main__":

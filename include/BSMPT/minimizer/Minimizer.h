@@ -28,7 +28,11 @@ namespace Minimizer
 /**
  * @brief UseGSLDefault Use the GSL minimizer in the default settings
  */
+#ifdef EnableCoverage
+const bool UseGSLDefault = false;
+#else 
 const bool UseGSLDefault = true;
+#endif
 
 /**
  * @brief UseLibCMAESDefault Use the Libcmaes minimizer in the default settings
