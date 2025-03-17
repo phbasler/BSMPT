@@ -70,11 +70,6 @@ public:
   double vwall = 0.95;
 
   /**
-   * @brief Chapman Jouget velocity
-   */
-  double v_ChapmanJouget = -1;
-
-  /**
    * @brief number of temperature steps in the initial scan of the bounce solver
    *
    */

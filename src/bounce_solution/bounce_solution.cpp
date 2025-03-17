@@ -118,11 +118,6 @@ void BounceSolution::SetAndCalculateGWParameters(
   CalculatePTStrength();
   CalculateInvTimeScale();
 
-  // Upper bound implementation https://arxiv.org/abs/2305.02357
-  v_ChapmanJouget = 1. / (1 + alpha) *
-                    (modelPointer->SMConstants.Csound +
-                     std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
-
   CalculateReheatingTemp();
 }
 
@@ -1097,8 +1092,11 @@ void BounceSolution::CalculatePTStrength()
 void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
                                            const Minimum &true_min)
 {
-  double Temp = false_min.temp; // temperature
-
+  const double Temp = false_min.temp; // temperature
+  const double v_ChapmanJouget =
+      1. / (1 + alpha) *
+      (modelPointer->SMConstants.Csound +
+       std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
   // User defined
   if (UserDefined_vwall >= 0) vwall = UserDefined_vwall;
   if (UserDefined_vwall == -1)
@@ -1108,7 +1106,6 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     double Vf = true_min.potential;  // potential at true vacuum
 
     double rho_gam = CalculateRhoGamma(Temp);
-
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
     // If cancidate is bigger than chapman jouget velocity, v = 1
