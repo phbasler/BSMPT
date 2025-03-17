@@ -794,7 +794,7 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
 
   auto output = trans.output_store;
 
@@ -810,11 +810,11 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   REQUIRE(120.7267244 ==
           Approx(output.vec_trans_data.at(0).compl_temp.value()).epsilon(1e-2));
 
-  REQUIRE(0.00537281 ==
+  REQUIRE(0.0055590 ==
           Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
-  REQUIRE(0.00803544 ==
+  REQUIRE(0.0083114 ==
           Approx(output.vec_gw_data.at(0).kappa_sw.value()).epsilon(1e-2));
 
   REQUIRE(0.0171346663 ==
@@ -822,37 +822,37 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   REQUIRE(0. ==
           Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
 
-  REQUIRE(0.0111955 ==
+  REQUIRE(0.0074665 ==
           Approx(output.vec_gw_data.at(0).f1_sw.value()).epsilon(1e-2));
-  REQUIRE(0.0713446 ==
+  REQUIRE(0.0475813 ==
           Approx(output.vec_gw_data.at(0).f2_sw.value()).epsilon(1e-2));
-  REQUIRE(4.16189e-20 ==
+  REQUIRE(1.03567e-19 ==
           Approx(output.vec_gw_data.at(0).omega_2_sw.value()).epsilon(1e-2));
 
-  REQUIRE(3.89074e-05 ==
+  REQUIRE(2.6841e-05 ==
           Approx(output.vec_gw_data.at(0).f1_turb.value()).epsilon(1e-2));
-  REQUIRE(0.12315 ==
+  REQUIRE(0.0821317 ==
           Approx(output.vec_gw_data.at(0).f2_turb.value()).epsilon(1e-2));
-  REQUIRE(1.3233e-25 ==
+  REQUIRE(3.40626e-25 ==
           Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
 
   REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
-  REQUIRE(1.67733e-08 ==
+  REQUIRE(1.031e-07 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
-  REQUIRE(2.87078e-13 ==
+  REQUIRE(1.10553e-12 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(1.67733e-08 ==
+  REQUIRE(1.031e-07 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
   REQUIRE(0.374931042806113 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 
   trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
-  REQUIRE(0.303761086384691 ==
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  REQUIRE(0.5843376 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 
@@ -901,11 +901,11 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   REQUIRE(120.7267244 ==
           Approx(output.vec_trans_data.at(0).compl_temp.value()).epsilon(1e-2));
 
-  REQUIRE(0.00537281 ==
+  REQUIRE(0.0055590 ==
           Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
-  REQUIRE(0.00803544 ==
+  REQUIRE(0.0083114 ==
           Approx(output.vec_gw_data.at(0).kappa_sw.value()).epsilon(1e-2));
 
   REQUIRE(0.0171346663 ==
@@ -913,37 +913,37 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   REQUIRE(0. ==
           Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
 
-  REQUIRE(0.0111955 ==
+  REQUIRE(0.0074665 ==
           Approx(output.vec_gw_data.at(0).f1_sw.value()).epsilon(1e-2));
-  REQUIRE(0.0713446 ==
+  REQUIRE(0.0475813 ==
           Approx(output.vec_gw_data.at(0).f2_sw.value()).epsilon(1e-2));
-  REQUIRE(4.16189e-20 ==
+  REQUIRE(1.03567e-19 ==
           Approx(output.vec_gw_data.at(0).omega_2_sw.value()).epsilon(1e-2));
 
-  REQUIRE(3.89074e-05 ==
+  REQUIRE(2.6841e-05 ==
           Approx(output.vec_gw_data.at(0).f1_turb.value()).epsilon(1e-2));
-  REQUIRE(0.12315 ==
+  REQUIRE(0.0821317 ==
           Approx(output.vec_gw_data.at(0).f2_turb.value()).epsilon(1e-2));
-  REQUIRE(1.3233e-25 ==
+  REQUIRE(3.40626e-25 ==
           Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
 
   REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
-  REQUIRE(1.67733e-08 ==
+  REQUIRE(1.031e-07 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
-  REQUIRE(2.87078e-13 ==
+  REQUIRE(1.10553e-12 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(1.67733e-08 ==
+  REQUIRE(1.031e-07 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
   REQUIRE(0.374931042806113 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 
   trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
-  REQUIRE(0.303761086384691 ==
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  REQUIRE(0.5843376 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 

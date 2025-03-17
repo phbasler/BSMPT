@@ -96,6 +96,16 @@ public:
   bool completion_temp_set = false;
 
   /**
+   * @brief Temperature at which to calculate parameters
+   * - = 0 - Not set
+   * - = 1 - Approximate Nucleation
+   * - = 2 - Exact Nucleation
+   * - = 3 - Percolation
+   * - = 4 - Completion Temperature
+   */
+  int which_transition_temp = false;
+
+  /**
    * @brief critical temperature/highest temperature when transition can occur
    */
   double Tc = -1;
@@ -310,6 +320,19 @@ public:
    *
    */
   StatusGW status_bounce_sol = StatusGW::NotSet;
+
+  /**
+   * @brief Set the Transition Temp object
+   *
+   * - = 0 - Not set
+   * - = 1 - Approximate Nucleation
+   * - = 2 - Exact Nucleation
+   * - = 3 - Percolation
+   * - = 4 - Completion Temperature
+   *
+   * @param which_transition_temp_in
+   */
+  void SetAndCalculateGWParameters(const int &which_transition_temp_in);
 
   /**
    * @brief status of approximate nucleation temperature calculation
@@ -550,7 +573,7 @@ public:
   /**
    * @brief CalcTransitionTemp Get transition temperature from int
    */
-  double CalcTransitionTemp(const int &which_transition_temp);
+  void CalcTransitionTemp();
 
   /**
    * @brief Calculate \f$ \rho_R = \rho_\gamma = g_\star \frac{\pi^2}{30}  T_*^4
