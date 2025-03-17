@@ -19,8 +19,6 @@ target_sources(
 if(cmaes_FOUND)
   add_subdirectory(LibCMAES)
   target_link_libraries(Minimizer PRIVATE Minimizer_CMAES)
-else()
-  message(FATAL_ERROR "No cmaes found")
 endif()
 
 if(NLopt_FOUND)
