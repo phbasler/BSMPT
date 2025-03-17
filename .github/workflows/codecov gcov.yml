@@ -19,6 +19,7 @@ on:
       - master
       - develop
       - feature/create-conan-package
+      - conan-fix-coverage-joao
     paths:
       - '**.cpp'
       - '**.c'
