@@ -150,6 +150,7 @@ def setup_cmaes():
     file_directory = Path(__file__).parent.absolute()
     cmaes_dir = os.path.join(file_directory, "tools", "conan", "cmaes","all")
     subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(),cwd=cmaes_dir )
+    
 
 
 def conan_install(

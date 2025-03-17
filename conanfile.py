@@ -52,6 +52,7 @@ class BSMPT(ConanFile):
         "EnableCoverage": False,
         "UseVectorization": False,
         "BuildExecutables": True,
+        "cmaes/*:coverage": True
     }
 
     def requirements(self):
@@ -116,6 +117,9 @@ class BSMPT(ConanFile):
         tc.variables["BSMPTBuildExecutables"] = self.options.BuildExecutables
 
         tc.generate()
+
+    def configure(self):
+        self.options["cmaes"].coverage = self.options.EnableCoverage
 
     def validate(self):
         if self.options.UseVectorization and self.options.EnableCoverage:

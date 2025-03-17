@@ -5,3 +5,4 @@ sources:
 patches:
   "0.10.0":
     - patch_file: "patches/CompilerOptionsEigen.patch"    
+    - patch_file: "patches/Coverage.patch"

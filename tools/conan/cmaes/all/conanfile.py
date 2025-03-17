@@ -29,11 +29,13 @@ class CmaesConan(ConanFile):
         "shared": [True, False],
         "fPIC": [True, False],
         "surrog": [True, False],
+        "coverage": [True,False]
     }
     default_options = {
         "shared": False,
         "fPIC": True,
         "surrog": True,
+        "coverage": True
     }
 
     short_paths = True
@@ -74,6 +76,7 @@ class CmaesConan(ConanFile):
         tc.variables["LIBCMAES_ENABLE_SURROG"] = self.options.surrog
         tc.variables["LIBCMAES_BUILD_PYTHON"] = False
         tc.variables["LIBCMAES_BUILD_TESTS"] = False
+        tc.variables["LIBCMAES_ENABLE_CODECOVERAGE"] = self.options.coverage
         tc.generate()
 
     def build(self):
