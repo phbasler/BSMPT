@@ -12,6 +12,6 @@ if __name__ == "__main__":
 
     env_file = os.getenv('GITHUB_ENV')
     with open(env_file, "a") as myfile:
-        myfile.write(f"GeneratedCMakeProfile={Build.get_preset(Setup.BuildMode.debug)}")
+        myfile.write(f"GeneratedCMakeProfile={Build.get_preset(Setup.BuildMode.release)}")
 
-        print(f"Setting GeneratedCMakeProfile={Build.get_preset(Setup.BuildMode.debug)}")
+        print(f"Setting GeneratedCMakeProfile={Build.get_preset(Setup.BuildMode.release)}")
