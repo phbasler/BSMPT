@@ -62,7 +62,7 @@ jobs:
     - run: |
         echo "CC=clang-16" >> "$GITHUB_ENV"
         echo "CXX=clang++-16" >> "$GITHUB_ENV"
-      if: ${{matrix.compiler}} == "clang"
+      if: "${{ matrix.compiler == 'clang' }}"
 
     - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False BuildExecutables=False UseLibCMAES=${{matrix.use_cmaes}} --build-missing --compiler ${{matrix.compiler}}
 
