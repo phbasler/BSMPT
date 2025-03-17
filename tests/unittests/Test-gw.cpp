@@ -856,7 +856,9 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 
-TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
+TEST_CASE("Checking phase tracking and GW for BP3 (low sample) and not "
+          "transition temperature not set",
+          "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
                                                /* vs = */ 0,
@@ -885,7 +887,6 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   input.gw_calculation                      = true;
   input.number_of_initial_scan_temperatures = 6;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
 
   auto output = trans.output_store;
 
