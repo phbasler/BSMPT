@@ -62,7 +62,7 @@ jobs:
         echo "CC=clang-16" >> "$GITHUB_ENV"
         echo "CXX=clang++-16" >> "$GITHUB_ENV"
 
-    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False UseLibCMAES=${{matrix.use_cmaes}} --build-missing --compiler clang
+    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False BuildExecutables=False UseLibCMAES=${{matrix.use_cmaes}} --build-missing --compiler clang
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py
