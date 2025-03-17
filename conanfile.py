@@ -51,7 +51,7 @@ class BSMPT(ConanFile):
         "CompileBaryo": False,
         "EnableCoverage": False,
         "UseVectorization": False,
-        "BuildExecutables": True,
+        "BuildExecutables": False,
         "cmaes/*:coverage": True
     }
 
