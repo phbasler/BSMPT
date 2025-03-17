@@ -36,11 +36,16 @@ const Compare_CPINTHEDARK Expected;
 TEST_CASE("Checking NLOVEV for CPINTHEDARK", "[cpinthedark]")
 {
   using namespace BSMPT;
+  SetLogger({"--logginglevel::complete=true"});
+  std::cout << "Set SM Constants\n";
   const auto SMConstants = GetSMConstants();
+  std::cout << "Set model pointer\n";
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::CPINTHEDARK, SMConstants);
+  std::cout << "init model\n";
   modelPointer->initModel(example_point_CPINTHEDARK);
   std::vector<double> Check;
+  std::cout << "Minimize gen all\n";
   auto sol = Minimizer::Minimize_gen_all(modelPointer,
                                          0,
                                          Check,
@@ -48,8 +53,11 @@ TEST_CASE("Checking NLOVEV for CPINTHEDARK", "[cpinthedark]")
                                          Minimizer::WhichMinimizerDefault);
   for (std::size_t i{0}; i < sol.size(); ++i)
   {
+    std::cout << ">\t" << i << "\n";
     auto expected = std::abs(modelPointer->get_vevTreeMin(i));
-    auto res      = std::abs(sol.at(i));
+    std::cout << "set res\n";
+    auto res = std::abs(sol.at(i));
+    std::cout << "Require\n";
     REQUIRE(res == Approx(expected).margin(1e-4));
   }
 }
