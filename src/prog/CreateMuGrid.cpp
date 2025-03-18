@@ -174,12 +174,12 @@ CLIOptions_CreateMuGrid::CLIOptions_CreateMuGrid(int argc, char *argv[])
        << "or with the following arguments" << std::endl
        << std::setw(SizeOfFirstColumn) << std::left << "--help"
        << "Shows this menu" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--model="
-       << "The model you want to investigate" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--input="
-       << "The input file in tsv format" << std::endl
-       << std::setw(SizeOfFirstColumn) << std::left << "--output="
-       << "The output file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left
+       << "--model=" << "The model you want to investigate" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left
+       << "--input=" << "The input file in tsv format" << std::endl
+       << std::setw(SizeOfFirstColumn) << std::left
+       << "--output=" << "The output file in tsv format" << std::endl
        << std::setw(SizeOfFirstColumn) << std::left << "--Line="
        << "The line in the input file to calculate the EWPT. Expects "
           "line 1 to be a legend."
