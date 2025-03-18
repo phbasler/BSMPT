@@ -50,7 +50,7 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov clang-16 make llvm
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov clang make llvm
    
     - uses: actions/setup-python@v5
       with:
@@ -60,8 +60,8 @@ jobs:
       run: pip install conan>2
 
     - run: |
-        echo "CC=clang-16" >> "$GITHUB_ENV"
-        echo "CXX=clang++-16" >> "$GITHUB_ENV"
+        echo "CC=clang" >> "$GITHUB_ENV"
+        echo "CXX=clang++" >> "$GITHUB_ENV"
       if: "${{ matrix.compiler == 'clang' }}"
 
     - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False BuildExecutables=False UseLibCMAES=${{matrix.use_cmaes}} --build-missing --compiler ${{matrix.compiler}}
