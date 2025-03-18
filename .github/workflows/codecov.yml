@@ -16,13 +16,6 @@ on:
       - 'conanfile.py'
   pull_request:
     branches: [ master, develop ]
-    paths:
-      - '**.cpp'
-      - '**.c'
-      - '**.h'
-      - '**.hpp'
-      - '**CMakeLists.txt'
-      - 'conanfile.py'
   workflow_dispatch:
 
 concurrency:
