@@ -41,7 +41,7 @@ jobs:
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
-    - run: python3 Setup.py --options CompileBaryo=True --build-missing
+    - run: python3 Setup.py --options CompileBaryo=True UseLibCMAES=False --build-missing
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py
