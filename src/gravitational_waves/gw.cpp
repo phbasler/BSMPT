@@ -446,22 +446,22 @@ double integrate(const std::vector<double> &y, const std::vector<double> &x)
     auto data = static_cast<
         std::pair<const std::vector<double> *, const std::vector<double> *> *>(
         params);
-    const auto &y = *data->first;
-    const auto &x = *data->second;
+    const auto &Y = *data->first;
+    const auto &X = *data->second;
 
-    if (xi < x.front() || xi > x.back())
+    if (xi < X.front() || xi > X.back())
     {
       throw std::out_of_range("xi is out of bounds of the x vector.");
     }
 
     // Find the interval
-    size_t idx = std::lower_bound(x.begin(), x.end(), xi) - x.begin();
-    if (idx == 0) return y[0];
-    if (idx >= x.size()) return y.back();
+    size_t idx = std::lower_bound(X.begin(), X.end(), xi) - X.begin();
+    if (idx == 0) return Y[0];
+    if (idx >= X.size()) return Y.back();
 
     // Linear interpolation
-    double x1 = x[idx - 1], x2 = x[idx];
-    double y1 = y[idx - 1], y2 = y[idx];
+    double x1 = X[idx - 1], x2 = X[idx];
+    double y1 = Y[idx - 1], y2 = Y[idx];
     return y1 + (xi - x1) * (y2 - y1) / (x2 - x1);
   };
 

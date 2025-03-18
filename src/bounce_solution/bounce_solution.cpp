@@ -1094,7 +1094,7 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
 
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
-    // If cancidate is bigger than chapman jouget velocity, v = 1
+    // If candidate is bigger than chapman jouget velocity, v = 1
     if (vwall > v_ChapmanJouget) vwall = 1;
   }
   if (UserDefined_vwall == -2)

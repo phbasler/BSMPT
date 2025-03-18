@@ -152,7 +152,7 @@ public:
   double betaH = -1;
 
   /**
-   * @brief \f$ R_{\star}=\left[T_{p}^{3}\int_{T_{p}}^{T_{c}}\frac{d
+   * @brief \f$ R_{\star}=\left[T_{*}^{3}\int_{T_{*}}^{T_{c}}\frac{d
    * T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
    * \f$
    *
