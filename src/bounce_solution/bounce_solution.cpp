@@ -107,6 +107,20 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
   Logger::Write(LoggingLevel::BounceDetailed, ss.str());
 }
 
+void BounceSolution::SetAndCalculateGWParameters(
+    const int &which_transition_temp_in)
+{
+  which_transition_temp = which_transition_temp_in;
+  CalcTransitionTemp();
+  Logger::Write(LoggingLevel::TransitionDetailed,
+                "Calculate PT strength and inverse time scale at the chosen "
+                "transition temperature.");
+  CalculatePTStrength();
+  CalculateInvTimeScale();
+
+  CalculateReheatingTemp();
+}
+
 std::vector<double> BounceSolution::TransformIntoOptimalDiscreteSymmetry(
     const std::vector<double> &vev)
 {
@@ -579,8 +593,20 @@ double BounceSolution::GetReheatingTemp() const
   return Treh;
 }
 
-double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
+void BounceSolution::CalcTransitionTemp()
 {
+  if (!which_transition_temp)
+  {
+    Logger::Write(
+        LoggingLevel::TransitionDetailed,
+        "'which_transition_temp' not set. Default to percolation temperature");
+    which_transition_temp = 3;
+  }
+  // Calculate all temperatures
+  CalculateNucleationTempApprox();
+  CalculateNucleationTemp();
+  CalculatePercolationTemp();
+  CalculateCompletionTemp();
   if (status_nucl_approx == BSMPT::StatusTemperature::Success and
       which_transition_temp == 1)
   {
@@ -614,21 +640,6 @@ double BounceSolution::CalcTransitionTemp(const int &which_transition_temp)
                   "Completion temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
-
-  Logger::Write(LoggingLevel::TransitionDetailed,
-                "Calculate PT strength and inverse time scale at the chosen "
-                "transition temperature.");
-  CalculatePTStrength();
-  CalculateInvTimeScale();
-
-  // Upper bound implementation https://arxiv.org/abs/2305.02357
-  v_ChapmanJouget = 1. / (1 + alpha) *
-                    (modelPointer->SMConstants.Csound +
-                     std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
-
-  CalculateReheatingTemp();
-
-  return Tstar;
 }
 
 double BounceSolution::GetPTStrength() const
@@ -1043,7 +1054,8 @@ void BounceSolution::CalculatePTStrength()
     // T_* =  T_*(alpha, v_wall)
     // v_wall = v_wall(alpha, T_*)
     // Should converge quickly, if fails use default value of v_wall = 0.95
-    old_alpha         = alpha;
+    old_alpha = alpha;
+    CalcTransitionTemp(); // Calculation all Ts
     Minimum true_min  = phase_pair.true_phase.Get(GetTransitionTemp());
     Minimum false_min = phase_pair.false_phase.Get(GetTransitionTemp());
 
@@ -1080,8 +1092,11 @@ void BounceSolution::CalculatePTStrength()
 void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
                                            const Minimum &true_min)
 {
-  double Temp = false_min.temp; // temperature
-
+  const double Temp = false_min.temp; // temperature
+  const double v_ChapmanJouget =
+      1. / (1 + alpha) *
+      (modelPointer->SMConstants.Csound +
+       std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
   // User defined
   if (UserDefined_vwall >= 0) vwall = UserDefined_vwall;
   if (UserDefined_vwall == -1)
@@ -1091,7 +1106,6 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     double Vf = true_min.potential;  // potential at true vacuum
 
     double rho_gam = CalculateRhoGamma(Temp);
-
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
     // If candidate is bigger than chapman jouget velocity, v = 1
