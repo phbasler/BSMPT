@@ -554,7 +554,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    UserDefined_PNLO_scaling = argparser.get_value<double>("pnlo_scaling");
+    UserDefined_PNLO_scaling = argparser.get_value<int>("pnlo_scaling");
   }
   catch (BSMPT::parserException &)
   {
