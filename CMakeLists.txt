@@ -130,6 +130,8 @@ if(EnableCoverage)
   set(COVERAGE_EXCLUDES
       "/usr/include/*"
       "/usr/lib/*"
+      "~/.conan/*"
+      "~/.conan2/*"
       ${CodeCoverageExcludesFromOtherPkgs}
       "${PROJECT_SOURCE_DIR}/tests/*"
       "tests/*"
