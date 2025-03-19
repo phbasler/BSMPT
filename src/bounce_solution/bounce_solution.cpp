@@ -482,6 +482,21 @@ double BounceSolution::GetWallVelocity() const
   return vwall;
 }
 
+double BounceSolution::GetChapmanJougetVelocity() const
+{
+  return vCJ;
+}
+
+double BounceSolution::GetSoundSpeedFalse() const
+{
+  return Csound_false;
+}
+
+double BounceSolution::GetSoundSpeedTrue() const
+{
+  return Csound_true;
+}
+
 double BounceSolution::GetEpsTurb() const
 {
   return epsturb;
@@ -640,6 +655,8 @@ void BounceSolution::CalcTransitionTemp()
                   "Completion temperature T = " + std::to_string(Tstar) +
                       " chosen as transition temperature.");
   }
+
+  CalculateSoundSpeeds(); // calculate sound speeds in false and true vacuum
 }
 
 double BounceSolution::GetPTStrength() const
@@ -953,6 +970,15 @@ void BounceSolution::CalculateReheatingTemp()
   }
   else // supercooling
   {
+    if (vwall < vCJ)
+    {
+      std::stringstream ss;
+      ss << "\n\033[1;93mWARNING: Detected wall velocity outside detonation "
+            "regime with vw = "
+         << std::to_string(vwall) << " < vCJ = " << std::to_string(vCJ)
+         << " for alpha = " << std::to_string(alpha) << ".\033[0m\n";
+      Logger::Write(LoggingLevel::TransitionDetailed, ss.str());
+    }
     Treh = GetTransitionTemp() * std::pow((1 + alpha), 1. / 4);
   }
 }
@@ -1089,14 +1115,19 @@ void BounceSolution::CalculatePTStrength()
   return;
 }
 
+void BounceSolution::CalcChapmanJougetVelocity()
+{
+  vCJ = (1 + std::sqrt(3 * alpha *
+                       (1 - Csound_false * Csound_false +
+                        3 * Csound_false * Csound_false * alpha))) /
+        (1. / Csound_false + 3 * Csound_false * alpha);
+}
+
 void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
                                            const Minimum &true_min)
 {
   const double Temp = false_min.temp; // temperature
-  const double v_ChapmanJouget =
-      1. / (1 + alpha) *
-      (modelPointer->SMConstants.Csound +
-       std::sqrt(std::pow(alpha, 2) + 2. / 3 * alpha));
+
   // User defined
   if (UserDefined_vwall >= 0) vwall = UserDefined_vwall;
   if (UserDefined_vwall == -1)
@@ -1109,7 +1140,7 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     // Candidate wall velocity
     vwall = std::sqrt((Vi - Vf) / (alpha * rho_gam));
     // If candidate is bigger than chapman jouget velocity, v = 1
-    if (vwall > v_ChapmanJouget) vwall = 1;
+    if (vwall > vCJ) vwall = 1;
   }
   if (UserDefined_vwall == -2)
   {
@@ -1130,11 +1161,47 @@ void BounceSolution::CalculateWallVelocity(const Minimum &false_min,
     vwall = std::pow(
         pow(abs((3 * alpha + psi - 1) / (2 * (2 - 3 * psi + std::pow(psi, 3)))),
             p / 2) +
-            std::pow(
-                abs(v_ChapmanJouget * (1 - a * std::pow(1 - psi, b) / alpha)),
-                p / 2),
+            std::pow(abs(vCJ * (1 - a * std::pow(1 - psi, b) / alpha)), p / 2),
         1 / p);
   }
+}
+
+double BounceSolution::CalculateSoundSpeed(Phase &phase)
+{
+  const double eps                         = 0.01;
+  std::function<double(Minimum minimum)> V = [&](Minimum minimum)
+  {
+    // Potential wrapper
+    std::vector<double> res = modelPointer->MinimizeOrderVEV(minimum.point);
+    return modelPointer->VEff(res, minimum.temp);
+  };
+  const double V_before = V(phase.Get(Tstar + eps));
+  const double V_tstar  = V(phase.Get(Tstar));
+  const double V_after  = V(phase.Get(Tstar - eps));
+  const double dVdT     = (V_before - V_after) / (2. * eps);
+  const double d2VdT2   = (V_before - 2. * V_tstar + V_after) / (eps * eps);
+  const double cs       = sqrt(dVdT / (d2VdT2 * Tstar));
+  if (isnan(cs))
+  {
+    stringstream ss;
+    ss << "Sound speed calculation failed!" << "\n";
+    ss << "V(T-eps) V(T) V(T + eps) " << V_after << " " << V_tstar << " "
+       << V_before << "\n";
+    ss << "dVdT = \t" << dVdT << "\n";
+    ss << "d2VdT2 = \t" << d2VdT2 << "\n";
+    ss << "Using cs = 1/sqrt(3) instead.";
+    Logger::Write(LoggingLevel::GWDetailed, ss.str());
+    return 1. / sqrt(3.);
+  }
+  return cs;
+}
+
+void BounceSolution::CalculateSoundSpeeds()
+{
+  Csound_false = CalculateSoundSpeed(phase_pair.false_phase);
+  Csound_true  = CalculateSoundSpeed(phase_pair.true_phase);
+
+  CalcChapmanJougetVelocity();
 }
 
 double BounceSolution::GetBounceSol(const double &Temp) const

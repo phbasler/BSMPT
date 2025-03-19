@@ -70,6 +70,21 @@ public:
   double vwall = 0.95;
 
   /**
+   * @brief Chapman-Jouget velocity
+   */
+  double vCJ = -1;
+
+  /**
+   * @brief sound speed in false phase
+   */
+  double Csound_false = -1;
+
+  /**
+   * @brief sound speed in true phase
+   */
+  double Csound_true = -1;
+
+  /**
    * @brief number of temperature steps in the initial scan of the bounce solver
    *
    */
@@ -484,6 +499,22 @@ public:
   double GetWallVelocity() const;
 
   /**
+   * @brief Get Chapman-Jouget velocity
+   * @return vCJ
+   */
+  double GetChapmanJougetVelocity() const;
+
+  /**
+   * @brief Get the sound speed in the false phase
+   */
+  double GetSoundSpeedFalse() const;
+
+  /**
+   * @brief Get the sound speed in the true phase
+   */
+  double GetSoundSpeedTrue() const;
+
+  /**
    * @brief Get epsturb
    * @return epsturb
    */
@@ -654,11 +685,32 @@ public:
   void CalculatePTStrength();
 
   /**
+   * @brief Derive the Chapman-Jouget velocity from PT strength and false phase
+   * sound velocity using Eq. (55) of 2004.06995
+   */
+  void CalcChapmanJougetVelocity();
+
+  /**
    * @brief Calculate wall velocity
    * @param false_min initial, false minimum
    * @param true_min final, true minimum
    */
   void CalculateWallVelocity(const Minimum &false_min, const Minimum &true_min);
+
+  /**
+   * @brief Calculate sound speeds \f$ c_s^2 = \frac{1}{T}
+   * \frac{V'_{\text{eff}}(T)}{V''_{\text{eff}}(T)} \f$ at Tstar in phase
+   * @param phase
+   * @return sound speed
+   */
+  double CalculateSoundSpeed(Phase &phase);
+
+  /**
+   * @brief Calculate sound speeds \f$ c_s^2 = \frac{1}{T}
+   * \frac{V'_{\text{eff}}(T)}{V''_{\text{eff}}(T)} \f$ at Tstar in false and
+   * true phase
+   */
+  void CalculateSoundSpeeds();
 
   /**
    * @brief Calculate inverse time scale of phase transition

@@ -17,27 +17,22 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
 {
   BACalc.SetAndCalculateGWParameters(which_transition_temp);
   data.transitionTemp = BACalc.GetTransitionTemp();
+  data.reheatingTemp  = BACalc.GetReheatingTemp();
   data.PTStrength     = BACalc.GetPTStrength();
   data.betaH          = BACalc.GetInvTimeScale();
   data.vw             = BACalc.GetWallVelocity();
-  std::vector<double> FalseVacuum =
-      BACalc.phase_pair.false_phase.Get(data.transitionTemp).point;
-  std::vector<double> TrueVacuum =
-      BACalc.phase_pair.true_phase.Get(data.transitionTemp).point;
-  // General purpose GW parameters
-  data.Csound_false = CalculateSoundSpeed(BACalc.GetTransitionTemp(),
-                                          BACalc.phase_pair.false_phase,
-                                          BACalc.modelPointer);
 
-  data.Csound_true = CalculateSoundSpeed(BACalc.GetTransitionTemp(),
-                                         BACalc.phase_pair.true_phase,
-                                         BACalc.modelPointer);
-  data.HR          = BACalc.GetRstar() * BACalc.HubbleRate(data.transitionTemp);
-  data.gstar       = BACalc.GetGstar(data.transitionTemp);
-  data.FGW0        = 1.64 / pow(h, 2) * 1.e-5 *
+  // Sound speeds
+  data.Csound_false = BACalc.GetSoundSpeedFalse();
+  data.Csound_true  = BACalc.GetSoundSpeedTrue();
+
+  // General purpose GW parameters
+  data.HR    = BACalc.GetRstar() * BACalc.HubbleRate(data.transitionTemp);
+  data.gstar = BACalc.GetGstar(data.transitionTemp);
+  data.FGW0  = 1.64 / pow(h, 2) * 1.e-5 *
               pow(100. / BACalc.GetGstar(data.transitionTemp), 1 / 3.);
-  data.Hstar0 = GetHstar0(BACalc.GetReheatingTemp(),
-                          BACalc.GetGstar(data.transitionTemp));
+  data.Hstar0 =
+      GetHstar0(data.reheatingTemp, BACalc.GetGstar(data.transitionTemp));
   // Collisions
   data.pnlo_scaling = BACalc.pnlo_scaling;
   data.kappa_col    = kappa::Getkappa_col(
@@ -203,39 +198,6 @@ double GravitationalWave::DBPL(const double &f, const DBPLParameters &par) const
                     pow(1 + pow(f_2 / f_1, a1), (-n1 + n2) / a1) *
                     pow(1 + pow(f_2 / f_2, a2), (-n2 + n3) / a2);
   return Omega_2 * Sf / S2;
-}
-
-double GravitationalWave::CalculateSoundSpeed(
-    const double &Tstar,
-    Phase &phase,
-    const std::shared_ptr<Class_Potential_Origin> &modelPointer)
-{
-  const double eps                         = 0.01;
-  std::function<double(Minimum minimum)> V = [&](Minimum minimum)
-  {
-    // Potential wrapper
-    std::vector<double> res = modelPointer->MinimizeOrderVEV(minimum.point);
-    return modelPointer->VEff(res, minimum.temp);
-  };
-  const double V_before = V(phase.Get(Tstar + eps));
-  const double V_tstar  = V(phase.Get(Tstar));
-  const double V_after  = V(phase.Get(Tstar - eps));
-  const double dVdT     = (V_before - V_after) / (2. * eps);
-  const double d2VdT2   = (V_before - 2. * V_tstar + V_after) / (eps * eps);
-  const double cs       = sqrt(dVdT / (d2VdT2 * Tstar));
-  if (isnan(cs))
-  {
-    stringstream ss;
-    ss << "Sound speed calculation failed!" << "\n";
-    ss << "V(T-eps) V(T) V(T + eps) " << V_after << " " << V_tstar << " "
-       << V_before << "\n";
-    ss << "dVdT = \t" << dVdT << "\n";
-    ss << "d2VdT2 = \t" << d2VdT2 << "\n";
-    ss << "Using cs = 1/sqrt(3) instead.";
-    Logger::Write(LoggingLevel::GWDetailed, ss.str());
-    return 1 / sqrt(3.);
-  }
-  return cs;
 }
 
 double GravitationalWave::CalcGWAmplitude(double f)

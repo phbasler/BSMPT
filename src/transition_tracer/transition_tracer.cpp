@@ -301,6 +301,7 @@ TransitionTracer::TransitionTracer(user_input &input)
 
                 new_gw_data.status_gw  = gw.data.status;
                 new_gw_data.trans_temp = gw.data.transitionTemp;
+                new_gw_data.reh_temp   = gw.data.reheatingTemp;
 
                 new_gw_data.alpha       = gw.data.PTStrength;
                 new_gw_data.beta_over_H = gw.data.betaH;

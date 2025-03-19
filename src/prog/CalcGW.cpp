@@ -192,6 +192,7 @@ try
               << output.vec_trans_data.at(i).compl_true_vev << sep
               << output.vec_gw_data.at(i).status_gw << sep
               << output.vec_gw_data.at(i).trans_temp.value_or(EmptyValue) << sep
+              << output.vec_gw_data.at(i).reh_temp.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).vwall.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).alpha.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).beta_over_H.value_or(EmptyValue)

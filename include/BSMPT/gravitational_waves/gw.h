@@ -71,6 +71,7 @@ struct GravitationalWaveData
   bool turbON           = true;  // enable turbulence contribution by default
   bool collisionON      = true;  // enable collision contribution by default
   double transitionTemp = false; // transition temperature
+  double reheatingTemp  = false; // reheating temperature
   double PTStrength     = false; // strength of EW phase transition
   double betaH          = false; // inverse time scale beta/H
   double vw             = false; // bubble wall velocity
@@ -144,20 +145,6 @@ public:
    * @brief Calculate peak amplitude and frequency for GW signal from turbulence
    */
   void CalcPeakTurbulence();
-
-  /**
-   * @brief Calculate sound speed \f$ c_s^2 = \frac{1}{T}
-   * \frac{V'_{\text{eff}}(T)}{V''_{\text{eff}}(T)} \f$
-   *
-   * @param Tstar transition temperature.
-   * @param phase phase where we calculate the sound speed.
-   * @param modelPointer model pointer.
-   * @return double sound speed in that phase at that temperature.
-   */
-  double CalculateSoundSpeed(
-      const double &Tstar,
-      Phase &phase,
-      const std::shared_ptr<Class_Potential_Origin> &modelPointer);
 
   /**
    * @brief Broken power law spectrum \f$

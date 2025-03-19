@@ -683,6 +683,52 @@ TEST_CASE("Checking phase tracking for SM with Mode 2", "[gw]")
   REQUIRE(vac.PhasesList.size() == 2);
 }
 
+TEST_CASE("Check calculation of Chapman-Jouget velocity")
+{
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
+  modelPointer->initModel(example_point_SM);
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+
+  REQUIRE(0.583037 ==
+          Approx(trans.ListBounceSolution.at(0).GetChapmanJougetVelocity())
+              .epsilon(1e-2));
+}
+
+TEST_CASE("Check calculation of reheating temperature")
+{
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
+  modelPointer->initModel(example_point_SM);
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+
+  REQUIRE(
+      159.07847220175202 ==
+      Approx(trans.ListBounceSolution.at(0).GetReheatingTemp()).epsilon(1e-2));
+}
+
 TEST_CASE("Check maximal thermal mass squared over temperature ratio")
 {
   const std::vector<double> example_point_SM{

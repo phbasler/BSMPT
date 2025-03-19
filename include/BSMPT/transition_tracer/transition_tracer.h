@@ -150,6 +150,7 @@ struct gw_data
 
   StatusGW status_gw = StatusGW::NotSet;
   std::optional<double> trans_temp;
+  std::optional<double> reh_temp;
 };
 
 struct output

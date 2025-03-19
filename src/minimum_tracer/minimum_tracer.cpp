@@ -2875,6 +2875,7 @@ std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
     {
       legend.push_back("status_gw_" + std::to_string(i));
       legend.push_back("trans_temp_" + std::to_string(i));
+      legend.push_back("T_reh_" + std::to_string(i));
       legend.push_back("v_wall_" + std::to_string(i));
       legend.push_back("alpha_PT_" + std::to_string(i));
       legend.push_back("beta/H_" + std::to_string(i));
