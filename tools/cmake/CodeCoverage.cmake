@@ -75,10 +75,6 @@
 # Multiple Output Formats at the same time by making use of
 # GCOVR_ADDITIONAL_ARGS, e.g. GCOVR_ADDITIONAL_ARGS "--txt".
 #
-# 2022-09-28, Sebastian Mueller - fix append_coverage_compiler_flags_to_target
-# to correctly add flags - replace "-fprofile-arcs -ftest-coverage" with
-# "--coverage" (equivalent)
-#
 # USAGE:
 #
 # 1. Copy this file into your cmake modules path.
@@ -119,50 +115,42 @@ include(CMakeParseArguments)
 option(CODE_COVERAGE_VERBOSE "Verbose information" FALSE)
 
 # Check prereqs
-find_program(GCOV_PATH llvm-cov)
+find_program(GCOV_PATH gcov)
 find_program(LCOV_PATH NAMES lcov lcov.bat lcov.exe lcov.perl)
 find_program(FASTCOV_PATH NAMES fastcov fastcov.py)
 find_program(GENHTML_PATH NAMES genhtml genhtml.perl genhtml.bat)
 find_program(GCOVR_PATH gcovr PATHS ${CMAKE_SOURCE_DIR}/scripts/test)
 find_program(CPPFILT_PATH NAMES c++filt)
 
-set(GCOV_CMD ${PROJECT_SOURCE_DIR}/tools/cmake/llvm-gcov.sh)
-
 if(NOT GCOV_PATH)
   message(FATAL_ERROR "gcov not found! Aborting...")
 endif() # NOT GCOV_PATH
 
-# Check supported compiler (Clang, GNU and Flang)
 get_property(LANGUAGES GLOBAL PROPERTY ENABLED_LANGUAGES)
-foreach(LANG ${LANGUAGES})
-  if("${CMAKE_${LANG}_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
-    if("${CMAKE_${LANG}_COMPILER_VERSION}" VERSION_LESS 3)
-      message(FATAL_ERROR "Clang version must be 3.0.0 or greater! Aborting...")
-    endif()
-  elseif(NOT "${CMAKE_${LANG}_COMPILER_ID}" MATCHES "GNU"
-         AND NOT "${CMAKE_${LANG}_COMPILER_ID}" MATCHES "(LLVM)?[Ff]lang")
-    message(FATAL_ERROR "Compiler is not GNU or Flang! Aborting...")
+list(GET LANGUAGES 0 LANG)
+
+if("${CMAKE_${LANG}_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
+  if("${CMAKE_${LANG}_COMPILER_VERSION}" VERSION_LESS 3)
+    message(FATAL_ERROR "Clang version must be 3.0.0 or greater! Aborting...")
   endif()
-endforeach()
-
-set(COVERAGE_COMPILER_FLAGS
-    "-g --coverage"
-    CACHE INTERNAL "")
-
-if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag(-fprofile-abs-path HAVE_cxx_fprofile_abs_path)
-  if(HAVE_cxx_fprofile_abs_path)
-    set(COVERAGE_CXX_COMPILER_FLAGS
-        "${COVERAGE_COMPILER_FLAGS} -fprofile-abs-path")
+elseif(NOT CMAKE_COMPILER_IS_GNUCXX)
+  if("${CMAKE_Fortran_COMPILER_ID}" MATCHES "[Ff]lang")
+    # Do nothing; exit conditional without error if true
+  elseif("${CMAKE_Fortran_COMPILER_ID}" MATCHES "GNU")
+    # Do nothing; exit conditional without error if true
+  else()
+    message(FATAL_ERROR "Compiler is not GNU gcc! Aborting...")
   endif()
 endif()
-if(CMAKE_C_COMPILER_ID MATCHES "(GNU|Clang)")
-  include(CheckCCompilerFlag)
-  check_c_compiler_flag(-fprofile-abs-path HAVE_c_fprofile_abs_path)
-  if(HAVE_c_fprofile_abs_path)
-    set(COVERAGE_C_COMPILER_FLAGS
-        "${COVERAGE_COMPILER_FLAGS} -fprofile-abs-path")
+
+set(COVERAGE_COMPILER_FLAGS
+    "-g -fprofile-arcs -ftest-coverage"
+    CACHE INTERNAL "")
+if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
+  include(CheckCXXCompilerFlag)
+  check_cxx_compiler_flag(-fprofile-abs-path HAVE_fprofile_abs_path)
+  if(HAVE_fprofile_abs_path)
+    set(COVERAGE_COMPILER_FLAGS "${COVERAGE_COMPILER_FLAGS} -fprofile-abs-path")
   endif()
 endif()
 
@@ -218,7 +206,7 @@ endif()
 # Don't demangle C++ symbols #  even if c++filt is found )
 function(setup_target_for_coverage_lcov)
 
-  set(options NO_DEMANGLE SONARQUBE)
+  set(options NO_DEMANGLE)
   set(oneValueArgs BASE_DIRECTORY NAME)
   set(multiValueArgs EXCLUDE EXECUTABLE EXECUTABLE_ARGS DEPENDENCIES LCOV_ARGS
                      GENHTML_ARGS)
@@ -262,7 +250,7 @@ function(setup_target_for_coverage_lcov)
       ${LCOV_PATH}
       ${Coverage_LCOV_ARGS}
       --gcov-tool
-      ${GCOV_CMD}
+      ${GCOV_PATH}
       -directory
       .
       -b
@@ -273,7 +261,7 @@ function(setup_target_for_coverage_lcov)
       ${LCOV_PATH}
       ${Coverage_LCOV_ARGS}
       --gcov-tool
-      ${GCOV_CMD}
+      ${GCOV_PATH}
       -c
       -i
       -d
@@ -289,7 +277,7 @@ function(setup_target_for_coverage_lcov)
       ${LCOV_PATH}
       ${Coverage_LCOV_ARGS}
       --gcov-tool
-      ${GCOV_CMD}
+      ${GCOV_PATH}
       --directory
       .
       -b
@@ -302,7 +290,7 @@ function(setup_target_for_coverage_lcov)
       ${LCOV_PATH}
       ${Coverage_LCOV_ARGS}
       --gcov-tool
-      ${GCOV_CMD}
+      ${GCOV_PATH}
       -a
       ${Coverage_NAME}.base
       -a
@@ -314,7 +302,7 @@ function(setup_target_for_coverage_lcov)
       ${LCOV_PATH}
       ${Coverage_LCOV_ARGS}
       --gcov-tool
-      ${GCOV_CMD}
+      ${GCOV_PATH}
       --remove
       ${Coverage_NAME}.total
       ${LCOV_EXCLUDES}
@@ -324,24 +312,6 @@ function(setup_target_for_coverage_lcov)
   set(LCOV_GEN_HTML_CMD
       ${GENHTML_PATH} ${GENHTML_EXTRA_ARGS} ${Coverage_GENHTML_ARGS} -o
       ${Coverage_NAME} ${Coverage_NAME}.info)
-  if(${Coverage_SONARQUBE})
-    # Generate SonarQube output
-    set(GCOVR_XML_CMD
-        ${GCOVR_PATH}
-        --sonarqube
-        ${Coverage_NAME}_sonarqube.xml
-        -r
-        ${BASEDIR}
-        ${GCOVR_ADDITIONAL_ARGS}
-        ${GCOVR_EXCLUDE_ARGS}
-        --object-directory=${PROJECT_BINARY_DIR})
-    set(GCOVR_XML_CMD_COMMAND COMMAND ${GCOVR_XML_CMD})
-    set(GCOVR_XML_CMD_BYPRODUCTS ${Coverage_NAME}_sonarqube.xml)
-    set(GCOVR_XML_CMD_COMMENT
-        COMMENT
-        "SonarQube code coverage info report saved in ${Coverage_NAME}_sonarqube.xml."
-    )
-  endif()
 
   if(CODE_COVERAGE_VERBOSE)
     message(STATUS "Executed command report")
@@ -373,12 +343,6 @@ function(setup_target_for_coverage_lcov)
     message(STATUS "Command to generate lcov HTML output: ")
     string(REPLACE ";" " " LCOV_GEN_HTML_CMD_SPACED "${LCOV_GEN_HTML_CMD}")
     message(STATUS "${LCOV_GEN_HTML_CMD_SPACED}")
-
-    if(${Coverage_SONARQUBE})
-      message(STATUS "Command to generate SonarQube XML output: ")
-      string(REPLACE ";" " " GCOVR_XML_CMD_SPACED "${GCOVR_XML_CMD}")
-      message(STATUS "${GCOVR_XML_CMD_SPACED}")
-    endif()
   endif()
 
   # Setup target
@@ -390,11 +354,11 @@ function(setup_target_for_coverage_lcov)
     COMMAND ${LCOV_CAPTURE_CMD}
     COMMAND ${LCOV_BASELINE_COUNT_CMD}
     COMMAND ${LCOV_FILTER_CMD}
-    COMMAND ${LCOV_GEN_HTML_CMD} ${GCOVR_XML_CMD_COMMAND}
+    COMMAND ${LCOV_GEN_HTML_CMD}
     # Set output files as GENERATED (will be removed on 'make clean')
     BYPRODUCTS ${Coverage_NAME}.base ${Coverage_NAME}.capture
                ${Coverage_NAME}.total ${Coverage_NAME}.info
-               ${GCOVR_XML_CMD_BYPRODUCTS} ${Coverage_NAME}/index.html
+               ${Coverage_NAME}/index.html
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     DEPENDS ${Coverage_DEPENDENCIES}
     VERBATIM # Protect arguments to commands
@@ -407,8 +371,7 @@ function(setup_target_for_coverage_lcov)
     TARGET ${Coverage_NAME}
     POST_BUILD
     COMMAND ;
-    COMMENT "Lcov code coverage info report saved in ${Coverage_NAME}.info."
-            ${GCOVR_XML_CMD_COMMENT})
+    COMMENT "Lcov code coverage info report saved in ${Coverage_NAME}.info.")
 
   # Show info where to find the report
   add_custom_command(
@@ -696,6 +659,8 @@ function(setup_target_for_coverage_fastcov)
       --output
       ${Coverage_NAME}.json
       --exclude
+      ${FASTCOV_EXCLUDES}
+      --exclude
       ${FASTCOV_EXCLUDES})
 
   set(FASTCOV_CONVERT_CMD ${FASTCOV_PATH} -C ${Coverage_NAME}.json --lcov
@@ -798,11 +763,5 @@ endfunction() # append_coverage_compiler_flags
 
 # Setup coverage for specific library
 function(append_coverage_compiler_flags_to_target name)
-  separate_arguments(_flag_list NATIVE_COMMAND "${COVERAGE_COMPILER_FLAGS}")
-  target_compile_options(${name} PRIVATE ${_flag_list})
-  if(CMAKE_C_COMPILER_ID STREQUAL "GNU"
-     OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-     OR CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-    target_link_libraries(${name} PRIVATE gcov)
-  endif()
+  target_compile_options(${name} PRIVATE ${COVERAGE_COMPILER_FLAGS})
 endfunction()
