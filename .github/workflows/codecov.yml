@@ -31,7 +31,7 @@ concurrency:
   
 jobs:  
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
     
     steps:
@@ -42,7 +42,7 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov clang-16 make llvm
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov
    
     - uses: actions/setup-python@v5
       with:
@@ -51,11 +51,7 @@ jobs:
     - name: Install conan
       run: pip install conan>2
 
-    - run: |
-        echo "CC=clang-16" >> "$GITHUB_ENV"
-        echo "CXX=clang++-16" >> "$GITHUB_ENV"
-
-    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing --compiler clang
+    - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py
