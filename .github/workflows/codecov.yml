@@ -46,8 +46,8 @@ jobs:
       run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov
 
     - run: |
-        echo "CC=clang" >> "$GITHUB_ENV"
-        echo "CXX=clang++" >> "$GITHUB_ENV"
+        echo "CC=gcc-11" >> "$GITHUB_ENV"
+        echo "CXX=g++-11" >> "$GITHUB_ENV"
    
     - uses: actions/setup-python@v5
       with:
