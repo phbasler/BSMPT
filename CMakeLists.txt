@@ -134,6 +134,7 @@ if(EnableCoverage)
       "/usr/lib/*"
       "~/.conan2/*"
       "~/.conan/*"
+      "${PROJECT_SOURCE_DIR}/tools/*"
       ${CodeCoverageExcludesFromOtherPkgs}
       "${PROJECT_SOURCE_DIR}/tests/*"
       "tests/*"
