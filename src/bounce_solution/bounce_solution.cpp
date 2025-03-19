@@ -548,7 +548,8 @@ double BounceSolution::GetGstar(const double &T) const
   const double TinMeV    = T * 1000.;
   const double TTreshold = TGstarLowT.back(); // = TGstarHighT.front()
   // Everything is multiplied by 1000 because the fit was done in MeV
-  if (TinMeV < TGstarLowT.front()) return neutrinogstar;
+  if (TinMeV < TGstarLowT.front())
+    return GstarLowT.front(); // Set to \f$ N_\nu \f$
   if (TinMeV > TGstarHighT.back()) return gstar;
   if (TinMeV < TTreshold) return GstarProfileLowT(TinMeV);
 

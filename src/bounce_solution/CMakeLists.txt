@@ -5,9 +5,9 @@
 
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/bounce_solution")
 set(header ${header_path}/bounce_solution.h ${header_path}/action_calculation.h
-           ${header_path}/hubblerate.h)
+           ${header_path}/gstar.h)
 
-set(src bounce_solution.cpp action_calculation.cpp hubblerate.cpp)
+set(src bounce_solution.cpp action_calculation.cpp gstar.cpp)
 
 add_library(BounceSolution ${header} ${src})
 target_link_libraries(BounceSolution PUBLIC Eigen3::Eigen GSL::gsl Minimizer

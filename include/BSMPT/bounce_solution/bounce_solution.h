@@ -13,7 +13,7 @@
  */
 
 #include <BSMPT/bounce_solution/action_calculation.h>
-#include <BSMPT/bounce_solution/hubblerate.h>
+#include <BSMPT/bounce_solution/gstar.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/utility/spline/spline.h>
@@ -44,9 +44,6 @@ public:
    * @brief modelPointer for the used parameter point
    */
   std::shared_ptr<Class_Potential_Origin> modelPointer;
-
-  /** Relativistic dof for the energy at T = 0 */
-  const double neutrinogstar = 3.384;
 
   /**
    * @brief MinTracer object
@@ -198,13 +195,13 @@ public:
   tk::spline S3ofT_spline;
 
   /**
-   * @brief Gstar spline, T < 219.67
+   * @brief Gstar spline, T < 214.0
    *
    */
   tk::spline GstarProfileLowT;
 
   /**
-   * @brief Gstar spline, T > 219.67
+   * @brief Gstar spline, T > 214.0
    *
    */
   tk::spline GstarProfileHighT;
