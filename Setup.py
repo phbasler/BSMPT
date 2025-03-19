@@ -149,7 +149,38 @@ def setup_profiles():
 def setup_cmaes():
     file_directory = Path(__file__).parent.absolute()
     cmaes_dir = os.path.join(file_directory, "tools", "conan", "cmaes","all")
-    subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(),cwd=cmaes_dir )
+
+    # Define the recipe name
+    recipe = "cmaes/0.10.0@bsmpt/local"
+
+    try:
+        # Run the conan search command and capture the output
+        
+        result = subprocess.check_output(f"conan list {recipe} -c".split(), stderr=subprocess.STDOUT, text=True)
+        
+        
+        # Check if the output indicates the recipe is not found
+        if "ERROR: Recipe" in result:
+            print(f"Recipe '{recipe}' not found. Exporting...")
+            subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(), cwd=cmaes_dir)
+            print(f"Recipe '{recipe}' successfully exported.")
+        else:
+            print(f"Recipe '{recipe}' already exists in the local cache.")
+    except subprocess.CalledProcessError as e:
+        # Handle errors from the subprocess
+        error_output = e.output.decode("utf-8")  # Decode the error output for debugging
+        if "ERROR: Recipe" in error_output:
+            print(f"Recipe '{recipe}' not found in local cache. Exporting...")
+            subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(), cwd=cmaes_dir)
+            print(f"Recipe '{recipe}' successfully exported.")
+        else:
+            # If another error occurs, print the error output
+            print(f"An error occurred: {error_output}")
+
+    
+
+    
+
 
 
 def conan_install(
