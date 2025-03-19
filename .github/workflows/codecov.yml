@@ -43,7 +43,7 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name : installPackages
-      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov
+      run : sudo apt-get update && sudo apt-get install --no-install-recommends --yes lcov gcc-11
 
     - run: |
         echo "CC=gcc-11" >> "$GITHUB_ENV"
