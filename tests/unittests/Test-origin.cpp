@@ -9,13 +9,15 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 using Approx = Catch::Approx;
 
 #include "C2HDM.h"
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
-
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
+#include <BSMPT/utility/Logger.h>
 namespace
 {
 
@@ -118,4 +120,25 @@ TEST_CASE("Check f_{abcd}", "[origin]")
         0, std::pow(100, 2), std::pow(200, 2), std::pow(50, 2));
     REQUIRE(result == Approx(expected).margin(1e-4));
   }
+}
+
+TEST_CASE("Check CheckImplementation", "[origin]")
+{
+  using namespace BSMPT;
+  using Catch::Matchers::ContainsSubstring;
+
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
+  modelPointer->initModel(example_point_C2HDM);
+
+  std::stringstream ss;
+  BSMPT::Logger::SetOStream(ss);
+
+  ModelTests::CheckImplementation(*modelPointer,
+                                  Minimizer::WhichMinimizerDefault);
+
+  REQUIRE_THAT(ss.str(), ContainsSubstring("You're good to go!"));
+
+  BSMPT::Logger::SetOStream(std::cout);
 }
