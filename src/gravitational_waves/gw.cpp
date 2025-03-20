@@ -672,7 +672,7 @@ double Getkappa_col(const double &Tstar,
   const double gamma_eq =
       pow((BACalc.GetPTStrength() - alpha_infty) / alpha_eq, 1. / pnlo_scaling);
   if (gamma_eq <= 1) return 0.; // dV - P_LO < P_NLO. Unphysical gamma;
-  const double R_eq       = 3. * R0 * gamma_eq / 2.;
+  const double R_eq       = 3. * R0 * gamma_eq.;
   const double gamma_star = min(gamma_eq, gamma_run_away);
   const double kappa_col  = (1 - alpha_infty / BACalc.GetPTStrength()) *
                            (1 - 1 / pow(gamma_eq, pnlo_scaling)) *
