@@ -665,14 +665,12 @@ double Getkappa_col(const double &Tstar,
     P_NLO *= pow(Tstar, 4); // pressure NLO normalization
   }
   const double alpha_infty    = P_LO / RhoGamma;
-  const double alpha_eq       = P_NLO / RhoGamma;
   const double gamma_run_away = Rstar / (3. * R0);
   if (BACalc.GetPTStrength() - alpha_infty < 0)
     return 0.; // Not enough pressure to drive the bubble wall.
-  const double gamma_eq =
-      pow((BACalc.GetPTStrength() - alpha_infty) / alpha_eq, 1. / pnlo_scaling);
-  if (gamma_eq <= 1) return 0.; // dV - P_LO < P_NLO. Unphysical gamma;
-  const double R_eq       = 3. * R0 * gamma_eq.;
+  const double gamma_eq = pow((dV - P_LO) / P_NLO, 1. / pnlo_scaling);
+  if (gamma_eq < 1) return 0.; // dV - P_LO < P_NLO. Unphysical gamma < 1;
+  const double R_eq       = 3. * R0 * gamma_eq;
   const double gamma_star = min(gamma_eq, gamma_run_away);
   const double kappa_col  = (1 - alpha_infty / BACalc.GetPTStrength()) *
                            (1 - 1 / pow(gamma_eq, pnlo_scaling)) *
