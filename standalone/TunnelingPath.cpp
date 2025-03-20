@@ -89,7 +89,7 @@ int main()
       }
     }
 
-    if(ClosestBounceActionInt == nullptr)
+    if (ClosestBounceActionInt == nullptr)
     {
       throw std::runtime_error("ClosestBounceActionInt was not set");
     }
