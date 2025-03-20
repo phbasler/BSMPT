@@ -3,9 +3,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include <BSMPT/utility/ModelIDs.h>
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include <BSMPT/utility/ModelIDs.h>
 #include <sstream>
 
 using Approx = Catch::Approx;
@@ -15,7 +15,7 @@ using Approx = Catch::Approx;
 TEST_CASE("Check ModelID name generation", "[utility]")
 {
   using namespace BSMPT;
-  for(const auto& [name, id]: ModelID::ModelNames)
+  for (const auto &[name, id] : ModelID::ModelNames)
   {
     std::stringstream ss;
     ss << id;
@@ -26,19 +26,20 @@ TEST_CASE("Check ModelID name generation", "[utility]")
 
 TEST_CASE("Check if split function for string works", "[utility]")
 {
-  std::vector<std::string> values{"a","b","c"};
+  std::vector<std::string> values{"a", "b", "c"};
   std::stringstream ss;
   bool first = true;
-  for(const auto& el: values)
+  for (const auto &el : values)
   {
-    if(not first) {
+    if (not first)
+    {
       ss << ",";
     }
-    else{
+    else
+    {
       first = false;
     }
     ss << el;
-
   }
 
   std::string input = ss.str();
