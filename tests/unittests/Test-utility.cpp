@@ -5,10 +5,48 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <BSMPT/utility/ModelIDs.h>
+#include <sstream>
 
 using Approx = Catch::Approx;
 
 #include <BSMPT/utility/utility.h>
+
+TEST_CASE("Check ModelID name generation", "[utility]")
+{
+  using namespace BSMPT;
+  for(const auto& [name, id]: ModelID::ModelNames)
+  {
+    std::stringstream ss;
+    ss << id;
+    std::string generatedName = ss.str();
+    REQUIRE(generatedName == name);
+  }
+}
+
+TEST_CASE("Check if split function for string works", "[utility]")
+{
+  std::vector<std::string> values{"a","b","c"};
+  std::stringstream ss;
+  bool first = true;
+  for(const auto& el: values)
+  {
+    if(not first) {
+      ss << ",";
+    }
+    else{
+      first = false;
+    }
+    ss << el;
+
+  }
+
+  std::string input = ss.str();
+  std::cout << "input = " << input << std::endl;
+
+  auto result = BSMPT::split(input, ',');
+  REQUIRE(values == result);
+}
 
 TEST_CASE("Check vector . vector product", "[utility]")
 {
