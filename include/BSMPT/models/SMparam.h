@@ -215,7 +215,7 @@ struct ISMConstants
   double C_SMTriHiggs{0};
 
   /**
-   * @brief speed of sound
+   * @brief speed of sound in the bag model
    */
   const double Csound = 0.5773502691896258; // 1/sqrt(3)
 
