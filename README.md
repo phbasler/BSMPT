@@ -122,6 +122,13 @@ Code from the following repositories is used in BSMPT:
 
 ---
 
+## How to include BSMPT in another program
+
+You can call the `Setup.py` script with the `--create` option. This will generate a local conan package of BSMPT which then can be used in your program.
+If your code is already a conan project you can add BSMPT just as a requirement. If you have a pure CMake project you can use the [conan-provider](https://github.com/conan-io/cmake-conan/) to include it.
+
+---
+
 ## How to add a new model:
 
 To add a new model, you have to modify/create five files (for further details, also consult the manual):
