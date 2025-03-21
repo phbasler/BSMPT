@@ -49,8 +49,6 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
 std::unordered_map<ModelIDs, std::string> InvertModelNames();
 } // namespace ModelID
 
-
-
 /**
  * @brief operator << overload for the model parameter
  */

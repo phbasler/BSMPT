@@ -27,8 +27,6 @@ std::unordered_map<ModelIDs, std::string> InvertModelNames()
 
 } // namespace ModelID
 
-
-
 std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
 {
   static auto IMN = BSMPT::ModelID::InvertModelNames();
