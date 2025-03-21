@@ -255,7 +255,9 @@ def create(build_missing=False, compiler: Compiler = None, additional_options=[]
     for option in additional_options:
         cmd += ["--options", option]
 
-    cmd += ["--options", "EnableTests=False"]
+    if "EnableTests=True" not in additional_options:
+        cmd += ["--options", "EnableTests=False"]
+        
     cmd += ["--options", "BuildExecutables=False"]
 
     subprocess.check_call(cmd)

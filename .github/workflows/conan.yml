@@ -38,4 +38,4 @@ jobs:
 
           - run: python3 Setup.py --build-missing
 
-          - run: python3 Setup.py --create --build-missing
+          - run: python3 Setup.py --create --build-missing --options EnableTests=True
