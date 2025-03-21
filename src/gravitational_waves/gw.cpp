@@ -69,12 +69,26 @@ GravitationalWave::~GravitationalWave()
 {
 }
 
+double GetHtauSH(const double HR, const double K_sw)
+{
+  return 2. / std::sqrt(3) * HR / std::sqrt(K_sw);
+}
+
+double GetHtauSW(const double HR, const double K_sw)
+{
+  return min(GetHtauSH(HR, K_sw), 1.);
+}
+
+double GetYpsilon(const double HR, const double K_sw)
+{
+  return 1. - 1. / sqrt(1. + 2. * GetHtauSW(HR, K_sw));
+}
+
 double GravitationalWave::CalcEpsTurb(double epsturb_in)
 {
   if (epsturb_in == -1)
   {
-    double HtauSW = 2. / std::sqrt(3) * data.HR / std::sqrt(data.K_sw);
-    return std::pow((1 - std::min(HtauSW, 1.)), 2. / 3.);
+    return std::pow((1 - GetYpsilon(data.HR, data.K_sw)), 2. / 3.);
   }
   else
   {
@@ -128,11 +142,9 @@ void GravitationalWave::CalcPeakSoundWave()
   // Sound wave amplitude
 
   const double Asw = 0.11; // Numerical simulation
-  const double HtauSW =
-      std::min(1., 2. / std::sqrt(3) * data.HR / std::sqrt(data.K_sw));
-
   const double Omega_int =
-      data.FGW0 * Asw * pow(data.K_sw, 2) * HtauSW * data.HR;
+      data.FGW0 * Asw * pow(data.K_sw, 2) *
+      GetYpsilon(data.HR, data.K_sw) /* arxiv:2007.08537 */ * data.HR;
 
   // Convert Omega_int to Omega_2
 

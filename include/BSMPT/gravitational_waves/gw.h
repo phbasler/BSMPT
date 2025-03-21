@@ -256,6 +256,34 @@ double GetHstar0(const double &temp, const double &gstar);
  */
 double GetKtilde(const double &alpha);
 
+/**
+ * @brief Calculate \f$ H_*\tau_\text{sh} = H_* R_* / \sqrt{\bar v_f^2} \f$
+ *
+ * @param HR
+ * @param K_sw
+ * @return double
+ */
+double GetHtauSH(const double HR, const double K_sw);
+
+/**
+ * @brief Calculate \f$ H_*\tau_\text{sw} = \min(1,H_*\tau_\text{sh}) \f$
+ *
+ * @param HR
+ * @param K_sw
+ * @return double
+ */
+double GetHtauSW(const double HR, const double K_sw);
+
+/**
+ * @brief Calculate \f$
+ * \Upsilon=1-\frac{1}{\sqrt{1+2H_{\ast}\tau_{\mathrm{sw}}}} \f$ from
+ * https://arxiv.org/abs/1903.09642
+ * @param HR
+ * @param K_sw
+ * @return double
+ */
+double GetYpsilon(const double HR, const double K_sw);
+
 namespace kappa
 {
 // Compute kappa_sw https://arxiv.org/abs/2010.09744

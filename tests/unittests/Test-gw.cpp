@@ -872,7 +872,7 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
           Approx(output.vec_gw_data.at(0).f1_sw.value()).epsilon(1e-2));
   REQUIRE(0.0475813 ==
           Approx(output.vec_gw_data.at(0).f2_sw.value()).epsilon(1e-2));
-  REQUIRE(1.03567e-19 ==
+  REQUIRE(8.81683e-20 ==
           Approx(output.vec_gw_data.at(0).omega_2_sw.value()).epsilon(1e-2));
 
   REQUIRE(2.6841e-05 ==
@@ -883,11 +883,11 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
           Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
 
   REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
-  REQUIRE(1.031e-07 ==
+  REQUIRE(8.78574e-08 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
   REQUIRE(1.10553e-12 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(1.031e-07 ==
+  REQUIRE(8.78574e-08 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
@@ -964,7 +964,7 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample) and not "
           Approx(output.vec_gw_data.at(0).f1_sw.value()).epsilon(1e-2));
   REQUIRE(0.0475813 ==
           Approx(output.vec_gw_data.at(0).f2_sw.value()).epsilon(1e-2));
-  REQUIRE(1.03567e-19 ==
+  REQUIRE(8.81683e-20 ==
           Approx(output.vec_gw_data.at(0).omega_2_sw.value()).epsilon(1e-2));
 
   REQUIRE(2.6841e-05 ==
@@ -975,11 +975,11 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample) and not "
           Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
 
   REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
-  REQUIRE(1.031e-07 ==
+  REQUIRE(8.78574e-08 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
   REQUIRE(1.10553e-12 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(1.031e-07 ==
+  REQUIRE(8.78574e-08 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
