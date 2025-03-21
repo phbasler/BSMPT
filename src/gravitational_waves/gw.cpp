@@ -649,13 +649,13 @@ double Getkappa_col(const double &Tstar,
   if (pnlo_scaling == 1)
   {
     // Mass matrix is ordered
-    P_NLO += sqrt(GaugeSq_True.at(0)) * A_coupling;
-    P_NLO += 2 * sqrt(GaugeSq_True.at(1)) * W_coupling;
-    P_NLO += sqrt(GaugeSq_True.at(3)) * Z_coupling;
+    P_NLO += sqrt(GaugeSq_True.at(0)) * pow(A_coupling, 2);
+    P_NLO += 2 * sqrt(GaugeSq_True.at(1)) * pow(W_coupling, 2);
+    P_NLO += sqrt(GaugeSq_True.at(3)) * pow(Z_coupling, 2);
 
-    P_NLO -= sqrt(GaugeSq_False.at(0)) * A_coupling;
-    P_NLO -= 2 * sqrt(GaugeSq_False.at(1)) * W_coupling;
-    P_NLO -= sqrt(GaugeSq_False.at(3)) * Z_coupling;
+    P_NLO -= sqrt(GaugeSq_False.at(0)) * pow(A_coupling, 2);
+    P_NLO -= 2 * sqrt(GaugeSq_False.at(1)) * pow(W_coupling, 2);
+    P_NLO -= sqrt(GaugeSq_False.at(3)) * pow(Z_coupling, 2);
 
     P_NLO *= pow(Tstar, 3);
   }
