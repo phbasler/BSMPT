@@ -5,7 +5,9 @@
 
 #include <BSMPT/config.h>
 #include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/ModelIDs.h>
 #include <BSMPT/utility/parser.h>
+#include <BSMPT/utility/settings.h>
 #include <BSMPT/utility/utility.h>
 #include <algorithm>
 #include <sstream>
@@ -17,6 +19,22 @@
 
 namespace BSMPT
 {
+
+void ShowInputError()
+{
+  std::stringstream ss;
+  ss << "The chosen Method for the thermal mass corrections is ";
+  if (C_UseParwani)
+    ss << "Parwani ";
+  else
+    ss << "Arnold Espinosa\n";
+  ss << "The implemented models are " << std::endl;
+  for (auto entry : ModelID::ModelNames)
+  {
+    ss << entry.first << std::endl;
+  }
+  Logger::Write(LoggingLevel::Default, ss.str());
+}
 
 parserException::parserException(const std::string &msg) : message{msg}
 {

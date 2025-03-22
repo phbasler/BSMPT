@@ -26,7 +26,9 @@ SOFTWARE.
 
 using namespace std;
 
-int max(vector<int> data)
+namespace
+{
+int max(const vector<int> &data)
 {
   int xmax = data[0];
   for (std::size_t i = 1; i < sizeof(data); i++)
@@ -39,7 +41,7 @@ int max(vector<int> data)
   return xmax;
 }
 
-int min(vector<int> data)
+int min(const vector<int> &data)
 {
   int xmin = data[0];
   for (std::size_t i = 1; i < data.size(); i++)
@@ -52,7 +54,7 @@ int min(vector<int> data)
   return xmin;
 }
 
-double max(vector<double> data)
+double max(const vector<double> &data)
 {
   double xmax = data[0];
   for (std::size_t i = 1; i < data.size(); i++)
@@ -65,7 +67,7 @@ double max(vector<double> data)
   return xmax;
 }
 
-double min(vector<double> data)
+double min(const vector<double> &data)
 {
   double xmin = data[0];
   for (std::size_t i = 1; i < data.size(); i++)
@@ -169,6 +171,7 @@ resample(vector<double> xdata, vector<double> ydata, int newlength)
   }
 }
 
+} // namespace
 AsciiPlotter::AsciiPlotter()
 {
   _title  = "";

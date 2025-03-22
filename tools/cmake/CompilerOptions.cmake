@@ -71,6 +71,7 @@ list(
   "C4389" # '!=' : signed/unsigned mismatch
   "C4464" # relative include path contains '..'
   "C4510" # 'argument' : default constructor could not be generated
+  "C4530" # C++ exception handler used
   "C4571"
   "C4512" # 'argument' : assignment operator could not be generated
   "C4514" # 'function': unreferenced inline function has been removed

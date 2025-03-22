@@ -16,6 +16,11 @@
 namespace BSMPT
 {
 
+/**
+ * @brief ShowInputError shows all the available models in the terminal
+ */
+void ShowInputError();
+
 class parserException : public std::exception
 {
 public:
