@@ -50,7 +50,7 @@ class BSMPT(ConanFile):
         "MakeAdditionalTesting": False,
         "CompileBaryo": False,
         "EnableCoverage": False,
-        "UseVectorization": False,
+        "UseVectorization": True,
         "BuildExecutables": True,
     }
 

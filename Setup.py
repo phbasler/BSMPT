@@ -249,8 +249,7 @@ def create(build_missing=False, compiler: Compiler = None, additional_options=[]
 
     if build_missing:
         cmd += ["--build=missing"]
-    else:
-        cmd += ["--build=cmaes/0.10.0@bsmpt/local"]
+    
 
     for option in additional_options:
         cmd += ["--options", option]
