@@ -27,7 +27,7 @@ if(BSMPTBuildExecutables)
       "${filename}" PROPERTIES RUNTIME_OUTPUT_DIRECTORY
                                "${CMAKE_BINARY_DIR}/bin/standalone")
 
-    target_compile_features("${filename}" PUBLIC cxx_std_14)
+    target_compile_features("${filename}" PUBLIC cxx_std_17)
   endforeach()
 
 endif(BSMPTBuildExecutables)

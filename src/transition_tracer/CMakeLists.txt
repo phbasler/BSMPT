@@ -13,7 +13,7 @@ set(src transition_tracer.cpp)
 add_library(TransitionTracer ${header} ${src})
 target_link_libraries(TransitionTracer PUBLIC MinimumTracer BounceSolution GW)
 target_include_directories(TransitionTracer PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(TransitionTracer PUBLIC cxx_std_14)
+target_compile_features(TransitionTracer PUBLIC cxx_std_17)
 
 set_property(TARGET TransitionTracer PROPERTY PUBLIC_HEADER ${header})
 

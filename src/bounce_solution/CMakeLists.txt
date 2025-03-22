@@ -12,7 +12,7 @@ add_library(BounceSolution ${header} ${src})
 target_link_libraries(BounceSolution PUBLIC Eigen3::Eigen GSL::gsl Minimizer
                                             Utility MinimumTracer)
 target_include_directories(BounceSolution PUBLIC ${BSMPT_SOURCE_DIR}/include)
-target_compile_features(BounceSolution PUBLIC cxx_std_14)
+target_compile_features(BounceSolution PUBLIC cxx_std_17)
 
 set_property(TARGET BounceSolution PROPERTY PUBLIC_HEADER ${header})
 
