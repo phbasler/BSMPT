@@ -131,7 +131,7 @@ class BSMPT(ConanFile):
             raise ConanInvalidConfiguration("We depend on lcov for coverage.")
 
         if (
-            self.setting.os == "Linux"
+            self.settings.os == "Linux"
             and self.options.UseLibCMAES
             and self.options.UseVectorization
         ):
