@@ -139,7 +139,7 @@ To add a new model, you have to modify/create five files (for further details, a
 
 3. For your model to compile, you have to open `src/models/CMakeLists.txt` and add `${header_path}/YourModel.h` as well as `YourModel.cpp` to the listed headers and source files.
 
-4. In `include/BSMPT/models/IncludeAllModels.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
+4. In `include/BSMPT/utility/ModelIDs.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
 
 5. In `src/models/IncludeAllModels.cpp` you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also, to be able to call your model, you have to extend the `FChoose` function. For this you add a new case to the switch statement, which reads
 

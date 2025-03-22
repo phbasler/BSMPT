@@ -446,8 +446,7 @@ TestResults CheckTreeLevelMin(const Class_Potential_Origin &point,
                                              point.SMConstants,
                                              CheckVector,
                                              start,
-                                             WhichMinimizer,
-                                             false);
+                                             WhichMinimizer);
   std::string prsize_tline1 = "The given VEV configuration at tree-level is : ";
   std::string prsize_tline2 =
       "The calculated VEV configuration at tree-level is : ";
