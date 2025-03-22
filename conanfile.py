@@ -50,7 +50,7 @@ class BSMPT(ConanFile):
         "MakeAdditionalTesting": False,
         "CompileBaryo": False,
         "EnableCoverage": False,
-        "UseVectorization": True,
+        "UseVectorization": False,  # This causes double free with cmaes. We need to modify the package to include vectorization as well as an option
         "BuildExecutables": True,
     }
 
@@ -66,7 +66,11 @@ class BSMPT(ConanFile):
             self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
 
         if self.options.UseLibCMAES:
-            self.requires("cmaes/0.10.0@bsmpt/local", transitive_headers=True, transitive_libs=True)
+            self.requires(
+                "cmaes/0.10.0@bsmpt/local",
+                transitive_headers=True,
+                transitive_libs=True,
+            )
 
     def build_requirements(self):
         self.tool_requires("cmake/3.29.0")
@@ -126,6 +130,15 @@ class BSMPT(ConanFile):
         if self.settings.os != "Linux" and self.options.EnableCoverage:
             raise ConanInvalidConfiguration("We depend on lcov for coverage.")
 
+        if (
+            self.setting.os == "Linux"
+            and self.options.UseLibCMAES
+            and self.options.UseVectorization
+        ):
+            raise ConanInvalidConfiguration(
+                "This causes a double free error. CMAES needs to be modified to be build with Vectorization as well"
+            )
+
         tools.build.check_min_cppstd(self, "17")
 
     def config_options(self):
@@ -140,7 +153,7 @@ class BSMPT(ConanFile):
 
         environment = Environment()
         environment.define("CTEST_OUTPUT_ON_FAILURE", "1")
-        environment.define("CTEST_PARALLEL_LEVEL", str(os.cpu_count()) )
+        environment.define("CTEST_PARALLEL_LEVEL", str(os.cpu_count()))
         envvars = environment.vars(self)
 
         if self.options.get_safe("EnableTests"):
@@ -237,7 +250,6 @@ class BSMPT(ConanFile):
 
         if self.options.UseLibCMAES:
             self.cpp_info.components["Minimizer"].requires.append("cmaes::cmaes")
-
 
         self.cpp_info.components["MinimumTracer"].libs = ["MinimumTracer"]
         self.cpp_info.components["MinimumTracer"].requires = [
