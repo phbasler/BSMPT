@@ -11,6 +11,8 @@
 using Approx = Catch::Approx;
 
 #include <BSMPT/utility/utility.h>
+#include <BSMPT/utility/Logger.h>
+#include <BSMPT/utility/parser.h>
 
 TEST_CASE("Check ModelID name generation", "[utility]")
 {
@@ -22,6 +24,19 @@ TEST_CASE("Check ModelID name generation", "[utility]")
     std::string generatedName = ss.str();
     REQUIRE(generatedName == name);
   }
+}
+
+TEST_CASE("Check parser input error is disabled on Loglevel None", "[utility]")
+{
+  using namespace BSMPT;
+  std::stringstream ss;
+  Logger::SetOStream(ss);
+  Logger::Disable();
+  ShowInputError();
+  Logger::Write(LoggingLevel::Default, "Some output");
+  std::string output = ss.str();
+  REQUIRE(output.empty());
+
 }
 
 TEST_CASE("Check if split function for string works", "[utility]")
