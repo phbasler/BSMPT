@@ -10,8 +10,6 @@
 
 using Approx = Catch::Approx;
 
-#include <BSMPT/utility/Logger.h>
-#include <BSMPT/utility/parser.h>
 #include <BSMPT/utility/utility.h>
 
 TEST_CASE("Check ModelID name generation", "[utility]")
