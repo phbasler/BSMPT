@@ -24,6 +24,33 @@ TEST_CASE("Check ModelID name generation", "[utility]")
   }
 }
 
+TEST_CASE("Check error on inversion of map with duplicate key", "[utility]")
+{
+  std::unordered_map<BSMPT::ModelID::ModelIDs, std::string> nameMap;
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::C2HDM, "c2hdm");
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::CXSM, "c2hdm");
+
+  REQUIRE_THROWS_AS(BSMPT::InvertMap(nameMap, "Double name"), std::runtime_error);
+
+
+}
+
+TEST_CASE("Check inversion of map", "[utility]")
+{
+  std::unordered_map<BSMPT::ModelID::ModelIDs, std::string> nameMap;
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::C2HDM, "c2hdm");
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::CXSM, "cxsm");
+
+  auto inverted_map = BSMPT::InvertMap(nameMap, "double names");
+
+  for(const auto& [id, name]: nameMap)
+  {
+    REQUIRE(id == inverted_map[name]);
+  }
+
+
+}
+
 TEST_CASE("Check if split function for string works", "[utility]")
 {
   std::vector<std::string> values{"a", "b", "c"};

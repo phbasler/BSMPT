@@ -32,6 +32,29 @@ namespace BSMPT
 {
 
 /**
+ * @brief Inverts a map
+ * @param originalMap Map to be inverted
+ * @param errorOnDuplicateValue Error message on duplicate value
+ * @throw std::runtime_error if the new map would have duplicate keys
+ */
+template <typename key, typename value>
+std::unordered_map<value, key> InvertMap(const std::unordered_map<key, value> &originalMap,
+                               const std::string &errorOnDuplicateValue)
+{
+  std::unordered_map<value, key> result;
+  for (const auto &[orig_key, orig_value] : originalMap)
+  {
+    auto success = result.emplace(orig_value, orig_key);
+    if (not success.second)
+    {
+      throw std::runtime_error(errorOnDuplicateValue);
+    }
+  }
+
+  return result;
+}
+
+/**
  * @brief StringStartsWith checks if str starts with prefix
  */
 bool StringStartsWith(const std::string &str, const std::string &prefix);

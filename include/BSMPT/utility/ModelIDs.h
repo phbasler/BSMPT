@@ -42,11 +42,6 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
     {"template", ModelIDs::TEMPLATE},
 };
 
-/**
- * @brief InvertModelNames
- * @return The switched map to ModelNames
- */
-std::unordered_map<ModelIDs, std::string> InvertModelNames();
 } // namespace ModelID
 
 /**

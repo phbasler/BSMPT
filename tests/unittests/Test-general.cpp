@@ -11,6 +11,7 @@ using Approx = Catch::Approx;
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/models/SMparam.h>
+#include <BSMPT/utility/utility.h>
 
 TEST_CASE("Checking CKM Unitarity", "[general]")
 {
@@ -29,14 +30,5 @@ TEST_CASE("Check get model", "[general]")
 
 TEST_CASE("Check no model ids are set twice", "[general]")
 {
-  std::string foundException;
-  try
-  {
-    auto ids = BSMPT::ModelID::InvertModelNames();
-  }
-  catch (std::exception &e)
-  {
-    foundException = e.what();
-  }
-  REQUIRE(foundException == std::string());
+  REQUIRE_NOTHROW(BSMPT::InvertMap(BSMPT::ModelID::ModelNames, "double names"));
 }
