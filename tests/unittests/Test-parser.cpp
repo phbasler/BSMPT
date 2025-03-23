@@ -91,5 +91,4 @@ TEST_CASE("Check parser input error is disabled on Loglevel None", "[parser]")
   REQUIRE(output.empty());
   Logger::SetOStream(std::cout);
   Logger::RestoreDefaultLevels();
-
 }

@@ -88,7 +88,7 @@ private:
 
   std::ostream mOstream;
   std::ofstream mfilestream;
-  
+
   const std::map<LoggingLevel, bool> mDefaultSetup{
       {LoggingLevel::Default, true},
       {LoggingLevel::EWBGDetailed, false},
@@ -102,7 +102,6 @@ private:
 
   std::map<LoggingLevel, bool> mCurrentSetup = mDefaultSetup;
 };
-
 
 class Logger
 {
