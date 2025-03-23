@@ -26,18 +26,7 @@ TEST_CASE("Check ModelID name generation", "[utility]")
   }
 }
 
-TEST_CASE("Check parser input error is disabled on Loglevel None", "[utility]")
-{
-  using namespace BSMPT;
-  std::stringstream ss;
-  Logger::SetOStream(ss);
-  Logger::Disable();
-  ShowInputError();
-  Logger::Write(LoggingLevel::Default, "Some output");
-  std::string output = ss.str();
-  REQUIRE(output.empty());
 
-}
 
 TEST_CASE("Check if split function for string works", "[utility]")
 {

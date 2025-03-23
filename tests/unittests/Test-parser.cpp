@@ -78,3 +78,18 @@ TEST_CASE("Check for all required parameters", "[parser]")
   parser.add_argument(argName, description, true);
   REQUIRE_THROWS_AS(parser.check_required_parameters(), BSMPT::parserException);
 }
+
+TEST_CASE("Check parser input error is disabled on Loglevel None", "[parser]")
+{
+  using namespace BSMPT;
+  std::stringstream ss;
+  Logger::SetOStream(ss);
+  Logger::Disable();
+  ShowInputError();
+  Logger::Write(LoggingLevel::Default, "Some output");
+  std::string output = ss.str();
+  REQUIRE(output.empty());
+  Logger::SetOStream(std::cout);
+  Logger::RestoreDefaultLevels();
+
+}
