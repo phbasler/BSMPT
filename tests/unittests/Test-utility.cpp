@@ -24,8 +24,6 @@ TEST_CASE("Check ModelID name generation", "[utility]")
   }
 }
 
-
-
 TEST_CASE("Check if split function for string works", "[utility]")
 {
   std::vector<std::string> values{"a", "b", "c"};
