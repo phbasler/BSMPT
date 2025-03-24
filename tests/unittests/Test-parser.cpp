@@ -31,6 +31,30 @@ TEST_CASE("Check bool input", "[parser]")
   REQUIRE_FALSE(parser.get_value<bool>(argNameF));
 }
 
+TEST_CASE("Check int input", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  int value = 3;
+  std::string argName{"arg"};
+  parser.add_argument(argName, "foo", true );
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=" + std::to_string(value));
+  parser.add_input(input);
+  REQUIRE(parser.get_value<int>(argName) == value);
+}
+
+TEST_CASE("Check double input", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  double value = 3.2;
+  std::string argName{"arg"};
+  parser.add_argument(argName, "foo", true );
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=" + std::to_string(value) );
+  parser.add_input(input);
+  REQUIRE(parser.get_value<double>(argName) == value);
+}
+
 TEST_CASE("Set unexpected input", "[parser]")
 {
   auto parser = BSMPT::parser();
