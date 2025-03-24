@@ -8,6 +8,7 @@
 
 using Approx = Catch::Approx;
 
+#include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/models/SMparam.h>
@@ -31,4 +32,24 @@ TEST_CASE("Check get model", "[general]")
 TEST_CASE("Check no model ids are set twice", "[general]")
 {
   REQUIRE_NOTHROW(BSMPT::InvertMap(BSMPT::ModelID::ModelNames, "double names"));
+}
+
+TEST_CASE("Check calculating of minimizer selection", "[general]")
+{
+  std::vector<BSMPT::Minimizer::MinimizersToUse> minimizers;
+  ;
+  for (const auto &gsl : {true, false})
+  {
+    for (const auto &cmaes : {true, false})
+    {
+      for (const auto &nlopt : {true, false})
+      {
+        auto whichMin = BSMPT::Minimizer::CalcWhichMinimizer(gsl, cmaes, nlopt);
+        auto minToUse = BSMPT::Minimizer::GetMinimizers(whichMin);
+        REQUIRE(minToUse.UseCMAES == cmaes);
+        REQUIRE(minToUse.UseGSL == gsl);
+        REQUIRE(minToUse.UseNLopt == nlopt);
+      }
+    }
+  }
 }
