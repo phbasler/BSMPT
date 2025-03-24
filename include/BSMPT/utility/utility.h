@@ -38,8 +38,9 @@ namespace BSMPT
  * @throw std::runtime_error if the new map would have duplicate keys
  */
 template <typename key, typename value>
-std::unordered_map<value, key> InvertMap(const std::unordered_map<key, value> &originalMap,
-                               const std::string &errorOnDuplicateValue)
+std::unordered_map<value, key>
+InvertMap(const std::unordered_map<key, value> &originalMap,
+          const std::string &errorOnDuplicateValue)
 {
   std::unordered_map<value, key> result;
   for (const auto &[orig_key, orig_value] : originalMap)

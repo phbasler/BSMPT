@@ -30,9 +30,8 @@ TEST_CASE("Check error on inversion of map with duplicate key", "[utility]")
   nameMap.emplace(BSMPT::ModelID::ModelIDs::C2HDM, "c2hdm");
   nameMap.emplace(BSMPT::ModelID::ModelIDs::CXSM, "c2hdm");
 
-  REQUIRE_THROWS_AS(BSMPT::InvertMap(nameMap, "Double name"), std::runtime_error);
-
-
+  REQUIRE_THROWS_AS(BSMPT::InvertMap(nameMap, "Double name"),
+                    std::runtime_error);
 }
 
 TEST_CASE("Check inversion of map", "[utility]")
@@ -43,12 +42,10 @@ TEST_CASE("Check inversion of map", "[utility]")
 
   auto inverted_map = BSMPT::InvertMap(nameMap, "double names");
 
-  for(const auto& [id, name]: nameMap)
+  for (const auto &[id, name] : nameMap)
   {
     REQUIRE(id == inverted_map[name]);
   }
-
-
 }
 
 TEST_CASE("Check if split function for string works", "[utility]")
