@@ -10,6 +10,7 @@
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/utility/Logger.h>
 
 #include "C2HDM.h"
 #include <fstream>
@@ -27,6 +28,21 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
 const Compare_C2HDM Expected;
 
 using Approx = Catch::Approx;
+
+TEST_CASE("Run CheckImplementation in c2hdm", "[c2hdm]")
+{
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
+  modelPointer->initModel(example_point_C2HDM);
+  std::stringstream ss;
+  Logger::SetOStream(ss);
+  REQUIRE_NOTHROW(modelPointer->CheckImplementation());
+  Logger::SetOStream(std::cout);
+  std::string output = ss.str();
+  REQUIRE(output.find("fail") == std::string::npos);
+}
 
 TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
 {
