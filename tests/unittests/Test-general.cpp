@@ -53,5 +53,3 @@ TEST_CASE("Check calculating of minimizer selection", "[general]")
     }
   }
 }
-
-
