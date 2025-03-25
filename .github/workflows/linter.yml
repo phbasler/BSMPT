@@ -11,6 +11,8 @@ concurrency:
 jobs:
   linter:
     runs-on: ubuntu-latest
+    env:
+      LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
   
     steps:
       - uses: actions/checkout@v4
@@ -18,10 +20,13 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           token: ${{ secrets.LINTER_PAT }}
+        if: env.LocalCommit == 'true'
 
-      - name: Install clang-format
-        if: inputs.apply_clang_format
-        run: pip3 install clang-format==14.0.0
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+        if: env.LocalCommit != 'true'
 
       - run: git fetch origin $GITHUB_BASE_REF
 
@@ -32,7 +37,7 @@ jobs:
 
       - name: Format CMake files
         id: cmake-format
-        uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
+        uses: PuneetMatharu/cmake-format-lint-action@v1.0.6
         with:
           args: --config-files .cmake-format.py --in-place
 
@@ -59,8 +64,14 @@ jobs:
           git config user.email "<>"
 
       - name: Commit changes
-        if: steps.check-changes.outputs.ChangesFound == 'True'
+        if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
         run: |
           git commit -am "Automatically applied linter"
           git push
+
+      - name: Notify that changes are required
+        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit != 'true' }}
+        run: |
+          echo "Linter changes are required" >> $GITHUB_STEP_SUMMARY
+          exit 1
 
