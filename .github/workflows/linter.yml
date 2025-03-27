@@ -20,12 +20,14 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           token: ${{ secrets.LINTER_PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
         if: env.LocalCommit == 'true'
 
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
         if: env.LocalCommit != 'true'
 
       - run: git fetch origin $GITHUB_BASE_REF
@@ -37,7 +39,7 @@ jobs:
 
       - name: Format CMake files
         id: cmake-format
-        uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
+        uses: PuneetMatharu/cmake-format-lint-action@v1.0.6
         with:
           args: --config-files .cmake-format.py --in-place
 
