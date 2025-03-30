@@ -1,0 +1,76 @@
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+import os
+
+# -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+
+project = 'BSMPT - Beyond the Standard Model Phase Transitions'
+copyright = '2024, Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana'
+author = 'Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana'
+release = '3.0.7'
+
+# -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+extensions = ['breathe', 'sphinx.ext.graphviz', 'sphinx.ext.autodoc', 'sphinx.ext.viewcode',
+              'sphinx.ext.napoleon', 'myst_parser', 'sphinx_github_changelog']
+
+# Sphinx Github Changelog Token
+sphinx_github_changelog_token = os.getenv('SPHINX_GITHUB_CHANGELOG_TOKEN')
+
+templates_path = ['_templates']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# breathe_debug_trace_directives = True
+
+# -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+
+# html_theme = 'classic'
+html_theme = 'sphinx_rtd_theme'
+html_static_path = ['_static']
+
+# Custom CSS, word wrap
+html_css_files = [
+    'custom.css',
+]
+
+# Logo
+html_logo = '../logos/logo_(BSM_PT).png'
+
+# LaTeX
+latex_engine = 'xelatex'
+latex_elements = {
+    'fontpkg': r'''
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+''',
+    'preamble': r'''
+\usepackage[titles]{tocloft}
+\cftsetpnumwidth {1.25cm}\cftsetrmarg{1.5cm}
+\setlength{\cftchapnumwidth}{0.75cm}
+\setlength{\cftsecindent}{\cftchapnumwidth}
+\setlength{\cftsecnumwidth}{1.25cm}
+''',
+    'fncychap': r'\usepackage[Bjornstrup]{fncychap}',
+    'amsmath': r'\usepackage{amsmath}',
+    'printindex': r'\footnotesize\raggedright\printindex',
+}
+latex_show_urls = 'footnote'
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+try:
+    preset = os.listdir(os.path.join(script_dir, "..", "build"))[0]
+except:
+    raise Exception("No build arch found inside /build/.")
+xml_default = os.path.join(script_dir, "..", "build", preset, "xml")
+xml_directory = os.getenv('XML_DIR', xml_default)
+
+breathe_projects = {
+    "BSMPT": xml_directory}
+breathe_default_project = "BSMPT"

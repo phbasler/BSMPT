@@ -32,7 +32,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_Test
 {
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int Line{};
@@ -43,7 +43,7 @@ struct CLIOptions
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
   bool UseMultithreading{true};
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_Test(const BSMPT::parser &argparser);
   bool good() const;
 };
 
@@ -57,7 +57,7 @@ try
   const auto SMConstants = GetSMConstants();
   auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_Test args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -112,7 +112,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_Test::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
@@ -150,7 +150,7 @@ bool CLIOptions::good() const
   return true;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_Test::CLIOptions_Test(const BSMPT::parser &argparser)
 {
   argparser.check_required_parameters();
   Model     = BSMPT::ModelID::getModel(argparser.get_value("model"));

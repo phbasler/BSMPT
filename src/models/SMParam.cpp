@@ -60,4 +60,7 @@ const ISMConstants GetSMConstants()
 
   return SM;
 }
+
+const std::complex<double> II(0, 1);
+
 } // namespace BSMPT

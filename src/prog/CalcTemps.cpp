@@ -28,7 +28,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_CalcTemps
 {
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int firstline{0}, lastline{0};
@@ -48,7 +48,7 @@ struct CLIOptions
   int num_check_pts{10};
   int CheckNLOStability{1};
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_CalcTemps(const BSMPT::parser &argparser);
   bool good() const;
 };
 
@@ -62,7 +62,7 @@ try
   const auto SMConstants = GetSMConstants();
   auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_CalcTemps args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -265,7 +265,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_CalcTemps::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {
@@ -364,7 +364,7 @@ bool CLIOptions::good() const
   return true;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_CalcTemps::CLIOptions_CalcTemps(const BSMPT::parser &argparser)
 {
   std::stringstream ss;
   argparser.check_required_parameters();

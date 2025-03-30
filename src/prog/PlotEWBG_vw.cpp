@@ -27,7 +27,7 @@
 using namespace std;
 using namespace BSMPT;
 
-struct CLIOptions
+struct CLIOptions_PlotEWBG_vw
 {
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int Line{};
@@ -40,7 +40,7 @@ struct CLIOptions
   int WhichMinimizer{Minimizer::WhichMinimizerDefault};
   bool UseMultithreading{true};
 
-  CLIOptions(const BSMPT::parser &argparser);
+  CLIOptions_PlotEWBG_vw(const BSMPT::parser &argparser);
   bool good() const;
 };
 BSMPT::parser prepare_parser();
@@ -54,7 +54,7 @@ try
   const auto SMConstants = GetSMConstants();
   auto argparser         = prepare_parser();
   argparser.add_input(convert_input(argc, argv));
-  const CLIOptions args(argparser);
+  const CLIOptions_PlotEWBG_vw args(argparser);
   if (not args.good())
   {
     return EXIT_FAILURE;
@@ -166,7 +166,7 @@ try
         outfile << sep << x;
       outfile << std::endl;
     } // END: vw loop
-  }   // END: SFOEWPT FOUND
+  } // END: SFOEWPT FOUND
   else
   {
     outfile << -1 << -1 << -1 << -1 << -1 << std::endl;
@@ -185,7 +185,7 @@ catch (exception &e)
   return EXIT_FAILURE;
 }
 
-CLIOptions::CLIOptions(const BSMPT::parser &argparser)
+CLIOptions_PlotEWBG_vw::CLIOptions_PlotEWBG_vw(const BSMPT::parser &argparser)
 {
   argparser.check_required_parameters();
   Model       = BSMPT::ModelID::getModel(argparser.get_value("model"));
@@ -240,7 +240,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   WhichMinimizer = Minimizer::CalcWhichMinimizer(UseGSL, UseCMAES, UseNLopt);
 }
 
-bool CLIOptions::good() const
+bool CLIOptions_PlotEWBG_vw::good() const
 {
   if (UseGSL and not Minimizer::UseGSLDefault)
   {

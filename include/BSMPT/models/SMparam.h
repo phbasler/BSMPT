@@ -8,8 +8,7 @@
  * @file
  * Standard Model input parameters
  */
-#ifndef SMPARAM_H_
-#define SMPARAM_H_
+#pragma once
 
 #include <cmath>
 #include <complex>
@@ -228,7 +227,7 @@ struct ISMConstants
 /**
  * @brief imaginary number i
  */
-const std::complex<double> II(0, 1);
+extern const std::complex<double> II;
 
 /**
  * @brief GetSMConstants returns a set of SM contants as indicated by the
@@ -237,5 +236,3 @@ const std::complex<double> II(0, 1);
  */
 const ISMConstants GetSMConstants();
 } // namespace BSMPT
-
-#endif /* SMPARAM_H_ */
