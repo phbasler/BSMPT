@@ -2419,6 +2419,14 @@ Vacuum::Vacuum(const double &T_lowIn,
 
 void Vacuum::EnsureHighTemperatureGlobalMininum()
 {
+  // Check if Phase list is empty
+  if (PhasesList.size() == 0)
+  {
+    Logger::Write(LoggingLevel::MinTracerDetailed,
+                  "No traceable phase found. Abort.");
+    status_vacuum = StatusTracing::Failure;
+    return;
+  }
   // sort phases in decending T_high
   std::sort(PhasesList.begin(),
             PhasesList.end(),
