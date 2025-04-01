@@ -11,7 +11,7 @@ Off[Part::partd]
 (*Helper functions*)
 
 
-ToC[x_]:=StringReplace[ToString[CForm[x//HoldForm]],{"Power"->"pow", "vev0" -> "SMConstants.C_vev0","Sqrt"->"sqrt"}]
+ToC[x_]:=StringReplace[ToString[CForm[x//HoldForm]],{"Power"->"pow", "vev0" -> "SMConstants.C_vev0", "Sqrt"->"sqrt", "Sin"->"sin", "Cos"->"cos", "Tan"->"tan", "\""->""}]
 RemoveDuplicates[list__] := Cases[Tally[list], {x_, 1} :> x]
 
 
@@ -560,7 +560,7 @@ Class_Potential_"<>name<>"::VTreeSimplified(const std::vector<double> &v) const
 {
   if (not UseVTreeSimplified) return 0;
   double res = 0;
-  res = " <> ToC[Simplify[VHiggs/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0,v[[i-1]]],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
+  res = " <> ToC[Simplify[VHiggs/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0, "v[" <> ToString[i-1]<>"]"],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
   
   return res;
 }
@@ -570,7 +570,7 @@ double Class_Potential_"<>name<>"::VCounterSimplified(
 {
   if (not UseVTreeSimplified) return 0;
   double res = 0;
-  res = " <> ToC[Simplify[VCT/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0,v[[i-1]]],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
+  res = " <> ToC[Simplify[VCT/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0, "v[" <> ToString[i-1]<>"]"],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
   
   return res;
 }
