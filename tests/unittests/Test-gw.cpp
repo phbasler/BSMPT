@@ -1511,6 +1511,8 @@ TEST_CASE("Checking EnsureHighTemperatureGlobalMininum()", "[gw]")
   // Check that it puts a phase with T_high = vac.T_high in the first position
   REQUIRE(vac.PhasesList[0].T_high > vac.PhasesList[1].T_high);
 
+  auto ZeroTempPhase = vac.PhasesList[1]; // Save zero temperaure phase
+
   // Make 2nd phase the true vacuum to simulate an error
   vac.PhasesList[1] = vac.PhasesList[0];
   vac.PhasesList[1].MinimumPhaseVector.back().potential *= 2;
@@ -1522,11 +1524,18 @@ TEST_CASE("Checking EnsureHighTemperatureGlobalMininum()", "[gw]")
   REQUIRE(vac.PhasesList[0].Get(vac.T_high).potential <
           vac.PhasesList[1].Get(vac.T_high).potential);
 
+  // Check if PhasesList.at(0).T_high < T_high
+  vac.PhasesList.pop_back(); // pop front
+  vac.PhasesList.at(0) = ZeroTempPhase;
+
+  // Reorder the PhaseList
+  vac.EnsureHighTemperatureGlobalMininum();
+  REQUIRE(vac.status_vacuum == StatusTracing::NoMinsAtBoundaries);
+
   // Check if phase list is empty
   vac.PhasesList.clear();
 
   // Reorder the PhaseList
   vac.EnsureHighTemperatureGlobalMininum();
-
   REQUIRE(vac.status_vacuum == StatusTracing::Failure);
 }
