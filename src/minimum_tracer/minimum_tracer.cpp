@@ -2442,10 +2442,10 @@ void Vacuum::EnsureHighTemperatureGlobalMininum()
   }
   // Global minimum at Thigh at position 0 of PhasesList
   for (auto phase = PhasesList.begin(); phase != PhasesList.end(); ++phase)
-    if ((phase->T_high == T_high) and
-        (phase->Get(T_high).potential <
-         PhasesList.begin()->Get(T_high).potential))
-      std::iter_swap(PhasesList.begin(), phase);
+    if (phase->T_high == T_high)
+      if (phase->Get(T_high).potential <
+          PhasesList.begin()->Get(T_high).potential)
+        std::iter_swap(PhasesList.begin(), phase);
 }
 
 void Vacuum::MultiStepPTTracer(const double &Temp, const double &deltaT)
