@@ -959,6 +959,48 @@ Class_Potential_Origin::SecondDerivativeOfEigenvaluesNonRepeated(
   return res;
 }
 
+// Sanity check to make sure HiggsRotationMatrix is a proper rotation
+// matrix, i.e. its inverse should correspond to its transpose, and its
+// determinant should be +1 or -1
+bool Class_Potential_Origin::CheckRotationMatrix()
+{
+  MatrixXd mat(NHiggs, NHiggs);
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      mat(i, j) = HiggsRotationMatrix[i][j];
+    }
+  }
+
+  double precision = 1e-10;
+
+  bool AbsDetIsOne   = almost_the_same(std::abs(mat.determinant()), 1.,
+                                       precision);
+  bool InvEqTrans = true;
+
+  auto inv    = mat.inverse();
+  auto transp = mat.transpose();
+
+  for (std::size_t i = 0; i < NHiggs; i++)
+  {
+    for (std::size_t j = 0; j < NHiggs; j++)
+    {
+      if (!almost_the_same(inv(i, j), transp(i, j), precision))
+      {
+        InvEqTrans = false;
+        break;
+      }
+    }
+  }
+
+  if (AbsDetIsOne and InvEqTrans)
+  {
+    return true;
+  }
+  return false;
+}
+
 void Class_Potential_Origin::CalculatePhysicalCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
@@ -1395,7 +1437,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
     }
   }
 
-  CalcCouplingsdone = true;
+  CalcCouplingsDone = true;
 
   return;
 }
@@ -1403,7 +1445,7 @@ void Class_Potential_Origin::CalculatePhysicalCouplings()
 std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
 {
   std::vector<double> res;
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     //        CalculatePhysicalCouplings();
     std::string retmes = __func__;
@@ -1497,7 +1539,7 @@ std::vector<double> Class_Potential_Origin::WeinbergFirstDerivative() const
 Eigen::MatrixXd
 Class_Potential_Origin::WeinbergSecondDerivativeAsMatrixXd() const
 {
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     //        CalculatePhysicalCouplings();
     std::string retmes = __func__;
@@ -1656,7 +1698,7 @@ std::vector<double> Class_Potential_Origin::WeinbergSecondDerivative() const
 std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
 {
 
-  if (not CalcCouplingsdone)
+  if (not CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " tries to use Physical couplings but they are not initialised.";
@@ -1902,7 +1944,7 @@ std::vector<double> Class_Potential_Origin::WeinbergThirdDerivative() const
 std::vector<double> Class_Potential_Origin::WeinbergForthDerivative() const
 {
 
-  if (not CalcCouplingsdone)
+  if (not CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " tries to use Physical couplings but they are not initialised.";
@@ -3387,6 +3429,9 @@ void Class_Potential_Origin::initVectors()
       vec3Complex{NQuarks, vec2Complex{NHiggs, vec1Complex(NHiggs, 0)}}};
 
   HiggsVev = std::vector<double>(NHiggs, 0);
+
+  HiggsRotationMatrixEnsuredConvention =
+      std::vector<std::vector<double>>{NHiggs, std::vector<double>(NHiggs, 0)};
 }
 
 void Class_Potential_Origin::sym2Dim(
@@ -3472,7 +3517,7 @@ void Class_Potential_Origin::sym4Dim(
 void Class_Potential_Origin::resetbools()
 {
   SetCurvatureDone          = false;
-  CalcCouplingsdone         = false;
+  CalcCouplingsDone         = false;
   CalculatedTripleCopulings = false;
   parStored.clear();
   parCTStored.clear();
@@ -3611,6 +3656,8 @@ Class_Potential_Origin::initModel(const std::vector<double> &par)
   set_CT_Pot_Par(parCT);
   CalculateDebye();
   CalculateDebyeGauge();
+
+  AdjustRotationMatrix();
 
   parStored   = par;
   parCTStored = parCT;
