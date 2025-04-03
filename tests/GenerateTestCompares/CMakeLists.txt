@@ -9,5 +9,5 @@ set(src C2HDM.cpp R2HDM.cpp N2HDM.cpp CPINTHEDARK.cpp CXSM.cpp SM.cpp)
 
 add_library(TestCompares ${header} ${src})
 target_compile_features(TestCompares PUBLIC cxx_std_17)
-target_link_libraries(TestCompares PRIVATE Minimizer)
+target_link_libraries(TestCompares PRIVATE ModelTests Minimizer)
 target_include_directories(TestCompares PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -6,7 +6,6 @@
 set(header_path "${BSMPT_SOURCE_DIR}/include/BSMPT/models")
 set(header
     ${header_path}/SMparam.h
-    ${header_path}/ModelTestfunctions.h
     ${header_path}/IncludeAllModels.h
     ${header_path}/ClassPotentialOrigin.h
     ${header_path}/ClassPotentialC2HDM.h
@@ -21,7 +20,6 @@ set(header
 
 set(src
     SMParam.cpp
-    ModelTestfunctions.cpp
     IncludeAllModels.cpp
     ClassPotentialOrigin.cpp
     ClassPotentialOrigin_deprecated.cpp
@@ -36,8 +34,8 @@ set(src
     ClassTemplate.cpp)
 
 add_library(Models ${header} ${src})
-target_link_libraries(Models PUBLIC GSL::gsl Eigen3::Eigen Minimizer
-                                    ThermalFunctions Utility)
+target_link_libraries(Models PUBLIC GSL::gsl Eigen3::Eigen ThermalFunctions
+                                    Utility)
 target_include_directories(Models PUBLIC ${BSMPT_SOURCE_DIR}/include)
 target_compile_features(Models PUBLIC cxx_std_17)
 
