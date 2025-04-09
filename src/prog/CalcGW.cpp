@@ -673,12 +673,9 @@ BSMPT::parser prepare_parser()
       "epsturb", "turbulence efficiency factor", "0.1", false);
   argparser.add_subtext(">0: user defined");
   argparser.add_subtext("-1: upper bound");
-  argparser.add_argument("pnlo_scaling",
-                         "pressure of 1 -> N at NLO at the bubble wall",
-                         "1",
-                         false);
-  argparser.add_subtext("1: ~ gamma");
-  argparser.add_subtext("2: ~ gamma^2");
+  argparser.add_argument("pnlo_scaling", "1 -> N NLO pressure", "1", false);
+  argparser.add_subtext("1: propto gamma");
+  argparser.add_subtext("2: propto gamma^2");
   argparser.add_argument("checknlo", "check for NLO stability", "on", false);
   argparser.add_subtext("on: only keep NLO stable points");
   argparser.add_subtext("off: check disabled");

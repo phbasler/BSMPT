@@ -2874,14 +2874,14 @@ std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
     if (do_gw_calc)
     {
       legend.push_back("status_gw_" + std::to_string(i));
-      legend.push_back("trans_temp_" + std::to_string(i));
+      legend.push_back("T_star_" + std::to_string(i));
       legend.push_back("T_reh_" + std::to_string(i));
       legend.push_back("v_wall_" + std::to_string(i));
       legend.push_back("alpha_PT_" + std::to_string(i));
       legend.push_back("beta/H_" + std::to_string(i));
       legend.push_back("kappa_col_" + std::to_string(i));
       legend.push_back("kappa_sw_" + std::to_string(i));
-      legend.push_back("Eps_turb_" + std::to_string(i));
+      legend.push_back("eps_turb_" + std::to_string(i));
       legend.push_back("cs_f_" + std::to_string(i));
       legend.push_back("cs_t_" + std::to_string(i));
       legend.push_back("fb_col_" + std::to_string(i));
