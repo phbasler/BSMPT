@@ -11,7 +11,6 @@
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/minimum_tracer/minimum_tracer.h> // MinimumTracer
-#include <BSMPT/models/ClassPotentialOrigin.h>   // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/parser.h>
