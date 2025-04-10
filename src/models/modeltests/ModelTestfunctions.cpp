@@ -1053,9 +1053,9 @@ void CheckImplementation(const Class_Potential_Origin &point,
   const std::string Pass = "Pass";
   const std::string Fail = "Fail";
 
-  Logger::Write(LoggingLevel::Default,
-                "The tested Model is the " +
-                    ModelIDToString(point.get_Model()));
+  std::stringstream ss_model;
+  ss_model << "The tested Model is the " << point.get_Model();
+  Logger::Write(LoggingLevel::Default, ss_model.str());
 
   std::vector<std::string> TestNames, TestResults;
 

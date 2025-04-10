@@ -64,7 +64,7 @@ if(BSMPTBuildExecutables)
   target_compile_features(TripleHiggsCouplingsNLO PUBLIC cxx_std_17)
 
   add_executable(Test prog/Test.cpp)
-  target_link_libraries(Test Minimizer Models Utility)
+  target_link_libraries(Test Minimizer Models Utility ModelTests)
   target_compile_features(Test PUBLIC cxx_std_17)
 
   add_executable(CalcGW prog/CalcGW.cpp)

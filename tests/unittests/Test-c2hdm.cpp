@@ -6,12 +6,12 @@
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
+#include "C2HDM.h"
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/modeltests/ModelTestfunctions.h>
-
-#include "C2HDM.h"
+#include <BSMPT/utility/Logger.h>
 #include <fstream>
 
 const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
@@ -37,7 +37,8 @@ TEST_CASE("Run CheckImplementation in c2hdm", "[c2hdm]")
   modelPointer->initModel(example_point_C2HDM);
   std::stringstream ss;
   Logger::SetOStream(ss);
-  REQUIRE_NOTHROW(modelPointer->CheckImplementation());
+  REQUIRE_NOTHROW(ModelTests::CheckImplementation(
+      *modelPointer, Minimizer::WhichMinimizerDefault));
   Logger::SetOStream(std::cout);
   std::string output = ss.str();
   REQUIRE(output.find("fail") == std::string::npos);
