@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 3.0.7
+Program: BSMPT version 3.0.8
 
 Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana
 
@@ -122,6 +122,13 @@ Code from the following repositories is used in BSMPT:
 
 ---
 
+## How to include BSMPT in another program
+
+You can call the `Setup.py` script with the `--create` option. This will generate a local conan package of BSMPT which then can be used in your program.
+If your code is already a conan project you can add BSMPT just as a requirement. If you have a pure CMake project you can use the [conan-provider](https://github.com/conan-io/cmake-conan/) to include it.
+
+---
+
 ## How to add a new model:
 
 To add a new model, you have to modify/create five files (for further details, also consult the manual):
@@ -132,7 +139,7 @@ To add a new model, you have to modify/create five files (for further details, a
 
 3. For your model to compile, you have to open `src/models/CMakeLists.txt` and add `${header_path}/YourModel.h` as well as `YourModel.cpp` to the listed headers and source files.
 
-4. In `include/BSMPT/models/IncludeAllModels.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
+4. In `include/BSMPT/utility/ModelIDs.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
 
 5. In `src/models/IncludeAllModels.cpp` you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also, to be able to call your model, you have to extend the `FChoose` function. For this you add a new case to the switch statement, which reads
 

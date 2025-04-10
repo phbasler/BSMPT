@@ -25,10 +25,11 @@ m_strange = symbols('C_MassStrange',real=True)
 m_bottom = symbols('C_MassBottom',real=True)
 
 
-
 # CKM Matrix
-Vud,Vus,Vub,Vcd,Vcs,Vcb,Vtd,Vts,Vtb = symbols('Vud Vus Vub Vcd Vcs Vcb Vtd Vts Vtb')
-VCKM = Matrix([[Vud,Vus,Vub],[Vcd,Vcs,Vcb],[Vtd,Vts,Vtb]])
+Vud, Vus, Vub, Vcd, Vcs, Vcb, Vtd, Vts, Vtb = symbols(
+    "Vud Vus Vub Vcd Vcs Vcb Vtd Vts Vtb"
+)
+VCKM = Matrix([[Vud, Vus, Vub], [Vcd, Vcs, Vcb], [Vtd, Vts, Vtb]])
 
 #parameters
 muSq, lamb = symbols('muSq lambda', real=True)
@@ -38,21 +39,21 @@ params=[muSq,lamb]
 dmuSq, dlamb = symbols('dmuSq dlambda', real=True)
 dparams=[dmuSq,dlamb]
 
-#VEVs
-v = symbols('v', real=True)
+# VEVs
+v = symbols("v", real=True)
 
-#Higgsfields
-rho,eta,zeta,psi = symbols('rho eta zeta psi', real=True)
-Higgsfields=[rho,eta,zeta,psi]
-CTTadpoles = symbols('dT1:{}'.format(len(Higgsfields)+1),real=True)
+# Higgsfields
+rho, eta, zeta, psi = symbols("rho eta zeta psi", real=True)
+Higgsfields = [rho, eta, zeta, psi]
+CTTadpoles = symbols("dT1:{}".format(len(Higgsfields) + 1), real=True)
 
-#doublets
-phi = Matrix([[rho+I*eta], [zeta+I*psi]]) * 1/sqrt(2)
+# doublets
+phi = Matrix([[rho + I * eta], [zeta + I * psi]]) * 1 / sqrt(2)
 
-#replacements
-zeroTempVEV = [(rho,0),(eta,0),(zeta,v),(psi,0)]
+# replacements
+zeroTempVEV = [(rho, 0), (eta, 0), (zeta, v), (psi, 0)]
 finiteTempVEV = zeroTempVEV
-fieldsZero = [(x,0) for x in Higgsfields]
+fieldsZero = [(x, 0) for x in Higgsfields]
 
 phiSq = simplify((Dagger(phi)*phi)[0])
 VHiggs = muSq * phiSq + lamb * phiSq**2
@@ -60,28 +61,30 @@ VHiggs = muSq * phiSq + lamb * phiSq**2
 # Set Gauge fields
 W1, W2, W3, B0 = symbols('W1 W2 W3 B0',real=True)
 
-Dmu = -I*Cg/2 * (sigma1*W1 + sigma2 * W2 + sigma3*W3) -I*Cgs/2 * sigma0 * B0
-VGauge = simplify(Dagger(Dmu*phi)*(Dmu*phi))[0,0]
+Dmu = (
+    -I * Cg / 2 * (sigma1 * W1 + sigma2 * W2 + sigma3 * W3) - I * Cgs / 2 * sigma0 * B0
+)
+VGauge = simplify(Dagger(Dmu * phi) * (Dmu * phi))[0, 0]
 
 # Generate Lepton Potentials
-NuL = symbols('veL vmuL vtauL',real=True)
-ER = symbols('eR muR tauR', real=True)
-EL = symbols('eL muL tauL', real=True)
+NuL = symbols("veL vmuL vtauL", real=True)
+ER = symbols("eR muR tauR", real=True)
+EL = symbols("eL muL tauL", real=True)
 
 ye = sqrt(2)*m_electron/v
 ymu = sqrt(2)*m_mu/v
 ytau = sqrt(2)*m_tau/v
 
-PiLep = Matrix([[ye,0,0],[0,ymu,0],[0,0,ytau]])
+PiLep = Matrix([[ye, 0, 0], [0, ymu, 0], [0, 0, ytau]])
 
 VFLep = 0
 for i in range(len(NuL)):
     for j in range(len(ER)):
-        VFLep += (NuL[i] * PiLep[i,j] * ER[j])*phi[0]
+        VFLep += (NuL[i] * PiLep[i, j] * ER[j]) * phi[0]
 
 for i in range(len(EL)):
     for j in range(len(ER)):
-        VFLep += (EL[i] * PiLep[i,j] * ER[j])*phi[1]
+        VFLep += (EL[i] * PiLep[i, j] * ER[j]) * phi[1]
 
 VFLep = simplify(VFLep)
 LepBase = symbols('eL eR muL muR tauL tauR veL vmuL vtauL', real=True)
@@ -100,8 +103,8 @@ ys = sqrt(2)*m_strange/v
 yt = sqrt(2)*m_top/v
 yu = sqrt(2)*m_up/v
 
-DownCoupling = Matrix([[yd,0,0],[0,ys,0],[0,0,yb]])
-UpCoupling = Matrix([[yu,0,0],[0,yc,0],[0,0,yt]])
+DownCoupling = Matrix([[yd, 0, 0], [0, ys, 0], [0, 0, yb]])
+UpCoupling = Matrix([[yu, 0, 0], [0, yc, 0], [0, 0, yt]])
 
 ULVector = Matrix([[x] for x in UL])
 DLVector = Matrix([[x] for x in DL])
@@ -116,21 +119,29 @@ VQuark = simplify(VQuark[0,0])
 
 
 # Generate the model
-toyModel = ModelGenerator.ModelGenerator(params,dparams,CTTadpoles,Higgsfields,VHiggs,zeroTempVEV,finiteTempVEV)
-toyModel.setGauge([W1,W2,W3,B0],VGauge)
+toyModel = ModelGenerator.ModelGenerator(
+    params, dparams, CTTadpoles, Higgsfields, VHiggs, zeroTempVEV, finiteTempVEV
+)
+toyModel.setGauge([W1, W2, W3, B0], VGauge)
 toyModel.setLepton(LepBase, VFLep)
 toyModel.setQuark(QuarkBase, VQuark)
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-s','--show',choices=['ct','tensor','treeSimpl','CTSimpl'],required=True,help='The part of the model to be printed')
+parser.add_argument(
+    "-s",
+    "--show",
+    choices=["ct", "tensor", "treeSimpl", "CTSimpl"],
+    required=True,
+    help="The part of the model to be printed",
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
     method = args.show
 
-    printCT = method == 'ct'
-    printTensors = method == 'tensor'
+    printCT = method == "ct"
+    printTensors = method == "tensor"
 
     if printCT:
         print("//Begin CT Calculation")
@@ -144,8 +155,9 @@ if __name__ == "__main__":
     if printTensors:
         toyModel.printModelToCPP()
 
-    if method == 'treeSimpl':
+    if method == "treeSimpl":
         toyModel.printTreeSimplified()
+
 
     if method == 'CTSimpl':
         toyModel.printVCTSimplified()

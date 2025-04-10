@@ -77,7 +77,7 @@ int main()
     bounce.CalculatePercolationTemp();
     if (bounce.GetPercolationTemp() == -1) continue;
     double errorTtoTp = 1e100;
-    BounceActionInt const *ClosestBounceActionInt;
+    BounceActionInt const *ClosestBounceActionInt{nullptr};
     std::cout << "Found a transitions with Tp =\t"
               << bounce.GetPercolationTemp() << " GeV.\n";
     for (const auto &BAInt : bounce.SolutionList)
@@ -87,6 +87,11 @@ int main()
         errorTtoTp             = abs(BAInt.T - bounce.GetPercolationTemp());
         ClosestBounceActionInt = &BAInt;
       }
+    }
+
+    if (ClosestBounceActionInt == nullptr)
+    {
+      throw std::runtime_error("ClosestBounceActionInt was not set");
     }
     std::cout << "The closest solution is at a distance of " << errorTtoTp
               << " GeV from Tp.\n The tunnenling path is\n";
