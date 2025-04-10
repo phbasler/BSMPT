@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['package_0',['BSMPT as a package',['../md_Changelog.html#autotoc_md41',1,'']]],
+  ['package_0',['BSMPT as a package',['../md_Changelog.html#autotoc_md43',1,'']]],
   ['par_1',['par',['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a96dac193946592990729b2a75df57815',1,'BSMPT::Baryo::GSL_integration_mubl::par'],['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a5794b7f4b137653f4c1b4795e0a18a0a',1,'BSMPT::Baryo::gen_fluid::par']]],
   ['parct_2',['parCT',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a1a462d5d9024a8c9f2e3073bdb0ab6d7',1,'BSMPT::Baryo::gen_fluid']]],
   ['parctstored_3',['parCTStored',['../classBSMPT_1_1Class__Potential__Origin.html#ab415d2b3823f61a6411f3209146396d0',1,'BSMPT::Class_Potential_Origin']]],
@@ -17,14 +17,14 @@ var searchData=
   ['phase_5fpair_14',['phase_pair',['../classBSMPT_1_1BounceSolution.html#a9ac9a3413c0c0a4679ab188c98e56937',1,'BSMPT::BounceSolution']]],
   ['phaseslist_15',['PhasesList',['../structBSMPT_1_1Vacuum.html#adc8ca9c7c9cf6f69b9ede7e34750a718',1,'BSMPT::Vacuum']]],
   ['phipath_16',['phipath',['../classcvspline.html#a5f8e29633893508402e08d4afe179cab',1,'cvspline']]],
-  ['physics_17',['New Physics',['../md_Changelog.html#autotoc_md34',1,'']]],
-  ['plotewbg_5fnl_18',['PlotEWBG_nL',['../index.html#autotoc_md24',1,'']]],
+  ['physics_17',['New Physics',['../md_Changelog.html#autotoc_md36',1,'']]],
+  ['plotewbg_5fnl_18',['PlotEWBG_nL',['../index.html#autotoc_md26',1,'']]],
   ['plotewbg_5fnl_2ecpp_19',['PlotEWBG_nL.cpp',['../PlotEWBG__nL_8cpp.html',1,'']]],
-  ['plotewbg_5fvw_20',['PlotEWBG_vw',['../index.html#autotoc_md23',1,'']]],
+  ['plotewbg_5fvw_20',['PlotEWBG_vw',['../index.html#autotoc_md25',1,'']]],
   ['plotewbg_5fvw_2ecpp_21',['PlotEWBG_vw.cpp',['../PlotEWBG__vw_8cpp.html',1,'']]],
   ['point_22',['Point',['../structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#ac2bba7e00090d28feaf38d82b6a663eb',1,'BSMPT::Minimizer::PointerContainerMinPlane']]],
   ['pointercontainerminplane_23',['PointerContainerMinPlane',['../structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html',1,'BSMPT::Minimizer']]],
-  ['potplotter_24',['PotPlotter',['../index.html#autotoc_md15',1,'']]],
+  ['potplotter_24',['PotPlotter',['../index.html#autotoc_md17',1,'']]],
   ['potplotter_2ecpp_25',['PotPlotter.cpp',['../PotPlotter_8cpp.html',1,'']]],
   ['potval_26',['PotVal',['../structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html#a83fc86831fba374ed0c37ec118e28a44',1,'BSMPT::Minimizer::GSLPlaneReturn']]],
   ['powspec_5fdensity_27',['powspec_density',['../namespaceBSMPT.html#a1bff087c25d1473bed536213020d2132',1,'BSMPT']]],
@@ -35,7 +35,8 @@ var searchData=
   ['print_5fpath_32',['print_path',['../classcvspline.html#a56247ef95de773500459452853cb9879',1,'cvspline']]],
   ['printphasesdiagram_33',['PrintPhasesDiagram',['../structBSMPT_1_1Vacuum.html#a422db47a54a026095e8c41ce94d702c0',1,'BSMPT::Vacuum']]],
   ['printvector_34',['PrintVector',['../classBSMPT_1_1BounceActionInt.html#a56af7825d2984693798e9fb47f42724f',1,'BSMPT::BounceActionInt']]],
-  ['ptfinder_5fgen_5fall_35',['PTFinder_gen_all',['../Minimizer_8h.html#a211218e6b6deed7426dc1db2fe9c2851',1,'BSMPT::Minimizer']]],
-  ['push_5fback_36',['push_back',['../namespaceBSMPT.html#a935c070ee9cdc8f832d6b424e90f6731',1,'BSMPT']]],
-  ['push_5fback_5fstate_5fand_5ftime_37',['push_back_state_and_time',['../structBSMPT_1_1Baryo_1_1push__back__state__and__time.html',1,'BSMPT::Baryo']]]
+  ['program_35',['How to include BSMPT in another program',['../index.html#autotoc_md9',1,'']]],
+  ['ptfinder_5fgen_5fall_36',['PTFinder_gen_all',['../Minimizer_8h.html#a211218e6b6deed7426dc1db2fe9c2851',1,'BSMPT::Minimizer']]],
+  ['push_5fback_37',['push_back',['../namespaceBSMPT.html#a935c070ee9cdc8f832d6b424e90f6731',1,'BSMPT']]],
+  ['push_5fback_5fstate_5fand_5ftime_38',['push_back_state_and_time',['../structBSMPT_1_1Baryo_1_1push__back__state__and__time.html',1,'BSMPT::Baryo']]]
 ];

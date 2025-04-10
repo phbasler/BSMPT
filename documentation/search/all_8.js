@@ -11,7 +11,7 @@ var searchData=
   ['detailed_8',['build - detailed',['../index.html#autotoc_md5',1,'']]],
   ['development_9',['Development',['../index.html#autotoc_md7',1,'']]],
   ['dh_10',['Dh',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a758b5b217796ae68603657e304cf99fd',1,'BSMPT::Baryo::gen_fluid']]],
-  ['differences_20in_20how_20to_20include_20a_20new_20model_11',['Differences in how to include a new model',['../md_Changelog.html#autotoc_md44',1,'']]],
+  ['differences_20in_20how_20to_20include_20a_20new_20model_11',['Differences in how to include a new model',['../md_Changelog.html#autotoc_md46',1,'']]],
   ['dim_12',['dim',['../classBSMPT_1_1BounceActionInt.html#a01159002c3d65f5cc0f6a17bc9a20800',1,'BSMPT::BounceActionInt::dim'],['../classcvspline.html#a2a84285059eb1be60bb1b5552729ae97',1,'cvspline::dim']]],
   ['display_5fresults_13',['display_results',['../Kfactors_8h.html#ae7d4995137551a4f88236793111ee69a',1,'BSMPT::Kfactors']]],
   ['distribution_5ff0_14',['distribution_f0',['../Kfactors_8h.html#a3a12382cb6aa4fa878ea8dde4d046dff',1,'BSMPT::Kfactors']]],

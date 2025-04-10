@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -121,12 +121,13 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceBSMPT" id="r_namespaceBSMPT"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html">BSMPT</a></td></tr>
 <tr class="memdesc:namespaceBSMPT"><td class="mdescLeft">&#160;</td><td class="mdescRight">This classes calculates the Bounce action of the potential with a set temperature. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceBSMPT_1_1ModelID" id="r_namespaceBSMPT_1_1ModelID"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html">BSMPT::ModelID</a></td></tr>
-<tr class="memdesc:namespaceBSMPT_1_1ModelID"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator &lt;&lt; overload for the model parameter <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a19358c50de5990badb12ca083ddff645" id="r_a19358c50de5990badb12ca083ddff645"><td class="memTemplParams" colspan="2">template&lt;typename key , typename value &gt; </td></tr>
+<tr class="memitem:a19358c50de5990badb12ca083ddff645"><td class="memTemplItemLeft" align="right" valign="top">std::unordered_map&lt; value, key &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a19358c50de5990badb12ca083ddff645">BSMPT::InvertMap</a> (const std::unordered_map&lt; key, value &gt; &amp;originalMap, const std::string &amp;errorOnDuplicateValue)</td></tr>
+<tr class="memdesc:a19358c50de5990badb12ca083ddff645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts a map.  <br /></td></tr>
+<tr class="separator:a19358c50de5990badb12ca083ddff645"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68d199b1c37b6807ce1cfb6c57c0721b" id="r_a68d199b1c37b6807ce1cfb6c57c0721b"><td class="memItemLeft" align="right" valign="top"><a id="a68d199b1c37b6807ce1cfb6c57c0721b" name="a68d199b1c37b6807ce1cfb6c57c0721b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::StringStartsWith</b> (const std::string &amp;str, const std::string &amp;prefix)</td></tr>
 <tr class="memdesc:a68d199b1c37b6807ce1cfb6c57c0721b"><td class="mdescLeft">&#160;</td><td class="mdescRight">StringStartsWith checks if str starts with prefix. <br /></td></tr>
@@ -204,12 +205,6 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:adcb7a745c3dcbb7dac3319dc94f792f1" id="r_adcb7a745c3dcbb7dac3319dc94f792f1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#adcb7a745c3dcbb7dac3319dc94f792f1">BSMPT::EllipIntSecond</a> (const double &amp;x)</td></tr>
 <tr class="memdesc:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incomplete elliptic integral of the second kind of x with a different parameterization and k^2 = -2.  <br /></td></tr>
 <tr class="separator:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c20b7a437ed80792bc18e44668605c2" id="r_a6c20b7a437ed80792bc18e44668605c2"><td class="memItemLeft" align="right" valign="top"><a id="a6c20b7a437ed80792bc18e44668605c2" name="a6c20b7a437ed80792bc18e44668605c2"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;Model)</td></tr>
-<tr class="separator:a6c20b7a437ed80792bc18e44668605c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81ad5e54211841dd33b4e4edd53b5b9e" id="r_a81ad5e54211841dd33b4e4edd53b5b9e"><td class="memItemLeft" align="right" valign="top"><a id="a81ad5e54211841dd33b4e4edd53b5b9e" name="a81ad5e54211841dd33b4e4edd53b5b9e"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::ModelIDToString</b> (const <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;Model)</td></tr>
-<tr class="separator:a81ad5e54211841dd33b4e4edd53b5b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>

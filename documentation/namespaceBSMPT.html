@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -98,7 +98,6 @@ $(document).ready(function(){initNavTree('namespaceBSMPT.html',''); initResizabl
 
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
@@ -110,12 +109,6 @@ $(document).ready(function(){initNavTree('namespaceBSMPT.html',''); initResizabl
 <p>This classes calculates the Bounce action of the potential with a set temperature.  
 <a href="namespaceBSMPT.html#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespaceBSMPT_1_1ModelID" id="r_namespaceBSMPT_1_1ModelID"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html">ModelID</a></td></tr>
-<tr class="memdesc:namespaceBSMPT_1_1ModelID"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator &lt;&lt; overload for the model parameter <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceActionInt.html">BounceActionInt</a></td></tr>
@@ -331,10 +324,6 @@ Functions</h2></td></tr>
 <tr class="separator:a7ef27f7780c7d96480ff01a91dc88a17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5dd574f107251ff284bc79473d4c5c5" id="r_ac5dd574f107251ff284bc79473d4c5c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#ac5dd574f107251ff284bc79473d4c5c5">almost_the_same</a> (const std::vector&lt; double &gt; &amp;a, const std::vector&lt; double &gt; &amp;b, const bool &amp;allow_for_sign_flip=false, const double &amp;rel_precision=0.01, const double &amp;num_zero=1e-10)</td></tr>
 <tr class="separator:ac5dd574f107251ff284bc79473d4c5c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6f80a02afc15ea2ed023b14038f9d36" id="r_af6f80a02afc15ea2ed023b14038f9d36"><td class="memItemLeft" align="right" valign="top"><a id="af6f80a02afc15ea2ed023b14038f9d36" name="af6f80a02afc15ea2ed023b14038f9d36"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowInputError</b> ()</td></tr>
-<tr class="memdesc:af6f80a02afc15ea2ed023b14038f9d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">ShowInputError shows all the available models in the terminal. <br /></td></tr>
-<tr class="separator:af6f80a02afc15ea2ed023b14038f9d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f7a6e0bc281f72955810d5e61ef2a26" id="r_a3f7a6e0bc281f72955810d5e61ef2a26"><td class="memItemLeft" align="right" valign="top"><a id="a3f7a6e0bc281f72955810d5e61ef2a26" name="a3f7a6e0bc281f72955810d5e61ef2a26"></a>
 const std::complex&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>II</b> (0, 1)</td></tr>
 <tr class="memdesc:a3f7a6e0bc281f72955810d5e61ef2a26"><td class="mdescLeft">&#160;</td><td class="mdescRight">imaginary number i <br /></td></tr>
@@ -351,12 +340,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetLogger</b> (const 
 <tr class="memitem:a4dec9f9f006e9b948047594578298009" id="r_a4dec9f9f006e9b948047594578298009"><td class="memItemLeft" align="right" valign="top"><a id="a4dec9f9f006e9b948047594578298009" name="a4dec9f9f006e9b948047594578298009"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetLogger</b> (const std::vector&lt; std::string &gt; &amp;args)</td></tr>
 <tr class="separator:a4dec9f9f006e9b948047594578298009"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c20b7a437ed80792bc18e44668605c2" id="r_a6c20b7a437ed80792bc18e44668605c2"><td class="memItemLeft" align="right" valign="top"><a id="a6c20b7a437ed80792bc18e44668605c2" name="a6c20b7a437ed80792bc18e44668605c2"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const ModelID::ModelIDs &amp;Model)</td></tr>
+<tr class="memdesc:a6c20b7a437ed80792bc18e44668605c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator &lt;&lt; overload for the model parameter <br /></td></tr>
+<tr class="separator:a6c20b7a437ed80792bc18e44668605c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d3fdbfc7b4f3e3d170f2fd5b094fdc3" id="r_a5d3fdbfc7b4f3e3d170f2fd5b094fdc3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a5d3fdbfc7b4f3e3d170f2fd5b094fdc3">NablaNumerical</a> (const std::vector&lt; double &gt; &amp;phi, const std::function&lt; double(std::vector&lt; double &gt;)&gt; &amp;f, const double &amp;eps)</td></tr>
 <tr class="memdesc:a5d3fdbfc7b4f3e3d170f2fd5b094fdc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Numerical method to calculate the gradient of a function f using finite differences method.  <br /></td></tr>
 <tr class="separator:a5d3fdbfc7b4f3e3d170f2fd5b094fdc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fa2d0b5e797e27d8021e222c2522c85" id="r_a2fa2d0b5e797e27d8021e222c2522c85"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a2fa2d0b5e797e27d8021e222c2522c85">HessianNumerical</a> (const std::vector&lt; double &gt; &amp;phi, const std::function&lt; double(std::vector&lt; double &gt;)&gt; &amp;V, double eps)</td></tr>
 <tr class="memdesc:a2fa2d0b5e797e27d8021e222c2522c85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Numerical method to calculate the potential's (or other functions's) hessian matrix using finite differences method.  <br /></td></tr>
 <tr class="separator:a2fa2d0b5e797e27d8021e222c2522c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6f80a02afc15ea2ed023b14038f9d36" id="r_af6f80a02afc15ea2ed023b14038f9d36"><td class="memItemLeft" align="right" valign="top"><a id="af6f80a02afc15ea2ed023b14038f9d36" name="af6f80a02afc15ea2ed023b14038f9d36"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ShowInputError</b> ()</td></tr>
+<tr class="memdesc:af6f80a02afc15ea2ed023b14038f9d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">ShowInputError shows all the available models in the terminal. <br /></td></tr>
+<tr class="separator:af6f80a02afc15ea2ed023b14038f9d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19358c50de5990badb12ca083ddff645" id="r_a19358c50de5990badb12ca083ddff645"><td class="memTemplParams" colspan="2">template&lt;typename key , typename value &gt; </td></tr>
+<tr class="memitem:a19358c50de5990badb12ca083ddff645"><td class="memTemplItemLeft" align="right" valign="top">std::unordered_map&lt; value, key &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a19358c50de5990badb12ca083ddff645">InvertMap</a> (const std::unordered_map&lt; key, value &gt; &amp;originalMap, const std::string &amp;errorOnDuplicateValue)</td></tr>
+<tr class="memdesc:a19358c50de5990badb12ca083ddff645"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts a map.  <br /></td></tr>
+<tr class="separator:a19358c50de5990badb12ca083ddff645"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68d199b1c37b6807ce1cfb6c57c0721b" id="r_a68d199b1c37b6807ce1cfb6c57c0721b"><td class="memItemLeft" align="right" valign="top"><a id="a68d199b1c37b6807ce1cfb6c57c0721b" name="a68d199b1c37b6807ce1cfb6c57c0721b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>StringStartsWith</b> (const std::string &amp;str, const std::string &amp;prefix)</td></tr>
 <tr class="memdesc:a68d199b1c37b6807ce1cfb6c57c0721b"><td class="mdescLeft">&#160;</td><td class="mdescRight">StringStartsWith checks if str starts with prefix. <br /></td></tr>
@@ -434,12 +435,6 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:adcb7a745c3dcbb7dac3319dc94f792f1" id="r_adcb7a745c3dcbb7dac3319dc94f792f1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#adcb7a745c3dcbb7dac3319dc94f792f1">EllipIntSecond</a> (const double &amp;x)</td></tr>
 <tr class="memdesc:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incomplete elliptic integral of the second kind of x with a different parameterization and k^2 = -2.  <br /></td></tr>
 <tr class="separator:adcb7a745c3dcbb7dac3319dc94f792f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c20b7a437ed80792bc18e44668605c2" id="r_a6c20b7a437ed80792bc18e44668605c2"><td class="memItemLeft" align="right" valign="top"><a id="a6c20b7a437ed80792bc18e44668605c2" name="a6c20b7a437ed80792bc18e44668605c2"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;os, const <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;Model)</td></tr>
-<tr class="separator:a6c20b7a437ed80792bc18e44668605c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81ad5e54211841dd33b4e4edd53b5b9e" id="r_a81ad5e54211841dd33b4e4edd53b5b9e"><td class="memItemLeft" align="right" valign="top"><a id="a81ad5e54211841dd33b4e4edd53b5b9e" name="a81ad5e54211841dd33b4e4edd53b5b9e"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ModelIDToString</b> (const <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelID::ModelIDs</a> &amp;Model)</td></tr>
-<tr class="separator:a81ad5e54211841dd33b4e4edd53b5b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a015912790aa1621295b47972dab49e6a" id="r_a015912790aa1621295b47972dab49e6a"><td class="memItemLeft" align="right" valign="top"><a id="a015912790aa1621295b47972dab49e6a" name="a015912790aa1621295b47972dab49e6a"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>inner_integrand</b> (double Temp, void *params)</td></tr>
 <tr class="separator:a015912790aa1621295b47972dab49e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -480,10 +475,6 @@ const double&#160;</td><td class="memItemRight" valign="bottom"><b>EmptyValue</b
 <tr class="memitem:a4ed11b3f677e44dfdcb5d0be9d7e048e" id="r_a4ed11b3f677e44dfdcb5d0be9d7e048e"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; <a class="el" href="namespaceBSMPT.html#a548174fac1d1e5e7bf7f17893d37e80d">StatusGW</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html#a4ed11b3f677e44dfdcb5d0be9d7e048e">StatusGWToString</a></td></tr>
 <tr class="memdesc:a4ed11b3f677e44dfdcb5d0be9d7e048e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map to convert StatusGWToString to strins.  <br /></td></tr>
 <tr class="separator:a4ed11b3f677e44dfdcb5d0be9d7e048e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada024e6f414467cfebfc6c6b49459056" id="r_ada024e6f414467cfebfc6c6b49459056"><td class="memItemLeft" align="right" valign="top"><a id="ada024e6f414467cfebfc6c6b49459056" name="ada024e6f414467cfebfc6c6b49459056"></a>
-const bool&#160;</td><td class="memItemRight" valign="bottom"><b>C_UseParwani</b> = false</td></tr>
-<tr class="memdesc:ada024e6f414467cfebfc6c6b49459056"><td class="mdescLeft">&#160;</td><td class="mdescRight">C_UseParwani Use the Parwani Method instead of Arnold-Espinosa. <br /></td></tr>
-<tr class="separator:ada024e6f414467cfebfc6c6b49459056"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b3a829fa1c864f44450da9df8771d64" id="r_a1b3a829fa1c864f44450da9df8771d64"><td class="memItemLeft" align="right" valign="top"><a id="a1b3a829fa1c864f44450da9df8771d64" name="a1b3a829fa1c864f44450da9df8771d64"></a>
 const double&#160;</td><td class="memItemRight" valign="bottom"><b>C_PT</b> = 0</td></tr>
 <tr class="memdesc:a1b3a829fa1c864f44450da9df8771d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">C_PT Lower threshold to stop the EWPT calculation. <br /></td></tr>
@@ -500,6 +491,10 @@ const double&#160;</td><td class="memItemRight" valign="bottom"><b>C_CWcbGB</b> 
 const double&#160;</td><td class="memItemRight" valign="bottom"><b>C_CWcbHiggs</b> = 1.5</td></tr>
 <tr class="memdesc:a668e05fb73b3d4ccb9bfa1bb8a623b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">C_CWcbHiggs constant used in the CW potential for Higgs bosons. <br /></td></tr>
 <tr class="separator:a668e05fb73b3d4ccb9bfa1bb8a623b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada024e6f414467cfebfc6c6b49459056" id="r_ada024e6f414467cfebfc6c6b49459056"><td class="memItemLeft" align="right" valign="top"><a id="ada024e6f414467cfebfc6c6b49459056" name="ada024e6f414467cfebfc6c6b49459056"></a>
+const bool&#160;</td><td class="memItemRight" valign="bottom"><b>C_UseParwani</b> = false</td></tr>
+<tr class="memdesc:ada024e6f414467cfebfc6c6b49459056"><td class="mdescLeft">&#160;</td><td class="mdescRight">C_UseParwani Use the Parwani Method instead of Arnold-Espinosa. <br /></td></tr>
+<tr class="separator:ada024e6f414467cfebfc6c6b49459056"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa22b6e21d416bf9c0575943396b81556" id="r_aa22b6e21d416bf9c0575943396b81556"><td class="memItemLeft" align="right" valign="top"><a id="aa22b6e21d416bf9c0575943396b81556" name="aa22b6e21d416bf9c0575943396b81556"></a>
 const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>sep</b> = &quot;\t&quot;</td></tr>
 <tr class="memdesc:aa22b6e21d416bf9c0575943396b81556"><td class="mdescLeft">&#160;</td><td class="mdescRight">seperator used to write into output files <br /></td></tr>
@@ -719,7 +714,7 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>sep</b> 
 <p>Incomplete elliptic integral of the second kind of x with a different parameterization and k^2 = -2. </p>
 <p>\( \text{EllipIntSecond}(x) = -i E(i \phi, 2) = \int_0^\phi
 \sqrt{1+2\sinh^2{\theta}}\,d\theta \)</p>
-<p><a href="https://en.wikipedia.org/wiki">https://en.wikipedia.org/wiki</a>&lt;/Elliptic_integralIncomplete_elliptic_integral_of_the_second_kind <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html</a></p>
+<p><a href="https://en.wikipedia.org/wiki">https://en.wikipedia.org/wiki</a>&lt;/Elliptic_integral#Incomplete_elliptic_integral_of_the_second_kind <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>real argument </td></tr>
@@ -999,6 +994,51 @@ const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>sep</b> 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::vector&lt;double&gt;&gt; The \( dim \times \dim \) hessian matrix of V taken at phi </dd></dl>
+
+</div>
+</div>
+<a id="a19358c50de5990badb12ca083ddff645" name="a19358c50de5990badb12ca083ddff645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19358c50de5990badb12ca083ddff645">&#9670;&#160;</a></span>InvertMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename key , typename value &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; value, key &gt; BSMPT::InvertMap </td>
+          <td>(</td>
+          <td class="paramtype">const std::unordered_map&lt; key, value &gt; &amp;&#160;</td>
+          <td class="paramname"><em>originalMap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>errorOnDuplicateValue</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inverts a map. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">originalMap</td><td>Map to be inverted </td></tr>
+    <tr><td class="paramname">errorOnDuplicateValue</td><td>Error message on duplicate value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if the new map would have duplicate keys </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

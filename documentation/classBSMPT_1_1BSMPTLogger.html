@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -157,6 +157,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetLevel</b> (Logging
 <tr class="memitem:a2fd599013e096223febc58606c68bd6d" id="r_a2fd599013e096223febc58606c68bd6d"><td class="memItemLeft" align="right" valign="top"><a id="a2fd599013e096223febc58606c68bd6d" name="a2fd599013e096223febc58606c68bd6d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Disable</b> ()</td></tr>
 <tr class="separator:a2fd599013e096223febc58606c68bd6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f60af40d625de35aa36e5c0cbff3516" id="r_a1f60af40d625de35aa36e5c0cbff3516"><td class="memItemLeft" align="right" valign="top"><a id="a1f60af40d625de35aa36e5c0cbff3516" name="a1f60af40d625de35aa36e5c0cbff3516"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>RestoreDefaultLevels</b> ()</td></tr>
+<tr class="separator:a1f60af40d625de35aa36e5c0cbff3516"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -166,7 +169,10 @@ std::ostream&#160;</td><td class="memItemRight" valign="bottom"><b>mOstream</b><
 <tr class="memitem:a25aec3dca52cc8ee0a2e2e9e8abfb0be" id="r_a25aec3dca52cc8ee0a2e2e9e8abfb0be"><td class="memItemLeft" align="right" valign="top"><a id="a25aec3dca52cc8ee0a2e2e9e8abfb0be" name="a25aec3dca52cc8ee0a2e2e9e8abfb0be"></a>
 std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><b>mfilestream</b></td></tr>
 <tr class="separator:a25aec3dca52cc8ee0a2e2e9e8abfb0be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a581075a8c9493daaba20411bbb8004b9" id="r_a581075a8c9493daaba20411bbb8004b9"><td class="memItemLeft" align="right" valign="top">std::map&lt; LoggingLevel, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BSMPTLogger.html#a581075a8c9493daaba20411bbb8004b9">mCurrentSetup</a></td></tr>
+<tr class="memitem:a2c309d1097913d54686cd04ebffa3eac" id="r_a2c309d1097913d54686cd04ebffa3eac"><td class="memItemLeft" align="right" valign="top">const std::map&lt; LoggingLevel, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BSMPTLogger.html#a2c309d1097913d54686cd04ebffa3eac">mDefaultSetup</a></td></tr>
+<tr class="separator:a2c309d1097913d54686cd04ebffa3eac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581075a8c9493daaba20411bbb8004b9" id="r_a581075a8c9493daaba20411bbb8004b9"><td class="memItemLeft" align="right" valign="top"><a id="a581075a8c9493daaba20411bbb8004b9" name="a581075a8c9493daaba20411bbb8004b9"></a>
+std::map&lt; LoggingLevel, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mCurrentSetup</b> = mDefaultSetup</td></tr>
 <tr class="separator:a581075a8c9493daaba20411bbb8004b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -241,8 +247,8 @@ std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><b>mfilestream<
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a581075a8c9493daaba20411bbb8004b9" name="a581075a8c9493daaba20411bbb8004b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a581075a8c9493daaba20411bbb8004b9">&#9670;&#160;</a></span>mCurrentSetup</h2>
+<a id="a2c309d1097913d54686cd04ebffa3eac" name="a2c309d1097913d54686cd04ebffa3eac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c309d1097913d54686cd04ebffa3eac">&#9670;&#160;</a></span>mDefaultSetup</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -251,7 +257,7 @@ std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><b>mfilestream<
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt;LoggingLevel, bool&gt; BSMPT::BSMPTLogger::mCurrentSetup</td>
+          <td class="memname">const std::map&lt;LoggingLevel, bool&gt; BSMPT::BSMPTLogger::mDefaultSetup</td>
         </tr>
       </table>
   </td>

@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a></p>
-<p>Program: <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> version 3.0.7</p>
+<p>Program: <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> version 3.0.8</p>
 <p>Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana</p>
 <p><a href="https://github.com/phbasler/BSMPT/discussions"><img src="https://img.shields.io/badge/%20GitHub-%20Discussions-gray.svg?longCache=true&amp;logo=github&amp;colorB=purple" alt="GitHub Discussions" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/phbasler/BSMPT/actions/workflows/test.yml"><img src="https://github.com/phbasler/BSMPT/actions/workflows/test.yml/badge.svg?branch=master" alt="Unit tests" style="pointer-events: none;" class="inline"/></a> <a href="https://codecov.io/gh/phbasler/BSMPT"><img src="https://codecov.io/gh/phbasler/BSMPT/branch/master/graph/badge.svg?token=LDGNQTADB5" alt="codecov master" style="pointer-events: none;" class="inline"/></a> <a href="https://phbasler.github.io/BSMPT/documentation"><img src="https://img.shields.io/badge/Documentation-master-success" alt="Documentation" class="inline"/></a> <a href="https://phbasler.github.io/BSMPT/benchmarks/"><img src="https://img.shields.io/badge/Benchmark-master-success" alt="Benchmarks" class="inline"/></a> <a href="https://github.com/phbasler/bsmpt/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/phbasler/BSMPT/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/phbasler/bsmpt.svg" alt="GitHub license" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/phbasler/bsmpt/releases"><img src="https://badgen.net/github/release/phbasler/bsmpt" alt="Latest release" class="inline"/></a></p>
 <p>Manual: version 3.0</p>
@@ -173,17 +173,21 @@ Development</h3>
 </ul>
 <hr  />
 <h2><a class="anchor" id="autotoc_md9"></a>
+How to include BSMPT in another program</h2>
+<p>You can call the <code>Setup.py</code> script with the <code>--create</code> option. This will generate a local conan package of <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> which then can be used in your program. If your code is already a conan project you can add <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> just as a requirement. If you have a pure CMake project you can use the <a href="https://github.com/conan-io/cmake-conan/">conan-provider</a> to include it.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md11"></a>
 How to add a new model:</h2>
 <p>To add a new model, you have to modify/create five files (for further details, also consult the manual):</p>
 <ol type="1">
 <li>Go to <code>include/BSMPT/models</code> and copy <code><a class="el" href="ClassTemplate_8h.html">ClassTemplate.h</a></code> to <code>YourModel.h</code>. Adjust the name of the class <code>Class_Template</code> to <code>Class_YourModel</code>.</li>
 <li>Go to <code>src/models</code> and copy <code><a class="el" href="ClassTemplate_8cpp.html">ClassTemplate.cpp</a></code> to <code>YourModel.cpp</code>, and again change <code>Class_Template</code> to <code>Class_YourModel</code>. Also, follow the instructions in this file and in the manual to set up your new model.</li>
 <li>For your model to compile, you have to open <code>src/models/CMakeLists.txt</code> and add <code>${header_path}/YourModel.h</code> as well as <code>YourModel.cpp</code> to the listed headers and source files.</li>
-<li>In <code><a class="el" href="IncludeAllModels_8h.html">include/BSMPT/models/IncludeAllModels.h</a></code> you need to add a new entry in the <code>enum class ModelIDs</code> above the <code>stop</code> entry which is different from the already defined <code>ModelIDs</code>, e.g. <code>YourModel</code>. Additionally, you have to create a new entry in the <code>const std::unordered_map&lt;std::string, ModelIDs&gt; ModelNames</code> map in the same file and add a new line with <code>{"YourModelName",ModelIDs::YourModel}</code>.</li>
+<li>In <code><a class="el" href="ModelIDs_8h_source.html">include/BSMPT/utility/ModelIDs.h</a></code> you need to add a new entry in the <code>enum class ModelIDs</code> above the <code>stop</code> entry which is different from the already defined <code>ModelIDs</code>, e.g. <code>YourModel</code>. Additionally, you have to create a new entry in the <code>const std::unordered_map&lt;std::string, ModelIDs&gt; ModelNames</code> map in the same file and add a new line with <code>{"YourModelName",ModelIDs::YourModel}</code>.</li>
 <li>In <code>src/models/IncludeAllModels.cpp</code> you have to add <code>#include &lt;BSMPT/models/YourModel.h&gt;</code> to the include list. Also, to be able to call your model, you have to extend the <code>FChoose</code> function. For this you add a new case to the switch statement, which reads <pre class="fragment"> case ModelIDs::YourModel: return std::make_unique&lt;Class_YourModel&gt;(); break;
 </pre> </li>
 </ol>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md12"></a>
 Generate the C++ code for a model</h3>
 <p>We provide currently two methods to generate the tensors and calculate the counter terms for a new model.</p>
 <ol type="1">
@@ -193,49 +197,49 @@ Generate the C++ code for a model</h3>
 </ol>
 <p>You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at <a href="#" onclick="location.href='mai'+'lto:'+'bsm'+'pt'+'@li'+'st'+'s.k'+'it'+'.ed'+'u'; return false;">bsmpt<span class="obfuscator">.nosp@m.</span>@lis<span class="obfuscator">.nosp@m.</span>ts.ki<span class="obfuscator">.nosp@m.</span>t.ed<span class="obfuscator">.nosp@m.</span>u</a></p>
 <p>Also contact us if you have a custom model for <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> v1.x and you have trouble converting it to the new notation.</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Executables</h2>
 <p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> provides multiple executables. Here we give a quick overview of them. Every executable can be called with the <code>--help</code> option to see how it can be run and to get an overview of all its required and optional arguments. Also, consult the manuals (<a href="https://arxiv.org/abs/1803.02846">BSMPTv1</a>, <a href="https://arxiv.org/abs/2007.01725">BSMPTv2</a>, <a href="https://arxiv.org/abs/24XX.XXXXX]">BSMPTv3</a>) for more details on the executables and their input parameters.</p>
 <p>Note, that every executable has the option to set the <code>--json=/path/to/your/file.json</code> which contains a json string with the parameters you can set through the CLI. This can be useful if you want to store the parameters you used for a given call. Please beware that all paths in the json file are considered relative to the current working directory and not to the location of the json file. Examples can be found in <code>example/JSON</code>. If you want to be sure to have the correct output file we recommend using absolute paths.</p>
 <p>In BSMPTv3, the following four executables are added:</p>
-<h3><a class="anchor" id="autotoc_md12"></a>
+<h3><a class="anchor" id="autotoc_md14"></a>
 MinimaTracer</h3>
 <p>MinimaTracer tracks temperature-dependent local minima in a user-defined temperature interval.</p>
-<h3><a class="anchor" id="autotoc_md13"></a>
+<h3><a class="anchor" id="autotoc_md15"></a>
 CalcTemps</h3>
 <p>CalcTemps identifies regions of coexisting minima, calculates the bounce solutions and characteristic temperature scales (critical, nucleation, percolation and completion temperature) of first-order phase transitions. Based on that, we report a transition history for the point.</p>
-<h3><a class="anchor" id="autotoc_md14"></a>
+<h3><a class="anchor" id="autotoc_md16"></a>
 CalcGW</h3>
 <p>CalcGW expands CalcTemps by the additional calculation of the gravitational waves spectra sourced by first-order phase transitions.</p>
-<h3><a class="anchor" id="autotoc_md15"></a>
+<h3><a class="anchor" id="autotoc_md17"></a>
 PotPlotter</h3>
 <p>PotPlotter calculates user-defined data grids that can be used for the visualization of multi-dimensional potential contours.</p>
 <p>The following executables were released with BSMPTv1 and BSMPTv2:</p>
-<h3><a class="anchor" id="autotoc_md16"></a>
+<h3><a class="anchor" id="autotoc_md18"></a>
 Test</h3>
 <p>Test checks the model implementation for a provided parameter point. Some of the performed tests are e.g.: matching fermion masses and tree-level electroweak minimum with SM, tadpole relations, matching scalar masses between tree-level and NLO and symmetries of the coupling-tensors. The number of passed/failed tests is reported.</p>
-<h3><a class="anchor" id="autotoc_md17"></a>
+<h3><a class="anchor" id="autotoc_md19"></a>
 BSMPT</h3>
 <p><a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> calculates the strength of a single-step electroweak phase transition (EWPT), defined as the ratio of the vacuum expectation value (VEV) at the critical temperature \(v_c\) over the critical temperature \(T_c\), based on finding a discontinuity in the electroweak VEV of the temperature-dependent global minimum.</p>
-<h3><a class="anchor" id="autotoc_md18"></a>
+<h3><a class="anchor" id="autotoc_md20"></a>
 CalcCT</h3>
 <p>CalcCT calculates the (finite) counterterms for the 'on-shell' renormalization scheme.</p>
-<h3><a class="anchor" id="autotoc_md19"></a>
+<h3><a class="anchor" id="autotoc_md21"></a>
 NLOVEV</h3>
 <p>NLOVEV calculates the zero-temperature VEV at one-loop order. This can be used to investigate the vacuum stability of the model.</p>
-<h3><a class="anchor" id="autotoc_md20"></a>
+<h3><a class="anchor" id="autotoc_md22"></a>
 VEVEVO</h3>
 <p>VEVEVO calculates the evolution of the global minimum of a given point in a user-specified temperature range.</p>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md23"></a>
 TripleHiggsCouplingNLO</h3>
 <p>TripleHiggsCouplingNLO calculates the trilinear Higgs self-couplings at NLO at zero temperature.</p>
-<h3><a class="anchor" id="autotoc_md22"></a>
+<h3><a class="anchor" id="autotoc_md24"></a>
 CalculateEWBG</h3>
 <p>CalculateEWBG calculates the difference between baryons and anti-baryons normalized to the photon density generated through the EWPT. Please beware that this is only tested for the C2HDM so far and the general implementation is future work.</p>
-<h3><a class="anchor" id="autotoc_md23"></a>
+<h3><a class="anchor" id="autotoc_md25"></a>
 PlotEWBG_vw</h3>
 <p>PlotEWBG_vw varies the wall velocity of a given parameter point and calculates the baryon asymmetry for each velocity.</p>
-<h3><a class="anchor" id="autotoc_md24"></a>
+<h3><a class="anchor" id="autotoc_md26"></a>
 PlotEWBG_nL</h3>
 <p>PlotEWBG_nL calculates the left-handed fermion density in front of the wall as a function of the distance to the bubble wall. </p>
 </div></div><!-- PageDoc -->

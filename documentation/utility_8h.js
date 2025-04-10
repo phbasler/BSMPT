@@ -3,6 +3,7 @@ var utility_8h =
     [ "EllipIntSecond", "utility_8h.html#adcb7a745c3dcbb7dac3319dc94f792f1", null ],
     [ "factorial", "utility_8h.html#a720b2c4437c3b97f3d6fd4c1466dd201", null ],
     [ "flatten", "utility_8h.html#a88666c9da7b8687cbbb2efa44d882187", null ],
+    [ "InvertMap", "utility_8h.html#a19358c50de5990badb12ca083ddff645", null ],
     [ "L2NormVector", "utility_8h.html#a8b82302c8d9c5e58eca68e22f3d5616c", null ],
     [ "Li2", "utility_8h.html#a9b7ee9ad848ad4f37479dd595602f1cc", null ],
     [ "operator*", "utility_8h.html#a52dd1aab206bbc883df674011f429768", null ],

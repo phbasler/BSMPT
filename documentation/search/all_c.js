@@ -13,7 +13,8 @@ var searchData=
   ['higgsrotationmatrix_10',['HiggsRotationMatrix',['../classBSMPT_1_1Class__Potential__Origin.html#a0e383fd333a8fdc4f7539a5790bdd64b',1,'BSMPT::Class_Potential_Origin']]],
   ['higgsvev_11',['HiggsVev',['../classBSMPT_1_1Class__Potential__Origin.html#ad195337e2edf3dc98f2a23f90bfe9e88',1,'BSMPT::Class_Potential_Origin']]],
   ['hightemperaturevev_12',['HighTemperatureVEV',['../classBSMPT_1_1MinimumTracer.html#aed54425666127f35e23eae9d5295175d',1,'BSMPT::MinimumTracer']]],
-  ['how_20to_20add_20a_20new_20model_3a_13',['How to add a new model:',['../index.html#autotoc_md9',1,'']]],
-  ['how_20to_20include_20a_20new_20model_14',['Differences in how to include a new model',['../md_Changelog.html#autotoc_md44',1,'']]],
-  ['hubblerate_15',['HubbleRate',['../classBSMPT_1_1BounceSolution.html#a686824d441628cabebfb6124011c0c90',1,'BSMPT::BounceSolution']]]
+  ['how_20to_20add_20a_20new_20model_3a_13',['How to add a new model:',['../index.html#autotoc_md11',1,'']]],
+  ['how_20to_20include_20a_20new_20model_14',['Differences in how to include a new model',['../md_Changelog.html#autotoc_md46',1,'']]],
+  ['how_20to_20include_20bsmpt_20in_20another_20program_15',['How to include BSMPT in another program',['../index.html#autotoc_md9',1,'']]],
+  ['hubblerate_16',['HubbleRate',['../classBSMPT_1_1BounceSolution.html#a686824d441628cabebfb6124011c0c90',1,'BSMPT::BounceSolution']]]
 ];

@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -123,139 +123,142 @@ $(document).ready(function(){initNavTree('parser_8h_source.html',''); initResiza
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceBSMPT.html">BSMPT</a></div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00019" data-start="{" data-end="};">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parserException.html">   19</a></span><span class="keyword">class </span><a class="code hl_class" href="classBSMPT_1_1parserException.html">parserException</a> : <span class="keyword">public</span> std::exception</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>{</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *what() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  <a class="code hl_class" href="classBSMPT_1_1parserException.html">parserException</a>(<span class="keyword">const</span> std::string &amp;msg);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  std::string message;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keywordtype">void</span> <a class="code hl_function" href="namespaceBSMPT.html#af6f80a02afc15ea2ed023b14038f9d36">ShowInputError</a>();</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parserException.html">   24</a></span><span class="keyword">class </span><a class="code hl_class" href="classBSMPT_1_1parserException.html">parserException</a> : <span class="keyword">public</span> std::exception</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>{</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *what() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <a class="code hl_class" href="classBSMPT_1_1parserException.html">parserException</a>(<span class="keyword">const</span> std::string &amp;msg);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  std::string message;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>};</div>
 </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parser.html">   33</a></span><span class="keyword">class </span><a class="code hl_class" href="classBSMPT_1_1parser.html">parser</a></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>{</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <a class="code hl_class" href="classBSMPT_1_1parser.html">parser</a>();</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <a class="code hl_class" href="classBSMPT_1_1parser.html">parser</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;enable_column_output);</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#aa7f016d7a3c3c22121d013a89fd3c59a">enable_minimizer_options</a>();</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#ab678ae6c7ea7e75a11549f4047554f29">add_argument_only_display</a>(<span class="keyword">const</span> std::string &amp;argument,</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                                 <span class="keyword">const</span> std::string &amp;description,</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                                 <span class="keyword">const</span> std::string &amp;default_val);</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">add_argument</a>(<span class="keyword">const</span> std::string &amp;argument, <span class="keywordtype">bool</span> required);</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">add_argument</a>(<span class="keyword">const</span> std::string &amp;argument,</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                    <span class="keyword">const</span> std::string &amp;description,</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                    <span class="keywordtype">bool</span> required);</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">add_argument</a>(<span class="keyword">const</span> std::string &amp;argument,</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>                    <span class="keyword">const</span> std::string &amp;description,</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>                    <span class="keyword">const</span> std::string &amp;default_val,</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                    <span class="keywordtype">bool</span> required);</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a974e4a757c211840eee6c96a3484a160">add_subtext</a>(<span class="keyword">const</span> std::string &amp;subtext);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">add_input</a>(<span class="keyword">const</span> std::vector&lt;std::string&gt; &amp;input);</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a69978eb8d4113de98c9b3d93a5691f98">print_help</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T = std::<span class="keywordtype">string</span>&gt;</div>
-<div class="foldopen" id="foldopen00107" data-start="{" data-end="}">
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parser.html#a3b4cd8c8a703fddb8293cf6d26a04b0e">  107</a></span>  T <a class="code hl_function" href="classBSMPT_1_1parser.html#a3b4cd8c8a703fddb8293cf6d26a04b0e">get_value</a>(<span class="keyword">const</span> std::string &amp;argument)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword">  </span>{</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keyword">auto</span> value = <a class="code hl_function" href="classBSMPT_1_1parser.html#a1e2d2aeefdba5a7c49021aac1761dd86">get_value_as_string</a>(argument);</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, std::string&gt;::value)</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    {</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>      <span class="keywordflow">return</span> value;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    }</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, int&gt;::value)</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>      <span class="keywordflow">return</span> std::stoi(value);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    }</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, unsigned int&gt;::value)</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    {</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>      <span class="keywordflow">return</span> std::stoul(value);</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    }</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, double&gt;::value)</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    {</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>      <span class="keywordflow">return</span> std::stod(value);</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    }</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, bool&gt;::value)</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    {</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>      <span class="keyword">auto</span> lower = <a class="code hl_function" href="classBSMPT_1_1parser.html#a756058edbd154eed8ca3c9ebfd74e7f0">to_lower</a>(value);</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>      <span class="keywordflow">return</span> lower == <span class="stringliteral">&quot;true&quot;</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="foldopen" id="foldopen00038" data-start="{" data-end="};">
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parser.html">   38</a></span><span class="keyword">class </span><a class="code hl_class" href="classBSMPT_1_1parser.html">parser</a></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>{</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  <a class="code hl_class" href="classBSMPT_1_1parser.html">parser</a>();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <a class="code hl_class" href="classBSMPT_1_1parser.html">parser</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;enable_column_output);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#aa7f016d7a3c3c22121d013a89fd3c59a">enable_minimizer_options</a>();</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#ab678ae6c7ea7e75a11549f4047554f29">add_argument_only_display</a>(<span class="keyword">const</span> std::string &amp;argument,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                                 <span class="keyword">const</span> std::string &amp;description,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                                 <span class="keyword">const</span> std::string &amp;default_val);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">add_argument</a>(<span class="keyword">const</span> std::string &amp;argument, <span class="keywordtype">bool</span> required);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">add_argument</a>(<span class="keyword">const</span> std::string &amp;argument,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                    <span class="keyword">const</span> std::string &amp;description,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                    <span class="keywordtype">bool</span> required);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">add_argument</a>(<span class="keyword">const</span> std::string &amp;argument,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                    <span class="keyword">const</span> std::string &amp;description,</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>                    <span class="keyword">const</span> std::string &amp;default_val,</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>                    <span class="keywordtype">bool</span> required);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a974e4a757c211840eee6c96a3484a160">add_subtext</a>(<span class="keyword">const</span> std::string &amp;subtext);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">add_input</a>(<span class="keyword">const</span> std::vector&lt;std::string&gt; &amp;input);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a69978eb8d4113de98c9b3d93a5691f98">print_help</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T = std::<span class="keywordtype">string</span>&gt;</div>
+<div class="foldopen" id="foldopen00112" data-start="{" data-end="}">
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parser.html#a3b4cd8c8a703fddb8293cf6d26a04b0e">  112</a></span>  T <a class="code hl_function" href="classBSMPT_1_1parser.html#a3b4cd8c8a703fddb8293cf6d26a04b0e">get_value</a>(<span class="keyword">const</span> std::string &amp;argument)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="keyword">  </span>{</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keyword">auto</span> value = <a class="code hl_function" href="classBSMPT_1_1parser.html#a1e2d2aeefdba5a7c49021aac1761dd86">get_value_as_string</a>(argument);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, std::string&gt;::value)</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>      <span class="keywordflow">return</span> value;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    }</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, int&gt;::value)</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    {</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>      <span class="keywordflow">return</span> std::stoi(value);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    }</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, unsigned int&gt;::value)</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    {</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>      <span class="keywordflow">return</span> std::stoul(value);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    }</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, double&gt;::value)</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    {</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>      <span class="keywordflow">return</span> std::stod(value);</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    }</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_same&lt;T, bool&gt;::value)</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>      <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(value);</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    }</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  }</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>      <span class="keyword">auto</span> lower = <a class="code hl_function" href="classBSMPT_1_1parser.html#a756058edbd154eed8ca3c9ebfd74e7f0">to_lower</a>(value);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>      <span class="keywordflow">return</span> lower == <span class="stringliteral">&quot;true&quot;</span>;</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    }</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    {</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>      <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(value);</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    }</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  }</div>
 </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  <span class="keywordtype">bool</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964">all_required_set</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a8b445766c7efdb6b1ffd82e2bc50ac2e">check_required_parameters</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a7796751925ea8cc1ccf857beb8856462">set_help_header</a>(<span class="keyword">const</span> std::string &amp;header);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="keyword">private</span>:</div>
-<div class="foldopen" id="foldopen00155" data-start="{" data-end="};">
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="structBSMPT_1_1parser_1_1Options.html">  155</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1parser_1_1Options.html">Options</a></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  {</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    std::string argument;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    std::string description;</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    std::optional&lt;std::string&gt; value;</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    std::string default_val = <span class="stringliteral">&quot;&quot;</span>;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  };</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <span class="keywordtype">bool</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964">all_required_set</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a8b445766c7efdb6b1ffd82e2bc50ac2e">check_required_parameters</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a7796751925ea8cc1ccf857beb8856462">set_help_header</a>(<span class="keyword">const</span> std::string &amp;header);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="keyword">private</span>:</div>
+<div class="foldopen" id="foldopen00160" data-start="{" data-end="};">
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="structBSMPT_1_1parser_1_1Options.html">  160</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1parser_1_1Options.html">Options</a></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  {</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    std::string argument;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    std::string description;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    std::optional&lt;std::string&gt; value;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    std::string default_val = <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  };</div>
 </div>
-<div class="foldopen" id="foldopen00162" data-start="{" data-end="};">
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="structBSMPT_1_1parser_1_1KeyValue.html">  162</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  {</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    std::string key;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    std::string value;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a>(<span class="keyword">const</span> std::string &amp;Key, <span class="keyword">const</span> std::string &amp;Value)</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        : key{Key}</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        , value{Value}</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    {</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    }</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>  };</div>
+<div class="foldopen" id="foldopen00167" data-start="{" data-end="};">
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="structBSMPT_1_1parser_1_1KeyValue.html">  167</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  {</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    std::string key;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    std::string value;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a>(<span class="keyword">const</span> std::string &amp;Key, <span class="keyword">const</span> std::string &amp;Value)</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        : key{Key}</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        , value{Value}</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    {</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    }</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  };</div>
 </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>  std::vector&lt;std::pair&lt;std::string, Options&gt;&gt; mOrderedArguments;</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  std::unordered_map&lt;std::string, Options&gt; mRequiredArguments;</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  std::unordered_map&lt;std::string, Options&gt; mOptionalArguments;</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  <span class="keywordtype">bool</span> extra_column_output = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>  std::string <a class="code hl_function" href="classBSMPT_1_1parser.html#a1e2d2aeefdba5a7c49021aac1761dd86">get_value_as_string</a>(<span class="keyword">const</span> std::string &amp;argument) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a9e5deb552577c0b670f14284561b4ba1">add_json_input</a>(<span class="keyword">const</span> std::string &amp;filename);</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">add_input</a>(<span class="keyword">const</span> std::vector&lt;KeyValue&gt; &amp;input);</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  std::string <a class="code hl_function" href="classBSMPT_1_1parser.html#a756058edbd154eed8ca3c9ebfd74e7f0">to_lower</a>(<span class="keyword">const</span> std::string &amp;input) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  <a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a> get_key_value(<span class="keyword">const</span> std::string &amp;input);</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>  std::string mHeader;</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108">  213</a></span>  <span class="keyword">mutable</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108">mHelpAlreadyPrinted</a>{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>};</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  std::vector&lt;std::pair&lt;std::string, Options&gt;&gt; mOrderedArguments;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>  std::unordered_map&lt;std::string, Options&gt; mRequiredArguments;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>  std::unordered_map&lt;std::string, Options&gt; mOptionalArguments;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  <span class="keywordtype">bool</span> extra_column_output = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  std::string <a class="code hl_function" href="classBSMPT_1_1parser.html#a1e2d2aeefdba5a7c49021aac1761dd86">get_value_as_string</a>(<span class="keyword">const</span> std::string &amp;argument) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a9e5deb552577c0b670f14284561b4ba1">add_json_input</a>(<span class="keyword">const</span> std::string &amp;filename);</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">add_input</a>(<span class="keyword">const</span> std::vector&lt;KeyValue&gt; &amp;input);</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>  std::string <a class="code hl_function" href="classBSMPT_1_1parser.html#a756058edbd154eed8ca3c9ebfd74e7f0">to_lower</a>(<span class="keyword">const</span> std::string &amp;input) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>  <a class="code hl_struct" href="structBSMPT_1_1parser_1_1KeyValue.html">KeyValue</a> get_key_value(<span class="keyword">const</span> std::string &amp;input);</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>  std::string mHeader;</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108">  218</a></span>  <span class="keyword">mutable</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108">mHelpAlreadyPrinted</a>{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>};</div>
 </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>} <span class="comment">// namespace BSMPT</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="preprocessor">#endif </span><span class="comment">// PARSER_H</span></div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>} <span class="comment">// namespace BSMPT</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="preprocessor">#endif </span><span class="comment">// PARSER_H</span></div>
 <div class="ttc" id="aIncludeAllModels_8h_html"><div class="ttname"><a href="IncludeAllModels_8h.html">IncludeAllModels.h</a></div></div>
-<div class="ttc" id="aclassBSMPT_1_1parserException_html"><div class="ttname"><a href="classBSMPT_1_1parserException.html">BSMPT::parserException</a></div><div class="ttdef"><b>Definition</b> parser.h:20</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html"><div class="ttname"><a href="classBSMPT_1_1parser.html">BSMPT::parser</a></div><div class="ttdoc">The parser class provides the argument parser for the CLI and JSON methods. This is case insensitive.</div><div class="ttdef"><b>Definition</b> parser.h:34</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a11892b62a8da8e89f829b298733d99bf"><div class="ttname"><a href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">BSMPT::parser::add_input</a></div><div class="ttdeci">void add_input(const std::vector&lt; std::string &gt; &amp;input)</div><div class="ttdoc">add_input Add the vector with each input as it is given in the CLI in the form &quot;--argument=value&quot;.</div><div class="ttdef"><b>Definition</b> parser.cpp:195</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a1af4cfd40c1a0dca5a9985d9016fc964"><div class="ttname"><a href="classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964">BSMPT::parser::all_required_set</a></div><div class="ttdeci">bool all_required_set() const</div><div class="ttdoc">all_required_set Check ifs all required parameter are set.</div><div class="ttdef"><b>Definition</b> parser.cpp:226</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a1e2d2aeefdba5a7c49021aac1761dd86"><div class="ttname"><a href="classBSMPT_1_1parser.html#a1e2d2aeefdba5a7c49021aac1761dd86">BSMPT::parser::get_value_as_string</a></div><div class="ttdeci">std::string get_value_as_string(const std::string &amp;argument) const</div><div class="ttdoc">get_value Get the value for the required parameter.</div><div class="ttdef"><b>Definition</b> parser.cpp:333</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a3b4cd8c8a703fddb8293cf6d26a04b0e"><div class="ttname"><a href="classBSMPT_1_1parser.html#a3b4cd8c8a703fddb8293cf6d26a04b0e">BSMPT::parser::get_value</a></div><div class="ttdeci">T get_value(const std::string &amp;argument) const</div><div class="ttdoc">get_value Get the value for the required parameter.</div><div class="ttdef"><b>Definition</b> parser.h:107</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a69978eb8d4113de98c9b3d93a5691f98"><div class="ttname"><a href="classBSMPT_1_1parser.html#a69978eb8d4113de98c9b3d93a5691f98">BSMPT::parser::print_help</a></div><div class="ttdeci">void print_help() const</div><div class="ttdoc">print_help Prints the header and the arguments with their description.</div><div class="ttdef"><b>Definition</b> parser.cpp:250</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a756058edbd154eed8ca3c9ebfd74e7f0"><div class="ttname"><a href="classBSMPT_1_1parser.html#a756058edbd154eed8ca3c9ebfd74e7f0">BSMPT::parser::to_lower</a></div><div class="ttdeci">std::string to_lower(const std::string &amp;input) const</div><div class="ttdoc">get_key_value Converts the CLI input in the form &quot;--argName=value&quot; into a key value pair.</div><div class="ttdef"><b>Definition</b> parser.cpp:440</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a7796751925ea8cc1ccf857beb8856462"><div class="ttname"><a href="classBSMPT_1_1parser.html#a7796751925ea8cc1ccf857beb8856462">BSMPT::parser::set_help_header</a></div><div class="ttdeci">void set_help_header(const std::string &amp;header)</div><div class="ttdoc">set_help_header Sets the header which is printed in print_help()</div><div class="ttdef"><b>Definition</b> parser.cpp:389</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a7b83cdf842f2e27f7c27e20a77a81108"><div class="ttname"><a href="classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108">BSMPT::parser::mHelpAlreadyPrinted</a></div><div class="ttdeci">bool mHelpAlreadyPrinted</div><div class="ttdoc">Helper to avoid multiple prints of the help output.</div><div class="ttdef"><b>Definition</b> parser.h:213</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a8b445766c7efdb6b1ffd82e2bc50ac2e"><div class="ttname"><a href="classBSMPT_1_1parser.html#a8b445766c7efdb6b1ffd82e2bc50ac2e">BSMPT::parser::check_required_parameters</a></div><div class="ttdeci">void check_required_parameters() const</div><div class="ttdoc">check_required_parameters Calls all_required_set() and throws a parserException if not all required p...</div><div class="ttdef"><b>Definition</b> parser.cpp:241</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a974e4a757c211840eee6c96a3484a160"><div class="ttname"><a href="classBSMPT_1_1parser.html#a974e4a757c211840eee6c96a3484a160">BSMPT::parser::add_subtext</a></div><div class="ttdeci">void add_subtext(const std::string &amp;subtext)</div><div class="ttdoc">add_subtext add subtext to description column</div><div class="ttdef"><b>Definition</b> parser.cpp:187</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_a9e5deb552577c0b670f14284561b4ba1"><div class="ttname"><a href="classBSMPT_1_1parser.html#a9e5deb552577c0b670f14284561b4ba1">BSMPT::parser::add_json_input</a></div><div class="ttdeci">void add_json_input(const std::string &amp;filename)</div><div class="ttdoc">add_json_input Add the input parameters with a json file.</div><div class="ttdef"><b>Definition</b> parser.cpp:365</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_aa7f016d7a3c3c22121d013a89fd3c59a"><div class="ttname"><a href="classBSMPT_1_1parser.html#aa7f016d7a3c3c22121d013a89fd3c59a">BSMPT::parser::enable_minimizer_options</a></div><div class="ttdeci">void enable_minimizer_options()</div><div class="ttdoc">enable_minimizer_options Enables the options regarding the minimizer.</div><div class="ttdef"><b>Definition</b> parser.cpp:95</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_ab678ae6c7ea7e75a11549f4047554f29"><div class="ttname"><a href="classBSMPT_1_1parser.html#ab678ae6c7ea7e75a11549f4047554f29">BSMPT::parser::add_argument_only_display</a></div><div class="ttdeci">void add_argument_only_display(const std::string &amp;argument, const std::string &amp;description, const std::string &amp;default_val)</div><div class="ttdoc">add_argument Silently adds a new argument for the parser options.</div><div class="ttdef"><b>Definition</b> parser.cpp:111</div></div>
-<div class="ttc" id="aclassBSMPT_1_1parser_html_abefef451ca87db9d128ae0af2c480fb1"><div class="ttname"><a href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">BSMPT::parser::add_argument</a></div><div class="ttdeci">void add_argument(const std::string &amp;argument, bool required)</div><div class="ttdoc">add_argument Silently adds a new argument for the parser options.</div><div class="ttdef"><b>Definition</b> parser.cpp:124</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parserException_html"><div class="ttname"><a href="classBSMPT_1_1parserException.html">BSMPT::parserException</a></div><div class="ttdef"><b>Definition</b> parser.h:25</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html"><div class="ttname"><a href="classBSMPT_1_1parser.html">BSMPT::parser</a></div><div class="ttdoc">The parser class provides the argument parser for the CLI and JSON methods. This is case insensitive.</div><div class="ttdef"><b>Definition</b> parser.h:39</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a11892b62a8da8e89f829b298733d99bf"><div class="ttname"><a href="classBSMPT_1_1parser.html#a11892b62a8da8e89f829b298733d99bf">BSMPT::parser::add_input</a></div><div class="ttdeci">void add_input(const std::vector&lt; std::string &gt; &amp;input)</div><div class="ttdoc">add_input Add the vector with each input as it is given in the CLI in the form &quot;--argument=value&quot;.</div><div class="ttdef"><b>Definition</b> parser.cpp:213</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a1af4cfd40c1a0dca5a9985d9016fc964"><div class="ttname"><a href="classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964">BSMPT::parser::all_required_set</a></div><div class="ttdeci">bool all_required_set() const</div><div class="ttdoc">all_required_set Check ifs all required parameter are set.</div><div class="ttdef"><b>Definition</b> parser.cpp:244</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a1e2d2aeefdba5a7c49021aac1761dd86"><div class="ttname"><a href="classBSMPT_1_1parser.html#a1e2d2aeefdba5a7c49021aac1761dd86">BSMPT::parser::get_value_as_string</a></div><div class="ttdeci">std::string get_value_as_string(const std::string &amp;argument) const</div><div class="ttdoc">get_value Get the value for the required parameter.</div><div class="ttdef"><b>Definition</b> parser.cpp:351</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a3b4cd8c8a703fddb8293cf6d26a04b0e"><div class="ttname"><a href="classBSMPT_1_1parser.html#a3b4cd8c8a703fddb8293cf6d26a04b0e">BSMPT::parser::get_value</a></div><div class="ttdeci">T get_value(const std::string &amp;argument) const</div><div class="ttdoc">get_value Get the value for the required parameter.</div><div class="ttdef"><b>Definition</b> parser.h:112</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a69978eb8d4113de98c9b3d93a5691f98"><div class="ttname"><a href="classBSMPT_1_1parser.html#a69978eb8d4113de98c9b3d93a5691f98">BSMPT::parser::print_help</a></div><div class="ttdeci">void print_help() const</div><div class="ttdoc">print_help Prints the header and the arguments with their description.</div><div class="ttdef"><b>Definition</b> parser.cpp:268</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a756058edbd154eed8ca3c9ebfd74e7f0"><div class="ttname"><a href="classBSMPT_1_1parser.html#a756058edbd154eed8ca3c9ebfd74e7f0">BSMPT::parser::to_lower</a></div><div class="ttdeci">std::string to_lower(const std::string &amp;input) const</div><div class="ttdoc">get_key_value Converts the CLI input in the form &quot;--argName=value&quot; into a key value pair.</div><div class="ttdef"><b>Definition</b> parser.cpp:458</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a7796751925ea8cc1ccf857beb8856462"><div class="ttname"><a href="classBSMPT_1_1parser.html#a7796751925ea8cc1ccf857beb8856462">BSMPT::parser::set_help_header</a></div><div class="ttdeci">void set_help_header(const std::string &amp;header)</div><div class="ttdoc">set_help_header Sets the header which is printed in print_help()</div><div class="ttdef"><b>Definition</b> parser.cpp:407</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a7b83cdf842f2e27f7c27e20a77a81108"><div class="ttname"><a href="classBSMPT_1_1parser.html#a7b83cdf842f2e27f7c27e20a77a81108">BSMPT::parser::mHelpAlreadyPrinted</a></div><div class="ttdeci">bool mHelpAlreadyPrinted</div><div class="ttdoc">Helper to avoid multiple prints of the help output.</div><div class="ttdef"><b>Definition</b> parser.h:218</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a8b445766c7efdb6b1ffd82e2bc50ac2e"><div class="ttname"><a href="classBSMPT_1_1parser.html#a8b445766c7efdb6b1ffd82e2bc50ac2e">BSMPT::parser::check_required_parameters</a></div><div class="ttdeci">void check_required_parameters() const</div><div class="ttdoc">check_required_parameters Calls all_required_set() and throws a parserException if not all required p...</div><div class="ttdef"><b>Definition</b> parser.cpp:259</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a974e4a757c211840eee6c96a3484a160"><div class="ttname"><a href="classBSMPT_1_1parser.html#a974e4a757c211840eee6c96a3484a160">BSMPT::parser::add_subtext</a></div><div class="ttdeci">void add_subtext(const std::string &amp;subtext)</div><div class="ttdoc">add_subtext add subtext to description column</div><div class="ttdef"><b>Definition</b> parser.cpp:205</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_a9e5deb552577c0b670f14284561b4ba1"><div class="ttname"><a href="classBSMPT_1_1parser.html#a9e5deb552577c0b670f14284561b4ba1">BSMPT::parser::add_json_input</a></div><div class="ttdeci">void add_json_input(const std::string &amp;filename)</div><div class="ttdoc">add_json_input Add the input parameters with a json file.</div><div class="ttdef"><b>Definition</b> parser.cpp:383</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_aa7f016d7a3c3c22121d013a89fd3c59a"><div class="ttname"><a href="classBSMPT_1_1parser.html#aa7f016d7a3c3c22121d013a89fd3c59a">BSMPT::parser::enable_minimizer_options</a></div><div class="ttdeci">void enable_minimizer_options()</div><div class="ttdoc">enable_minimizer_options Enables the options regarding the minimizer.</div><div class="ttdef"><b>Definition</b> parser.cpp:113</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_ab678ae6c7ea7e75a11549f4047554f29"><div class="ttname"><a href="classBSMPT_1_1parser.html#ab678ae6c7ea7e75a11549f4047554f29">BSMPT::parser::add_argument_only_display</a></div><div class="ttdeci">void add_argument_only_display(const std::string &amp;argument, const std::string &amp;description, const std::string &amp;default_val)</div><div class="ttdoc">add_argument Silently adds a new argument for the parser options.</div><div class="ttdef"><b>Definition</b> parser.cpp:129</div></div>
+<div class="ttc" id="aclassBSMPT_1_1parser_html_abefef451ca87db9d128ae0af2c480fb1"><div class="ttname"><a href="classBSMPT_1_1parser.html#abefef451ca87db9d128ae0af2c480fb1">BSMPT::parser::add_argument</a></div><div class="ttdeci">void add_argument(const std::string &amp;argument, bool required)</div><div class="ttdoc">add_argument Silently adds a new argument for the parser options.</div><div class="ttdef"><b>Definition</b> parser.cpp:142</div></div>
 <div class="ttc" id="anamespaceBSMPT_html"><div class="ttname"><a href="namespaceBSMPT.html">BSMPT</a></div><div class="ttdoc">This classes calculates the Bounce action of the potential with a set temperature.</div><div class="ttdef"><b>Definition</b> CalculateEtaInterface.h:24</div></div>
-<div class="ttc" id="astructBSMPT_1_1parser_1_1KeyValue_html"><div class="ttname"><a href="structBSMPT_1_1parser_1_1KeyValue.html">BSMPT::parser::KeyValue</a></div><div class="ttdef"><b>Definition</b> parser.h:163</div></div>
-<div class="ttc" id="astructBSMPT_1_1parser_1_1Options_html"><div class="ttname"><a href="structBSMPT_1_1parser_1_1Options.html">BSMPT::parser::Options</a></div><div class="ttdef"><b>Definition</b> parser.h:156</div></div>
+<div class="ttc" id="anamespaceBSMPT_html_af6f80a02afc15ea2ed023b14038f9d36"><div class="ttname"><a href="namespaceBSMPT.html#af6f80a02afc15ea2ed023b14038f9d36">BSMPT::ShowInputError</a></div><div class="ttdeci">void ShowInputError()</div><div class="ttdoc">ShowInputError shows all the available models in the terminal.</div><div class="ttdef"><b>Definition</b> parser.cpp:23</div></div>
+<div class="ttc" id="astructBSMPT_1_1parser_1_1KeyValue_html"><div class="ttname"><a href="structBSMPT_1_1parser_1_1KeyValue.html">BSMPT::parser::KeyValue</a></div><div class="ttdef"><b>Definition</b> parser.h:168</div></div>
+<div class="ttc" id="astructBSMPT_1_1parser_1_1Options_html"><div class="ttname"><a href="structBSMPT_1_1parser_1_1Options.html">BSMPT::parser::Options</a></div><div class="ttdef"><b>Definition</b> parser.h:161</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

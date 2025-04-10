@@ -36,7 +36,7 @@ var searchData=
   ['k_5fintegration_33',['K_integration',['../Kfactors_8h.html#ae5210d4030b8ecbb21022b6f70b8d86a',1,'BSMPT::Kfactors']]],
   ['keyvalue_34',['KeyValue',['../structBSMPT_1_1parser_1_1KeyValue.html',1,'BSMPT::parser']]],
   ['kfactor_5fgrid_2ecpp_35',['Kfactor_grid.cpp',['../Kfactor__grid_8cpp.html',1,'']]],
-  ['kfactors_36',['Kfactors',['../md_Changelog.html#autotoc_md38',1,'']]],
+  ['kfactors_36',['Kfactors',['../md_Changelog.html#autotoc_md40',1,'']]],
   ['kfactors_2ecpp_37',['Kfactors.cpp',['../Kfactors_8cpp.html',1,'']]],
   ['kfactors_2eh_38',['Kfactors.h',['../Kfactors_8h.html',1,'']]],
   ['kfactorsinterpolatedgsl_2ecpp_39',['KfactorsinterpolatedGSL.cpp',['../KfactorsinterpolatedGSL_8cpp.html',1,'']]],

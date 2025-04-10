@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -99,13 +99,12 @@ $(document).ready(function(){initNavTree('IncludeAllModels_8h.html',''); initRes
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">IncludeAllModels.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<div class="textblock"><code>#include &lt;BSMPT/utility/ModelIDs.h&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
@@ -118,51 +117,120 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceBSMPT" id="r_namespaceBSMPT"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT.html">BSMPT</a></td></tr>
 <tr class="memdesc:namespaceBSMPT"><td class="mdescLeft">&#160;</td><td class="mdescRight">This classes calculates the Bounce action of the potential with a set temperature. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceBSMPT_1_1ModelID" id="r_namespaceBSMPT_1_1ModelID"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html">BSMPT::ModelID</a></td></tr>
-<tr class="memdesc:namespaceBSMPT_1_1ModelID"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator &lt;&lt; overload for the model parameter <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a5f777ff3c379602f5d554d87edc7dc3a" id="r_a5f777ff3c379602f5d554d87edc7dc3a"><td class="memItemLeft" align="right" valign="top"><a id="a5f777ff3c379602f5d554d87edc7dc3a" name="a5f777ff3c379602f5d554d87edc7dc3a"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">BSMPT::ModelID::ModelIDs</a> { <br />
-&#160;&#160;<b>NotSet</b>
-, <b>C2HDM</b>
-, <b>R2HDM</b>
-, <b>N2HDM</b>
-, <br />
-&#160;&#160;<b>CXSM</b>
-, <b>CPINTHEDARK</b>
-, <b>SM</b>
-, <b>TEMPLATE</b>
-, <br />
-&#160;&#160;<b>stop</b>
-<br />
- }</td></tr>
-<tr class="memdesc:a5f777ff3c379602f5d554d87edc7dc3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ModelIDs enum containing all IDs for identifying the Models. <br /></td></tr>
-<tr class="separator:a5f777ff3c379602f5d554d87edc7dc3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afb726c44374beb9ef62018b4d84dd872" id="r_afb726c44374beb9ef62018b4d84dd872"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a>, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#afb726c44374beb9ef62018b4d84dd872">BSMPT::ModelID::InvertModelNames</a> ()</td></tr>
-<tr class="memdesc:afb726c44374beb9ef62018b4d84dd872"><td class="mdescLeft">&#160;</td><td class="mdescRight">InvertModelNames.  <br /></td></tr>
-<tr class="separator:afb726c44374beb9ef62018b4d84dd872"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c0e4a151de955f3cddeb1eaf0b0324f" id="r_a9c0e4a151de955f3cddeb1eaf0b0324f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a9c0e4a151de955f3cddeb1eaf0b0324f">BSMPT::ModelID::FChoose</a> (<a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a> choice)</td></tr>
+<tr class="memitem:a9c0e4a151de955f3cddeb1eaf0b0324f" id="r_a9c0e4a151de955f3cddeb1eaf0b0324f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IncludeAllModels_8h.html#a9c0e4a151de955f3cddeb1eaf0b0324f">BSMPT::ModelID::FChoose</a> (ModelIDs choice)</td></tr>
 <tr class="separator:a9c0e4a151de955f3cddeb1eaf0b0324f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5493feda6e5ee05acba5916c1728b57d" id="r_a5493feda6e5ee05acba5916c1728b57d"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a5493feda6e5ee05acba5916c1728b57d">BSMPT::ModelID::FChoose</a> (<a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a> choice, const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;smConstants)</td></tr>
+<tr class="memitem:a5493feda6e5ee05acba5916c1728b57d" id="r_a5493feda6e5ee05acba5916c1728b57d"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IncludeAllModels_8h.html#a5493feda6e5ee05acba5916c1728b57d">BSMPT::ModelID::FChoose</a> (ModelIDs choice, const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;smConstants)</td></tr>
 <tr class="separator:a5493feda6e5ee05acba5916c1728b57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed5df8b1a3e3690f96116edadafa7614" id="r_aed5df8b1a3e3690f96116edadafa7614"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#aed5df8b1a3e3690f96116edadafa7614">BSMPT::ModelID::getModel</a> (const std::string &amp;s)</td></tr>
+<tr class="memitem:aed5df8b1a3e3690f96116edadafa7614" id="r_aed5df8b1a3e3690f96116edadafa7614"><td class="memItemLeft" align="right" valign="top">ModelIDs&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IncludeAllModels_8h.html#aed5df8b1a3e3690f96116edadafa7614">BSMPT::ModelID::getModel</a> (const std::string &amp;s)</td></tr>
 <tr class="separator:aed5df8b1a3e3690f96116edadafa7614"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6f80a02afc15ea2ed023b14038f9d36" id="r_af6f80a02afc15ea2ed023b14038f9d36"><td class="memItemLeft" align="right" valign="top"><a id="af6f80a02afc15ea2ed023b14038f9d36" name="af6f80a02afc15ea2ed023b14038f9d36"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>BSMPT::ShowInputError</b> ()</td></tr>
-<tr class="memdesc:af6f80a02afc15ea2ed023b14038f9d36"><td class="mdescLeft">&#160;</td><td class="mdescRight">ShowInputError shows all the available models in the terminal. <br /></td></tr>
-<tr class="separator:af6f80a02afc15ea2ed023b14038f9d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a4f42e82b2d78653c1131f114830ce98d" id="r_a4f42e82b2d78653c1131f114830ce98d"><td class="memItemLeft" align="right" valign="top">const std::unordered_map&lt; std::string, <a class="el" href="namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a">ModelIDs</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceBSMPT_1_1ModelID.html#a4f42e82b2d78653c1131f114830ce98d">BSMPT::ModelID::ModelNames</a></td></tr>
-<tr class="memdesc:a4f42e82b2d78653c1131f114830ce98d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mapping between the model name which is given as the first argument to the binary and the ModelIDs element.  <br /></td></tr>
-<tr class="separator:a4f42e82b2d78653c1131f114830ce98d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a9c0e4a151de955f3cddeb1eaf0b0324f" name="a9c0e4a151de955f3cddeb1eaf0b0324f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c0e4a151de955f3cddeb1eaf0b0324f">&#9670;&#160;</a></span>FChoose() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; Class_Potential_Origin &gt; BSMPT::ModelID::FChoose </td>
+          <td>(</td>
+          <td class="paramtype">ModelIDs&#160;</td>
+          <td class="paramname"><em>choice</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">choice</td><td>ModelIDs for the Model under investigation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>smart pointer to the instance of the class matching the ModelIDs choice. If choice == NotSet the function throws an runtime error </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Runtime</td><td>error if an invalid model was given into choice </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5493feda6e5ee05acba5916c1728b57d" name="a5493feda6e5ee05acba5916c1728b57d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5493feda6e5ee05acba5916c1728b57d">&#9670;&#160;</a></span>FChoose() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; Class_Potential_Origin &gt; BSMPT::ModelID::FChoose </td>
+          <td>(</td>
+          <td class="paramtype">ModelIDs&#160;</td>
+          <td class="paramname"><em>choice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structBSMPT_1_1ISMConstants.html">ISMConstants</a> &amp;&#160;</td>
+          <td class="paramname"><em>smConstants</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">choice</td><td>ModelIDs for the Model under investigation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>smart pointer to the instance of the class matching the ModelIDs choice. If choice == NotSet the function throws an runtime error </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">smConstants</td><td>The SM Constants to use for the parameter </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Runtime</td><td>error if an invalid model was given into choice </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aed5df8b1a3e3690f96116edadafa7614" name="aed5df8b1a3e3690f96116edadafa7614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed5df8b1a3e3690f96116edadafa7614">&#9670;&#160;</a></span>getModel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ModelIDs BSMPT::ModelID::getModel </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>The input string, which is turned to lower case and then compared to the entries of the ModelNames map </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>If a match in ModelNames is found, return the corresponding ModelIDs entry, otherwise return ModelIDs::NoSet </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

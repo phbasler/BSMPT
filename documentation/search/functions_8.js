@@ -18,7 +18,7 @@ var searchData=
   ['integrate_5fmubl_15',['Integrate_mubl',['../transport__equations_8h.html#a608185628c16ac3b2726c66fcc34b254',1,'BSMPT::Baryo']]],
   ['integrate_5fmubl_5finterpolated_16',['Integrate_mubl_interpolated',['../transport__equations_8h.html#a06ca6944f075deca05b61249734bd7f1',1,'BSMPT::Baryo']]],
   ['integratebounce_17',['IntegrateBounce',['../classBSMPT_1_1BounceActionInt.html#ab6c0f5b4f40a029fc5a349e6032b1f6f',1,'BSMPT::BounceActionInt']]],
-  ['invertmodelnames_18',['InvertModelNames',['../namespaceBSMPT_1_1ModelID.html#afb726c44374beb9ef62018b4d84dd872',1,'BSMPT::ModelID']]],
+  ['invertmap_18',['InvertMap',['../namespaceBSMPT.html#a19358c50de5990badb12ca083ddff645',1,'BSMPT']]],
   ['isfluidturnoverapproxone_19',['IsFluidTurnoverApproxOne',['../namespaceBSMPT.html#ac876dec7723b41917122dc0257ed6218',1,'BSMPT']]],
   ['isglobmin_20',['IsGlobMin',['../classBSMPT_1_1MinimumTracer.html#a63209e83aacc339c3cec0d8f69c10e48',1,'BSMPT::MinimumTracer']]],
   ['isthereewsymmetryrestoration_21',['IsThereEWSymmetryRestoration',['../classBSMPT_1_1MinimumTracer.html#a6c57bea2a9fcaf0ef497626f2da30624',1,'BSMPT::MinimumTracer']]]

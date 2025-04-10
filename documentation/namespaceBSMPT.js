@@ -1,23 +1,5 @@
 var namespaceBSMPT =
 [
-    [ "ModelID", "namespaceBSMPT_1_1ModelID.html", [
-      [ "ModelIDs", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3a", [
-        [ "NotSet", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aafaf396cbd83927b72a84d2616fac76ff", null ],
-        [ "C2HDM", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aa44d06324e6fc6d2a87291592b3e1b0b8", null ],
-        [ "R2HDM", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aaeaa35b00d13e29250931f0b9b89eb53d", null ],
-        [ "N2HDM", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aaae11868b3b3de2e188d0d91bc7799928", null ],
-        [ "CXSM", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aa5050c24a4083c18f5a43d8b0c97c62ac", null ],
-        [ "CPINTHEDARK", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aa037338d48cb78bf582349354f0bda85b", null ],
-        [ "SM", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aa4e0d4f6ce30646f5a3f3e2a7422c1c5a", null ],
-        [ "TEMPLATE", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aa9208fdeb4912b59451a5aa9c4a66aba1", null ],
-        [ "stop", "namespaceBSMPT_1_1ModelID.html#a5f777ff3c379602f5d554d87edc7dc3aaef399b2d446bb37b7c32ad2cc1b6045b", null ]
-      ] ],
-      [ "FChoose", "namespaceBSMPT_1_1ModelID.html#a9c0e4a151de955f3cddeb1eaf0b0324f", null ],
-      [ "FChoose", "namespaceBSMPT_1_1ModelID.html#a5493feda6e5ee05acba5916c1728b57d", null ],
-      [ "getModel", "namespaceBSMPT_1_1ModelID.html#aed5df8b1a3e3690f96116edadafa7614", null ],
-      [ "InvertModelNames", "namespaceBSMPT_1_1ModelID.html#afb726c44374beb9ef62018b4d84dd872", null ],
-      [ "ModelNames", "namespaceBSMPT_1_1ModelID.html#a4f42e82b2d78653c1131f114830ce98d", null ]
-    ] ],
     [ "BounceActionInt", "classBSMPT_1_1BounceActionInt.html", "classBSMPT_1_1BounceActionInt" ],
     [ "BounceSolution", "classBSMPT_1_1BounceSolution.html", "classBSMPT_1_1BounceSolution" ],
     [ "BSMPTLogger", "classBSMPT_1_1BSMPTLogger.html", "classBSMPT_1_1BSMPTLogger" ],
@@ -101,6 +83,7 @@ var namespaceBSMPT =
     [ "h2OmSens", "namespaceBSMPT.html#a2cfd79038f04a64f01fd5bc3803f2744", null ],
     [ "HessianNumerical", "namespaceBSMPT.html#a2fa2d0b5e797e27d8021e222c2522c85", null ],
     [ "II", "namespaceBSMPT.html#a3f7a6e0bc281f72955810d5e61ef2a26", null ],
+    [ "InvertMap", "namespaceBSMPT.html#a19358c50de5990badb12ca083ddff645", null ],
     [ "IsFluidTurnoverApproxOne", "namespaceBSMPT.html#ac876dec7723b41917122dc0257ed6218", null ],
     [ "L2NormVector", "namespaceBSMPT.html#a8b82302c8d9c5e58eca68e22f3d5616c", null ],
     [ "Li2", "namespaceBSMPT.html#a9b7ee9ad848ad4f37479dd595602f1cc", null ],
@@ -115,6 +98,7 @@ var namespaceBSMPT =
     [ "operator+", "namespaceBSMPT.html#a0831515c5effc809689bc90335e99836", null ],
     [ "operator-", "namespaceBSMPT.html#a164c33d2736fce2302ce9d09a5901834", null ],
     [ "operator/", "namespaceBSMPT.html#a3dea73ecd794339a3604258f86c02046", null ],
+    [ "operator<<", "namespaceBSMPT.html#a6c20b7a437ed80792bc18e44668605c2", null ],
     [ "operator<<", "namespaceBSMPT.html#a498675fb0141ff7ac4e613a9ce8ef7d2", null ],
     [ "operator<<", "namespaceBSMPT.html#a94bd88c394451fdc3a6f5399dd346c3f", null ],
     [ "operator<<", "namespaceBSMPT.html#af0162b26708b2f2f0866d346470d337c", null ],

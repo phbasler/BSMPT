@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.7</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -100,14 +100,14 @@ $(document).ready(function(){initNavTree('md_Changelog.html',''); initResizable(
   <div class="headertitle"><div class="title">Changelog</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md25"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md27"></a>
 Changelog</h1>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 2022/XX: Release of v2.4.0</h1>
 <ul>
 <li>Drop changelog in favor of <a href="https://github.com/phbasler/BSMPT/releases">release notes</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md29"></a>
 2022/04: Release of v2.3.3</h1>
 <ul>
 <li>Allow Conan to manage to dependencies</li>
@@ -117,7 +117,7 @@ Changelog</h1>
 <li>Added Coverage options</li>
 <li>Fixed a compile error if boost was not found</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 2021/10/20: Release of v2.3.2</h1>
 <ul>
 <li>Fixed wrong linker part if BSMPT::Minimizer was used in an external cmake package</li>
@@ -125,7 +125,7 @@ Changelog</h1>
 <li>Use symmetric tensors to update performance</li>
 <li>Bumped catch2 to 2.3.17</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 2021/09/23: Release of v2.3.1</h1>
 <ul>
 <li>Fixed a bug in the CxSM which would cause Re(a1)=Im(a1)=0 if read a point from a file</li>
@@ -134,13 +134,13 @@ Changelog</h1>
 <li>Fixed a race condition in the thermal interpolations causing segfaults on mac</li>
 <li>Bumped libcmaes to 0.10</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<h1><a class="anchor" id="autotoc_md32"></a>
 2021/08/30: Release of v2.3</h1>
 <ul>
 <li>Changed cout output to a Logger which provides different levels. How to set them is shown under the &ndash;help option.</li>
 <li>CP in the Dark is now added as a model. The implementation follows the conventions of [1807.10322], for further details on the chosen renormalization scheme we refer to our respective publication.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md31"></a>
+<h1><a class="anchor" id="autotoc_md33"></a>
 2021/05/06: Release of v2.2</h1>
 <ul>
 <li>Unit tests are provided for the models 'ch2dm', 'n2hdm' and 'r2hdm'</li>
@@ -148,7 +148,7 @@ Changelog</h1>
 <li>Added the option to turn off the multithreading in the minimization</li>
 <li>Removed the following binaries: 'RenormScale' and 'EWBGRenormScale'</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md32"></a>
+<h1><a class="anchor" id="autotoc_md34"></a>
 2020/01/03: Release of v2.1</h1>
 <ul>
 <li>Changed to multithreading in the minimizer</li>
@@ -158,79 +158,79 @@ Changelog</h1>
 <li>Updated the cmaes inclusion to their new cmake setup</li>
 <li>Updated the NLopt inclusion to use their delivered FindCmake instead of our own</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md33"></a>
+<h1><a class="anchor" id="autotoc_md35"></a>
 2020/07/06: Release of v2.0</h1>
-<h2><a class="anchor" id="autotoc_md34"></a>
+<h2><a class="anchor" id="autotoc_md36"></a>
 New Physics</h2>
 <p>With this version, we provide the calculation for the electroweak baryogenesis in the C2HDM with multiple, different approaches. For this several smaller libraries have been implemented: </p>
-<h3><a class="anchor" id="autotoc_md35"></a>
+<h3><a class="anchor" id="autotoc_md37"></a>
 Baryo</h3>
 <p>This library contains the numerical evaluation of the different methods to calculate the electroweak baryogenesis. The different approaches are described in the manual. </p>
-<h3><a class="anchor" id="autotoc_md36"></a>
+<h3><a class="anchor" id="autotoc_md38"></a>
 WallThickness</h3>
 <p>The thickness of the bubble wall is calculated as described in the manual. </p>
-<h3><a class="anchor" id="autotoc_md37"></a>
+<h3><a class="anchor" id="autotoc_md39"></a>
 ThermalFunctions</h3>
 <p>The thermal integrals J_+ and J_- have been moved to their own library. The old implementations are still in the main code and can be accessed for legacy code if wished. </p>
-<h3><a class="anchor" id="autotoc_md38"></a>
+<h3><a class="anchor" id="autotoc_md40"></a>
 Kfactors</h3>
 <p>During the calculation of the transport equations, the K-functions are needed. This library provides a numerical integration for those but also the bicubic spline interpolation which is used in the numerical evaluation of the transport equations. The data points for the interpolation are given in '<a class="el" href="Kfunctions__grid_8h.html">include/BSMPT/Kfactors/Kfactors_grid/Kfunctions_grid.h</a>' which has a size of 148mb. </p>
-<h3><a class="anchor" id="autotoc_md39"></a>
+<h3><a class="anchor" id="autotoc_md41"></a>
 Minimizer</h3>
 <p>NLopt is now a possible option for the minimization. You can set the default settings in <a class="el" href="Minimizer_8h.html">Minimizer.h</a> </p>
-<h2><a class="anchor" id="autotoc_md40"></a>
+<h2><a class="anchor" id="autotoc_md42"></a>
 Models</h2>
 <p>You CAN NOT call the models anymore by their number. You have to call them through the string set in <a class="el" href="IncludeAllModels_8h.html">IncludeAllModels.h</a></p>
-<h2><a class="anchor" id="autotoc_md41"></a>
+<h2><a class="anchor" id="autotoc_md43"></a>
 BSMPT as a package</h2>
 <p>It is now possible to include <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> as a library into your program through cmake. In your cmake file you can use find_package(BSMPT) after compiling <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a>.</p>
-<h2><a class="anchor" id="autotoc_md42"></a>
+<h2><a class="anchor" id="autotoc_md44"></a>
 Changes in Test</h2>
 <ul>
 <li>Extends the Test binary to check if the minimum conditions are fulfilled</li>
 <li>If a simplified tree-level or counterterm potential is given it is compared at random points with the potential calculated through the tensor structures to check for possible errors in the simplified potential.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md43"></a>
+<h2><a class="anchor" id="autotoc_md45"></a>
 Changes in the Installation Routine</h2>
 <p>Due to changes in the cmake interfaces, Eigen is now included through -DEigen3_DIR. The instructions in the Readme are updated.</p>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md46"></a>
 Differences in how to include a new model</h2>
 <p>Due to the restructuring of the Code, the source file for your model has to be put in include/BSMPT/models/YourModel.h and the source file in src/models/YourModel.cpp. In src/models you have to put ${header_path}/YourModel.h in the set(header list and YourModel.cpp in the set(src list.</p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<h1><a class="anchor" id="autotoc_md47"></a>
 2019/12/11: Release of v1.1.2</h1>
 <p>Many thanks for Andrew Fowlie, Csaba Balazs, Peter Athron and Yang Zhang for pointing out a small bug in the calculation of the bosonic thermal corrections. The finite shift delta_- introduced in Eq. (2.43) of the manual was not carried over in the case m^2 &lt; 0, introducing a non-continuity in the function. This is now fixed.</p>
 <p>#2019/10/08: Release of v1.1.1 v1.1 did not calculate the tree-level minimum for comparison with the input but the NLO minimum, this is now fixed. The code can now work with data samples where the first column is an index column without a label, assuming the columns are tab separated. Cleaned up the interface of the minimisation functions, this changed nothing at the results. Introduced the initModel function which will handle ReadAndSet from the line, setting the parameters, calculating the Counterterm parameters and setting them as well as preparing everything necessary in the background. This was cleanup of the interface and did not change the numerics.</p>
-<h1><a class="anchor" id="autotoc_md46"></a>
+<h1><a class="anchor" id="autotoc_md48"></a>
 2019/10/07: Release of v1.1</h1>
 <p>It is now possible to call the models with the names 'ch2dm', 'n2hdm', 'r2hdm' instead of the numbers. Additionally added the Test binary which provides a possibility to check the implemented models.</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 2019/09/27</h1>
 <p>Fixed a bug introduced with the changes of 2019/08/15</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md50"></a>
 2019/08/05</h1>
 <p>Fixed a small bug which occurred if the Gauge fields were already given in a diagonal basis</p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md51"></a>
 2018/11/06</h1>
 <p>Updated the manual with the cmake installation and fixed some typos</p>
-<h1><a class="anchor" id="autotoc_md50"></a>
+<h1><a class="anchor" id="autotoc_md52"></a>
 2018/09/25</h1>
 <p>Fixed a small bug which set all singlet VEVs to 0 for T &gt; T_C. This did not effect <a class="el" href="namespaceBSMPT.html" title="This classes calculates the Bounce action of the potential with a set temperature.">BSMPT</a> but only VEVEVO for plotting for T &gt; T_C in the N2HDM. </p>
-<h1><a class="anchor" id="autotoc_md51"></a>
+<h1><a class="anchor" id="autotoc_md53"></a>
 2018/07/11</h1>
 <p>Fixed a bug in the calculation of the triple Higgs couplings. Furthermore, the terminal output was changed into a more readable format. Thanks to Jonas Wittbrodt the installation is now done through a cmake file where the procedure is described in the README. </p>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<h1><a class="anchor" id="autotoc_md54"></a>
 2018/07/02</h1>
 <p>The notation of omega_c and T_c was swapped in the N2HDM model file and in the example/N2HDM_Input.dat_BSMPT output file. This is fixed now. </p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md55"></a>
 2018/06/25</h1>
 <p>Fixed a mistake in eq (2.30) in the manual and the corresponding formula in the code. Thanks to Peter Athron for noticing this. Additionally, the numbers of minimizations were increased if only the GSL minimizer is used. Before it searched for 20 local minima, now it searches for 50. </p>
-<h1><a class="anchor" id="autotoc_md54"></a>
+<h1><a class="anchor" id="autotoc_md56"></a>
 2018/04/23</h1>
 <p>Fixed a wrong sign in the Yukawa couplings to the CP-odd Higgs fields </p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md57"></a>
 2018/03/30</h1>
 <p>Corrected a small bug in the minimizer which caused a segfault if vevsolTmp &gt; 0.5 and ModifiedVEVVectorDim has dimension 0 </p>
-<h1><a class="anchor" id="autotoc_md56"></a>
+<h1><a class="anchor" id="autotoc_md58"></a>
 2018/03/07: v1.0</h1>
 <p>Release </p>
 </div></div><!-- contents -->

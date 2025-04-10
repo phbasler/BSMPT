@@ -60,7 +60,7 @@ var searchData=
   ['getlegend_57',['GetLegend',['../classBSMPT_1_1MinimumTracer.html#a9ffa25770bdcf417fbe6fed2a360dcd2',1,'BSMPT::MinimumTracer']]],
   ['getlw_58',['getlw',['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a6c97784b06af9d14a6b9ad74b09e768f',1,'BSMPT::Baryo::GSL_integration_mubl::getLW()'],['../classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a8b85eeb992f78389449a267a87dd0d95',1,'BSMPT::Baryo::CalculateEtaInterface::getLW()']]],
   ['getminimizers_59',['GetMinimizers',['../Minimizer_8h.html#a3ac152f5d63263e90befeadbea1c14d0',1,'BSMPT::Minimizer']]],
-  ['getmodel_60',['getModel',['../namespaceBSMPT_1_1ModelID.html#aed5df8b1a3e3690f96116edadafa7614',1,'BSMPT::ModelID']]],
+  ['getmodel_60',['getModel',['../IncludeAllModels_8h.html#aed5df8b1a3e3690f96116edadafa7614',1,'BSMPT::ModelID']]],
   ['getmodelpointer_61',['getModelPointer',['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#abc87e71040d6e3d4dd419a1403fabf38',1,'BSMPT::Baryo::GSL_integration_mubl']]],
   ['getnucleationtemp_62',['GetNucleationTemp',['../classBSMPT_1_1BounceSolution.html#aba947788d13c9791fe9fdfc9974b6edb',1,'BSMPT::BounceSolution']]],
   ['getnucleationtempapprox_63',['GetNucleationTempApprox',['../classBSMPT_1_1BounceSolution.html#aa128fe9aae40e03e5ca38a2781b8e238',1,'BSMPT::BounceSolution']]],
