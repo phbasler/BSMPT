@@ -6,13 +6,14 @@
 import pandas as pd
 import sys
 
-####### The parameters Type,Lambda1 to Lambda5, tanbeta and m12squared should have the label of the corresponding
+####### The parameters Type, Lambda1 to Lambda5, tanbeta and m12squared should have the label of the corresponding
 ####### parameter. With Seperator you have to tell which seperator your data file
 #######  is using (e.g. , \t or space). Your InputFILE will then be saved to OutputFILE
 
+
 def convert(InputFile, OutputFile):
-    print(f'Reading {InputFile}.')
-    print(f'Output is saved to {OutputFile}.')
+    print(f"Reading {InputFile}.")
+    print(f"Output is saved to {OutputFile}.")
 
 Seperator = "\t"
 InputFILE = "../example/R2HDM_Input.dat"
@@ -27,8 +28,8 @@ Lambda5 = "L5"
 tanbeta = "tbeta"
 m12squared = "m12sq"
 
-    with open(InputFile, 'r') as file:
-        df = pd.read_csv(file,index_col=HasIndexCol,sep=Separator)
+    with open(InputFile, "r") as file:
+        df = pd.read_csv(file, index_col=HasIndexCol, sep=Separator)
 
 def convert(IndexCol):
     df = pd.DataFrame()

@@ -24,7 +24,6 @@ m_down = symbols("C_MassDown", real=True)
 m_strange = symbols("C_MassStrange", real=True)
 m_bottom = symbols("C_MassBottom", real=True)
 
-
 # CKM Matrix
 Vud, Vus, Vub, Vcd, Vcs, Vcb, Vtd, Vts, Vtb = symbols(
     "Vud Vus Vub Vcd Vcs Vcb Vtd Vts Vtb"
