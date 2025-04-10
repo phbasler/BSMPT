@@ -75,6 +75,8 @@ struct GravitationalWaveData
   double PTStrength     = false; // strength of EW phase transition
   double betaH          = false; // inverse time scale beta/H
   double vw             = false; // bubble wall velocity
+  double vCJ            = false; // Chapman-Jouguet velocity
+  double XiShock        = false; // Shock speed
   double Csound_false   = false; // speed sound false vacuum
   double Csound_true    = false; // speed sound true vacuum
   double kappa_col      = false; // efficiency factor for collision
@@ -134,6 +136,14 @@ public:
    * @brief Calculate peak amplitude and frequency for GW signal from collision
    */
   void CalcPeakCollision();
+
+  /**
+   * @brief Calcualte the fluid shell thickness \f$ \xi_\text{front} -
+   * \xi_\text{rear} \f$
+   *
+   * @return double
+   */
+  double CalculateXiShell();
 
   /**
    * @brief Calculate peak amplitude and frequency for GW signal from sound
@@ -287,18 +297,105 @@ double GetYpsilon(const double HR, const double K_sw);
 namespace kappa
 {
 // Compute kappa_sw https://arxiv.org/abs/2010.09744
+/**
+ * @brief Lorentz boost
+ *
+ * @param a
+ * @param b
+ * @return double
+ */
 double mu(double a, double b);
+/**
+ * @brief encode the (special relativistic) relative velocity and
+the ratio of the enthalpies across the bubble wall.
+ *
+ * @param a
+ * @param b
+ * @return double
+ */
 double getwow(double a, double b);
 void custom_error_handler(const char *reason,
                           const char *file,
                           int line,
                           int gsl_errno);
+/**
+ * @brief returns the fluid velocity behind the wall, v−, and the expansion mode
+ * (2=detonation, 1=hybrid, 0=deflagration)
+ *
+ * @param al \f$ \alpha \f$
+ * @param vw \f$ v_w \f$
+ * @param cs2b \f$ c_{s,b}^2 $ sound speed squared in the broken phase
+ * @return std::pair<double, int>
+ */
 std::pair<double, int> getvm(double al, double vw, double cs2b);
+/**
+ * @brief encodes the differential equation solved in the shock/rarefaction wave
+ * and returns (dξ/dv, dw/dv).
+ *
+ * @param v
+ * @param y
+ * @param dydv
+ * @param params
+ * @return int
+ */
 int dfdv(double v, const double y[], double dydv[], void *params);
+/**
+ * @brief solve the hydrodynamics equation
+ *
+ * @param vw
+ * @param v0
+ * @param cs2
+ * @return std::vector<std::vector<double>>
+ */
 std::vector<std::vector<double>> solve_ode(double vw, double v0, double cs2);
 double integrate(const std::vector<double> &y, const std::vector<double> &x);
-std::pair<double, double> getKandWow(double vw, double v0, double cs2);
+/**
+ * @brief Get the Kand Wow object returns the enthalpy-weighted kinetic energy
+ * in the shock/rarefaction wave and the ratio between the enthalpy density at
+ * the start of the shock/rarefaction compared to its end (for the shocks, the
+ * end is in the phase in front of the shock; for the rarefaction wave, the
+ * enthalpy density is normalized to 1 behind the wall and has to be rescaled in
+ * the other part of the code).
+ *
+ * @param vw
+ * @param v0
+ * @param cs2
+ * @param vprofile velocity profile
+ * @return std::pair<double, double>
+ */
+std::pair<double, double>
+getKandWow(double vw,
+           double v0,
+           double cs2,
+           std::vector<std::vector<double>> &vprofile);
+/**
+ * @brief returns α¯θn in the nucleation phase (in front of the shock) for a
+ * given α¯θ+ value at the wall.
+ *
+ * @param al
+ * @param wow
+ * @param cs2b
+ * @param cs2s
+ * @return double
+ */
 double alN(double al, double wow, double cs2b, double cs2s);
+/**
+ * @brief Calculate the \f$ \kappa_{sw} \f$
+ *
+ * @param cs2b sound speed in the true vacuum \f$ c_{s,b}^2 =
+ * \frac{1}{T}\frac{\frac{dV(\phi_t)}{dT}}{\frac{d^2V(\phi_t)}{dT^2}} \f$
+ * @param cs2s sound speed in the false vacuum \f$ c_{s,b}^2 =
+ * \frac{1}{T}\frac{\frac{dV(\phi_f)}{dT}}{\frac{d^2V(\phi_f)}{dT^2}} \f$
+ * @param al \f$ \alpha \f$
+ * @param vw \f$ v_w \f$
+ * @param vprofile velocity profile
+ * @return double effiency factor for sound waves
+ */
+double kappaNuMuModel(double cs2b,
+                      double cs2s,
+                      double al,
+                      double vw,
+                      std::vector<std::vector<double>> &vprofile);
 /**
  * @brief Calculate the \f$ \kappa_{sw} \f$
  *

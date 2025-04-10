@@ -43,11 +43,20 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
   const double alpha_eff =
       (1 - data.kappa_col) *
       data.PTStrength; // remove energy that goes into collisions
+  data.vCJ = BACalc.GetChapmanJougetVelocity();
+  std::vector<std::vector<double>> vprofile; // Fluid profile
   data.kappa_sw = (alpha_eff / data.PTStrength) *
                   kappa::kappaNuMuModel(pow(data.Csound_true, 2),
                                         pow(data.Csound_false, 2),
                                         alpha_eff,
-                                        BACalc.vwall);
+                                        BACalc.vwall,
+                                        vprofile);
+  // XiShock = fastest fluid shell
+  if (data.kappa_sw > 0)
+    data.XiShock = vprofile.back().front();
+  else
+    data.XiShock = 1.; // Does not matter as efficiency if zero
+
   data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
   if (data.betaH < 1)
   {
@@ -123,6 +132,22 @@ void GravitationalWave::CalcPeakCollision()
                     (n1 - n2) / a1);
 }
 
+double GravitationalWave::CalculateXiShell()
+{
+  double XiFront, XiRear;
+  if (data.vw > data.vCJ)
+    XiFront = data.vw;
+  else
+    XiFront = data.XiShock;
+
+  if (data.vw < data.Csound_true)
+    XiRear = data.vw;
+  else
+    XiRear = data.Csound_true;
+
+  return XiFront - XiRear;
+}
+
 void GravitationalWave::CalcPeakSoundWave()
 {
   data.SoundWaveParameter.n1 = 3.;
@@ -133,7 +158,7 @@ void GravitationalWave::CalcPeakSoundWave()
 
   // Characteristic frequencies
 
-  const double xi_shell = abs(data.vw - data.Csound_false);
+  const double xi_shell = CalculateXiShell();
   const double delta_w  = xi_shell / max(data.vw, data.Csound_false);
 
   const double f_1 = 0.2 * data.Hstar0 / data.HR;
@@ -336,7 +361,7 @@ double getwow(double a, double b)
 
 std::pair<double, int> getvm(double al, double vw, double cs2b)
 {
-  if (vw * vw < cs2b)
+  if (vw * vw < cs2b) // Deflagration
   {
     return {vw, 0};
   }
@@ -344,9 +369,9 @@ std::pair<double, int> getvm(double al, double vw, double cs2b)
   double disc = -4.0 * vw * vw / cs2b + cc * cc;
   if (disc < 0.0 || cc < 0.0)
   {
-    return {std::sqrt(cs2b), 1};
+    return {std::sqrt(cs2b), 1}; // Hybrid
   }
-  return {(cc + std::sqrt(disc)) / 2.0 * cs2b / vw, 2};
+  return {(cc + std::sqrt(disc)) / 2.0 * cs2b / vw, 2}; // Detonation
 }
 
 // Differential equation system for dfdv
@@ -470,7 +495,10 @@ double integrate(const std::vector<double> &y, const std::vector<double> &x)
 }
 
 // Get K and Wow
-std::pair<double, double> getKandWow(double vw, double v0, double cs2)
+std::pair<double, double> getKandWow(double vw,
+                                     double v0,
+                                     double cs2,
+                                     std::vector<std::vector<double>> &vprofile)
 {
   if (v0 == 0)
   {
@@ -506,7 +534,10 @@ std::pair<double, double> getKandWow(double vw, double v0, double cs2)
   }
 
   for (size_t i = 0; i < wows.size(); ++i)
-    yis.push_back(wows[i] * pow(xis[i] * vs[i], 2) / (1 - pow(vs[i], 2)));
+    yis.push_back(wows[i] * pow(xis[i] * vs[i], 2) /
+                  (1 - pow(vs[i], 2))); // w (\xi v)/gam^2
+
+  vprofile = Transpose({xis, vs});
 
   if (xis.size() == 1) return {0, wows[0]};
 
@@ -524,7 +555,8 @@ double alN(double al, double wow, double cs2b, double cs2s)
 std::pair<double, double>
 getalNwow(double vp, double vm, double vw, double cs2b, double cs2s)
 {
-  auto [Ksh, wow] = getKandWow(vw, mu(vw, vp), cs2s);
+  std::vector<std::vector<double>> vprofile;
+  auto [Ksh, wow] = getKandWow(vw, mu(vw, vp), cs2s, vprofile);
   double al = (vp / vm - 1.0) * (vp * vm / cs2b - 1.0) / (1.0 - vp * vp) / 3.0;
   return {alN(al, wow, cs2b, cs2s), wow};
 }
@@ -541,13 +573,25 @@ void custom_error_handler(const char *reason,
 
 double kappaNuMuModel(double cs2b, double cs2s, double al, double vw)
 {
+  std::vector<std::vector<double>> vprofile;
+  return kappaNuMuModel(cs2b, cs2s, al, vw, vprofile);
+}
+
+double kappaNuMuModel(double cs2b,
+                      double cs2s,
+                      double al,
+                      double vw,
+                      std::vector<std::vector<double>> &vprofile)
+{
   if (vw == 1) vw = 0.999; // 1/0 if vw = 1, 0.999 is a decent approximation
   gsl_set_error_handler(&custom_error_handler);
-  auto [vm, mode] = getvm(al, vw, cs2b);
+  auto [vm, mode] = getvm(al, vw, cs2b); // Calculate vm = v-
   double Ksh = 0, wow = 1, vp = vw;
   double vpm;
 
-  if (mode < 2)
+  std::vector<std::vector<double>> vprofile_false, vprofile_true;
+
+  if (mode < 2) // Deflagration or hybrid
   {
     auto [almax, wow2] = getalNwow(0, vm, vw, cs2b, cs2s);
     if (almax < al) return 0;
@@ -572,15 +616,17 @@ double kappaNuMuModel(double cs2b, double cs2s, double al, double vw)
       }
     }
     vp                 = (iv[1][0] + iv[0][0]) / 2.0;
-    std::tie(Ksh, wow) = getKandWow(vw, mu(vw, vp), cs2s);
+    std::tie(Ksh, wow) = getKandWow(vw, mu(vw, vp), cs2s, vprofile_false);
   }
-
   double Krf = 0;
-  if (mode > 0)
+  if (mode > 0) // Not deflagration
   {
-    auto [Krf_val, wow3] = getKandWow(vw, mu(vw, vm), cs2b);
+    auto [Krf_val, wow3] = getKandWow(vw, mu(vw, vm), cs2b, vprofile_true);
     Krf                  = -wow * getwow(vp, vm) * Krf_val;
   }
+  vprofile = vprofile_true;
+  std::reverse(vprofile.begin(), vprofile.end());
+  vprofile.insert(vprofile.end(), vprofile_false.begin(), vprofile_false.end());
   return (Ksh + Krf) / al;
 }
 
