@@ -501,7 +501,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    low1 = argparser.get_value<int>("low1");
+    low1 = argparser.get_value<double>("low1");
   }
   catch (BSMPT::parserException &)
   {
@@ -509,7 +509,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    low2 = argparser.get_value<int>("low2");
+    low2 = argparser.get_value<double>("low2");
   }
   catch (BSMPT::parserException &)
   {
@@ -517,7 +517,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    low3 = argparser.get_value<int>("low3");
+    low3 = argparser.get_value<double>("low3");
   }
   catch (BSMPT::parserException &)
   {
@@ -525,7 +525,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    low4 = argparser.get_value<int>("low4");
+    low4 = argparser.get_value<double>("low4");
   }
   catch (BSMPT::parserException &)
   {
@@ -533,7 +533,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    low5 = argparser.get_value<int>("low5");
+    low5 = argparser.get_value<double>("low5");
   }
   catch (BSMPT::parserException &)
   {
@@ -541,7 +541,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    low6 = argparser.get_value<int>("low6");
+    low6 = argparser.get_value<double>("low6");
   }
   catch (BSMPT::parserException &)
   {
@@ -550,7 +550,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
-    high1 = argparser.get_value<int>("high1");
+    high1 = argparser.get_value<double>("high1");
   }
   catch (BSMPT::parserException &)
   {
@@ -558,7 +558,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    high2 = argparser.get_value<int>("high2");
+    high2 = argparser.get_value<double>("high2");
   }
   catch (BSMPT::parserException &)
   {
@@ -566,7 +566,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    high3 = argparser.get_value<int>("high3");
+    high3 = argparser.get_value<double>("high3");
   }
   catch (BSMPT::parserException &)
   {
@@ -574,7 +574,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    high4 = argparser.get_value<int>("high4");
+    high4 = argparser.get_value<double>("high4");
   }
   catch (BSMPT::parserException &)
   {
@@ -582,7 +582,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    high5 = argparser.get_value<int>("high5");
+    high5 = argparser.get_value<double>("high5");
   }
   catch (BSMPT::parserException &)
   {
@@ -590,7 +590,7 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
   }
   try
   {
-    high6 = argparser.get_value<int>("high6");
+    high6 = argparser.get_value<double>("high6");
   }
   catch (BSMPT::parserException &)
   {
