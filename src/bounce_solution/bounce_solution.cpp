@@ -698,7 +698,7 @@ void BounceSolution::CalcGstarPureRad()
 {
   std::size_t NHiggs = this->modelPointer->get_NHiggs();
 
-  double gb   = 8 * 2 + 3 * 3 + 2 + NHiggs;
+  double gb   = 8 * 2 + 4 * 2 + NHiggs;
   double gf   = 6 * 3 * 2 * 2 + 3 * 2 * 2 + 3 * 2;
   double geff = gb + 7. / 8 * gf;
 
