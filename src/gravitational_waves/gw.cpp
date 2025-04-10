@@ -135,7 +135,7 @@ void GravitationalWave::CalcPeakCollision()
 double GravitationalWave::CalculateXiShell()
 {
   double XiFront, XiRear;
-  if (data.vw > data.vCJ)
+  if (data.vw >= data.vCJ)
     XiFront = data.vw;
   else
     XiFront = data.XiShock;
