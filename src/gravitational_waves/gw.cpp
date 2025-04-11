@@ -97,7 +97,7 @@ double GravitationalWave::CalcEpsTurb(double epsturb_in)
 {
   if (epsturb_in == -1)
   {
-    return std::pow((1 - GetYpsilon(data.HR, data.K_sw)), 2. / 3.);
+    return std::sqrt(1 - GetYpsilon(data.HR, data.K_sw));
   }
   else
   {
