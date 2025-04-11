@@ -138,13 +138,14 @@ TransitionTracer::TransitionTracer(user_input &input)
             new_transition_data.crit_false_vev =
                 pair.false_phase.Get(pair.crit_temp).point;
 
-            auto max_ratio = CheckMassRatio(
+            (void)CheckMassRatio(
                 input, new_transition_data.crit_false_vev, pair.crit_temp);
 
             BounceSolution bounce(input.modelPointer,
                                   mintracer,
                                   pair,
                                   input.vwall,
+                                  input.PNLO_scaling,
                                   input.epsturb,
                                   input.maxpathintegrations,
                                   input.number_of_initial_scan_temperatures);
@@ -176,10 +177,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                             EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.nucl_approx_false_vev,
-                                   bounce.GetNucleationTempApprox());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.nucl_approx_false_vev,
+                                     bounce.GetNucleationTempApprox());
               }
               else
               {
@@ -204,10 +204,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.nucl_false_vev,
-                                   bounce.GetNucleationTemp());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.nucl_false_vev,
+                                     bounce.GetNucleationTemp());
               }
               else
               {
@@ -232,10 +231,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                         .Get(new_transition_data.perc_temp.value_or(EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.perc_false_vev,
-                                   bounce.GetPercolationTemp());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.perc_false_vev,
+                                     bounce.GetPercolationTemp());
               }
               else
               {
@@ -262,10 +260,9 @@ TransitionTracer::TransitionTracer(user_input &input)
                             new_transition_data.compl_temp.value_or(EmptyValue))
                         .point;
 
-                auto max_ratio =
-                    CheckMassRatio(input,
-                                   new_transition_data.compl_false_vev,
-                                   bounce.GetCompletionTemp());
+                (void)CheckMassRatio(input,
+                                     new_transition_data.compl_false_vev,
+                                     bounce.GetCompletionTemp());
               }
               else
               {
@@ -300,44 +297,64 @@ TransitionTracer::TransitionTracer(user_input &input)
                 Logger::Write(LoggingLevel::TransitionDetailed,
                               "Start GW parameters calculation.");
 
-                new_gw_data.vwall = bounce.GetWallVelocity();
-
-                bounce.CalculatePTStrength();
-                new_gw_data.alpha       = bounce.GetPTStrength();
-                new_gw_data.beta_over_H = bounce.GetInvTimeScale();
-
                 GravitationalWave gw(bounce, input.which_transition_temp);
 
                 new_gw_data.status_gw  = gw.data.status;
                 new_gw_data.trans_temp = gw.data.transitionTemp;
+                new_gw_data.reh_temp   = gw.data.reheatingTemp;
+
+                new_gw_data.alpha       = gw.data.PTStrength;
+                new_gw_data.beta_over_H = gw.data.betaH;
+                new_gw_data.vwall       = gw.data.vw;
 
                 if (new_gw_data.status_gw != StatusGW::Failure)
                 {
-                  gw.CalcPeakFrequencySoundWave();
-                  gw.CalcPeakAmplitudeSoundWave();
-                  new_gw_data.fpeak_sw   = gw.data.fPeakSoundWave;
-                  new_gw_data.h2Omega_sw = gw.data.h2OmegaPeakSoundWave;
+                  gw.CalcPeakCollision();
+                  new_gw_data.fb_col = gw.data.CollisionParameter.f_b.value();
+                  new_gw_data.omegab_col =
+                      gw.data.CollisionParameter.Omega_b.value();
 
-                  gw.CalcPeakFrequencyTurbulence();
-                  gw.CalcPeakAmplitudeTurbulence();
-                  new_gw_data.fpeak_turb   = gw.data.fPeakTurbulence;
-                  new_gw_data.h2Omega_turb = gw.data.h2OmegaPeakTurbulence;
+                  gw.CalcPeakSoundWave();
+                  new_gw_data.f1_sw = gw.data.SoundWaveParameter.f_1.value();
+                  new_gw_data.f2_sw = gw.data.SoundWaveParameter.f_2.value();
+                  new_gw_data.omega_2_sw =
+                      gw.data.SoundWaveParameter.Omega_2.value();
 
-                  // center integration limits around fpeak
-                  gw.data.swON       = true;
-                  gw.data.turbON     = false;
-                  new_gw_data.SNR_sw = gw.GetSNR(1e-6, 10);
+                  gw.CalcPeakTurbulence();
+                  new_gw_data.f1_turb = gw.data.TurbulanceParameter.f_1.value();
+                  new_gw_data.f2_turb = gw.data.TurbulanceParameter.f_2.value();
+                  new_gw_data.omega_2_turb =
+                      gw.data.TurbulanceParameter.Omega_2.value();
 
+                  // SNR of Collision
+                  gw.data.collisionON = true;
+                  gw.data.swON        = false;
+                  gw.data.turbON      = false;
+                  new_gw_data.SNR_col = gw.GetSNR(1e-6, 10);
+
+                  // SNR of Sound Waves
+                  gw.data.collisionON = false;
+                  gw.data.swON        = true;
+                  gw.data.turbON      = false;
+                  new_gw_data.SNR_sw  = gw.GetSNR(1e-6, 10);
+
+                  // SNR of Turbulence
+                  gw.data.collisionON  = false;
                   gw.data.swON         = false;
                   gw.data.turbON       = true;
                   new_gw_data.SNR_turb = gw.GetSNR(1e-6, 10);
 
-                  gw.data.swON    = true;
-                  gw.data.turbON  = true;
-                  new_gw_data.SNR = gw.GetSNR(1e-6, 10);
+                  // SNR of all contributions
+                  gw.data.collisionON = true;
+                  gw.data.swON        = true;
+                  gw.data.turbON      = true;
+                  new_gw_data.SNR     = gw.GetSNR(1e-6, 10);
 
-                  new_gw_data.K_sw   = gw.data.K_sw;
-                  new_gw_data.K_turb = gw.data.K_turb;
+                  new_gw_data.kappa_col    = gw.data.kappa_col;
+                  new_gw_data.kappa_sw     = gw.data.kappa_sw;
+                  new_gw_data.Epsilon_Turb = gw.data.Epsilon_Turb;
+                  new_gw_data.cs_f         = gw.data.Csound_false;
+                  new_gw_data.cs_t         = gw.data.Csound_true;
 
                   new_gw_data.status_gw = gw.data.status;
                 }

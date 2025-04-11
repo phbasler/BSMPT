@@ -30,6 +30,8 @@ namespace BSMPT
  * @param compl_prbl false vacuum fraction at completion temperature, default:
  * 1%
  * @param epsturb epsilon value of turbulence contribution, default: 0.1
+ * @param PNLO_scaling pressure scaling at NLO, 1 -> N processes at bubble
+ * wall
  * @param maxpathintegrations maximal number of path integrations, default: 7
  * @param multistepmode choose multi-step PT modes: default (= -1), 0, 1, 2,
  * auto (= 3)
@@ -57,6 +59,7 @@ struct user_input
   double vwall            = 0.95;
   double perc_prbl        = 0.71;
   double compl_prbl       = 0.01;
+  int PNLO_scaling        = 1;
   double epsturb          = 0.1;
   int maxpathintegrations = 7;
   int multistepmode       = -1;
@@ -123,20 +126,31 @@ struct gw_data
   std::optional<double> alpha;
   std::optional<double> beta_over_H;
 
-  std::optional<double> K_sw;
-  std::optional<double> K_turb;
+  std::optional<double> kappa_col;
+  std::optional<double> kappa_sw;
+  std::optional<double> Epsilon_Turb;
+  std::optional<double> cs_f;
+  std::optional<double> cs_t;
 
-  std::optional<double> fpeak_sw;
-  std::optional<double> fpeak_turb;
-  std::optional<double> h2Omega_sw;
-  std::optional<double> h2Omega_turb;
+  std::optional<double> fb_col;
+  std::optional<double> omegab_col;
 
+  std::optional<double> f1_sw;
+  std::optional<double> f2_sw;
+  std::optional<double> omega_2_sw;
+
+  std::optional<double> f1_turb;
+  std::optional<double> f2_turb;
+  std::optional<double> omega_2_turb;
+
+  std::optional<double> SNR_col;
   std::optional<double> SNR_sw;
   std::optional<double> SNR_turb;
   std::optional<double> SNR;
 
   StatusGW status_gw = StatusGW::NotSet;
   std::optional<double> trans_temp;
+  std::optional<double> reh_temp;
 };
 
 struct output
