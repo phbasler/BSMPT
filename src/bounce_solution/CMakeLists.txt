@@ -5,8 +5,8 @@
 
 set(suffix "include/BSMPT/bounce_solution")
 set(header_path "${BSMPT_SOURCE_DIR}/${suffix}")
-set(header ${header_path}/bounce_solution.h ${header_path}/action_calculation.h ${header_path}/gstar.h)
-
+set(header ${header_path}/bounce_solution.h ${header_path}/action_calculation.h
+           ${header_path}/gstar.h)
 
 set(src bounce_solution.cpp action_calculation.cpp gstar.cpp)
 
