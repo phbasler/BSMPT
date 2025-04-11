@@ -87,9 +87,9 @@ InsertCMakeLists[name_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/CMakeLists.txt";
 file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
 If[MemberQ[file,"    ${header_path}/"<> ToString[name] <>".h"] || MemberQ[file,"    ClassPotential"<> ToString[name] <>".cpp"],Print["Model is already in CMakeList.txt"];Return[]];
-indexheader = Position[file, "set(header_path \"${BSMPT_SOURCE_DIR}/include/BSMPT/models\")"][[1,1]]+1;
+indexheader = Position[file, "set(header_path \"${BSMPT_SOURCE_DIR}/${suffix}\")"][[1,1]]+1;
 indexsrc = Position[file, "set(src"][[1,1]];
-indexaddlibrary = Position[file, "add_library(Models ${header} ${src})"][[1,1]];
+indexaddlibrary = Position[file, "add_library(Models STATIC ${header} ${src})"][[1,1]];
 before = file[[;;indexheader]];
 coreheader = Insert[file[[indexheader+1;; indexsrc-1]],"    ${header_path}/ClassPotential" <> ToString[name] <> ".h",-3];
 middlecore = file[[indexsrc;;indexsrc]];
@@ -100,7 +100,7 @@ Export[filename, file, "Table"];]
 
 
 InsertIncludeAllModelsHeader[name_] := Block[{},
-filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/IncludeAllModels.h";
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/utility/ModelIDs.h";
 file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
 If[MemberQ[file,"  " <> ToUpperCase[ToString[name]] <> ","] || MemberQ[file,"    {\"" <> ToLowerCase[ToString[name]] <> "\", ModelIDs::"<> ToUpperCase[ToString[name]] <>"},"],Print["Model is already in IncludeAllModels.h"];Return[]];
 indexheader = Position[file, "  // DO NOT EDIT the part below"][[1,1]];
