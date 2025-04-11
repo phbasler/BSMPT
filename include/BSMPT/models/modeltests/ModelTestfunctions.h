@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/SMparam.h>
 
 namespace BSMPT
@@ -62,6 +63,15 @@ TestResults CheckSymmetricTensorQuarks(
     const std::vector<std::vector<std::complex<double>>> &Tensor);
 TestResults CheckSymmetricTensorGauge(
     const std::vector<std::vector<std::vector<std::vector<double>>>> &Tensor);
+
+/**
+ * Checks if the tensors are correctly implemented. For this the fermion,
+ * quark and gauge boson masses are calculated and printed next to the values
+ * defined in SMparah.h
+ */
+void CheckImplementation(
+    const Class_Potential_Origin &point,
+    const int &WhichMinimizer = Minimizer::WhichMinimizerDefault);
 
 } // namespace ModelTests
 } // namespace BSMPT

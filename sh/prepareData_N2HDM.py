@@ -25,7 +25,6 @@ tanbeta = "p_tbeta"
 m12squared = "p_m12sq"
 vs = "p_vs"
 
-
 def convert(IndexCol):
     df = pd.DataFrame()
     if IndexCol == "False":

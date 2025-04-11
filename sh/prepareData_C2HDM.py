@@ -6,29 +6,41 @@
 import pandas as pd
 import sys
 
-####### The parameters Type, Lambda1 to Lambda4, re_Lambda5, im_Lambda5, tanbeta and re_m12squared should have the label
+####### The parameters Type,Lambda1 to Lambda4,re_Lambda5,im_Lambda5, tanbeta and re_m12squared should have the label
 ####### of the corresponding parameter. With Seperator you have to tell which seperator your data file
 ####### is using (e.g. , \t or space). Your InputFILE will then be saved to OutputFILE.
 
+Seperator = "\t"
+InputFILE = "../example/C2HDM_Input.dat"
+OutputFILE = "C2HDM_Ordered.dat"
+Type = "Type"
+Lambda1 = "L1"
+Lambda2 = "L2"
+Lambda3 = "L3"
+Lambda4 = "L4"
+re_Lambda5 = "re_L5"
+im_Lambda5 = "im_L5"
+tanbeta = "tbeta"
+re_m12squared = "re_m12sq"
 
-def convert(InputFile, OutputFile):
-    print(f"Reading {InputFile}.")
-    print(f"Output is saved to {OutputFile}.")
+    HasIndexCol=False
+    Separator='\t'
+    Type='yuktype'
+    Lambda1='L1'
+    Lambda2='L2'
+    Lambda3='L3'
+    Lambda4='L4'
+    re_Lambda5='re_L5'
+    im_Lambda5='im_L5'
+    tanbeta='tbeta'
+    re_m12squared='re_m12sq'
 
-    HasIndexCol = False
-    Separator = "\t"
-    Type = "yuktype"
-    Lambda1 = "L1"
-    Lambda2 = "L2"
-    Lambda3 = "L3"
-    Lambda4 = "L4"
-    re_Lambda5 = "re_L5"
-    im_Lambda5 = "im_L5"
-    tanbeta = "tbeta"
-    re_m12squared = "re_m12sq"
-
-    with open(InputFile, "r") as file:
-        df = pd.read_csv(file, index_col=HasIndexCol, sep=Separator)
+def convert(IndexCol):
+    df = pd.DataFrame()
+    if IndexCol == "False":
+        df = pd.read_table(InputFILE, index_col=False, sep=Seperator)
+    else:
+        df = pd.read_table(InputFILE, index_col=int(IndexCol), sep=Seperator)
 
     frontcol = [
         Type,
@@ -43,12 +55,19 @@ def convert(InputFile, OutputFile):
     ]
 
     Col = [c for c in frontcol if c in df] + [c for c in df if c not in frontcol]
-
     df = df[Col]
 
-    with open(OutputFile, "w") as file:
-        df.to_csv(file, index=False, sep="\t")
+    df.to_csv(OutputFILE, index=False, sep="\t")
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "-i",
+    "--indexcol",
+    help="Column which stores the index of your data",
+    default="False",
+)
 
 if __name__ == "__main__":
-    convert(sys.argv[1], sys.argv[2])
+    args = parser.parse_args()
+    convert(args.indexcol)
