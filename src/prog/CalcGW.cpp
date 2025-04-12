@@ -33,9 +33,10 @@ struct CLIOptions
   BSMPT::ModelID::ModelIDs Model{ModelID::ModelIDs::NotSet};
   int firstline{0}, lastline{0};
   double templow{0}, temphigh{300};
-  double UserDefined_vwall   = 0.95;
-  double UserDefined_epsturb = 0.1;
-  int MaxPathIntegrations    = 7;
+  double UserDefined_vwall     = 0.95;
+  int UserDefined_PNLO_scaling = 1;
+  double UserDefined_epsturb   = 0.1;
+  int MaxPathIntegrations      = 7;
   std::string inputfile, outputfile;
   bool UseGSL{Minimizer::UseGSLDefault};
   bool UseCMAES{Minimizer::UseLibCMAESDefault};
@@ -130,6 +131,7 @@ try
                        args.UserDefined_vwall,
                        args.perc_prbl,
                        args.compl_prbl,
+                       args.UserDefined_PNLO_scaling,
                        args.UserDefined_epsturb,
                        args.MaxPathIntegrations,
                        args.UseMultiStepPTMode,
@@ -190,17 +192,27 @@ try
               << output.vec_trans_data.at(i).compl_true_vev << sep
               << output.vec_gw_data.at(i).status_gw << sep
               << output.vec_gw_data.at(i).trans_temp.value_or(EmptyValue) << sep
+              << output.vec_gw_data.at(i).reh_temp.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).vwall.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).alpha.value_or(EmptyValue) << sep
               << output.vec_gw_data.at(i).beta_over_H.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).K_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).fpeak_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).h2Omega_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).SNR_sw.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).K_turb.value_or(EmptyValue)
-              << sep << output.vec_gw_data.at(i).fpeak_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).kappa_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).kappa_sw.value_or(EmptyValue)
               << sep
-              << output.vec_gw_data.at(i).h2Omega_turb.value_or(EmptyValue)
+              << output.vec_gw_data.at(i).Epsilon_Turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).cs_f.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).cs_t.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).fb_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).omegab_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f1_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f2_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).omega_2_sw.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f1_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).f2_turb.value_or(EmptyValue)
+              << sep
+              << output.vec_gw_data.at(i).omega_2_turb.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR_col.value_or(EmptyValue)
+              << sep << output.vec_gw_data.at(i).SNR_sw.value_or(EmptyValue)
               << sep << output.vec_gw_data.at(i).SNR_turb.value_or(EmptyValue)
               << sep << output.vec_gw_data.at(i).SNR.value_or(EmptyValue)
               << sep;
@@ -332,12 +344,19 @@ bool CLIOptions::good() const
                   "Invalid temperature choice. Thigh has to be > 0 GeV.");
     return false;
   }
+  if (UserDefined_PNLO_scaling != 1 and UserDefined_PNLO_scaling != 2)
+  {
+    Logger::Write(LoggingLevel::Default,
+                  "Invalid choice for PNLO_scaling. Must be 1 or 2.");
+    return false;
+  }
   if (UserDefined_epsturb != -1 and
       (UserDefined_epsturb < 0 or UserDefined_epsturb > 1))
   {
     Logger::Write(LoggingLevel::Default, "Invalid choice for eps_turb.");
     return false;
   }
+
   if ((UserDefined_vwall != -1 and UserDefined_vwall != -2) and
       (UserDefined_vwall <= 0 or UserDefined_vwall > 1))
   {
@@ -536,6 +555,16 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
 
   try
   {
+    UserDefined_PNLO_scaling = argparser.get_value<int>("pnlo_scaling");
+  }
+  catch (BSMPT::parserException &)
+  {
+    ss << "--pnlo_scaling not set, using default value: "
+       << UserDefined_PNLO_scaling << "\n";
+  }
+
+  try
+  {
     UserDefined_epsturb = argparser.get_value<double>("epsturb");
   }
   catch (BSMPT::parserException &)
@@ -644,6 +673,9 @@ BSMPT::parser prepare_parser()
       "epsturb", "turbulence efficiency factor", "0.1", false);
   argparser.add_subtext(">0: user defined");
   argparser.add_subtext("-1: upper bound");
+  argparser.add_argument("pnlo_scaling", "1 -> N NLO pressure", "1", false);
+  argparser.add_subtext("1: propto gamma");
+  argparser.add_subtext("2: propto gamma^2");
   argparser.add_argument("checknlo", "check for NLO stability", "on", false);
   argparser.add_subtext("on: only keep NLO stable points");
   argparser.add_subtext("off: check disabled");
