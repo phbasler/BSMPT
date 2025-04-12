@@ -592,7 +592,7 @@ CreateExamplePoint[name_,InputParameters_,InputParametersExample_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
 file = {Prepend[InputParameters,Null],{1,Sequence@@InputParametersExample}};
 fileTest = FileNames["Test",Nest[ParentDirectory, NotebookDirectory[], 3]<>"/build/*/bin"][[1]]; 
-Print["To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
+WriteString[$Output,"To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
 Export[filename, file, "Table"];]
 
 
