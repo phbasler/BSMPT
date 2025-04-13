@@ -247,15 +247,17 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
 
   for (auto &thr : MinThreads)
   {
-    if (thr.joinable()) {
+    if (thr.joinable())
+    {
       std::stringstream ss;
       ss << "Wait for thread" << thr.get_id();
       Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
       thr.join();
     }
-    else{
+    else
+    {
       std::stringstream ss;
-      ss << "Thread " << thr.get_id() << " is not joinable"; 
+      ss << "Thread " << thr.get_id() << " is not joinable";
       Logger::Write(LoggingLevel::MinimizerDetailed, ss.str());
     }
   }
@@ -291,20 +293,15 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                       " solutions at T = " + std::to_string(Temp));
   }
 
-  std::size_t minIndex = 0;
-  double VMin          = saveAllMinima[0][dim + 1];
-  for (std::size_t k = 1; k < saveAllMinima.size(); k++)
-  {
-    if (saveAllMinima[k][dim + 1] <= VMin)
-    {
-      VMin     = saveAllMinima[k][dim + 1];
-      minIndex = k;
-    }
-  }
+  auto minIter =
+      std::min_element(saveAllMinima.begin(),
+                       saveAllMinima.end(),
+                       [dim](const auto &lhs, const auto &rhs)
+                       { return lhs.at(dim + 1) <= rhs.at(dim + 1); });
 
   std::vector<double> solV;
   for (std::size_t k = 0; k < dim; k++)
-    solV.push_back(saveAllMinima[minIndex][k]);
+    solV.push_back((*minIter)[k]);
 
   return {solV, true};
 }
@@ -314,8 +311,7 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                                 const double &Temp,
                                 const std::vector<double> &start)
 {
-  nlopt::opt opt(nlopt::LN_SBPLX,
-                 static_cast<unsigned int>(model.get_nVEV()));
+  nlopt::opt opt(nlopt::LN_SBPLX, static_cast<unsigned int>(model.get_nVEV()));
   ShareInformationNLOPT settings(model, Temp);
   auto VEV = start;
   opt.set_min_objective(NLOPTVEff, &settings);
@@ -328,11 +324,12 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                  (result == nlopt::FTOL_REACHED) or
                  (result == nlopt::XTOL_REACHED);
 
-  if(Success)
+  if (Success)
   {
     return VEV;
   }
-  else{
+  else
+  {
     return {};
   }
   // NLOPTReturnType res(VEV, minf, result, Success);
