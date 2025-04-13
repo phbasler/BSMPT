@@ -293,11 +293,11 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                       " solutions at T = " + std::to_string(Temp));
   }
 
-  auto minIter =
-      std::min_element(saveAllMinima.begin(),
-                       saveAllMinima.end(),
-                       [dim](const auto &lhs, const auto &rhs)
-                       { return lhs.at(dim + 1) <= rhs.at(dim + 1); });
+  auto minIter = std::min_element(saveAllMinima.begin(),
+                                  saveAllMinima.end(),
+                                  [dim](const auto &lhs, const auto &rhs) {
+                                    return lhs.at(dim + 1) <= rhs.at(dim + 1);
+                                  });
 
   std::vector<double> solV;
   for (std::size_t k = 0; k < dim; k++)
