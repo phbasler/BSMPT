@@ -185,7 +185,6 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
   std::default_random_engine randGen(seed);
   double RNDMax        = 500;
   std::size_t MaxTries = 600; // 600;
-  std::size_t nCol     = dim + 2;
 
   std::queue<std::vector<double>> StartingPoints;
   for (std::size_t i{0}; i < MaxTries; ++i)
@@ -206,14 +205,15 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
   std::atomic<std::size_t> FoundSolutions{0};
   std::vector<std::thread> MinThreads;
   std::mutex WriteResultLock;
-  std::queue<std::vector<double>> Results;
+  std::vector<std::pair<std::vector<double>, double>> Results;
 
-  auto thread_job = [&FoundSolutions, &WriteResultLock](
-                        std::size_t maxSol,
-                        std::queue<std::vector<double>> &mResults,
-                        std::queue<std::vector<double>> &mStartingPoints,
-                        const Class_Potential_Origin &mModel,
-                        const double &mTemp)
+  auto thread_job =
+      [&FoundSolutions, &WriteResultLock](
+          std::size_t maxSol,
+          std::vector<std::pair<std::vector<double>, double>> &mResults,
+          std::queue<std::vector<double>> &mStartingPoints,
+          const Class_Potential_Origin &mModel,
+          const double &mTemp)
   {
     auto loop_condition = [&]() -> bool
     {
@@ -230,11 +230,11 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
       }
 
       auto solution = NLOPT_SBPLX_Find_Global_Minimum(mModel, mTemp, start);
-      if (not solution.empty())
+      if (not solution.first.empty())
       {
         std::unique_lock<std::mutex> lock(WriteResultLock);
         ++FoundSolutions;
-        mResults.push(std::move(solution));
+        mResults.push_back(std::move(solution));
       }
     }
   };
@@ -264,20 +264,7 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
 
   Logger::Write(LoggingLevel::MinimizerDetailed, "Finished threads");
 
-  while (not Results.empty())
-  {
-    auto res = Results.front();
-    Results.pop();
-    auto vpot = model.MinimizeOrderVEV(res);
-    std::vector<double> row(nCol);
-    for (std::size_t i = 0; i < dim; ++i)
-      row.at(i) = res.at(i);
-    row.at(dim)     = model.EWSBVEV(vpot);
-    row.at(dim + 1) = model.VEff(vpot, Temp, 0);
-    saveAllMinima.push_back(row);
-  }
-
-  if (saveAllMinima.size() == 0)
+  if (Results.size() == 0)
   {
     Logger::Write(LoggingLevel::Default,
                   "No solutions found during the GSL minimization at T = " +
@@ -285,7 +272,7 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
     return std::make_pair(std::vector<double>{}, false);
   }
 
-  if (saveAllMinima.size() < MaxSol)
+  if (Results.size() < MaxSol)
   {
     Logger::Write(LoggingLevel::MinimizerDetailed,
                   "Found " + std::to_string(saveAllMinima.size()) + " of  " +
@@ -293,20 +280,15 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                       " solutions at T = " + std::to_string(Temp));
   }
 
-  auto minIter = std::min_element(saveAllMinima.begin(),
-                                  saveAllMinima.end(),
-                                  [dim](const auto &lhs, const auto &rhs) {
-                                    return lhs.at(dim + 1) <= rhs.at(dim + 1);
-                                  });
+  auto minIter = std::min_element(Results.begin(),
+                                  Results.end(),
+                                  [dim](const auto &lhs, const auto &rhs)
+                                  { return lhs.second <= rhs.second; });
 
-  std::vector<double> solV;
-  for (std::size_t k = 0; k < dim; k++)
-    solV.push_back((*minIter)[k]);
-
-  return {solV, true};
+  return {(*minIter).first, true};
 }
 
-std::vector<double>
+std::pair<std::vector<double>, double>
 NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                                 const double &Temp,
                                 const std::vector<double> &start)
@@ -326,7 +308,7 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
 
   if (Success)
   {
-    return VEV;
+    return {VEV, minf};
   }
   else
   {

@@ -122,7 +122,7 @@ NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                                 const double &Temp,
                                 const int &seed);
 
-std::vector<double>
+std::pair<std::vector<double>, double>
 NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
                                 const double &Temp,
                                 const std::vector<double> &start);
