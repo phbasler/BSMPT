@@ -76,7 +76,6 @@ jobs:
       if: runner.os != 'Windows'
 
     - name: Check if executables were created
-    shell: pwsh
     run: |
         $exe = Get-ChildItem .\build\*\bin\BSMPT.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
         if (-not $exe) {
