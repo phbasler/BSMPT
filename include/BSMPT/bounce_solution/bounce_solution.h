@@ -104,13 +104,8 @@ public:
 
   /**
    * @brief Temperature at which to calculate parameters
-   * - = 0 - Not set
-   * - = 1 - Approximate Nucleation
-   * - = 2 - Exact Nucleation
-   * - = 3 - Percolation
-   * - = 4 - Completion Temperature
    */
-  int which_transition_temp = false;
+  TransitionTemperature which_transition_temp = TransitionTemperature::NotSet;
 
   /**
    * @brief critical temperature/highest temperature when transition can occur
@@ -330,16 +325,10 @@ public:
 
   /**
    * @brief Set the Transition Temp object
-   *
-   * - = 0 - Not set
-   * - = 1 - Approximate Nucleation
-   * - = 2 - Exact Nucleation
-   * - = 3 - Percolation
-   * - = 4 - Completion Temperature
-   *
    * @param which_transition_temp_in
    */
-  void SetAndCalculateGWParameters(const int &which_transition_temp_in);
+  void SetAndCalculateGWParameters(
+      const TransitionTemperature &which_transition_temp_in);
 
   /**
    * @brief status of approximate nucleation temperature calculation

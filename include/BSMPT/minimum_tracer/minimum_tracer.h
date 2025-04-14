@@ -175,13 +175,26 @@ enum class StatusGW
   Failure
 };
 /**
- * @brief Map to convert StatusGWToString to strins
+ * @brief Map to convert StatusGWToString to strings
  *
  */
 const std::unordered_map<StatusGW, std::string> StatusGWToString{
     {StatusGW::NotSet, "not_set"},
     {StatusGW::Success, "success"},
     {StatusGW::Failure, "failure"}};
+
+/**
+ * @brief Possible transitions temperatures
+ *
+ */
+enum class TransitionTemperature
+{
+  NotSet,
+  ApproxNucleation,
+  Nucleation,
+  Percolation,
+  Completion
+};
 
 /**
  * @brief Override << operator to handle StatusNLOStability

@@ -108,7 +108,7 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
 }
 
 void BounceSolution::SetAndCalculateGWParameters(
-    const int &which_transition_temp_in)
+    const TransitionTemperature &which_transition_temp_in)
 {
   which_transition_temp = which_transition_temp_in;
   CalcTransitionTemp();
@@ -616,12 +616,12 @@ double BounceSolution::GetReheatingTemp() const
 
 void BounceSolution::CalcTransitionTemp()
 {
-  if (!which_transition_temp)
+  if (which_transition_temp == TransitionTemperature::NotSet)
   {
     Logger::Write(
         LoggingLevel::TransitionDetailed,
         "'which_transition_temp' not set. Default to percolation temperature");
-    which_transition_temp = 3;
+    which_transition_temp = TransitionTemperature::Percolation;
   }
   // Calculate all temperatures
   CalculateNucleationTempApprox();
@@ -629,7 +629,7 @@ void BounceSolution::CalcTransitionTemp()
   CalculatePercolationTemp();
   CalculateCompletionTemp();
   if (status_nucl_approx == BSMPT::StatusTemperature::Success and
-      which_transition_temp == 1)
+      which_transition_temp == TransitionTemperature::ApproxNucleation)
   {
     Tstar = GetNucleationTempApprox();
     Logger::Write(
@@ -638,7 +638,7 @@ void BounceSolution::CalcTransitionTemp()
             " chosen as transition temperature.");
   }
   else if (status_nucl == BSMPT::StatusTemperature::Success and
-           which_transition_temp == 2)
+           which_transition_temp == TransitionTemperature::Nucleation)
   {
     Tstar = GetNucleationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
@@ -646,7 +646,7 @@ void BounceSolution::CalcTransitionTemp()
                       " chosen as transition temperature.");
   }
   else if (status_perc == BSMPT::StatusTemperature::Success and
-           which_transition_temp == 3)
+           which_transition_temp == TransitionTemperature::Percolation)
   {
     Tstar = GetPercolationTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,
@@ -654,7 +654,7 @@ void BounceSolution::CalcTransitionTemp()
                       " chosen as transition temperature.");
   }
   else if (status_compl == BSMPT::StatusTemperature::Success and
-           which_transition_temp == 4)
+           which_transition_temp == TransitionTemperature::Completion)
   {
     Tstar = GetCompletionTemp();
     Logger::Write(LoggingLevel::TransitionDetailed,

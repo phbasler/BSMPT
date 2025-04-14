@@ -699,7 +699,8 @@ TEST_CASE("Check calculation of Chapman-Jouget velocity")
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
 
   REQUIRE(0.583037 ==
           Approx(trans.ListBounceSolution.at(0).GetChapmanJougetVelocity())
@@ -722,7 +723,8 @@ TEST_CASE("Check calculation of reheating temperature")
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
 
   REQUIRE(
       159.07847220175202 ==
@@ -842,7 +844,8 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
 
   auto output = trans.output_store;
 
@@ -894,12 +897,14 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
   REQUIRE(0.374931042806113 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 
   trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
   REQUIRE(0.6539310662 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
@@ -986,12 +991,14 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample) and not "
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
   REQUIRE(0.374931042806113 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 
   trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
-  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(3);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
   REQUIRE(0.6539310662 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }

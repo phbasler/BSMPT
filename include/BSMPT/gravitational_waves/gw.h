@@ -104,7 +104,8 @@ private:
 public:
   GravitationalWaveData data;
   GravitationalWave(BounceSolution &BACalc,
-                    const int &which_transition_temp = 3);
+                    const TransitionTemperature &which_transition_temp =
+                        TransitionTemperature::Percolation);
   ~GravitationalWave();
 
   /**
