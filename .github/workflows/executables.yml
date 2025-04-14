@@ -66,10 +66,10 @@ jobs:
       if: runner.os == 'Windows'
     
     - name: Run ls
-      run: ls ${CMAKE_CURRENT_BINARY_DIR}/bin
+      run: ls build/*/bin
     - name: Check if executables were created
       run: |
-          if [[ -f ${CMAKE_CURRENT_BINARY_DIR}/bin/BSMPT --help]]; then
+          if [[ -f build/*/bin/BSMPT --help]]; then
             echo "Executable found."
           else
             echo "Executable not found!" >&2
