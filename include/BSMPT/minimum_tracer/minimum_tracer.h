@@ -114,7 +114,7 @@ enum class StatusCoexPair
   NoCoexPairs
 };
 /**
- * @brief Map to convert StatusCoexPairToString to strins
+ * @brief Map to convert StatusCoexPairToString to strings
  *
  */
 const std::unordered_map<StatusCoexPair, std::string> StatusCoexPairToString{
@@ -134,7 +134,7 @@ enum class StatusCrit
   Failure
 };
 /**
- * @brief Map to convert StatusCritToString to strins
+ * @brief Map to convert StatusCritToString to strings
  *
  */
 const std::unordered_map<StatusCrit, std::string> StatusCritToString{
@@ -156,7 +156,7 @@ enum class StatusTemperature
   NaN
 };
 /**
- * @brief Map to convert StatusTemperature to strins
+ * @brief Map to convert StatusTemperature to strings
  *
  */
 const std::unordered_map<StatusTemperature, std::string>
@@ -175,13 +175,26 @@ enum class StatusGW
   Failure
 };
 /**
- * @brief Map to convert StatusGWToString to strins
+ * @brief Map to convert StatusGWToString to strings
  *
  */
 const std::unordered_map<StatusGW, std::string> StatusGWToString{
     {StatusGW::NotSet, "not_set"},
     {StatusGW::Success, "success"},
     {StatusGW::Failure, "failure"}};
+
+/**
+ * @brief Possible transitions temperatures
+ *
+ */
+enum class TransitionTemperature
+{
+  NotSet,
+  ApproxNucleation,
+  Nucleation,
+  Percolation,
+  Completion
+};
 
 /**
  * @brief Override << operator to handle StatusNLOStability

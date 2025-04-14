@@ -12,8 +12,9 @@
 namespace BSMPT
 {
 
-GravitationalWave::GravitationalWave(BounceSolution &BACalc,
-                                     const int &which_transition_temp)
+GravitationalWave::GravitationalWave(
+    BounceSolution &BACalc,
+    const TransitionTemperature &which_transition_temp)
 {
   BACalc.SetAndCalculateGWParameters(which_transition_temp);
   data.transitionTemp = BACalc.GetTransitionTemp();
@@ -53,9 +54,13 @@ GravitationalWave::GravitationalWave(BounceSolution &BACalc,
                                         vprofile);
   // XiShock = fastest fluid shell
   if (data.kappa_sw > 0)
+  {
     data.XiShock = vprofile.back().front();
+  }
   else
+  {
     data.XiShock = 1.; // Does not matter as efficiency if zero
+  }
 
   data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
   if (data.betaH < 1)

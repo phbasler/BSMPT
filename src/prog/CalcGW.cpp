@@ -49,8 +49,8 @@ struct CLIOptions
   double compl_prbl{.01};
   int num_check_pts{10};
   int CheckNLOStability{1};
-  int WhichTransitionTemperature{
-      3}; // 1 = nucl_approx, 2 = nucl, 3 = perc, 4 = compl
+  TransitionTemperature WhichTransitionTemperature{
+      TransitionTemperature::Percolation};
 
   CLIOptions(const BSMPT::parser &argparser);
   bool good() const;
@@ -399,12 +399,6 @@ bool CLIOptions::good() const
                   "completion temperature given.");
     return false;
   }
-  if (WhichTransitionTemperature < 1 or WhichTransitionTemperature > 4)
-  {
-    Logger::Write(LoggingLevel::Default,
-                  "Invalid transition temperature given.");
-  }
-
   return true;
 }
 
@@ -533,19 +527,25 @@ CLIOptions::CLIOptions(const BSMPT::parser &argparser)
     auto trans_string = argparser.get_value("trans_temp");
     if (trans_string == "nucl_approx")
     {
-      WhichTransitionTemperature = 1;
+      WhichTransitionTemperature = TransitionTemperature::ApproxNucleation;
     }
     else if (trans_string == "nucl")
     {
-      WhichTransitionTemperature = 2;
+      WhichTransitionTemperature = TransitionTemperature::Nucleation;
     }
     else if (trans_string == "perc")
     {
-      WhichTransitionTemperature = 3;
+      WhichTransitionTemperature = TransitionTemperature::Percolation;
     }
     else if (trans_string == "compl")
     {
-      WhichTransitionTemperature = 4;
+      WhichTransitionTemperature = TransitionTemperature::Completion;
+    }
+    else
+    {
+      ss << "--trans_temp set with invalid argument '" << trans_string
+         << "'. Using percolation temperature.\n";
+      WhichTransitionTemperature = TransitionTemperature::Percolation;
     }
   }
   catch (BSMPT::parserException &)

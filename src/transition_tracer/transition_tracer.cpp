@@ -274,19 +274,23 @@ TransitionTracer::TransitionTracer(user_input &input)
 
               BSMPT::StatusTemperature trans_status =
                   BSMPT::StatusTemperature::NotSet;
-              if (input.which_transition_temp == 1)
+              if (input.which_transition_temp ==
+                  TransitionTemperature::ApproxNucleation)
               {
                 trans_status = bounce.status_nucl_approx;
               }
-              else if (input.which_transition_temp == 2)
+              else if (input.which_transition_temp ==
+                       TransitionTemperature::Nucleation)
               {
                 trans_status = bounce.status_nucl;
               }
-              else if (input.which_transition_temp == 3)
+              else if (input.which_transition_temp ==
+                       TransitionTemperature::Percolation)
               {
                 trans_status = bounce.status_perc;
               }
-              else if (input.which_transition_temp == 4)
+              else if (input.which_transition_temp ==
+                       TransitionTemperature::Completion)
               {
                 trans_status = bounce.status_compl;
               }
