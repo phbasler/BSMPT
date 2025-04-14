@@ -683,7 +683,7 @@ TEST_CASE("Checking phase tracking for SM with Mode 2", "[gw]")
   REQUIRE(vac.PhasesList.size() == 2);
 }
 
-TEST_CASE("Check calculation of Chapman-Jouget velocity")
+TEST_CASE("Check calculation of Chapman-Jouget velocity", "[gw]")
 {
   const std::vector<double> example_point_SM{
       /* muSq = */ -7823.7540500000005,
@@ -707,7 +707,7 @@ TEST_CASE("Check calculation of Chapman-Jouget velocity")
               .epsilon(1e-2));
 }
 
-TEST_CASE("Check calculation of reheating temperature")
+TEST_CASE("Check calculation of reheating temperature", "[gw]")
 {
   const std::vector<double> example_point_SM{
       /* muSq = */ -7823.7540500000005,
@@ -731,7 +731,7 @@ TEST_CASE("Check calculation of reheating temperature")
       Approx(trans.ListBounceSolution.at(0).GetReheatingTemp()).epsilon(1e-2));
 }
 
-TEST_CASE("Check maximal thermal mass squared over temperature ratio")
+TEST_CASE("Check maximal thermal mass squared over temperature ratio", "[gw]")
 {
   const std::vector<double> example_point_SM{
       /* muSq = */ -7823.7540500000005,
