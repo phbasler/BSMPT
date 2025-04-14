@@ -65,8 +65,9 @@ jobs:
       run: cmake --build --preset $env:GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
       if: runner.os == 'Windows'
     
-    - name: Check if executables were created
+    - name: Run ls
       run: ls
+    - name: Check if executables were created
       run: |
           if [[ -f ./BSMPT --help]]; then
             echo "Executable found."
