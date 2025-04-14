@@ -65,8 +65,6 @@ jobs:
       run: cmake --build --preset $env:GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
       if: runner.os == 'Windows'
     
-    - name: Run ls
-      run: ls build/*/bin
     - name: Check if executables were created
       run: |
           if ./build/*/bin/BSMPT | grep -q 'BSMPT calculates the strength of the electroweak phase transition'; then
@@ -75,5 +73,15 @@ jobs:
             echo "Executable not found!" >&2
             exit 1
           fi      
+      if: runner.os != 'Windows'
 
-
+    - name: Check if executables were created
+      shell: bash
+      run: |
+          if ./build/*/bin/BSMPT | grep -q 'BSMPT calculates the strength of the electroweak phase transition'; then
+            echo "Executable found."
+          else
+            echo "Executable not found!" >&2
+            exit 1
+          fi    
+      if: runner.os == 'Windows'
