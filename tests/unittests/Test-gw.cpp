@@ -804,6 +804,8 @@ TEST_CASE("Check gstar implementation", "[gw]")
 
   BounceSolution BASolution(modelPointer);
   BASolution.InitializeGstarProfile();
+  REQUIRE(108.75 == Approx(BASolution.CalcGstarPureRad()).epsilon(1e-2));
+  REQUIRE(108.75 == Approx(BASolution.GetGstar()).epsilon(1e-2));
   REQUIRE(108.75 == Approx(BASolution.GetGstar(1000)).epsilon(1e-2));
   REQUIRE(104.65 == Approx(BASolution.GetGstar(100)).epsilon(1e-2));
   REQUIRE(86.72 == Approx(BASolution.GetGstar(10)).epsilon(1e-2));

@@ -509,7 +509,7 @@ void BounceSolution::SetGstar(const double &gstar_in)
 
 void BounceSolution::InitializeGstarProfile()
 {
-  CalcGstarPureRad();
+  this->SetGstar(CalcGstarPureRad());
   GstarProfileLowT.set_boundary(
       tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
   GstarProfileLowT.set_points(TGstarLowT, GstarLowT);
@@ -557,6 +557,11 @@ double BounceSolution::GetGstar(const double &T) const
              (log(gstar / GstarHighT.back()) /
               log(TGstarHighT.back() / TTreshold))) *
          GstarProfileHighT(TinMeV);
+}
+
+double BounceSolution::GetGstar()
+{
+  return this->CalcGstarPureRad();
 }
 
 void BounceSolution::SetCriticalTemp(const double &T_in)
@@ -694,7 +699,7 @@ double BounceSolution::HubbleRate(const double &Temp)
          std::sqrt(rhoR + DeltaV);
 }
 
-void BounceSolution::CalcGstarPureRad()
+double BounceSolution::CalcGstarPureRad()
 {
   std::size_t NHiggs = this->modelPointer->get_NHiggs();
 
@@ -702,7 +707,7 @@ void BounceSolution::CalcGstarPureRad()
   double gf   = 6 * 3 * 2 * 2 + 3 * 2 * 2 + 3 * 2;
   double geff = gb + 7. / 8 * gf;
 
-  this->SetGstar(geff);
+  return geff;
 }
 
 void BounceSolution::CalculateNucleationTemp()

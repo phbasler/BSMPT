@@ -544,6 +544,13 @@ public:
   double GetGstar(const double &T) const;
 
   /**
+   * @brief Get Gstar for radiation-dominated epoch
+   *
+   * @return double
+   */
+  double GetGstar();
+
+  /**
    * @brief SetCriticalTemp Set critical temperature
    */
   void SetCriticalTemp(const double &T_in);
@@ -616,7 +623,7 @@ public:
    * @brief CalcGstarPureRad Calculate the number of effective degrees of
    * freedom assuming a purely radiative universe
    */
-  void CalcGstarPureRad();
+  double CalcGstarPureRad();
 
   /**
    * @brief Calculation of nucleation temperature
