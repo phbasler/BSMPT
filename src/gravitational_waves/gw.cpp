@@ -54,9 +54,13 @@ GravitationalWave::GravitationalWave(
                                         vprofile);
   // XiShock = fastest fluid shell
   if (data.kappa_sw > 0)
+  {
     data.XiShock = vprofile.back().front();
+  }
   else
+  {
     data.XiShock = 1.; // Does not matter as efficiency if zero
+  }
 
   data.K_sw = GetK_sw(data.PTStrength, data.kappa_sw);
   if (data.betaH < 1)

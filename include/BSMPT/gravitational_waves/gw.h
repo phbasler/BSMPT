@@ -111,8 +111,7 @@ public:
   /**
    * @brief CalcEpsTurb calculate epsilon for turbulence contribution
    * @param epsturb_in is the input value for epsturb. If [0..1] set
-   * to value, for -1 we use the upper bound from
-   * https://arxiv.org/abs/1704.05871
+   * to value, for -1 we use the upper bound sqrt(1 - Upsilon)
    * @return value for epsturb
    */
   double CalcEpsTurb(double epsturb_in);
