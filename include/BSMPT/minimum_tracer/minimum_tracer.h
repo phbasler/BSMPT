@@ -114,7 +114,7 @@ enum class StatusCoexPair
   NoCoexPairs
 };
 /**
- * @brief Map to convert StatusCoexPairToString to strins
+ * @brief Map to convert StatusCoexPairToString to strings
  *
  */
 const std::unordered_map<StatusCoexPair, std::string> StatusCoexPairToString{
@@ -134,7 +134,7 @@ enum class StatusCrit
   Failure
 };
 /**
- * @brief Map to convert StatusCritToString to strins
+ * @brief Map to convert StatusCritToString to strings
  *
  */
 const std::unordered_map<StatusCrit, std::string> StatusCritToString{
@@ -156,7 +156,7 @@ enum class StatusTemperature
   NaN
 };
 /**
- * @brief Map to convert StatusTemperature to strins
+ * @brief Map to convert StatusTemperature to strings
  *
  */
 const std::unordered_map<StatusTemperature, std::string>
