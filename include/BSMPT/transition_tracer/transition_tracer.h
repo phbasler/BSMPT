@@ -46,8 +46,7 @@ namespace BSMPT
  * @param which_minimizer which minimizers are used
  * @param use_multithreading whether multi-threading is used
  * @param gw_calculation bool to turn GW parameter calculation on/off
- * @param which_transition_temp which transition temperature is chosen: 1 =
- * nucl_approx, 2 = nucl, 3 = perc (default), 4 = compl
+ * @param which_transition_temp which transition temperature is chosen
  * @param number_of_initial_scan_temperatures number of temperature steps in the
  * initial scan of the bounce solver
  */
@@ -70,8 +69,9 @@ struct user_input
   int which_minimizer     = Minimizer::WhichMinimizerDefault;
   bool use_multithreading = false;
 
-  bool gw_calculation                        = false;
-  int which_transition_temp                  = 3;
+  bool gw_calculation = false;
+  TransitionTemperature which_transition_temp =
+      TransitionTemperature::Percolation;
   size_t number_of_initial_scan_temperatures = 25;
 };
 

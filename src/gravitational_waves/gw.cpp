@@ -12,8 +12,9 @@
 namespace BSMPT
 {
 
-GravitationalWave::GravitationalWave(BounceSolution &BACalc,
-                                     const int &which_transition_temp)
+GravitationalWave::GravitationalWave(
+    BounceSolution &BACalc,
+    const TransitionTemperature &which_transition_temp)
 {
   BACalc.SetAndCalculateGWParameters(which_transition_temp);
   data.transitionTemp = BACalc.GetTransitionTemp();
