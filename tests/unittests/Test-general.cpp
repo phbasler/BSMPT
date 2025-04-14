@@ -71,8 +71,14 @@ TEST_CASE("Checking if executables were created", "[general]")
   std::array<char, 128> buffer;
   std::string result;
   // Open pipe to file
+
+#ifdef _WIN32
+  std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd, "r"), _pclose);
+#else
   std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"),
                                                 pclose);
+#endif
+
   if (!pipe)
   {
     FAIL("popen() failed! Check if executables were created.");
