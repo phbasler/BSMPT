@@ -15,6 +15,26 @@
 
 namespace BSMPT
 {
-extern const std::vector<double> TGstarLowT, TGstarHighT;
-extern const std::vector<double> GstarLowT, GstarHighT;
+
+/**
+ * @brief List of temperatures below T = 214 GeV for the gstar spline
+ * construction
+ *
+ */
+extern const std::vector<double> TGstarLowT;
+/**
+ * @brief  List of temperatures above T = 214 GeV for the gstar spline
+ * construction
+ */
+extern const std::vector<double> TGstarHighT;
+/**
+ * @brief List of gstar below T = 214 GeV for the gstar spline
+ * construction
+ */
+extern const std::vector<double> GstarLowT;
+/**
+ * @brief List of gstar above T = 214 GeV for the gstar spline
+ * construction
+ */
+extern const std::vector<double> GstarHighT;
 } // namespace BSMPT
