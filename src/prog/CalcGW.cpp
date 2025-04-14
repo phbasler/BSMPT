@@ -131,7 +131,6 @@ try
                        args.UserDefined_vwall,
                        args.perc_prbl,
                        args.compl_prbl,
-                       args.UserDefined_PNLO_scaling,
                        args.UserDefined_epsturb,
                        args.MaxPathIntegrations,
                        args.UseMultiStepPTMode,
@@ -141,7 +140,8 @@ try
                        args.WhichMinimizer,
                        args.UseMultithreading,
                        true,
-                       args.WhichTransitionTemperature};
+                       args.WhichTransitionTemperature,
+                       args.UserDefined_PNLO_scaling};
 
       TransitionTracer trans(input);
 

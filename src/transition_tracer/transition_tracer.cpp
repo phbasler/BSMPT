@@ -145,10 +145,10 @@ TransitionTracer::TransitionTracer(user_input &input)
                                   mintracer,
                                   pair,
                                   input.vwall,
-                                  input.PNLO_scaling,
                                   input.epsturb,
                                   input.maxpathintegrations,
-                                  input.number_of_initial_scan_temperatures);
+                                  input.number_of_initial_scan_temperatures,
+                                  input.PNLO_scaling);
 
             ListBounceSolution.push_back(bounce);
 

@@ -58,7 +58,6 @@ struct user_input
   double vwall            = 0.95;
   double perc_prbl        = 0.71;
   double compl_prbl       = 0.01;
-  int PNLO_scaling        = 1;
   double epsturb          = 0.1;
   int maxpathintegrations = 7;
   int multistepmode       = -1;
@@ -72,6 +71,7 @@ struct user_input
   bool gw_calculation = false;
   TransitionTemperature which_transition_temp =
       TransitionTemperature::Percolation;
+  int PNLO_scaling                           = 1;
   size_t number_of_initial_scan_temperatures = 25;
 };
 
