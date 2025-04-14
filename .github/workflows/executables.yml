@@ -69,7 +69,7 @@ jobs:
       run: ls build/*/bin
     - name: Check if executables were created
       run: |
-          if [[ -f build/*/bin/BSMPT --help]]; then
+          if ./build/*/bin/BSMPT | grep -q 'BSMPT calculates the strength of the electroweak phase transition'; then
             echo "Executable found."
           else
             echo "Executable not found!" >&2
