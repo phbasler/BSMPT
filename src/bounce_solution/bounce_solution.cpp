@@ -23,11 +23,11 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
-    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
     const size_t &NumberOfInitialScanTemperatures_in,
-    std::vector<Eigen::MatrixXd> GroupElements_in)
+    std::vector<Eigen::MatrixXd> GroupElements_in,
+    const int &UserDefined_PNLO_scaling_in)
 {
   modelPointer = pointer_in;
   MinTracer    = MinTracer_in;
@@ -57,20 +57,20 @@ BounceSolution::BounceSolution(
     const std::shared_ptr<MinimumTracer> &MinTracer_in,
     const CoexPhases &phase_pair_in,
     const double &UserDefined_vwall_in,
-    const int &UserDefined_PNLO_scaling_in,
     const double &UserDefined_epsturb_in,
     const int &MaxPathIntegrations_in,
-    const size_t &NumberOfInitialScanTemperatures_in)
+    const size_t &NumberOfInitialScanTemperatures_in,
+    const int &UserDefined_PNLO_scaling_in)
     : BounceSolution(pointer_in,
                      MinTracer_in,
                      phase_pair_in,
                      UserDefined_vwall_in,
-                     UserDefined_PNLO_scaling_in,
                      UserDefined_epsturb_in,
                      MaxPathIntegrations_in,
                      NumberOfInitialScanTemperatures_in,
                      {Eigen::MatrixXd::Identity(pointer_in->get_nVEV(),
-                                                pointer_in->get_nVEV())})
+                                                pointer_in->get_nVEV())},
+                     UserDefined_PNLO_scaling_in)
 {
 }
 
@@ -545,17 +545,17 @@ void BounceSolution::InitializedVSpline()
 
 double BounceSolution::GetGstar(const double &T) const
 {
-  const double TinMeV    = T * 1000.;
-  const double TTreshold = TGstarLowT.back(); // = TGstarHighT.front()
-  // Everything is multiplied by 1000 because the fit was done in MeV
+  const double TinMeV =
+      T * 1000.; // Multiplied by 1000 because the fit was done in MeV
+  const double TQCD = TGstarLowT.back(); // QCD transition = 214 MeV
   if (TinMeV < TGstarLowT.front())
     return GstarLowT.front(); // Set to \f$ N_\nu \f$
   if (TinMeV > TGstarHighT.back()) return gstar;
-  if (TinMeV < TTreshold) return GstarProfileLowT(TinMeV);
+  if (TinMeV < TQCD) return GstarProfileLowT(TinMeV);
 
-  return pow(TinMeV / TTreshold,
+  return pow(TinMeV / TQCD,
              (log(gstar / GstarHighT.back()) /
-              log(TGstarHighT.back() / TTreshold))) *
+              log(TGstarHighT.back() / TQCD))) *
          GstarProfileHighT(TinMeV);
 }
 
