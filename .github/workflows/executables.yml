@@ -87,6 +87,7 @@ jobs:
       $output = & $exe --help
       if ($output -like '*BSMPT calculates the strength of the electroweak phase transition*') {
         Write-Host "Executable found and verified."
+        exit 0
       }
       else {
         Write-Error "Executable output did not match expected string."
