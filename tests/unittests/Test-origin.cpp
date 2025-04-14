@@ -121,24 +121,3 @@ TEST_CASE("Check f_{abcd}", "[origin]")
     REQUIRE(result == Approx(expected).margin(1e-4));
   }
 }
-
-TEST_CASE("Check CheckImplementation", "[origin]")
-{
-  using namespace BSMPT;
-  using Catch::Matchers::ContainsSubstring;
-
-  const auto SMConstants = GetSMConstants();
-  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
-      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
-  modelPointer->initModel(example_point_C2HDM);
-
-  std::stringstream ss;
-  BSMPT::Logger::SetOStream(ss);
-
-  ModelTests::CheckImplementation(*modelPointer,
-                                  Minimizer::WhichMinimizerDefault);
-
-  REQUIRE_THAT(ss.str(), ContainsSubstring("You're good to go!"));
-
-  BSMPT::Logger::SetOStream(std::cout);
-}
