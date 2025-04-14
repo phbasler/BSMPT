@@ -77,10 +77,17 @@ jobs:
 
     - name: Check if executables were created
       run: |
-          if (.\\build\\*\\bin\\BSMPT | grep -q 'BSMPT calculates the strength of the electroweak phase transition';) then
-            echo "Executable found."
-          else
-            echo "Executable not found!" >&2
+          $exe = Get-ChildItem ./build/*/bin/BSMPT.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($exe)
+            $output = & $exe --help
+            if ($output -like '*BSMPT calculates the strength of the electroweak phase transition*')
+              Write-Host "Executable found and verified."
+            else
+              Write-Error "Executable found but output does not match."
             exit 1
-          fi    
+            fi
+          else
+            Write-Error "Executable not found."
+            exit 1
+          fi
       if: runner.os == 'Windows'
