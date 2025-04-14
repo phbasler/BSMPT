@@ -12,19 +12,24 @@ The parameters Type, Lambda1 to Lambda8, tanbeta, m12squared and vs should
 have the label of the corresponding parameter.
 """
 
-Type = "yuktype"
-Lambda1 = "L1"
-Lambda2 = "L2"
-Lambda3 = "L3"
-Lambda4 = "L4"
-Lambda5 = "L5"
-Lambda6 = "L6"
-Lambda7 = "L7"
-Lambda8 = "L8"
-tanbeta = "tbeta"
-m12squared = "m12sq"
-vs = "vs"
+type_names = ["yuktype", "type", "Type", "p_THDMtype"]
+Lambda1_names = ["L1", "p_L1"]
+Lambda2_names = ["L2", "p_L2"]
+Lambda3_names = ["L3", "p_L3"]
+Lambda4_names = ["L4", "p_L4"]
+Lambda5_names = ["L5", "p_L5"]
+Lambda6_names = ["L6", "p_L6"]
+Lambda7_names = ["L7", "p_L7"]
+Lambda8_names = ["L8", "p_L8"]
+tanbeta_names = ["tbeta", "p_tbeta"]
+m12squared_names = ["m12sq", "m12sqr", "p_m12sq"]
+vs_names = ["vs", "p_vs"]
 
+def get_column_names(name_list, df):
+    name = next((el for el in name_list if el in df), None)
+    if name is None:
+        raise ValueError("No column matching " + str(name_list) + " found in file. Check the input or add column name to the list.")
+    return name
 
 def convert(IndexCol, InputFILE, OutputFILE, Seperator):
     df = pd.DataFrame()
@@ -32,6 +37,19 @@ def convert(IndexCol, InputFILE, OutputFILE, Seperator):
         df = pd.read_table(InputFILE, index_col=False, sep=Seperator)
     else:
         df = pd.read_table(InputFILE, index_col=int(IndexCol), sep=Seperator)
+
+    Type = get_column_names(type_names, df)
+    Lambda1 = get_column_names(Lambda1_names, df)
+    Lambda2 = get_column_names(Lambda2_names, df)
+    Lambda3 = get_column_names(Lambda3_names, df)
+    Lambda4 = get_column_names(Lambda4_names, df)
+    Lambda5 = get_column_names(Lambda5_names, df)
+    Lambda6 = get_column_names(Lambda6_names, df)
+    Lambda7 = get_column_names(Lambda7_names, df)
+    Lambda8 = get_column_names(Lambda8_names, df)
+    tanbeta = get_column_names(tanbeta_names, df)
+    m12squared = get_column_names(m12squared_names, df)
+    vs = get_column_names(vs_names, df)
 
     frontcol = [
         Type,

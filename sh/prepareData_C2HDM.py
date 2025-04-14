@@ -12,16 +12,21 @@ The parameters Type,Lambda1 to Lambda4, re_Lambda5, im_Lambda5, tanbeta,
 re_m12squared should have the label of the corresponding parameter.
 """
 
-Type = "yuktype"
-Lambda1 = "L1"
-Lambda2 = "L2"
-Lambda3 = "L3"
-Lambda4 = "L4"
-re_Lambda5 = "L5r"
-im_Lambda5 = "L5i"
-tanbeta = "tbeta"
-re_m12squared = "m12sqr"
+type_names = ["yuktype", "type", "Type"]
+Lambda1_names = ["L1"]
+Lambda2_names = ["L2"]
+Lambda3_names = ["L3"]
+Lambda4_names = ["L4"]
+re_Lambda5_names = ["L5r", "re_L5"]
+im_Lambda5_names = ["L5i", "im_L5"]
+tanbeta_names = ["tbeta", "p_tbeta"]
+re_m12squared_names = ["m12sq", "m12sqr", "re_m12sq"]
 
+def get_column_names(name_list, df):
+    name = next((el for el in name_list if el in df), None)
+    if name is None:
+        raise ValueError("No column matching " + str(name_list) + " found in file. Check the input or add column name to the list.")
+    return name
 
 def convert(IndexCol, InputFILE, OutputFILE, Seperator):
     df = pd.DataFrame()
@@ -29,6 +34,16 @@ def convert(IndexCol, InputFILE, OutputFILE, Seperator):
         df = pd.read_table(InputFILE, index_col=False, sep=Seperator)
     else:
         df = pd.read_table(InputFILE, index_col=int(IndexCol), sep=Seperator)
+
+    Type = get_column_names(type_names, df)
+    Lambda1 = get_column_names(Lambda1_names, df)
+    Lambda2 = get_column_names(Lambda2_names, df)
+    Lambda3 = get_column_names(Lambda3_names, df)
+    Lambda4 = get_column_names(Lambda4_names, df)
+    re_Lambda5 = get_column_names(re_Lambda5_names, df)
+    im_Lambda5 = get_column_names(im_Lambda5_names, df)
+    re_m12squared = get_column_names(re_m12squared_names, df)
+    tanbeta = get_column_names(tanbeta_names, df)
 
     frontcol = [
         Type,
