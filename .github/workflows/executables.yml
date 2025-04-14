@@ -76,9 +76,8 @@ jobs:
       if: runner.os != 'Windows'
 
     - name: Check if executables were created
-      shell: bash
       run: |
-          if ./build/*/bin/BSMPT | grep -q 'BSMPT calculates the strength of the electroweak phase transition'; then
+          if (./build/*/bin/BSMPT | grep -q 'BSMPT calculates the strength of the electroweak phase transition'); then
             echo "Executable found."
           else
             echo "Executable not found!" >&2
