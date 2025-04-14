@@ -8,11 +8,18 @@
 
 using Approx = Catch::Approx;
 
+#include <BSMPT/config.h>
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/SMparam.h>
 #include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/utility/utility.h>
+#include <array>
+#include <filesystem>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
 TEST_CASE("Checking CKM Unitarity", "[general]")
 {
@@ -52,4 +59,30 @@ TEST_CASE("Check calculating of minimizer selection", "[general]")
       }
     }
   }
+}
+
+TEST_CASE("Checking if executables were created", "[general]")
+{
+
+  const std::string build = CMAKE_RUNTIME_OUTPUT_DIRECTORY;
+  const std::string cmd   = std::string(CMAKE_RUNTIME_OUTPUT_DIRECTORY) +
+                          std::string("/BSMPT --help");
+
+  std::array<char, 128> buffer;
+  std::string result;
+  // Open pipe to file
+  std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"),
+                                                pclose);
+  if (!pipe)
+  {
+    FAIL("popen() failed! Check if executables were created.");
+  }
+  // Read output
+  while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+  {
+    result += buffer.data();
+  }
+
+  REQUIRE("BSMPT calculates the strength of the electroweak phase transition" ==
+          result.substr(0, 65));
 }
