@@ -5,3 +5,4 @@
 #cmakedefine Boost_FOUND
 #cmakedefine nlohmann_json_FOUND
 #cmakedefine CMAKE_RUNTIME_OUTPUT_DIRECTORY "@CMAKE_RUNTIME_OUTPUT_DIRECTORY@"
+#cmakedefine BSMPTBuildExecutables "@BSMPTBuildExecutables@"

@@ -64,6 +64,9 @@ TEST_CASE("Check calculating of minimizer selection", "[general]")
 TEST_CASE("Checking if executables were created", "[general]")
 {
 
+#ifndef BSMPTBuildExecutables
+  SKIP("BSMPTBuildExecutables set to false. No executables.");
+#endif
   const std::string build = CMAKE_RUNTIME_OUTPUT_DIRECTORY;
   const std::string cmd   = std::string(CMAKE_RUNTIME_OUTPUT_DIRECTORY) +
                           std::string("/BSMPT --help");
