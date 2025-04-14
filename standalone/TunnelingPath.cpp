@@ -9,7 +9,7 @@
 #include <BSMPT/minimum_tracer/minimum_tracer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/transition_tracer/transition_tracer.h>
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
@@ -58,6 +58,7 @@ int main()
                    0.95,                  /*UserDefined_vwall*/
                    .71,                   /*perc_prbl*/
                    .01,                   /*compl_prbl*/
+                   1,                     /*userDefined_PNLO_scaling*/
                    0.1,                   /*UserDefined_epsturb*/
                    7,                     /*MaxPathIntegrations*/
                    -1,                    /*UseMultiStepPTMode*/
@@ -77,7 +78,7 @@ int main()
     bounce.CalculatePercolationTemp();
     if (bounce.GetPercolationTemp() == -1) continue;
     double errorTtoTp = 1e100;
-    BounceActionInt const *ClosestBounceActionInt;
+    BounceActionInt const *ClosestBounceActionInt{nullptr};
     std::cout << "Found a transitions with Tp =\t"
               << bounce.GetPercolationTemp() << " GeV.\n";
     for (const auto &BAInt : bounce.SolutionList)
@@ -87,6 +88,11 @@ int main()
         errorTtoTp             = abs(BAInt.T - bounce.GetPercolationTemp());
         ClosestBounceActionInt = &BAInt;
       }
+    }
+
+    if (ClosestBounceActionInt == nullptr)
+    {
+      throw std::runtime_error("ClosestBounceActionInt was not set");
     }
     std::cout << "The closest solution is at a distance of " << errorTtoTp
               << " GeV from Tp.\n The tunnenling path is\n";

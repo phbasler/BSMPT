@@ -1,25 +1,34 @@
-name: cpp-linter
+name: Run all linters
 
-on:
+on: 
   pull_request:
-    branches: [master]
-
+      branches: [ master, develop ]
+     
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }} 
-  cancel-in-progress: true
-
+    group: ${{ github.workflow }}-${{ github.ref }} 
+    cancel-in-progress: true
+ 
 jobs:
-  cpp-linter:
+  linter:
     runs-on: ubuntu-latest
+    env:
+      LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+  
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          token: ${{ secrets.LINTER_PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit == 'true'
 
-      - name: Install clang-format
-        if: inputs.apply_clang_format
-        run: pip3 install clang-format==14.0.0
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit != 'true'
 
       - run: git fetch origin $GITHUB_BASE_REF
 
@@ -27,6 +36,12 @@ jobs:
         id: branch-name
         run:
           echo "branchName=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+
+      - name: Format CMake files
+        id: cmake-format
+        uses: PuneetMatharu/cmake-format-lint-action@v1.0.6
+        with:
+          args: --config-files .cmake-format.py --in-place
 
       - name: Define base git diff args
         id: git-diff-args
@@ -51,8 +66,14 @@ jobs:
           git config user.email "<>"
 
       - name: Commit changes
-        if: steps.check-changes.outputs.ChangesFound == 'True'
+        if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
         run: |
           git commit -am "Automatically applied linter"
           git push
+
+      - name: Notify that changes are required
+        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit != 'true' }}
+        run: |
+          echo "Linter changes are required" >> $GITHUB_STEP_SUMMARY
+          exit 1
 

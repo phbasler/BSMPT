@@ -30,6 +30,8 @@ namespace BSMPT
  * @param compl_prbl false vacuum fraction at completion temperature, default:
  * 1%
  * @param epsturb epsilon value of turbulence contribution, default: 0.1
+ * @param PNLO_scaling pressure scaling at NLO, 1 -> N processes at bubble
+ * wall
  * @param maxpathintegrations maximal number of path integrations, default: 7
  * @param multistepmode choose multi-step PT modes: default (= -1), 0, 1, 2,
  * auto (= 3)
@@ -44,8 +46,7 @@ namespace BSMPT
  * @param which_minimizer which minimizers are used
  * @param use_multithreading whether multi-threading is used
  * @param gw_calculation bool to turn GW parameter calculation on/off
- * @param which_transition_temp which transition temperature is chosen: 1 =
- * nucl_approx, 2 = nucl, 3 = perc (default), 4 = compl
+ * @param which_transition_temp which transition temperature is chosen
  * @param number_of_initial_scan_temperatures number of temperature steps in the
  * initial scan of the bounce solver
  */
@@ -57,6 +58,7 @@ struct user_input
   double vwall            = 0.95;
   double perc_prbl        = 0.71;
   double compl_prbl       = 0.01;
+  int PNLO_scaling        = 1;
   double epsturb          = 0.1;
   int maxpathintegrations = 7;
   int multistepmode       = -1;
@@ -67,8 +69,9 @@ struct user_input
   int which_minimizer     = Minimizer::WhichMinimizerDefault;
   bool use_multithreading = false;
 
-  bool gw_calculation                        = false;
-  int which_transition_temp                  = 3;
+  bool gw_calculation = false;
+  TransitionTemperature which_transition_temp =
+      TransitionTemperature::Percolation;
   size_t number_of_initial_scan_temperatures = 25;
 };
 
@@ -123,20 +126,31 @@ struct gw_data
   std::optional<double> alpha;
   std::optional<double> beta_over_H;
 
-  std::optional<double> K_sw;
-  std::optional<double> K_turb;
+  std::optional<double> kappa_col;
+  std::optional<double> kappa_sw;
+  std::optional<double> Epsilon_Turb;
+  std::optional<double> cs_f;
+  std::optional<double> cs_t;
 
-  std::optional<double> fpeak_sw;
-  std::optional<double> fpeak_turb;
-  std::optional<double> h2Omega_sw;
-  std::optional<double> h2Omega_turb;
+  std::optional<double> fb_col;
+  std::optional<double> omegab_col;
 
+  std::optional<double> f1_sw;
+  std::optional<double> f2_sw;
+  std::optional<double> omega_2_sw;
+
+  std::optional<double> f1_turb;
+  std::optional<double> f2_turb;
+  std::optional<double> omega_2_turb;
+
+  std::optional<double> SNR_col;
   std::optional<double> SNR_sw;
   std::optional<double> SNR_turb;
   std::optional<double> SNR;
 
   StatusGW status_gw = StatusGW::NotSet;
   std::optional<double> trans_temp;
+  std::optional<double> reh_temp;
 };
 
 struct output
@@ -181,7 +195,6 @@ public:
 
   /**
    * @brief Store the list of bounce solutions
-   *
    */
   std::vector<BounceSolution> ListBounceSolution;
 
@@ -189,6 +202,17 @@ public:
    * @brief output data storage
    */
   output output_store;
+
+  /**
+   * @brief CheckMassRatio
+   * @param input
+   * @param vev
+   * @param temp
+   * @return maximal ratio
+   */
+  double CheckMassRatio(const user_input &input,
+                        const std::vector<double> &vec,
+                        const double &temp) const;
 };
 
 } // namespace BSMPT

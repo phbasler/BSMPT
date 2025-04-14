@@ -8,8 +8,7 @@ import pandas as pd
 import argparse
 
 """
-The parameters Type, Lambda1 to Lambda8, tanbeta, m12squared and vs should
-have the label of the corresponding parameter.
+The column labels used in the input file need to be contained in the parameter name lists.
 """
 
 type_names = ["yuktype", "type", "Type", "p_THDMtype"]

@@ -338,15 +338,6 @@ double JbosonInterpolated(const double &x, int diff)
   return res;
 }
 
-tk::spline JbosonNegativeSpline(NegLinearIntTransposed[0],
-                                NegLinearIntTransposed[1],
-                                tk::spline::cspline,
-                                false,
-                                tk::spline::first_deriv,
-                                -pow(M_PI, 2) / 12,
-                                tk::spline::first_deriv,
-                                3.816357189);
-
 double JbosonInterpolatedNegative(const double &x, int diff)
 {
   if (x >= 0) return 0;
