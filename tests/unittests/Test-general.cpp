@@ -73,7 +73,8 @@ TEST_CASE("Checking if executables were created", "[general]")
   // Open pipe to file
 
 #ifdef _WIN32
-  std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd, "r"), _pclose);
+  std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"),
+                                                 _pclose);
 #else
   std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"),
                                                 pclose);
