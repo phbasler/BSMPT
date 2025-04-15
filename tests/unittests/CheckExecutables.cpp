@@ -12,6 +12,8 @@ TEST_CASE("Check for existence of BSMPT executable", "[executable]")
 
   std::vector<fs::path> matching_files;
 
+  std::cout << "Start test" << std::endl;
+
   // Iterate through directories inside 'build'
   fs::path base_directory = BASE_PATH;
   base_directory /= "build";
@@ -21,8 +23,22 @@ TEST_CASE("Check for existence of BSMPT executable", "[executable]")
     std::cout << "Checking entry: " << dir_entry.path() << std::endl;
     if (fs::is_directory(dir_entry.path()))
     {
-      fs::path file_path = dir_entry.path() / "bin" / "BSMPT";
+      fs::path file_path = dir_entry.path() / "bin";
       // Append ".exe" only on Windows
+
+      for (const auto &bin_dir : fs::directory_iterator(file_path))
+      {
+        fs::path low_file_path = bin_dir.path() / "BSMPT";
+#ifdef _WIN32
+        low_file_path.replace_extension(".exe");
+#endif
+        if (fs::exists(low_file_path) and fs::is_regular_file(low_file_path))
+        {
+          matching_files.push_back(low_file_path);
+        }
+      }
+
+      file_path /= "BSMPT";
 #ifdef _WIN32
       file_path.replace_extension(".exe");
 #endif
