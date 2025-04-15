@@ -18,12 +18,19 @@ TEST_CASE("Check for existence of BSMPT executable", "[executable]")
   std::cout << "bp = " << base_directory << std::endl;
   for (const auto &dir_entry : fs::directory_iterator(base_directory))
   {
+    std::cout << "Checking entry: " << dir_entry.path() << std::endl;
     if (fs::is_directory(dir_entry.path()))
     {
       fs::path file_path = dir_entry.path() / "bin" / "BSMPT";
-      if (fs::exists(file_path) && fs::is_regular_file(file_path))
+      std::cout << "Checking file" << file_path << std::endl;
+      if (fs::exists(file_path))
       {
-        matching_files.push_back(file_path);
+        std::cout << "File exists" << std::endl;
+        if(fs::is_regular_file(file_path))
+        {
+          std::cout << file_path << " is a regular file" << std::endl;
+          matching_files.push_back(file_path);
+        }
       }
     }
   }
