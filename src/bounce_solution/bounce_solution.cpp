@@ -521,7 +521,7 @@ void BounceSolution::InitializeGstarProfile()
 void BounceSolution::InitializedVSpline()
 {
   std::vector<double> T_list, V_list;
-  for (auto m : phase_pair.false_phase.MinimumPhaseVector)
+  for (const auto &m : phase_pair.false_phase.MinimumPhaseVector)
   {
     T_list.push_back(m.temp);
     V_list.push_back(m.potential);
@@ -533,7 +533,7 @@ void BounceSolution::InitializedVSpline()
   T_list.clear();
   V_list.clear();
 
-  for (auto m : phase_pair.true_phase.MinimumPhaseVector)
+  for (const auto &m : phase_pair.true_phase.MinimumPhaseVector)
   {
     T_list.push_back(m.temp);
     V_list.push_back(m.potential);
