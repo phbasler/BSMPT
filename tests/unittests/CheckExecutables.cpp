@@ -2,8 +2,8 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <filesystem>
-#include <vector>
 #include <iostream>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -26,7 +26,7 @@ TEST_CASE("Check for existence of BSMPT executable", "[executable]")
       if (fs::exists(file_path))
       {
         std::cout << "File exists" << std::endl;
-        if(fs::is_regular_file(file_path))
+        if (fs::is_regular_file(file_path))
         {
           std::cout << file_path << " is a regular file" << std::endl;
           matching_files.push_back(file_path);
