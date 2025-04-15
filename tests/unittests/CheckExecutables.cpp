@@ -34,6 +34,7 @@ TEST_CASE("Check for existence of BSMPT executable", "[executable]")
 #endif
         if (fs::exists(low_file_path) and fs::is_regular_file(low_file_path))
         {
+          std::cout << low_file_path << " is a regular file" << std::endl;
           matching_files.push_back(low_file_path);
         }
       }
