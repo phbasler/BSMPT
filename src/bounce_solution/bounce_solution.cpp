@@ -533,7 +533,7 @@ void BounceSolution::InitializedVSpline()
   T_list.clear();
   V_list.clear();
 
-  for (const auto& m : phase_pair.true_phase.MinimumPhaseVector)
+  for (const auto &m : phase_pair.true_phase.MinimumPhaseVector)
   {
     T_list.push_back(m.temp);
     V_list.push_back(m.potential);
