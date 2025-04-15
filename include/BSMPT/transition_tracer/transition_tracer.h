@@ -204,7 +204,9 @@ public:
   output output_store;
 
   /**
-   * @brief CheckMassRatio
+   * @brief CheckMassRatio Prints the scalar and gauge boson squard masses over
+   * temperature squared ratios at the given point and temperature and returns
+   * the maximal value
    * @param input
    * @param vev
    * @param temp
