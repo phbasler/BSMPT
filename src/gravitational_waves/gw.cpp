@@ -364,19 +364,20 @@ double getwow(double a, double b)
   return a / (1.0 - a * a) / b * (1.0 - b * b);
 }
 
-std::pair<double, int> getvm(double al, double vw, double cs2b)
+std::pair<double, ExpansionMode> getvm(double al, double vw, double cs2b)
 {
   if (vw * vw < cs2b) // Deflagration
   {
-    return {vw, 0};
+    return {vw, ExpansionMode::Deflagration};
   }
   double cc   = 1.0 - 3.0 * al + vw * vw * (1.0 / cs2b + 3.0 * al);
   double disc = -4.0 * vw * vw / cs2b + cc * cc;
   if (disc < 0.0 || cc < 0.0)
   {
-    return {std::sqrt(cs2b), 1}; // Hybrid
+    return {std::sqrt(cs2b), ExpansionMode::Hybrid}; // Hybrid
   }
-  return {(cc + std::sqrt(disc)) / 2.0 * cs2b / vw, 2}; // Detonation
+  return {(cc + std::sqrt(disc)) / 2.0 * cs2b / vw,
+          ExpansionMode::Detonation}; // Detonation
 }
 
 // Differential equation system for dfdv
@@ -596,7 +597,8 @@ double kappaNuMuModel(double cs2b,
 
   std::vector<std::vector<double>> vprofile_false, vprofile_true;
 
-  if (mode < 2) // Deflagration or hybrid
+  if (mode == ExpansionMode::Deflagration or
+      mode == ExpansionMode::Hybrid) // Deflagration or hybrid
   {
     auto [almax, wow2] = getalNwow(0, vm, vw, cs2b, cs2s);
     if (almax < al) return 0;
@@ -624,7 +626,8 @@ double kappaNuMuModel(double cs2b,
     std::tie(Ksh, wow) = getKandWow(vw, mu(vw, vp), cs2s, vprofile_false);
   }
   double Krf = 0;
-  if (mode > 0) // Not deflagration
+  if (mode == ExpansionMode::Hybrid or
+      mode == ExpansionMode::Detonation) // Not deflagration
   {
     auto [Krf_val, wow3] = getKandWow(vw, mu(vw, vm), cs2b, vprofile_true);
     Krf                  = -wow * getwow(vp, vm) * Krf_val;
