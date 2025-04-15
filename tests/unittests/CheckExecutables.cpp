@@ -22,6 +22,10 @@ TEST_CASE("Check for existence of BSMPT executable", "[executable]")
     if (fs::is_directory(dir_entry.path()))
     {
       fs::path file_path = dir_entry.path() / "bin" / "BSMPT";
+      // Append ".exe" only on Windows
+#ifdef _WIN32
+      file_path.replace_extension(".exe");
+#endif
       std::cout << "Checking file" << file_path << std::endl;
       if (fs::exists(file_path))
       {
