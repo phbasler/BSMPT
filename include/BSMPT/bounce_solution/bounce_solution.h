@@ -190,13 +190,13 @@ public:
   tk::spline S3ofT_spline;
 
   /**
-   * @brief Gstar spline, T < 214.0
+   * @brief Gstar spline, T < T_QCD (214.0 MeV)
    *
    */
   tk::spline GstarProfileLowT;
 
   /**
-   * @brief Gstar spline, T > 214.0
+   * @brief Gstar spline, T > T_QCD (214.0 MeV)
    *
    */
   tk::spline GstarProfileHighT;
@@ -433,7 +433,7 @@ public:
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in,
-                 std::vector<Eigen::MatrixXd> GroupElements_in,
+                 const std::vector<Eigen::MatrixXd> &GroupElements_in,
                  const int &UserDefined_PNLO_scaling_in = 1);
 
   /**
@@ -516,6 +516,14 @@ public:
    *
    */
   void InitializeGstarProfile();
+
+  /**
+   * @brief Using the phase, constructs a spline of \f$ V(T) \f$ of that phase
+   *
+   * @param phase Phase to reconstruct using spline
+   * @param spline Spline that takes the result
+   */
+  static void ConstructSplineVofT(Phase &phase, tk::spline &spline);
 
   /**
    * @brief Initialize two splines for the potential across the tunneling
