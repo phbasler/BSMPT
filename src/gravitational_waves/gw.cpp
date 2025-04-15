@@ -679,21 +679,21 @@ double Getkappa_col(const double &Tstar,
 
   double P_LO = 0; // Pressure at LO. 1 -> 1
 
-  for (auto massSq : HiggsSq_True)
+  for (const auto &massSq : HiggsSq_True)
     P_LO += massSq;
-  for (auto massSq : GaugeSq_True)
+  for (const auto &massSq : GaugeSq_True)
     P_LO += 3 * massSq; // 3 from polarization
-  for (auto massSq : LeptonSq_True)
+  for (const auto &massSq : LeptonSq_True)
     P_LO += massSq / 2.;
-  for (auto massSq : QuarkSq_True)
+  for (const auto &massSq : QuarkSq_True)
     P_LO += 3 * massSq / 2.; // 3 from colour
-  for (auto massSq : HiggsSq_False)
+  for (const auto &massSq : HiggsSq_False)
     P_LO -= massSq;
-  for (auto massSq : GaugeSq_False)
+  for (const auto &massSq : GaugeSq_False)
     P_LO -= 3 * massSq; // 3 from polarization
-  for (auto massSq : LeptonSq_False)
+  for (const auto &massSq : LeptonSq_False)
     P_LO -= massSq / 2.;
-  for (auto massSq : QuarkSq_False)
+  for (const auto &massSq : QuarkSq_False)
     P_LO -= 3 * massSq / 2.; // 3 from colour
 
   P_LO *= pow(Tstar, 2) / 24.; // pressure LO normalization
