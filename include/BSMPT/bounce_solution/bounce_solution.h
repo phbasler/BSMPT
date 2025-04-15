@@ -388,23 +388,23 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
-   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
-   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
    * @param MaxPathIntegrations_in max number of path integrations
    * @param NumberOfInitialScanTemperatures_in number of temperature steps in
    * the initial scan of the bounce solver
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    */
   BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
-                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
-                 const size_t &NumberOfInitialScanTemperatures_in);
+                 const size_t &NumberOfInitialScanTemperatures_in,
+                 const int &UserDefined_PNLO_scaling_in = 1);
 
   /**
    * @brief Construct a new Bounce Sol Calc object. This class takes as input a
@@ -416,8 +416,6 @@ public:
    * @param UserDefined_vwall_in is the input value for v_wall. If = -1$ then we
    * use the approximation coming from https://arxiv.org/abs/2210.16305. If =
    * -2$ then we use the upper bound from https://arxiv.org/abs/2305.02357
-   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
-   * -> N
    * @param UserDefined_epsturb_in is the input value for epsturb. If [0..1] set
    * to value, for -1 we use the upper bound from
    * https://arxiv.org/abs/1704.05871
@@ -425,16 +423,18 @@ public:
    * @param GroupElements_In List of allowed potential symmetries
    * @param NumberOfInitialScanTemperatures_in number of temperature steps in
    * the initial scan of the bounce solver
+   * @param UserDefined_PNLO_scaling_in is the pressure scaling at NLO for 1
+   * -> N
    */
   BounceSolution(const std::shared_ptr<Class_Potential_Origin> &pointer_in,
                  const std::shared_ptr<MinimumTracer> &MinTracer_in,
                  const CoexPhases &phase_pair_in,
                  const double &UserDefined_vwall_in,
-                 const int &UserDefined_PNLO_scaling_in,
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in,
-                 std::vector<Eigen::MatrixXd> GroupElements_in);
+                 std::vector<Eigen::MatrixXd> GroupElements_in,
+                 const int &UserDefined_PNLO_scaling_in = 1);
 
   /**
    * @brief Initially we have no idea where the transition can occur, therefore

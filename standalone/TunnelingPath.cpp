@@ -52,22 +52,24 @@ int main()
       ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
   modelPointer->initModel(example_point_CXSM);
 
-  user_input input{modelPointer,          /*modelPointer*/
-                   0,                     /*templow*/
-                   400,                   /*temphigh*/
-                   0.95,                  /*UserDefined_vwall*/
-                   .71,                   /*perc_prbl*/
-                   .01,                   /*compl_prbl*/
-                   1,                     /*userDefined_PNLO_scaling*/
-                   0.1,                   /*UserDefined_epsturb*/
-                   7,                     /*MaxPathIntegrations*/
-                   -1,                    /*UseMultiStepPTMode*/
-                   10,                    /*num_check_pts*/
-                   0,                     /*CheckEWSymmetryRestoration*/
-                   1,                     /*CheckNLOStability*/
-                   WhichMinimizerDefault, /*WhichMinimizer*/
-                   false,                 /*GW calculation*/
-                   true};                 /*WhichTransitionTemperature*/
+  user_input input{
+      modelPointer,                       /*modelPointer*/
+      0,                                  /*templow*/
+      400,                                /*temphigh*/
+      0.95,                               /*UserDefined_vwall*/
+      .71,                                /*perc_prbl*/
+      .01,                                /*compl_prbl*/
+      0.1,                                /*UserDefined_epsturb*/
+      7,                                  /*MaxPathIntegrations*/
+      -1,                                 /*UseMultiStepPTMode*/
+      10,                                 /*num_check_pts*/
+      0,                                  /*CheckEWSymmetryRestoration*/
+      1,                                  /*CheckNLOStability*/
+      WhichMinimizerDefault,              /*WhichMinimizer*/
+      false,                              /*GW calculation*/
+      true,                               /*gw_calculation*/
+      TransitionTemperature::Percolation, /*WhichTransitionTemperature*/
+      1};                                 /*userDefined_PNLO_scaling*/
 
   TransitionTracer trans(input);
   auto output = trans.output_store;

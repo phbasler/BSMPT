@@ -732,7 +732,7 @@ double Getkappa_col(const double &Tstar,
   if (BACalc.GetPTStrength() - alpha_infty < 0)
     return 0.; // Not enough pressure to drive the bubble wall.
   const double gamma_eq = pow((dV - P_LO) / P_NLO, 1. / pnlo_scaling);
-  if (gamma_eq < 1) return 0.; // dV - P_LO < P_NLO. Unphysical gamma < 1;
+  if (gamma_eq < 1) return 0.; // unphysical: dV - P_LO < P_NLO
   const double R_eq       = 3. * R0 * gamma_eq;
   const double gamma_star = min(gamma_eq, gamma_run_away);
   const double kappa_col  = (1 - alpha_infty / BACalc.GetPTStrength()) *
