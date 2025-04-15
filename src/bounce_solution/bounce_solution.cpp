@@ -89,7 +89,7 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
       Eigen::MatrixXd::Identity(FalseVacuum.size(), FalseVacuum.size());
 
   double MaximumDistance = 1e100;
-  for (auto GroupElement : GroupElements)
+  for (const auto &GroupElement : GroupElements)
   {
     Eigen::VectorXd CandidateTrueVacuum = GroupElement * TrueVacuum;
     std::vector<double> DeltaVEV        = FalseVacuum;
