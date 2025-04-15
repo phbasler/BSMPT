@@ -65,6 +65,14 @@ jobs:
       run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
       if: runner.os != 'Windows'
 
+    - name: ls
+      run: ls build/*
+      if: runner.os == 'Windows'
+
+    - name: ls
+      run: ls build/*/*
+      if: runner.os == 'Windows'
+
     - name: run test
       run: ctest --preset $env:GeneratedCMakeProfile -j --output-on-failure -R "^Check for existence of BSMPT executables$"
       if: runner.os == 'Windows'
