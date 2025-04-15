@@ -567,7 +567,7 @@ double TransitionTracer::CheckMassRatio(const user_input &input,
   if (color == 0)
   {
     ss << "\n\033[1;92mm^2(vev_false, T = " << std::to_string(temp)
-       << ") / T^2 = " << vec_to_string(massOverTempSq) << "\033[0m\n";
+       << ") / T^2 = " << massOverTempSq << "\033[0m\n";
   }
   else if (color == 1)
   {
