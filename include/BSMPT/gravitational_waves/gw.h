@@ -332,12 +332,11 @@ void custom_error_handler(const char *reason,
                           int gsl_errno);
 /**
  * @brief returns the fluid velocity behind the wall, v−, and the expansion mode
- * (2=detonation, 1=hybrid, 0=deflagration)
  *
  * @param al \f$ \alpha \f$
  * @param vw \f$ v_w \f$
  * @param cs2b \f$ c_{s,b}^2 $ sound speed squared in the broken phase
- * @return std::pair<double, int>
+ * @return std::pair<double, ExpansionMode>
  */
 std::pair<double, ExpansionMode> getvm(double al, double vw, double cs2b);
 /**
