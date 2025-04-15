@@ -190,13 +190,13 @@ public:
   tk::spline S3ofT_spline;
 
   /**
-   * @brief Gstar spline, T < 214.0
+   * @brief Gstar spline, T < T_QCD (214.0 MeV)
    *
    */
   tk::spline GstarProfileLowT;
 
   /**
-   * @brief Gstar spline, T > 214.0
+   * @brief Gstar spline, T > T_QCD (214.0 MeV)
    *
    */
   tk::spline GstarProfileHighT;
