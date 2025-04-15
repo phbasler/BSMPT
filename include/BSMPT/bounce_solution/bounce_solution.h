@@ -433,7 +433,7 @@ public:
                  const double &UserDefined_epsturb_in,
                  const int &MaxPathIntegrations_in,
                  const size_t &NumberOfInitialScanTemperatures_in,
-                 std::vector<Eigen::MatrixXd> GroupElements_in,
+                 const std::vector<Eigen::MatrixXd> &GroupElements_in,
                  const int &UserDefined_PNLO_scaling_in = 1);
 
   /**
