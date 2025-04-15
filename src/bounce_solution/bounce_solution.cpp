@@ -89,7 +89,7 @@ void BounceSolution::CalculateOptimalDiscreteSymmetry()
       Eigen::MatrixXd::Identity(FalseVacuum.size(), FalseVacuum.size());
 
   double MaximumDistance = 1e100;
-  for (auto GroupElement : GroupElements)
+  for (const auto &GroupElement : GroupElements)
   {
     Eigen::VectorXd CandidateTrueVacuum = GroupElement * TrueVacuum;
     std::vector<double> DeltaVEV        = FalseVacuum;
@@ -518,29 +518,27 @@ void BounceSolution::InitializeGstarProfile()
   GstarProfileHighT.set_points(TGstarHighT, GstarHighT);
 }
 
-void BounceSolution::InitializedVSpline()
+void BounceSolution::ConstructSplineVofT(Phase &phase, tk::spline &spline)
 {
   std::vector<double> T_list, V_list;
-  for (const auto &m : phase_pair.false_phase.MinimumPhaseVector)
+  // Extract knots from phase
+  for (const auto &m : phase.MinimumPhaseVector)
   {
     T_list.push_back(m.temp);
     V_list.push_back(m.potential);
   }
-  FalsePhaseVSpline.set_boundary(
-      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
-  FalsePhaseVSpline.set_points(T_list, V_list);
+  // Consctruct spline with not-a-know conditions
+  spline.set_boundary(tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
+  spline.set_points(T_list, V_list);
+}
 
-  T_list.clear();
-  V_list.clear();
+void BounceSolution::InitializedVSpline()
+{
+  // Construct V(phi_false,T) spline
+  ConstructSplineVofT(phase_pair.false_phase, FalsePhaseVSpline);
 
-  for (const auto &m : phase_pair.true_phase.MinimumPhaseVector)
-  {
-    T_list.push_back(m.temp);
-    V_list.push_back(m.potential);
-  }
-  TruePhaseVSpline.set_boundary(
-      tk::spline::not_a_knot, 0.0, tk::spline::not_a_knot, 0.0);
-  TruePhaseVSpline.set_points(T_list, V_list);
+  // Construct V(phi_true,T) spline
+  ConstructSplineVofT(phase_pair.true_phase, TruePhaseVSpline);
 }
 
 double BounceSolution::GetGstar(const double &T) const

@@ -297,6 +297,18 @@ double GetYpsilon(const double HR, const double K_sw);
 namespace kappa
 {
 // Compute kappa_sw https://arxiv.org/abs/2010.09744
+
+/**
+ * @brief Expansion modes of the fluid shell
+ *
+ */
+enum class ExpansionMode
+{
+  Deflagration,
+  Hybrid,
+  Detonation
+};
+
 /**
  * @brief Lorentz boost
  *
@@ -327,7 +339,7 @@ void custom_error_handler(const char *reason,
  * @param cs2b \f$ c_{s,b}^2 $ sound speed squared in the broken phase
  * @return std::pair<double, int>
  */
-std::pair<double, int> getvm(double al, double vw, double cs2b);
+std::pair<double, ExpansionMode> getvm(double al, double vw, double cs2b);
 /**
  * @brief encodes the differential equation solved in the shock/rarefaction wave
  * and returns (dξ/dv, dw/dv).

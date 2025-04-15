@@ -704,7 +704,7 @@ void MinimumTracer::ReduceVEV(std::vector<double> &vev)
   int MaximumMeasure = -1;
   char *ptr;
   std::string BinaryNumber;
-  for (auto GroupElement : GroupElements)
+  for (const auto &GroupElement : GroupElements)
   {
     // Clean buffer
     BinaryNumber.clear();

@@ -518,6 +518,14 @@ public:
   void InitializeGstarProfile();
 
   /**
+   * @brief Using the phase, constructs a spline of \f$ V(T) \f$ of that phase
+   *
+   * @param phase Phase to reconstruct using spline
+   * @param spline Spline that takes the result
+   */
+  static void ConstructSplineVofT(Phase &phase, tk::spline &spline);
+
+  /**
    * @brief Initialize two splines for the potential across the tunneling
    * profile. Used to improve the Hubble rate calculation speed
    *
