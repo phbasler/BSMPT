@@ -641,7 +641,7 @@ public:
    * @param T temperature
    * @return double
    */
-  double I(const double &T);
+  double FalseVacFractionExponent_I(const double &T);
 
   /**
    * @brief CalcTempAtFalseVacFraction calculates the temperature at which the
