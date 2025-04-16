@@ -824,7 +824,7 @@ void BounceSolution::CalculateNucleationTempApprox()
   return;
 }
 
-double BounceSolution::I(const double &T)
+double BounceSolution::FalseVacFractionExponent_I(const double &T)
 {
   const double prefac = 4. * M_PI / 3. * std::pow(vwall, 3);
   this->SetStoredTemp(T);
@@ -833,7 +833,7 @@ double BounceSolution::I(const double &T)
 
 double BounceSolution::CalcFalseVacFraction(const double &temp)
 {
-  return std::exp(-I(temp));
+  return std::exp(-FalseVacFractionExponent_I(temp));
 }
 
 double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
@@ -849,7 +849,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
   for (auto sol = SolutionList.rbegin(); sol != SolutionList.rend(); sol++)
   {
     // catch the first interval containing res_Temp
-    double IatT_solT = I(sol->T);
+    double IatT_solT = FalseVacFractionExponent_I(sol->T);
 
     if (T_up == -1 and IatT_solT < int_at_false_vac_frac) T_up = sol->T;
     if (T_down == -1 and IatT_solT > int_at_false_vac_frac) T_down = sol->T;
@@ -864,7 +864,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
   if (T_up > 0 and T_down > 0)
   {
     T_middle    = (T_up + T_down) / 2.;
-    double IatT = I(T_middle);
+    double IatT = FalseVacFractionExponent_I(T_middle);
 
     while ((std::abs(T_up / T_down - 1) >
             RelativeTemperatureInCalcTempAtFalseVacFraction *
@@ -876,7 +876,7 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
                    MarginOfCalcTempAtFalseVacFractionBeforeFailure)))
     {
       T_middle = (T_up + T_down) / 2.;
-      IatT     = I(T_middle);
+      IatT     = FalseVacFractionExponent_I(T_middle);
 
       Logger::Write(LoggingLevel::BounceDetailed,
                     "Pf ( T = " + std::to_string(T_middle) +
@@ -1262,7 +1262,8 @@ void BounceSolution::CalculateRstar()
   F.function = [](double T, void *params) -> double
   {
     return static_cast<BounceSolution *>(params)->TunnelingRate(T) *
-           exp(-static_cast<BounceSolution *>(params)->I(T)) /
+           exp(-static_cast<BounceSolution *>(params)
+                    ->FalseVacFractionExponent_I(T)) /
            (static_cast<BounceSolution *>(params)->HubbleRate(T) * pow(T, 4));
   };
   F.params = this; // Pass `this` pointer as parameters
