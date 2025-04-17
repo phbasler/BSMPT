@@ -57,9 +57,6 @@ jobs:
     - name: build
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
       if: runner.os != 'Windows'
-    - name: run tests
-      run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
-      if: runner.os != 'Windows'
 
     - name: cmake
       run: cmake --preset $env:GeneratedCMakeProfile
@@ -67,6 +64,13 @@ jobs:
     - name: build
       run: cmake --build --preset $env:GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
       if: runner.os == 'Windows'
+
+
+    - name: run tests
+      run: ctest --preset $GeneratedCMakeProfile -j --output-on-failure 
+      if: runner.os != 'Windows'
+
+    
     - name: run tests
       run: ctest --preset $env:GeneratedCMakeProfile -j --output-on-failure 
       if: runner.os == 'Windows'
