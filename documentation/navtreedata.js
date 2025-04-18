@@ -124,14 +124,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "BSMPT_8cpp.html",
-"NegativeBosonSpline_8h.html#ae7be2f10cd4525049e5abd8460b3eabb",
-"classBSMPT_1_1BounceActionInt.html#a22f3c3e5dee34fcef55eeb52ca1327fe",
-"classBSMPT_1_1BounceSolution.html#aba947788d13c9791fe9fdfc9974b6edb",
-"classBSMPT_1_1Class__Potential__Origin.html#a8d42c3286c5bbfd816c325f47aa0aa67",
-"classBSMPT_1_1Models_1_1Class__CxSM.html#a6d678aa5de1be95566ac2459871e4c99",
-"functions_f.html",
-"namespaceBSMPT.html#af399e9a581e9c31fc59194a3f32b66f1",
-"structBSMPT_1_1Vacuum.html#aeeaf7a1f9261d3fa38461b74864de52d"
+"NegativeBosonSpline_8h.html#abfde607bc1595b6eeccd62be17afbb8f",
+"classBSMPT_1_1BounceActionInt.html#a1d402c0928fdea994ead22d1bffd1c87",
+"classBSMPT_1_1BounceSolution.html#a900d56d924b7c7ef9ccaf404ab2e6a6b",
+"classBSMPT_1_1Class__Potential__Origin.html#a6832879413039f6fb0d89b0ee912abf2",
+"classBSMPT_1_1MinimumTracer.html#a4d98bca085e4499b7e2faf29bbd3fdef",
+"classcvspline.html#a5e5d392d1e21aab71db008562eadd009",
+"namespaceBSMPT.html#a3f7a6e0bc281f72955810d5e61ef2a26",
+"structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

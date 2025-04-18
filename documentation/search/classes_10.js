@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vacuum_0',['Vacuum',['../structBSMPT_1_1Vacuum.html',1,'BSMPT']]]
+  ['user_5finput_0',['user_input',['../structBSMPT_1_1user__input.html',1,'BSMPT']]]
 ];

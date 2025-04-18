@@ -1,21 +1,15 @@
 var searchData=
 [
-  ['v_0',['V',['../classBSMPT_1_1BounceActionInt.html#a32ec54d4799c94ce10ddd8f1f83fc910',1,'BSMPT::BounceActionInt']]],
-  ['vc_1',['vc',['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a74ca3d82e662d96cc44f301dc347c02b',1,'BSMPT::Baryo::GSL_integration_mubl::vc'],['../structBSMPT_1_1Minimizer_1_1GSLPlaneReturn.html#ab600f952753e746f45874d7fc50b7ccf',1,'BSMPT::Minimizer::GSLPlaneReturn::vc']]],
-  ['vcritical_2',['vcritical',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#acb8694da69c9ce74671b0f0c13890c76',1,'BSMPT::Baryo::gen_fluid']]],
-  ['vec_5fcoex_3',['vec_coex',['../classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08',1,'BSMPT::TransitionTracer']]],
-  ['vev_5fcritical_4',['vev_critical',['../classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a71e31741180469b05a1b247fdff1a355',1,'BSMPT::Baryo::CalculateEtaInterface::vev_critical'],['../classBSMPT_1_1Baryo_1_1transport__equations.html#afdeb30863af8f90afe62a27945a356d1',1,'BSMPT::Baryo::transport_equations::vev_critical'],['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a23a4aab31b79c79b48b822c419896677',1,'BSMPT::Baryo::GSL_integration_mubl::vev_critical']]],
-  ['vev_5fposition_5',['vev_position',['../classcvspline.html#aae5ab09721d002f46600ee8c9d11e9a6',1,'cvspline']]],
-  ['vev_5fsym_5ftheta_6',['vev_sym_theta',['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#aac122c97bff927b4bbb8d72169050981',1,'BSMPT::Baryo::GSL_integration_mubl']]],
-  ['vev_5fsymmetric_7',['vev_symmetric',['../classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a804fb7d96295401dc359d3025ef5a76c',1,'BSMPT::Baryo::CalculateEtaInterface::vev_symmetric'],['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#af6ceeafeaa4b7cbd47fb4455c2fe6c35',1,'BSMPT::Baryo::GSL_integration_mubl::vev_symmetric']]],
-  ['vevbroken_8',['VEVBroken',['../structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#a89ec6deb9f18b510988aabb4348db7ce',1,'BSMPT::Minimizer::PointerContainerMinPlane']]],
-  ['vevminimum_9',['VevMinimum',['../structBSMPT_1_1Wall_1_1GSL__params.html#a80c977e69408a594cadf44ccdcf3c156',1,'BSMPT::Wall::GSL_params']]],
-  ['vevorder_10',['VevOrder',['../classBSMPT_1_1Class__Potential__Origin.html#a4c507c7abe9be676ace4e315170d24b1',1,'BSMPT::Class_Potential_Origin']]],
-  ['vevsymmetric_11',['vevsymmetric',['../structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#a14947e6e7b09b54f196a2ed5e78cd49f',1,'BSMPT::Minimizer::PointerContainerMinPlane::VEVSymmetric'],['../structBSMPT_1_1Wall_1_1GSL__params.html#ab1784e040e3a590f777f9b8fc4e69955',1,'BSMPT::Wall::GSL_params::VeVSymmetric'],['../classBSMPT_1_1Class__Potential__Origin.html#ae46aae75d997cc69f017822f50da8f05',1,'BSMPT::Class_Potential_Origin::VEVSymmetric']]],
-  ['vevtree_12',['vevTree',['../classBSMPT_1_1Class__Potential__Origin.html#a3d7a6aabb22ba315a28a4ea832e20313',1,'BSMPT::Class_Potential_Origin']]],
-  ['vevtreemin_13',['vevTreeMin',['../classBSMPT_1_1Class__Potential__Origin.html#a1ae82d65a2f8ffd9c08db68aa0930550',1,'BSMPT::Class_Potential_Origin']]],
-  ['vfalse_14',['Vfalse',['../classBSMPT_1_1BounceActionInt.html#a6475be53a29a92745279a76cace664d4',1,'BSMPT::BounceActionInt']]],
-  ['vsym_15',['vsym',['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a07174a5313f9ef942bded28deca9d7c3',1,'BSMPT::Baryo::gen_fluid']]],
-  ['vw_16',['vw',['../classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#a7628f5cb00504c6e7050a5b46079cdf3',1,'BSMPT::Baryo::CalculateEtaInterface::vw'],['../classBSMPT_1_1Baryo_1_1Calc__Gam__M.html#a4ed8cc8990807c26738ff943e17a3ef6',1,'BSMPT::Baryo::Calc_Gam_M::vw'],['../classBSMPT_1_1Baryo_1_1Calc__Scp.html#af80539a11a5c6aeae85581f457194055',1,'BSMPT::Baryo::Calc_Scp::vw'],['../classBSMPT_1_1Baryo_1_1Calc__eta.html#ae56a8a115803afaa5b24aaaeee58415f',1,'BSMPT::Baryo::Calc_eta::vw'],['../classBSMPT_1_1Baryo_1_1gen__fluid.html#a3f48419f3b2c3d9a816a765f7818b645',1,'BSMPT::Baryo::gen_fluid::vw'],['../classBSMPT_1_1Baryo_1_1transport__equations.html#aad821a9fe1a31c86bf6d0c6781d389d5',1,'BSMPT::Baryo::transport_equations::vw'],['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a9ef38e5867468978727c7fbce3d389e5',1,'BSMPT::Baryo::GSL_integration_mubl::vw'],['../structBSMPT_1_1Baryo_1_1GSL__mubl__interpolation.html#a8bcb28f8aae28c056c8e7f9e43edd2a4',1,'BSMPT::Baryo::GSL_mubl_interpolation::vw']]],
-  ['vwall_17',['vwall',['../classBSMPT_1_1BounceSolution.html#ad2a831a3b1f45b8ba0748ac119403654',1,'BSMPT::BounceSolution']]]
+  ['undershotonce_0',['UndershotOnce',['../classBSMPT_1_1BounceActionInt.html#a1d402c0928fdea994ead22d1bffd1c87',1,'BSMPT::BounceActionInt']]],
+  ['usegsldefault_1',['UseGSLDefault',['../Minimizer_8h.html#ac0a05e648102baab29671f0f578756bc',1,'BSMPT::Minimizer']]],
+  ['useindexcol_2',['UseIndexCol',['../classBSMPT_1_1Class__Potential__Origin.html#af1e1c7812d1a9e6c36dea361bc5d0c83',1,'BSMPT::Class_Potential_Origin']]],
+  ['uselibcmaesdefault_3',['UseLibCMAESDefault',['../Minimizer_8h.html#ab6f8272942b46cd033293ccb411b6d40',1,'BSMPT::Minimizer']]],
+  ['usenloptdefault_4',['UseNLoptDefault',['../Minimizer_8h.html#a68ef9a7c5689ba6320a375a5a3180ca6',1,'BSMPT::Minimizer']]],
+  ['userdefined_5fvwall_5',['UserDefined_vwall',['../classBSMPT_1_1BounceSolution.html#a19d3a0ccf39461d8e65ef5c77cc45d56',1,'BSMPT::BounceSolution']]],
+  ['usespline_6',['UseSpline',['../structBSMPT_1_1Wall_1_1GSL__params.html#a791ab4ad97dbcc4c5ac51c33c419027e',1,'BSMPT::Wall::GSL_params']]],
+  ['usetanbetasuppression_7',['UseTanBetaSuppression',['../classBSMPT_1_1Baryo_1_1transport__equations.html#a41e44a49c9496545b60479c65c179caf',1,'BSMPT::Baryo::transport_equations']]],
+  ['usetreelevel_8',['UseTreeLevel',['../classBSMPT_1_1Class__Potential__Origin.html#aa13c4b8675b13c153774ad9cf475c2ca',1,'BSMPT::Class_Potential_Origin']]],
+  ['usevcountersimplified_9',['UseVCounterSimplified',['../classBSMPT_1_1Class__Potential__Origin.html#a9f5b1fc4312b08807683d0bd4fde6cba',1,'BSMPT::Class_Potential_Origin']]],
+  ['usevelocitytransportequations_10',['usevelocitytransportequations',['../classBSMPT_1_1Baryo_1_1transport__equations.html#a8908dbaaacc64c535cea7ffc4b51f868',1,'BSMPT::Baryo::transport_equations::UseVelocityTransportEquations'],['../structBSMPT_1_1Baryo_1_1GSL__integration__mubl.html#a046c2d9c0e8d98e7c9c25ec7a3c5ab02',1,'BSMPT::Baryo::GSL_integration_mubl::UseVelocityTransportEquations']]],
+  ['usevtreesimplified_11',['UseVTreeSimplified',['../classBSMPT_1_1Class__Potential__Origin.html#a26745f900d20213c8beddc10ab44698d',1,'BSMPT::Class_Potential_Origin']]]
 ];

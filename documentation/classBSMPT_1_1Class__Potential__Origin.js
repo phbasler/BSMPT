@@ -13,7 +13,6 @@ var classBSMPT_1_1Class__Potential__Origin =
     [ "CalculateDebyeSimplified", "classBSMPT_1_1Class__Potential__Origin.html#a33a01c8aa22a0d83a5446982a67e4b5b", null ],
     [ "CalculatePhysicalCouplings", "classBSMPT_1_1Class__Potential__Origin.html#a109af4ea19569cdacbe5b55a71250dfb", null ],
     [ "CalculateRatioAlpha", "classBSMPT_1_1Class__Potential__Origin.html#add691d65a58de93a08e03e01817b0d1c", null ],
-    [ "CheckImplementation", "classBSMPT_1_1Class__Potential__Origin.html#a3a69d8b783813a26ae5fea5561b3887f", null ],
     [ "CheckNLOVEV", "classBSMPT_1_1Class__Potential__Origin.html#a16150813f8e3aaf6133af7c655c85a89", null ],
     [ "CounterTerm", "classBSMPT_1_1Class__Potential__Origin.html#af6dd58732f0856e6710551e30f9f7eb8", null ],
     [ "CWTerm", "classBSMPT_1_1Class__Potential__Origin.html#a234541b83ffa51dae80a6690e8a1b562", null ],

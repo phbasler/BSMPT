@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.1.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -98,11 +98,14 @@ $(document).ready(function(){initNavTree('NegativeBosonSpline_8h.html',''); init
 
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">NegativeBosonSpline.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<div class="textblock"><code>#include &lt;BSMPT/utility/spline/spline.h&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="NegativeBosonSpline_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -121,6 +124,11 @@ const double&#160;</td><td class="memItemRight" valign="bottom"><b>NegLinearInt<
 const std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>NegLinearIntTransposed</b></td></tr>
 <tr class="memdesc:abfde607bc1595b6eeccd62be17afbb8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">NegLinearInt Transpose of NegLinearInt. <br /></td></tr>
 <tr class="separator:abfde607bc1595b6eeccd62be17afbb8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add366dbfd26c29f1f1af0d7085c9ef68" id="r_add366dbfd26c29f1f1af0d7085c9ef68"><td class="memItemLeft" align="right" valign="top"><a id="add366dbfd26c29f1f1af0d7085c9ef68" name="add366dbfd26c29f1f1af0d7085c9ef68"></a>
+const <a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>JbosonNegativeSpline</b></td></tr>
+<tr class="memdesc:add366dbfd26c29f1f1af0d7085c9ef68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cubic spline with the \( J_b(\frac{m}{T}) \) for \( \frac{m}{T} &lt; 0
+\). <br /></td></tr>
+<tr class="separator:add366dbfd26c29f1f1af0d7085c9ef68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

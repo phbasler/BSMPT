@@ -11,5 +11,9 @@ var searchData=
   ['groupelements_8',['groupelements',['../classBSMPT_1_1BounceSolution.html#a34acd7ce9dc3e843e7a526d0b55d4478',1,'BSMPT::BounceSolution::GroupElements'],['../classBSMPT_1_1MinimumTracer.html#a3aa1563907f76badf7a7b4ccb5408d50',1,'BSMPT::MinimumTracer::GroupElements']]],
   ['gsl_5fintegration_5fmubl_5fcontainer_9',['GSL_integration_mubl_container',['../classBSMPT_1_1Baryo_1_1CalculateEtaInterface.html#abc2869a9043c901d94d2b57d87b1ec9c',1,'BSMPT::Baryo::CalculateEtaInterface']]],
   ['gsl_5ftolerance_10',['GSL_Tolerance',['../MinimizeGSL_8h.html#a47dc7a95ee3143d14911588faebd7d3c',1,'BSMPT::Minimizer']]],
-  ['gstar_11',['gstar',['../classBSMPT_1_1BounceSolution.html#aea8b2fdaba400b1e66c39f5bfb19b1e9',1,'BSMPT::BounceSolution']]]
+  ['gstar_11',['gstar',['../classBSMPT_1_1BounceSolution.html#aea8b2fdaba400b1e66c39f5bfb19b1e9',1,'BSMPT::BounceSolution']]],
+  ['gstarhight_12',['GstarHighT',['../namespaceBSMPT.html#a9ed1026b6652750ec98bc980465e6e1c',1,'BSMPT']]],
+  ['gstarlowt_13',['GstarLowT',['../namespaceBSMPT.html#a2e805f343e6197f75b74a9084886107f',1,'BSMPT']]],
+  ['gstarprofilehight_14',['GstarProfileHighT',['../classBSMPT_1_1BounceSolution.html#a2a3f3a515dbae5cd29bc6c8ea9f84506',1,'BSMPT::BounceSolution']]],
+  ['gstarprofilelowt_15',['GstarProfileLowT',['../classBSMPT_1_1BounceSolution.html#a3bd55ab25746f070ee69aa15f11bc6f9',1,'BSMPT::BounceSolution']]]
 ];

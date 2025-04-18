@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.1.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -156,9 +156,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>use_multithreading</b
 <tr class="memitem:aac41f82a0d01a52c96cd97eb25ed4138" id="r_aac41f82a0d01a52c96cd97eb25ed4138"><td class="memItemLeft" align="right" valign="top"><a id="aac41f82a0d01a52c96cd97eb25ed4138" name="aac41f82a0d01a52c96cd97eb25ed4138"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>gw_calculation</b> = false</td></tr>
 <tr class="separator:aac41f82a0d01a52c96cd97eb25ed4138"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47d38781d67b39f79140d2c660ac9023" id="r_a47d38781d67b39f79140d2c660ac9023"><td class="memItemLeft" align="right" valign="top"><a id="a47d38781d67b39f79140d2c660ac9023" name="a47d38781d67b39f79140d2c660ac9023"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>which_transition_temp</b> = 3</td></tr>
-<tr class="separator:a47d38781d67b39f79140d2c660ac9023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1f71410088b5e495a8752959c51c9d7" id="r_aa1f71410088b5e495a8752959c51c9d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">TransitionTemperature</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBSMPT_1_1user__input.html#aa1f71410088b5e495a8752959c51c9d7">which_transition_temp</a></td></tr>
+<tr class="separator:aa1f71410088b5e495a8752959c51c9d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd37023f8677833f6a55d10a4a26f133" id="r_afd37023f8677833f6a55d10a4a26f133"><td class="memItemLeft" align="right" valign="top"><a id="afd37023f8677833f6a55d10a4a26f133" name="afd37023f8677833f6a55d10a4a26f133"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>PNLO_scaling</b> = 1</td></tr>
+<tr class="separator:afd37023f8677833f6a55d10a4a26f133"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a457c8e5d67cabb08cf91c9ef09abb4ec" id="r_a457c8e5d67cabb08cf91c9ef09abb4ec"><td class="memItemLeft" align="right" valign="top"><a id="a457c8e5d67cabb08cf91c9ef09abb4ec" name="a457c8e5d67cabb08cf91c9ef09abb4ec"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>number_of_initial_scan_temperatures</b> = 25</td></tr>
 <tr class="separator:a457c8e5d67cabb08cf91c9ef09abb4ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +176,7 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>number_of_initial_s
     <tr><td class="paramname">perc_prbl</td><td>false vacuum fraction at percolation temperature, default: 71% </td></tr>
     <tr><td class="paramname">compl_prbl</td><td>false vacuum fraction at completion temperature, default: 1% </td></tr>
     <tr><td class="paramname">epsturb</td><td>epsilon value of turbulence contribution, default: 0.1 </td></tr>
+    <tr><td class="paramname">PNLO_scaling</td><td>pressure scaling at NLO, 1 -&gt; N processes at bubble wall </td></tr>
     <tr><td class="paramname">maxpathintegrations</td><td>maximal number of path integrations, default: 7 </td></tr>
     <tr><td class="paramname">multistepmode</td><td>choose multi-step PT modes: default (= -1), 0, 1, 2, auto (= 3) </td></tr>
     <tr><td class="paramname">num_points</td><td>number of equally-spaced intermediate points to check, default: 10 </td></tr>
@@ -185,12 +188,29 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>number_of_initial_s
     <tr><td class="paramname">which_minimizer</td><td>which minimizers are used </td></tr>
     <tr><td class="paramname">use_multithreading</td><td>whether multi-threading is used </td></tr>
     <tr><td class="paramname">gw_calculation</td><td>bool to turn GW parameter calculation on/off </td></tr>
-    <tr><td class="paramname">which_transition_temp</td><td>which transition temperature is chosen: 1 = nucl_approx, 2 = nucl, 3 = perc (default), 4 = compl </td></tr>
+    <tr><td class="paramname">which_transition_temp</td><td>which transition temperature is chosen </td></tr>
     <tr><td class="paramname">number_of_initial_scan_temperatures</td><td>number of temperature steps in the initial scan of the bounce solver </td></tr>
   </table>
   </dd>
 </dl>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa1f71410088b5e495a8752959c51c9d7" name="aa1f71410088b5e495a8752959c51c9d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1f71410088b5e495a8752959c51c9d7">&#9670;&#160;</a></span>which_transition_temp</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">TransitionTemperature</a> BSMPT::user_input::which_transition_temp</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      TransitionTemperature::Percolation</div>
+</div><!-- fragment -->
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/BSMPT/transition_tracer/<a class="el" href="transition__tracer_8h_source.html">transition_tracer.h</a></li>
 </ul>
 </div><!-- contents -->

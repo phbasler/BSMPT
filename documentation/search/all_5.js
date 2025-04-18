@@ -26,7 +26,7 @@ var searchData=
   ['addphase_23',['addPhase',['../structBSMPT_1_1Vacuum.html#a2c242c262d65b3f98a321bd67f63f1a1',1,'BSMPT::Vacuum']]],
   ['all_5frequired_5fset_24',['all_required_set',['../classBSMPT_1_1parser.html#a1af4cfd40c1a0dca5a9985d9016fc964',1,'BSMPT::parser']]],
   ['almost_5fthe_5fsame_25',['almost_the_same',['../namespaceBSMPT.html#a7ef27f7780c7d96480ff01a91dc88a17',1,'BSMPT::almost_the_same(const double &amp;a, const double &amp;b, const double &amp;rel_precision=0.01, const double &amp;num_zero=1e-10)'],['../namespaceBSMPT.html#ac5dd574f107251ff284bc79473d4c5c5',1,'BSMPT::almost_the_same(const std::vector&lt; double &gt; &amp;a, const std::vector&lt; double &gt; &amp;b, const bool &amp;allow_for_sign_flip=false, const double &amp;rel_precision=0.01, const double &amp;num_zero=1e-10)']]],
-  ['alpha_26',['alpha',['../classBSMPT_1_1BounceSolution.html#ad748b0e18d854cc0b2d49da5648da0bb',1,'BSMPT::BounceSolution::alpha'],['../classBSMPT_1_1BounceActionInt.html#ae67bd826a910bac7a4d85518d7b1d509',1,'BSMPT::BounceActionInt::Alpha']]],
+  ['alpha_26',['alpha',['../classBSMPT_1_1BounceActionInt.html#ae67bd826a910bac7a4d85518d7b1d509',1,'BSMPT::BounceActionInt::Alpha'],['../classBSMPT_1_1BounceSolution.html#ad748b0e18d854cc0b2d49da5648da0bb',1,'BSMPT::BounceSolution::alpha']]],
   ['another_20program_27',['How to include BSMPT in another program',['../index.html#autotoc_md9',1,'']]],
   ['as_20a_20package_28',['BSMPT as a package',['../md_Changelog.html#autotoc_md43',1,'']]],
   ['asciiplotter_29',['AsciiPlotter',['../classAsciiPlotter.html',1,'']]],

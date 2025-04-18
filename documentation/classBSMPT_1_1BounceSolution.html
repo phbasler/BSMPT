@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.1.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -99,6 +99,7 @@ $(document).ready(function(){initNavTree('classBSMPT_1_1BounceSolution.html','')
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classBSMPT_1_1BounceSolution-members.html">List of all members</a>  </div>
@@ -130,15 +131,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateOptimalDiscr
 double&#160;</td><td class="memItemRight" valign="bottom"><b>GetBounceSol</b> (const double &amp;Temp) const</td></tr>
 <tr class="memdesc:a158f2e3de17a79f7c778e8d4847f4c43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate euclidian action at temperature T. <br /></td></tr>
 <tr class="separator:a158f2e3de17a79f7c778e8d4847f4c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a190a652a66f37ee10adc0b73df95ee63" id="r_a190a652a66f37ee10adc0b73df95ee63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a190a652a66f37ee10adc0b73df95ee63">SetAndCalculateGWParameters</a> (const <a class="el" href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">TransitionTemperature</a> &amp;which_transition_temp_in)</td></tr>
+<tr class="memdesc:a190a652a66f37ee10adc0b73df95ee63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Transition Temp object.  <br /></td></tr>
+<tr class="separator:a190a652a66f37ee10adc0b73df95ee63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a584bcb8c89c4b47ceefac51fd176ab87" id="r_a584bcb8c89c4b47ceefac51fd176ab87"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a584bcb8c89c4b47ceefac51fd176ab87">BounceSolution</a> (const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;pointer_in)</td></tr>
 <tr class="memdesc:a584bcb8c89c4b47ceefac51fd176ab87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Bounce Sol Calc object. Used for testing.  <br /></td></tr>
 <tr class="separator:a584bcb8c89c4b47ceefac51fd176ab87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95086075246bd162705c1baff5caa5c4" id="r_a95086075246bd162705c1baff5caa5c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a95086075246bd162705c1baff5caa5c4">BounceSolution</a> (const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;pointer_in, const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt; &amp;MinTracer_in, const <a class="el" href="structBSMPT_1_1CoexPhases.html">CoexPhases</a> &amp;phase_pair_in, const double &amp;UserDefined_vwall_in, const double &amp;UserDefined_epsturb_in, const int &amp;MaxPathIntegrations_in, const size_t &amp;NumberOfInitialScanTemperatures_in)</td></tr>
-<tr class="memdesc:a95086075246bd162705c1baff5caa5c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Bounce Sol Calc object. This class takes as input a pair of coexisting phases and delegates to constructor with provided symmetry group.  <br /></td></tr>
-<tr class="separator:a95086075246bd162705c1baff5caa5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e5968e6693725125e01a59fd35c5a20" id="r_a1e5968e6693725125e01a59fd35c5a20"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a1e5968e6693725125e01a59fd35c5a20">BounceSolution</a> (const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;pointer_in, const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt; &amp;MinTracer_in, const <a class="el" href="structBSMPT_1_1CoexPhases.html">CoexPhases</a> &amp;phase_pair_in, const double &amp;UserDefined_vwall_in, const double &amp;UserDefined_epsturb_in, const int &amp;MaxPathIntegrations_in, const size_t &amp;NumberOfInitialScanTemperatures_in, std::vector&lt; Eigen::MatrixXd &gt; GroupElements_in)</td></tr>
-<tr class="memdesc:a1e5968e6693725125e01a59fd35c5a20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Bounce Sol Calc object. This class takes as input a pair of coexisting phases.  <br /></td></tr>
-<tr class="separator:a1e5968e6693725125e01a59fd35c5a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca0975cad7017aeea4aad53a7e1896f7" id="r_aca0975cad7017aeea4aad53a7e1896f7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#aca0975cad7017aeea4aad53a7e1896f7">BounceSolution</a> (const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;pointer_in, const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt; &amp;MinTracer_in, const <a class="el" href="structBSMPT_1_1CoexPhases.html">CoexPhases</a> &amp;phase_pair_in, const double &amp;UserDefined_vwall_in, const double &amp;UserDefined_epsturb_in, const int &amp;MaxPathIntegrations_in, const size_t &amp;NumberOfInitialScanTemperatures_in, const int &amp;UserDefined_PNLO_scaling_in=1)</td></tr>
+<tr class="memdesc:aca0975cad7017aeea4aad53a7e1896f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Bounce Sol Calc object. This class takes as input a pair of coexisting phases and delegates to constructor with provided symmetry group.  <br /></td></tr>
+<tr class="separator:aca0975cad7017aeea4aad53a7e1896f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca75fd783bd38a4f03cdf908cbbfb4cb" id="r_aca75fd783bd38a4f03cdf908cbbfb4cb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#aca75fd783bd38a4f03cdf908cbbfb4cb">BounceSolution</a> (const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;pointer_in, const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt; &amp;MinTracer_in, const <a class="el" href="structBSMPT_1_1CoexPhases.html">CoexPhases</a> &amp;phase_pair_in, const double &amp;UserDefined_vwall_in, const double &amp;UserDefined_epsturb_in, const int &amp;MaxPathIntegrations_in, const size_t &amp;NumberOfInitialScanTemperatures_in, const std::vector&lt; Eigen::MatrixXd &gt; &amp;GroupElements_in, const int &amp;UserDefined_PNLO_scaling_in=1)</td></tr>
+<tr class="memdesc:aca75fd783bd38a4f03cdf908cbbfb4cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Bounce Sol Calc object. This class takes as input a pair of coexisting phases.  <br /></td></tr>
+<tr class="separator:aca75fd783bd38a4f03cdf908cbbfb4cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a400c6b72007c5862d22c34b98e433734" id="r_a400c6b72007c5862d22c34b98e433734"><td class="memItemLeft" align="right" valign="top"><a id="a400c6b72007c5862d22c34b98e433734" name="a400c6b72007c5862d22c34b98e433734"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>GWInitialScan</b> ()</td></tr>
 <tr class="memdesc:a400c6b72007c5862d22c34b98e433734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initially we have no idea where the transition can occur, therefore we scan the complete temperature range. <br /></td></tr>
@@ -165,6 +169,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBounceSol</b> ()</
 <tr class="memitem:ae29f5574065159dd09f7deb3b8f5cd2c" id="r_ae29f5574065159dd09f7deb3b8f5cd2c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#ae29f5574065159dd09f7deb3b8f5cd2c">GetWallVelocity</a> () const</td></tr>
 <tr class="memdesc:ae29f5574065159dd09f7deb3b8f5cd2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the bubble wall velocity.  <br /></td></tr>
 <tr class="separator:ae29f5574065159dd09f7deb3b8f5cd2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55defb60380fe115b074897351c6e4db" id="r_a55defb60380fe115b074897351c6e4db"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a55defb60380fe115b074897351c6e4db">GetChapmanJougetVelocity</a> () const</td></tr>
+<tr class="memdesc:a55defb60380fe115b074897351c6e4db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Chapman-Jouget velocity.  <br /></td></tr>
+<tr class="separator:a55defb60380fe115b074897351c6e4db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a1ea66086c2201f58f22dd462277a04" id="r_a5a1ea66086c2201f58f22dd462277a04"><td class="memItemLeft" align="right" valign="top"><a id="a5a1ea66086c2201f58f22dd462277a04" name="a5a1ea66086c2201f58f22dd462277a04"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>GetSoundSpeedFalse</b> () const</td></tr>
+<tr class="memdesc:a5a1ea66086c2201f58f22dd462277a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the sound speed in the false phase. <br /></td></tr>
+<tr class="separator:a5a1ea66086c2201f58f22dd462277a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa963ca1e718d01b9c41f683b39138b07" id="r_aa963ca1e718d01b9c41f683b39138b07"><td class="memItemLeft" align="right" valign="top"><a id="aa963ca1e718d01b9c41f683b39138b07" name="aa963ca1e718d01b9c41f683b39138b07"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>GetSoundSpeedTrue</b> () const</td></tr>
+<tr class="memdesc:aa963ca1e718d01b9c41f683b39138b07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the sound speed in the true phase. <br /></td></tr>
+<tr class="separator:aa963ca1e718d01b9c41f683b39138b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0da671e36a95ece984142895fa17883" id="r_af0da671e36a95ece984142895fa17883"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#af0da671e36a95ece984142895fa17883">GetEpsTurb</a> () const</td></tr>
 <tr class="memdesc:af0da671e36a95ece984142895fa17883"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get epsturb.  <br /></td></tr>
 <tr class="separator:af0da671e36a95ece984142895fa17883"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,10 +187,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBounceSol</b> ()</
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetGstar</b> (const double &amp;gstar_in)</td></tr>
 <tr class="memdesc:a82522f6a61fbe6aa59792e868b0fb834"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetGstar Set gstar. <br /></td></tr>
 <tr class="separator:a82522f6a61fbe6aa59792e868b0fb834"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa04df2b1f51957fabf94a113589d87ae" id="r_aa04df2b1f51957fabf94a113589d87ae"><td class="memItemLeft" align="right" valign="top"><a id="aa04df2b1f51957fabf94a113589d87ae" name="aa04df2b1f51957fabf94a113589d87ae"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>GetGstar</b> () const</td></tr>
-<tr class="memdesc:aa04df2b1f51957fabf94a113589d87ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetGstar Get gstar. <br /></td></tr>
-<tr class="separator:aa04df2b1f51957fabf94a113589d87ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80b67ffde0490943c1f728247a65e83" id="r_aa80b67ffde0490943c1f728247a65e83"><td class="memItemLeft" align="right" valign="top"><a id="aa80b67ffde0490943c1f728247a65e83" name="aa80b67ffde0490943c1f728247a65e83"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>InitializeGstarProfile</b> ()</td></tr>
+<tr class="memdesc:aa80b67ffde0490943c1f728247a65e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the spline used to interpolate the gstar SM profile. <br /></td></tr>
+<tr class="separator:aa80b67ffde0490943c1f728247a65e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21218a67011da29030772b801beb44cb" id="r_a21218a67011da29030772b801beb44cb"><td class="memItemLeft" align="right" valign="top"><a id="a21218a67011da29030772b801beb44cb" name="a21218a67011da29030772b801beb44cb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>InitializedVSpline</b> ()</td></tr>
+<tr class="memdesc:a21218a67011da29030772b801beb44cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize two splines for the potential across the tunneling profile. Used to improve the Hubble rate calculation speed. <br /></td></tr>
+<tr class="separator:a21218a67011da29030772b801beb44cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa7fa4e3b5e91e6d52ec8960c4f7959c" id="r_aaa7fa4e3b5e91e6d52ec8960c4f7959c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#aaa7fa4e3b5e91e6d52ec8960c4f7959c">GetGstar</a> (const double &amp;T) const</td></tr>
+<tr class="memdesc:aaa7fa4e3b5e91e6d52ec8960c4f7959c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Gstar object.  <br /></td></tr>
+<tr class="separator:aaa7fa4e3b5e91e6d52ec8960c4f7959c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb11b319f959779364912803cbf4aca2" id="r_acb11b319f959779364912803cbf4aca2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#acb11b319f959779364912803cbf4aca2">GetGstar</a> ()</td></tr>
+<tr class="memdesc:acb11b319f959779364912803cbf4aca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Gstar for radiation-dominated epoch.  <br /></td></tr>
+<tr class="separator:acb11b319f959779364912803cbf4aca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29d9a5c346f720b60299a9411a59e3f1" id="r_a29d9a5c346f720b60299a9411a59e3f1"><td class="memItemLeft" align="right" valign="top"><a id="a29d9a5c346f720b60299a9411a59e3f1" name="a29d9a5c346f720b60299a9411a59e3f1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetCriticalTemp</b> (const double &amp;T_in)</td></tr>
 <tr class="memdesc:a29d9a5c346f720b60299a9411a59e3f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">SetCriticalTemp Set critical temperature. <br /></td></tr>
@@ -208,18 +233,30 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>GetPercolationTemp<
 double&#160;</td><td class="memItemRight" valign="bottom"><b>GetCompletionTemp</b> () const</td></tr>
 <tr class="memdesc:adb4c823789885ec1e7807e80c51680e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetCompletionTemp Get percolation temperature. <br /></td></tr>
 <tr class="separator:adb4c823789885ec1e7807e80c51680e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a308f913f7efeb1c861ae43f90ed885b4" id="r_a308f913f7efeb1c861ae43f90ed885b4"><td class="memItemLeft" align="right" valign="top"><a id="a308f913f7efeb1c861ae43f90ed885b4" name="a308f913f7efeb1c861ae43f90ed885b4"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>CalcTransitionTemp</b> (const int &amp;which_transition_temp)</td></tr>
-<tr class="memdesc:a308f913f7efeb1c861ae43f90ed885b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalcTransitionTemp Get transition temperature from int. <br /></td></tr>
-<tr class="separator:a308f913f7efeb1c861ae43f90ed885b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac57ad45d07739f73f36e6a9f1aa57684" id="r_ac57ad45d07739f73f36e6a9f1aa57684"><td class="memItemLeft" align="right" valign="top"><a id="ac57ad45d07739f73f36e6a9f1aa57684" name="ac57ad45d07739f73f36e6a9f1aa57684"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>GetTransitionTemp</b> () const</td></tr>
+<tr class="memdesc:ac57ad45d07739f73f36e6a9f1aa57684"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetTransitionTemp Get transition temperature. <br /></td></tr>
+<tr class="separator:ac57ad45d07739f73f36e6a9f1aa57684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8aa010e2d3d43a8f3d0bc5f3c4b2182" id="r_ac8aa010e2d3d43a8f3d0bc5f3c4b2182"><td class="memItemLeft" align="right" valign="top"><a id="ac8aa010e2d3d43a8f3d0bc5f3c4b2182" name="ac8aa010e2d3d43a8f3d0bc5f3c4b2182"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>GetReheatingTemp</b> () const</td></tr>
+<tr class="memdesc:ac8aa010e2d3d43a8f3d0bc5f3c4b2182"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetReheatingTemp Get reheating temperature. <br /></td></tr>
+<tr class="separator:ac8aa010e2d3d43a8f3d0bc5f3c4b2182"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e0b5ccc5267c03a1c7b810df9d6d377" id="r_a3e0b5ccc5267c03a1c7b810df9d6d377"><td class="memItemLeft" align="right" valign="top"><a id="a3e0b5ccc5267c03a1c7b810df9d6d377" name="a3e0b5ccc5267c03a1c7b810df9d6d377"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CalcTransitionTemp</b> ()</td></tr>
+<tr class="memdesc:a3e0b5ccc5267c03a1c7b810df9d6d377"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalcTransitionTemp Get transition temperature from int. <br /></td></tr>
+<tr class="separator:a3e0b5ccc5267c03a1c7b810df9d6d377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5f8e61534e9aabd262c092a8346f135" id="r_af5f8e61534e9aabd262c092a8346f135"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#af5f8e61534e9aabd262c092a8346f135">CalculateRhoGamma</a> (const double &amp;T) const</td></tr>
+<tr class="memdesc:af5f8e61534e9aabd262c092a8346f135"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate \( \rho_R = \rho_\gamma = g_\star \frac{\pi^2}{30}  T_*^4
+\).  <br /></td></tr>
+<tr class="separator:af5f8e61534e9aabd262c092a8346f135"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ec46726e7a8f346bfd939fcfe2d9c0a" id="r_a1ec46726e7a8f346bfd939fcfe2d9c0a"><td class="memItemLeft" align="right" valign="top"><a id="a1ec46726e7a8f346bfd939fcfe2d9c0a" name="a1ec46726e7a8f346bfd939fcfe2d9c0a"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>GetPTStrength</b> () const</td></tr>
 <tr class="memdesc:a1ec46726e7a8f346bfd939fcfe2d9c0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">GetPTStrength Get PT strength alpha. <br /></td></tr>
 <tr class="separator:a1ec46726e7a8f346bfd939fcfe2d9c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a404755d4603a80cb1930b594dabb471c" id="r_a404755d4603a80cb1930b594dabb471c"><td class="memItemLeft" align="right" valign="top"><a id="a404755d4603a80cb1930b594dabb471c" name="a404755d4603a80cb1930b594dabb471c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>CalcGstarPureRad</b> ()</td></tr>
-<tr class="memdesc:a404755d4603a80cb1930b594dabb471c"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalcGstarPureRad Calculate the number of effective degrees of freedom assuming a purely radiative universe. <br /></td></tr>
-<tr class="separator:a404755d4603a80cb1930b594dabb471c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0177daa3ca7f39cd387258e805f5e5" id="r_a6d0177daa3ca7f39cd387258e805f5e5"><td class="memItemLeft" align="right" valign="top"><a id="a6d0177daa3ca7f39cd387258e805f5e5" name="a6d0177daa3ca7f39cd387258e805f5e5"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>CalcGstarPureRad</b> ()</td></tr>
+<tr class="memdesc:a6d0177daa3ca7f39cd387258e805f5e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalcGstarPureRad Calculate the number of effective degrees of freedom assuming a purely radiative universe. <br /></td></tr>
+<tr class="separator:a6d0177daa3ca7f39cd387258e805f5e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1647157baf354f0be91059e66614f48" id="r_aa1647157baf354f0be91059e66614f48"><td class="memItemLeft" align="right" valign="top"><a id="aa1647157baf354f0be91059e66614f48" name="aa1647157baf354f0be91059e66614f48"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateNucleationTemp</b> ()</td></tr>
 <tr class="memdesc:aa1647157baf354f0be91059e66614f48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculation of nucleation temperature. <br /></td></tr>
@@ -228,6 +265,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateNucleationTe
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateNucleationTempApprox</b> ()</td></tr>
 <tr class="memdesc:ad364576598986dea11756a997f8c81d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Approximate calculation of nucleation temperature. <br /></td></tr>
 <tr class="separator:ad364576598986dea11756a997f8c81d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb862c71373009b28ac363941bb2646f" id="r_abb862c71373009b28ac363941bb2646f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#abb862c71373009b28ac363941bb2646f">FalseVacFractionExponent_I</a> (const double &amp;T)</td></tr>
+<tr class="memdesc:abb862c71373009b28ac363941bb2646f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the false vacuum fraction \( I(T)=\frac{4\pi
+v_{b}^{3}}{3}\int_{T}^{T_{c}}\frac{\Gamma(T^{\prime})d
+T^{\prime}}{T^{\prime4}H(T^{\prime})}\left(\int_{T}^{T^{\prime}}\frac{d\tilde{T}}{H(\tilde{T})}\right)^{3}
+\).  <br /></td></tr>
+<tr class="separator:abb862c71373009b28ac363941bb2646f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48aa62ef2601bd943560a50be14b8bbd" id="r_a48aa62ef2601bd943560a50be14b8bbd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a48aa62ef2601bd943560a50be14b8bbd">CalcTempAtFalseVacFraction</a> (const double &amp;false_vac_frac)</td></tr>
 <tr class="memdesc:a48aa62ef2601bd943560a50be14b8bbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalcTempAtFalseVacFraction calculates the temperature at which the false vacuum fraction drops below val.  <br /></td></tr>
 <tr class="separator:a48aa62ef2601bd943560a50be14b8bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -240,13 +283,30 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateNucleationTe
 <tr class="memitem:a942b1260651a12e21514cd6558fa1e9a" id="r_a942b1260651a12e21514cd6558fa1e9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a942b1260651a12e21514cd6558fa1e9a">CalculateCompletionTemp</a> (const double &amp;false_vac_frac=0.01)</td></tr>
 <tr class="memdesc:a942b1260651a12e21514cd6558fa1e9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalculateCompletionTemp calculation of the temperature when the false vacuum fraction drops below 1 % (default)  <br /></td></tr>
 <tr class="separator:a942b1260651a12e21514cd6558fa1e9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec5f2f6e6ac4ea7d1844f3e28acaa29d" id="r_aec5f2f6e6ac4ea7d1844f3e28acaa29d"><td class="memItemLeft" align="right" valign="top"><a id="aec5f2f6e6ac4ea7d1844f3e28acaa29d" name="aec5f2f6e6ac4ea7d1844f3e28acaa29d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateReheatingTemp</b> ()</td></tr>
+<tr class="memdesc:aec5f2f6e6ac4ea7d1844f3e28acaa29d"><td class="mdescLeft">&#160;</td><td class="mdescRight">CalculateReheatingTemp calculation of the reheating temperature. <br /></td></tr>
+<tr class="separator:aec5f2f6e6ac4ea7d1844f3e28acaa29d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab66118235241c0da4dd34f490ca5a618" id="r_ab66118235241c0da4dd34f490ca5a618"><td class="memItemLeft" align="right" valign="top"><a id="ab66118235241c0da4dd34f490ca5a618" name="ab66118235241c0da4dd34f490ca5a618"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculatePTStrength</b> ()</td></tr>
-<tr class="memdesc:ab66118235241c0da4dd34f490ca5a618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate phase transition strength alpha at percolation temperature. <br /></td></tr>
+<tr class="memdesc:ab66118235241c0da4dd34f490ca5a618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate phase transition strength alpha. <br /></td></tr>
 <tr class="separator:ab66118235241c0da4dd34f490ca5a618"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1989e11ec24734dee2b9a290f56164b6" id="r_a1989e11ec24734dee2b9a290f56164b6"><td class="memItemLeft" align="right" valign="top"><a id="a1989e11ec24734dee2b9a290f56164b6" name="a1989e11ec24734dee2b9a290f56164b6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CalcChapmanJougetVelocity</b> ()</td></tr>
+<tr class="memdesc:a1989e11ec24734dee2b9a290f56164b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derive the Chapman-Jouget velocity from PT strength and false phase sound velocity using Eq. (55) of 2004.06995. <br /></td></tr>
+<tr class="separator:a1989e11ec24734dee2b9a290f56164b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a016647bd551a24836785a8ad06944ba5" id="r_a016647bd551a24836785a8ad06944ba5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a016647bd551a24836785a8ad06944ba5">CalculateWallVelocity</a> (const <a class="el" href="structBSMPT_1_1Minimum.html">Minimum</a> &amp;false_min, const <a class="el" href="structBSMPT_1_1Minimum.html">Minimum</a> &amp;true_min)</td></tr>
 <tr class="memdesc:a016647bd551a24836785a8ad06944ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate wall velocity.  <br /></td></tr>
 <tr class="separator:a016647bd551a24836785a8ad06944ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cd075da217e897c462a515b34fb5fe8" id="r_a7cd075da217e897c462a515b34fb5fe8"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#a7cd075da217e897c462a515b34fb5fe8">CalculateSoundSpeed</a> (<a class="el" href="structBSMPT_1_1Phase.html">Phase</a> &amp;phase)</td></tr>
+<tr class="memdesc:a7cd075da217e897c462a515b34fb5fe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate sound speeds \( c_s^2 = \frac{1}{T}
+\frac{V&#39;_{\text{eff}}(T)}{V&#39;&#39;_{\text{eff}}(T)} \) at Tstar in phase.  <br /></td></tr>
+<tr class="separator:a7cd075da217e897c462a515b34fb5fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c1626f8bb4a955c8ca0b79ff5421e5" id="r_ac6c1626f8bb4a955c8ca0b79ff5421e5"><td class="memItemLeft" align="right" valign="top"><a id="ac6c1626f8bb4a955c8ca0b79ff5421e5" name="ac6c1626f8bb4a955c8ca0b79ff5421e5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateSoundSpeeds</b> ()</td></tr>
+<tr class="memdesc:ac6c1626f8bb4a955c8ca0b79ff5421e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate sound speeds \( c_s^2 = \frac{1}{T}
+\frac{V&#39;_{\text{eff}}(T)}{V&#39;&#39;_{\text{eff}}(T)} \) at Tstar in false and true phase. <br /></td></tr>
+<tr class="separator:ac6c1626f8bb4a955c8ca0b79ff5421e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adceb9a776152fc94fd821639a402fe86" id="r_adceb9a776152fc94fd821639a402fe86"><td class="memItemLeft" align="right" valign="top"><a id="adceb9a776152fc94fd821639a402fe86" name="adceb9a776152fc94fd821639a402fe86"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateInvTimeScale</b> ()</td></tr>
 <tr class="memdesc:adceb9a776152fc94fd821639a402fe86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate inverse time scale of phase transition. <br /></td></tr>
@@ -255,6 +315,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateInvTimeScale
 double&#160;</td><td class="memItemRight" valign="bottom"><b>GetInvTimeScale</b> ()</td></tr>
 <tr class="memdesc:a483ddd7153b14e9bd26e8639c8aa0cc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get inverse time scale of phase transition. <br /></td></tr>
 <tr class="separator:a483ddd7153b14e9bd26e8639c8aa0cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60617129f4d1cd8c9e3cfb609d902db3" id="r_a60617129f4d1cd8c9e3cfb609d902db3"><td class="memItemLeft" align="right" valign="top"><a id="a60617129f4d1cd8c9e3cfb609d902db3" name="a60617129f4d1cd8c9e3cfb609d902db3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateRstar</b> ()</td></tr>
+<tr class="memdesc:a60617129f4d1cd8c9e3cfb609d902db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">\( R_{\star}=\left[T_{p}^{3}\int_{T_{p}}^{T_{c}}\frac{d
+T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
+\) <br /></td></tr>
+<tr class="separator:a60617129f4d1cd8c9e3cfb609d902db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b18b8d8cc60aa776d741a0a7071a996" id="r_a2b18b8d8cc60aa776d741a0a7071a996"><td class="memItemLeft" align="right" valign="top"><a id="a2b18b8d8cc60aa776d741a0a7071a996" name="a2b18b8d8cc60aa776d741a0a7071a996"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>GetRstar</b> ()</td></tr>
+<tr class="memdesc:a2b18b8d8cc60aa776d741a0a7071a996"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns \( R_\star \). <br /></td></tr>
+<tr class="separator:a2b18b8d8cc60aa776d741a0a7071a996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ac12e66253f31963250a920aec5f68986" id="r_ac12e66253f31963250a920aec5f68986"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1BounceSolution.html#ac12e66253f31963250a920aec5f68986">ConstructSplineVofT</a> (<a class="el" href="structBSMPT_1_1Phase.html">Phase</a> &amp;phase, <a class="el" href="classtk_1_1spline.html">tk::spline</a> &amp;spline)</td></tr>
+<tr class="memdesc:ac12e66253f31963250a920aec5f68986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using the phase, constructs a spline of \( V(T) \) of that phase.  <br /></td></tr>
+<tr class="separator:ac12e66253f31963250a920aec5f68986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -266,6 +342,10 @@ std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.h
 std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>MinTracer</b></td></tr>
 <tr class="memdesc:a8faf10d6b2b6dfae370e753b2dac07e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">MinTracer object. <br /></td></tr>
 <tr class="separator:a8faf10d6b2b6dfae370e753b2dac07e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a900d56d924b7c7ef9ccaf404ab2e6a6b" id="r_a900d56d924b7c7ef9ccaf404ab2e6a6b"><td class="memItemLeft" align="right" valign="top"><a id="a900d56d924b7c7ef9ccaf404ab2e6a6b" name="a900d56d924b7c7ef9ccaf404ab2e6a6b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>pnlo_scaling</b></td></tr>
+<tr class="memdesc:a900d56d924b7c7ef9ccaf404ab2e6a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">pressure scaling with \( \gamma \) of 1 -&gt; N processes at NLO <br /></td></tr>
+<tr class="separator:a900d56d924b7c7ef9ccaf404ab2e6a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb0a1026ce5b6ba5762426a0e12b46e1" id="r_adb0a1026ce5b6ba5762426a0e12b46e1"><td class="memItemLeft" align="right" valign="top"><a id="adb0a1026ce5b6ba5762426a0e12b46e1" name="adb0a1026ce5b6ba5762426a0e12b46e1"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>epsturb</b> = 0.1</td></tr>
 <tr class="memdesc:adb0a1026ce5b6ba5762426a0e12b46e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">epsilon of turbulence efficiency factor <br /></td></tr>
@@ -274,6 +354,18 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>epsturb</b> = 0.1</
 double&#160;</td><td class="memItemRight" valign="bottom"><b>vwall</b> = 0.95</td></tr>
 <tr class="memdesc:ad2a831a3b1f45b8ba0748ac119403654"><td class="mdescLeft">&#160;</td><td class="mdescRight">wall velocity <br /></td></tr>
 <tr class="separator:ad2a831a3b1f45b8ba0748ac119403654"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca1c4d65e0361d689fc7be8bcf012d1e" id="r_aca1c4d65e0361d689fc7be8bcf012d1e"><td class="memItemLeft" align="right" valign="top"><a id="aca1c4d65e0361d689fc7be8bcf012d1e" name="aca1c4d65e0361d689fc7be8bcf012d1e"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>vCJ</b> = -1</td></tr>
+<tr class="memdesc:aca1c4d65e0361d689fc7be8bcf012d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chapman-Jouget velocity. <br /></td></tr>
+<tr class="separator:aca1c4d65e0361d689fc7be8bcf012d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a014964fcb768465765e492fee0ceb6f3" id="r_a014964fcb768465765e492fee0ceb6f3"><td class="memItemLeft" align="right" valign="top"><a id="a014964fcb768465765e492fee0ceb6f3" name="a014964fcb768465765e492fee0ceb6f3"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>Csound_false</b> = -1</td></tr>
+<tr class="memdesc:a014964fcb768465765e492fee0ceb6f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">sound speed in false phase <br /></td></tr>
+<tr class="separator:a014964fcb768465765e492fee0ceb6f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f5263b5380bc0b7285b52d6ef1543c6" id="r_a5f5263b5380bc0b7285b52d6ef1543c6"><td class="memItemLeft" align="right" valign="top"><a id="a5f5263b5380bc0b7285b52d6ef1543c6" name="a5f5263b5380bc0b7285b52d6ef1543c6"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>Csound_true</b> = -1</td></tr>
+<tr class="memdesc:a5f5263b5380bc0b7285b52d6ef1543c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">sound speed in true phase <br /></td></tr>
+<tr class="separator:a5f5263b5380bc0b7285b52d6ef1543c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a088fc30cb625626a293e0c47825b9ac2" id="r_a088fc30cb625626a293e0c47825b9ac2"><td class="memItemLeft" align="right" valign="top"><a id="a088fc30cb625626a293e0c47825b9ac2" name="a088fc30cb625626a293e0c47825b9ac2"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>NumberOfInitialScanTemperatures</b></td></tr>
 <tr class="memdesc:a088fc30cb625626a293e0c47825b9ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of temperature steps in the initial scan of the bounce solver <br /></td></tr>
@@ -290,6 +382,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>percolation_temp_set<
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>completion_temp_set</b> = false</td></tr>
 <tr class="memdesc:a3ccf7acab51a0dd480ae30b5ccbbfae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">set to true if completion temperature is set <br /></td></tr>
 <tr class="separator:a3ccf7acab51a0dd480ae30b5ccbbfae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0995167fbef49ce90698634f88af276" id="r_af0995167fbef49ce90698634f88af276"><td class="memItemLeft" align="right" valign="top"><a id="af0995167fbef49ce90698634f88af276" name="af0995167fbef49ce90698634f88af276"></a>
+<a class="el" href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">TransitionTemperature</a>&#160;</td><td class="memItemRight" valign="bottom"><b>which_transition_temp</b> = TransitionTemperature::NotSet</td></tr>
+<tr class="memdesc:af0995167fbef49ce90698634f88af276"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temperature at which to calculate parameters. <br /></td></tr>
+<tr class="separator:af0995167fbef49ce90698634f88af276"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0e5cadbafce5e7182512cc80c0a67df" id="r_ab0e5cadbafce5e7182512cc80c0a67df"><td class="memItemLeft" align="right" valign="top"><a id="ab0e5cadbafce5e7182512cc80c0a67df" name="ab0e5cadbafce5e7182512cc80c0a67df"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>Tc</b> = -1</td></tr>
 <tr class="memdesc:ab0e5cadbafce5e7182512cc80c0a67df"><td class="mdescLeft">&#160;</td><td class="mdescRight">critical temperature/highest temperature when transition can occur <br /></td></tr>
@@ -314,6 +410,14 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>Tperc</b> = -1</td>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>Tcompl</b> = -1</td></tr>
 <tr class="memdesc:acc185ef7921e4e5ef43b91780e876a92"><td class="mdescLeft">&#160;</td><td class="mdescRight">completion temperature <br /></td></tr>
 <tr class="separator:acc185ef7921e4e5ef43b91780e876a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9ce7666df54692156bfe953af4bbf83" id="r_ac9ce7666df54692156bfe953af4bbf83"><td class="memItemLeft" align="right" valign="top"><a id="ac9ce7666df54692156bfe953af4bbf83" name="ac9ce7666df54692156bfe953af4bbf83"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>Treh</b> = -1</td></tr>
+<tr class="memdesc:ac9ce7666df54692156bfe953af4bbf83"><td class="mdescLeft">&#160;</td><td class="mdescRight">reheating temperature <br /></td></tr>
+<tr class="separator:ac9ce7666df54692156bfe953af4bbf83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5711fb023145fa45e280d8e4d3e86584" id="r_a5711fb023145fa45e280d8e4d3e86584"><td class="memItemLeft" align="right" valign="top"><a id="a5711fb023145fa45e280d8e4d3e86584" name="a5711fb023145fa45e280d8e4d3e86584"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>Tstar</b> = -1</td></tr>
+<tr class="memdesc:a5711fb023145fa45e280d8e4d3e86584"><td class="mdescLeft">&#160;</td><td class="mdescRight">transition temperature <br /></td></tr>
+<tr class="separator:a5711fb023145fa45e280d8e4d3e86584"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5538ee4205361f42123c8e7952918c1" id="r_ab5538ee4205361f42123c8e7952918c1"><td class="memItemLeft" align="right" valign="top"><a id="ab5538ee4205361f42123c8e7952918c1" name="ab5538ee4205361f42123c8e7952918c1"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>store_Temp</b></td></tr>
 <tr class="memdesc:ab5538ee4205361f42123c8e7952918c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">stored temperature <br /></td></tr>
@@ -326,6 +430,12 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>alpha</b> = -1</td>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>betaH</b> = -1</td></tr>
 <tr class="memdesc:a088a20a7f184e883c0351a9b6aa3e120"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse time scale \( \frac{\beta}{H} \). <br /></td></tr>
 <tr class="separator:a088a20a7f184e883c0351a9b6aa3e120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74d0157776c0aa721376e0df657fdb4d" id="r_a74d0157776c0aa721376e0df657fdb4d"><td class="memItemLeft" align="right" valign="top"><a id="a74d0157776c0aa721376e0df657fdb4d" name="a74d0157776c0aa721376e0df657fdb4d"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>Rstar</b> = -1</td></tr>
+<tr class="memdesc:a74d0157776c0aa721376e0df657fdb4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">\( R_{\star}=\left[T_{*}^{3}\int_{T_{*}}^{T_{c}}\frac{d
+T^{\prime}}{T^{\prime4}}\frac{\Gamma(T^{\prime})}{H(T^{\prime})}e^{-I(T^{\prime})}\right]^{-1/3}
+\) <br /></td></tr>
+<tr class="separator:a74d0157776c0aa721376e0df657fdb4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea8b2fdaba400b1e66c39f5bfb19b1e9" id="r_aea8b2fdaba400b1e66c39f5bfb19b1e9"><td class="memItemLeft" align="right" valign="top"><a id="aea8b2fdaba400b1e66c39f5bfb19b1e9" name="aea8b2fdaba400b1e66c39f5bfb19b1e9"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>gstar</b></td></tr>
 <tr class="memdesc:aea8b2fdaba400b1e66c39f5bfb19b1e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of effective degrees of freedom <br /></td></tr>
@@ -338,6 +448,22 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>indexTrueCandidatePhas
 <a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>S3ofT_spline</b></td></tr>
 <tr class="memdesc:aea321e56f6292de82943b64279080084"><td class="mdescLeft">&#160;</td><td class="mdescRight">spline used to interpolate the action as a function of the temperature <br /></td></tr>
 <tr class="separator:aea321e56f6292de82943b64279080084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bd55ab25746f070ee69aa15f11bc6f9" id="r_a3bd55ab25746f070ee69aa15f11bc6f9"><td class="memItemLeft" align="right" valign="top"><a id="a3bd55ab25746f070ee69aa15f11bc6f9" name="a3bd55ab25746f070ee69aa15f11bc6f9"></a>
+<a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GstarProfileLowT</b></td></tr>
+<tr class="memdesc:a3bd55ab25746f070ee69aa15f11bc6f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gstar spline, T &lt; T_QCD (214.0 MeV) <br /></td></tr>
+<tr class="separator:a3bd55ab25746f070ee69aa15f11bc6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a3f3a515dbae5cd29bc6c8ea9f84506" id="r_a2a3f3a515dbae5cd29bc6c8ea9f84506"><td class="memItemLeft" align="right" valign="top"><a id="a2a3f3a515dbae5cd29bc6c8ea9f84506" name="a2a3f3a515dbae5cd29bc6c8ea9f84506"></a>
+<a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GstarProfileHighT</b></td></tr>
+<tr class="memdesc:a2a3f3a515dbae5cd29bc6c8ea9f84506"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gstar spline, T &gt; T_QCD (214.0 MeV) <br /></td></tr>
+<tr class="separator:a2a3f3a515dbae5cd29bc6c8ea9f84506"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bd284707e4259c6cb89edc3a82ab131" id="r_a8bd284707e4259c6cb89edc3a82ab131"><td class="memItemLeft" align="right" valign="top"><a id="a8bd284707e4259c6cb89edc3a82ab131" name="a8bd284707e4259c6cb89edc3a82ab131"></a>
+<a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>FalsePhaseVSpline</b></td></tr>
+<tr class="memdesc:a8bd284707e4259c6cb89edc3a82ab131"><td class="mdescLeft">&#160;</td><td class="mdescRight">False V spline to interpolate. <br /></td></tr>
+<tr class="separator:a8bd284707e4259c6cb89edc3a82ab131"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af350c13978b71d505dbf4a95a019d9a2" id="r_af350c13978b71d505dbf4a95a019d9a2"><td class="memItemLeft" align="right" valign="top"><a id="af350c13978b71d505dbf4a95a019d9a2" name="af350c13978b71d505dbf4a95a019d9a2"></a>
+<a class="el" href="classtk_1_1spline.html">tk::spline</a>&#160;</td><td class="memItemRight" valign="bottom"><b>TruePhaseVSpline</b></td></tr>
+<tr class="memdesc:af350c13978b71d505dbf4a95a019d9a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">True V spline to interpolate. <br /></td></tr>
+<tr class="separator:af350c13978b71d505dbf4a95a019d9a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f1621c008192b518a9b88f315b31802" id="r_a1f1621c008192b518a9b88f315b31802"><td class="memItemLeft" align="right" valign="top"><a id="a1f1621c008192b518a9b88f315b31802" name="a1f1621c008192b518a9b88f315b31802"></a>
 std::vector&lt; <a class="el" href="classBSMPT_1_1BounceActionInt.html">BounceActionInt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>SolutionList</b></td></tr>
 <tr class="memdesc:a1f1621c008192b518a9b88f315b31802"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of <a class="el" href="classBSMPT_1_1BounceActionInt.html">BounceActionInt</a> objects with valid solutions. <br /></td></tr>
@@ -448,80 +574,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
 
 </div>
 </div>
-<a id="a95086075246bd162705c1baff5caa5c4" name="a95086075246bd162705c1baff5caa5c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95086075246bd162705c1baff5caa5c4">&#9670;&#160;</a></span>BounceSolution() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">BSMPT::BounceSolution::BounceSolution </td>
-          <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>pointer_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>MinTracer_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="structBSMPT_1_1CoexPhases.html">CoexPhases</a> &amp;&#160;</td>
-          <td class="paramname"><em>phase_pair_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const double &amp;&#160;</td>
-          <td class="paramname"><em>UserDefined_vwall_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const double &amp;&#160;</td>
-          <td class="paramname"><em>UserDefined_epsturb_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>MaxPathIntegrations_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const size_t &amp;&#160;</td>
-          <td class="paramname"><em>NumberOfInitialScanTemperatures_in</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Construct a new Bounce Sol Calc object. This class takes as input a pair of coexisting phases and delegates to constructor with provided symmetry group. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pointer_in</td><td>model pointer </td></tr>
-    <tr><td class="paramname">MinTracerIn</td><td>minimum tracer pointer </td></tr>
-    <tr><td class="paramname">phase_pair_in</td><td>pair of coexisting phases </td></tr>
-    <tr><td class="paramname">UserDefined_vwall_in</td><td>is the input value for v_wall. If = -1$ then we use the approximation coming from <a href="https://arxiv.org/abs/2210.16305">https://arxiv.org/abs/2210.16305</a>. If = -2$ then we use the upper bound from <a href="https://arxiv.org/abs/2305.02357">https://arxiv.org/abs/2305.02357</a> </td></tr>
-    <tr><td class="paramname">UserDefined_epsturb_in</td><td>is the input value for epsturb. If [0..1] set to value, for -1 we use the upper bound from <a href="https://arxiv.org/abs/1704.05871">https://arxiv.org/abs/1704.05871</a> </td></tr>
-    <tr><td class="paramname">MaxPathIntegrations_in</td><td>max number of path integrations </td></tr>
-    <tr><td class="paramname">NumberOfInitialScanTemperatures_in</td><td>number of temperature steps in the initial scan of the bounce solver </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1e5968e6693725125e01a59fd35c5a20" name="a1e5968e6693725125e01a59fd35c5a20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e5968e6693725125e01a59fd35c5a20">&#9670;&#160;</a></span>BounceSolution() <span class="overload">[3/3]</span></h2>
+<a id="aca0975cad7017aeea4aad53a7e1896f7" name="aca0975cad7017aeea4aad53a7e1896f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca0975cad7017aeea4aad53a7e1896f7">&#9670;&#160;</a></span>BounceSolution() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -571,8 +625,93 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; Eigen::MatrixXd &gt;&#160;</td>
-          <td class="paramname"><em>GroupElements_in</em>&#160;</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>UserDefined_PNLO_scaling_in</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new Bounce Sol Calc object. This class takes as input a pair of coexisting phases and delegates to constructor with provided symmetry group. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pointer_in</td><td>model pointer </td></tr>
+    <tr><td class="paramname">MinTracerIn</td><td>minimum tracer pointer </td></tr>
+    <tr><td class="paramname">phase_pair_in</td><td>pair of coexisting phases </td></tr>
+    <tr><td class="paramname">UserDefined_vwall_in</td><td>is the input value for v_wall. If = -1$ then we use the approximation coming from <a href="https://arxiv.org/abs/2210.16305">https://arxiv.org/abs/2210.16305</a>. If = -2$ then we use the upper bound from <a href="https://arxiv.org/abs/2305.02357">https://arxiv.org/abs/2305.02357</a> </td></tr>
+    <tr><td class="paramname">UserDefined_epsturb_in</td><td>is the input value for epsturb. If [0..1] set to value, for -1 we use the upper bound from <a href="https://arxiv.org/abs/1704.05871">https://arxiv.org/abs/1704.05871</a> </td></tr>
+    <tr><td class="paramname">MaxPathIntegrations_in</td><td>max number of path integrations </td></tr>
+    <tr><td class="paramname">NumberOfInitialScanTemperatures_in</td><td>number of temperature steps in the initial scan of the bounce solver </td></tr>
+    <tr><td class="paramname">UserDefined_PNLO_scaling_in</td><td>is the pressure scaling at NLO for 1 -&gt; N </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aca75fd783bd38a4f03cdf908cbbfb4cb" name="aca75fd783bd38a4f03cdf908cbbfb4cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca75fd783bd38a4f03cdf908cbbfb4cb">&#9670;&#160;</a></span>BounceSolution() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BSMPT::BounceSolution::BounceSolution </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1Class__Potential__Origin.html">Class_Potential_Origin</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pointer_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classBSMPT_1_1MinimumTracer.html">MinimumTracer</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>MinTracer_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structBSMPT_1_1CoexPhases.html">CoexPhases</a> &amp;&#160;</td>
+          <td class="paramname"><em>phase_pair_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>UserDefined_vwall_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>UserDefined_epsturb_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>MaxPathIntegrations_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t &amp;&#160;</td>
+          <td class="paramname"><em>NumberOfInitialScanTemperatures_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; Eigen::MatrixXd &gt; &amp;&#160;</td>
+          <td class="paramname"><em>GroupElements_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>UserDefined_PNLO_scaling_in</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -593,6 +732,7 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
     <tr><td class="paramname">MaxPathIntegrations_in</td><td>max number of path integrations </td></tr>
     <tr><td class="paramname">GroupElements_In</td><td>List of allowed potential symmetries </td></tr>
     <tr><td class="paramname">NumberOfInitialScanTemperatures_in</td><td>number of temperature steps in the initial scan of the bounce solver </td></tr>
+    <tr><td class="paramname">UserDefined_PNLO_scaling_in</td><td>is the pressure scaling at NLO for 1 -&gt; N </td></tr>
   </table>
   </dd>
 </dl>
@@ -743,6 +883,62 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
 
 </div>
 </div>
+<a id="af5f8e61534e9aabd262c092a8346f135" name="af5f8e61534e9aabd262c092a8346f135"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5f8e61534e9aabd262c092a8346f135">&#9670;&#160;</a></span>CalculateRhoGamma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::BounceSolution::CalculateRhoGamma </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>T</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate \( \rho_R = \rho_\gamma = g_\star \frac{\pi^2}{30}  T_*^4
+\). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>temperature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+</div>
+</div>
+<a id="a7cd075da217e897c462a515b34fb5fe8" name="a7cd075da217e897c462a515b34fb5fe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cd075da217e897c462a515b34fb5fe8">&#9670;&#160;</a></span>CalculateSoundSpeed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::BounceSolution::CalculateSoundSpeed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBSMPT_1_1Phase.html">Phase</a> &amp;&#160;</td>
+          <td class="paramname"><em>phase</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate sound speeds \( c_s^2 = \frac{1}{T}
+\frac{V&#39;_{\text{eff}}(T)}{V&#39;&#39;_{\text{eff}}(T)} \) at Tstar in phase. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">phase</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>sound speed </dd></dl>
+
+</div>
+</div>
 <a id="a016647bd551a24836785a8ad06944ba5" name="a016647bd551a24836785a8ad06944ba5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a016647bd551a24836785a8ad06944ba5">&#9670;&#160;</a></span>CalculateWallVelocity()</h2>
 
@@ -780,6 +976,101 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
 
 </div>
 </div>
+<a id="ac12e66253f31963250a920aec5f68986" name="ac12e66253f31963250a920aec5f68986"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac12e66253f31963250a920aec5f68986">&#9670;&#160;</a></span>ConstructSplineVofT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BSMPT::BounceSolution::ConstructSplineVofT </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBSMPT_1_1Phase.html">Phase</a> &amp;&#160;</td>
+          <td class="paramname"><em>phase</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtk_1_1spline.html">tk::spline</a> &amp;&#160;</td>
+          <td class="paramname"><em>spline</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Using the phase, constructs a spline of \( V(T) \) of that phase. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">phase</td><td><a class="el" href="structBSMPT_1_1Phase.html" title="Phase object.">Phase</a> to reconstruct using spline </td></tr>
+    <tr><td class="paramname">spline</td><td>Spline that takes the result </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abb862c71373009b28ac363941bb2646f" name="abb862c71373009b28ac363941bb2646f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb862c71373009b28ac363941bb2646f">&#9670;&#160;</a></span>FalseVacFractionExponent_I()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::BounceSolution::FalseVacFractionExponent_I </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>T</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the false vacuum fraction \( I(T)=\frac{4\pi
+v_{b}^{3}}{3}\int_{T}^{T_{c}}\frac{\Gamma(T^{\prime})d
+T^{\prime}}{T^{\prime4}H(T^{\prime})}\left(\int_{T}^{T^{\prime}}\frac{d\tilde{T}}{H(\tilde{T})}\right)^{3}
+\). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>temperature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+</div>
+</div>
+<a id="a55defb60380fe115b074897351c6e4db" name="a55defb60380fe115b074897351c6e4db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55defb60380fe115b074897351c6e4db">&#9670;&#160;</a></span>GetChapmanJougetVelocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::BounceSolution::GetChapmanJougetVelocity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get Chapman-Jouget velocity. </p>
+<dl class="section return"><dt>Returns</dt><dd>vCJ </dd></dl>
+
+</div>
+</div>
 <a id="af0da671e36a95ece984142895fa17883" name="af0da671e36a95ece984142895fa17883"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af0da671e36a95ece984142895fa17883">&#9670;&#160;</a></span>GetEpsTurb()</h2>
 
@@ -797,6 +1088,53 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
 
 <p>Get epsturb. </p>
 <dl class="section return"><dt>Returns</dt><dd>epsturb </dd></dl>
+
+</div>
+</div>
+<a id="acb11b319f959779364912803cbf4aca2" name="acb11b319f959779364912803cbf4aca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb11b319f959779364912803cbf4aca2">&#9670;&#160;</a></span>GetGstar() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::BounceSolution::GetGstar </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get Gstar for radiation-dominated epoch. </p>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+</div>
+</div>
+<a id="aaa7fa4e3b5e91e6d52ec8960c4f7959c" name="aaa7fa4e3b5e91e6d52ec8960c4f7959c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa7fa4e3b5e91e6d52ec8960c4f7959c">&#9670;&#160;</a></span>GetGstar() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::BounceSolution::GetGstar </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>T</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the Gstar object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>temperature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
 
 </div>
 </div>
@@ -840,6 +1178,32 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>action_ratio</b> (d
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Temp</td><td>temperature </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a190a652a66f37ee10adc0b73df95ee63" name="a190a652a66f37ee10adc0b73df95ee63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a190a652a66f37ee10adc0b73df95ee63">&#9670;&#160;</a></span>SetAndCalculateGWParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BSMPT::BounceSolution::SetAndCalculateGWParameters </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">TransitionTemperature</a> &amp;&#160;</td>
+          <td class="paramname"><em>which_transition_temp_in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the Transition Temp object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">which_transition_temp_in</td><td></td></tr>
   </table>
   </dd>
 </dl>

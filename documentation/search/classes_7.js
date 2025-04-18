@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['libcmaesreturn_0',['LibCMAESReturn',['../structBSMPT_1_1Minimizer_1_1LibCMAES_1_1LibCMAESReturn.html',1,'BSMPT::Minimizer::LibCMAES']]],
-  ['logger_1',['Logger',['../classBSMPT_1_1Logger.html',1,'BSMPT']]]
+  ['keyvalue_0',['KeyValue',['../structBSMPT_1_1parser_1_1KeyValue.html',1,'BSMPT::parser']]]
 ];

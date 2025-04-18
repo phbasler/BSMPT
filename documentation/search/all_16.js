@@ -25,5 +25,6 @@ var searchData=
   ['rfunc_22',['Rfunc',['../namespaceBSMPT.html#ab98ac2bf8d484e530d4c5ce20dc364fe',1,'BSMPT']]],
   ['rho_5fsol_23',['rho_sol',['../classBSMPT_1_1BounceActionInt.html#a22f3c3e5dee34fcef55eeb52ca1327fe',1,'BSMPT::BounceActionInt']]],
   ['rk5_5fstep_24',['RK5_step',['../classBSMPT_1_1BounceActionInt.html#a8ca48bc968b6d7bb995cda9c91ef7d53',1,'BSMPT::BounceActionInt']]],
-  ['routine_25',['Changes in the Installation Routine',['../md_Changelog.html#autotoc_md45',1,'']]]
+  ['routine_25',['Changes in the Installation Routine',['../md_Changelog.html#autotoc_md45',1,'']]],
+  ['rstar_26',['Rstar',['../classBSMPT_1_1BounceSolution.html#a74d0157776c0aa721376e0df657fdb4d',1,'BSMPT::BounceSolution']]]
 ];

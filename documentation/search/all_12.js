@@ -10,7 +10,7 @@ var searchData=
   ['negativebosonspline_2ecpp_7',['NegativeBosonSpline.cpp',['../NegativeBosonSpline_8cpp.html',1,'']]],
   ['negativebosonspline_2eh_8',['NegativeBosonSpline.h',['../NegativeBosonSpline_8h.html',1,'']]],
   ['neglinearint_9',['neglinearint',['../NegativeBosonSpline_8cpp.html#a062ab089c6d9fefd5a4799a23a446b9a',1,'NegLinearInt:&#160;NegativeBosonSpline.cpp'],['../NegativeBosonSpline_8h.html#a062ab089c6d9fefd5a4799a23a446b9a',1,'NegLinearInt:&#160;NegativeBosonSpline.cpp']]],
-  ['neglinearinttransposed_10',['NegLinearIntTransposed',['../NegativeBosonSpline_8h.html#abfde607bc1595b6eeccd62be17afbb8f',1,'NegativeBosonSpline.h']]],
+  ['neglinearinttransposed_10',['neglinearinttransposed',['../NegativeBosonSpline_8cpp.html#abfde607bc1595b6eeccd62be17afbb8f',1,'NegLinearIntTransposed:&#160;NegativeBosonSpline.cpp'],['../NegativeBosonSpline_8h.html#abfde607bc1595b6eeccd62be17afbb8f',1,'NegLinearIntTransposed:&#160;NegativeBosonSpline.cpp']]],
   ['new_20model_11',['Differences in how to include a new model',['../md_Changelog.html#autotoc_md46',1,'']]],
   ['new_20model_3a_12',['How to add a new model:',['../index.html#autotoc_md11',1,'']]],
   ['new_20physics_13',['New Physics',['../md_Changelog.html#autotoc_md36',1,'']]],
@@ -46,5 +46,5 @@ var searchData=
   ['num_5fvev_43',['num_vev',['../classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138',1,'BSMPT::TransitionTracer']]],
   ['numberofinitialscantemperatures_44',['NumberOfInitialScanTemperatures',['../classBSMPT_1_1BounceSolution.html#a088fc30cb625626a293e0c47825b9ac2',1,'BSMPT::BounceSolution']]],
   ['numberpathknots_45',['NumberPathKnots',['../classBSMPT_1_1BounceActionInt.html#a1537015cb4a851b7cb4b79f9d3c75edd',1,'BSMPT::BounceActionInt']]],
-  ['nvev_46',['nvev',['../structBSMPT_1_1Wall_1_1GSL__params.html#af328fd3781947bd22923ef5e73827efd',1,'BSMPT::Wall::GSL_params::nVEV'],['../classBSMPT_1_1Class__Potential__Origin.html#a02f00f70f83e5ddcfc1e85744fe86e58',1,'BSMPT::Class_Potential_Origin::nVEV'],['../structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#a1268463f9599877a3d48bb061f28a018',1,'BSMPT::Minimizer::PointerContainerMinPlane::nVEV']]]
+  ['nvev_46',['nvev',['../structBSMPT_1_1Minimizer_1_1PointerContainerMinPlane.html#a1268463f9599877a3d48bb061f28a018',1,'BSMPT::Minimizer::PointerContainerMinPlane::nVEV'],['../structBSMPT_1_1Wall_1_1GSL__params.html#af328fd3781947bd22923ef5e73827efd',1,'BSMPT::Wall::GSL_params::nVEV'],['../classBSMPT_1_1Class__Potential__Origin.html#a02f00f70f83e5ddcfc1e85744fe86e58',1,'BSMPT::Class_Potential_Origin::nVEV']]]
 ];

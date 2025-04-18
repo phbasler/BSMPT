@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.1.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -122,149 +122,168 @@ $(document).ready(function(){initNavTree('transition__tracer_8h_source.html','')
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceBSMPT.html">BSMPT</a></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>{</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="foldopen" id="foldopen00052" data-start="{" data-end="};">
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="structBSMPT_1_1user__input.html">   52</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1user__input.html">user_input</a></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>{</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  std::shared_ptr&lt;Class_Potential_Origin&gt; modelPointer;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keywordtype">double</span> T_low            = 0;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <span class="keywordtype">double</span> T_high           = 300;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keywordtype">double</span> vwall            = 0.95;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <span class="keywordtype">double</span> perc_prbl        = 0.71;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="keywordtype">double</span> compl_prbl       = 0.01;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keywordtype">double</span> epsturb          = 0.1;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  <span class="keywordtype">int</span> maxpathintegrations = 7;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="keywordtype">int</span> multistepmode       = -1;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keywordtype">int</span> num_points          = 10;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="keywordtype">int</span> ewsr_check          = 0;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keywordtype">int</span> nlo_check           = 1;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">int</span> which_minimizer     = Minimizer::WhichMinimizerDefault;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keywordtype">bool</span> use_multithreading = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keywordtype">bool</span> gw_calculation                        = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">int</span> which_transition_temp                  = 3;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordtype">size_t</span> number_of_initial_scan_temperatures = 25;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>};</div>
+<div class="foldopen" id="foldopen00053" data-start="{" data-end="};">
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="structBSMPT_1_1user__input.html">   53</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1user__input.html">user_input</a></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>{</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  std::shared_ptr&lt;Class_Potential_Origin&gt; modelPointer;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <span class="keywordtype">double</span> T_low            = 0;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keywordtype">double</span> T_high           = 300;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <span class="keywordtype">double</span> vwall            = 0.95;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="keywordtype">double</span> perc_prbl        = 0.71;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keywordtype">double</span> compl_prbl       = 0.01;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  <span class="keywordtype">double</span> epsturb          = 0.1;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="keywordtype">int</span> maxpathintegrations = 7;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keywordtype">int</span> multistepmode       = -1;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="keywordtype">int</span> num_points          = 10;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keywordtype">int</span> ewsr_check          = 0;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keywordtype">int</span> nlo_check           = 1;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keywordtype">int</span> which_minimizer     = Minimizer::WhichMinimizerDefault;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keywordtype">bool</span> use_multithreading = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">bool</span> gw_calculation = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">TransitionTemperature</a> which_transition_temp =</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>      TransitionTemperature::Percolation;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keywordtype">int</span> PNLO_scaling                           = 1;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <span class="keywordtype">size_t</span> number_of_initial_scan_temperatures = 25;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>};</div>
 </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="foldopen" id="foldopen00078" data-start="{" data-end="};">
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="structBSMPT_1_1status__codes.html">   78</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1status__codes.html">status_codes</a></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>{</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a3c0b51265ad016cb2ffeb47da838b3f5">StatusNLOStability</a> status_nlo_stability = StatusNLOStability::NotSet;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a027d918f62e839a8cfed4fd16341766e">StatusEWSR</a> status_ewsr                  = StatusEWSR::NotSet;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a55fd1ad353563eab5383fe07eefe7314">StatusTracing</a> status_tracing            = StatusTracing::NotSet;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a572a958ee192b7b00500562c3f1c8b4f">StatusCoexPair</a> status_coex_pairs        = StatusCoexPair::NotSet;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="comment">// index of vectors is coex_phase_id</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  std::vector&lt;StatusCrit&gt; status_crit;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  std::vector&lt;StatusGW&gt; status_bounce_sol;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  std::vector&lt;StatusTemperature&gt; status_nucl_approx;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  std::vector&lt;StatusTemperature&gt; status_nucl;</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  std::vector&lt;StatusTemperature&gt; status_perc;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  std::vector&lt;StatusTemperature&gt; status_compl;</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>};</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="foldopen" id="foldopen00081" data-start="{" data-end="};">
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="structBSMPT_1_1status__codes.html">   81</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1status__codes.html">status_codes</a></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>{</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a3c0b51265ad016cb2ffeb47da838b3f5">StatusNLOStability</a> status_nlo_stability = StatusNLOStability::NotSet;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a027d918f62e839a8cfed4fd16341766e">StatusEWSR</a> status_ewsr                  = StatusEWSR::NotSet;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a55fd1ad353563eab5383fe07eefe7314">StatusTracing</a> status_tracing            = StatusTracing::NotSet;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a572a958ee192b7b00500562c3f1c8b4f">StatusCoexPair</a> status_coex_pairs        = StatusCoexPair::NotSet;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  <span class="comment">// index of vectors is coex_phase_id</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  std::vector&lt;StatusCrit&gt; status_crit;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  std::vector&lt;StatusGW&gt; status_bounce_sol;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  std::vector&lt;StatusTemperature&gt; status_nucl_approx;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  std::vector&lt;StatusTemperature&gt; status_nucl;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  std::vector&lt;StatusTemperature&gt; status_perc;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  std::vector&lt;StatusTemperature&gt; status_compl;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>};</div>
 </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="foldopen" id="foldopen00096" data-start="{" data-end="};">
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="structBSMPT_1_1transition__data.html">   96</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1transition__data.html">transition_data</a></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>{</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  std::optional&lt;double&gt; crit_temp;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  std::optional&lt;double&gt; nucl_approx_temp;</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  std::optional&lt;double&gt; nucl_temp;</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  std::optional&lt;double&gt; perc_temp;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  std::optional&lt;double&gt; compl_temp;</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  std::vector&lt;double&gt; crit_true_vev;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  std::vector&lt;double&gt; crit_false_vev;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  std::vector&lt;double&gt; nucl_approx_true_vev;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  std::vector&lt;double&gt; nucl_approx_false_vev;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  std::vector&lt;double&gt; nucl_true_vev;</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  std::vector&lt;double&gt; nucl_false_vev;</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  std::vector&lt;double&gt; perc_true_vev;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  std::vector&lt;double&gt; perc_false_vev;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  std::vector&lt;double&gt; compl_true_vev;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  std::vector&lt;double&gt; compl_false_vev;</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>};</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="foldopen" id="foldopen00099" data-start="{" data-end="};">
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="structBSMPT_1_1transition__data.html">   99</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1transition__data.html">transition_data</a></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>{</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  std::optional&lt;double&gt; crit_temp;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  std::optional&lt;double&gt; nucl_approx_temp;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  std::optional&lt;double&gt; nucl_temp;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  std::optional&lt;double&gt; perc_temp;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  std::optional&lt;double&gt; compl_temp;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  std::vector&lt;double&gt; crit_true_vev;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  std::vector&lt;double&gt; crit_false_vev;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  std::vector&lt;double&gt; nucl_approx_true_vev;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  std::vector&lt;double&gt; nucl_approx_false_vev;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  std::vector&lt;double&gt; nucl_true_vev;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  std::vector&lt;double&gt; nucl_false_vev;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  std::vector&lt;double&gt; perc_true_vev;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  std::vector&lt;double&gt; perc_false_vev;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  std::vector&lt;double&gt; compl_true_vev;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  std::vector&lt;double&gt; compl_false_vev;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>};</div>
 </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="foldopen" id="foldopen00119" data-start="{" data-end="};">
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="structBSMPT_1_1gw__data.html">  119</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1gw__data.html">gw_data</a></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>{</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  std::optional&lt;double&gt; vwall;</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  std::optional&lt;double&gt; alpha;</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  std::optional&lt;double&gt; beta_over_H;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="foldopen" id="foldopen00122" data-start="{" data-end="};">
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="structBSMPT_1_1gw__data.html">  122</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1gw__data.html">gw_data</a></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>{</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  std::optional&lt;double&gt; vwall;</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  std::optional&lt;double&gt; K_sw;</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  std::optional&lt;double&gt; K_turb;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  std::optional&lt;double&gt; alpha;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  std::optional&lt;double&gt; beta_over_H;</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  std::optional&lt;double&gt; fpeak_sw;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  std::optional&lt;double&gt; fpeak_turb;</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  std::optional&lt;double&gt; h2Omega_sw;</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  std::optional&lt;double&gt; h2Omega_turb;</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  std::optional&lt;double&gt; SNR_sw;</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  std::optional&lt;double&gt; SNR_turb;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  std::optional&lt;double&gt; SNR;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  std::optional&lt;double&gt; kappa_col;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  std::optional&lt;double&gt; kappa_sw;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  std::optional&lt;double&gt; Epsilon_Turb;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  std::optional&lt;double&gt; cs_f;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  std::optional&lt;double&gt; cs_t;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  std::optional&lt;double&gt; fb_col;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  std::optional&lt;double&gt; omegab_col;</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a548174fac1d1e5e7bf7f17893d37e80d">StatusGW</a> status_gw = StatusGW::NotSet;</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  std::optional&lt;double&gt; trans_temp;</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>};</div>
-</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  std::optional&lt;double&gt; f1_sw;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  std::optional&lt;double&gt; f2_sw;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  std::optional&lt;double&gt; omega_2_sw;</div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
-<div class="foldopen" id="foldopen00142" data-start="{" data-end="};">
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="structBSMPT_1_1output.html">  142</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1output.html">output</a></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>{</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  std::vector&lt;std::string&gt; legend;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  <a class="code hl_struct" href="structBSMPT_1_1status__codes.html">status_codes</a> status;</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::vector&lt;transition_data&gt; vec_trans_data;</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  std::vector&lt;gw_data&gt; vec_gw_data;</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  std::size_t num_coex_phase_pairs = 0;</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  <span class="comment">// stores string-identifier of phase id&#39;s throughout the transition history of</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="comment">// the universe</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  std::string transition_history = <span class="stringliteral">&quot;not_set&quot;</span>;</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>};</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  std::optional&lt;double&gt; f1_turb;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  std::optional&lt;double&gt; f2_turb;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  std::optional&lt;double&gt; omega_2_turb;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::optional&lt;double&gt; SNR_col;</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  std::optional&lt;double&gt; SNR_sw;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  std::optional&lt;double&gt; SNR_turb;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  std::optional&lt;double&gt; SNR;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <a class="code hl_enumeration" href="namespaceBSMPT.html#a548174fac1d1e5e7bf7f17893d37e80d">StatusGW</a> status_gw = StatusGW::NotSet;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  std::optional&lt;double&gt; trans_temp;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  std::optional&lt;double&gt; reh_temp;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>};</div>
 </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
-<div class="foldopen" id="foldopen00155" data-start="{" data-end="};">
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html">  155</a></span><span class="keyword">class </span><a class="code hl_class" href="classBSMPT_1_1TransitionTracer.html">TransitionTracer</a></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>{</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#ae57f966713ba9415a7ef6a3ea181fa47">  161</a></span>  std::shared_ptr&lt;Class_Potential_Origin&gt; <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#ae57f966713ba9415a7ef6a3ea181fa47">modelPointer</a>;</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138">  167</a></span>  std::size_t <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138">num_vev</a>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="foldopen" id="foldopen00156" data-start="{" data-end="};">
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="structBSMPT_1_1output.html">  156</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structBSMPT_1_1output.html">output</a></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>{</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  std::vector&lt;std::string&gt; legend;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  <a class="code hl_struct" href="structBSMPT_1_1status__codes.html">status_codes</a> status;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  std::vector&lt;transition_data&gt; vec_trans_data;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  std::vector&lt;gw_data&gt; vec_gw_data;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  std::size_t num_coex_phase_pairs = 0;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  <span class="comment">// stores string-identifier of phase id&#39;s throughout the transition history of</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  <span class="comment">// the universe</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  std::string transition_history = <span class="stringliteral">&quot;not_set&quot;</span>;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>};</div>
+</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08">  173</a></span>  std::vector&lt;CoexPhases&gt; <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08">vec_coex</a>;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  <a class="code hl_class" href="classBSMPT_1_1TransitionTracer.html">TransitionTracer</a>(<a class="code hl_struct" href="structBSMPT_1_1user__input.html">user_input</a> &amp;input);</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>  <a class="code hl_class" href="classBSMPT_1_1TransitionTracer.html">~TransitionTracer</a>();</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#a49172c16356f4017c02c01b17ac2fcc5">  186</a></span>  std::vector&lt;BounceSolution&gt; <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#a49172c16356f4017c02c01b17ac2fcc5">ListBounceSolution</a>;</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#aa4f57dacf24133400acabb0ed366cfac">  191</a></span>  <a class="code hl_struct" href="structBSMPT_1_1output.html">output</a> <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#aa4f57dacf24133400acabb0ed366cfac">output_store</a>;</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>};</div>
+<div class="foldopen" id="foldopen00169" data-start="{" data-end="};">
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html">  169</a></span><span class="keyword">class </span><a class="code hl_class" href="classBSMPT_1_1TransitionTracer.html">TransitionTracer</a></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>{</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#ae57f966713ba9415a7ef6a3ea181fa47">  175</a></span>  std::shared_ptr&lt;Class_Potential_Origin&gt; <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#ae57f966713ba9415a7ef6a3ea181fa47">modelPointer</a>;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138">  181</a></span>  std::size_t <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138">num_vev</a>;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08">  187</a></span>  std::vector&lt;CoexPhases&gt; <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08">vec_coex</a>;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  <a class="code hl_class" href="classBSMPT_1_1TransitionTracer.html">TransitionTracer</a>(<a class="code hl_struct" href="structBSMPT_1_1user__input.html">user_input</a> &amp;input);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  <a class="code hl_class" href="classBSMPT_1_1TransitionTracer.html">~TransitionTracer</a>();</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#a49172c16356f4017c02c01b17ac2fcc5">  199</a></span>  std::vector&lt;BounceSolution&gt; <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#a49172c16356f4017c02c01b17ac2fcc5">ListBounceSolution</a>;</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="classBSMPT_1_1TransitionTracer.html#aa4f57dacf24133400acabb0ed366cfac">  204</a></span>  <a class="code hl_struct" href="structBSMPT_1_1output.html">output</a> <a class="code hl_variable" href="classBSMPT_1_1TransitionTracer.html#aa4f57dacf24133400acabb0ed366cfac">output_store</a>;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>  <span class="keywordtype">double</span> <a class="code hl_function" href="classBSMPT_1_1TransitionTracer.html#a2dd8a3a22c334b324e7eaaca89b82f87">CheckMassRatio</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structBSMPT_1_1user__input.html">user_input</a> &amp;input,</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>                        <span class="keyword">const</span> std::vector&lt;double&gt; &amp;vec,</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>                        <span class="keyword">const</span> <span class="keywordtype">double</span> &amp;temp) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>};</div>
 </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>} <span class="comment">// namespace BSMPT</span></div>
-<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html">BSMPT::TransitionTracer</a></div><div class="ttdef"><b>Definition</b> transition_tracer.h:156</div></div>
-<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a1a972b6fe1f8318ba7c5a038ee30d138"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138">BSMPT::TransitionTracer::num_vev</a></div><div class="ttdeci">std::size_t num_vev</div><div class="ttdoc">number of VEVs of model</div><div class="ttdef"><b>Definition</b> transition_tracer.h:167</div></div>
-<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a49172c16356f4017c02c01b17ac2fcc5"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a49172c16356f4017c02c01b17ac2fcc5">BSMPT::TransitionTracer::ListBounceSolution</a></div><div class="ttdeci">std::vector&lt; BounceSolution &gt; ListBounceSolution</div><div class="ttdoc">Store the list of bounce solutions.</div><div class="ttdef"><b>Definition</b> transition_tracer.h:186</div></div>
-<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a7f20387517848ebd2107120de5bdea08"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08">BSMPT::TransitionTracer::vec_coex</a></div><div class="ttdeci">std::vector&lt; CoexPhases &gt; vec_coex</div><div class="ttdoc">vector of all found coexisting phase regions</div><div class="ttdef"><b>Definition</b> transition_tracer.h:173</div></div>
-<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_aa4f57dacf24133400acabb0ed366cfac"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#aa4f57dacf24133400acabb0ed366cfac">BSMPT::TransitionTracer::output_store</a></div><div class="ttdeci">output output_store</div><div class="ttdoc">output data storage</div><div class="ttdef"><b>Definition</b> transition_tracer.h:191</div></div>
-<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_ae57f966713ba9415a7ef6a3ea181fa47"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#ae57f966713ba9415a7ef6a3ea181fa47">BSMPT::TransitionTracer::modelPointer</a></div><div class="ttdeci">std::shared_ptr&lt; Class_Potential_Origin &gt; modelPointer</div><div class="ttdoc">modelPointer for the used parameter point</div><div class="ttdef"><b>Definition</b> transition_tracer.h:161</div></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>} <span class="comment">// namespace BSMPT</span></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html">BSMPT::TransitionTracer</a></div><div class="ttdef"><b>Definition</b> transition_tracer.h:170</div></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a1a972b6fe1f8318ba7c5a038ee30d138"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a1a972b6fe1f8318ba7c5a038ee30d138">BSMPT::TransitionTracer::num_vev</a></div><div class="ttdeci">std::size_t num_vev</div><div class="ttdoc">number of VEVs of model</div><div class="ttdef"><b>Definition</b> transition_tracer.h:181</div></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a2dd8a3a22c334b324e7eaaca89b82f87"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a2dd8a3a22c334b324e7eaaca89b82f87">BSMPT::TransitionTracer::CheckMassRatio</a></div><div class="ttdeci">double CheckMassRatio(const user_input &amp;input, const std::vector&lt; double &gt; &amp;vec, const double &amp;temp) const</div><div class="ttdoc">CheckMassRatio Prints the scalar and gauge boson squard masses over temperature squared ratios at the...</div><div class="ttdef"><b>Definition</b> transition_tracer.cpp:536</div></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a49172c16356f4017c02c01b17ac2fcc5"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a49172c16356f4017c02c01b17ac2fcc5">BSMPT::TransitionTracer::ListBounceSolution</a></div><div class="ttdeci">std::vector&lt; BounceSolution &gt; ListBounceSolution</div><div class="ttdoc">Store the list of bounce solutions.</div><div class="ttdef"><b>Definition</b> transition_tracer.h:199</div></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_a7f20387517848ebd2107120de5bdea08"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#a7f20387517848ebd2107120de5bdea08">BSMPT::TransitionTracer::vec_coex</a></div><div class="ttdeci">std::vector&lt; CoexPhases &gt; vec_coex</div><div class="ttdoc">vector of all found coexisting phase regions</div><div class="ttdef"><b>Definition</b> transition_tracer.h:187</div></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_aa4f57dacf24133400acabb0ed366cfac"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#aa4f57dacf24133400acabb0ed366cfac">BSMPT::TransitionTracer::output_store</a></div><div class="ttdeci">output output_store</div><div class="ttdoc">output data storage</div><div class="ttdef"><b>Definition</b> transition_tracer.h:204</div></div>
+<div class="ttc" id="aclassBSMPT_1_1TransitionTracer_html_ae57f966713ba9415a7ef6a3ea181fa47"><div class="ttname"><a href="classBSMPT_1_1TransitionTracer.html#ae57f966713ba9415a7ef6a3ea181fa47">BSMPT::TransitionTracer::modelPointer</a></div><div class="ttdeci">std::shared_ptr&lt; Class_Potential_Origin &gt; modelPointer</div><div class="ttdoc">modelPointer for the used parameter point</div><div class="ttdef"><b>Definition</b> transition_tracer.h:175</div></div>
 <div class="ttc" id="anamespaceBSMPT_html"><div class="ttname"><a href="namespaceBSMPT.html">BSMPT</a></div><div class="ttdoc">This classes calculates the Bounce action of the potential with a set temperature.</div><div class="ttdef"><b>Definition</b> CalculateEtaInterface.h:24</div></div>
 <div class="ttc" id="anamespaceBSMPT_html_a027d918f62e839a8cfed4fd16341766e"><div class="ttname"><a href="namespaceBSMPT.html#a027d918f62e839a8cfed4fd16341766e">BSMPT::StatusEWSR</a></div><div class="ttdeci">StatusEWSR</div><div class="ttdoc">Possible electroweak symmetry restoration status.</div><div class="ttdef"><b>Definition</b> minimum_tracer.h:61</div></div>
 <div class="ttc" id="anamespaceBSMPT_html_a3c0b51265ad016cb2ffeb47da838b3f5"><div class="ttname"><a href="namespaceBSMPT.html#a3c0b51265ad016cb2ffeb47da838b3f5">BSMPT::StatusNLOStability</a></div><div class="ttdeci">StatusNLOStability</div><div class="ttdoc">Possible NLO stability status.</div><div class="ttdef"><b>Definition</b> minimum_tracer.h:40</div></div>
 <div class="ttc" id="anamespaceBSMPT_html_a548174fac1d1e5e7bf7f17893d37e80d"><div class="ttname"><a href="namespaceBSMPT.html#a548174fac1d1e5e7bf7f17893d37e80d">BSMPT::StatusGW</a></div><div class="ttdeci">StatusGW</div><div class="ttdoc">Possible results for the GW and bounce_sol class.</div><div class="ttdef"><b>Definition</b> minimum_tracer.h:172</div></div>
 <div class="ttc" id="anamespaceBSMPT_html_a55fd1ad353563eab5383fe07eefe7314"><div class="ttname"><a href="namespaceBSMPT.html#a55fd1ad353563eab5383fe07eefe7314">BSMPT::StatusTracing</a></div><div class="ttdeci">StatusTracing</div><div class="ttdoc">Possible tracing results.</div><div class="ttdef"><b>Definition</b> minimum_tracer.h:87</div></div>
 <div class="ttc" id="anamespaceBSMPT_html_a572a958ee192b7b00500562c3f1c8b4f"><div class="ttname"><a href="namespaceBSMPT.html#a572a958ee192b7b00500562c3f1c8b4f">BSMPT::StatusCoexPair</a></div><div class="ttdeci">StatusCoexPair</div><div class="ttdoc">Possible status for the coex phase.</div><div class="ttdef"><b>Definition</b> minimum_tracer.h:111</div></div>
-<div class="ttc" id="astructBSMPT_1_1gw__data_html"><div class="ttname"><a href="structBSMPT_1_1gw__data.html">BSMPT::gw_data</a></div><div class="ttdoc">gravitational wave data struct</div><div class="ttdef"><b>Definition</b> transition_tracer.h:120</div></div>
-<div class="ttc" id="astructBSMPT_1_1output_html"><div class="ttname"><a href="structBSMPT_1_1output.html">BSMPT::output</a></div><div class="ttdef"><b>Definition</b> transition_tracer.h:143</div></div>
-<div class="ttc" id="astructBSMPT_1_1status__codes_html"><div class="ttname"><a href="structBSMPT_1_1status__codes.html">BSMPT::status_codes</a></div><div class="ttdoc">status codes struct</div><div class="ttdef"><b>Definition</b> transition_tracer.h:79</div></div>
-<div class="ttc" id="astructBSMPT_1_1transition__data_html"><div class="ttname"><a href="structBSMPT_1_1transition__data.html">BSMPT::transition_data</a></div><div class="ttdoc">transition data struct</div><div class="ttdef"><b>Definition</b> transition_tracer.h:97</div></div>
-<div class="ttc" id="astructBSMPT_1_1user__input_html"><div class="ttname"><a href="structBSMPT_1_1user__input.html">BSMPT::user_input</a></div><div class="ttdoc">user_input struct to store user input and distribute to the classes</div><div class="ttdef"><b>Definition</b> transition_tracer.h:53</div></div>
+<div class="ttc" id="anamespaceBSMPT_html_a5f2a6b7efc9d6695e40543d323613ee0"><div class="ttname"><a href="namespaceBSMPT.html#a5f2a6b7efc9d6695e40543d323613ee0">BSMPT::TransitionTemperature</a></div><div class="ttdeci">TransitionTemperature</div><div class="ttdoc">Possible transitions temperatures.</div><div class="ttdef"><b>Definition</b> minimum_tracer.h:191</div></div>
+<div class="ttc" id="astructBSMPT_1_1gw__data_html"><div class="ttname"><a href="structBSMPT_1_1gw__data.html">BSMPT::gw_data</a></div><div class="ttdoc">gravitational wave data struct</div><div class="ttdef"><b>Definition</b> transition_tracer.h:123</div></div>
+<div class="ttc" id="astructBSMPT_1_1output_html"><div class="ttname"><a href="structBSMPT_1_1output.html">BSMPT::output</a></div><div class="ttdef"><b>Definition</b> transition_tracer.h:157</div></div>
+<div class="ttc" id="astructBSMPT_1_1status__codes_html"><div class="ttname"><a href="structBSMPT_1_1status__codes.html">BSMPT::status_codes</a></div><div class="ttdoc">status codes struct</div><div class="ttdef"><b>Definition</b> transition_tracer.h:82</div></div>
+<div class="ttc" id="astructBSMPT_1_1transition__data_html"><div class="ttname"><a href="structBSMPT_1_1transition__data.html">BSMPT::transition_data</a></div><div class="ttdoc">transition data struct</div><div class="ttdef"><b>Definition</b> transition_tracer.h:100</div></div>
+<div class="ttc" id="astructBSMPT_1_1user__input_html"><div class="ttname"><a href="structBSMPT_1_1user__input.html">BSMPT::user_input</a></div><div class="ttdoc">user_input struct to store user input and distribute to the classes</div><div class="ttdef"><b>Definition</b> transition_tracer.h:54</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

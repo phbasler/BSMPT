@@ -32,7 +32,7 @@ MathJax.Hub.Config({
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.0.8</span>
+   <div id="projectname">BSMPT<span id="projectnumber">&#160;3.1.0</span>
    </div>
    <div id="projectbrief">BSMPT - Beyond the Standard Model Phase Transitions : A C++ package for the computation of the EWPT in BSM models</div>
   </td>
@@ -112,6 +112,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a13a5bec0802a8bfec745894877dd5866" id="r_a13a5bec0802a8bfec745894877dd5866"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1TransitionTracer.html#a13a5bec0802a8bfec745894877dd5866">TransitionTracer</a> (<a class="el" href="structBSMPT_1_1user__input.html">user_input</a> &amp;input)</td></tr>
 <tr class="memdesc:a13a5bec0802a8bfec745894877dd5866"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classBSMPT_1_1TransitionTracer.html">TransitionTracer</a> constructor.  <br /></td></tr>
 <tr class="separator:a13a5bec0802a8bfec745894877dd5866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dd8a3a22c334b324e7eaaca89b82f87" id="r_a2dd8a3a22c334b324e7eaaca89b82f87"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBSMPT_1_1TransitionTracer.html#a2dd8a3a22c334b324e7eaaca89b82f87">CheckMassRatio</a> (const <a class="el" href="structBSMPT_1_1user__input.html">user_input</a> &amp;input, const std::vector&lt; double &gt; &amp;vec, const double &amp;temp) const</td></tr>
+<tr class="memdesc:a2dd8a3a22c334b324e7eaaca89b82f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">CheckMassRatio Prints the scalar and gauge boson squard masses over temperature squared ratios at the given point and temperature and returns the maximal value.  <br /></td></tr>
+<tr class="separator:a2dd8a3a22c334b324e7eaaca89b82f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -166,6 +169,52 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>num_vev</b></t
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2dd8a3a22c334b324e7eaaca89b82f87" name="a2dd8a3a22c334b324e7eaaca89b82f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dd8a3a22c334b324e7eaaca89b82f87">&#9670;&#160;</a></span>CheckMassRatio()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double BSMPT::TransitionTracer::CheckMassRatio </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structBSMPT_1_1user__input.html">user_input</a> &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>temp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>CheckMassRatio Prints the scalar and gauge boson squard masses over temperature squared ratios at the given point and temperature and returns the maximal value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td></td></tr>
+    <tr><td class="paramname">vev</td><td></td></tr>
+    <tr><td class="paramname">temp</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>maximal ratio </dd></dl>
 
 </div>
 </div>
