@@ -9,13 +9,15 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_string.hpp>
 
 using Approx = Catch::Approx;
 
 #include "C2HDM.h"
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
-
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
+#include <BSMPT/utility/Logger.h>
 namespace
 {
 

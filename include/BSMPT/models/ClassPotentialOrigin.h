@@ -1145,14 +1145,6 @@ public:
                          std::vector<double> &output) const = 0;
 
   /**
-   * Checks if the tensors are correctly implemented. For this the fermion,
-   * quark and gauge boson masses are calculated and printed next to the values
-   * defined in SMparah.h
-   */
-  void CheckImplementation(
-      const int &WhichMinimizer = Minimizer::WhichMinimizerDefault) const;
-
-  /**
    * Find all possible sign combinations of the vevs under which the potential
    * is invariant
    */

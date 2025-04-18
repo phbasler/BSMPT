@@ -704,7 +704,7 @@ void MinimumTracer::ReduceVEV(std::vector<double> &vev)
   int MaximumMeasure = -1;
   char *ptr;
   std::string BinaryNumber;
-  for (auto GroupElement : GroupElements)
+  for (const auto &GroupElement : GroupElements)
   {
     // Clean buffer
     BinaryNumber.clear();
@@ -2874,17 +2874,26 @@ std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
     if (do_gw_calc)
     {
       legend.push_back("status_gw_" + std::to_string(i));
-      legend.push_back("trans_temp_" + std::to_string(i));
+      legend.push_back("T_star_" + std::to_string(i));
+      legend.push_back("T_reh_" + std::to_string(i));
       legend.push_back("v_wall_" + std::to_string(i));
       legend.push_back("alpha_PT_" + std::to_string(i));
       legend.push_back("beta/H_" + std::to_string(i));
-      legend.push_back("K_sw_" + std::to_string(i));
-      legend.push_back("fpeak_sw_" + std::to_string(i));
-      legend.push_back("h2OmegaPeak_sw_" + std::to_string(i));
+      legend.push_back("kappa_col_" + std::to_string(i));
+      legend.push_back("kappa_sw_" + std::to_string(i));
+      legend.push_back("eps_turb_" + std::to_string(i));
+      legend.push_back("cs_f_" + std::to_string(i));
+      legend.push_back("cs_t_" + std::to_string(i));
+      legend.push_back("fb_col_" + std::to_string(i));
+      legend.push_back("h2Omegab_col_" + std::to_string(i));
+      legend.push_back("f_1_sw_" + std::to_string(i));
+      legend.push_back("f_2_sw_" + std::to_string(i));
+      legend.push_back("h2Omega_2_sw_" + std::to_string(i));
+      legend.push_back("f_1_turb_" + std::to_string(i));
+      legend.push_back("f_2_turb_" + std::to_string(i));
+      legend.push_back("h2Omega_2_turb_" + std::to_string(i));
+      legend.push_back("SNR(LISA-3yrs)_col_" + std::to_string(i));
       legend.push_back("SNR(LISA-3yrs)_sw_" + std::to_string(i));
-      legend.push_back("K_turb_" + std::to_string(i));
-      legend.push_back("fpeak_turb_" + std::to_string(i));
-      legend.push_back("h2OmegaPeak_turb_" + std::to_string(i));
       legend.push_back("SNR(LISA-3yrs)_turb_" + std::to_string(i));
       legend.push_back("SNR(LISA-3yrs)_" + std::to_string(i));
     }

@@ -10,8 +10,8 @@ using Approx = Catch::Approx;
 
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
 #include <BSMPT/models/SMparam.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/utility/utility.h>
 
 TEST_CASE("Checking CKM Unitarity", "[general]")
