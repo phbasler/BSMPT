@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 3.0.7
+Program: BSMPT version 3.1.0
 
 Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana
 
@@ -122,6 +122,13 @@ Code from the following repositories is used in BSMPT:
 
 ---
 
+## How to include BSMPT in another program
+
+You can call the `Setup.py` script with the `--create` option. This will generate a local conan package of BSMPT which then can be used in your program.
+If your code is already a conan project you can add BSMPT just as a requirement. If you have a pure CMake project you can use the [conan-provider](https://github.com/conan-io/cmake-conan/) to include it.
+
+---
+
 ## How to add a new model:
 
 To add a new model, you have to modify/create five files (for further details, also consult the manual):
@@ -132,19 +139,18 @@ To add a new model, you have to modify/create five files (for further details, a
 
 3. For your model to compile, you have to open `src/models/CMakeLists.txt` and add `${header_path}/YourModel.h` as well as `YourModel.cpp` to the listed headers and source files.
 
-4. In `include/BSMPT/models/IncludeAllModels.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
+4. In `include/BSMPT/utility/ModelIDs.h` you need to add a new entry in the `enum class ModelIDs` above the `stop` entry which is different from the already defined `ModelIDs`, e.g. `YourModel`. Additionally, you have to create a new entry in the `const std::unordered_map<std::string, ModelIDs> ModelNames` map in the same file and add a new line with `{"YourModelName",ModelIDs::YourModel}`.
 
 5. In `src/models/IncludeAllModels.cpp` you have to add `#include <BSMPT/models/YourModel.h>` to the include list. Also, to be able to call your model, you have to extend the `FChoose` function. For this you add a new case to the switch statement, which reads
 
         case ModelIDs::YourModel: return std::make_unique<Class_YourModel>(); break;
 
 ### Generate the C++ code for a model
-We provide currently two methods to generate the tensors and calculate the counter terms for a new model.
+We provide currently three methods to generate the tensors and calculate the counter terms for a new model.
 
-1. At `tools/ModelGeneration/Maple` we provide the maple Worksheet `CreateModel.mw` which you can use to implement your model and get the tensors.
-2. At `tools/ModelGeneration/sympy` we provide a setup using only `python3` with `sympy` (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, `SM.py` and `G2HDM.py` (generic 2HDM) which both use the `ModelGenerator.py` module to calculate the tensors and CT. You can get the CT using `python3 SM.py --show ct` and the tensors by calling `python3 SM.py --show tensors`. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. in the G2HDM example).
-3. To show the simplified tree-level and counterterm potentials, you can use `python3 SM.py --show treeSimpl` and `python3 SM.py --show CTSimpl`.
-
+1. At `tools/ModelGeneration/sympy` we provide a setup using only `python3` with `sympy` (at least version 1.10!, if your packet manager only has an older installed, e.g. ubuntu 20.04 only has v1.6, then you have to install v1.10 or up with pip). Here we provide two examples, `SM.py` and `G2HDM.py` (generic 2HDM) which both use the `ModelGenerator.py` module to calculate the tensors and CT. You can get the CT using `python3 SM.py --show ct` and the tensors by calling `python3 SM.py --show tensors`. If your counterterms don't have a unique solution, then the solution space will be shown to you and you have to add additional equations until you have a unique solution (e.g. in the G2HDM example). To show the simplified tree-level and counterterm potentials, you can use `python3 SM.py --show treeSimpl` and `python3 SM.py --show CTSimpl`.
+2. At `tools/ModelGeneration/Mathematica` we provide a Mathematica framework to implement your model.
+3. At `tools/ModelGeneration/Maple` we provide the maple Worksheet `CreateModel.mw` which you can use to implement your model and get the tensors.
 
 
 You can use the Test executable to detect possible errors in your implementation. If the Test executable does not show you an error, but something is still wrong, contact us at bsmpt@lists.kit.edu

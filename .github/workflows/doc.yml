@@ -54,7 +54,7 @@ jobs:
           name: documentation
           path: documentation
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.6.9
+        uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
             branch: gh-pages # The branch the action should deploy to.
             folder: documentation # The folder the action should deploy.

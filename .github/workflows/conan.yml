@@ -1,0 +1,42 @@
+name: Run conan
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches: 
+      - master
+      - main
+      - develop
+  workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }} 
+    cancel-in-progress: true
+
+
+jobs:
+    conan:
+        strategy:
+          fail-fast: false
+          matrix:
+            os: [ ubuntu-latest, macos-latest, windows-latest]
+        runs-on: ${{matrix.os}}
+        if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    
+        steps:
+          - uses: actions/checkout@v4
+            with:
+              persist-credentials: false
+          - uses: actions/setup-python@v5
+            with:
+              python-version: '3.x'
+              architecture: 'x64'
+          - name: Install conan
+            run: pip install conan>2
+
+          - run: python3 Setup.py --build-missing
+
+          - run: python3 Setup.py --create --build-missing --options EnableTests=True

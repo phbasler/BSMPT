@@ -15,16 +15,12 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/SMparam.h>
+#include <BSMPT/utility/settings.h>
 #include <iostream>
 #include <vector>
 
 namespace BSMPT
 {
-
-/**
- * @brief C_UseParwani Use the Parwani Method instead of Arnold-Espinosa
- */
-const bool C_UseParwani = false;
 
 /**
  * @brief C_PT Lower threshold to stop the EWPT calculation
@@ -1160,14 +1156,6 @@ public:
    */
   virtual void Debugging(const std::vector<double> &input,
                          std::vector<double> &output) const = 0;
-
-  /**
-   * Checks if the tensors are correctly implemented. For this the fermion,
-   * quark and gauge boson masses are calculated and printed next to the values
-   * defined in SMparah.h
-   */
-  void CheckImplementation(
-      const int &WhichMinimizer = Minimizer::WhichMinimizerDefault) const;
 
   /**
    * Find all possible sign combinations of the vevs under which the potential

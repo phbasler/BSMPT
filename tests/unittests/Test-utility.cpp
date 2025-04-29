@@ -3,12 +3,75 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include <BSMPT/utility/ModelIDs.h>
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <sstream>
 
 using Approx = Catch::Approx;
 
 #include <BSMPT/utility/utility.h>
+
+TEST_CASE("Check ModelID name generation", "[utility]")
+{
+  using namespace BSMPT;
+  for (const auto &[name, id] : ModelID::ModelNames)
+  {
+    std::stringstream ss;
+    ss << id;
+    std::string generatedName = ss.str();
+    REQUIRE(generatedName == name);
+  }
+}
+
+TEST_CASE("Check error on inversion of map with duplicate key", "[utility]")
+{
+  std::unordered_map<BSMPT::ModelID::ModelIDs, std::string> nameMap;
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::C2HDM, "c2hdm");
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::CXSM, "c2hdm");
+
+  REQUIRE_THROWS_AS(BSMPT::InvertMap(nameMap, "Double name"),
+                    std::runtime_error);
+}
+
+TEST_CASE("Check inversion of map", "[utility]")
+{
+  std::unordered_map<BSMPT::ModelID::ModelIDs, std::string> nameMap;
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::C2HDM, "c2hdm");
+  nameMap.emplace(BSMPT::ModelID::ModelIDs::CXSM, "cxsm");
+
+  auto inverted_map = BSMPT::InvertMap(nameMap, "double names");
+
+  for (const auto &[id, name] : nameMap)
+  {
+    REQUIRE(id == inverted_map[name]);
+  }
+}
+
+TEST_CASE("Check if split function for string works", "[utility]")
+{
+  std::vector<std::string> values{"a", "b", "c"};
+  std::stringstream ss;
+  bool first = true;
+  for (const auto &el : values)
+  {
+    if (not first)
+    {
+      ss << ",";
+    }
+    else
+    {
+      first = false;
+    }
+    ss << el;
+  }
+
+  std::string input = ss.str();
+  std::cout << "input = " << input << std::endl;
+
+  auto result = BSMPT::split(input, ',');
+  REQUIRE(values == result);
+}
 
 TEST_CASE("Check vector . vector product", "[utility]")
 {

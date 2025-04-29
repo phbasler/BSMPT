@@ -5,6 +5,7 @@
 
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
 
 using Approx = Catch::Approx;
 
@@ -14,7 +15,7 @@ using Approx = Catch::Approx;
 #include <BSMPT/minimum_tracer/minimum_tracer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/transition_tracer/transition_tracer.h>
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
@@ -683,6 +684,139 @@ TEST_CASE("Checking phase tracking for SM with Mode 2", "[gw]")
   REQUIRE(vac.PhasesList.size() == 2);
 }
 
+TEST_CASE("Check calculation of Chapman-Jouget velocity", "[gw]")
+{
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
+  modelPointer->initModel(example_point_SM);
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
+
+  REQUIRE(0.583037 ==
+          Approx(trans.ListBounceSolution.at(0).GetChapmanJougetVelocity())
+              .epsilon(1e-2));
+}
+
+TEST_CASE("Check calculation of reheating temperature", "[gw]")
+{
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
+  modelPointer->initModel(example_point_SM);
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
+
+  REQUIRE(
+      159.07847220175202 ==
+      Approx(trans.ListBounceSolution.at(0).GetReheatingTemp()).epsilon(1e-2));
+}
+
+TEST_CASE("Check maximal thermal mass squared over temperature ratio", "[gw]")
+{
+  const std::vector<double> example_point_SM{
+      /* muSq = */ -7823.7540500000005,
+      /* lambda = */ 0.12905349405143487};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::SM, SMConstants);
+  modelPointer->initModel(example_point_SM);
+
+  std::shared_ptr<MinimumTracer> MinTracer(
+      new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
+
+  user_input input;
+  input.modelPointer   = modelPointer;
+  input.gw_calculation = true;
+  TransitionTracer trans(input);
+  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
+
+  auto output = trans.output_store;
+
+  REQUIRE(0.781639 == Approx(trans.CheckMassRatio(
+                                 input,
+                                 output.vec_trans_data.at(0).crit_false_vev,
+                                 output.vec_trans_data.at(0).crit_temp.value()))
+                          .epsilon(1e-2));
+  REQUIRE(0.781639 ==
+          Approx(trans.CheckMassRatio(
+                     input,
+                     output.vec_trans_data.at(0).nucl_approx_false_vev,
+                     output.vec_trans_data.at(0).nucl_approx_temp.value()))
+              .epsilon(1e-2));
+  REQUIRE(0.781639 == Approx(trans.CheckMassRatio(
+                                 input,
+                                 output.vec_trans_data.at(0).nucl_false_vev,
+                                 output.vec_trans_data.at(0).nucl_temp.value()))
+                          .epsilon(1e-2));
+  REQUIRE(0.781639 == Approx(trans.CheckMassRatio(
+                                 input,
+                                 output.vec_trans_data.at(0).perc_false_vev,
+                                 output.vec_trans_data.at(0).perc_temp.value()))
+                          .epsilon(1e-2));
+  REQUIRE(0.781639 ==
+          Approx(trans.CheckMassRatio(
+                     input,
+                     output.vec_trans_data.at(0).compl_false_vev,
+                     output.vec_trans_data.at(0).compl_temp.value()))
+              .epsilon(1e-2));
+}
+
+TEST_CASE("Check gstar implementation", "[gw]")
+{
+  const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
+                                               /* vs = */ 0,
+                                               /* va = */ 0,
+                                               /* msq = */ -15650,
+                                               /* lambda = */ 0.52,
+                                               /* delta2 = */ 0.55,
+                                               /* b2 = */ -8859,
+                                               /* d2 = */ 0.5,
+                                               /* Reb1 = */ 0,
+                                               /* Imb1 = */ 0,
+                                               /* Rea1 = */ 0,
+                                               /* Ima1 = */ 0};
+
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
+  modelPointer->initModel(example_point_CXSM);
+
+  BounceSolution BASolution(modelPointer);
+  BASolution.InitializeGstarProfile();
+  REQUIRE(108.75 == Approx(BASolution.CalcGstarPureRad()).epsilon(1e-2));
+  REQUIRE(108.75 == Approx(BASolution.GetGstar()).epsilon(1e-2));
+  REQUIRE(108.75 == Approx(BASolution.GetGstar(1000)).epsilon(1e-2));
+  REQUIRE(104.65 == Approx(BASolution.GetGstar(100)).epsilon(1e-2));
+  REQUIRE(86.72 == Approx(BASolution.GetGstar(10)).epsilon(1e-2));
+  REQUIRE(76.52 == Approx(BASolution.GetGstar(1)).epsilon(1e-2));
+  REQUIRE(10.63 == Approx(BASolution.GetGstar(1e-3)).epsilon(1e-2));
+  REQUIRE(3.366 == Approx(BASolution.GetGstar(1e-6)).epsilon(1e-2));
+}
+
 TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
@@ -711,7 +845,8 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   input.modelPointer   = modelPointer;
   input.gw_calculation = true;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
 
   auto output = trans.output_store;
 
@@ -727,42 +862,57 @@ TEST_CASE("Checking phase tracking and GW for BP3", "[gw]")
   REQUIRE(120.7267244 ==
           Approx(output.vec_trans_data.at(0).compl_temp.value()).epsilon(1e-2));
 
-  REQUIRE(0.00537281 ==
+  REQUIRE(0.0056735067 ==
           Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
-  REQUIRE(4.40964e-05 ==
-          Approx(output.vec_gw_data.at(0).K_sw.value()).epsilon(1e-2));
-  REQUIRE(4.40964e-06 ==
-          Approx(output.vec_gw_data.at(0).K_turb.value()).epsilon(1e-2));
-  REQUIRE(0.0884755 ==
-          Approx(output.vec_gw_data.at(0).fpeak_sw.value()).epsilon(1e-2));
-  REQUIRE(0.269136 ==
-          Approx(output.vec_gw_data.at(0).fpeak_turb.value()).epsilon(1e-2));
-  REQUIRE(1.70812e-20 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_sw.value()).epsilon(1e-2));
-  REQUIRE(3.69052e-16 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_turb.value()).epsilon(1e-2));
-  REQUIRE(1.23742e-09 ==
+  REQUIRE(0.0084807773 ==
+          Approx(output.vec_gw_data.at(0).kappa_sw.value()).epsilon(1e-2));
+
+  REQUIRE(0.01699469177 ==
+          Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
+  REQUIRE(0. ==
+          Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
+
+  REQUIRE(0.007441950626 ==
+          Approx(output.vec_gw_data.at(0).f1_sw.value()).epsilon(1e-2));
+  REQUIRE(0.04661408636 ==
+          Approx(output.vec_gw_data.at(0).f2_sw.value()).epsilon(1e-2));
+  REQUIRE(9.481654892e-20 ==
+          Approx(output.vec_gw_data.at(0).omega_2_sw.value()).epsilon(1e-2));
+
+  REQUIRE(2.729908945e-05 ==
+          Approx(output.vec_gw_data.at(0).f1_turb.value()).epsilon(1e-2));
+  REQUIRE(0.08186145689 ==
+          Approx(output.vec_gw_data.at(0).f2_turb.value()).epsilon(1e-2));
+  REQUIRE(3.71764571e-25 ==
+          Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
+
+  REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
+  REQUIRE(9.681903249e-08 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
-  REQUIRE(1.28789e-20 ==
+  REQUIRE(1.210536738e-12 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(1.23742e-09 ==
+  REQUIRE(9.682005317e-08 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
   REQUIRE(0.374931042806113 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 
   trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
-  REQUIRE(0.303761086384691 ==
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
+  REQUIRE(0.6539310662 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 
-TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
+TEST_CASE("Checking phase tracking and GW for BP3 (low sample) and not "
+          "transition temperature not set",
+          "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
                                                /* vs = */ 0,
@@ -791,7 +941,6 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   input.gw_calculation                      = true;
   input.number_of_initial_scan_temperatures = 6;
   TransitionTracer trans(input);
-  trans.ListBounceSolution.at(0).CalculatePercolationTemp();
 
   auto output = trans.output_store;
 
@@ -807,43 +956,56 @@ TEST_CASE("Checking phase tracking and GW for BP3 (low sample)", "[gw]")
   REQUIRE(120.7267244 ==
           Approx(output.vec_trans_data.at(0).compl_temp.value()).epsilon(1e-2));
 
-  REQUIRE(0.00537281 ==
+  REQUIRE(0.0056735067 ==
           Approx(output.vec_gw_data.at(0).alpha.value()).epsilon(1e-2));
   REQUIRE(7658.8931 ==
           Approx(output.vec_gw_data.at(0).beta_over_H.value()).epsilon(1e-2));
-  REQUIRE(4.40964e-05 ==
-          Approx(output.vec_gw_data.at(0).K_sw.value()).epsilon(1e-2));
-  REQUIRE(4.40964e-06 ==
-          Approx(output.vec_gw_data.at(0).K_turb.value()).epsilon(1e-2));
-  REQUIRE(0.0884755 ==
-          Approx(output.vec_gw_data.at(0).fpeak_sw.value()).epsilon(1e-2));
-  REQUIRE(0.269136 ==
-          Approx(output.vec_gw_data.at(0).fpeak_turb.value()).epsilon(1e-2));
-  REQUIRE(1.70812e-20 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_sw.value()).epsilon(1e-2));
-  REQUIRE(3.69052e-16 ==
-          Approx(output.vec_gw_data.at(0).h2Omega_turb.value()).epsilon(1e-2));
-  REQUIRE(1.23742e-09 ==
+  REQUIRE(0.0084807773 ==
+          Approx(output.vec_gw_data.at(0).kappa_sw.value()).epsilon(1e-2));
+
+  REQUIRE(0.01699469177 ==
+          Approx(output.vec_gw_data.at(0).fb_col.value()).epsilon(1e-2));
+  REQUIRE(0. ==
+          Approx(output.vec_gw_data.at(0).omegab_col.value()).epsilon(1e-2));
+
+  REQUIRE(0.007441950626 ==
+          Approx(output.vec_gw_data.at(0).f1_sw.value()).epsilon(1e-2));
+  REQUIRE(0.04661408636 ==
+          Approx(output.vec_gw_data.at(0).f2_sw.value()).epsilon(1e-2));
+  REQUIRE(9.481654892e-20 ==
+          Approx(output.vec_gw_data.at(0).omega_2_sw.value()).epsilon(1e-2));
+
+  REQUIRE(2.729908945e-05 ==
+          Approx(output.vec_gw_data.at(0).f1_turb.value()).epsilon(1e-2));
+  REQUIRE(0.08186145689 ==
+          Approx(output.vec_gw_data.at(0).f2_turb.value()).epsilon(1e-2));
+  REQUIRE(3.71764571e-25 ==
+          Approx(output.vec_gw_data.at(0).omega_2_turb.value()).epsilon(1e-2));
+
+  REQUIRE(0 == Approx(output.vec_gw_data.at(0).SNR_col.value()).epsilon(5e-2));
+  REQUIRE(9.681903249e-08 ==
           Approx(output.vec_gw_data.at(0).SNR_sw.value()).epsilon(5e-2));
-  REQUIRE(1.28789e-20 ==
+  REQUIRE(1.210536738e-12 ==
           Approx(output.vec_gw_data.at(0).SNR_turb.value()).epsilon(5e-2));
-  REQUIRE(1.23742e-09 ==
+  REQUIRE(9.682005317e-08 ==
           Approx(output.vec_gw_data.at(0).SNR.value()).epsilon(5e-2));
 
   // Check different vwalls
   trans.ListBounceSolution.at(0).UserDefined_vwall = -1;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
   REQUIRE(0.374931042806113 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 
   trans.ListBounceSolution.at(0).UserDefined_vwall = -2;
-  trans.ListBounceSolution.at(0).CalculatePTStrength();
-  REQUIRE(0.303761086384691 ==
+  trans.ListBounceSolution.at(0).SetAndCalculateGWParameters(
+      TransitionTemperature::Percolation);
+  REQUIRE(0.6539310662 ==
           Approx(trans.ListBounceSolution.at(0).vwall).epsilon(1e-2));
 }
 
 TEST_CASE(
-    "Checking phase tracking and GW for BP3 (low sample) (suposed to fail)",
+    "Checking phase tracking and GW for BP3 (low sample) (supposed to fail)",
     "[gw]")
 {
   const std::vector<double> example_point_CXSM{/* v = */ 245.34120667410863,
@@ -875,6 +1037,7 @@ TEST_CASE(
   input.maxpathintegrations = 1;
   TransitionTracer trans(input);
   auto output = trans.output_store;
+
   REQUIRE(trans.ListBounceSolution.at(0).status_bounce_sol ==
           StatusGW::Failure);
   REQUIRE(126.0223716 ==
@@ -885,12 +1048,17 @@ TEST_CASE(
   REQUIRE(not output.vec_trans_data.at(0).compl_temp.has_value());
   REQUIRE(not output.vec_gw_data.at(0).alpha.has_value());
   REQUIRE(not output.vec_gw_data.at(0).beta_over_H.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).K_sw.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).K_turb.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).fpeak_sw.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).fpeak_turb.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).h2Omega_sw.has_value());
-  REQUIRE(not output.vec_gw_data.at(0).h2Omega_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).kappa_col.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).kappa_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).fb_col.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).omegab_col.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).f1_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).f2_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).omega_2_sw.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).f1_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).f2_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).omega_2_turb.has_value());
+  REQUIRE(not output.vec_gw_data.at(0).SNR_col.has_value());
   REQUIRE(not output.vec_gw_data.at(0).SNR_sw.has_value());
   REQUIRE(not output.vec_gw_data.at(0).SNR_turb.has_value());
   REQUIRE(not output.vec_gw_data.at(0).SNR.has_value());
@@ -1423,4 +1591,1178 @@ TEST_CASE("Espinosa-Konstandin - Three-Field Examples - rho = 1/8", "[gw]")
   bc.CalculateAction();
 
   REQUIRE(bc.Action == Approx(55.6).epsilon(2e-2));
+}
+
+TEST_CASE("Test dydv", "[gw]")
+{
+  using namespace BSMPT::kappa;
+  double v   = 0.1;
+  double y[] = {0.6, 1};
+  double dydv[2];
+  double cs2 = 0.57735;
+  dfdv(v, y, dydv, &cs2);
+
+  REQUIRE(dydv[0] == Approx(-1.4525696202948652).epsilon(1e-10));
+  REQUIRE(dydv[1] == Approx(1.4678979234569798).epsilon(1e-10));
+
+  v = 0.7;
+  dfdv(v, y, dydv, &cs2);
+  REQUIRE(dydv[0] == Approx(-0.4623000345532002).epsilon(1e-10));
+  REQUIRE(dydv[1] == Approx(-0.9236144743536612).epsilon(1e-10));
+
+  y[0] = 0.3;
+  y[1] = 0.4;
+  v    = 0.2;
+  dfdv(v, y, dydv, &cs2);
+  REQUIRE(dydv[0] == Approx(-0.7199796242092907).epsilon(1e-10));
+  REQUIRE(dydv[1] == Approx(0.12110157868520084).epsilon(1e-10));
+}
+
+TEST_CASE("Test getKandWow", "[gw]")
+{
+  using namespace BSMPT::kappa;
+  std::vector<std::vector<double>> vprofile;
+  auto [K, wow] = getKandWow(0.6, 0.4, 1 / sqrt(3.), vprofile);
+
+  REQUIRE(K == Approx(0.1943013335557658).epsilon(1e-4));
+  REQUIRE(wow == Approx(1.938501886826841).epsilon(1e-4));
+}
+
+TEST_CASE("Test kappa_sw", "[gw]")
+{
+  auto [cs2b, cs2s, al, vw, expected] = GENERATE(
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0001,
+                 0.05,
+                 7.3179378666420855e-06},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0001,
+                 0.35,
+                 0.0002008455736394683},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0001,
+                 0.65,
+                 0.001985541586762711},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0001,
+                 0.95,
+                 0.00021420942862449336},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023266326269007358},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.35,
+                 0.0062915254891997945},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.65,
+                 0.11046950045060759},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.95,
+                 0.006728525079006433},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.1,
+                 0.05,
+                 0.007326900011342696},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.1,
+                 0.35,
+                 0.1583633860049138},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.1,
+                 0.65,
+                 0.4832524716454113},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 0.1,
+                 0.95,
+                 0.17634385707782466},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.05,
+                 0},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.35,
+                 0},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.65,
+                 0},
+      std::tuple{0.37735026918962583,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.95,
+                 0.9727036578377455},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0001,
+                 0.05,
+                 7.540003466141407e-06},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0001,
+                 0.35,
+                 0.00018923147050079953},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0001,
+                 0.65,
+                 0.001985541586762711},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0001,
+                 0.95,
+                 0.00021420942862449336},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023817340171740378},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.35,
+                 0.005945714385861376},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.65,
+                 0.03607648814742543},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.95,
+                 0.006728525079006433},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.1,
+                 0.05,
+                 0.007501379181425136},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.1,
+                 0.35,
+                 0.15655928946830946},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.1,
+                 0.65,
+                 0.3954665998695123},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 0.1,
+                 0.95,
+                 0.17634385707782466},
+      std::tuple{
+          0.37735026918962583, 0.5106836025229592, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.37735026918962583, 0.5106836025229592, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.37735026918962583, 0.5106836025229592, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.37735026918962583,
+                 0.5106836025229592,
+                 3.1622776601683795,
+                 0.95,
+                 0.970642029722613},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0001,
+                 0.05,
+                 7.692929307907293e-06},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0001,
+                 0.35,
+                 0.00018545963266591788},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0001,
+                 0.65,
+                 0.001985541586762711},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0001,
+                 0.95,
+                 0.00021420942862449336},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00024211617232036147},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.35,
+                 0.005833736573734788},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.65,
+                 0.03316056910212684},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.95,
+                 0.006728525079006433},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.1,
+                 0.05,
+                 0.007624504332890382},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.1,
+                 0.35,
+                 0.15694210231703978},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.1,
+                 0.65,
+                 0.3436082030718621},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 0.1,
+                 0.95,
+                 0.17634385707782466},
+      std::tuple{
+          0.37735026918962583, 0.6440169358562926, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.37735026918962583, 0.6440169358562926, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.37735026918962583, 0.6440169358562926, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.37735026918962583,
+                 0.6440169358562926,
+                 3.1622776601683795,
+                 0.95,
+                 0.9687133749239248},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0001,
+                 0.05,
+                 7.707876457599111e-06},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0001,
+                 0.35,
+                 0.00018455369243278248},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0001,
+                 0.65,
+                 0.001985541586762711},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0001,
+                 0.95,
+                 0.00021420942862449336},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00024499815032913154},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.35,
+                 0.005802184299445743},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.65,
+                 0.03240315684256059},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.95,
+                 0.006728525079006433},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.1,
+                 0.05,
+                 0.007717618473164975},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.1,
+                 0.35,
+                 0.1580415225935992},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.1,
+                 0.65,
+                 0.3150514998815157},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 0.1,
+                 0.95,
+                 0.17634385707782466},
+      std::tuple{
+          0.37735026918962583, 0.7773502691896259, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.37735026918962583, 0.7773502691896259, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.37735026918962583, 0.7773502691896259, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.37735026918962583,
+                 0.7773502691896259,
+                 3.1622776601683795,
+                 0.95,
+                 0.9668918501603003},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0001,
+                 0.05,
+                 7.411159383997479e-06},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0001,
+                 0.35,
+                 0.00021535515537291937},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0001,
+                 0.65,
+                 0.21355709597248396},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0001,
+                 0.95,
+                 0.00048331431171071257},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.05,
+                 0.0002334094314291312},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006751762441268846},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.65,
+                 0.25693735830010916},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.95,
+                 0.01509800636192268},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.1,
+                 0.05,
+                 0.0073523723090345204},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.1,
+                 0.35,
+                 0.17225172320523233},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.1,
+                 0.65,
+                 0.5731438341546534},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 0.1,
+                 0.95,
+                 0.349203204340969},
+      std::tuple{
+          0.5106836025229592, 0.37735026918962583, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.5106836025229592, 0.37735026918962583, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.5106836025229592, 0.37735026918962583, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.5106836025229592,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.95,
+                 1.2516692504124665},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0001,
+                 0.05,
+                 7.540003466141407e-06},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0001,
+                 0.35,
+                 0.00020412867981207998},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0001,
+                 0.65,
+                 0.0016405613872688411},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0001,
+                 0.95,
+                 0.00048331431171071257},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023893967203783564},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006412043572008043},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.65,
+                 0.04575694072054808},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.95,
+                 0.01509800636192268},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.1,
+                 0.05,
+                 0.0075278738492524895},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.1,
+                 0.35,
+                 0.1708924639957514},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 0.1,
+                 0.65,
+                 0.4755894145419821},
+      std::tuple{
+          0.5106836025229592, 0.5106836025229592, 0.1, 0.95, 0.349203204340969},
+      std::tuple{
+          0.5106836025229592, 0.5106836025229592, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.5106836025229592, 0.5106836025229592, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.5106836025229592, 0.5106836025229592, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.5106836025229592,
+                 0.5106836025229592,
+                 3.1622776601683795,
+                 0.95,
+                 1.2491837681467124},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0001,
+                 0.05,
+                 7.692929307907293e-06},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0001,
+                 0.35,
+                 0.00020084139139559613},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0001,
+                 0.65,
+                 0.0008542268840703054},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0001,
+                 0.95,
+                 0.00048331431171071257},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00024279891079803805},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006314226722618959},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.65,
+                 0.025928478833256597},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.95,
+                 0.01509800636192268},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.1,
+                 0.05,
+                 0.007651743217987089},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.1,
+                 0.35,
+                 0.17178262559292462},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 0.1,
+                 0.65,
+                 0.41723240786672683},
+      std::tuple{
+          0.5106836025229592, 0.6440169358562926, 0.1, 0.95, 0.349203204340969},
+      std::tuple{
+          0.5106836025229592, 0.6440169358562926, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.5106836025229592, 0.6440169358562926, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.5106836025229592, 0.6440169358562926, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.5106836025229592,
+                 0.6440169358562926,
+                 3.1622776601683795,
+                 0.95,
+                 1.2466103418640628},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0001,
+                 0.05,
+                 7.806693241205771e-06},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0001,
+                 0.35,
+                 0.0002001547078822659},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0001,
+                 0.65,
+                 0.0006609907513608744},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0001,
+                 0.95,
+                 0.00048331431171071257},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.05,
+                 0.0002457888939963252},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006298444498776185},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.65,
+                 0.020373559368388087},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.95,
+                 0.01509800636192268},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.1,
+                 0.05,
+                 0.00774540086331589},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.1,
+                 0.35,
+                 0.17337307239197647},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 0.1,
+                 0.65,
+                 0.3849851141570427},
+      std::tuple{
+          0.5106836025229592, 0.7773502691896259, 0.1, 0.95, 0.349203204340969},
+      std::tuple{
+          0.5106836025229592, 0.7773502691896259, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.5106836025229592, 0.7773502691896259, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.5106836025229592, 0.7773502691896259, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.5106836025229592,
+                 0.7773502691896259,
+                 3.1622776601683795,
+                 0.95,
+                 1.2440939368345787},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0001,
+                 0.05,
+                 7.411159383997479e-06},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0001,
+                 0.35,
+                 0.00022461569610901424},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0001,
+                 0.65,
+                 0.2264581276563679},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0001,
+                 0.95,
+                 0.0010832003949572397},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023378296386764998},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.35,
+                 0.007045529152416038},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.65,
+                 0.27524400608876515},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.95,
+                 0.033497529479630764},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.1,
+                 0.05,
+                 0.007367376780085396},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.1,
+                 0.35,
+                 0.18140381964529517},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.1,
+                 0.65,
+                 0.6328843746021567},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 0.1,
+                 0.95,
+                 0.6516798361681999},
+      std::tuple{
+          0.6440169358562926, 0.37735026918962583, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.6440169358562926, 0.37735026918962583, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.6440169358562926, 0.37735026918962583, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.6440169358562926,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.95,
+                 1.4744151097706777},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0001,
+                 0.05,
+                 7.540003466141407e-06},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0001,
+                 0.35,
+                 0.00021351032531940882},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0001,
+                 0.65,
+                 0.0018062037169213605},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0001,
+                 0.95,
+                 0.0010832003949572397},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023932330850725875},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006711124762791142},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.65,
+                 0.05034578173466377},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.95,
+                 0.033497529479630764},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.1,
+                 0.05,
+                 0.007543541096817625},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.1,
+                 0.35,
+                 0.1803659060719546},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.1,
+                 0.65,
+                 0.5287300815907237},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 0.1,
+                 0.95,
+                 0.6516798361681999},
+      std::tuple{
+          0.6440169358562926, 0.5106836025229592, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.6440169358562926, 0.5106836025229592, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.6440169358562926, 0.5106836025229592, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.6440169358562926,
+                 0.5106836025229592,
+                 3.1622776601683795,
+                 0.95,
+                 1.4709593598880144},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0001,
+                 0.05,
+                 7.692929307907293e-06},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0001,
+                 0.35,
+                 0.00021061167167705277},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0001,
+                 0.65,
+                 0.0009456342249578272},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0001,
+                 0.95,
+                 0.0010832003949572397},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00024328716972870837},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.35,
+                 0.00662410929054976},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.65,
+                 0.0287227378668273},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.95,
+                 0.033497529479630764},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.1,
+                 0.05,
+                 0.007667778068094371},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.1,
+                 0.35,
+                 0.18161578458489833},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.1,
+                 0.65,
+                 0.4661174138210306},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 0.1,
+                 0.95,
+                 0.6516798361681999},
+      std::tuple{
+          0.6440169358562926, 0.6440169358562926, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.6440169358562926, 0.6440169358562926, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.6440169358562926, 0.6440169358562926, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.6440169358562926,
+                 0.6440169358562926,
+                 3.1622776601683795,
+                 0.95,
+                 1.4681186958771253},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0001,
+                 0.05,
+                 7.806693241205771e-06},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0001,
+                 0.35,
+                 0.00021014521843789488},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0001,
+                 0.65,
+                 0.0007352512140041711},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0001,
+                 0.95,
+                 0.0010832003949572397},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.05,
+                 0.0002461847436252291},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006619503935970726},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.65,
+                 0.022673459914223072},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.95,
+                 0.033497529479630764},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.1,
+                 0.05,
+                 0.0077618374741581795},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.1,
+                 0.35,
+                 0.18355303095597814},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.1,
+                 0.65,
+                 0.4315289844972973},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 0.1,
+                 0.95,
+                 0.6516798361681999},
+      std::tuple{
+          0.6440169358562926, 0.7773502691896259, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.6440169358562926, 0.7773502691896259, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.6440169358562926, 0.7773502691896259, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.6440169358562926,
+                 0.7773502691896259,
+                 3.1622776601683795,
+                 0.95,
+                 1.4652553264278354},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0001,
+                 0.05,
+                 7.411159383997479e-06},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0001,
+                 0.35,
+                 0.00023116136272582555},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0001,
+                 0.65,
+                 0.23563606395424863},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0001,
+                 0.95,
+                 0.0030546091145512624},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023406330922685052},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.35,
+                 0.007249139201052769},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.65,
+                 0.288806813335828},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.0031622776601683794,
+                 0.95,
+                 0.09256075757974097},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.1,
+                 0.05,
+                 0.007377231824157576},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.1,
+                 0.35,
+                 0.18788862212722682},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 0.1,
+                 0.65,
+                 0.6791707222540323},
+      std::tuple{0.7773502691896259, 0.37735026918962583, 0.1, 0.95, 0},
+      std::tuple{
+          0.7773502691896259, 0.37735026918962583, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.7773502691896259, 0.37735026918962583, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.7773502691896259, 0.37735026918962583, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.7773502691896259,
+                 0.37735026918962583,
+                 3.1622776601683795,
+                 0.95,
+                 1.6545035829889259},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0001,
+                 0.05,
+                 7.540003466141407e-06},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0001,
+                 0.35,
+                 0.00022017376031957072},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0001,
+                 0.65,
+                 0.0019291854113340373},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0001,
+                 0.95,
+                 0.0030546091145512624},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00023961116825033191},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006919498291816282},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.65,
+                 0.053762638707409126},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.0031622776601683794,
+                 0.95,
+                 0.09256075757974097},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.1,
+                 0.05,
+                 0.007553835443188259},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.1,
+                 0.35,
+                 0.1870907093282112},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.1,
+                 0.65,
+                 0.5699414855437102},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 0.1,
+                 0.95,
+                 1.3456667575818533},
+      std::tuple{
+          0.7773502691896259, 0.5106836025229592, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.7773502691896259, 0.5106836025229592, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.7773502691896259, 0.5106836025229592, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.7773502691896259,
+                 0.5106836025229592,
+                 3.1622776601683795,
+                 0.95,
+                 1.6513526733164734},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0001,
+                 0.05,
+                 7.692929307907293e-06},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0001,
+                 0.35,
+                 0.00021746340965321482},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0001,
+                 0.65,
+                 0.0010141027513213725},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0001,
+                 0.95,
+                 0.0030546091145512624},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00024358036052285205},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006840181608917257},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.65,
+                 0.030816935402392814},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.0031622776601683794,
+                 0.95,
+                 0.09256075757974097},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.1,
+                 0.05,
+                 0.0076783467954213485},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.1,
+                 0.35,
+                 0.1886076171694935},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.1,
+                 0.65,
+                 0.5040849323535525},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 0.1,
+                 0.95,
+                 1.2811313744400128},
+      std::tuple{
+          0.7773502691896259, 0.6440169358562926, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.7773502691896259, 0.6440169358562926, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.7773502691896259, 0.6440169358562926, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.7773502691896259,
+                 0.6440169358562926,
+                 3.1622776601683795,
+                 0.95,
+                 1.6483214411861051},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0001,
+                 0.05,
+                 7.806693241205771e-06},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0001,
+                 0.35,
+                 0.0002173828693434697},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0001,
+                 0.65,
+                 0.0007909289023483763},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0001,
+                 0.95,
+                 0.0030546091145512624},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.05,
+                 0.00024648183988229506},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.35,
+                 0.006844294417901413},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.65,
+                 0.024405928427880138},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.0031622776601683794,
+                 0.95,
+                 0.09256075757974097},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.1,
+                 0.05,
+                 0.0077725405473192104},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.1,
+                 0.35,
+                 0.1908016693914296},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.1,
+                 0.65,
+                 0.4677255472039136},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 0.1,
+                 0.95,
+                 1.1733319381342693},
+      std::tuple{
+          0.7773502691896259, 0.7773502691896259, 3.1622776601683795, 0.05, 0},
+      std::tuple{
+          0.7773502691896259, 0.7773502691896259, 3.1622776601683795, 0.35, 0},
+      std::tuple{
+          0.7773502691896259, 0.7773502691896259, 3.1622776601683795, 0.65, 0},
+      std::tuple{0.7773502691896259,
+                 0.7773502691896259,
+                 3.1622776601683795,
+                 0.95,
+                 1.6452148494846968});
+  REQUIRE(BSMPT::kappa::kappaNuMuModel(cs2b, cs2s, al, vw) ==
+          Approx(expected).epsilon(1e-3));
 }
