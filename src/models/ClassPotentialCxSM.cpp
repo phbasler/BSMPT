@@ -741,14 +741,13 @@ void Class_CxSM::AdjustRotationMatrix()
 
   // Indices of mass eigenstates for rotation from interaction to mass basis
   // Only neutral/physical part necessary, as Goldstones are already diagonal
-  pos_Gp = -1, pos_Gm = -1, pos_G0 = -1,
-  pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
+  pos_Gp = -1, pos_Gm = -1, pos_G0 = -1, pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
 
   // First finding the correct rows for the Goldstone bosons
   for (std::size_t i = 0; i < 3; i++)
   {
-    if (std::abs(HiggsRot(i, pos_i_G1))
-        + std::abs(HiggsRot(i, pos_i_G2)) > ZeroThreshold)
+    if (std::abs(HiggsRot(i, pos_i_G1)) + std::abs(HiggsRot(i, pos_i_G2)) >
+        ZeroThreshold)
     {
       if (pos_Gp == -1)
       {
@@ -771,21 +770,26 @@ void Class_CxSM::AdjustRotationMatrix()
     }
   }
 
-
   // Starting from 3 to NHiggs, i.e. fixing the physical Higgs bosons
   for (std::size_t i = 3; i < NHiggs; i++)
-    // mass base index i corresponds to mass vector sorted in ascending mass
+  // mass base index i corresponds to mass vector sorted in ascending mass
   {
     // Neutral submatrix
-    if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2))
-        + std::abs(HiggsRot(i, pos_zeta3)) > ZeroThreshold)
-      // use that mh1 < mh2 < mh3
+    if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2)) +
+            std::abs(HiggsRot(i, pos_zeta3)) >
+        ZeroThreshold)
+    // use that mh1 < mh2 < mh3
     {
-      if (pos_h1 == -1) {
+      if (pos_h1 == -1)
+      {
         pos_h1 = i;
-      } else if (pos_h2 == -1) {
+      }
+      else if (pos_h2 == -1)
+      {
         pos_h2 = i;
-      } else {
+      }
+      else
+      {
         pos_h3 = i;
       }
     }
@@ -805,12 +809,15 @@ void Class_CxSM::AdjustRotationMatrix()
     {
       int ii = int(i);
       int jj = int(j);
-      if (not((jj == pos_Gp    and ii == pos_Gp) or
-              (jj == pos_Gm    and ii == pos_Gm) or
-              (jj == pos_G0    and ii == pos_G0) or
-              (jj == pos_zeta1 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
-              (jj == pos_zeta2 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
-              (jj == pos_zeta3 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3))))
+      if (not((jj == pos_Gp and ii == pos_Gp) or
+              (jj == pos_Gm and ii == pos_Gm) or
+              (jj == pos_G0 and ii == pos_G0) or
+              (jj == pos_zeta1 and
+               (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
+              (jj == pos_zeta2 and
+               (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
+              (jj == pos_zeta3 and
+               (ii == pos_h1 or ii == pos_h2 or ii == pos_h3))))
       {
         zero_element = true;
       }
@@ -835,28 +842,28 @@ void Class_CxSM::AdjustRotationMatrix()
 
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]
-  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1])
-                          - SMConstants.C_MassSMHiggs);
-  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2])
-                          - SMConstants.C_MassSMHiggs);
-  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3])
-                          - SMConstants.C_MassSMHiggs);
+  double diff1 =
+      std::abs(std::sqrt(HiggsMasses[pos_h1]) - SMConstants.C_MassSMHiggs);
+  double diff2 =
+      std::abs(std::sqrt(HiggsMasses[pos_h2]) - SMConstants.C_MassSMHiggs);
+  double diff3 =
+      std::abs(std::sqrt(HiggsMasses[pos_h3]) - SMConstants.C_MassSMHiggs);
   if (diff1 < diff2 and diff1 < diff3)
   {
     pos_h_SM = pos_h1;
-    pos_h_l = pos_h2;
-    pos_h_H = pos_h3;
+    pos_h_l  = pos_h2;
+    pos_h_H  = pos_h3;
   }
   else if (diff2 < diff1 and diff2 < diff3)
   {
-    pos_h_l = pos_h1;
+    pos_h_l  = pos_h1;
     pos_h_SM = pos_h2;
-    pos_h_H = pos_h3;
+    pos_h_H  = pos_h3;
   }
   else
   {
-    pos_h_l = pos_h1;
-    pos_h_H = pos_h2;
+    pos_h_l  = pos_h1;
+    pos_h_H  = pos_h2;
     pos_h_SM = pos_h3;
   }
 
@@ -889,14 +896,14 @@ void Class_CxSM::AdjustRotationMatrix()
 
   // check neutral, CP-even submatrix
   if (HiggsRotFixed(pos_h1, pos_zeta1) < 0)
-    // h1 zeta1 (condition (1) above, R11 < 0)
+  // h1 zeta1 (condition (1) above, R11 < 0)
   {
     // if negative, flip sign of h1
     HiggsRotFixed.row(pos_h1) *= -1;
   }
 
   if (HiggsRotFixed(pos_h3, pos_zeta3) < 0)
-    // h3 zeta3 (condition (2) above, R33 < 0)
+  // h3 zeta3 (condition (2) above, R33 < 0)
   {
     // if negative, flip sign of h3
     HiggsRotFixed.row(pos_h3) *= -1;
@@ -917,7 +924,7 @@ void Class_CxSM::AdjustRotationMatrix()
   HiggsRotFixedNeutral(2, 2) = HiggsRotFixed(pos_h3, pos_zeta3);
 
   if (HiggsRotFixedNeutral.determinant() < 0)
-    // condition (3) above, det(R) < 0
+  // condition (3) above, det(R) < 0
   {
     // if negative, flip sign of h2
     HiggsRotFixed.row(pos_h2) *= -1;

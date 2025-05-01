@@ -766,7 +766,7 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
       }
     }
     else if (std::abs(HiggsRot(i, pos_eta1)) + std::abs(HiggsRot(i, pos_eta2)) >
-        ZeroThreshold) // use that mGpm < mHpm
+             ZeroThreshold) // use that mGpm < mHpm
     {
       if (pos_G2 == -1)
       {
@@ -777,8 +777,9 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
         pos_H2 = i;
       }
     }
-    else if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2)) >
-        ZeroThreshold) // use that mh < mH
+    else if (std::abs(HiggsRot(i, pos_zeta1)) +
+                 std::abs(HiggsRot(i, pos_zeta2)) >
+             ZeroThreshold) // use that mh < mH
     {
       if (pos_h == -1)
       {
@@ -790,7 +791,7 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
       }
     }
     else if (std::abs(HiggsRot(i, pos_psi1)) + std::abs(HiggsRot(i, pos_psi2)) >
-        ZeroThreshold) // use that 0 = mG0 < mA
+             ZeroThreshold) // use that 0 = mG0 < mA
     {
       if (pos_G0 == -1)
       {
@@ -804,8 +805,8 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
   }
 
   // check if all position indices are set
-  if (pos_G1 == -1 or pos_G2 == -1 or pos_H1 == -1 or pos_H2 == -1 or pos_G0 == -1 or
-      pos_A == -1 or pos_H == -1 or pos_h == -1)
+  if (pos_G1 == -1 or pos_G2 == -1 or pos_H1 == -1 or pos_H2 == -1 or
+      pos_G0 == -1 or pos_A == -1 or pos_H == -1 or pos_h == -1)
   {
     throw std::runtime_error("Error. Not all position indices are set.");
   }
@@ -846,18 +847,18 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
 
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h] <= HiggsMasses[pos_H]
-  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h])
-                          - SMConstants.C_MassSMHiggs);
-  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_H])
-                          - SMConstants.C_MassSMHiggs);
+  double diff1 =
+      std::abs(std::sqrt(HiggsMasses[pos_h]) - SMConstants.C_MassSMHiggs);
+  double diff2 =
+      std::abs(std::sqrt(HiggsMasses[pos_H]) - SMConstants.C_MassSMHiggs);
   if (diff1 < diff2)
   {
     pos_h_SM = pos_h;
-    pos_h_H = pos_H;
+    pos_h_H  = pos_H;
   }
   else
   {
-    pos_h_H = pos_h;
+    pos_h_H  = pos_h;
     pos_h_SM = pos_H;
   }
 

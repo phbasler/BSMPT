@@ -975,8 +975,8 @@ bool Class_Potential_Origin::CheckRotationMatrix()
 
   double precision = 1e-10;
 
-  bool AbsDetIsOne   = almost_the_same(std::abs(mat.determinant()), 1.,
-                                       precision);
+  bool AbsDetIsOne =
+      almost_the_same(std::abs(mat.determinant()), 1., precision);
   bool InvEqTrans = true;
 
   auto inv    = mat.inverse();

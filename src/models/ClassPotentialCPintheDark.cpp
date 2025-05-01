@@ -1290,18 +1290,18 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
   // CP in the Dark interaction basis
   // 0     1     2     3     4      5     6      7     8
   // rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2, rhoS
-  int pos_rho1 = 0, pos_eta1 = 1, pos_rho2 = 2, pos_eta2 = 3,
-      pos_zeta1 = 4, pos_psi1 = 5, pos_zeta2 = 6, pos_psi2 = 7,
-      pos_rhoS = 8;
+  int pos_rho1 = 0, pos_eta1 = 1, pos_rho2 = 2, pos_eta2 = 3, pos_zeta1 = 4,
+      pos_psi1 = 5, pos_zeta2 = 6, pos_psi2 = 7, pos_rhoS = 8;
 
   // Indices of mass eigenstates for rotation from interaction to mass basis
-  pos_Gp = -1, pos_Gm = -1, pos_Hp = -1, pos_Hm = -1, pos_HSM = -1,
-  pos_G0 = -1, pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
-
+  pos_Gp = -1, pos_Gm = -1, pos_Hp = -1, pos_Hm = -1, pos_HSM = -1, pos_G0 = -1,
+  pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
 
   // basis = {rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2, rhoS}
   // the rotation matrix is diagonal besides for the neutral dark scalars
-  for (std::size_t i = 0; i < NHiggs; i++) // mass base index i corresponds to mass vector sorted in ascending mass
+  for (std::size_t i = 0; i < NHiggs;
+       i++) // mass base index i corresponds to mass vector sorted in ascending
+            // mass
   {
     if (std::abs(HiggsRot(i, pos_rho1)) > ZeroThreshold)
     {
@@ -1328,8 +1328,9 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
       pos_G0 = i;
     }
     // the neutral dark scalars mix
-    else if ((std::abs(HiggsRot(i, pos_zeta2)) + std::abs(HiggsRot(i, pos_psi2)) +
-         std::abs(HiggsRot(i, pos_rhoS))) > ZeroThreshold)
+    else if ((std::abs(HiggsRot(i, pos_zeta2)) +
+              std::abs(HiggsRot(i, pos_psi2)) +
+              std::abs(HiggsRot(i, pos_rhoS))) > ZeroThreshold)
     {
       // use that scalars are sorted by mass
       if (pos_h1 == -1)
@@ -1349,8 +1350,8 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
 
   // check if all position indices are set
   if (pos_Gp == -1 or pos_Gm == -1 or pos_Hp == -1 or pos_Hm == -1 or
-      pos_HSM == -1 or pos_G0 == -1 or
-      pos_h1 == -1 or pos_h2 == -1 or pos_h3 == -1)
+      pos_HSM == -1 or pos_G0 == -1 or pos_h1 == -1 or pos_h2 == -1 or
+      pos_h3 == -1)
   {
     throw std::runtime_error("Error. Not all position indices are set.");
   }
@@ -1363,15 +1364,18 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
     {
       int ii = int(i);
       int jj = int(j);
-      if (not((jj == pos_rho1  and ii == pos_Gp) or
-              (jj == pos_eta1  and ii == pos_Gm) or
-              (jj == pos_rho2  and ii == pos_Hp) or
-              (jj == pos_eta2  and ii == pos_Hm) or
+      if (not((jj == pos_rho1 and ii == pos_Gp) or
+              (jj == pos_eta1 and ii == pos_Gm) or
+              (jj == pos_rho2 and ii == pos_Hp) or
+              (jj == pos_eta2 and ii == pos_Hm) or
               (jj == pos_zeta1 and ii == pos_HSM) or
-              (jj == pos_psi1  and ii == pos_G0) or
-              (jj == pos_zeta2 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
-              (jj == pos_psi2  and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
-              (jj == pos_rhoS  and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3))))
+              (jj == pos_psi1 and ii == pos_G0) or
+              (jj == pos_zeta2 and
+               (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
+              (jj == pos_psi2 and
+               (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
+              (jj == pos_rhoS and
+               (ii == pos_h1 or ii == pos_h2 or ii == pos_h3))))
       {
         zero_element = true;
       }
@@ -1423,14 +1427,14 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
   // * (3) if det R < 0: h2 -> -h2 (i.e. multiply the h2 row with -1)
 
   if (HiggsRotFixed(pos_h1, pos_zeta2) < 0)
-    // h1 zeta2 (condition (1) above, R11 < 0)
+  // h1 zeta2 (condition (1) above, R11 < 0)
   {
     // if negative, flip sign of h1
     HiggsRotFixed.row(pos_h1) *= -1;
   }
 
   if (HiggsRotFixed(pos_h3, pos_rhoS) < 0)
-    // h3 rhoS (condition (2) above, R33 < 0)
+  // h3 rhoS (condition (2) above, R33 < 0)
   {
     // if negative, flip sign of h3
     HiggsRotFixed.row(pos_h3) *= -1;
@@ -1451,7 +1455,7 @@ void Class_Potential_CPintheDark::AdjustRotationMatrix()
   HiggsRotFixedNeutral(2, 2) = HiggsRotFixed(pos_h3, pos_rhoS);
 
   if (HiggsRotFixedNeutral.determinant() < 0)
-    // condition (3) above, det(R) < 0
+  // condition (3) above, det(R) < 0
   {
     // if negative, flip sign of h2
     HiggsRotFixed.row(pos_h2) *= -1;
