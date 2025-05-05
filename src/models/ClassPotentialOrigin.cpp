@@ -3646,7 +3646,8 @@ Class_Potential_Origin::initModel(std::string linestr)
 }
 
 std::vector<double>
-Class_Potential_Origin::initModel(const std::vector<double> &par)
+Class_Potential_Origin::initModel(const std::vector<double> &par,
+                                  const bool &adjust_rot_matrix)
 {
   std::vector<double> parCT(nParCT);
   resetbools();
@@ -3657,7 +3658,10 @@ Class_Potential_Origin::initModel(const std::vector<double> &par)
   CalculateDebye();
   CalculateDebyeGauge();
 
-  AdjustRotationMatrix();
+  if (adjust_rot_matrix)
+  {
+    AdjustRotationMatrix();
+  }
 
   parStored   = par;
   parCTStored = parCT;

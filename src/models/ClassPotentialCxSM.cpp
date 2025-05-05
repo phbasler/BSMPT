@@ -837,9 +837,6 @@ void Class_CxSM::AdjustRotationMatrix()
   std::vector<double> HiggsMasses;
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
-  std::cout << "HiggsMasses=" << std::endl;
-  std::cout << HiggsMasses << std::endl;
-
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]
   double diff1 =

@@ -1177,6 +1177,8 @@ public:
    * Gets the parameter line as an Input and calls
    * resetbools, ReadAndSet, calc_CT, set_CT_Pot_Par,CalculateDebye and
    * CalculateDebyeGauge
+   * @param linestr parameter line
+   * @return pair of parameters and CTs
    */
   std::pair<std::vector<double>, std::vector<double>>
   initModel(std::string linestr);
@@ -1187,9 +1189,12 @@ public:
    * CalculateDebyeGauge
    * @param par Parameters to define the parameter point. Same input as in
    * set_gen()
+   * @param adjust_rot_matrix bool to determine whether rotation matrix shall be
+   * fixed to model conventions or not (to allow to check unphysical points)
    * @return Vector with the CT
    */
-  std::vector<double> initModel(const std::vector<double> &par);
+  std::vector<double> initModel(const std::vector<double> &par,
+                                const bool &adjust_rot_matrix = true);
 
   /**
    * @brief resetScale changes the MSBar scale to newScale
