@@ -63,8 +63,6 @@ class CmaesConan(ConanFile):
     def requirements(self):
         self.requires("eigen/3.4.0", transitive_headers=True)
     
-    def build_requirements(self):
-        self.tool_requires("cmake/3.10")
 
     def layout(self):
         cmake_layout(self, src_folder="src")
