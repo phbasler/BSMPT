@@ -9,7 +9,7 @@
 #include <BSMPT/minimum_tracer/minimum_tracer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/transition_tracer/transition_tracer.h>
 #include <BSMPT/utility/Logger.h> // for Logger Class
 #include <fstream>
@@ -131,21 +131,24 @@ int main()
       std::dynamic_pointer_cast<Class_Potential_OriginDerived>(
           modelPointerDerived);
 
-  user_input input{modelPointer,          /* modelPointer */
-                   0,                     /* templow */
-                   400,                   /* temphigh */
-                   0.95,                  /* UserDefined_vwall */
-                   .71,                   /* perc_prbl */
-                   .01,                   /* compl_prbl */
-                   0.1,                   /* UserDefined_epsturb */
-                   7,                     /* MaxPathIntegrations */
-                   -1,                    /* UseMultiStepPTMode */
-                   10,                    /* num_check_pts  */
-                   0,                     /* CheckEWSymmetryRestoration*/
-                   0,                     /* CheckNLOStability*/
-                   WhichMinimizerDefault, /* WhichMinimizer*/
-                   false,                 /* GW calculation*/
-                   true};                 /* WhichTransitionTemperature*/
+  user_input input{
+      modelPointer,                       /* modelPointer */
+      0,                                  /* templow */
+      400,                                /* temphigh */
+      0.95,                               /* UserDefined_vwall */
+      .71,                                /* perc_prbl */
+      .01,                                /* compl_prbl */
+      0.1,                                /* UserDefined_epsturb */
+      7,                                  /* MaxPathIntegrations */
+      -1,                                 /* UseMultiStepPTMode */
+      10,                                 /* num_check_pts  */
+      0,                                  /* CheckEWSymmetryRestoration*/
+      0,                                  /* CheckNLOStability*/
+      WhichMinimizerDefault,              /* WhichMinimizer*/
+      false,                              /* GW calculation*/
+      true,                               /* gw_calculation */
+      TransitionTemperature::Percolation, /* WhichTransitionTemperature */
+      1};                                 /* UserDefined_PNLO_scaling */
 
   TransitionTracer trans(input);
 

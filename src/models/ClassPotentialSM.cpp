@@ -280,7 +280,7 @@ void Class_SM::TripleHiggsCouplings()
   if (CalculatedTripleCopulings) return;
   CalculatedTripleCopulings = true;
 
-  std::vector<double> HiggsOrder(NHiggs);
+  std::vector<std::size_t> HiggsOrder(NHiggs);
 
   for (std::size_t i = 0; i < NHiggs; i++)
   {

@@ -83,9 +83,9 @@ public:
 
   double vh, vs, va;
 
-  int pos_Gp, pos_Gm, pos_G0;
-  int pos_h1, pos_h2, pos_h3;
-  int pos_h_SM, pos_h_l, pos_h_H;
+  std::size_t pos_Gp, pos_Gm, pos_G0;
+  std::size_t pos_h1, pos_h2, pos_h3;
+  std::size_t pos_h_SM, pos_h_l, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;

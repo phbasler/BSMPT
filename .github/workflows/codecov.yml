@@ -51,14 +51,17 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Install conan
       run: pip install conan>2
+
     - run: python3 Setup.py --options EnableCoverage=True CompileBaryo=True UseVectorization=False --build-missing
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py
 
     - run: cmake --preset $GeneratedCMakeProfile
+    
     - name: compile
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }}
+    
     - name: Generate Coverage
       run: cmake --build --preset $GeneratedCMakeProfile -j${{ steps.cpu-cores.outputs.count }} -t coverage
     - name: Upload coverage

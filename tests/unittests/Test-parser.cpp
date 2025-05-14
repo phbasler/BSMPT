@@ -31,6 +31,30 @@ TEST_CASE("Check bool input", "[parser]")
   REQUIRE_FALSE(parser.get_value<bool>(argNameF));
 }
 
+TEST_CASE("Check int input", "[parser]")
+{
+  auto parser = BSMPT::parser();
+  int value   = 3;
+  std::string argName{"arg"};
+  parser.add_argument(argName, "foo", true);
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=" + std::to_string(value));
+  parser.add_input(input);
+  REQUIRE(parser.get_value<int>(argName) == value);
+}
+
+TEST_CASE("Check double input", "[parser]")
+{
+  auto parser  = BSMPT::parser();
+  double value = 3.2;
+  std::string argName{"arg"};
+  parser.add_argument(argName, "foo", true);
+  std::vector<std::string> input;
+  input.emplace_back("--" + argName + "=" + std::to_string(value));
+  parser.add_input(input);
+  REQUIRE(parser.get_value<double>(argName) == value);
+}
+
 TEST_CASE("Set unexpected input", "[parser]")
 {
   auto parser = BSMPT::parser();
@@ -77,4 +101,18 @@ TEST_CASE("Check for all required parameters", "[parser]")
   std::string header{"Some header"};
   parser.add_argument(argName, description, true);
   REQUIRE_THROWS_AS(parser.check_required_parameters(), BSMPT::parserException);
+}
+
+TEST_CASE("Check parser input error is disabled on Loglevel None", "[parser]")
+{
+  using namespace BSMPT;
+  std::stringstream ss;
+  Logger::SetOStream(ss);
+  Logger::Disable();
+  ShowInputError();
+  Logger::Write(LoggingLevel::Default, "Some output");
+  std::string output = ss.str();
+  REQUIRE(output.empty());
+  Logger::SetOStream(std::cout);
+  Logger::RestoreDefaultLevels();
 }

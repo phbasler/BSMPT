@@ -6,12 +6,12 @@
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
+#include "C2HDM.h"
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
-
-#include "C2HDM.h"
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
+#include <BSMPT/utility/Logger.h>
 #include <fstream>
 
 const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
@@ -27,6 +27,22 @@ const std::vector<double> example_point_C2HDM{/* lambda_1 = */ 3.29771,
 const Compare_C2HDM Expected;
 
 using Approx = Catch::Approx;
+
+TEST_CASE("Run CheckImplementation in c2hdm", "[c2hdm]")
+{
+  using namespace BSMPT;
+  const auto SMConstants = GetSMConstants();
+  std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
+      ModelID::FChoose(ModelID::ModelIDs::C2HDM, SMConstants);
+  modelPointer->initModel(example_point_C2HDM);
+  std::stringstream ss;
+  Logger::SetOStream(ss);
+  REQUIRE_NOTHROW(ModelTests::CheckImplementation(
+      *modelPointer, Minimizer::WhichMinimizerDefault));
+  Logger::SetOStream(std::cout);
+  std::string output = ss.str();
+  REQUIRE(output.find("fail") == std::string::npos);
+}
 
 TEST_CASE("Checking NLOVEV for C2HDM", "[c2hdm]")
 {
@@ -294,25 +310,24 @@ TEST_CASE("Checking triple higgs NLO couplings in the C2HDM", "[c2hdm]")
     {
       for (std::size_t k{0}; k < NHiggs; ++k)
       {
-        // INFO("Current Minimizer
-        // Set-up:\t"<<Minimizer::WhichMinimizerDefault); INFO("Failed at
-        // Tree-Coupling ("
+        // INFO("Current Minimizer Set-up:\t" <<
+        // Minimizer::WhichMinimizerDefault); INFO("Failed at Tree-Coupling ("
         //      << i << "," << j << "," << k << ")\tFound:\t"
         //      << modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k)
-        //      << "\tExpextec:\t" <<
+        //      << "\tExpected:\t" <<
         //      Expected.CheckTripleTree.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
               Expected.CheckTripleTree.at(i).at(j).at(k));
         // INFO("Failed at CT-Coupling ("
         //      << i << "," << j << "," << k << ")\tFound:\t"
         //      << modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k)
-        //      << "\tExpextec:\t" << Expected.CheckTripleCT.at(i).at(j).at(k));
+        //      << "\tExpected:\t" << Expected.CheckTripleCT.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k),
               Expected.CheckTripleCT.at(i).at(j).at(k));
         // INFO("Failed at CW-Coupling ("
         //      << i << "," << j << "," << k << ")\tFound:\t"
         //      << modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k)
-        //      << "\tExpextec:\t" << Expected.CheckTripleCW.at(i).at(j).at(k));
+        //      << "\tExpected:\t" << Expected.CheckTripleCW.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k),
               Expected.CheckTripleCW.at(i).at(j).at(k));
       }

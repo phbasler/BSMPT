@@ -20,12 +20,14 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           token: ${{ secrets.LINTER_PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
         if: env.LocalCommit == 'true'
 
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
         if: env.LocalCommit != 'true'
 
       - run: git fetch origin $GITHUB_BASE_REF

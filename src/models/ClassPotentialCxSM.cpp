@@ -8,6 +8,9 @@
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
+
+#include <optional>
+
 using namespace Eigen;
 
 /**
@@ -474,6 +477,7 @@ void Class_CxSM::write() const
      << "m_{H_SM} = " << std::sqrt(HiggsMasses[pos_h_SM]) << " GeV \n"
      << "m_{H_l} = " << std::sqrt(HiggsMasses[pos_h_l]) << " GeV \n"
      << "m_{H_h} = " << std::sqrt(HiggsMasses[pos_h_H]) << " GeV \n";
+
   ss << "The neutral mixing Matrix is given by :\n";
   bool IsNegative = NeutralMatrix(0, 1) < 0;
   ss << "H_{SM} = " << NeutralMatrix(0, 0) << " h ";
@@ -733,69 +737,114 @@ void Class_CxSM::AdjustRotationMatrix()
     }
   }
 
+  std::vector<double> HiggsMasses = HiggsMassesSquared(vevTree, 0);
+  if (HiggsMasses.front() <= -ZeroThreshold)
+  {
+    std::stringstream ss;
+    ss.precision(std::numeric_limits<double>::max_digits10);
+    ss << "Warning, at least one negative mass squared in spectrum: "
+       << HiggsMasses.front() << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+  }
+
   // CxSM interaction basis
   // 0   1   2   3      4      5
   // Gp, Gm, G0, zeta1, zeta2, zeta3
-  int pos_i_G1 = 0, pos_i_G2 = 1, pos_i_G0 = 2;
-  int pos_zeta1 = 3, pos_zeta2 = 4, pos_zeta3 = 5;
+  const std::size_t pos_i_Gp = 0, pos_i_Gm = 1, pos_i_G0 = 2,
+                    pos_zeta1 = 3, pos_zeta2 = 4, pos_zeta3 = 5;
 
-  // Indices of mass eigenstates for rotation from interaction to mass basis
-  // Only neutral/physical part necessary, as Goldstones are already diagonal
-  pos_Gp = -1, pos_Gm = -1, pos_G0 = -1,
-  pos_h1 = -1, pos_h2 = -1, pos_h3 = -1;
+  // Indices of mass eigenstates for rotation from interaction to mass basis.
+  // Goldstones are already diagonal.
+  // Using temporary optional variables, later being set to the instance variables
+  // pos_G0, pos_Gp, etc.
+  std::optional<std::size_t> tpos_Gp, tpos_Gm, tpos_G0, tpos_h1, tpos_h2,
+                             tpos_h3;
 
-  // First finding the correct rows for the Goldstone bosons
-  for (std::size_t i = 0; i < 3; i++)
+  for (std::size_t i = 0; i < NHiggs; i++)
   {
-    if (std::abs(HiggsRot(i, pos_i_G1))
-        + std::abs(HiggsRot(i, pos_i_G2)) > ZeroThreshold)
+    bool hasZeroMass = std::abs(HiggsMasses[i]) < ZeroThreshold;
+    if (std::abs(HiggsRot(i, pos_i_Gp)) > ZeroThreshold)
     {
-      if (pos_Gp == -1)
+      if (not tpos_Gp.has_value() and hasZeroMass)
       {
-        pos_Gp = i;
+        tpos_Gp = i;
       }
       else
       {
-        pos_Gm = i;
+        throw std::runtime_error("Error. Goldstone Gp not massless "
+                                 "or not diagonal.");
+      }
+    }
+    else if (std::abs(HiggsRot(i, pos_i_Gm)) > ZeroThreshold)
+    {
+      if (not tpos_Gm.has_value() and hasZeroMass)
+      {
+        tpos_Gm = i;
+      }
+      else
+      {
+        throw std::runtime_error("Error. Goldstone Gm not massless "
+                                 "or not diagonal.");
       }
     }
     else if (std::abs(HiggsRot(i, pos_i_G0)) > ZeroThreshold)
     {
-      pos_G0 = i;
+      if (not tpos_G0.has_value() and hasZeroMass)
+      {
+        tpos_G0 = i;
+      }
+      else
+      {
+        throw std::runtime_error("Error. Goldstone G0 not massless "
+                                 "or not diagonal.");
+      }
+    }
+    // Neutral submatrix
+    else if (std::abs(HiggsRot(i, pos_zeta1))
+             + std::abs(HiggsRot(i, pos_zeta2))
+             + std::abs(HiggsRot(i, pos_zeta3)) > ZeroThreshold)
+    // use that mh1 < mh2 < mh3
+    {
+      if (not tpos_h1.has_value())
+      {
+        tpos_h1 = i;
+      }
+      else if (not tpos_h2.has_value())
+      {
+        tpos_h2 = i;
+      }
+      else if (not tpos_h3.has_value())
+      {
+        tpos_h3 = i;
+      }
+      else
+      {
+        throw std::runtime_error("Error. Neutral submatrix mixing "
+                                 "with other components.");
+      }
     }
     else
     {
-      throw std::runtime_error("Error. Non-Goldstone in Goldstone submatrix."
-                               " Particle with negative mass? Check your "
-                               "parameter point.");
+      throw std::runtime_error("Error. Invalid mixing matrix containing row "
+                               "with all zeroes.");
     }
   }
 
-
-  // Starting from 3 to NHiggs, i.e. fixing the physical Higgs bosons
-  for (std::size_t i = 3; i < NHiggs; i++)
-    // mass base index i corresponds to mass vector sorted in ascending mass
-  {
-    // Neutral submatrix
-    if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2))
-        + std::abs(HiggsRot(i, pos_zeta3)) > ZeroThreshold)
-      // use that mh1 < mh2 < mh3
-    {
-      if (pos_h1 == -1) {
-        pos_h1 = i;
-      } else if (pos_h2 == -1) {
-        pos_h2 = i;
-      } else {
-        pos_h3 = i;
-      }
-    }
-  }
-
-  // check if all position indices are set
-  if (pos_h1 == -1 or pos_h2 == -1 or pos_h3 == -1)
+  // Sanity check if all position indices are set
+  if (not (tpos_G0.has_value() and tpos_Gp.has_value() and tpos_Gm.has_value()
+           and tpos_h1.has_value() and tpos_h2.has_value()
+           and tpos_h3.has_value())
+     )
   {
     throw std::runtime_error("Error. Not all position indices are set.");
   }
+
+  pos_G0 = tpos_G0.value();
+  pos_Gp = tpos_Gp.value();
+  pos_Gm = tpos_Gm.value();
+  pos_h1 = tpos_h1.value();
+  pos_h2 = tpos_h2.value();
+  pos_h3 = tpos_h3.value();
 
   // check if all other elements of rotation matrix are zero
   bool zero_element = false;
@@ -803,14 +852,15 @@ void Class_CxSM::AdjustRotationMatrix()
   {
     for (std::size_t j = 0; j < NHiggs; j++)
     {
-      int ii = int(i);
-      int jj = int(j);
-      if (not((jj == pos_Gp    and ii == pos_Gp) or
-              (jj == pos_Gm    and ii == pos_Gm) or
-              (jj == pos_G0    and ii == pos_G0) or
-              (jj == pos_zeta1 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
-              (jj == pos_zeta2 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3)) or
-              (jj == pos_zeta3 and (ii == pos_h1 or ii == pos_h2 or ii == pos_h3))))
+      if (not((j == pos_i_Gp and i == pos_Gp) or
+              (j == pos_i_Gm and i == pos_Gm) or
+              (j == pos_i_G0 and i == pos_G0) or
+              (j == pos_zeta1 and
+               (i == pos_h1 or i == pos_h2 or i == pos_h3)) or
+              (j == pos_zeta2 and
+               (i == pos_h1 or i == pos_h2 or i == pos_h3)) or
+              (j == pos_zeta3 and
+               (i == pos_h1 or i == pos_h2 or i == pos_h3))))
       {
         zero_element = true;
       }
@@ -824,39 +874,31 @@ void Class_CxSM::AdjustRotationMatrix()
   }
 
   // Determine the additional indices for the SM-like
-  // and lighter/heavier Higgses
-  pos_h_SM = -1, pos_h_l = -1, pos_h_H = -1;
-
-  std::vector<double> HiggsMasses;
-  HiggsMasses = HiggsMassesSquared(vevTree, 0);
-
-  std::cout << "HiggsMasses=" << std::endl;
-  std::cout << HiggsMasses << std::endl;
-
+  // and lighter/heavier Higgses.
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h1] <= HiggsMasses[pos_h2] <= HiggsMasses[pos_h3]
-  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h1])
-                          - SMConstants.C_MassSMHiggs);
-  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_h2])
-                          - SMConstants.C_MassSMHiggs);
-  double diff3 = std::abs(std::sqrt(HiggsMasses[pos_h3])
-                          - SMConstants.C_MassSMHiggs);
+  double diff1 =
+      std::abs(std::sqrt(HiggsMasses[pos_h1]) - SMConstants.C_MassSMHiggs);
+  double diff2 =
+      std::abs(std::sqrt(HiggsMasses[pos_h2]) - SMConstants.C_MassSMHiggs);
+  double diff3 =
+      std::abs(std::sqrt(HiggsMasses[pos_h3]) - SMConstants.C_MassSMHiggs);
   if (diff1 < diff2 and diff1 < diff3)
   {
     pos_h_SM = pos_h1;
-    pos_h_l = pos_h2;
-    pos_h_H = pos_h3;
+    pos_h_l  = pos_h2;
+    pos_h_H  = pos_h3;
   }
   else if (diff2 < diff1 and diff2 < diff3)
   {
-    pos_h_l = pos_h1;
+    pos_h_l  = pos_h1;
     pos_h_SM = pos_h2;
-    pos_h_H = pos_h3;
+    pos_h_H  = pos_h3;
   }
   else
   {
-    pos_h_l = pos_h1;
-    pos_h_H = pos_h2;
+    pos_h_l  = pos_h1;
+    pos_h_H  = pos_h2;
     pos_h_SM = pos_h3;
   }
 
@@ -889,14 +931,14 @@ void Class_CxSM::AdjustRotationMatrix()
 
   // check neutral, CP-even submatrix
   if (HiggsRotFixed(pos_h1, pos_zeta1) < 0)
-    // h1 zeta1 (condition (1) above, R11 < 0)
+  // h1 zeta1 (condition (1) above, R11 < 0)
   {
     // if negative, flip sign of h1
     HiggsRotFixed.row(pos_h1) *= -1;
   }
 
   if (HiggsRotFixed(pos_h3, pos_zeta3) < 0)
-    // h3 zeta3 (condition (2) above, R33 < 0)
+  // h3 zeta3 (condition (2) above, R33 < 0)
   {
     // if negative, flip sign of h3
     HiggsRotFixed.row(pos_h3) *= -1;
@@ -917,7 +959,7 @@ void Class_CxSM::AdjustRotationMatrix()
   HiggsRotFixedNeutral(2, 2) = HiggsRotFixed(pos_h3, pos_zeta3);
 
   if (HiggsRotFixedNeutral.determinant() < 0)
-    // condition (3) above, det(R) < 0
+  // condition (3) above, det(R) < 0
   {
     // if negative, flip sign of h2
     HiggsRotFixed.row(pos_h2) *= -1;
@@ -951,7 +993,7 @@ void Class_CxSM::TripleHiggsCouplings()
     }
   }
 
-  std::vector<double> HiggsOrder(NHiggs);
+  std::vector<std::size_t> HiggsOrder(NHiggs);
   // mass order: Gp, Gm, G0, h1, h2, h3
   HiggsOrder[0] = pos_Gp;
   HiggsOrder[1] = pos_Gm;

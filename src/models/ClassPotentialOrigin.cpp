@@ -18,7 +18,7 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 using namespace Eigen;
@@ -975,9 +975,10 @@ bool Class_Potential_Origin::CheckRotationMatrix()
 
   double precision = 1e-10;
 
-  bool AbsDetIsOne   = almost_the_same(std::abs(mat.determinant()), 1.,
-                                       precision);
-  bool InvEqTrans = true;
+  if (!almost_the_same(std::abs(mat.determinant()), 1., precision))
+  {
+    return false;
+  }
 
   auto inv    = mat.inverse();
   auto transp = mat.transpose();
@@ -988,17 +989,12 @@ bool Class_Potential_Origin::CheckRotationMatrix()
     {
       if (!almost_the_same(inv(i, j), transp(i, j), precision))
       {
-        InvEqTrans = false;
-        break;
+        return false;
       }
     }
   }
 
-  if (AbsDetIsOne and InvEqTrans)
-  {
-    return true;
-  }
-  return false;
+  return true;
 }
 
 void Class_Potential_Origin::CalculatePhysicalCouplings()
@@ -3586,172 +3582,6 @@ bool Class_Potential_Origin::getUseIndexCol()
   return UseIndexCol;
 }
 
-void Class_Potential_Origin::CheckImplementation(
-    const int &WhichMinimizer) const
-{
-  using std::pow;
-
-  const std::string Pass = "Pass";
-  const std::string Fail = "Fail";
-
-  Logger::Write(LoggingLevel::Default,
-                "The tested Model is the " + ModelIDToString(Model));
-
-  std::vector<std::string> TestNames, TestResults;
-
-  TestNames.push_back("CT number/label match");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNumberOfCTParameters(*this)));
-
-  TestNames.push_back("VEV number/label match");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNumberOfVEVLabels(*this)));
-
-  TestNames.push_back("addLegendTemp number/label match");
-  TestResults.push_back(
-      ModelTests::TestResultsToString(ModelTests::CheckLegendTemp(*this)));
-
-  TestNames.push_back("addLegendTripleCouplings number/label match");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckNumberOfTripleCouplings(*this)));
-
-  TestNames.push_back("CKM matrix unitarity");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckCKMUnitarity(SMConstants)));
-
-  Logger::Write(LoggingLevel::Default,
-                "This function calculates the masses of the gauge bosons, "
-                "fermions and Higgs boson and compares them "
-                "with the parameters defined in SMparam.h.");
-
-  TestNames.push_back("Matching gauge boson masses with SMparam.h");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckGaugeBosonMasses(*this)));
-
-  auto FermionCheck = ModelTests::CheckFermionicMasses(*this);
-  TestNames.push_back("Matching lepton masses with SMparam.h");
-  TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.first));
-  TestNames.push_back("Matching quark masses with SMparam.h");
-  TestResults.push_back(ModelTests::TestResultsToString(FermionCheck.second));
-
-  TestNames.push_back("Correct EW Minimum");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckTreeLevelMin(*this, WhichMinimizer)));
-
-  TestNames.push_back("Tadpole relations fullfilled");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckTadpoleRelations(*this)));
-
-  TestNames.push_back("Matching Masses between NLO and tree-level");
-  TestResults.push_back(
-      ModelTests::TestResultsToString(ModelTests::CheckNLOMasses(*this)));
-
-  if (UseVTreeSimplified)
-  {
-    TestNames.push_back("Checking VTreeSimplified");
-    TestResults.push_back(ModelTests::TestResultsToString(
-        ModelTests::CheckVTreeSimplified(*this)));
-  }
-
-  if (UseVCounterSimplified)
-  {
-    TestNames.push_back("Checking VCounterSimplified");
-    TestResults.push_back(ModelTests::TestResultsToString(
-        ModelTests::CheckVCounterSimplified(*this)));
-  }
-
-  TestNames.push_back("Checking second derivative of CW+CT");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckCTConditionsSecondDerivative(*this)));
-
-  TestNames.push_back("Checking first derivative of CW+CT");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckCTConditionsFirstDerivative(*this)));
-
-  TestNames.push_back("Check symmetric properties of the scalar tensor Lij");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorScalarSecond(Curvature_Higgs_L2)));
-
-  TestNames.push_back("Check symmetric properties of the scalar tensor Lijk");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorScalarThird(Curvature_Higgs_L3)));
-
-  TestNames.push_back("Check symmetric properties of the scalar tensor Lijkl");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorScalarFourth(Curvature_Higgs_L4)));
-
-  TestNames.push_back(
-      "Check symmetric properties of the gauge tensor in the C2HDM");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorGauge(Curvature_Gauge_G2H2)));
-
-  TestNames.push_back(
-      "Check symmetric properties of the Lepton tensor in the C2HDM");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorLeptonsThird(Curvature_Lepton_F2H1)));
-
-  TestNames.push_back(
-      "Check symmetric properties of the mass Lepton tensor in the C2HDM");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorLeptons(Curvature_Lepton_F2)));
-
-  TestNames.push_back(
-      "Check symmetric properties of the Quark tensor in the C2HDM");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorQuarksThird(Curvature_Quark_F2H1)));
-
-  TestNames.push_back(
-      "Check symmetric properties of the mass Quark tensor in the C2HDM");
-  TestResults.push_back(ModelTests::TestResultsToString(
-      ModelTests::CheckSymmetricTensorQuarks(Curvature_Quark_F2)));
-
-  if (TestNames.size() != TestResults.size())
-  {
-    std::stringstream ss;
-    ss << "TestNames : " << std::endl << TestNames << std::endl;
-    ss << "TestResults : " << std::endl << TestResults << std::endl;
-    Logger::Write(LoggingLevel::Default, ss.str());
-    std::string errmsg{
-        "Mismatch between the number of labels for the tests and the results."};
-    errmsg += "TestNames.size() = " + std::to_string(TestNames.size());
-    errmsg += " TestResults.size() = " + std::to_string(TestResults.size());
-    throw std::runtime_error(errmsg);
-  }
-
-  std::size_t Passes{0};
-  for (const auto &el : TestResults)
-  {
-    if (el == Pass) Passes++;
-  }
-
-  std::stringstream ss;
-  ss << "\nTEST | Pass/Fail\n================================\n" << std::endl;
-  auto maxsize = TestNames.at(0).size();
-  for (const auto &el : TestNames)
-  {
-    if (el.size() > maxsize) maxsize = el.size();
-  }
-  maxsize += 5;
-  for (std::size_t i{0}; i < TestNames.size(); ++i)
-  {
-    ss << std::setw(maxsize) << std::left << TestNames.at(i) << "| "
-       << TestResults.at(i) << std::endl;
-  }
-
-  ss << Passes << " tests out of " << TestResults.size() << " passed.\n"
-     << std::endl;
-  if (Passes != TestResults.size())
-  {
-    ss << TestResults.size() - Passes
-       << " tests failed. Please check and try again." << std::endl;
-  }
-  else
-  {
-    ss << "You're good to go!\n" << std::endl;
-  }
-  Logger::Write(LoggingLevel::Default, ss.str());
-}
-
 void Class_Potential_Origin::FindSignSymmetries()
 {
   SignSymmetries.clear();
@@ -3812,7 +3642,8 @@ Class_Potential_Origin::initModel(std::string linestr)
 }
 
 std::vector<double>
-Class_Potential_Origin::initModel(const std::vector<double> &par)
+Class_Potential_Origin::initModel(const std::vector<double> &par,
+                                  const bool &adjust_rot_matrix)
 {
   std::vector<double> parCT(nParCT);
   resetbools();
@@ -3823,7 +3654,10 @@ Class_Potential_Origin::initModel(const std::vector<double> &par)
   CalculateDebye();
   CalculateDebyeGauge();
 
-  AdjustRotationMatrix();
+  if (adjust_rot_matrix)
+  {
+    AdjustRotationMatrix();
+  }
 
   parStored   = par;
   parCTStored = parCT;

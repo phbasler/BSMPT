@@ -12,7 +12,7 @@ using Approx = Catch::Approx;
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Potential_Origin
 #include <BSMPT/models/ClassPotentialR2HDM.h>
 #include <BSMPT/models/IncludeAllModels.h>
-#include <BSMPT/models/ModelTestfunctions.h>
+#include <BSMPT/models/modeltests/ModelTestfunctions.h>
 
 #include "R2HDM.h"
 
@@ -328,10 +328,24 @@ TEST_CASE("Checking triple higgs NLO couplings in the R2HDM", "[r2hdm]")
     {
       for (std::size_t k{0}; k < NHiggs; ++k)
       {
+        // INFO("Current Minimizer Set-up:\t" <<
+        // Minimizer::WhichMinimizerDefault); INFO("Failed at Tree-Coupling ("
+        //      << i << "," << j << "," << k << ")\tFound:\t"
+        //      << modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k)
+        //      << "\tExpected:\t" <<
+        //      Expected.CheckTripleTree.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsTreePhysical(i, j, k),
               Expected.CheckTripleTree.at(i).at(j).at(k));
+        // INFO("Failed at CT-Coupling ("
+        //      << i << "," << j << "," << k << ")\tFound:\t"
+        //      << modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k)
+        //      << "\tExpected:\t" << Expected.CheckTripleCT.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsCTPhysical(i, j, k),
               Expected.CheckTripleCT.at(i).at(j).at(k));
+        // INFO("Failed at CW-Coupling ("
+        //      << i << "," << j << "," << k << ")\tFound:\t"
+        //      << modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k)
+        //      << "\tExpected:\t" << Expected.CheckTripleCW.at(i).at(j).at(k));
         Check(modelPointer->get_TripleHiggsCorrectionsCWPhysical(i, j, k),
               Expected.CheckTripleCW.at(i).at(j).at(k));
       }

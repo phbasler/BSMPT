@@ -15,16 +15,12 @@
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/models/SMparam.h>
+#include <BSMPT/utility/settings.h>
 #include <iostream>
 #include <vector>
 
 namespace BSMPT
 {
-
-/**
- * @brief C_UseParwani Use the Parwani Method instead of Arnold-Espinosa
- */
-const bool C_UseParwani = false;
 
 /**
  * @brief C_PT Lower threshold to stop the EWPT calculation
@@ -1162,14 +1158,6 @@ public:
                          std::vector<double> &output) const = 0;
 
   /**
-   * Checks if the tensors are correctly implemented. For this the fermion,
-   * quark and gauge boson masses are calculated and printed next to the values
-   * defined in SMparah.h
-   */
-  void CheckImplementation(
-      const int &WhichMinimizer = Minimizer::WhichMinimizerDefault) const;
-
-  /**
    * Find all possible sign combinations of the vevs under which the potential
    * is invariant
    */
@@ -1189,6 +1177,8 @@ public:
    * Gets the parameter line as an Input and calls
    * resetbools, ReadAndSet, calc_CT, set_CT_Pot_Par,CalculateDebye and
    * CalculateDebyeGauge
+   * @param linestr parameter line
+   * @return pair of parameters and CTs
    */
   std::pair<std::vector<double>, std::vector<double>>
   initModel(std::string linestr);
@@ -1199,9 +1189,12 @@ public:
    * CalculateDebyeGauge
    * @param par Parameters to define the parameter point. Same input as in
    * set_gen()
+   * @param adjust_rot_matrix bool to determine whether rotation matrix shall be
+   * fixed to model conventions or not (to allow to check unphysical points)
    * @return Vector with the CT
    */
-  std::vector<double> initModel(const std::vector<double> &par);
+  std::vector<double> initModel(const std::vector<double> &par,
+                                const bool &adjust_rot_matrix = true);
 
   /**
    * @brief resetScale changes the MSBar scale to newScale

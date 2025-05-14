@@ -99,8 +99,8 @@ public:
   double R_Hh_1 = 0, R_Hh_2 = 0, R_Hh_3 = 0, R_Hl_1 = 0, R_Hl_2 = 0, R_Hl_3 = 0,
          R_Hsm_1 = 0, R_Hsm_2 = 0, R_Hsm_3 = 0;
 
-  int pos_G0, pos_G1, pos_G2, pos_H1, pos_H2, pos_h1, pos_h2, pos_h3;
-  int pos_h_SM, pos_h_l, pos_h_H;
+  std::size_t pos_G0, pos_Gp, pos_Gm, pos_Hp, pos_Hm, pos_h1, pos_h2, pos_h3;
+  std::size_t pos_h_SM, pos_h_l, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;

@@ -285,8 +285,8 @@ std::vector<double> Class_Template::calc_CT() const
 void Class_Template::AdjustRotationMatrix()
 {
   // Here you implement the rotation matrix convention of your model
-  // and define HiggsRotationMatrixEnsuredConvention, use then HiggsRotationMatrixEnsuredConvention in
-  // TripleHiggsCouplings
+  // and define HiggsRotationMatrixEnsuredConvention, use then
+  // HiggsRotationMatrixEnsuredConvention in TripleHiggsCouplings
 }
 
 void Class_Template::TripleHiggsCouplings()

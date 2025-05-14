@@ -9,6 +9,8 @@
 #include <BSMPT/utility/Logger.h>
 #include <BSMPT/utility/utility.h>
 
+#include <optional>
+
 namespace BSMPT
 {
 namespace Models
@@ -571,11 +573,11 @@ void Class_Potential_R2HDM::write() const
   HiggsMasses = HiggsMassesSquared(vevTree, 0);
 
   ss << "The mass spectrum is given by :\n"
-     << "m_{G^+}^2 = " << HiggsMasses[pos_G1] << " GeV^2 \n"
-     << "m_{G^-}^2 = " << HiggsMasses[pos_G2] << " GeV^2 \n"
+     << "m_{G^+}^2 = " << HiggsMasses[pos_Gp] << " GeV^2 \n"
+     << "m_{G^-}^2 = " << HiggsMasses[pos_Gm] << " GeV^2 \n"
      << "m_{G^0}^2 = " << HiggsMasses[pos_G0] << " GeV^2 \n"
-     << "m_{H^+} = " << std::sqrt(HiggsMasses[pos_H1]) << " GeV \n"
-     << "m_{H^-} = " << std::sqrt(HiggsMasses[pos_H2]) << " GeV \n"
+     << "m_{H^+} = " << std::sqrt(HiggsMasses[pos_Hp]) << " GeV \n"
+     << "m_{H^-} = " << std::sqrt(HiggsMasses[pos_Hm]) << " GeV \n"
      << "m_h = " << std::sqrt(HiggsMasses[pos_h]) << " GeV \n"
      << "m_H = " << std::sqrt(HiggsMasses[pos_H]) << " GeV \n"
      << "m_A = " << std::sqrt(HiggsMasses[pos_A]) << " GeV \n";
@@ -737,78 +739,129 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
     }
   }
 
-  // initialize position indices (new initialization for each point in multiline
-  // files)
-  pos_G1 = -1, pos_G2 = -1, pos_H1 = -1, pos_H2 = -1, pos_G0 = -1, pos_A = -1,
-  pos_H = -1, pos_h = -1;
+  std::vector<double> HiggsMasses = HiggsMassesSquared(vevTree, 0);
+  if (HiggsMasses.front() <= -ZeroThreshold)
+  {
+    std::stringstream ss;
+    ss.precision(std::numeric_limits<double>::max_digits10);
+    ss << "Warning, at least one negative mass squared in spectrum: "
+       << HiggsMasses.front() << std::endl;
+    Logger::Write(LoggingLevel::Default, ss.str());
+  }
 
   // interaction basis
   // rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2
-  int pos_rho1 = 0, pos_eta1 = 1, pos_rho2 = 2, pos_eta2 = 3, pos_zeta1 = 4,
-      pos_psi1 = 5, pos_zeta2 = 6, pos_psi2 = 7;
+  std::size_t pos_rho1 = 0, pos_eta1 = 1, pos_rho2 = 2, pos_eta2 = 3,
+              pos_zeta1 = 4, pos_psi1 = 5, pos_zeta2 = 6, pos_psi2 = 7;
+
+  // initialize position indices (new initialization for each point in multiline
+  // files)
+  std::optional<std::size_t> tpos_Gp, tpos_Gm, tpos_Hp, tpos_Hm, tpos_G0,
+                             tpos_A, tpos_H, tpos_h;
 
   // higgsbasis = {rho1, eta1, rho2, eta2, zeta1, psi1, zeta2, psi2}
   for (std::size_t i = 0; i < NHiggs;
        i++) // mass base index i corresponds to mass vector sorted in ascending
             // mass
   {
-    // charged submatrices
+    bool hasZeroMass = std::abs(HiggsMasses[i]) < ZeroThreshold;
+    // Charged submatrices
     if (std::abs(HiggsRot(i, pos_rho1)) + std::abs(HiggsRot(i, pos_rho2)) >
-        ZeroThreshold) // use that mGpm < mHpm
+        ZeroThreshold)
     {
-      if (pos_G1 == -1)
+      if (not tpos_Gp.has_value() and hasZeroMass)
       {
-        pos_G1 = i;
+        tpos_Gp = i;
+      }
+      else if (not tpos_Hp.has_value())
+      {
+        tpos_Hp = i;
       }
       else
       {
-        pos_H1 = i;
+        throw std::runtime_error("Error. Charged submatrix Gp/Hp mixing with "
+                                 "other components.");
       }
     }
     else if (std::abs(HiggsRot(i, pos_eta1)) + std::abs(HiggsRot(i, pos_eta2)) >
-        ZeroThreshold) // use that mGpm < mHpm
+             ZeroThreshold)
     {
-      if (pos_G2 == -1)
+      if (not tpos_Gm.has_value() and hasZeroMass)
       {
-        pos_G2 = i;
+        tpos_Gm = i;
+      }
+      else if (not tpos_Hm.has_value())
+      {
+        tpos_Hm = i;
       }
       else
       {
-        pos_H2 = i;
+        throw std::runtime_error("Error. Charged submatrix Gm/Hm mixing with "
+                                 "other components.");
       }
     }
-    else if (std::abs(HiggsRot(i, pos_zeta1)) + std::abs(HiggsRot(i, pos_zeta2)) >
-        ZeroThreshold) // use that mh < mH
+    // Neutral CP-even submatrix
+    else if (std::abs(HiggsRot(i, pos_zeta1)) +
+                 std::abs(HiggsRot(i, pos_zeta2)) >
+             ZeroThreshold) // use that mh < mH
     {
-      if (pos_h == -1)
+      if (not tpos_h.has_value())
       {
-        pos_h = i;
+        tpos_h = i;
+      }
+      else if (not tpos_H.has_value())
+      {
+        tpos_H = i;
       }
       else
       {
-        pos_H = i;
+        throw std::runtime_error("Error. Neutral CP-even submatrix mixing with"
+                                 " other components.");
       }
     }
+    // Neutral CP-odd submatrix
     else if (std::abs(HiggsRot(i, pos_psi1)) + std::abs(HiggsRot(i, pos_psi2)) >
-        ZeroThreshold) // use that 0 = mG0 < mA
+             ZeroThreshold)
     {
-      if (pos_G0 == -1)
+      if (not tpos_G0.has_value() and hasZeroMass)
       {
-        pos_G0 = i;
+        tpos_G0 = i;
+      }
+      else if (not tpos_A.has_value())
+      {
+        tpos_A = i;
       }
       else
       {
-        pos_A = i;
+        throw std::runtime_error("Error. Neutral CP-odd submatrix mixing with "
+                                 "other components.");
       }
+    }
+    else
+    {
+      throw std::runtime_error("Error. Invalid mixing matrix containing row "
+                               "with all zeroes.");
     }
   }
 
-  // check if all position indices are set
-  if (pos_G1 == -1 or pos_G2 == -1 or pos_H1 == -1 or pos_H2 == -1 or pos_G0 == -1 or
-      pos_A == -1 or pos_H == -1 or pos_h == -1)
+  // Sanity check if all position indices are set
+  if (not (tpos_Gp.has_value() and tpos_Gm.has_value() and tpos_Hp.has_value()
+           and tpos_Hm.has_value() and tpos_G0.has_value()
+           and tpos_A.has_value() and tpos_H.has_value()
+           and tpos_h.has_value())
+     )
   {
     throw std::runtime_error("Error. Not all position indices are set.");
   }
+
+  pos_Gp = tpos_Gp.value();
+  pos_Gm = tpos_Gm.value();
+  pos_Hp = tpos_Hp.value();
+  pos_Hm = tpos_Hm.value();
+  pos_G0 = tpos_G0.value();
+  pos_A = tpos_A.value();
+  pos_H = tpos_H.value();
+  pos_h = tpos_h.value();
 
   // check if all other elements of rotation matrix are zero
   bool zero_element = false;
@@ -816,16 +869,14 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
   {
     for (std::size_t j = 0; j < NHiggs; j++)
     {
-      int ii = int(i);
-      int jj = int(j);
-      if (not((jj == pos_rho1 and (ii == pos_G1 or ii == pos_H1)) or
-              (jj == pos_eta1 and (ii == pos_G2 or ii == pos_H2)) or
-              (jj == pos_zeta1 and (ii == pos_h or ii == pos_H)) or
-              (jj == pos_psi1 and (ii == pos_G0 or ii == pos_A)) or
-              (jj == pos_rho2 and (ii == pos_G1 or ii == pos_H1)) or
-              (jj == pos_eta2 and (ii == pos_G2 or ii == pos_H2)) or
-              (jj == pos_zeta2 and (ii == pos_h or ii == pos_H)) or
-              (jj == pos_psi2 and (ii == pos_G0 or ii == pos_A))))
+      if (not((j == pos_rho1 and (i == pos_Gp or i == pos_Hp)) or
+              (j == pos_eta1 and (i == pos_Gm or i == pos_Hm)) or
+              (j == pos_zeta1 and (i == pos_h or i == pos_H)) or
+              (j == pos_psi1 and (i == pos_G0 or i == pos_A)) or
+              (j == pos_rho2 and (i == pos_Gp or i == pos_Hp)) or
+              (j == pos_eta2 and (i == pos_Gm or i == pos_Hm)) or
+              (j == pos_zeta2 and (i == pos_h or i == pos_H)) or
+              (j == pos_psi2 and (i == pos_G0 or i == pos_A))))
       {
         zero_element = true;
       }
@@ -838,26 +889,21 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
   }
 
   // Determine the additional indices for the SM-like
-  // and lighter/heavier Higgses
-  pos_h_SM = -1, pos_h_H = -1;
-
-  std::vector<double> HiggsMasses;
-  HiggsMasses = HiggsMassesSquared(vevTree, 0);
-
+  // and lighter/heavier Higgses.
   // Due to the masses being ordered, we will always have
   //  HiggsMasses[pos_h] <= HiggsMasses[pos_H]
-  double diff1 = std::abs(std::sqrt(HiggsMasses[pos_h])
-                          - SMConstants.C_MassSMHiggs);
-  double diff2 = std::abs(std::sqrt(HiggsMasses[pos_H])
-                          - SMConstants.C_MassSMHiggs);
+  double diff1 =
+      std::abs(std::sqrt(HiggsMasses[pos_h]) - SMConstants.C_MassSMHiggs);
+  double diff2 =
+      std::abs(std::sqrt(HiggsMasses[pos_H]) - SMConstants.C_MassSMHiggs);
   if (diff1 < diff2)
   {
     pos_h_SM = pos_h;
-    pos_h_H = pos_H;
+    pos_h_H  = pos_H;
   }
   else
   {
-    pos_h_H = pos_h;
+    pos_h_H  = pos_h;
     pos_h_SM = pos_H;
   }
 
@@ -868,21 +914,21 @@ void Class_Potential_R2HDM::AdjustRotationMatrix()
   }
 
   // charged submatrix
-  if (HiggsRotFixed(pos_G1, pos_rho1) < 0) // G1 rho1 (+ cos(beta))
+  if (HiggsRotFixed(pos_Gp, pos_rho1) < 0) // Gp rho1 (+ cos(beta))
   {
-    HiggsRotFixed.row(pos_G1) *= -1;
+    HiggsRotFixed.row(pos_Gp) *= -1;
   }
-  if (HiggsRotFixed(pos_G2, pos_eta1) < 0) // G2 eta1 (+ cos(beta))
+  if (HiggsRotFixed(pos_Gm, pos_eta1) < 0) // Gm eta1 (+ cos(beta))
   {
-    HiggsRotFixed.row(pos_G2) *= -1;
+    HiggsRotFixed.row(pos_Gm) *= -1;
   }
-  if (HiggsRotFixed(pos_H1, pos_rho2) < 0) // H1 rho2 (+ cos(beta))
+  if (HiggsRotFixed(pos_Hp, pos_rho2) < 0) // Hp rho2 (+ cos(beta))
   {
-    HiggsRotFixed.row(pos_H1) *= -1;
+    HiggsRotFixed.row(pos_Hp) *= -1;
   }
-  if (HiggsRotFixed(pos_H2, pos_eta2) < 0) // H2 eta2 (+ cos(beta))
+  if (HiggsRotFixed(pos_Hm, pos_eta2) < 0) // Hm eta2 (+ cos(beta))
   {
-    HiggsRotFixed.row(pos_H2) *= -1;
+    HiggsRotFixed.row(pos_Hm) *= -1;
   }
 
   // check neutral, CP-odd submatrix
@@ -944,11 +990,11 @@ void Class_Potential_R2HDM::TripleHiggsCouplings()
     }
   }
 
-  std::vector<double> HiggsOrder(NHiggs);
-  HiggsOrder[0] = pos_G1;
-  HiggsOrder[1] = pos_G2;
-  HiggsOrder[2] = pos_H1;
-  HiggsOrder[3] = pos_H2;
+  std::vector<std::size_t> HiggsOrder(NHiggs);
+  HiggsOrder[0] = pos_Gp;
+  HiggsOrder[1] = pos_Gm;
+  HiggsOrder[2] = pos_Hp;
+  HiggsOrder[3] = pos_Hm;
   HiggsOrder[4] = pos_G0;
   HiggsOrder[5] = pos_A;
   HiggsOrder[6] = pos_h;

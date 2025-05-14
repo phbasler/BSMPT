@@ -6,23 +6,16 @@
 
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/utility.h>
+#include <complex>
 #include <ostream>
 #include <sstream>
 #include <string>
-#include <complex>
 
 /**
  * @file
  */
 namespace BSMPT
 {
-
-std::ostream &operator<<(std::ostream &os, const ModelID::ModelIDs &Model)
-{
-  static auto IMN = BSMPT::ModelID::InvertModelNames();
-  os << IMN.at(Model);
-  return os;
-}
 
 std::vector<std::string> split(const std::string &str, char delimiter)
 {
@@ -35,13 +28,6 @@ std::vector<std::string> split(const std::string &str, char delimiter)
     res.push_back(token);
   }
   return res;
-}
-
-std::string ModelIDToString(const ModelID::ModelIDs &Model)
-{
-  std::stringstream ss;
-  ss << Model;
-  return ss.str();
 }
 
 bool StringStartsWith(const std::string &str, const std::string &prefix)
@@ -143,14 +129,12 @@ bool almost_the_same(const double &a,
 }
 
 bool almost_the_same(const std::complex<double> &a,
-		     const std::complex<double> &b,
+                     const std::complex<double> &b,
                      const double &rel_precision,
-		     const double &num_zero)
+                     const double &num_zero)
 {
-  bool real_part = almost_the_same(a.real(), b.real(), rel_precision,
-		                   num_zero);
-  bool imag_part = almost_the_same(a.imag(), b.imag(), rel_precision,
-		                   num_zero);
+  bool real_part = almost_the_same(a.real(), b.real(), rel_precision, num_zero);
+  bool imag_part = almost_the_same(a.imag(), b.imag(), rel_precision, num_zero);
   return (real_part and imag_part);
 }
 
