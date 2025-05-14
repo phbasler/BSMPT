@@ -1425,52 +1425,6 @@ Create1DimGrid(const std::vector<double> &min_start,
   return res_vec;
 }
 
-bool almost_the_same(const double &a,
-                     const double &b,
-                     const double &rel_precision,
-                     const double &num_zero)
-{
-  if (std::abs(a) < num_zero and std::abs(b) < num_zero)
-  {
-    return true;
-  }
-  return std::abs(a - b) < std::abs(a + b) / 2 * rel_precision;
-}
-
-bool almost_the_same(const std::vector<double> &a,
-                     const std::vector<double> &b,
-                     const bool &allow_for_sign_flip,
-                     const double &rel_precision,
-                     const double &num_zero)
-{
-  if (a.size() != b.size())
-  {
-    throw std::runtime_error("Error. Vectors must have the same size.");
-  }
-  int count_true = 0;
-  for (std::size_t i = 0; i < a.size(); i++)
-  {
-    if (allow_for_sign_flip)
-    {
-      count_true +=
-          int(almost_the_same(a.at(i), b.at(i), rel_precision, num_zero));
-    }
-    else
-    {
-      count_true += int(almost_the_same(
-          std::abs(a.at(i)), std::abs(b.at(i)), rel_precision, num_zero));
-    }
-  }
-  if (std::size_t(count_true) == a.size())
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-
 Phase::Phase()
 {
 }

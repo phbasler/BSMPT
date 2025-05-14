@@ -63,7 +63,7 @@ class BSMPT(ConanFile):
             self.requires("boost/1.84.0", transitive_headers=True, transitive_libs=True)
 
         if self.options.UseNLopt:
-            self.requires("nlopt/2.7.1", transitive_headers=True, transitive_libs=True)
+            self.requires("nlopt/2.9.1", transitive_headers=True, transitive_libs=True)
 
         if self.options.UseLibCMAES:
             self.requires(
