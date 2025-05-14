@@ -49,8 +49,8 @@ public:
 
   double dmsq, dlambda, dmSsq, dlambdaS, dlambdaHS, dT1, dT2, dT3, dT4, dT5;
 
-  int pos_G1, pos_G2, pos_G0, pos_h, pos_H;
-  int pos_h_SM, pos_h_H;
+  std::size_t pos_Gp, pos_Gm, pos_G0, pos_h, pos_H;
+  std::size_t pos_h_SM, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
