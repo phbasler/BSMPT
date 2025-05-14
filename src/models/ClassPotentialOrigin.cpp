@@ -975,9 +975,10 @@ bool Class_Potential_Origin::CheckRotationMatrix()
 
   double precision = 1e-10;
 
-  bool AbsDetIsOne =
-      almost_the_same(std::abs(mat.determinant()), 1., precision);
-  bool InvEqTrans = true;
+  if (!almost_the_same(std::abs(mat.determinant()), 1., precision))
+  {
+    return false;
+  }
 
   auto inv    = mat.inverse();
   auto transp = mat.transpose();
@@ -988,17 +989,12 @@ bool Class_Potential_Origin::CheckRotationMatrix()
     {
       if (!almost_the_same(inv(i, j), transp(i, j), precision))
       {
-        InvEqTrans = false;
-        break;
+        return false;
       }
     }
   }
 
-  if (AbsDetIsOne and InvEqTrans)
-  {
-    return true;
-  }
-  return false;
+  return true;
 }
 
 void Class_Potential_Origin::CalculatePhysicalCouplings()

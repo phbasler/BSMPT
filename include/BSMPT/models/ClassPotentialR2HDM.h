@@ -90,8 +90,8 @@ public:
   int Type       = 0;
   double CTempC1 = 0, CTempC2 = 0, CTempCS = 0;
 
-  int pos_G1, pos_G2, pos_H1, pos_H2, pos_G0, pos_A, pos_H, pos_h;
-  int pos_h_SM, pos_h_H;
+  std::size_t pos_Gp, pos_Gm, pos_Hp, pos_Hm, pos_G0, pos_A, pos_H, pos_h;
+  std::size_t pos_h_SM, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
