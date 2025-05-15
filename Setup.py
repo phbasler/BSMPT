@@ -120,7 +120,6 @@ def get_compiler_version(compiler: Compiler):
         semver_string = subprocess.check_output(
             "gcc -dumpversion".split(), encoding="UTF-8"
         ).split("\n")[0]
-        print("call response|", semver_string, "|end")
         return semver_string.partition(".")[0]
     elif sys.platform == "darwin" or compiler == Compiler.clang:
         semver_string = subprocess.check_output(
