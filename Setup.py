@@ -48,8 +48,6 @@ def get_compiler(compiler: Compiler):
         compilerString += "-clang-"
     compilerString += get_compiler_version(compiler)
 
-    print("Found compiler ", compilerString)
-
     return compilerString
 
 
