@@ -117,16 +117,14 @@ def check_profile(profile):
 
 def get_compiler_version(compiler: Compiler):
     if sys.platform == "linux" and compiler != Compiler.clang:
-        version_response = subprocess.check_output(
+        semver_string = subprocess.check_output(
             "gcc -dumpversion".split(), encoding="UTF-8"
-        ).partition("\n")[0]
-        semver_string = version_response[version_response.rfind(" ") + 1 :]
+        )
         return semver_string.partition(".")[0]
     elif sys.platform == "darwin" or compiler == Compiler.clang:
-        version_response = subprocess.check_output(
+        semver_string = subprocess.check_output(
             "clang -dumpversion".split(), encoding="UTF-8"
-        ).partition("\n")[0]
-        semver_string = version_response[version_response.rfind("version") + 8 :]
+        )
         return semver_string.partition(".")[0]
     return ""
 
