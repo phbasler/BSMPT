@@ -135,7 +135,9 @@ try
                        args.CheckNLOStability,
                        args.WhichMinimizer,
                        args.UseMultithreading,
-                       false};
+                       false,
+                       TransitionTemperature::Percolation,
+                       1};
 
       TransitionTracer trans(input);
 

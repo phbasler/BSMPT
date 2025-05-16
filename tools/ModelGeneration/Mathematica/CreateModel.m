@@ -11,7 +11,7 @@ Off[Part::partd]
 (*Helper functions*)
 
 
-ToC[x_]:=StringReplace[ToString[CForm[x//HoldForm]],{"Power"->"pow", "vev0" -> "SMConstants.C_vev0","Sqrt"->"sqrt"}]
+ToC[x_]:=StringReplace[ToString[CForm[x//HoldForm]],{"Power"->"pow", "vev0" -> "SMConstants.C_vev0", "Sqrt"->"sqrt", "Sin"->"sin", "Cos"->"cos", "Tan"->"tan", "\""->""}]
 RemoveDuplicates[list__] := Cases[Tally[list], {x_, 1} :> x]
 
 
@@ -87,9 +87,9 @@ InsertCMakeLists[name_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/CMakeLists.txt";
 file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
 If[MemberQ[file,"    ${header_path}/"<> ToString[name] <>".h"] || MemberQ[file,"    ClassPotential"<> ToString[name] <>".cpp"],Print["Model is already in CMakeList.txt"];Return[]];
-indexheader = Position[file, "set(header_path \"${BSMPT_SOURCE_DIR}/include/BSMPT/models\")"][[1,1]]+1;
+indexheader = Position[file, "set(header_path \"${BSMPT_SOURCE_DIR}/${suffix}\")"][[1,1]]+1;
 indexsrc = Position[file, "set(src"][[1,1]];
-indexaddlibrary = Position[file, "add_library(Models ${header} ${src})"][[1,1]];
+indexaddlibrary = Position[file, "add_library(Models STATIC ${header} ${src})"][[1,1]];
 before = file[[;;indexheader]];
 coreheader = Insert[file[[indexheader+1;; indexsrc-1]],"    ${header_path}/ClassPotential" <> ToString[name] <> ".h",-3];
 middlecore = file[[indexsrc;;indexsrc]];
@@ -100,7 +100,7 @@ Export[filename, file, "Table"];]
 
 
 InsertIncludeAllModelsHeader[name_] := Block[{},
-filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/IncludeAllModels.h";
+filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/utility/ModelIDs.h";
 file = FromCharacterCode[ToCharacterCode[ReadList[filename, "String",NullRecords->True]], "UTF-8"];
 If[MemberQ[file,"  " <> ToUpperCase[ToString[name]] <> ","] || MemberQ[file,"    {\"" <> ToLowerCase[ToString[name]] <> "\", ModelIDs::"<> ToUpperCase[ToString[name]] <>"},"],Print["Model is already in IncludeAllModels.h"];Return[]];
 indexheader = Position[file, "  // DO NOT EDIT the part below"][[1,1]];
@@ -560,7 +560,7 @@ Class_Potential_"<>name<>"::VTreeSimplified(const std::vector<double> &v) const
 {
   if (not UseVTreeSimplified) return 0;
   double res = 0;
-  res = " <> ToC[Simplify[VHiggs/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0,v[[i-1]]],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
+  res = " <> ToC[Simplify[VHiggs/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0, "v[" <> ToString[i-1]<>"]"],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
   
   return res;
 }
@@ -570,7 +570,7 @@ double Class_Potential_"<>name<>"::VCounterSimplified(
 {
   if (not UseVTreeSimplified) return 0;
   double res = 0;
-  res = " <> ToC[Simplify[VCT/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0,v[[i-1]]],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
+  res = " <> ToC[Simplify[VCT/.Thread[higgsbase->Table[If[PossibleZeroQ[higgsvevFiniteTemp[[i]]],0, "v[" <> ToString[i-1]<>"]"],{i,Length[higgsvevFiniteTemp]}]]]] <> ";
   
   return res;
 }
@@ -592,7 +592,7 @@ CreateExamplePoint[name_,InputParameters_,InputParametersExample_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
 file = {Prepend[InputParameters,Null],{1,Sequence@@InputParametersExample}};
 fileTest = FileNames["Test",Nest[ParentDirectory, NotebookDirectory[], 3]<>"/build/*/bin"][[1]]; 
-Print["To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
+WriteString[$Output,"To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
 Export[filename, file, "Table"];]
 
 
