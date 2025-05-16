@@ -14,7 +14,6 @@ jobs:
     if: github.event.pull_request.merged == true && github.base_ref == 'bump'
     runs-on: ubuntu-latest
     env:
-      LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
   
     steps:
       - uses: actions/checkout@v4
@@ -69,5 +68,6 @@ jobs:
 
       - name: Commit changes
         run: |
+          # Push version bump
           git commit -am "Version bumped"
           git push
