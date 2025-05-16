@@ -11,16 +11,14 @@ concurrency:
  
 jobs:
   bump:
-    if: github.event.pull_request.merged == true && github.base_ref == 'bump'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'bump'
     runs-on: ubuntu-latest
   
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.head_ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-   
+          ref: ${{ github.event.pull_request.base.ref }}
 
       - name: Determine bump type
         id: determine_bump
@@ -39,6 +37,9 @@ jobs:
           README="README.md"
           CMAKE="CMakeLists.txt"
           prefix="Program: BSMPT version "
+
+          ls
+          cat ${README}
 
           OLD_VERSION=$(grep --color=never "${prefix}" "${README}" | sed -e "s/${prefix}//g" | tr -d '\r')
 
@@ -68,7 +69,7 @@ jobs:
           git config user.email "<>"
 
       - name: Commit changes
-        if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
         run: |
+          # Push version bump
           git commit -am "Version bumped"
           git push
