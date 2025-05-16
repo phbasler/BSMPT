@@ -20,9 +20,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.base_ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-   
+          ref: ${{ github.event.pull_request.base.ref }}
 
       - name: Determine bump type
         id: determine_bump
