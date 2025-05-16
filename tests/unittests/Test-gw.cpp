@@ -1083,7 +1083,7 @@ TEST_CASE("Test for SO(3)", "[gw]")
   const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::CXSM, SMConstants);
-  modelPointer->initModel(example_point_CXSM);
+  modelPointer->initModel(example_point_CXSM, false);
   std::shared_ptr<MinimumTracer> MinTracer(
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
   MinTracer->FindFlatDirections();
@@ -1106,7 +1106,7 @@ TEST_CASE("Test for EW symmetry restoration BP1", "[gw]")
   const auto SMConstants = GetSMConstants();
   std::shared_ptr<BSMPT::Class_Potential_Origin> modelPointer =
       ModelID::FChoose(ModelID::ModelIDs::R2HDM, SMConstants);
-  modelPointer->initModel(example_point_R2HDM);
+  modelPointer->initModel(example_point_R2HDM, false);
   std::shared_ptr<MinimumTracer> MinTracer(
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
   REQUIRE(MinTracer->IsThereEWSymmetryRestoration() == -1);

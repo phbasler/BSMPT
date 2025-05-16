@@ -178,10 +178,10 @@ protected:
    */
   bool SetCurvatureDone = false;
   /**
-   * @brief CalcCouplingsdone Used to check if CalculatePhysicalCouplings has
+   * @brief CalcCouplingsDone Used to check if CalculatePhysicalCouplings has
    * already been called
    */
-  bool CalcCouplingsdone = false;
+  bool CalcCouplingsDone = false;
   /**
    * @brief CalculatedTripleCopulings Used to check if TripleHiggsCouplings has
    * already been called
@@ -283,6 +283,11 @@ protected:
    * tree-level Vacuum
    */
   std::vector<std::vector<double>> HiggsRotationMatrix;
+  /**
+   * Storage of the model-specific Higgs rotation matrix for the Higgs mass
+   * matrix at the tree-level Vacuum
+   */
+  std::vector<std::vector<double>> HiggsRotationMatrixEnsuredConvention;
   /**
    * @brief Couplings_Higgs_Quartic Stores the quartic Higgs couplings in the
    * mass base
@@ -966,6 +971,14 @@ public:
   Eigen::MatrixXcd LeptonMassMatrix(const std::vector<double> &v) const;
 
   /**
+   * Ensures the correct rotation matrix convention
+   */
+  virtual void AdjustRotationMatrix() = 0;
+  /**
+   * Checks whether rotation matrix is properly set after implying conventions
+   */
+  bool CheckRotationMatrix();
+  /**
    * Calculates the triple Higgs couplings at NLO in the mass basis.
    *
    * Use the vector TripleHiggsCorrectionsCWPhysical to save your couplings and
@@ -1164,6 +1177,8 @@ public:
    * Gets the parameter line as an Input and calls
    * resetbools, ReadAndSet, calc_CT, set_CT_Pot_Par,CalculateDebye and
    * CalculateDebyeGauge
+   * @param linestr parameter line
+   * @return pair of parameters and CTs
    */
   std::pair<std::vector<double>, std::vector<double>>
   initModel(std::string linestr);
@@ -1174,9 +1189,12 @@ public:
    * CalculateDebyeGauge
    * @param par Parameters to define the parameter point. Same input as in
    * set_gen()
+   * @param adjust_rot_matrix bool to determine whether rotation matrix shall be
+   * fixed to model conventions or not (to allow to check unphysical points)
    * @return Vector with the CT
    */
-  std::vector<double> initModel(const std::vector<double> &par);
+  std::vector<double> initModel(const std::vector<double> &par,
+                                const bool &adjust_rot_matrix = true);
 
   /**
    * @brief resetScale changes the MSBar scale to newScale
