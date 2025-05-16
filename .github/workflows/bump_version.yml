@@ -38,9 +38,6 @@ jobs:
           CMAKE="CMakeLists.txt"
           prefix="Program: BSMPT version "
 
-          ls
-          cat ${README}
-
           OLD_VERSION=$(grep --color=never "${prefix}" "${README}" | sed -e "s/${prefix}//g" | tr -d '\r')
 
           IFS='.' read -r MAJOR MINOR PATCH <<< "$OLD_VERSION"
