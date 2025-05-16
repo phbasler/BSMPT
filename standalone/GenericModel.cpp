@@ -145,8 +145,8 @@ int main()
       0,                                  /* CheckEWSymmetryRestoration*/
       0,                                  /* CheckNLOStability*/
       WhichMinimizerDefault,              /* WhichMinimizer*/
-      false,                              /* GW calculation*/
-      true,                               /* gw_calculation */
+      false,                              /* use multithreading */
+      true,                               /* gw calculation */
       TransitionTemperature::Percolation, /* WhichTransitionTemperature */
       1};                                 /* UserDefined_PNLO_scaling */
 
