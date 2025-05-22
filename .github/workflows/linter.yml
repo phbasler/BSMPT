@@ -46,7 +46,7 @@ jobs:
       - name: Define base git diff args
         id: git-diff-args
         run: |
-          echo "args=base_repo/${{ github.event.pull_request.base.ref }}..HEAD" >> $GITHUB_OUTPUT
+          echo "args=origin/${{ github.head_ref }}..HEAD" >> $GITHUB_OUTPUT
           
       - name: Apply clang-format on changed files
         run: |
