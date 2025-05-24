@@ -98,6 +98,10 @@ public:
   double CTempC1 = 0, CTempC2 = 0, CTempCS = 0;
   double R_Hh_1 = 0, R_Hh_2 = 0, R_Hh_3 = 0, R_Hl_1 = 0, R_Hl_2 = 0, R_Hl_3 = 0,
          R_Hsm_1 = 0, R_Hsm_2 = 0, R_Hsm_3 = 0;
+
+  std::size_t pos_G0, pos_Gp, pos_Gm, pos_Hp, pos_Hm, pos_h1, pos_h2, pos_h3;
+  std::size_t pos_h_SM, pos_h_l, pos_h_H;
+
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
@@ -121,6 +125,7 @@ public:
   void set_CT_Pot_Par(const std::vector<double> &par) override;
   void write() const override;
 
+  void AdjustRotationMatrix() override;
   void TripleHiggsCouplings() override;
   std::vector<double> calc_CT() const override;
 

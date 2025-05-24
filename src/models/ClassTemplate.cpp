@@ -245,7 +245,7 @@ std::vector<double> Class_Template::calc_CT() const
     retmes += " was called before SetCurvatureArrays()!\n";
     throw std::runtime_error(retmes);
   }
-  if (!CalcCouplingsdone)
+  if (!CalcCouplingsDone)
   {
     std::string retmes = __func__;
     retmes += " was called before CalculatePhysicalCouplings()!\n";
@@ -279,10 +279,23 @@ std::vector<double> Class_Template::calc_CT() const
   return parCT;
 }
 
+/**
+ * Ensures the correct rotation matrix convention
+ */
+void Class_Template::AdjustRotationMatrix()
+{
+  // Here you implement the rotation matrix convention of your model
+  // and define HiggsRotationMatrixEnsuredConvention, use then
+  // HiggsRotationMatrixEnsuredConvention in TripleHiggsCouplings
+}
+
 void Class_Template::TripleHiggsCouplings()
 {
   if (!SetCurvatureDone) SetCurvatureArrays();
-  if (!CalcCouplingsdone) CalculatePhysicalCouplings();
+  if (!CalcCouplingsDone) CalculatePhysicalCouplings();
+
+  if (CalculatedTripleCopulings) return;
+  CalculatedTripleCopulings = true;
 
   std::vector<double> HiggsOrder(NHiggs);
   // Here you have to set the vector HiggsOrder. By telling e.g. HiggsOrder[0] =
