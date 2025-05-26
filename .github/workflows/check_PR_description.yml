@@ -34,5 +34,6 @@ jobs:
               if [[ $((major + minor + patch + nobump)) -eq 1 ]]; then
                 echo "Exactly one option selected."
               else
-                echo "Invalid number of options selected."
+                echo "Invalid options selected."
+                exit 1
               fi 
