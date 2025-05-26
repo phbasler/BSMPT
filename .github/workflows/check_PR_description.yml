@@ -19,6 +19,7 @@ jobs:
         run: echo The body of your PR is $PRBODY
       - name : Deduce bump mode
         run: |
+              PRBODY=${{ github.event.pull_request.body }}
               echo "----- PRBODY DEBUG START -----"
               echo $PRBODY | cat -vte
               echo "----- PRBODY DEBUG END -------"
