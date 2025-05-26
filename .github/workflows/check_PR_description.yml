@@ -20,10 +20,12 @@ jobs:
               echo "----- PRBODY DEBUG START -----"
               echo $PRBODY_CLEAN | cat -vte
               echo "----- PRBODY DEBUG END -------"
-              major=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Break \(major\)" | wc -l)
-              minor=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Feature \(minor\)" | wc -l)
-              patch=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Bug fix \(patch\)" | wc -l)
-              nobump=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] No source changes \(no version change\)" | wc -l)
+              
+              major=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Break \(major\)" | wc -l)
+              minor=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Feature \(minor\)" | wc -l)
+              patch=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Bug fix \(patch\)" | wc -l)
+              nobump=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*No source changes \(no version change\)" | wc -l)
+
   
               echo $major
               echo $minor
