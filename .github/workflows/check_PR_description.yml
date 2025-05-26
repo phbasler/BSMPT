@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-      - name : Print Body of PR
+      - name : Get Body of PR
         env:
             PRBODY: ${{ github.event.pull_request.body }}
         run: echo The body of your PR is $PRBODY
       - name : Deduce bump mode
         run: |
-              major=$(echo "$PRBODY" | grep -i -e "\[x] Break (major)" | wc -l)
-              minor=$(echo "$PRBODY" | grep -i -e "\[x] Feature (minor)" | wc -l)
-              patch=$(echo "$PRBODY" | grep -i -e "\[x] Bug fix (patch)" | wc -l)
-              nobump=$(echo "$PRBODY" | grep -i -e "\[x] No source changes (no version change)" | wc -l)
+              major=$(echo "$PRBODY" | grep -i -e "\[x\] Break (major)" | wc -l)
+              minor=$(echo "$PRBODY" | grep -i -e "\[x\] Feature (minor)" | wc -l)
+              patch=$(echo "$PRBODY" | grep -i -e "\[x\] Bug fix (patch)" | wc -l)
+              nobump=$(echo "$PRBODY" | grep -i -e "\[x\] No source changes (no version change)" | wc -l)
   
               echo $major
               echo $minor
