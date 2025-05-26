@@ -15,5 +15,24 @@ jobs:
     steps:
       - name : Print Body of PR
         env:
-            TITLE: ${{ github.event.pull_request.body }}
-        run: echo The Title of your PR is $TITLE
+            PRBODY: ${{ github.event.pull_request.body }}
+        run: echo The body of your PR is $PRBODY
+      - name : Deduce bump mode
+        run:
+            major=$(echo "$PR" | grep -i -e "\[x] Break (major)" | wc -l)
+            minor=$(echo "$PR" | grep -i -e "\[x] Feature (minor)" | wc -l)
+            patch=$(echo "$PR" | grep -i -e "\[x] Bug fix (patch)" | wc -l)
+            nobump=$(echo "$PR" | grep -i -e "\[x] No source changes (no version change)" | wc -l)
+
+            echo $major
+            echo $minor
+            echo $patch
+            echo $nobump
+
+            echo $((major + minor + patch + nobump)) 
+
+            if [[ $((major + minor + patch + nobump)) -eq 1 ]]; then
+              echo "Exactly one option selected."
+            else
+              echo "Invalid number of options selected."
+            fi 
