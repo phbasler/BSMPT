@@ -18,7 +18,7 @@ jobs:
         run: |
               PRBODY_CLEAN=$(echo "$PRBODY" | tr -d '\r')
               echo "----- PRBODY DEBUG START -----"
-              echo $PRBODY | cat -vte
+              echo $PRBODY_CLEAN | cat -vte
               echo "----- PRBODY DEBUG END -------"
               major=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Break \(major\)" | wc -l)
               minor=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Feature \(minor\)" | wc -l)
