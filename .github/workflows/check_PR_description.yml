@@ -16,5 +16,5 @@ jobs:
     steps:
       - name : Print Body of PR
         env:
-            TITLE: ${{ github.event.pull_request.body }}
+            TITLE: ${{ github.event.pull_request.title }}
         run: echo The Title of your PR is $TITLE
