@@ -14,8 +14,7 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-      steps:
-        - name : Print body of PR
-          env:
-              TITLE: ${{ github.event.pull_request.body }}
-          run: echo The Title of your PR is $TITLE
+      - name : Print Body of PR
+        env:
+            TITLE: ${{ github.event.pull_request.body }}
+        run: echo The Title of your PR is $TITLE
