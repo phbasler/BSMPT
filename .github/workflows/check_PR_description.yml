@@ -1,0 +1,21 @@
+name: Check description
+
+on:
+  push:
+  pull_request:
+   types: [opened, synchronize]
+     
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }} 
+    cancel-in-progress: true
+ 
+jobs:
+  print_title_of_pr:
+    runs-on: ubuntu-latest
+  
+    steps:
+      steps:
+        - name : Print body of PR
+          env:
+              TITLE: ${{ github.event.pull_request.body }}
+          run: echo The Title of your PR is $TITLE
