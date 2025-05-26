@@ -16,13 +16,14 @@ jobs:
     steps:
       - name : Deduce bump mode
         run: |
+              PRBODY_CLEAN=$(echo "$PRBODY" | tr -d '\r')
               echo "----- PRBODY DEBUG START -----"
               echo $PRBODY | cat -vte
               echo "----- PRBODY DEBUG END -------"
-              major=$(echo "$PRBODY" | grep -i -e "\[x\] Break \(major\)" | wc -l)
-              minor=$(echo "$PRBODY" | grep -i -e "\[x\] Feature \(minor\)" | wc -l)
-              patch=$(echo "$PRBODY" | grep -i -e "\[x\] Bug fix \(patch\)" | wc -l)
-              nobump=$(echo "$PRBODY" | grep -i -e "\[x\] No source changes \(no version change\)" | wc -l)
+              major=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Break \(major\)" | wc -l)
+              minor=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Feature \(minor\)" | wc -l)
+              patch=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] Bug fix \(patch\)" | wc -l)
+              nobump=$(echo "$PRBODY_CLEAN" | grep -i -e "\[x\] No source changes \(no version change\)" | wc -l)
   
               echo $major
               echo $minor
