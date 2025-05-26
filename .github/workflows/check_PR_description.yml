@@ -19,10 +19,13 @@ jobs:
         run: echo The body of your PR is $PRBODY
       - name : Deduce bump mode
         run: |
-              major=$(echo "$PRBODY" | grep -iE "^\s*-\s*\[x\]\s*Break \(major\)" | wc -l)
-              minor=$(echo "$PRBODY" | grep -iE "^\s*-\s*\[x\]\s*Feature \(minor\)" | wc -l)
-              patch=$(echo "$PRBODY" | grep -iE "^\s*-\s*\[x\]\s*Bug fix \(patch\)" | wc -l)
-              nobump=$(echo "$PRBODY" | grep -iE "^\s*-\s*\[x\]\s*No source changes \(no version change\)" | wc -l)
+              echo "----- PRBODY DEBUG START -----"
+              echo "$PRBODY" | cat -vte
+              echo "----- PRBODY DEBUG END -------"
+              major=$(echo "$PRBODY" | grep -i -e "\[x\] Break \(major\)" | wc -l)
+              minor=$(echo "$PRBODY" | grep -i -e "\[x\] Feature \(minor\)" | wc -l)
+              patch=$(echo "$PRBODY" | grep -i -e "\[x\] Bug fix \(patch\)" | wc -l)
+              nobump=$(echo "$PRBODY" | grep -i -e "\[x\] No source changes \(no version change\)" | wc -l)
   
               echo $major
               echo $minor
