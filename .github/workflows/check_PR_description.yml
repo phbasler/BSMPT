@@ -1,9 +1,8 @@
 name: Check description
 
 on:
-  push:
   pull_request:
-   types: [opened, synchronize]
+   types: [opened, edited, reopened, synchronize]
      
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }} 
