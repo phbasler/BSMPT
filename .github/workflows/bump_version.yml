@@ -122,6 +122,8 @@ jobs:
 
           echo "New version: ${NEW_VERSION}"
 
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+
           sed -i -E "s|^Program: BSMPT version.*|Program: BSMPT version ${NEW_VERSION}|" "$README"
           sed -i -E "s|^set\(BSMPT_VERSION.*|set(BSMPT_VERSION ${NEW_VERSION})|" "$CMAKE"
 
@@ -141,7 +143,7 @@ jobs:
       - name: Commit changes
         if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
         run: |
-          git commit -am "Automatic version bump (${{ steps.determine_bump.outputs.bumpmode }})"
+          git commit -am "Automatic version bump (${{ steps.determine_bump.outputs.bumpmode }}). ${{ steps.get_base_version.outputs.OLD_VERSION }} -> ${{ steps.bump.outputs.NEW_VERSION }} "
           git push
 
       - name: Notify that changes are required
