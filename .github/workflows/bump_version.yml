@@ -95,7 +95,7 @@ jobs:
 
       - name: Bump version
         id: bump
-        if: steps.determine_bump.outputs.bumpmode != "nobump" 
+        if: steps.determine_bump.outputs.bumpmode != 'nobump' 
         run: |
           OLD_VERSION="${{ steps.get_base_version.outputs.OLD_VERSION }}"
           IFS='.' read -r MAJOR MINOR PATCH <<< OLD_VERSION
