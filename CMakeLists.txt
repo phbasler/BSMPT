@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.23)
-cset(BSMPT_VERSION OLD_VERSION..1) 3.1.1)
+set(BSMPT_VERSION 3.1.1)
 project(
   BSMPT
   VERSION ${BSMPT_VERSION}
