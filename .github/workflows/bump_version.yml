@@ -95,6 +95,7 @@ jobs:
 
       - name: Bump version
         id: bump
+        if: steps.determine_bump.outputs.bumpmode != "nobump" 
         run: |
           OLD_VERSION="${{ steps.get_base_version.outputs.OLD_VERSION }}"
           IFS='.' read -r MAJOR MINOR PATCH <<< OLD_VERSION
@@ -115,8 +116,8 @@ jobs:
 
           echo "New version: ${NEW_VERSION}"
 
-          sed -i -e "s/Program: BSMPT version ${OLD_VERSION}/Program: BSMPT version ${NEW_VERSION}/g" "$README"
-          sed -i -e "s/set(BSMPT_VERSION ${OLD_VERSION})/set(BSMPT_VERSION ${NEW_VERSION})/g" "$CMAKE"
+          sed -i -e "s/Program: BSMPT version/c\Program: BSMPT version ${NEW_VERSION}/g" "$README"
+          sed -i -e "s/set(BSMPT_VERSION/c\set(BSMPT_VERSION ${NEW_VERSION})/g" "$CMAKE"
 
       - name: Check if we have local changes
         id: check-changes
