@@ -23,9 +23,6 @@ jobs:
         id: determine_bump
         run: |
           PRBODY_CLEAN=$(echo "$PRBODY" | tr -d '\r')
-          echo "----- PRBODY DEBUG START -----"
-          echo $PRBODY_CLEAN | cat -vte
-          echo "----- PRBODY DEBUG END -------"
           
           major=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Break \(major\)" | wc -l)
           minor=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Feature \(minor\)" | wc -l)
