@@ -19,6 +19,7 @@ jobs:
       prefix: "Program: BSMPT version " 
     steps:
       - name : Deduce bump mode from PR description
+        id: determine_bump
         run: |
           PRBODY_CLEAN=$(echo "$PRBODY" | tr -d '\r')
           echo "----- PRBODY DEBUG START -----"
@@ -96,7 +97,9 @@ jobs:
         run: |
           IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.get_base_version.outputs.OLD_VERSION }}"
 
-          case "${{ steps.determine_bump.outputs.bump_type }}" in
+          echo "Bump type is ${{ steps.determine_bump.outputs.bumpmode }}"
+          NEW_VERSION="nobump"
+          case "${{ steps.determine_bump.outputs.bumpmode }}" in
             patch)
               NEW_VERSION="$MAJOR.$MINOR.$((PATCH+1))"
               ;;
