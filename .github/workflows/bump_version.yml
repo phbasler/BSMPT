@@ -3,6 +3,7 @@ name: Bump version
 on: 
   pull_request:
       branches: [ master ]
+      types: [opened, edited, reopened]
      
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }} 
