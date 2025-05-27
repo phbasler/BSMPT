@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 5.0.04.0.03.1.2
+Program: BSMPT version nobump5.0.04.0.03.1.2
 
 Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana
 
