@@ -134,7 +134,7 @@ jobs:
       - name: Commit changes
         if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
         run: |
-          git commit -am "Automatic version bump"
+          git commit -am "Automatic version bump (${{ steps.determine_bump.outputs.bumpmode }})"
           git push
 
       - name: Notify that changes are required
