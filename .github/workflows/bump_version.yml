@@ -9,7 +9,8 @@ concurrency:
     cancel-in-progress: true
  
 jobs:
-  linter:
+  bump:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'bump'
     runs-on: ubuntu-latest
     env:
       LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
@@ -38,16 +39,16 @@ jobs:
   
           if [[ $((major + minor + patch + nobump)) -eq 1 ]]; then
             if [[ $((major)) -eq 1 ]]; then 
-              echo "bumpmode="major" >> $GITHUB_OUTPUT
+              echo "bumpmode=major" >> $GITHUB_OUTPUT
             fi
             if [[ $((minor)) -eq 1 ]]; then 
-              echo "bumpmode="minor" >> $GITHUB_OUTPUT
+              echo "bumpmode=minor" >> $GITHUB_OUTPUT
             fi
             if [[ $((patch)) -eq 1 ]]; then 
-              echo "bumpmode="patch" >> $GITHUB_OUTPUT
+              echo "bumpmode=patch" >> $GITHUB_OUTPUT
             fi
             if [[ $((nobump)) -eq 1 ]]; then 
-              echo "bumpmode="nobump" >> $GITHUB_OUTPUT
+              echo "bumpmode=nobump" >> $GITHUB_OUTPUT
             fi
           else
             echo "Invalid version bump selected."
