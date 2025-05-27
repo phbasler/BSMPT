@@ -72,6 +72,7 @@ jobs:
       - name: Get old version
         id: get_base_version
         run: |
+          echo "prefix\t" "${prefix}" 
           BASE_VERSION=$(grep --color=never "${prefix}" "${README}" | sed -e "s/${prefix}//g" | tr -d '\r')
           echo "Base version is: $BASE_VERSION"
 
