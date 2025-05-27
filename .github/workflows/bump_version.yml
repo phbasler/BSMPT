@@ -62,7 +62,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.base_ref }}
           repository: ${{ github.event.pull_request.base.repo.full_name }}
-          
+
       - run: git fetch origin $GITHUB_BASE_REF
 
       - name: Set Branch name
@@ -100,7 +100,7 @@ jobs:
         if: steps.determine_bump.outputs.bumpmode != 'nobump' 
         run: |
           OLD_VERSION="${{ steps.get_base_version.outputs.OLD_VERSION }}"
-          IFS='.' read -r MAJOR MINOR PATCH <<< OLD_VERSION
+          IFS='.' read -r MAJOR MINOR PATCH <<< $OLD_VERSION
 
           echo "Major : $MAJOR"
           echo "Minor : $MINOR"
