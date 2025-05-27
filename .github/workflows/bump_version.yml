@@ -122,8 +122,9 @@ jobs:
 
           echo "New version: ${NEW_VERSION}"
 
-          sed -i -e "s/Program: BSMPT version*\Program: BSMPT version ${NEW_VERSION}/g" "$README"
-          sed -i -e "s/set(BSMPT_VERSION*\set(BSMPT_VERSION ${NEW_VERSION})/g" "$CMAKE"
+          sed -i -E "s|^Program: BSMPT version.*|Program: BSMPT version ${NEW_VERSION}|" "$README"
+          sed -i -E "s|^set\(BSMPT_VERSION.*|set(BSMPT_VERSION ${NEW_VERSION})|" "$CMAKE"
+
 
       - name: Check if we have local changes
         id: check-changes
