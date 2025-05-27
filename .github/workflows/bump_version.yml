@@ -68,11 +68,12 @@ jobs:
           echo "branchName=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
 
       - name: Get old version
+        id: get_base_version
         run: |
           BASE_VERSION=$(grep --color=never "${prefix}" "${README}" | sed -e "s/${prefix}//g" | tr -d '\r')
           echo "Base version is: $BASE_VERSION"
 
-          if [[ $((BASE_VERSION)) -eq "" ]]; then 
+          if [[ -z "$BASE_VERSION" ]]; then
             echo "Could not retrieve base version"
             exit 1
           fi
@@ -93,7 +94,7 @@ jobs:
       - name: Bump version
         id: bump
         run: |
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$OLD_VERSION"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.get_base_version.outputs.OLD_VERSION }}"
 
           case "${{ steps.determine_bump.outputs.bump_type }}" in
             patch)
