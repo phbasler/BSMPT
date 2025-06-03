@@ -53,21 +53,13 @@ jobs:
             echo "Invalid version bump selected."
             exit 1
           fi 
-      
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.LINTER_PAT }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-        if: env.LocalCommit == 'true'
 
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.head_ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-        if: env.LocalCommit != 'true'
+          ref: ${{ github.base_ref }}
+          repository: ${{ github.event.pull_request.base.repo.full_name }}
+      
 
       - run: git fetch origin $GITHUB_BASE_REF
 
@@ -94,12 +86,21 @@ jobs:
         id: git-diff-args
         run: |
           echo "args=origin/${{steps.branch-name.outputs.branchName}}..HEAD" >> $GITHUB_OUTPUT
-          
+      
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.LINTER_PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit == 'true'
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit != 'true'
 
       - name: Bump version
         id: bump
