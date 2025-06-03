@@ -53,12 +53,21 @@ jobs:
             echo "Invalid version bump selected."
             exit 1
           fi 
+      
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.LINTER_PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit == 'true'
 
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.base_ref }}
-          repository: ${{ github.event.pull_request.base.repo.full_name }}
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit != 'true'
 
       - run: git fetch origin $GITHUB_BASE_REF
 
