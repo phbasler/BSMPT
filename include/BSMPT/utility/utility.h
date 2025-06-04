@@ -14,8 +14,8 @@
 #include <numeric>
 #include <random>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 #ifdef Boost_FOUND
 #include <boost/version.hpp>
