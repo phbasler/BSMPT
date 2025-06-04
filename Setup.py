@@ -187,8 +187,7 @@ def conan_install(
     profile, additional_options=[], build_missing=False, compiler: Compiler = None
 ):
     config_settings = [
-        "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']",
-        "tools.build:compiler_executables={'c':'/usr/local/opt/llvm@14/bin/clang', 'cpp': '/usr/local/opt/llvm@14/bin/clang++'}"
+        "tools.cmake.cmake_layout:build_folder_vars=['settings.os','settings.arch','settings.build_type']"
     ]
 
     build_profile = get_profile(sys.platform, get_arch(), BuildMode.release, compiler)
