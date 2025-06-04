@@ -48,6 +48,11 @@ jobs:
         brew install llvm@14
         echo "PATH=$(brew --prefix llvm@14)/bin:$PATH" >> $GITHUB_ENV
 
+    - if: runner.os == 'macOS'
+      run: |
+        clang --version
+        clang++ --version
+
     - uses: nick-fields/retry@v3
       with:
         timeout_minutes: 60
