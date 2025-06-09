@@ -50,7 +50,7 @@ jobs:
               echo "bumpmode=nobump" >> $GITHUB_OUTPUT
             fi
           else
-            echo "Invalid version bump selected."
+            echo "You need to choose exactly one checkbox for versioning." >> $GITHUB_STEP_SUMMARY
             exit 1
           fi 
 
