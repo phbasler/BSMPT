@@ -3,7 +3,12 @@ name: Bump version
 on: 
   pull_request:
       branches: [ master ]
-      types: [opened, edited, reopened]
+      types: 
+        - opened
+        - edited
+        - reopened
+        - synchronize 
+        - ready_for_review
      
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }} 
@@ -11,6 +16,7 @@ concurrency:
  
 jobs:
   bump:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     env:
       LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
