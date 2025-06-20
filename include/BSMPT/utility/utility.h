@@ -355,6 +355,8 @@ bool almost_the_same(const std::complex<double> &a,
  * check if two vectors (element-wise)
  * @param a and
  * @param b are the (almost) same with a given
+ * @param allow_for_sign_flip if set to false only the absolute values of the
+ * vector coordinates are compared
  * @param rel_precision relative precision
  * @param num_zero if both numbers are smaller than num_zero, they
  * are considered to be zero and the function always returns true

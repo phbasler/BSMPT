@@ -64,6 +64,14 @@ TEST_CASE("Test almost_the_same", "[gw]")
   REQUIRE(almost_the_same({0, 1}, {0, 0.991}, false, 0.01, 1e-5));
   REQUIRE(not almost_the_same({0, 1}, {0, 1.02}, false, 0.01, 1e-5));
   REQUIRE(not almost_the_same({0, 1}, {0, 0.991}, false, 0.01, 0));
+  REQUIRE(almost_the_same(std::complex<double>{1, 1},
+                          std::complex<double>{1.0001, 0.9999},
+                          0.001,
+                          0));
+  REQUIRE_THROWS_AS(almost_the_same({0}, {0, 0}, true, 0.01, 1e-5),
+                    std::runtime_error);
+  REQUIRE(almost_the_same({1, -1}, {-1, 1}, false, 0.01, 1e-5));
+  REQUIRE(not almost_the_same({1, -1}, {-1, 1}, true, 0.01, 1e-5));
 }
 
 TEST_CASE("Test I_alpha", "[gw]")
