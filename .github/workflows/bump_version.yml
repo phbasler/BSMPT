@@ -1,0 +1,166 @@
+name: Bump version
+
+on: 
+  pull_request:
+      branches: [ master ]
+      types: 
+        - opened
+        - edited
+        - reopened
+        - synchronize 
+        - ready_for_review
+     
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }} 
+    cancel-in-progress: true
+ 
+jobs:
+  bump:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    env:
+      LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+      PRBODY: ${{ github.event.pull_request.body }} 
+      README: "README.md"
+      CMAKE: "CMakeLists.txt"
+      prefix: "Program: BSMPT version " 
+    steps:
+      - name : Deduce bump mode from PR description
+        id: determine_bump
+        run: |
+          PRBODY_CLEAN=$(echo "$PRBODY" | tr -d '\r')
+          
+          major=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Break \(major\)" | wc -l)
+          minor=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Feature \(minor\)" | wc -l)
+          patch=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*Bug fix \(patch\)" | wc -l)
+          nobump=$(echo "$PRBODY_CLEAN" | grep -iE "^\s*-\s*\[x\]\s*No source changes \(no version change\)" | wc -l)
+  
+          echo $major
+          echo $minor
+          echo $patch
+          echo $nobump
+  
+          echo $((major + minor + patch + nobump)) 
+  
+          if [[ $((major + minor + patch + nobump)) -eq 1 ]]; then
+            if [[ $((major)) -eq 1 ]]; then 
+              echo "bumpmode=major" >> $GITHUB_OUTPUT
+            fi
+            if [[ $((minor)) -eq 1 ]]; then 
+              echo "bumpmode=minor" >> $GITHUB_OUTPUT
+            fi
+            if [[ $((patch)) -eq 1 ]]; then 
+              echo "bumpmode=patch" >> $GITHUB_OUTPUT
+            fi
+            if [[ $((nobump)) -eq 1 ]]; then 
+              echo "bumpmode=nobump" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "You need to choose exactly one checkbox for versioning." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi 
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.base_ref }}
+          repository: ${{ github.event.pull_request.base.repo.full_name }}
+      
+
+      - run: git fetch origin $GITHUB_BASE_REF
+
+      - name: Set Branch name
+        id: branch-name
+        run:
+          echo "branchName=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+
+      - name: Get old version
+        id: get_base_version
+        run: |
+          echo "prefix\t" "${prefix}" 
+          BASE_VERSION=$(grep --color=never "${prefix}" "${README}" | sed -e "s/${prefix}//g" | tr -d '\r')
+          echo "Base version is: $BASE_VERSION"
+
+          if [[ -z "$BASE_VERSION" ]]; then
+            echo "Could not retrieve base version"
+            exit 1
+          fi
+
+          echo "OLD_VERSION=$BASE_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Define base git diff args
+        id: git-diff-args
+        run: |
+          echo "args=origin/${{steps.branch-name.outputs.branchName}}..HEAD" >> $GITHUB_OUTPUT
+      
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.LINTER_PAT }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit == 'true'
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: env.LocalCommit != 'true'
+
+      - name: Bump version
+        id: bump
+        run: |
+          OLD_VERSION="${{ steps.get_base_version.outputs.OLD_VERSION }}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< $OLD_VERSION
+
+          echo "Major : $MAJOR"
+          echo "Minor : $MINOR"
+          echo "Patch : $PATCH"
+
+          echo "Bump type is ${{ steps.determine_bump.outputs.bumpmode }}"
+          NEW_VERSION=$OLD_VERSION    
+          case "${{ steps.determine_bump.outputs.bumpmode }}" in
+            patch)
+              NEW_VERSION="$MAJOR.$MINOR.$((PATCH+1))"
+              ;;
+            minor)
+              NEW_VERSION="$MAJOR.$((MINOR+1)).0"
+              ;;
+            major)
+              NEW_VERSION="$((MAJOR+1)).0.0"
+              ;;
+          esac
+
+          echo "New version: ${NEW_VERSION}"
+
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+          sed -i -E "s|^Program: BSMPT version.*|Program: BSMPT version ${NEW_VERSION}|" "$README"
+          sed -i -E "s|^set\(BSMPT_VERSION.*|set(BSMPT_VERSION ${NEW_VERSION})|" "$CMAKE"
+
+
+      - name: Check if we have local changes
+        id: check-changes
+        shell: bash
+        run: |
+          if [[ -z $(git status --porcelain --untracked-files=no) ]]; then echo "ChangesFound=False" >> $GITHUB_OUTPUT; else echo "ChangesFound=True" >> $GITHUB_OUTPUT; fi
+
+      - name: setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Commit changes
+        if: steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit == 'true'
+        run: |
+          git commit -am "Automatic version bump (${{ steps.determine_bump.outputs.bumpmode }}). ${{ steps.get_base_version.outputs.OLD_VERSION }} -> ${{ steps.bump.outputs.NEW_VERSION }}"  --author="github-actions[bot]<>"  
+          git push
+
+      - name: Notify that changes are required
+        if: ${{ steps.check-changes.outputs.ChangesFound == 'True' && env.LocalCommit != 'true' }}
+        run: |
+          echo "Version changes are required" >> $GITHUB_STEP_SUMMARY
+          exit 1
+

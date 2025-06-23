@@ -31,8 +31,7 @@ def build(preset):
 
 def main():
     opts = Setup.parse_arguments()
-    Setup.setup_cmaes()
-    Setup.setup_profiles()
+    Setup.prepare()
     Setup.conan_install_all(Setup.BuildMode.release,
                             opts.options if opts.options is not None else [],
                             build_missing=True,
