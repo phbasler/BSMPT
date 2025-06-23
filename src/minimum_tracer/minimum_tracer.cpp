@@ -1295,6 +1295,17 @@ void CoexPhases::CalculateTc()
                     std::to_string(false_phase.id) + " and true phase " +
                     std::to_string(true_phase.id));
 
+  // check if phase dont overlap at just a single point
+  if (T_high == T_low)
+  {
+    Logger::Write(
+        LoggingLevel::MinTracerDetailed,
+        "Phases coincide at a single point. Tc cannot be calculated.");
+
+    crit_status = BSMPT::StatusCrit::CoincideSinglePoint;
+    crit_temp   = -1;
+    return;
+  }
   // deltaV has to be negative for the transition to occur
   auto deltaV = [&](double T)
   { return true_phase.Get(T).potential - false_phase.Get(T).potential; };

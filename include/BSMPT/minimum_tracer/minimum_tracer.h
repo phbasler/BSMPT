@@ -131,7 +131,8 @@ enum class StatusCrit
   Success,
   FalseLower,
   TrueLower,
-  Failure
+  Failure,
+  CoincideSinglePoint
 };
 /**
  * @brief Map to convert StatusCritToString to strings
@@ -142,6 +143,7 @@ const std::unordered_map<StatusCrit, std::string> StatusCritToString{
     {StatusCrit::Success, "success"},
     {StatusCrit::FalseLower, "false_lower"},
     {StatusCrit::TrueLower, "true_lower"},
+    {StatusCrit::CoincideSinglePoint, "coincide_single_point"},
     {StatusCrit::Failure, "failure"}};
 /**
  * @brief Possible status for the approximated nucleation, exact nucleation,
