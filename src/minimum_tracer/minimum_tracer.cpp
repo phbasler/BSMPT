@@ -483,7 +483,10 @@ MinimumTracer::TrackPhase(double &globMinEndT,
     if (SafeStep)
       currentT += dT;
     else
+    {
+      dT       = finalT - currentT;
       currentT = finalT;
+    }
   }
   if (output) Logger::Write(LoggingLevel::MinTracerDetailed, ss.str());
   if (output)
@@ -688,7 +691,10 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
     if (SafeStep)
       currentT += dT;
     else
+    {
+      dT       = finalT - currentT;
       currentT = finalT;
+    }
   }
   if (output) Logger::Write(LoggingLevel::MinTracerDetailed, ss.str());
   if (output)
