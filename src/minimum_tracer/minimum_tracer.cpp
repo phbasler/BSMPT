@@ -2286,15 +2286,17 @@ Vacuum::Vacuum(const double &T_lowIn,
                const double &T_highIn,
                std::shared_ptr<MinimumTracer> &MinTracerIn,
                std::shared_ptr<Class_Potential_Origin> &modelPointerIn,
-               const int &UseMultiStepPTMode,
+               const int &UseMultiStepPTModeIn,
                const int &num_pointsIn,
-               const bool &do_only_tracing)
+               const bool &do_only_tracingIn)
 {
-  T_low        = T_lowIn;
-  T_high       = T_highIn;
-  MinTracer    = MinTracerIn;
-  modelPointer = modelPointerIn;
-  num_points   = num_pointsIn;
+  T_low              = T_lowIn;
+  T_high             = T_highIn;
+  MinTracer          = MinTracerIn;
+  modelPointer       = modelPointerIn;
+  num_points         = num_pointsIn;
+  UseMultiStepPTMode = UseMultiStepPTModeIn;
+  do_only_tracing    = do_only_tracingIn;
 
   status_vacuum =
       StatusTracing::Success; // flipped to error code if error encountered
@@ -2407,31 +2409,7 @@ Vacuum::Vacuum(const double &T_lowIn,
        status_vacuum == StatusTracing::NoCoverage)) // no_coverage can get fixed
                                                     // in setCoexRegion
   {
-    // sort phases in decending T_high
-    std::sort(PhasesList.begin(),
-              PhasesList.end(),
-              [](auto a, auto b) { return a.T_high > b.T_high; });
-
-    // assign ids to phases
-    for (std::size_t i = 0; i < PhasesList.size(); i++)
-    {
-      PhasesList[i].id = i;
-    }
-
-    // identify coexisiting phase regions
-    setCoexRegion(UseMultiStepPTMode); // can flip status_vacuum to error code
-
-    if (PhasesList.size() > 0)
-    {
-      PrintPhasesDiagram();
-    }
-
-    if ((status_coex_pairs == StatusCoexPair::Success) and
-        (not do_only_tracing))
-    {
-      // identify coexisting phase pairs
-      setCoexPhases();
-    }
+    orderPhases();
   }
 
   return;
@@ -2578,7 +2556,7 @@ void Vacuum::setCoexPhases()
   Logger::Write(LoggingLevel::MinTracerDetailed, ss2.str());
 }
 
-void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
+void Vacuum::setCoexRegion(const int &MultiStepPTMode)
 {
   std::vector<Minimum> edgesList, edgesListResult;
   std::vector<double> tempList;
@@ -2586,112 +2564,114 @@ void Vacuum::setCoexRegion(const int &UseMultiStepPTMode)
                 "Total number of phases identified: " +
                     std::to_string(PhasesList.size()));
 
-  if (PhasesList.size() > 0)
+  if (PhasesList.size() == 0) return; // no phase found
+
+  // create edge list
+  for (auto i : PhasesList)
   {
-    for (auto i : PhasesList)
-    {
-      edgesList.push_back(i.MinimumPhaseVector.front());
-      edgesList.push_back(i.MinimumPhaseVector.back());
-    }
+    edgesList.push_back(i.MinimumPhaseVector.front());
+    edgesList.push_back(i.MinimumPhaseVector.back());
+  }
 
-    for (auto i : edgesList)
-    {
-      tempList.push_back(i.temp);
-    }
+  // get the Ts of the edge list
+  for (auto i : edgesList)
+  {
+    tempList.push_back(i.temp);
+  }
 
-    std::sort(
-        tempList.begin(), tempList.end(), [](auto a, auto b) { return a > b; });
-    tempList.erase(unique(tempList.begin(), tempList.end()), tempList.end());
+  // sort the T list
+  std::sort(
+      tempList.begin(), tempList.end(), [](auto a, auto b) { return a > b; });
+  tempList.erase(unique(tempList.begin(), tempList.end()), tempList.end());
 
-    int EdgeOfPhaseatTemp = 0;
-    for (auto temp : tempList)
+  int EdgeOfPhaseatTemp = 0;
+  for (auto temp : tempList)
+  {
+    for (auto edge : edgesList)
     {
-      for (auto edge : edgesList)
+      if (edge.temp == temp)
       {
-        if (edge.temp == temp)
-        {
-          EdgeOfPhaseatTemp += edge.EdgeOfPhase;
-        }
+        EdgeOfPhaseatTemp += edge.EdgeOfPhase;
       }
-      Minimum min;
-      min.temp        = temp;
-      min.EdgeOfPhase = EdgeOfPhaseatTemp;
-      edgesListResult.push_back(min);
     }
+    Minimum min;
+    min.temp        = temp;
+    min.EdgeOfPhase = EdgeOfPhaseatTemp;
+    edgesListResult.push_back(min);
+  }
 
-    // order list decending in temperature
-    std::sort(edgesList.begin(),
-              edgesList.end(),
-              [](auto a, auto b) { return a.temp > b.temp; });
-    std::sort(edgesListResult.begin(),
-              edgesListResult.end(),
-              [](auto a, auto b) { return a.temp > b.temp; });
+  // order list decending in temperature
+  std::sort(edgesList.begin(),
+            edgesList.end(),
+            [](auto a, auto b) { return a.temp > b.temp; });
+  std::sort(edgesListResult.begin(),
+            edgesListResult.end(),
+            [](auto a, auto b) { return a.temp > b.temp; });
 
-    int numPhases = 0;
+  int numPhases = 0;
 
-    bool no_gap_found = true;
+  bool no_gap_found = true;
 
-    for (std::size_t i = 0; i < edgesListResult.size() - 1; i++)
+  for (std::size_t i = 0; i < edgesListResult.size() - 1; i++)
+  {
+    numPhases = edgesListResult[i].EdgeOfPhase;
+    if (numPhases > 1)
     {
-      numPhases = edgesListResult[i].EdgeOfPhase;
-      if (numPhases > 1)
-      {
-        status_coex_pairs = StatusCoexPair::Success;
-      }
-      else if (numPhases <= 0) // found a non-traced gap in temperature
-      {
-        no_gap_found       = false;
-        double T_low_hole  = edgesListResult[i + 1].temp;
-        double T_high_hole = edgesListResult[i].temp;
+      status_coex_pairs = StatusCoexPair::Success;
+    }
+    else if (numPhases <= 0) // found a non-traced gap in temperature
+    {
+      no_gap_found       = false;
+      double T_low_hole  = edgesListResult[i + 1].temp;
+      double T_high_hole = edgesListResult[i].temp;
 
-        if (T_low_hole + 1e-6 < T_high_hole) // threshold set to 1e-6 GeV
+      if (T_low_hole + 1e-6 < T_high_hole) // threshold set to 1e-6 GeV
+      {
+        Logger::Write(LoggingLevel::MinTracerDetailed,
+                      "\nThere are phases missing between " +
+                          std::to_string(T_low_hole) + " GeV and " +
+                          std::to_string(T_high_hole) + " GeV!");
+        status_vacuum = StatusTracing::NoCoverage;
+
+        if (not(MultiStepPTMode == 0))
         {
           Logger::Write(LoggingLevel::MinTracerDetailed,
-                        "\nThere are phases missing between " +
+                        "\nTry to patch up gap between " +
                             std::to_string(T_low_hole) + " GeV and " +
-                            std::to_string(T_high_hole) + " GeV!");
-          status_vacuum = StatusTracing::NoCoverage;
+                            std::to_string(T_high_hole) + " GeV.");
 
-          if (not(UseMultiStepPTMode == 0))
+          // try to patch up holes in tracing
+          Minimum min;
+          min.temp = (T_high_hole + T_low_hole) / 2;
+          min.point =
+              MinTracer->ConvertToVEVDim(MinTracer->GetGlobalMinimum(min.temp));
+          MinTracer->ReduceVEV(min.point);
+          MinTracer->ConvertToNonFlatDirections(min.point);
+          Phase inter_phase(min.temp, T_high, T_low, MinTracer);
+          addPhase(inter_phase);
+          print(inter_phase);
+          // If we had sucess finding a new phase.
+          if (inter_phase.MinimumPhaseVector.size() >
+              2) // more than just endpoints found
           {
-            Logger::Write(LoggingLevel::MinTracerDetailed,
-                          "\nTry to patch up gap between " +
-                              std::to_string(T_low_hole) + " GeV and " +
-                              std::to_string(T_high_hole) + " GeV.");
-
-            // try to patch up holes in tracing
-            Minimum min;
-            min.temp  = (T_high_hole + T_low_hole) / 2;
-            min.point = MinTracer->ConvertToVEVDim(
-                MinTracer->GetGlobalMinimum(min.temp));
-            MinTracer->ReduceVEV(min.point);
-            MinTracer->ConvertToNonFlatDirections(min.point);
-            Phase inter_phase(min.temp, T_high, T_low, MinTracer);
-            addPhase(inter_phase);
-            print(inter_phase);
-            // If we had sucess finding a new phase.
-            if (inter_phase.MinimumPhaseVector.size() >
-                2) // more than just endpoints found
-            {
-              status_vacuum = StatusTracing::Success;
-              setCoexRegion(UseMultiStepPTMode);
-            }
+            status_vacuum = StatusTracing::Success;
+            orderPhases();
           }
         }
-        else
-        {
-          status_vacuum = StatusTracing::NoCoverage;
-        }
+      }
+      else
+      {
+        status_vacuum = StatusTracing::NoCoverage;
       }
     }
+  }
 
-    if (no_gap_found) // correct status code in case local EW minimum covers up
-                      // range
+  if (no_gap_found) // correct status code in case local EW minimum covers up
+                    // range
+  {
+    if (status_vacuum == StatusTracing::NoCoverage)
     {
-      if (status_vacuum == StatusTracing::NoCoverage)
-      {
-        status_vacuum = StatusTracing::NoGlobMinCoverage;
-      }
+      status_vacuum = StatusTracing::NoGlobMinCoverage;
     }
   }
 
@@ -2788,6 +2768,34 @@ void Vacuum::addPhase(Phase &phase)
   phase.MinimumPhaseVector.back().EdgeOfPhase = 1;
   PhasesList.push_back(phase);
   return;
+}
+
+void Vacuum::orderPhases()
+{
+  // sort phases in decending T_high
+  std::sort(PhasesList.begin(),
+            PhasesList.end(),
+            [](auto a, auto b) { return a.T_high > b.T_high; });
+
+  // assign ids to phases
+  for (std::size_t i = 0; i < PhasesList.size(); i++)
+  {
+    PhasesList[i].id = i;
+  }
+
+  // identify coexisiting phase regions
+  setCoexRegion(UseMultiStepPTMode); // can flip status_vacuum to error code
+
+  if (PhasesList.size() > 0)
+  {
+    PrintPhasesDiagram();
+  }
+
+  if ((status_coex_pairs == StatusCoexPair::Success) and (not do_only_tracing))
+  {
+    // identify coexisting phase pairs
+    setCoexPhases();
+  }
 }
 
 int Vacuum::MinimumFoundAlready(const Minimum &minimum)
