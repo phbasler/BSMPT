@@ -280,6 +280,15 @@ MinimumTracer::TrackPhase(double &globMinEndT,
 
   bool old_min_is_global = true;
 
+  // Check if step size is not zero.
+  if (dT == 0)
+  {
+    if (output)
+      Logger::Write(LoggingLevel::MinTracerDetailed,
+                    "Zero step size in TrackPhase()");
+    return MinimumList;
+  }
+
   if ((finalT - currentT) / dT < 0)
   {
     // Step has the wrong sign
@@ -521,6 +530,15 @@ MinimumTracer::TrackPhase(const std::vector<double> &point_In,
   std::stringstream ss;
   std::vector<Minimum> MinimumList;
   Minimum newMinimum;
+
+  // Check if step size is not zero.
+  if (dT == 0)
+  {
+    if (output)
+      Logger::Write(LoggingLevel::MinTracerDetailed,
+                    "Zero step size in TrackPhase()");
+    return MinimumList;
+  }
 
   if ((finalT - currentT) / dT < 0)
   {
