@@ -8,6 +8,7 @@
 
 #include <BSMPT/config.h>
 #include <algorithm>
+#include <complex>
 #include <functional>
 #include <gsl/gsl_integration.h>
 #include <iostream>
@@ -319,5 +320,51 @@ template <typename T>
 using boost_cubic_b_spline = boost::math::cubic_b_spline<T>;
 #endif
 #endif
+
+/**
+ * @brief almost_the_same
+ * check if two doubles
+ * @param a and
+ * @param b are the (almost) same with a given
+ * @param rel_precision relative precision
+ * @param num_zero if both numbers are smaller than num_zero, they
+ * are considered to be zero and the function always returns true
+ * @return true if a and b are almost the same and false if not
+ */
+bool almost_the_same(const double &a,
+                     const double &b,
+                     const double &rel_precision,
+                     const double &num_zero = 1e-10);
+
+/**
+ * @brief almost_the_same
+ * check if two complex doubles
+ * @param a and
+ * @param b are the (almost) same with a given
+ * @param rel_precision relative precision
+ * @param num_zero if both numbers are smaller than num_zero, they
+ * are considered to be zero and the function always returns true
+ * @return true if a and b are almost the same and false if not
+ */
+bool almost_the_same(const std::complex<double> &a,
+                     const std::complex<double> &b,
+                     const double &rel_precision,
+                     const double &num_zero = 1e-10);
+
+/**
+ * @brief almost_the_same
+ * check if two vectors (element-wise)
+ * @param a and
+ * @param b are the (almost) same with a given
+ * @param rel_precision relative precision
+ * @param num_zero if both numbers are smaller than num_zero, they
+ * are considered to be zero and the function always returns true
+ * @return true if a and b are almost the same and false if not
+ */
+bool almost_the_same(const std::vector<double> &a,
+                     const std::vector<double> &b,
+                     const bool &allow_for_sign_flip,
+                     const double &rel_precision,
+                     const double &num_zero = 1e-10);
 
 } // namespace BSMPT
