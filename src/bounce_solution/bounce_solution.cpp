@@ -866,14 +866,11 @@ double BounceSolution::CalcTempAtFalseVacFraction(const double &false_vac_frac)
     T_middle    = (T_up + T_down) / 2.;
     double IatT = FalseVacFractionExponent_I(T_middle);
 
-    while ((std::abs(T_up / T_down - 1) >
-            RelativeTemperatureInCalcTempAtFalseVacFraction *
-                MarginOfCalcTempAtFalseVacFractionBeforeFailure) and
-           (not almost_the_same(
-               int_at_false_vac_frac,
-               IatT,
-               RelativeErrorInCalcTempAtFalseVacFraction *
-                   MarginOfCalcTempAtFalseVacFractionBeforeFailure)))
+    while (not(std::abs(T_up / T_down - 1) <
+                   RelativeTemperatureInCalcTempAtFalseVacFraction and
+               almost_the_same(int_at_false_vac_frac,
+                               IatT,
+                               RelativeErrorInCalcTempAtFalseVacFraction)))
     {
       T_middle = (T_up + T_down) / 2.;
       IatT     = FalseVacFractionExponent_I(T_middle);
