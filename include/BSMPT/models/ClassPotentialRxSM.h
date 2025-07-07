@@ -6,6 +6,7 @@
 
 /**
  * @file
+ * Model file for the SM + real singlet with the tree-level potential
  */
 
 #pragma once
@@ -20,22 +21,36 @@ namespace Models
 {
 
 /**
- * @brief The Class_Template class
- * Template for implementing a new model
+ * @brief The Class_RxSM class
+ * Lagrangian from https://arxiv.org/pdf/1512.05355 Eq. (11)
  */
-class Class_Template : public Class_Potential_Origin
+class Class_RxSM : public Class_Potential_Origin
 {
 public:
-  Class_Template(const ISMConstants &smConstants);
-  virtual ~Class_Template();
+  Class_RxSM(const ISMConstants &smConstants);
+  virtual ~Class_RxSM();
 
-  // Add here your parameters for the Lagrangian as well as for the counterterm
-  // potential Add here your variables in which you will save the Debye
-  // correction factors
+  // Choice of parameters of Lagrangian from https://arxiv.org/pdf/1512.05355 Eq. (11)
+  double lambdaS, lambdaHS, vS;
 
-  double ms, lambda;
+  // Not an input parameter; lambda is fixed via the requirement of having
+  // one of the Higgs bosons as the SM one with 125.09 GeV
+  double lambda;
 
-  double dms, dlambda, dT, yt, g;
+  // Not an input parameter; set to the SM value
+  double vH;
+
+  // Not input parameters; set through the tadpole equations
+  double msq, mSsq;
+
+  double alpha;
+
+  bool UnbrokenSingletPhase;
+
+  double dmsq, dlambda, dmSsq, dlambdaS, dlambdaHS, dT1, dT2, dT3, dT4, dT5;
+
+  std::size_t pos_Gp, pos_Gm, pos_G0, pos_h, pos_H;
+  std::size_t pos_h_SM, pos_h_H;
 
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;

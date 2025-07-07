@@ -99,6 +99,10 @@ public:
   double NDus = 0, NDL6 = 0, NDL7 = 0, NDL8 = 0, NDvs = 0, NDTS = 0;
   double DTCharged = 0;
 
+  std::size_t pos_G0, pos_Gp, pos_Gm, pos_Hp, pos_Hm;
+  std::size_t pos_h1, pos_h2, pos_h3, pos_A;
+  std::size_t pos_h_SM, pos_h_l, pos_h_H;
+
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
@@ -125,6 +129,7 @@ public:
   void set_CT_Pot_Par(const std::vector<double> &par) override;
   void write() const override;
 
+  void AdjustRotationMatrix() override;
   void TripleHiggsCouplings() override;
   std::vector<double> calc_CT() const override;
 
