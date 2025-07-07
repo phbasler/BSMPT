@@ -30,8 +30,6 @@ namespace BSMPT
  * @param compl_prbl false vacuum fraction at completion temperature, default:
  * 1%
  * @param epsturb epsilon value of turbulence contribution, default: 0.1
- * @param PNLO_scaling pressure scaling at NLO, 1 -> N processes at bubble
- * wall
  * @param maxpathintegrations maximal number of path integrations, default: 7
  * @param multistepmode choose multi-step PT modes: default (= -1), 0, 1, 2,
  * auto (= 3)
@@ -40,13 +38,12 @@ namespace BSMPT
  * @param ewsr_check check of electroweak symmetry restoration, default: off (=
  * 0)
  * @param nlo_check check of nlo stability, default: on (= 1)
- * @param use_gsl whether GSL minimizer is used
- * @param use_cmaes whether CMAES minimizer is used
- * @param use_nlopt whether NLopt minimizer is used
  * @param which_minimizer which minimizers are used
  * @param use_multithreading whether multi-threading is used
  * @param gw_calculation bool to turn GW parameter calculation on/off
  * @param which_transition_temp which transition temperature is chosen
+ * @param PNLO_scaling pressure scaling at NLO, 1 -> N processes at bubble
+ * wall
  * @param number_of_initial_scan_temperatures number of temperature steps in the
  * initial scan of the bounce solver
  */

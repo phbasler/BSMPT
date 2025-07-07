@@ -14,8 +14,9 @@ jobs:
     env:
       LocalCommit:  ${{ github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
   
-    steps:
-      - uses: actions/checkout@v4
+    steps:          
+      - name: Checkout remote branch
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
@@ -23,19 +24,18 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
         if: env.LocalCommit == 'true'
 
-      - uses: actions/checkout@v4
+      - name: Checkout remote branch
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
         if: env.LocalCommit != 'true'
 
-      - run: git fetch origin $GITHUB_BASE_REF
-
-      - name: Set Branch name
-        id: branch-name
-        run:
-          echo "branchName=$GITHUB_BASE_REF" >> $GITHUB_OUTPUT
+      - name: Add base as remote
+        run: |
+          git remote add base_repo https://github.com/${{ github.event.pull_request.base.repo.full_name }}.git
+          git fetch base_repo ${{ github.event.pull_request.base.ref }}
 
       - name: Format CMake files
         id: cmake-format
@@ -46,7 +46,7 @@ jobs:
       - name: Define base git diff args
         id: git-diff-args
         run: |
-          echo "args=origin/${{steps.branch-name.outputs.branchName}}..HEAD" >> $GITHUB_OUTPUT
+          echo "args=origin/${{ github.head_ref }}..HEAD" >> $GITHUB_OUTPUT
           
       - name: Apply clang-format on changed files
         run: |
