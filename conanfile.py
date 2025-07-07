@@ -6,6 +6,7 @@ from conan.tools.files import load
 from conan.tools.scm import Git
 import os, re
 from conan.tools.env import Environment
+from conan.errors import ConanException
 
 required_conan_version = ">=2.0.0 <3"
 
@@ -101,8 +102,13 @@ class BSMPT(ConanFile):
             self.version = extracted_version
         else:
             # if not tag -> pre-release version
-            commit_hash = git.get_commit()[:8]
-            self.version = f"{extracted_version}.{commit_hash}"
+            try:
+                commit_hash = git.get_commit()[:8]
+                self.version = f"{extracted_version}.{commit_hash}"
+            except ConanException:
+                # In this case (no git tag but also no git available) the source code was downloaded in a different way.
+                # We don't know if it is a changed code or the zip from the download, so we stick to the cmake defined version
+                self.version = extracted_version
 
     def layout(self):
         cmake_layout(self)
