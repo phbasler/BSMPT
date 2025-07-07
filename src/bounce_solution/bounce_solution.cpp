@@ -134,9 +134,9 @@ std::vector<double> BounceSolution::TransformIntoOptimalDiscreteSymmetry(
 
 void BounceSolution::GWInitialScan()
 {
-  if (Tc < 0)
+  if ((Tc < 0) or (Tc == phase_pair.T_low))
   {
-    // Transition is never viable
+    // Transition is never viable or coexphase is a single point.
     return;
   }
 
