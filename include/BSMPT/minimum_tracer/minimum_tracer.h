@@ -594,24 +594,6 @@ Create1DimGrid(const std::vector<double> &min_start,
                const int npoints = 100);
 
 /**
- * Returns true if two values are the same given some relative precision
- */
-bool almost_the_same(const double &a,
-                     const double &b,
-                     const double &rel_precision = 0.01,
-                     const double &num_zero      = 1e-10);
-
-/**
- * Returns true if two vectors are the element-wise the same given some relative
- * precision
- */
-bool almost_the_same(const std::vector<double> &a,
-                     const std::vector<double> &b,
-                     const bool &allow_for_sign_flip = false,
-                     const double &rel_precision     = 0.01,
-                     const double &num_zero          = 1e-10);
-
-/**
  * @brief Phase object
  *
  */

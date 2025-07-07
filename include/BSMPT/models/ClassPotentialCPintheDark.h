@@ -95,6 +95,9 @@ public:
   // vev
   double v1;
 
+  std::size_t pos_Gp, pos_Gm, pos_Hp, pos_Hm, pos_HSM;
+  std::size_t pos_G0, pos_h1, pos_h2, pos_h3;
+
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
@@ -106,6 +109,7 @@ public:
   void set_CT_Pot_Par(const std::vector<double> &par) override;
   void write() const override;
 
+  void AdjustRotationMatrix() override;
   void TripleHiggsCouplings() override;
   std::vector<double> calc_CT() const override;
 
