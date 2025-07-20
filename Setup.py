@@ -149,7 +149,7 @@ def setup_cmaes():
     cmaes_dir = os.path.join(file_directory, "tools", "conan", "cmaes","all")
 
     # Define the recipe name
-    recipe = "cmaes/0.10.0@bsmpt/local"
+    recipe = "cmaes/0.10.2@bsmpt/local"
 
     try:
         # Run the conan search command and capture the output
@@ -160,7 +160,7 @@ def setup_cmaes():
         # Check if the output indicates the recipe is not found
         if "ERROR: Recipe" in result:
             print(f"Recipe '{recipe}' not found. Exporting...")
-            subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(), cwd=cmaes_dir)
+            subprocess.check_output("conan export conanfile.py --version 0.10.2 --user bsmpt --channel local".split(), cwd=cmaes_dir)
             print(f"Recipe '{recipe}' successfully exported.")
         else:
             print(f"Recipe '{recipe}' already exists in the local cache.")
@@ -169,7 +169,7 @@ def setup_cmaes():
         error_output = e.output.decode("utf-8")  # Decode the error output for debugging
         if "ERROR: Recipe" in error_output:
             print(f"Recipe '{recipe}' not found in local cache. Exporting...")
-            subprocess.check_output("conan export conanfile.py --version 0.10.0 --user bsmpt --channel local".split(), cwd=cmaes_dir)
+            subprocess.check_output("conan export conanfile.py --version 0.10.2 --user bsmpt --channel local".split(), cwd=cmaes_dir)
             print(f"Recipe '{recipe}' successfully exported.")
         else:
             # If another error occurs, print the error output

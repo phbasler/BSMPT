@@ -1,22 +1,21 @@
 from conan import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout
+from conan.errors import ConanException, ConanInvalidConfiguration
+from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake, cmake_layout
 from conan.tools.files import (
     export_conandata_patches,
     get,
     rmdir,
-    rm,
     copy,
     apply_conandata_patches,
 )
 from conan.tools.build import check_min_cppstd
+from conan.tools.scm import Version
 import os
 
+required_conan_version = ">=2.0"
 
 class CmaesConan(ConanFile):
     name = "cmaes"
-
-    generators = "CMakeDeps"
-
     license = "LGPL-3.0-or-later"
     url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://github.com/CMA-ES/libcmaes"
@@ -28,54 +27,48 @@ class CmaesConan(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "surrog": [True, False],
     }
     default_options = {
         "shared": False,
         "fPIC": True,
-        "surrog": True,
     }
 
-    short_paths = True
-
-    @property
-    def _min_cppstd(self):
-        return 11
-
-    def config_options(self):
-        if self.settings.os == "Windows":
-            del self.options.fPIC
-
-    def configure(self):
-        if self.options.shared:
-            self.options.rm_safe("fPIC")
+    implements = ["auto_shared_fpic"]
 
     def export_sources(self):
         export_conandata_patches(self)
 
+    def validate_build(self):
+        if Version(self.version) == "0.10.0":
+          if self.settings.compiler == "msvc":
+              raise ConanInvalidConfiguration("cmaes does not support MSVC")
+
     def validate(self):
-        check_min_cppstd(self, self._min_cppstd)
+        check_min_cppstd(self, 11)
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
         apply_conandata_patches(self)
 
     def requirements(self):
+        # Transitive header: https://github.com/CMA-ES/libcmaes/blob/v0.10/include/libcmaes/eigenmvn.h#L36
         self.requires("eigen/3.4.0", transitive_headers=True)
-    
 
     def layout(self):
         cmake_layout(self, src_folder="src")
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.variables["LIBCMAES_BUILD_EXAMPLES"] = False
-        tc.variables["LIBCMAES_BUILD_SHARED_LIBS"] = self.options.shared
-        tc.variables["LIBCMAES_USE_OPENMP"] = False
-        tc.variables["LIBCMAES_ENABLE_SURROG"] = self.options.surrog
-        tc.variables["LIBCMAES_BUILD_PYTHON"] = False
-        tc.variables["LIBCMAES_BUILD_TESTS"] = False
+        tc.cache_variables["LIBCMAES_BUILD_EXAMPLES"] = False
+        tc.cache_variables["LIBCMAES_BUILD_SHARED_LIBS"] = self.options.shared
+        tc.cache_variables["LIBCMAES_USE_OPENMP"] = False
+        tc.cache_variables["LIBCMAES_BUILD_PYTHON"] = False
+        tc.cache_variables["LIBCMAES_BUILD_TESTS"] = False
+        if Version(self.version) == "0.10.0":
+          tc.cache_variables["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5"  # CMake 4 support
         tc.generate()
+        deps = CMakeDeps(self)
+        deps.generate()
 
     def build(self):
         cmake = CMake(self)
@@ -87,11 +80,7 @@ class CmaesConan(ConanFile):
         cmake.install()
 
         rmdir(self, os.path.join(self.package_folder, "lib", "pkgconfig"))
-        rm(
-            self,
-            "*.cmake",
-            os.path.join(self.package_folder, "lib", "cmake", "libcmaes"),
-        )
+        rmdir(self, os.path.join(self.package_folder, "lib", "cmake"))
         copy(
             self,
             "COPYING",
@@ -102,3 +91,5 @@ class CmaesConan(ConanFile):
     def package_info(self):
         self.cpp_info.libs = ["cmaes"]
         self.cpp_info.set_property("cmake_target_name", "libcmaes::cmaes")
+        self.cpp_info.set_property("cmake_file_name", "libcmaes")
+        self.cpp_info.set_property("pkg_config_name", "libcmaes")

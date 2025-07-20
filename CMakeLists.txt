@@ -98,7 +98,7 @@ endif()
 set(EXPORT_CMAES FALSE)
 include(FetchContent)
 if(UseLibCMAES)
-  find_package(cmaes CONFIG REQUIRED)
+  find_package(libcmaes 0.10.2 CONFIG REQUIRED)
 endif(UseLibCMAES)
 
 if(UseNLopt)
@@ -116,7 +116,7 @@ if(UseNLopt)
 
 endif(UseNLopt)
 
-if(NOT cmaes_FOUND AND NOT NLopt_FOUND)
+if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message(FATAL_ERROR "You need at least libcmaes or NLopt.")
 endif()
 

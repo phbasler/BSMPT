@@ -24,7 +24,7 @@
 
 #include <exception>
 
-#ifdef cmaes_FOUND
+#ifdef libcmaes_FOUND
 #include <BSMPT/minimizer/LibCMAES/MinimizeLibCMAES.h>
 #endif
 
@@ -69,7 +69,7 @@ MinimizersToUse GetMinimizers(int WhichMinimizer)
   WhichMinimizer /= 2;
   bool UseNLopt = (WhichMinimizer % 2 != 0);
 
-#ifndef cmaes_FOUND
+#ifndef libcmaes_FOUND
   UseCMAES = false;
 #endif
 
@@ -153,7 +153,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
       }
     }
   }
-#ifdef cmaes_FOUND
+#ifdef libcmaes_FOUND
   std::thread thread_CMAES;
   LibCMAES::LibCMAESReturn LibCMAES;
   if (UseMinimizer.UseCMAES)
@@ -210,7 +210,7 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
   }
 #endif
 
-#ifdef cmaes_FOUND
+#ifdef libcmaes_FOUND
   if (UseMultithreading and thread_CMAES.joinable())
   {
     Logger::Write(LoggingLevel::MinimizerDetailed, "Waiting for CMAES Thread");

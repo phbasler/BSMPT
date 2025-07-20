@@ -68,7 +68,7 @@ class BSMPT(ConanFile):
 
         if self.options.UseLibCMAES:
             self.requires(
-                "cmaes/0.10.0@bsmpt/local",
+                "cmaes/0.10.2@bsmpt/local",
                 transitive_headers=True,
                 transitive_libs=True,
             )
