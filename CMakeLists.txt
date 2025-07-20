@@ -116,7 +116,7 @@ if(UseNLopt)
 
 endif(UseNLopt)
 
-if(NOT cmaes_FOUND AND NOT NLopt_FOUND)
+if(NOT libcmaes_FOUND AND NOT NLopt_FOUND)
   message(FATAL_ERROR "You need at least libcmaes or NLopt.")
 endif()
 
