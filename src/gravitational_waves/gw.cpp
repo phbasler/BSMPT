@@ -463,8 +463,9 @@ std::vector<std::vector<double>> solve_ode(double vw, double v0, double cs2)
 {
   const size_t dim          = 2;
   gsl_odeiv2_system sys     = {dfdv, nullptr, dim, &cs2};
+  const double step         = (v0 > 0) ? (-1.e-10) : (1.e-10);
   gsl_odeiv2_driver *driver = gsl_odeiv2_driver_alloc_y_new(
-      &sys, gsl_odeiv2_step_rkf45, -1e-10, 1e-10, 0.0);
+      &sys, gsl_odeiv2_step_rkf45, step, 1e-10, 0.0);
 
   std::vector<std::vector<double>> results;
 
