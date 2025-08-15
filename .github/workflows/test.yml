@@ -43,6 +43,9 @@ jobs:
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
 
+    - name: Run detect
+      run: conan profile detect
+
     - uses: nick-fields/retry@v3
       with:
         timeout_minutes: 60
