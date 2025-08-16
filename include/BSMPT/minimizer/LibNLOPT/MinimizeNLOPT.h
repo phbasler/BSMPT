@@ -117,6 +117,16 @@ FindLocalMinimum(const std::shared_ptr<Class_Potential_Origin> &model,
                  const std::vector<double> &Start,
                  const double &Temp);
 
+std::pair<std::vector<double>, bool>
+NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
+                                const double &Temp,
+                                const int &seed);
+
+std::pair<std::vector<double>, double>
+NLOPT_SBPLX_Find_Global_Minimum(const Class_Potential_Origin &model,
+                                const double &Temp,
+                                const std::vector<double> &start);
+
 } // namespace LibNLOPT
 } // namespace Minimizer
 } // namespace BSMPT
