@@ -28,7 +28,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
           persist-credentials: false
         
@@ -42,6 +42,9 @@ jobs:
     - name: Get number of CPU cores
       uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
+
+    - name: Run detect
+      run: conan profile detect
 
     - uses: nick-fields/retry@v3
       with:
