@@ -2762,7 +2762,12 @@ TEST_CASE("Test kappa_sw", "[gw]")
                  0.7773502691896259,
                  3.1622776601683795,
                  0.95,
-                 1.6452148494846968});
+                 1.6452148494846968},
+      std::tuple{0.32058,
+                 0.312787,
+                 -6.60866e-05,
+                 0.95,
+                 -0.000096061} /* negative kappa is unphysical */);
   REQUIRE(BSMPT::kappa::kappaNuMuModel(cs2b, cs2s, al, vw) ==
           Approx(expected).epsilon(1e-3));
 }
