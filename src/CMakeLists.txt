@@ -80,6 +80,10 @@ if(BSMPTBuildExecutables)
                         TransitionTracer)
   target_compile_features(MinimaTracer PUBLIC cxx_std_17)
 
+  add_executable(ThermalMasses prog/ThermalMasses.cpp)
+  target_link_libraries(ThermalMasses Utility GW MinimumTracer TransitionTracer)
+  target_compile_features(ThermalMasses PUBLIC cxx_std_17)
+
   add_executable(PotPlotter prog/PotPlotter.cpp)
   target_link_libraries(PotPlotter Models Utility Minimizer MinimumTracer)
   target_compile_features(PotPlotter PUBLIC cxx_std_17)
