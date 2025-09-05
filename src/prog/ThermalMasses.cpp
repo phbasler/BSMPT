@@ -180,13 +180,13 @@ try
       for (std::size_t j = 0; j < modelPointer->get_nVEV(); j++)
         LegendMinima.push_back(modelPointer->addLegendVEV().at(j));
       for (std::size_t j = 0; j < modelPointer->get_NHiggs(); j++)
-        LegendMinima.push_back("mS2_" + to_string(j));
+        LegendMinima.push_back("mS_" + to_string(j));
       for (std::size_t j = 0; j < modelPointer->get_NLepton(); j++)
-        LegendMinima.push_back("mL2_" + to_string(j));
+        LegendMinima.push_back("mL_" + to_string(j));
       for (std::size_t j = 0; j < modelPointer->get_NQuarks(); j++)
-        LegendMinima.push_back("mQ2_" + to_string(j));
+        LegendMinima.push_back("mQ_" + to_string(j));
       for (std::size_t j = 0; j < modelPointer->get_NGauge(); j++)
-        LegendMinima.push_back("mG2_" + to_string(j));
+        LegendMinima.push_back("mG_" + to_string(j));
 
       LegendMinima.push_back("runtime");
       outfile << linestr_store << sep << modelPointer->addLegendCT() << sep
@@ -255,17 +255,17 @@ try
 
         outfile << sep << vev;
         outfile << sep
-                << modelPointer->HiggsMassesSquared(
-                       modelPointer->MinimizeOrderVEV(vev), T);
+                << vector_sqrt(modelPointer->HiggsMassesSquared(
+                       modelPointer->MinimizeOrderVEV(vev), T));
         outfile << sep
-                << modelPointer->LeptonMassesSquared(
-                       modelPointer->MinimizeOrderVEV(vev));
+                << vector_sqrt(modelPointer->LeptonMassesSquared(
+                       modelPointer->MinimizeOrderVEV(vev)));
         outfile << sep
-                << modelPointer->QuarkMassesSquared(
-                       modelPointer->MinimizeOrderVEV(vev));
+                << vector_sqrt(modelPointer->QuarkMassesSquared(
+                       modelPointer->MinimizeOrderVEV(vev)));
         outfile << sep
-                << modelPointer->GaugeMassesSquared(
-                       modelPointer->MinimizeOrderVEV(vev), T);
+                << vector_sqrt(modelPointer->GaugeMassesSquared(
+                       modelPointer->MinimizeOrderVEV(vev), T));
 
         auto time = std::chrono::duration_cast<std::chrono::milliseconds>(
                         std::chrono::high_resolution_clock::now() - start)

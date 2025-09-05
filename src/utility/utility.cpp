@@ -6,6 +6,7 @@
 
 #include <BSMPT/models/IncludeAllModels.h>
 #include <BSMPT/utility/utility.h>
+#include <algorithm>
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -27,6 +28,16 @@ std::vector<std::string> split(const std::string &str, char delimiter)
     res.push_back(token);
   }
   return res;
+}
+
+std::vector<double> vector_sqrt(const std::vector<double> vec)
+{
+  std::vector<double> result(vec.size());
+  std::transform(vec.begin(),
+                 vec.end(),
+                 result.begin(),
+                 static_cast<double (*)(double)>(std::sqrt));
+  return result;
 }
 
 bool StringStartsWith(const std::string &str, const std::string &prefix)

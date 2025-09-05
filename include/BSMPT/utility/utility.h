@@ -57,6 +57,14 @@ InvertMap(const std::unordered_map<key, value> &originalMap,
 }
 
 /**
+ * @brief computes the element-wise sqrt
+ *
+ * @param vec
+ * @return * std::vector<double>
+ */
+std::vector<double> vector_sqrt(const std::vector<double> vec);
+
+/**
  * @brief StringStartsWith checks if str starts with prefix
  */
 bool StringStartsWith(const std::string &str, const std::string &prefix);
