@@ -236,6 +236,24 @@ double BounceActionInt::BesselI(double alpha, double x, int terms)
   double r0 = 1e100;
   double r  = 0;
   int m     = 0;
+
+  // x > 20 we use a \f$ x \to \infty \f$ approximation. Mathematica
+  // Re[ Asymptotic[BesselI[n, x], {x, Infinity, 10}]] // FullSimplify[#, x > 0
+  // && n \[Element] Integers] &
+  if (x > 20)
+    return (exp(x) *
+            (11025 * (81 + 40 * x) +
+             4 * (-256 * pow(alpha, 10) + 320 * pow(alpha, 8) * (33 + 8 * x) -
+                  32 * pow(alpha, 6) * (4389 + 80 * x * (21 + 8 * x)) +
+                  960 * pow(x, 2) * (75 + 8 * x * (9 + 16 * x * (1 + 8 * x))) +
+                  40 * pow(alpha, 4) *
+                      (17281 + 8 * x * (987 + 16 * x * (35 + 24 * x))) -
+                  pow(alpha, 2) *
+                      (1057221 +
+                       160 * x *
+                           (3229 + 8 * x * (259 + 48 * x * (5 + 8 * x))))))) /
+           (3.93216e6 * sqrt(2 * M_PI) * pow(x, 5.5));
+
   while ((m < terms) && (abs((r - r0) / r) > 1e-15))
   {
     r0 = r; // Save step

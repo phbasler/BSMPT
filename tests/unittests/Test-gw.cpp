@@ -76,6 +76,7 @@ TEST_CASE("Test I_alpha", "[gw]")
   REQUIRE(BACalc.BesselI(3, 1) == Approx(0.0221684249).epsilon(1e-8));
   REQUIRE(BACalc.BesselI(1, 3) == Approx(3.953370217).epsilon(1e-8));
   REQUIRE(BACalc.BesselI(1, 1.5) == Approx(0.9816664285779).epsilon(1e-8));
+  REQUIRE(BACalc.BesselI(2, 100) == Approx(1.05238431932431e42).epsilon(1e-6));
 }
 
 TEST_CASE("Test J_1", "[gw]")
