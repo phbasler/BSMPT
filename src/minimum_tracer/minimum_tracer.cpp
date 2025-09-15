@@ -798,40 +798,40 @@ void MinimumTracer::FindFlatDirections()
         point.at(j) = 100;
         point.at(k) = 200;
         res_1       = this->modelPointer->VEff(
-            this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+            this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
         point.at(i) = 2;
         point.at(j) = 200;
         point.at(k) = 100;
         res_2       = this->modelPointer->VEff(
-            this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+            this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
         if (almost_the_same(res_1, res_2, 1e-8))
         {
           point.at(i) = 100;
           point.at(j) = 2;
           point.at(k) = 200;
           res_1       = this->modelPointer->VEff(
-              this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+              this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
           if (almost_the_same(res_1, res_2, 1e-8))
           {
             point.at(i) = 100;
             point.at(j) = 200;
             point.at(k) = 2;
             res_2       = this->modelPointer->VEff(
-                this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+                this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
             if (almost_the_same(res_1, res_2, 1e-8))
             {
               point.at(i) = 200;
               point.at(j) = 2;
               point.at(k) = 100;
               res_1       = this->modelPointer->VEff(
-                  this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+                  this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
               if (almost_the_same(res_1, res_2, 1e-8))
               {
                 point.at(i) = 200;
                 point.at(j) = 100;
                 point.at(k) = 2;
                 res_2       = this->modelPointer->VEff(
-                    this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+                    this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
                 if (almost_the_same(res_1, res_2, 1e-8))
                 {
                   NonFlatDirections.at(j) = 0; // choose one point in sphere
@@ -975,7 +975,7 @@ void MinimumTracer::FindDiscreteSymmetries()
     // Potential wrapper at T=0 for tree-level potential
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(
         std::vector<double>(vev.data(), vev.data() + vev.size()));
-    return this->modelPointer->VEff(res, 0, 0, 0);
+    return this->modelPointer->VEff(res, 0, 0, 1);
   };
 
   // Generate random VEV
