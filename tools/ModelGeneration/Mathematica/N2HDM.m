@@ -12,6 +12,10 @@
 (*In this section the scalar potential is defined. As an example the N2HDM in the convention of [arXiv:1803.02846] is shown*)
 
 
+(*Default renormalization scheme is ~246.22 GeV. Do you want to use a different one?*)
+CustomRenormalizationScheme = True;
+
+
 (*Define higgs fields*)
 higgsbase = {\[Rho]1, \[Rho]2, \[Eta]1, \[Eta]2, \[Psi]1, \[Psi]2, \[Zeta]1, \[Zeta]2, \[Zeta]S};
 

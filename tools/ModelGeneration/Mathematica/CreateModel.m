@@ -1,6 +1,13 @@
 (* ::Package:: *)
 
 (* ::Section:: *)
+(*Default settings*)
+
+
+CustomRenormalizationScheme = False;
+
+
+(* ::Section:: *)
 (*Disable error message*)
 
 
@@ -129,10 +136,10 @@ file = Join[include,untilchoice, cases, end,{""}];
 Export[filename, file, "Table"];]
 
 
-CreateModelHeader[name_,InputParameters_,DepententParameters_,parCT_,higgsvev_] :=Block[{},
+CreateModelHeader[name_,InputParametersIn_,DepententParameters_,parCT_,higgsvev_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/ClassPotential" <> ToString[name] <> ".h";
 uppercasename = ToUpperCase[ToString[name]];
-
+InputParameters= If[CustomRenormalizationScheme, Prepend[InputParametersIn, "mu"]];
 file={"#ifndef SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 #define SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 
@@ -181,10 +188,10 @@ public:
 Export[filename, file, "Table"];]
 
 
-CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParameters_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_,GaugeBasis_,LepBase_,baseQuarks_] :=Block[{},
+CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParametersIn_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_,GaugeBasis_,LepBase_,baseQuarks_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/ClassPotential" <> ToString[name] <> ".cpp";
 uppercasename = ToUpperCase[ToString[name]];
-
+InputParameters = If[CustomRenormalizationScheme, Prepend[InputParametersIn, "mu"]];
 file={"#include \"Eigen/Dense\"
 #include \"Eigen/Eigenvalues\"
 #include \"Eigen/IterativeLinearSolvers\"
@@ -212,7 +219,7 @@ Class_Potential_" <> name <> "::Class_Potential_" <> name <> "(
 {
   Model         = ModelID::ModelIDs::" <> uppercasename <> ";
 
-  nPar = " <> ToString[Length[par]] <> ";   // number of parameters in the tree-Level Lagrangian AFTER using
+  nPar = " <> ToString[Length[par] + Boole[CustomRenormalizationScheme]] <> ";   // number of parameters in the tree-Level Lagrangian AFTER using
                // tadpole equations
   nParCT = " <> ToString[Length[parCT]] <> "; // number of parameters in the counterterm potential
 
@@ -342,7 +349,7 @@ void Class_Potential_"<>name<>"::ReadAndSet(const std::string &linestr,
 void Class_Potential_"<>name<>"::set_gen(const std::vector<double> &par)
 {
 ", Sequence@@Table["  " <> ToString[InputParameters[[i]]] <>" = par[" <> ToString[i-1] <> "]; ",{i,Length[InputParameters]}],"",Sequence@@Table["  " <> (DepententParameters[[i]][[1]]//ToC) <> " = " <> ToString[DepententParameters[[i]][[2]]//ToC] <> "; ",{i,Length[DepententParameters]}],"
-  scale = SMConstants.C_vev0; // renormalisation scale is set to the SM VEV
+  scale = " <> If[CustomRenormalizationScheme,"mu", "SMConstants.C_vev0"] <> "; // renormalisation scale is set to the SM VEV
 
   vevTreeMin.resize(nVEV);
   vevTree.resize(NHiggs);
@@ -588,15 +595,14 @@ void Class_Potential_"<>name<>"::Debugging(const std::vector<double> &input,
 Export[filename, file, "Table"];]
 
 
-CreateExamplePoint[name_,InputParameters_,InputParametersExample_] := Block[{},
+CreateExamplePoint[name_,InputParametersIn_,InputParametersExampleIn_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
+InputParameters= If[CustomRenormalizationScheme, Prepend[InputParametersIn, "mu"]];
+InputParametersExample=Prepend[InputParametersExampleIn,If[CustomRenormalizationScheme,"246.22",Nothing]];
 file = {Prepend[InputParameters,Null],{1,Sequence@@InputParametersExample}};
 fileTest = FileNames["Test",Nest[ParentDirectory, NotebookDirectory[], 3]<>"/build/*/bin"][[1]]; 
 WriteString[$Output,"To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
 Export[filename, file, "Table"];]
-
-
-
 
 
 ImplementModel[
