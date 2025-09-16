@@ -4,7 +4,11 @@
 (*Default settings*)
 
 
+(*Default renormalization scheme is ~246.22 GeV. Do you want to use a different one?*)
 CustomRenormalizationScheme = False;
+(*If you want to compare renoramlization schemes you have to convert your parameters. This is done by a shift on the CTs.
+This option will read more inputs, assuming they are the CTs of another scheme, and shift the newly calculated CTs*)
+ShiftCounterterms = False;
 
 
 (* ::Section:: *)
@@ -140,7 +144,7 @@ CreateModelHeader[name_,InputParametersIn_,DepententParameters_,parCT_,higgsvev_
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/ClassPotential" <> ToString[name] <> ".h";
 uppercasename = ToUpperCase[ToString[name]];
 InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing ]];
-file={"#ifndef SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
+file=Flatten[{"#ifndef SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 #define SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 
 #include <BSMPT/models/ClassPotentialOrigin.h>
@@ -157,7 +161,8 @@ public:
 ", 
   "  // Initialize input parameters", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,InputParameters}],"",
   "  // Initialize dependent parameters", Sequence@@Table["  double " <> ToString[i[[1]]] <> " = 0;",{i,DepententParameters}],"",
-  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,parCT}],"","
+  "  // Initialize counter terms", Sequence@@Table["  double " <> ToString[i] <> " = 0;",{i,parCT}],
+  If[ShiftCounterterms, {"","  // Initialize counter terms shift" , Sequence@@Table["  double s_" <> ToString[i] <> " = 0;",{i,parCT}]}, Nothing],"
   void ReadAndSet(const std::string &linestr,
                   std::vector<double> &par) override;
   std::vector<std::string> addLegendCT() const override;
@@ -184,7 +189,7 @@ public:
 } // namespace Models
 } // namespace BSMPT
 #endif /* SRC_"<>uppercasename<>"_H_ */
-"};
+"}];
 Export[filename, file, "Table"];]
 
 
@@ -192,7 +197,7 @@ CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,Inp
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/ClassPotential" <> ToString[name] <> ".cpp";
 uppercasename = ToUpperCase[ToString[name]];
 InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing]];
-file={"#include \"Eigen/Dense\"
+file=Flatten[{"#include \"Eigen/Dense\"
 #include \"Eigen/Eigenvalues\"
 #include \"Eigen/IterativeLinearSolvers\"
 #include <BSMPT/models/SMparam.h> // for SMConstants.C_vev0, SMConstants.C_MassTop, SMConstants.C_g
@@ -334,12 +339,13 @@ void Class_Potential_"<>name<>"::ReadAndSet(const std::string &linestr,
     ss >> tmp;
   }
 
-  for (int k = 1; k <= "<>ToString[Length[InputParameters]]<>"; k++)
+  for (int k = 1; k <= "<>ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme]]<>"; k++)
   {
-    ss >> tmp;",Sequence@@Table["    if (k == " <> ToString[i] <>")\n      par[" <> ToString[i-1] <> "] = tmp; // " <> ToString[InputParameters[[i]]],{i,Length[InputParameters]}],"
-  }
-
-  set_gen(par);
+    ss >> tmp;",Sequence@@Table["    if (k == " <> ToString[i] <>")\n      par[" <> ToString[i-1] <> "] = tmp; // " <> ToString[InputParameters[[i]]],{i,Length[InputParameters]}],"  }
+",If[ShiftCounterterms, {"","  for (int k = " <> ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme] + 1] <> "; k <= "<>ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme] + Length[parCT] * Boole[ShiftCounterterms]]<>"; k++)
+  {
+    ss >> tmp;"<>Sequence@@Table["\n" <>"    if (k == " <> ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme] + i] <>")\n      s_" <> ToString[parCT[[i]]] <> " = tmp; // s_" <> ToString[parCT[[i]]],{i,Length[parCT]}]<>"
+  }",""},Nothing],"  set_gen(par);
   return;
 }
 
@@ -389,7 +395,9 @@ void Class_Potential_"<>name<>"::write() const
   ss << \"\\nThe parameters are : \\n\";",
   Sequence@@Table["  ss << \""<> ToString[i] <> " = \" << " <> ToString[i] <> " << \"\\n\";",{i,par}],"
   ss << \"\\nThe counterterm parameters are : \\n\";",
-  Sequence@@Table["  ss << \""<> ToString[i] <> " = \" << " <> ToString[i] <> " << \"\\n\";",{i,parCT}],"
+  Sequence@@Table["  ss << \""<> ToString[i] <> " = \" << " <> ToString[i] <> " << \"\\n\";",{i,parCT}],If[ShiftCounterterms, "
+  ss << \"\\nThe counterterm parameters shift are : \\n\";" <>
+  Sequence@@Table["\n  ss << \"s_"<> ToString[i] <> " = \" << s_" <> ToString[i] <> " << \"\\n\";",{i,parCT}],Nothing],"
   ss << \"\\nThe scale is given by mu = \" << scale << \" GeV \\n\";
 
   Logger::Write(LoggingLevel::Default, ss.str());
@@ -429,7 +437,7 @@ std::vector<double> Class_Potential_"<>name<>"::calc_CT() const
       HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
   }
 
-  // formulae for the counterterm scheme",Sequence@@Table["  parCT.push_back(" <> ToC[tiCTs[[i]]/.{NCW[x_]->NablaWeinberg[x-1],HCW[x_,y_]->HesseWeinberg[x-1,y-1]}]<> "); //"<>ToString[parCT[[i]]//CForm]<>";",{i,Length[parCT]}],"
+  // formulae for the counterterm scheme",Sequence@@Table["  parCT.push_back(" <> ToC[tiCTs[[i]]/.{NCW[x_]->NablaWeinberg[x-1],HCW[x_,y_]->HesseWeinberg[x-1,y-1]}]<>  If[ShiftCounterterms, " - s_" <> ToC[parCT[[i]]]]  <>"); //"<>ToString[parCT[[i]]//CForm]<>";",{i,Length[parCT]}],"
   return parCT;
 }
 
@@ -591,7 +599,7 @@ void Class_Potential_"<>name<>"::Debugging(const std::vector<double> &input,
 
 } // namespace Models
 } // namespace BSMPT
-"};
+"}];
 Export[filename, file, "Table"];]
 
 
