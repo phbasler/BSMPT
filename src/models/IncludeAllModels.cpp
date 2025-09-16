@@ -16,7 +16,7 @@
 #include <iostream>  // for operator<<, cerr, ost...
 #include <stdexcept> // for runtime_error
 #include <utility>   // for pair
-
+#include <BSMPT/models/ClassPotentialRxSMBroken.h>
 #include <BSMPT/models/ClassTemplate.h>
 #include <BSMPT/utility/Logger.h>
 
@@ -53,6 +53,7 @@ std::unique_ptr<Class_Potential_Origin> FChoose(ModelIDs choice,
   case ModelIDs::TEMPLATE:
     return std::make_unique<Class_Template>(smConstants);
     break;
+  case ModelIDs::RXSMBROKEN: return std::make_unique<Class_Potential_RxSMBroken>(smConstants); break;
   default: throw std::runtime_error("Invalid model");
   }
 }

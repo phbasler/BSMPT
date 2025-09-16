@@ -20,7 +20,7 @@ enum class ModelIDs
   CXSM,
   CPINTHEDARK,
   SM,
-
+  RXSMBROKEN,
   // Here you start adding your models
   TEMPLATE,
 
@@ -39,6 +39,7 @@ const std::unordered_map<std::string, ModelIDs> ModelNames{
     {"cxsm", ModelIDs::CXSM},
     {"sm", ModelIDs::SM},
     {"cpinthedark", ModelIDs::CPINTHEDARK},
+    {"rxsmbroken", ModelIDs::RXSMBROKEN},
     {"template", ModelIDs::TEMPLATE},
 };
 
