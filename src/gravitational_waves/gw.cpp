@@ -17,6 +17,10 @@ GravitationalWave::GravitationalWave(
     const TransitionTemperature &which_transition_temp)
 {
   BACalc.SetAndCalculateGWParameters(which_transition_temp);
+
+  if (BACalc.status_bounce_sol == StatusGW::Failure)
+    data.status = StatusGW::Failure;
+
   data.transitionTemp = BACalc.GetTransitionTemp();
   data.reheatingTemp  = BACalc.GetReheatingTemp();
   data.PTStrength     = BACalc.GetPTStrength();
