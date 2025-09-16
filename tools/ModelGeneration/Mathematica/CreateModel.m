@@ -139,7 +139,7 @@ Export[filename, file, "Table"];]
 CreateModelHeader[name_,InputParametersIn_,DepententParameters_,parCT_,higgsvev_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/ClassPotential" <> ToString[name] <> ".h";
 uppercasename = ToUpperCase[ToString[name]];
-InputParameters= If[CustomRenormalizationScheme, Prepend[InputParametersIn, "mu"]];
+InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing ]];
 file={"#ifndef SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 #define SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 
@@ -191,7 +191,7 @@ Export[filename, file, "Table"];]
 CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParametersIn_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_,GaugeBasis_,LepBase_,baseQuarks_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/ClassPotential" <> ToString[name] <> ".cpp";
 uppercasename = ToUpperCase[ToString[name]];
-InputParameters = If[CustomRenormalizationScheme, Prepend[InputParametersIn, "mu"]];
+InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing]];
 file={"#include \"Eigen/Dense\"
 #include \"Eigen/Eigenvalues\"
 #include \"Eigen/IterativeLinearSolvers\"
@@ -597,7 +597,7 @@ Export[filename, file, "Table"];]
 
 CreateExamplePoint[name_,InputParametersIn_,InputParametersExampleIn_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
-InputParameters= If[CustomRenormalizationScheme, Prepend[InputParametersIn, "mu"]];
+InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing]];
 InputParametersExample=Prepend[InputParametersExampleIn,If[CustomRenormalizationScheme,"246.22",Nothing]];
 file = {Prepend[InputParameters,Null],{1,Sequence@@InputParametersExample}};
 fileTest = FileNames["Test",Nest[ParentDirectory, NotebookDirectory[], 3]<>"/build/*/bin"][[1]]; 
