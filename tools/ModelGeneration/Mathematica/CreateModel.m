@@ -437,7 +437,7 @@ std::vector<double> Class_Potential_"<>name<>"::calc_CT() const
       HesseWeinberg(i, j) = WeinbergHesse.at(j * NHiggs + i);
   }
 
-  // formulae for the counterterm scheme",Sequence@@Table["  parCT.push_back(" <> ToC[tiCTs[[i]]/.{NCW[x_]->NablaWeinberg[x-1],HCW[x_,y_]->HesseWeinberg[x-1,y-1]}]<>  If[ShiftCounterterms, " - s_" <> ToC[parCT[[i]]]]  <>"); //"<>ToString[parCT[[i]]//CForm]<>";",{i,Length[parCT]}],"
+  // formulae for the counterterm scheme",Sequence@@Table["  parCT.push_back(" <> ToC[tiCTs[[i]]/.{NCW[x_]->NablaWeinberg[x-1],HCW[x_,y_]->HesseWeinberg[x-1,y-1]}]<>  If[ShiftCounterterms, " + s_" <> ToC[parCT[[i]]]]  <>"); //"<>ToString[parCT[[i]]//CForm]<>";",{i,Length[parCT]}],"
   return parCT;
 }
 
