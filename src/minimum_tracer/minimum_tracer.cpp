@@ -773,7 +773,7 @@ MinimumTracer::MinimumTracer(
   FindFlatDirections();
 }
 
-void MinimumTracer::FindFlatDirections()
+void MinimumTracer::FindFlatDirections(const int &Order)
 {
   // The number 2, 100, 200 were choosen arbitrarily as an example of a S0(3)
   // rotation
@@ -798,40 +798,40 @@ void MinimumTracer::FindFlatDirections()
         point.at(j) = 100;
         point.at(k) = 200;
         res_1       = this->modelPointer->VEff(
-            this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
+            this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
         point.at(i) = 2;
         point.at(j) = 200;
         point.at(k) = 100;
         res_2       = this->modelPointer->VEff(
-            this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
+            this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
         if (almost_the_same(res_1, res_2, 1e-8))
         {
           point.at(i) = 100;
           point.at(j) = 2;
           point.at(k) = 200;
           res_1       = this->modelPointer->VEff(
-              this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
+              this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
           if (almost_the_same(res_1, res_2, 1e-8))
           {
             point.at(i) = 100;
             point.at(j) = 200;
             point.at(k) = 2;
             res_2       = this->modelPointer->VEff(
-                this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
+                this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
             if (almost_the_same(res_1, res_2, 1e-8))
             {
               point.at(i) = 200;
               point.at(j) = 2;
               point.at(k) = 100;
               res_1       = this->modelPointer->VEff(
-                  this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
+                  this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
               if (almost_the_same(res_1, res_2, 1e-8))
               {
                 point.at(i) = 200;
                 point.at(j) = 100;
                 point.at(k) = 2;
                 res_2       = this->modelPointer->VEff(
-                    this->modelPointer->MinimizeOrderVEV(point), 0, 0, 1);
+                    this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
                 if (almost_the_same(res_1, res_2, 1e-8))
                 {
                   NonFlatDirections.at(j) = 0; // choose one point in sphere
@@ -861,11 +861,11 @@ void MinimumTracer::FindFlatDirections()
       point.at(i) = 2;
       point.at(j) = 100;
       res_1       = this->modelPointer->VEff(
-          this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+          this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
       point.at(i) = 100;
       point.at(j) = 2;
       res_2       = this->modelPointer->VEff(
-          this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+          this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
       point.at(i) = 1;
       point.at(j) = 1;
 
@@ -883,10 +883,10 @@ void MinimumTracer::FindFlatDirections()
   {
     point.at(i) = 2;
     res_1       = this->modelPointer->VEff(
-        this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+        this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
     point.at(i) = 100;
     res_2       = this->modelPointer->VEff(
-        this->modelPointer->MinimizeOrderVEV(point), 0, 0, 0);
+        this->modelPointer->MinimizeOrderVEV(point), 0, 0, Order);
     point.at(i) = 1;
 
     if (almost_the_same(res_1, res_2, 1e-8))
@@ -962,7 +962,7 @@ void MinimumTracer::ConvertToNonFlatDirections(std::vector<double> &point)
   return;
 }
 
-void MinimumTracer::FindDiscreteSymmetries()
+void MinimumTracer::FindDiscreteSymmetries(const int &Order)
 {
   const double GroupElementslMaximumRelativeError =
       1e-8; // Maximum value of |V/GroupElements(V)-1|
@@ -975,7 +975,7 @@ void MinimumTracer::FindDiscreteSymmetries()
     // Potential wrapper at T=0 for tree-level potential
     std::vector<double> res = this->modelPointer->MinimizeOrderVEV(
         std::vector<double>(vev.data(), vev.data() + vev.size()));
-    return this->modelPointer->VEff(res, 0, 0, 1);
+    return this->modelPointer->VEff(res, 0, 0, Order);
   };
 
   // Generate random VEV
