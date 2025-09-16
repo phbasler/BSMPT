@@ -607,6 +607,10 @@ CreateExamplePoint[name_,InputParametersIn_,InputParametersExampleIn_] := Block[
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
 InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing]];
 InputParametersExample=Prepend[InputParametersExampleIn,If[CustomRenormalizationScheme,"246.22",Nothing]];
+
+If[ShiftCounterterms,InputParameters= Join[InputParameters, parCT]];
+If[ShiftCounterterms,InputParametersExample= Join[InputParametersExample, Table[0,{i,parCT}]]];
+
 file = {Prepend[InputParameters,Null],{1,Sequence@@InputParametersExample}};
 fileTest = FileNames["Test",Nest[ParentDirectory, NotebookDirectory[], 3]<>"/build/*/bin"][[1]]; 
 WriteString[$Output,"To run example point \n" <>  fileTest  <> " --model=" <> name <> " --input="<> filename <> " --line=2"];
