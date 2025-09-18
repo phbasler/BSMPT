@@ -5,7 +5,7 @@
 
 
 (*Default renormalization scheme is ~246.22 GeV. Do you want to use a different one?*)
-CustomRenormalizationScheme = False;
+CustomRenormalizationScale = False;
 (*If you want to compare renoramlization schemes you have to convert your parameters. This is done by a shift on the CTs.
 This option will read more inputs, assuming they are the CTs of another scheme, and shift the newly calculated CTs*)
 ShiftCounterterms = False;
@@ -143,7 +143,7 @@ Export[filename, file, "Table"];]
 CreateModelHeader[name_,InputParametersIn_,DepententParameters_,parCT_,higgsvev_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/include/BSMPT/models/ClassPotential" <> ToString[name] <> ".h";
 uppercasename = ToUpperCase[ToString[name]];
-InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing ]];
+InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScale,"mu",Nothing ]];
 file=Flatten[{"#ifndef SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 #define SRC_CLASSPOTENTIAL"<>uppercasename<>"_H_
 
@@ -196,7 +196,7 @@ Export[filename, file, "Table"];]
 CreateModelFile[name_,higgsbase_,higgsvev_,higgsvevFiniteTemp_,VEVList_,par_,InputParametersIn_,DepententParameters_,CurvatureL1_,CurvatureL2_,CurvatureL3_,CurvatureL4_,GaugeCurvatureL4_,LeptonCurvatureL3_,QuarkCurvatureL3_,parCT_,CTCurvatureL1_,CTCurvatureL2_,CTCurvatureL3_,CTCurvatureL4_,GaugeBasis_,LepBase_,baseQuarks_] :=Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/src/models/ClassPotential" <> ToString[name] <> ".cpp";
 uppercasename = ToUpperCase[ToString[name]];
-InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing]];
+InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScale,"mu",Nothing]];
 file=Flatten[{"#include \"Eigen/Dense\"
 #include \"Eigen/Eigenvalues\"
 #include \"Eigen/IterativeLinearSolvers\"
@@ -224,7 +224,7 @@ Class_Potential_" <> name <> "::Class_Potential_" <> name <> "(
 {
   Model         = ModelID::ModelIDs::" <> uppercasename <> ";
 
-  nPar = " <> ToString[Length[par] + Boole[CustomRenormalizationScheme]] <> ";   // number of parameters in the tree-Level Lagrangian AFTER using
+  nPar = " <> ToString[Length[par] + Boole[CustomRenormalizationScale]] <> ";   // number of parameters in the tree-Level Lagrangian AFTER using
                // tadpole equations
   nParCT = " <> ToString[Length[parCT]] <> "; // number of parameters in the counterterm potential
 
@@ -354,7 +354,7 @@ void Class_Potential_"<>name<>"::ReadAndSet(const std::string &linestr,
 void Class_Potential_"<>name<>"::set_gen(const std::vector<double> &par)
 {
 ", Sequence@@Table["  " <> ToString[InputParameters[[i]]] <>" = par[" <> ToString[i-1] <> "]; ",{i,Length[InputParameters]}],"",Sequence@@Table["  " <> (DepententParameters[[i]][[1]]//ToC) <> " = " <> ToString[DepententParameters[[i]][[2]]//ToC] <> "; ",{i,Length[DepententParameters]}],"
-  scale = " <> If[CustomRenormalizationScheme,"mu", "SMConstants.C_vev0"] <> "; // renormalisation scale is set to the SM VEV
+  scale = " <> If[CustomRenormalizationScale,"mu", "SMConstants.C_vev0"] <> "; // renormalisation scale is set to the SM VEV
 
   vevTreeMin.resize(nVEV);
   vevTree.resize(NHiggs);
@@ -604,8 +604,8 @@ Export[filename, file, "Table"];]
 
 CreateExamplePoint[name_,InputParametersIn_,InputParametersExampleIn_] := Block[{},
 filename = Nest[ParentDirectory, NotebookDirectory[], 3]<>"/example/" <> name <> "_Input.tsv";
-InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScheme,"mu",Nothing]];
-InputParametersExample=Prepend[InputParametersExampleIn,If[CustomRenormalizationScheme,"246.22",Nothing]];
+InputParameters= Prepend[InputParametersIn, If[CustomRenormalizationScale,"mu",Nothing]];
+InputParametersExample=Prepend[InputParametersExampleIn,If[CustomRenormalizationScale,"246.22",Nothing]];
 
 If[ShiftCounterterms,InputParameters= Join[InputParameters, parCT]];
 If[ShiftCounterterms,InputParametersExample= Join[InputParametersExample, Table[0,{i,parCT}]]];

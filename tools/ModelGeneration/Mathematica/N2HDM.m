@@ -13,7 +13,7 @@
 
 
 (*Default renormalization scheme is ~246.22 GeV. Do you want to use a different one?*)
-CustomRenormalizationScheme = False;
+CustomRenormalizationScale = False;
 (*If you want to compare renoramlization schemes you have to convert your parameters. This is done by a shift on the CTs.
 This option will read more inputs, assuming they are the CTs of another scheme, and shift the newly calculated CTs*)
 ShiftCounterterms = False;
@@ -24,7 +24,7 @@ ShiftCounterterms = False;
 
 
 (*Default renormalization scheme is ~246.22 GeV. Do you want to use a different one?*)
-CustomRenormalizationScheme = True;
+CustomRenormalizationScale = True;
 
 
 (*Define higgs fields*)
