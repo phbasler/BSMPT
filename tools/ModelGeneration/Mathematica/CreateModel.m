@@ -339,12 +339,11 @@ void Class_Potential_"<>name<>"::ReadAndSet(const std::string &linestr,
     ss >> tmp;
   }
 
-  for (int k = 1; k <= "<>ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme]]<>"; k++)
+  for (int k = 1; k <= "<>ToString[Length[InputParameters]]<>"; k++)
   {
-    ss >> tmp;",Sequence@@Table["    if (k == " <> ToString[i] <>")\n      par[" <> ToString[i-1] <> "] = tmp; // " <> ToString[InputParameters[[i]]],{i,Length[InputParameters]}],"  }
-",If[ShiftCounterterms, {"","  for (int k = " <> ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme] + 1] <> "; k <= "<>ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme] + Length[parCT] * Boole[ShiftCounterterms]]<>"; k++)
+    ss >> tmp;",Sequence@@Table["    if (k == " <> ToString[i] <>")\n      par[" <> ToString[i-1] <> "] = tmp; // " <> ToString[InputParameters[[i]]],{i,Length[InputParameters]}],"  }",If[ShiftCounterterms, {"","  for (int k = " <> ToString[Length[InputParameters] + 1] <> "; k <= "<>ToString[Length[InputParameters] + Length[parCT] * Boole[ShiftCounterterms]]<>"; k++)
   {
-    ss >> tmp;"<>Sequence@@Table["\n" <>"    if (k == " <> ToString[Length[InputParameters] + Boole[CustomRenormalizationScheme] + i] <>")\n      s_" <> ToString[parCT[[i]]] <> " = tmp; // s_" <> ToString[parCT[[i]]],{i,Length[parCT]}]<>"
+    ss >> tmp;"<>Sequence@@Table["\n" <>"    if (k == " <> ToString[Length[InputParameters] + i] <>")\n      s_" <> ToString[parCT[[i]]] <> " = tmp; // s_" <> ToString[parCT[[i]]],{i,Length[parCT]}]<>"
   }",""},Nothing],"  set_gen(par);
   return;
 }
