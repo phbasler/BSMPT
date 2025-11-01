@@ -9,6 +9,17 @@
 
 
 (* ::Chapter:: *)
+(*Model options*)
+
+
+(*Default renormalization scale is ~246.22 GeV. Do you want to use a different one?*)
+CustomRenormalizationScale = False;
+(*If you want to compare renoramlization schemes you have to convert your parameters. This is done by a shift on the CTs.
+This option will read more inputs, assuming they are the CTs of another scheme, and shift the newly calculated CTs*)
+ShiftCounterterms = False;
+
+
+(* ::Chapter:: *)
 (*In this section the scalar potential is defined. As an example the Type-1 R2HDM in the convention of [arXiv:1803.02846] is shown*)
 
 
