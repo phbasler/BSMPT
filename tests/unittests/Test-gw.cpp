@@ -1086,7 +1086,7 @@ TEST_CASE("Test for SO(3)", "[gw]")
   modelPointer->initModel(example_point_CXSM);
   std::shared_ptr<MinimumTracer> MinTracer(
       new MinimumTracer(modelPointer, Minimizer::WhichMinimizerDefault, false));
-  MinTracer->FindFlatDirections();
+  MinTracer->FindFlatDirections(0);
   REQUIRE(MinTracer->flat_3D_dirs.size() == 1);
 }
 
