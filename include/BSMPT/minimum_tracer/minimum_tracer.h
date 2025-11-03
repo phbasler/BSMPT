@@ -328,8 +328,10 @@ public:
 
   /**
    * @brief Calculates flat field directions
+   *
+   * @param Order of the potential
    */
-  void FindFlatDirections();
+  void FindFlatDirections(const int &Order = 1);
 
   /**
    * @brief Convert point into minimal non-flat space, reduces dimension in case
@@ -340,8 +342,9 @@ public:
   /**
    * @brief Calculates the list of symmetries that leave V unchanged
    *
+   * @param Order of the potential
    */
-  void FindDiscreteSymmetries();
+  void FindDiscreteSymmetries(const int &Order = 1);
 
   /**
    * @brief ConvertToVEVDim converts point from full to reduced (VEV) dimension
