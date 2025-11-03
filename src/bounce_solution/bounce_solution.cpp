@@ -1107,7 +1107,11 @@ void BounceSolution::CalculatePTStrength()
     double rho_gam = CalculateRhoGamma(GetTransitionTemp());
     alpha = 1 / rho_gam * (Vi - Vf - GetTransitionTemp() / 4. * (dTVi - dTVf));
     CalculateWallVelocity(false_min, true_min);
-    if (abs(alpha / old_alpha - 1) < 1e-7) return; // Found a solution
+    if (abs(alpha / old_alpha - 1) < 1e-7)
+    {
+      if (alpha < 0) status_bounce_sol = StatusGW::Failure; // Unphysical
+      return;                                               // Found a solution
+    }
   }
   // We could not find the solution for the system. use default value of .95
   // instead
