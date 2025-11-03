@@ -131,7 +131,8 @@ enum class StatusCrit
   Success,
   FalseLower,
   TrueLower,
-  Failure
+  Failure,
+  CoincideSinglePoint
 };
 /**
  * @brief Map to convert StatusCritToString to strings
@@ -142,6 +143,7 @@ const std::unordered_map<StatusCrit, std::string> StatusCritToString{
     {StatusCrit::Success, "success"},
     {StatusCrit::FalseLower, "false_lower"},
     {StatusCrit::TrueLower, "true_lower"},
+    {StatusCrit::CoincideSinglePoint, "coincide_single_point"},
     {StatusCrit::Failure, "failure"}};
 /**
  * @brief Possible status for the approximated nucleation, exact nucleation,
@@ -813,6 +815,20 @@ struct Vacuum
   int num_points = 0;
 
   /**
+   * @brief Minimum tracing mode
+   *
+   */
+  int UseMultiStepPTMode = -1;
+
+  /**
+   * @brief if true only tracing and no identification of all possible
+   * coexisting phase pairs and their critical temperatures is done, if false
+   * identification and calculation of Tc is done
+   *
+   */
+  bool do_only_tracing = false;
+
+  /**
    * @brief vacuum status code = success, no_coverage, no_glob_min_coverage
    */
   StatusTracing status_vacuum = StatusTracing::NotSet;
@@ -857,7 +873,7 @@ struct Vacuum
    * 0, 1, 2, auto (= 3)
    * @param num_pointsIn number of equally-spaced intermediate points to check
    * for new phases
-   * @param do_only_tracing if true only tracing and no identification of all
+   * @param do_only_tracingIn if true only tracing and no identification of all
    * possible coexisting phase pairs and their critical temperatures is done, if
    * false identification and calculation of Tc is done
    */
@@ -866,8 +882,8 @@ struct Vacuum
          std::shared_ptr<MinimumTracer> &MinTracerIn,
          std::shared_ptr<Class_Potential_Origin> &modelPointerIn,
          const int &UseMultiStepPTModeIn,
-         const int &num_pointsIn     = 10,
-         const bool &do_only_tracing = false);
+         const int &num_pointsIn       = 10,
+         const bool &do_only_tracingIn = false);
 
   /**
    * @brief MultiStepPTTracer traces all phases between T_high and T_low
@@ -899,10 +915,10 @@ struct Vacuum
   /**
    * @brief setCoexRegion Calculates all coexisting phase regions with phase
    * pairs included from the phase vector
-   * @param UseMultiStepPTMode int to distinguish multistep PT mode, for all
+   * @param MultiStepPTMode int to distinguish multistep PT mode, for all
    * modes except mode 0 we try to patch up holes in tracing
    */
-  void setCoexRegion(const int &UseMultiStepPTMode);
+  void setCoexRegion(const int &MultiStepPTMode);
 
   /**
    * @brief Adds a phase to the phase list
@@ -910,6 +926,12 @@ struct Vacuum
    * @param phase
    */
   void addPhase(Phase &phase);
+
+  /**
+   * @brief Orders the phases
+   *
+   */
+  void orderPhases();
 
   /**
    * @brief This function checks if the minimum already exists in one of the
