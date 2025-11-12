@@ -121,11 +121,17 @@ Minimize_gen_all(const std::shared_ptr<Class_Potential_Origin> &modelPointer,
         thread_GSL = std::thread(
             [&solGSLMin, &gslMinSuc, &modelPointer, &Temp]()
             {
-              std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
-                  *modelPointer,
-                  Temp,
-                  5); // If additionally CMAES is minimising
-                      // GSL does not need as much solutions
+              // std::tie(solGSLMin, gslMinSuc) = GSL_Minimize_gen_all(
+              //     *modelPointer,
+              //     Temp,
+              //     5);
+
+              std::tie(solGSLMin, gslMinSuc) =
+                  LibNLOPT::NLOPT_SBPLX_Find_Global_Minimum(
+                      *modelPointer,
+                      Temp,
+                      5); // If additionally CMAES is minimising
+                          // GSL does not need as much solutions
             });
       }
       else
