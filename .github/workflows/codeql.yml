@@ -52,7 +52,7 @@ jobs:
         id: cpu-cores
         if: matrix.language == 'cpp'
       - name: Setup
-        run: python3 Setup.py --options CompileBaryo=True --build-missing
+        run: python3 Setup.py --build-missing
         if: matrix.language == 'cpp'
 
       - name: Set cmake preset name

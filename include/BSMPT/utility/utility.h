@@ -235,15 +235,19 @@ T operator*(const std::vector<T> &a, const std::vector<T> &b)
 }
 
 /**
- * @brief multiplication of matrix with vector
+ * @brief Matrix-vector multiplication
  */
 template <typename T>
 std::vector<T> operator*(const std::vector<std::vector<T>> &a,
                          const std::vector<T> &b)
 {
-  if (a.size() != b.size())
-    throw("Multiplication of matrix with vector cannot be done. Must have the "
-          "same size.");
+  // Validate dimensions
+  for (const auto &row : a)
+    if (row.size() != b.size())
+    {
+      throw std::runtime_error(
+          "Matrix-vector multiplication dimension mismatch.");
+    }
 
   std::vector<T> result;
   result.reserve(a.size());
@@ -251,9 +255,78 @@ std::vector<T> operator*(const std::vector<std::vector<T>> &a,
   std::transform(a.begin(),
                  a.end(),
                  std::back_inserter(result),
-                 [&](std::vector<T> i) { return (i * b); });
+                 [&](const std::vector<T> &row) { return row * b; });
 
   return result;
+}
+
+/**
+ * @brief matrix-matrix multiplication
+ *
+ * Computes:
+ *   C = A * B
+ *
+ * where:
+ *   A is (m x n)
+ *   B is (n x p)
+ *   C is (m x p)
+ */
+template <typename T>
+std::vector<std::vector<T>> operator*(const std::vector<std::vector<T>> &A,
+                                      const std::vector<std::vector<T>> &B)
+{
+  if (A.empty() || B.empty())
+  {
+    throw std::runtime_error(
+        "Matrix multiplication cannot be done with empty matrices.");
+  }
+
+  const std::size_t m = A.size();
+  const std::size_t n = A[0].size();
+  const std::size_t p = B[0].size();
+
+  // Check A is rectangular
+  for (const auto &row : A)
+  {
+    if (row.size() != n)
+    {
+      throw std::runtime_error("Matrix A is not rectangular.");
+    }
+  }
+
+  // Check B is rectangular
+  for (const auto &row : B)
+  {
+    if (row.size() != p)
+    {
+      throw std::runtime_error("Matrix B is not rectangular.");
+    }
+  }
+
+  // Compatibility check
+  if (B.size() != n)
+  {
+    throw std::runtime_error(
+        "Matrix multiplication cannot be done. "
+        "Number of columns of A must equal number of rows of B.");
+  }
+
+  // Result matrix initialized with zeros
+  std::vector<std::vector<T>> C(m, std::vector<T>(p, T{}));
+
+  // Standard triple-loop multiplication
+  for (std::size_t i = 0; i < m; ++i)
+  {
+    for (std::size_t k = 0; k < n; ++k)
+    {
+      for (std::size_t j = 0; j < p; ++j)
+      {
+        C[i][j] += A[i][k] * B[k][j];
+      }
+    }
+  }
+
+  return C;
 }
 
 /**
@@ -286,6 +359,15 @@ std::vector<std::vector<double>>
 Transpose(const std::vector<std::vector<double>> &A);
 
 /**
+ * @brief Delta \f$ \delta_{i,j} =  1\f$ if $i=j$ otherwise $=0$
+ *
+ * @param i
+ * @param j
+ * @return int
+ */
+int Delta(const int &i, const int &j);
+
+/**
  * @brief Dilogarithm of x
  *
  * https://en.wikipedia.org/wiki/Dilogarithm
@@ -294,6 +376,17 @@ Transpose(const std::vector<std::vector<double>> &A);
  * @return double
  */
 double Li2(const double &x);
+
+/**
+ * @brief Number of combinations of chosing k in n
+ *
+ * \f$ {n \choose k}  = \frac{n!}{k!(n-k)!}\f$
+ *
+ * @param n
+ * @param k
+ * @return unsigned
+ */
+unsigned nChoosek(unsigned n, unsigned k);
 
 /**
  * @brief Incomplete elliptic integral of the second kind of x with a different

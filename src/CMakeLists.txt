@@ -21,17 +21,14 @@ install(TARGETS BSMPT_Config PUBLIC_HEADER DESTINATION include/BSMPT)
 add_subdirectory(minimizer)
 add_subdirectory(models)
 add_subdirectory(models/modeltests)
-if(BSMPTCompileBaryo)
-  add_subdirectory(baryo_calculation)
-  add_subdirectory(WallThickness)
-  add_subdirectory(Kfactors)
-endif(BSMPTCompileBaryo)
 add_subdirectory(ThermalFunctions)
 
 add_subdirectory(minimum_tracer)
 add_subdirectory(transition_tracer)
 add_subdirectory(bounce_solution)
 add_subdirectory(gravitational_waves)
+add_subdirectory(baryo_fhck)
+add_subdirectory(vacuum_profile)
 
 # ==============================Utility==================================
 
@@ -84,51 +81,12 @@ if(BSMPTBuildExecutables)
   target_link_libraries(PotPlotter Models Utility Minimizer MinimumTracer)
   target_compile_features(PotPlotter PUBLIC cxx_std_17)
 
-  if(BSMPTCompileBaryo)
-    add_executable(CalculateEWBG prog/CalculateEWBG.cpp)
-    target_link_libraries(CalculateEWBG Minimizer Models Baryo Utility)
-    target_compile_features(CalculateEWBG PUBLIC cxx_std_17)
-  else(BSMPTCompileBaryo)
-    message("CalculateEWBG will not compile as Boost is missing")
-  endif(BSMPTCompileBaryo)
+  add_executable(CalcBAU prog/CalcBAU.cpp)
+  target_link_libraries(CalcBAU BaryoFHCK)
+  target_compile_features(CalcBAU PUBLIC cxx_std_17)
 
-  if(BSMPTCompileBaryo)
-    add_executable(PlotEWBG_vw prog/PlotEWBG_vw.cpp)
-    target_link_libraries(PlotEWBG_vw Minimizer Models Baryo Utility)
-    target_compile_features(PlotEWBG_vw PUBLIC cxx_std_17)
-  else(BSMPTCompileBaryo)
-    message("PlotEWBG_vw will not compile as Boost is missing")
-  endif(BSMPTCompileBaryo)
-
-  if(BSMPTCompileBaryo)
-    add_executable(PlotEWBG_nL prog/PlotEWBG_nL.cpp)
-    target_link_libraries(PlotEWBG_nL Minimizer Models Baryo Utility)
-    target_compile_features(PlotEWBG_nL PUBLIC cxx_std_17)
-  else(BSMPTCompileBaryo)
-    message("PlotEWBG_nL will not compile as Boost is missing")
-  endif(BSMPTCompileBaryo)
-
-  # ======================= Additional testing
-  # ====================================
-
-  if(MakeAdditionalTesting)
-
-    if(BSMPTCompileBaryo)
-      add_executable(CreateMuGrid prog/CreateMuGrid.cpp)
-      target_link_libraries(CreateMuGrid Minimizer Models Baryo Utility)
-      target_compile_features(CreateMuGrid PUBLIC cxx_std_17)
-    else(BSMPTCompileBaryo)
-      message("CreateMuGrid will not compile as Boost is missing")
-    endif(BSMPTCompileBaryo)
-
-    if(BSMPTCompileBaryo)
-      add_executable(Kfactor_grid prog/Kfactor_grid.cpp)
-      target_link_libraries(Kfactor_grid Minimizer Models Kfactors Utility)
-      target_compile_features(Kfactor_grid PUBLIC cxx_std_17)
-    else(BSMPTCompileBaryo)
-      message("Kfactor_grid will not compile as Boost is missing")
-    endif(BSMPTCompileBaryo)
-
-  endif(MakeAdditionalTesting)
+  add_executable(CalcBAUBench prog/CalcBAUBench.cpp)
+  target_link_libraries(CalcBAUBench BaryoFHCK)
+  target_compile_features(CalcBAUBench PUBLIC cxx_std_17)
 
 endif(BSMPTBuildExecutables)

@@ -12,7 +12,6 @@
  *
  */
 
-#include <BSMPT/baryo_calculation/CalculateEtaInterface.h>
 #include <BSMPT/baryo_calculation/transport_equations.h> // for GSL_integ...
 #include <BSMPT/minimizer/Minimizer.h>
 #include <BSMPT/models/ClassPotentialOrigin.h> // for Class_Pot...
@@ -55,7 +54,6 @@ std::vector<std::string> convert_input(int argc, char *argv[]);
 int main(int argc, char *argv[])
 try
 {
-
   const auto SMConstants = GetSMConstants();
 
   auto argparser = prepare_parser();
@@ -231,7 +229,7 @@ try
         Logger::Write(LoggingLevel::Default, ss.str());
 
       } // END: LineStart == LineEnd
-    }   // END: Valid Line
+    } // END: Valid Line
     linecounter++;
     if (infile.eof()) break;
   } // END: Input Read

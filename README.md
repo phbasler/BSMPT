@@ -4,7 +4,7 @@ SPDX-FileCopyrightText: 2021 Philipp Basler, Margarete Mühlleitner and Jonas M�
 SPDX-License-Identifier: GPL-3.0-or-later
 -->
 
-Program: BSMPT version 3.3.1
+Program: BSMPT version 4.0.0
 
 Released by: Philipp Basler, Lisa Biermann, Margarete Mühlleitner, Jonas Müller, Rui Santos and João Viana
 
@@ -87,7 +87,6 @@ BSMPT uses cmake and [conan 2](https://conan.io/) for dependencies. The used dep
 2. [Eigen3](https://eigen.tuxfamily.org/index.php?title=Main_Page)  
 3. [libcmaes](https://github.com/CMA-ES/libcmaes): Additionally to GSL you should either use libcmaes or NLopt. For more details on the libcmaes installation, e.g. possible dependencies, visit their [wiki](https://github.com/CMA-ES/libcmaes/wiki). If you don't want to install or use it, you can set `--options UseLibCMAES=False` when using the detailed build, as described below.
 4. [NLopt](https://nlopt.readthedocs.io/en/latest/): If you do not want to use NLopt, you can set `--options UseNLopt=False` when using the detailed build, as described below.
-5. [Boost](https://www.boost.org/) : This is optional and only required for the Baryogenesis calculations. In order to compile the Baryogenesis calculation, set `--options CompileBaryo=True` when using the detailed build, as described below.
 
 
 ### build - detailed

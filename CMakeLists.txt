@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.23)
-set(BSMPT_VERSION 3.3.1)
+set(BSMPT_VERSION 4.0.0)
 project(
   BSMPT
   VERSION ${BSMPT_VERSION}
@@ -19,7 +19,6 @@ option(UseLibCMAES "Use libcmaes to minimize the potential" ON)
 option(UseNLopt "Use NLopt to minimize the potential" ON)
 option(MakeAdditionalTesting "Build the executables used for further testing"
        OFF)
-option(BSMPTCompileBaryo "Compile Baryogenesis" OFF)
 option(EnableCoverage "Enable code coverage" OFF)
 option(BSMPTUseVectorization "Disable vectorization" ON)
 option(BSMPTBuildExecutables "Build the executables" ON)
@@ -61,17 +60,10 @@ include(LTO)
 
 find_package(PkgConfig)
 find_package(Eigen3 CONFIG REQUIRED)
-if(BSMPTCompileBaryo)
-  find_package(Boost CONFIG)
-endif()
 find_package(GSL CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG)
 
 find_package(Threads REQUIRED)
-
-if(NOT Boost_FOUND)
-  set(BSMPTCompileBaryo OFF)
-endif()
 
 set(CodeCoverageExcludesFromOtherPkgs "")
 if(NOT "${EIGEN3_ROOT_DIR}" STREQUAL "")
@@ -80,15 +72,6 @@ endif()
 
 if(NOT "${GSL_ROOT_DIR}" STREQUAL "")
   list(APPEND CodeCoverageExcludesFromOtherPkgs "${GSL_ROOT_DIR}/*")
-endif()
-
-if(Boost_FOUND)
-  if(NOT "${Boost_DIR}" STREQUAL "")
-    list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_DIR}/*")
-  endif()
-  if(NOT "${Boost_ROOT_DIR}" STREQUAL "")
-    list(APPEND CodeCoverageExcludesFromOtherPkgs "${Boost_ROOT_DIR}/*")
-  endif()
 endif()
 
 if(nlohmann_json_FOUND)
@@ -143,7 +126,6 @@ if(EnableCoverage)
       "${PROJECT_SOURCE_DIR}/src/prog/*"
       "${PROJECT_SOURCE_DIR}/src/utility/*"
       "${PROJECT_SOURCE_DIR}/include/BSMPT/utility/Logger.h"
-      "${PROJECT_SOURCE_DIR}/src/Kfactors/Kfactors.cpp"
       "${PROJECT_SOURCE_DIR}/src/models/ClassPotentialOrigin_deprecated.cpp"
       "${PROJECT_SOURCE_DIR}/src/models/ClassTemplate.cpp"
       "${PROJECT_SOURCE_DIR}/src/WallThickness/WallThickness1D.cpp"
@@ -176,9 +158,6 @@ if(BSMPT_IS_TOPLEVEL)
 
     set(DOXYGEN_USE_MATHJAX YES)
     set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
-    set(DOXYGEN_EXCLUDE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part1.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/Kfactors/Kfunctions_grid_Part2.cpp)
     set(DOXYGEN_EXCLUDE_PATTERNS ${CMAKE_CURRENT_SOURCE_DIR}/src/*/README.md)
     set(DOXYGEN_PROJECT_BRIEF ${CMAKE_PROJECT_DESCRIPTION})
     set(DOXYGEN_EXTRACT_PRIVATE YES)

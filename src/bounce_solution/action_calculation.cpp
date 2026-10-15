@@ -1455,22 +1455,6 @@ void BounceActionInt::PathDeformation(std::vector<double> &l,
   return;
 }
 
-unsigned BounceActionInt::nChoosek(unsigned n, unsigned k)
-{
-  // Auxiliary function to calculate n choose k combination
-  if (k > n) return 0;
-  if (k * 2 > n) k = n - k;
-  if (k == 0) return 1;
-
-  int result = n;
-  for (std::size_t i = 2; i <= k; ++i)
-  {
-    result *= (n - i + 1);
-    result /= i;
-  }
-  return result;
-}
-
 double
 BounceActionInt::CalculateKineticTermAction(const std::vector<double> &rho,
                                             const tk::spline &dl_drho_spl)

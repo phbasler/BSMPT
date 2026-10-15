@@ -655,16 +655,6 @@ public:
    * @param rho_l_spl tk::spline of \f$ \rho(l) \f$
    */
   void PathDeformation(std::vector<double> &l, tk::spline &rho_l_spl);
-  /**
-   * @brief Number of combinations of chosing k in n
-   *
-   * \f$ {n \choose k}  = \frac{n!}{k!(n-k)!}\f$
-   *
-   * @param n
-   * @param k
-   * @return unsigned
-   */
-  unsigned nChoosek(unsigned n, unsigned k);
 
   /**
    * @brief Calculates the \f$ k^{th}\f$ Bernstein polynomial of degree \f$ n

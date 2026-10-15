@@ -94,9 +94,11 @@ public:
    * This function calculates the EW breaking VEV from all contributing field
    * configurations.
    */
-  double EWSBVEV(const std::vector<double> &v) const override
+  double EWSBVEV(const std::vector<double> &v,
+                 const double &treshold) const override
   {
     (void)v;
+    (void)treshold;
     return 0;
   }
 

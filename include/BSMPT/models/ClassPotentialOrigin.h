@@ -752,10 +752,15 @@ public:
   double V1Loop(const std::vector<double> &v, double Temp, int diff) const;
 
   /**
-   * This function calculates the EW breaking VEV from all contributing field
-   * configurations.
+   * @brief This function calculates the EW breaking VEV from all contributing
+   * field configurations.
+   *
+   * @param v vev
+   * @param threshold threshold
+   * @return double EW breaking VEV
    */
-  virtual double EWSBVEV(const std::vector<double> &v) const;
+  virtual double EWSBVEV(const std::vector<double> &v,
+                         const double &threshold = 0.5) const;
 
   /**
    * @brief SetEWVEVZero Set all VEV directions in sol-vector to zero that

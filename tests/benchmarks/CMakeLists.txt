@@ -10,18 +10,11 @@ if(benchmark_FOUND)
 
   set(SOURCE_FILES benchmark-ewpt-c2hdm.cpp)
 
-  if(BSMPTCompileBaryo)
-    set(SOURCE_FILES ${SOURCE_FILES} benchmark-ewbg-c2hdm.cpp)
-  endif()
   add_executable(benchmarks ${SOURCE_FILES})
   target_link_libraries(benchmarks Minimizer Models Utility TestCompares
                         ThermalFunctions)
   target_link_libraries(benchmarks benchmark::benchmark)
   target_compile_features(benchmarks PUBLIC cxx_std_17)
-
-  if(BSMPTCompileBaryo)
-    target_link_libraries(benchmarks Baryo)
-  endif(BSMPTCompileBaryo)
 
 else()
   message(

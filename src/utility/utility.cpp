@@ -68,6 +68,12 @@ Transpose(const std::vector<std::vector<double>> &A)
   return r;
 }
 
+int Delta(const int &i, const int &j)
+{
+  if (i == j) return 1;
+  return 0;
+}
+
 double Li2(const double &x)
 {
   if (x == 0) return 0;
@@ -86,6 +92,22 @@ double Li2(const double &x)
     sum += pow(x, k) / pow(k, 2.);
   }
   return sum;
+}
+
+unsigned nChoosek(unsigned n, unsigned k)
+{
+  // Auxiliary function to calculate n choose k combination
+  if (k > n) return 0;
+  if (k * 2 > n) k = n - k;
+  if (k == 0) return 1;
+
+  int result = n;
+  for (std::size_t i = 2; i <= k; ++i)
+  {
+    result *= (n - i + 1);
+    result /= i;
+  }
+  return result;
 }
 
 bool StringEndsWith(const std::string &str, const std::string &suffix)

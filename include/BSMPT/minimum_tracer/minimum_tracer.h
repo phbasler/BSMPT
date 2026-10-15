@@ -180,6 +180,7 @@ const std::unordered_map<StatusGW, std::string> StatusGWToString{
 enum class TransitionTemperature
 {
   NotSet,
+  Critical,
   ApproxNucleation,
   Nucleation,
   Percolation,
@@ -264,6 +265,61 @@ std::ostream &operator<<(std::ostream &os, const StatusGW &status);
  * @return std::ostream& buffer
  */
 std::ostream &operator<<(std::ostream &os, const StatusTemperature &status);
+
+/**
+ * @brief user_input struct to store user input and distribute to the classes
+ * @param modelPointer model pointer
+ * @param T_low lowest temperature, default: 0 GeV
+ * @param T_high highest temperature, default: 300 GeV
+ * @param vwall wall velocity, default: 0.95
+ * @param perc_prbl false vacuum fraction at percolation temperature, default:
+ * 71%
+ * @param compl_prbl false vacuum fraction at completion temperature, default:
+ * 1%
+ * @param epsturb epsilon value of turbulence contribution, default: 0.1
+ * @param maxpathintegrations maximal number of path integrations, default: 7
+ * @param multistepmode choose multi-step PT modes: default (= -1), 0, 1, 2,
+ * auto (= 3)
+ * @param num_points number of equally-spaced intermediate points to check,
+ * default: 10
+ * @param ewsr_check check of electroweak symmetry restoration, default: off (=
+ * 0)
+ * @param nlo_check check of nlo stability, default: on (= 1)
+ * @param which_minimizer which minimizers are used
+ * @param use_multithreading whether multi-threading is used
+ * @param gw_calculation bool to turn GW parameter calculation on/off
+ * @param which_transition_temp which transition temperature is chosen
+ * @param PNLO_scaling pressure scaling at NLO, 1 -> N processes at bubble
+ * wall
+ * @param number_of_initial_scan_temperatures number of temperature steps in the
+ * initial scan of the bounce solver
+ */
+struct user_input
+{
+  std::shared_ptr<Class_Potential_Origin> modelPointer;
+  double T_low                  = 0;
+  double T_high                 = 300;
+  double vwall                  = 0.95;
+  double perc_prbl              = 0.71;
+  double compl_prbl             = 0.01;
+  double epsturb                = 0.1;
+  int maxpathintegrations       = 7;
+  MultiStepPTMode multistepmode = MultiStepPTMode::Default;
+  int num_points                = 10;
+  int ewsr_check                = 0;
+  int nlo_check                 = 1;
+
+  int which_minimizer     = Minimizer::WhichMinimizerDefault;
+  bool use_multithreading = false;
+
+  bool gw_calculation = false;
+  TransitionTemperature which_transition_temp =
+      TransitionTemperature::Percolation;
+  int PNLO_scaling                           = 1;
+  size_t number_of_initial_scan_temperatures = 25;
+  bool only_crit                             = false;
+  std::vector<size_t> FHCKMoments            = {};
+};
 
 /**
  * @brief struct to store minimum and temperature
@@ -562,8 +618,8 @@ public:
    */
   std::vector<double> LocateMinimum(
       const std::vector<double> &guess_In,
-      std::function<std::vector<double>(std::vector<double>)> &df,
-      std::function<std::vector<std::vector<double>>(std::vector<double>)>
+      const std::function<std::vector<double>(std::vector<double>)> &df,
+      const std::function<std::vector<std::vector<double>>(std::vector<double>)>
           &Hessian,
       const double &error            = 1e-4,
       const double &const_multiplier = 1e-2,
@@ -572,11 +628,11 @@ public:
   /**
    * @brief GetLegend derive legend
    * @param num_coex_phases number of coexisting phase regions
-   * @param do_gw_calc bool that determines whether gw calculation is performed
+   * @param input user input
    * @return vector of column label strings
    */
   std::vector<std::string> GetLegend(const int &num_coex_phases,
-                                     const bool &do_gw_calc);
+                                     const user_input &input);
 };
 
 /**

@@ -59,7 +59,7 @@ jobs:
       with:
         timeout_minutes: 60
         max_attempts: 3
-        command: python3 Setup.py --options CompileBaryo=True --build-missing
+        command: python3 Setup.py --build-missing
 
     - name: Set cmake preset name
       run: python3 .github/GetProfile.py

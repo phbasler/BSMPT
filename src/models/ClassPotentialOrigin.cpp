@@ -975,7 +975,7 @@ bool Class_Potential_Origin::CheckRotationMatrix()
 
   const double det_precision = 1e-10; // det precision
   const double el_precision =
-      1e-8; // element precision. different precision to prevent numerical
+      1e-6; // element precision. different precision to prevent numerical
             // instabilities for small elements
 
   if (!almost_the_same(std::abs(mat.determinant()), 1., det_precision))
@@ -3604,7 +3604,8 @@ bool Class_Potential_Origin::CheckNLOVEV(const std::vector<double> &v) const
   return (MaxDiff < AllowedDifference);
 }
 
-double Class_Potential_Origin::EWSBVEV(const std::vector<double> &v) const
+double Class_Potential_Origin::EWSBVEV(const std::vector<double> &v,
+                                       const double &threshold) const
 {
   double res = 0;
   for (std::size_t i = 0; i < NHiggs; i++)
@@ -3618,7 +3619,7 @@ double Class_Potential_Origin::EWSBVEV(const std::vector<double> &v) const
   }
   res = std::sqrt(res);
 
-  if (res <= 0.5)
+  if (res <= threshold)
   {
     return 0;
   }

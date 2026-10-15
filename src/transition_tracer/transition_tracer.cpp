@@ -16,11 +16,11 @@ TransitionTracer::TransitionTracer(user_input &input)
 {
   num_vev = input.modelPointer->get_nVEV();
 
-  std::shared_ptr<MinimumTracer> mintracer(new MinimumTracer(
-      input.modelPointer, input.which_minimizer, input.use_multithreading));
+  mintracer = std::make_shared<MinimumTracer>(
+      input.modelPointer, input.which_minimizer, input.use_multithreading);
 
   // initialize legend
-  output_store.legend = mintracer->GetLegend(0, input.gw_calculation);
+  output_store.legend = mintracer->GetLegend(0, input);
 
   // NLO stability check
   if (input.nlo_check)
@@ -107,8 +107,8 @@ TransitionTracer::TransitionTracer(user_input &input)
       if ((output_store.status.status_tracing == StatusTracing::Success) &&
           (output_store.status.status_coex_pairs == StatusCoexPair::Success))
       {
-        output_store.legend = mintracer->GetLegend(
-            output_store.num_coex_phase_pairs, input.gw_calculation);
+        output_store.legend =
+            mintracer->GetLegend(output_store.num_coex_phase_pairs, input);
 
         for (auto pair : vec_coex)
         {
@@ -141,139 +141,155 @@ TransitionTracer::TransitionTracer(user_input &input)
             (void)CheckMassRatio(
                 input, new_transition_data.crit_false_vev, pair.crit_temp);
 
-            BounceSolution bounce(input.modelPointer,
-                                  mintracer,
-                                  pair,
-                                  input.vwall,
-                                  input.epsturb,
-                                  input.maxpathintegrations,
-                                  input.number_of_initial_scan_temperatures,
-                                  input.PNLO_scaling);
-
-            ListBounceSolution.push_back(bounce);
-
-            output_store.status.status_bounce_sol.push_back(
-                bounce.status_bounce_sol);
-
-            if (bounce.status_bounce_sol == StatusGW::Success)
+            if (not input.only_crit)
             {
-              bounce.CalculateNucleationTempApprox();
 
-              output_store.status.status_nucl_approx.push_back(
-                  bounce.status_nucl_approx);
-              if (bounce.status_nucl_approx ==
-                  BSMPT::StatusTemperature::Success)
+              BounceSolution bounce(input.modelPointer,
+                                    mintracer,
+                                    pair,
+                                    input.vwall,
+                                    input.epsturb,
+                                    input.maxpathintegrations,
+                                    input.number_of_initial_scan_temperatures,
+                                    input.PNLO_scaling);
+
+              ListBounceSolution.push_back(bounce);
+
+              output_store.status.status_bounce_sol.push_back(
+                  bounce.status_bounce_sol);
+
+              if (bounce.status_bounce_sol == StatusGW::Success)
               {
-                new_transition_data.nucl_approx_temp =
-                    bounce.GetNucleationTempApprox();
-                new_transition_data.nucl_approx_true_vev =
-                    pair.true_phase
-                        .Get(new_transition_data.nucl_approx_temp.value_or(
-                            EmptyValue))
-                        .point;
-                new_transition_data.nucl_approx_false_vev =
-                    pair.false_phase
-                        .Get(new_transition_data.nucl_approx_temp.value_or(
-                            EmptyValue))
-                        .point;
+                bounce.CalculateNucleationTempApprox();
 
-                (void)CheckMassRatio(input,
-                                     new_transition_data.nucl_approx_false_vev,
-                                     bounce.GetNucleationTempApprox());
+                output_store.status.status_nucl_approx.push_back(
+                    bounce.status_nucl_approx);
+                if (bounce.status_nucl_approx ==
+                    BSMPT::StatusTemperature::Success)
+                {
+                  new_transition_data.nucl_approx_temp =
+                      bounce.GetNucleationTempApprox();
+                  new_transition_data.nucl_approx_true_vev =
+                      pair.true_phase
+                          .Get(new_transition_data.nucl_approx_temp.value_or(
+                              EmptyValue))
+                          .point;
+                  new_transition_data.nucl_approx_false_vev =
+                      pair.false_phase
+                          .Get(new_transition_data.nucl_approx_temp.value_or(
+                              EmptyValue))
+                          .point;
+
+                  (void)CheckMassRatio(
+                      input,
+                      new_transition_data.nucl_approx_false_vev,
+                      bounce.GetNucleationTempApprox());
+                }
+                else
+                {
+                  new_transition_data.nucl_approx_true_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                  new_transition_data.nucl_approx_false_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                }
+
+                bounce.CalculateNucleationTemp();
+
+                output_store.status.status_nucl.push_back(bounce.status_nucl);
+                if (bounce.status_nucl == BSMPT::StatusTemperature::Success)
+                {
+                  new_transition_data.nucl_temp = bounce.GetNucleationTemp();
+
+                  new_transition_data.nucl_true_vev =
+                      pair.true_phase
+                          .Get(new_transition_data.nucl_temp.value_or(
+                              EmptyValue))
+                          .point;
+                  new_transition_data.nucl_false_vev =
+                      pair.false_phase
+                          .Get(new_transition_data.nucl_temp.value_or(
+                              EmptyValue))
+                          .point;
+
+                  (void)CheckMassRatio(input,
+                                       new_transition_data.nucl_false_vev,
+                                       bounce.GetNucleationTemp());
+                }
+                else
+                {
+                  new_transition_data.nucl_true_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                  new_transition_data.nucl_false_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                }
+
+                bounce.CalculatePercolationTemp();
+
+                output_store.status.status_perc.push_back(bounce.status_perc);
+                if (bounce.status_perc == BSMPT::StatusTemperature::Success)
+                {
+                  new_transition_data.perc_temp = bounce.GetPercolationTemp();
+                  new_transition_data.perc_true_vev =
+                      pair.true_phase
+                          .Get(new_transition_data.perc_temp.value_or(
+                              EmptyValue))
+                          .point;
+                  new_transition_data.perc_false_vev =
+                      pair.false_phase
+                          .Get(new_transition_data.perc_temp.value_or(
+                              EmptyValue))
+                          .point;
+
+                  (void)CheckMassRatio(input,
+                                       new_transition_data.perc_false_vev,
+                                       bounce.GetPercolationTemp());
+                }
+                else
+                {
+                  new_transition_data.perc_true_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                  new_transition_data.perc_false_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                }
+
+                bounce.CalculateCompletionTemp();
+
+                output_store.status.status_compl.push_back(bounce.status_compl);
+                if (bounce.status_compl == BSMPT::StatusTemperature::Success)
+                {
+                  new_transition_data.compl_temp = bounce.GetCompletionTemp();
+                  new_transition_data.compl_true_vev =
+                      pair.true_phase
+                          .Get(new_transition_data.compl_temp.value_or(
+                              EmptyValue))
+                          .point;
+                  new_transition_data.compl_false_vev =
+                      pair.false_phase
+                          .Get(new_transition_data.compl_temp.value_or(
+                              EmptyValue))
+                          .point;
+
+                  (void)CheckMassRatio(input,
+                                       new_transition_data.compl_false_vev,
+                                       bounce.GetCompletionTemp());
+                }
+                else
+                {
+                  new_transition_data.compl_true_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                  new_transition_data.compl_false_vev =
+                      std::vector<double>(num_vev, EmptyValue);
+                }
               }
-              else
-              {
-                new_transition_data.nucl_approx_true_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-                new_transition_data.nucl_approx_false_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-              }
-
-              bounce.CalculateNucleationTemp();
-
-              output_store.status.status_nucl.push_back(bounce.status_nucl);
-              if (bounce.status_nucl == BSMPT::StatusTemperature::Success)
-              {
-                new_transition_data.nucl_temp = bounce.GetNucleationTemp();
-                new_transition_data.nucl_true_vev =
-                    pair.true_phase
-                        .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
-                        .point;
-                new_transition_data.nucl_false_vev =
-                    pair.false_phase
-                        .Get(new_transition_data.nucl_temp.value_or(EmptyValue))
-                        .point;
-
-                (void)CheckMassRatio(input,
-                                     new_transition_data.nucl_false_vev,
-                                     bounce.GetNucleationTemp());
-              }
-              else
-              {
-                new_transition_data.nucl_true_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-                new_transition_data.nucl_false_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-              }
-
-              bounce.CalculatePercolationTemp();
-
-              output_store.status.status_perc.push_back(bounce.status_perc);
-              if (bounce.status_perc == BSMPT::StatusTemperature::Success)
-              {
-                new_transition_data.perc_temp = bounce.GetPercolationTemp();
-                new_transition_data.perc_true_vev =
-                    pair.true_phase
-                        .Get(new_transition_data.perc_temp.value_or(EmptyValue))
-                        .point;
-                new_transition_data.perc_false_vev =
-                    pair.false_phase
-                        .Get(new_transition_data.perc_temp.value_or(EmptyValue))
-                        .point;
-
-                (void)CheckMassRatio(input,
-                                     new_transition_data.perc_false_vev,
-                                     bounce.GetPercolationTemp());
-              }
-              else
-              {
-                new_transition_data.perc_true_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-                new_transition_data.perc_false_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-              }
-
-              bounce.CalculateCompletionTemp();
-
-              output_store.status.status_compl.push_back(bounce.status_compl);
-              if (bounce.status_compl == BSMPT::StatusTemperature::Success)
-              {
-                new_transition_data.compl_temp = bounce.GetCompletionTemp();
-                new_transition_data.compl_true_vev =
-                    pair.true_phase
-                        .Get(
-                            new_transition_data.compl_temp.value_or(EmptyValue))
-                        .point;
-                new_transition_data.compl_false_vev =
-                    pair.false_phase
-                        .Get(
-                            new_transition_data.compl_temp.value_or(EmptyValue))
-                        .point;
-
-                (void)CheckMassRatio(input,
-                                     new_transition_data.compl_false_vev,
-                                     bounce.GetCompletionTemp());
-              }
-              else
-              {
-                new_transition_data.compl_true_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-                new_transition_data.compl_false_vev =
-                    std::vector<double>(num_vev, EmptyValue);
-              }
-
               BSMPT::StatusTemperature trans_status =
                   BSMPT::StatusTemperature::NotSet;
+              if (input.which_transition_temp ==
+                  TransitionTemperature::Critical)
+              {
+                trans_status = pair.crit_status == StatusCrit::Success
+                                   ? StatusTemperature::Success
+                                   : StatusTemperature::NotMet;
+              }
               if (input.which_transition_temp ==
                   TransitionTemperature::ApproxNucleation)
               {
@@ -485,8 +501,11 @@ TransitionTracer::TransitionTracer(user_input &input)
             if (pair.false_phase.id == tmp_phase_id)
             {
               pair_compl_temp =
-                  output_store.vec_trans_data.at(pair.coex_pair_id)
-                      .compl_temp.value_or(EmptyValue);
+                  input.which_transition_temp == TransitionTemperature::Critical
+                      ? output_store.vec_trans_data.at(pair.coex_pair_id)
+                            .crit_temp.value_or(EmptyValue)
+                      : output_store.vec_trans_data.at(pair.coex_pair_id)
+                            .compl_temp.value_or(EmptyValue);
 
               if (std::isnan(pair_compl_temp)) // completion temperature not
                                                // reached in pair

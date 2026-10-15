@@ -65,8 +65,8 @@ std::ostream &operator<<(std::ostream &os, const StatusTemperature &status)
 
 std::vector<double> MinimumTracer::LocateMinimum(
     const std::vector<double> &guess_In,
-    std::function<std::vector<double>(std::vector<double>)> &df,
-    std::function<std::vector<std::vector<double>>(std::vector<double>)>
+    const std::function<std::vector<double>(std::vector<double>)> &df,
+    const std::function<std::vector<std::vector<double>>(std::vector<double>)>
         &Hessian,
     const double &error,
     const double &const_multiplier,
@@ -2848,7 +2848,7 @@ int Vacuum::MinimumFoundAlready(const Minimum &minimum)
 }
 
 std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
-                                                  const bool &do_gw_calc)
+                                                  const user_input &input)
 {
   std::vector<std::string> legend;
 
@@ -2872,56 +2872,67 @@ std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
       legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
           "_crit_true_" + std::to_string(i)));
     }
-    legend.push_back("status_bounce_sol_" + std::to_string(i));
-    legend.push_back("status_nucl_approx_" + std::to_string(i));
-    legend.push_back("T_nucl_approx_" + std::to_string(i));
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
+    if (not input.only_crit)
     {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_nucl_approx_false_" + std::to_string(i)));
+      legend.push_back("status_bounce_sol_" + std::to_string(i));
+      legend.push_back("status_nucl_approx_" + std::to_string(i));
+      legend.push_back("T_nucl_approx_" + std::to_string(i));
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_nucl_approx_false_" + std::to_string(i)));
+      }
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_nucl_approx_true_" + std::to_string(i)));
+      }
+      legend.push_back("status_nucl_" + std::to_string(i));
+      legend.push_back("T_nucl_" + std::to_string(i));
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_nucl_false_" + std::to_string(i)));
+      }
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_nucl_true_" + std::to_string(i)));
+      }
+      legend.push_back("status_perc_" + std::to_string(i));
+      legend.push_back("T_perc_" + std::to_string(i));
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_perc_false_" + std::to_string(i)));
+      }
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_perc_true_" + std::to_string(i)));
+      }
+      legend.push_back("status_compl_" + std::to_string(i));
+      legend.push_back("T_compl_" + std::to_string(i));
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_compl_false_" + std::to_string(i)));
+      }
+      for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size();
+           j++)
+      {
+        legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
+            "_compl_true_" + std::to_string(i)));
+      }
     }
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_nucl_approx_true_" + std::to_string(i)));
-    }
-    legend.push_back("status_nucl_" + std::to_string(i));
-    legend.push_back("T_nucl_" + std::to_string(i));
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_nucl_false_" + std::to_string(i)));
-    }
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_nucl_true_" + std::to_string(i)));
-    }
-    legend.push_back("status_perc_" + std::to_string(i));
-    legend.push_back("T_perc_" + std::to_string(i));
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_perc_false_" + std::to_string(i)));
-    }
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_perc_true_" + std::to_string(i)));
-    }
-    legend.push_back("status_compl_" + std::to_string(i));
-    legend.push_back("T_compl_" + std::to_string(i));
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_compl_false_" + std::to_string(i)));
-    }
-    for (std::size_t j = 0; j < this->modelPointer->addLegendVEV().size(); j++)
-    {
-      legend.push_back(this->modelPointer->addLegendVEV().at(j).append(
-          "_compl_true_" + std::to_string(i)));
-    }
-    if (do_gw_calc)
+    if (input.gw_calculation and not input.only_crit)
     {
       legend.push_back("status_gw_" + std::to_string(i));
       legend.push_back("T_star_" + std::to_string(i));
@@ -2947,6 +2958,11 @@ std::vector<std::string> MinimumTracer::GetLegend(const int &num_coex_phases,
       legend.push_back("SNR(LISA-3yrs)_turb_" + std::to_string(i));
       legend.push_back("SNR(LISA-3yrs)_" + std::to_string(i));
     }
+    if (input.FHCKMoments.size() > 0)
+      legend.push_back("Lw_" + std::to_string(i));
+    for (const auto &moment : input.FHCKMoments)
+      legend.push_back("eta(" + std::to_string(moment) + ")_" +
+                       std::to_string(i));
   }
 
   legend.push_back("transition_history");

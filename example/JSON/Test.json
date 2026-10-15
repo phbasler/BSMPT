@@ -7,7 +7,6 @@
     "useGSL": "true",
     "logginglevel::default": "true",
     "logginglevel::minimizerdetailed": "false",
-    "logginglevel::ewbgdetailed": "false",
     "logginglevel::debug": "false",
     "logginglevel::progdetailed": "false",
     "logginglevel::disabled_comment": "remove _comment from key to disable logger"

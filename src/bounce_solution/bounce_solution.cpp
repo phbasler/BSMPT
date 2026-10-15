@@ -1190,7 +1190,7 @@ double BounceSolution::CalculateSoundSpeed(Phase &phase)
   const double cs     = sqrt(dVdT / (d2VdT2 * Tstar));
   if (isnan(cs))
   {
-    stringstream ss;
+    std::stringstream ss;
     ss << "Sound speed calculation failed!" << "\n";
     ss << "dVdT(T)   = \t" << dVdT << "\n";
     ss << "d2VdT2(T) = \t" << d2VdT2 << "\n";

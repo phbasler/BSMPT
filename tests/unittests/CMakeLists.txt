@@ -20,7 +20,9 @@ target_link_libraries(
           ThermalFunctions
           BounceSolution
           TransitionTracer
-          GW)
+          GW
+          BaryoFHCK
+          VacuumProfile)
 
 if(BSMPTBuildExecutables)
   target_sources(GenericTests PRIVATE CheckExecutables.cpp)
@@ -36,7 +38,3 @@ target_compile_features(GenericTests PUBLIC cxx_std_17)
 
 include(Catch)
 catch_discover_tests(GenericTests)
-
-if(BSMPTCompileBaryo)
-  add_subdirectory(baryotests)
-endif(BSMPTCompileBaryo)

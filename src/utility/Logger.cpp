@@ -22,13 +22,14 @@ namespace BSMPT
 static std::map<std::string, LoggingLevel> LoggingPrefixes{
     {"--logginglevel::default=", LoggingLevel::Default},
     {"--logginglevel::debug=", LoggingLevel::Debug},
-    {"--logginglevel::ewbgdetailed=", LoggingLevel::EWBGDetailed},
     {"--logginglevel::progdetailed=", LoggingLevel::ProgDetailed},
     {"--logginglevel::minimizerdetailed=", LoggingLevel::MinimizerDetailed},
     {"--logginglevel::transitiondetailed=", LoggingLevel::TransitionDetailed},
     {"--logginglevel::mintracerdetailed=", LoggingLevel::MinTracerDetailed},
     {"--logginglevel::bouncedetailed=", LoggingLevel::BounceDetailed},
     {"--logginglevel::gwdetailed=", LoggingLevel::GWDetailed},
+    {"--logginglevel::fhck=", LoggingLevel::FHCK},
+    {"--logginglevel::vacuumprofile=", LoggingLevel::VacuumProfile},
     {"--logginglevel::complete=", LoggingLevel::Complete}};
 
 void ShowLoggerHelp()

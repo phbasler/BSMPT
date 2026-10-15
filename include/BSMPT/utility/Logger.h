@@ -32,9 +32,10 @@ enum class LoggingLevel
   MinTracerDetailed,
   TransitionDetailed,
   GWDetailed,
+  FHCK,
+  VacuumProfile,
   BounceDetailed,
   ProgDetailed,
-  EWBGDetailed,
   Debug,
   Complete
 };
@@ -91,13 +92,14 @@ private:
 
   const std::map<LoggingLevel, bool> mDefaultSetup{
       {LoggingLevel::Default, true},
-      {LoggingLevel::EWBGDetailed, false},
       {LoggingLevel::ProgDetailed, false},
       {LoggingLevel::MinimizerDetailed, false},
       {LoggingLevel::MinTracerDetailed, false},
       {LoggingLevel::TransitionDetailed, false},
       {LoggingLevel::BounceDetailed, false},
       {LoggingLevel::GWDetailed, false},
+      {LoggingLevel::FHCK, false},
+      {LoggingLevel::VacuumProfile, false},
       {LoggingLevel::Debug, false}};
 
   std::map<LoggingLevel, bool> mCurrentSetup = mDefaultSetup;
