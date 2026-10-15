@@ -1,5 +1,6 @@
 #include <BSMPT/baryo_fhck/TransportEquations.h>
 #include <BSMPT/utility/asciiplotter/asciiplotter.h>
+#include <fstream>
 #include <sstream>
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -124,8 +125,10 @@ tk::spline TransportEquations::InterpolateKernel(const std::string &kernel_name,
   double x, x_save, vw, y;
   std::vector<double> vw_vals, y_vals, x_vals, res_vals;
 
-  std::string filename = std::string(KERNEL_DIR) + "/" + kernel_name + ".dat";
-  std::ifstream kernel(filename);
+  std::string abscissaeFile = std::string(KERNEL_DIR) + "/x_vw.dat";
+  std::string kernelFile = std::string(KERNEL_DIR) + "/" + kernel_name + ".dat";
+  std::ifstream kernel(kernelFile);
+  std::ifstream abscissae(abscissaeFile);
   if (is_1D)
   {
     while (kernel >> x >> y)
@@ -133,16 +136,16 @@ tk::spline TransportEquations::InterpolateKernel(const std::string &kernel_name,
       x_vals.push_back(x);
       res_vals.push_back(y);
     }
-    kernel.close();
   }
   else
   {
-    kernel >> x >> vw >> y;
+    abscissae >> x >> vw;
+    kernel >> y;
     x_save = x;
     vw_vals.push_back(vw);
     y_vals.push_back(y);
 
-    while (kernel >> x >> vw >> y)
+    while (abscissae >> x >> vw && kernel >> y)
     {
       if (x != x_save)
       {
@@ -156,8 +159,12 @@ tk::spline TransportEquations::InterpolateKernel(const std::string &kernel_name,
       y_vals.push_back(y);
       x_save = x;
     }
-    kernel.close();
+    tk::spline spl(vw_vals, y_vals);
+    x_vals.push_back(x_save);
+    res_vals.push_back(spl(transportmodel->vwall));
   }
+  kernel.close();
+  abscissae.close();
 
   return tk::spline(x_vals, res_vals);
 }
